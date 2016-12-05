@@ -1,12 +1,10 @@
 import React from 'react';
-import './AppHeader.css';
+import { PageHeader } from 'react-bootstrap';
 
 class AppHeader extends React.Component {
   render() {
     return (
-      <div className="AppHeader">
-        <h1>Honesty Store</h1>
-      </div>
+      <PageHeader>Honesty Store</PageHeader>
     );
   }
 }
