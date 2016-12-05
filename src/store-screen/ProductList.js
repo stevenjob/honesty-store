@@ -1,13 +1,14 @@
 import React from 'react';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
+import Product from './Product';
 
 class ProductList extends React.Component {
   render() {
     return (
         <ListGroup>
-          <ListGroupItem>Extra Peppermint - £0.25</ListGroupItem>
-          <ListGroupItem>Snickers - £0.19</ListGroupItem>
-          <ListGroupItem>Twix - £0.20</ListGroupItem>
+          <Product name="Extra Peppermint" price="0.25"/>
+          <Product name="Snickers" price="0.20"/>
+          <Product name="Twix" price="0.20"/>
         </ListGroup>
     );
   }
