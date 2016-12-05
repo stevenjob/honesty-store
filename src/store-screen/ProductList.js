@@ -1,13 +1,14 @@
 import React from 'react';
+import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
 class ProductList extends React.Component {
   render() {
     return (
-      <ul>
-        <li>Extra Peppermint</li>
-        <li>Snickers</li>
-        <li>Twix</li>
-      </ul>
+        <ListGroup>
+          <ListGroupItem>Extra Peppermint</ListGroupItem>
+          <ListGroupItem>Snickers</ListGroupItem>
+          <ListGroupItem>Twix</ListGroupItem>
+        </ListGroup>
     );
   }
 }
