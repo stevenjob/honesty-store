@@ -5,7 +5,7 @@ class Product extends React.Component {
 
   render() {
     return (
-      <ListGroupItem>{this.props.name} - £{this.props.price}</ListGroupItem>
+      <ListGroupItem>{this.props.name} - £{this.props.price.toFixed(2)}</ListGroupItem>
     )
   }
 }
