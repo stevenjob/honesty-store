@@ -1,4 +1,5 @@
 import React from 'react';
+import { Grid } from 'react-bootstrap';
 import ProductList from './ProductList';
 
 class Store extends React.Component {
@@ -10,10 +11,10 @@ class Store extends React.Component {
     ];
 
     return (
-      <div>
-        <h2>{this.props.params.name}</h2>
-        <ProductList products={products}/>
-      </div>
+      <Grid>
+          <h2>{this.props.params.name}</h2>
+          <ProductList products={products}/>
+      </Grid>
     );
   }
 }
