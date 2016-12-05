@@ -1,9 +1,13 @@
 import React from 'react';
+import ProductList from './ProductList';
 
 class Store extends React.Component {
   render() {
     return (
-      <h2>{this.props.params.name}</h2>
+      <div>
+        <h2>{this.props.params.name}</h2>
+        <ProductList />
+      </div>
     );
   }
 }
