@@ -1,5 +1,6 @@
 import React from 'react';
 import { ListGroupItem, Button, Grid, Col, Row } from 'react-bootstrap';
+import './Product.css'
 
 class Product extends React.Component {
 
@@ -7,9 +8,9 @@ class Product extends React.Component {
     return (
       <ListGroupItem>
         <Grid>
-          <Row>
+          <Row className="vertical-align">
             <Col xs={9}>
-              <p>{this.props.name} - £{this.props.price.toFixed(2)}</p>
+              <p className="product-name">{this.props.name} - £{this.props.price.toFixed(2)}</p>
             </Col>
             <Col xs={3}>
               <Button bsStyle="success" bsSize="small">Buy</Button>

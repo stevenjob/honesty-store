@@ -1,0 +1,9 @@
+.vertical-align {
+  display: flex;
+  align-items: center;
+}
+
+.product-name {
+  margin: 0;
+  text-align: left;
+}
