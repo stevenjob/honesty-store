@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AppHeader from './AppHeader';
-import Store from './Store';
+import Store from './store-screen/Store';
 import './App.css';
 
 class App extends Component {
