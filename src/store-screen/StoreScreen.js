@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid } from 'react-bootstrap';
 import ProductList from './ProductList';
 
-class Store extends React.Component {
+class StoreScreen extends React.Component {
   render() {
     const products = [
       { name: "Snickers", price: 0.20 },
@@ -19,4 +19,4 @@ class Store extends React.Component {
   }
 }
 
-export default Store;
+export default StoreScreen;
