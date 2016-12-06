@@ -9,11 +9,11 @@ class Product extends React.Component {
       <ListGroupItem>
         <Grid>
           <Row className="vertical-align">
-            <Col xs={9}>
-              <p className="product-name">{this.props.name} - £{this.props.price.toFixed(2)}</p>
+            <Col xs={8}>
+              <p className="product-name">{this.props.name}</p>
             </Col>
-            <Col xs={3}>
-              <Button bsStyle="success" bsSize="small">Buy</Button>
+            <Col xs={4}>
+              <Button bsStyle="success" bsSize="small">Buy (£{this.props.price.toFixed(2)})</Button>
             </Col>
           </Row>
         </Grid>
