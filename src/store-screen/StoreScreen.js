@@ -8,12 +8,12 @@ class StoreScreen extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(event) {
-    hashHistory.push(`/${this.props.params.name}/buy`);
+  handleClick(id) {
+    const queryParams = `?productID=${id}`;
+    hashHistory.push(`/${this.props.params.name}/buy${queryParams}`);
   }
 
   render() {
