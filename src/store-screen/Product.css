@@ -1,9 +1,9 @@
-.vertical-align {
+.Product .product-row {
   display: flex;
   align-items: center;
 }
 
-.product-name {
+.Product .product-name {
   margin: 0;
   text-align: left;
 }

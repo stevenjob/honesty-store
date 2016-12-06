@@ -7,9 +7,9 @@ class Product extends React.Component {
 
   render() {
     return (
-      <ListGroupItem>
+      <ListGroupItem className="Product">
         <Grid>
-          <Row className="vertical-align">
+          <Row className="product-row">
             <Col xs={8}>
               <p className="product-name">{this.props.name}</p>
             </Col>
