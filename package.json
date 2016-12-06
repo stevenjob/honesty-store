@@ -1,0 +1,26 @@
+{
+  "name": "infrastructure",
+  "private": "true",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/honesty-store/infrastructure.git"
+  },
+  "bugs": {
+    "url": "https://github.com/honesty-store/infrastructure/issues"
+  },
+  "scripts": {
+    "compile": "tsc",
+    "lint": "tslint src",
+    "test": "npm run lint && npm run compile"
+  },
+  "homepage": "https://github.com/honesty-store/infrastructure#readme",
+  "devDependencies": {
+    "@types/node": "0.0.2",
+    "tslint": "^4.0.2",
+    "tslint-microsoft-contrib": "^2.0.14",
+    "typescript": "^2.0.10"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.7.10"
+  }
+}
