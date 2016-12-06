@@ -5,6 +5,17 @@ import './Product.css'
 
 class Product extends React.Component {
 
+  constructor(props) {
+    super(props);
+
+    //this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(event) {
+    // TODO
+    alert("Hello!");
+  }
+
   render() {
     return (
       <ListGroupItem className="Product">
@@ -14,9 +25,9 @@ class Product extends React.Component {
               <p className="product-name">{this.props.name}</p>
             </Col>
             <Col xs={4}>
-              <Link to="/buy">
-                <Button bsStyle="success" bsSize="small">Buy (£{this.props.price.toFixed(2)})</Button>
-              </Link>
+              {/* <Link to="/newc/buy"> */}
+                <Button bsStyle="success" bsSize="small" onClick={this.props.clickHandler}>Buy (£{this.props.price.toFixed(2)})</Button>
+              {/* </Link> */}
             </Col>
           </Row>
         </Grid>

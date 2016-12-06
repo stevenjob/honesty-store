@@ -1,8 +1,20 @@
 import React from 'react';
+import { hashHistory } from 'react-router'
 import { Grid } from 'react-bootstrap';
 import ProductList from './ProductList';
 
 class StoreScreen extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(event) {
+    hashHistory.push(`/${this.props.params.name}/buy`);
+  }
+
   render() {
     const products = [
       { name: "Snickers", price: 0.20 },
@@ -13,7 +25,7 @@ class StoreScreen extends React.Component {
     return (
       <Grid>
           <h2>{this.props.params.name}</h2>
-          <ProductList products={products}/>
+          <ProductList products={products} clickHandler={this.handleClick}/>
       </Grid>
     );
   }
