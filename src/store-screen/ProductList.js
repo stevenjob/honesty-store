@@ -4,11 +4,9 @@ import Product from './Product';
 
 class ProductList extends React.Component {
   render() {
-    const products = this.props.products.map(function(product) {
-      return (
-        <Product key={product.name} name={product.name} price={product.price}/>
-      );
-    });
+    const products = this.props.products.map(product =>
+      <Product key={product.name} name={product.name} price={product.price}/>
+    );
     return (
         <ListGroup>
           {products}
