@@ -1,9 +1,9 @@
-.Product .product-row {
+.product .product-row {
   display: flex;
   align-items: center;
 }
 
-.Product .product-name {
+.product .product-name {
   margin: 0;
   text-align: left;
 }

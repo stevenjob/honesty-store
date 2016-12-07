@@ -7,15 +7,15 @@ class SignUpForm extends React.Component {
     super(props);
     this.state = {value: ''};
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleEmailAddressChange = this.handleEmailAddressChange.bind(this);
+    this.handleEmailAddressSubmit = this.handleEmailAddressSubmit.bind(this);
   }
 
-  handleChange(event) {
+  handleEmailAddressChange(event) {
     this.setState({value: event.target.value});
   }
 
-  handleSubmit(event) {
+  handleEmailAddressSubmit(event) {
     // TODO
   }
 
@@ -28,7 +28,7 @@ class SignUpForm extends React.Component {
             type="text"
             value={this.state.value}
             placeholder="Enter email address"
-            onChange={this.handleChange} />
+            onChange={this.handleEmailAddressChange} />
         </FormGroup>
       </form>
     );

@@ -7,7 +7,7 @@ class ProductStore {
     ];
   }
 
-  productForID(id) {
+  getProduct(id) {
     return this.inventory.find(element => element.id === id);
   }
 }
