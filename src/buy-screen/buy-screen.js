@@ -1,17 +1,17 @@
 import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
-import SignUpForm from './SignUpForm';
-import TopUpForm from './TopUpForm';
-import store from '../ProductStore';
-import './BuyScreen.css';
+import SignUpForm from './sign-up-form';
+import TopUpForm from './top-up-form';
+import ChosenProduct from './chosen-product';
+import store from '../product-store';
 
 class BuyScreen extends React.Component {
 
   render() {
-    const chosenProductID = Number(this.props.location.query.productID);
-    const chosenProduct = store.productForID(chosenProductID);
+    const chosenProductID = Number(this.props.params.productId);
+    const chosenProduct = store.getProduct(chosenProductID);
     return (
-      <Grid className="BuyScreen">
+      <Grid>
         <Row>
           <Col xs={12}>
             <SignUpForm />
@@ -22,9 +22,9 @@ class BuyScreen extends React.Component {
             <TopUpForm />
           </Col>
         </Row>
-        <Row className="chosen-product">
+        <Row>
           <Col xs={12}>
-            <p>Your chosen product: <strong>{chosenProduct.name}</strong></p>
+            <ChosenProduct product={chosenProduct}/>
           </Col>
         </Row>
       </Grid>

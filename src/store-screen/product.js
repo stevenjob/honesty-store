@@ -1,11 +1,12 @@
 import React from 'react';
 import { ListGroupItem, Button, Grid, Col, Row } from 'react-bootstrap';
-import './Product.css'
+import './product.css'
 
 class Product extends React.Component {
   render() {
     return (
-      <ListGroupItem className="Product">
+      <ListGroupItem className="product">
+        {/* Get rid of this nested grid */}
         <Grid>
           <Row className="product-row">
             <Col xs={8}>
@@ -15,7 +16,8 @@ class Product extends React.Component {
                 <Button
                   bsStyle="success"
                   bsSize="small"
-                  onClick={() => this.props.clickHandler(this.props.id)}
+                  // Just pass the product back
+                  onClick={() => this.props.buyButtonClickHandler(this.props.id)}
                 >
                   Buy (£{this.props.price.toFixed(2)})
                 </Button>
