@@ -68,12 +68,12 @@ const getCredentials = async () => {
 
 const ensureRepoExists = async (repo) => {
   try {
-    await new ECR({ apiVersion: '2015-09-21' })
+    const response = await new ECR({ apiVersion: '2015-09-21' })
       .describeRepositories({ repositoryNames: [ repo ] })
       .promise();
   }
   catch (e) {
-    if (e.statusCode !== 400) {
+    if (e.code !== 'RepositoryNotFoundException') {
       throw e;
     }
     const response = await new ECR({ apiVersion: '2015-09-21' })
@@ -91,4 +91,5 @@ export default async ({ image, repo, tag }) => {
   execSync(`docker tag ${image}:latest ${registry}/${repo}:${tag} `);
   execSync(`docker push ${registry}/${repo}:${tag} `);
   console.log(`Image ${image} deployed to ${repo} with tag ${tag}`);
+  return `https://${registry}/${repo}:${tag}`;
 };
