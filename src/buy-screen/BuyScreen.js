@@ -2,8 +2,8 @@ import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import SignUpForm from './SignUpForm';
 import TopUpForm from './TopUpForm';
+import ChosenProduct from './ChosenProduct';
 import store from '../ProductStore';
-import './BuyScreen.css';
 
 class BuyScreen extends React.Component {
 
@@ -11,7 +11,7 @@ class BuyScreen extends React.Component {
     const chosenProductID = Number(this.props.location.query.productID);
     const chosenProduct = store.productForID(chosenProductID);
     return (
-      <Grid className="BuyScreen">
+      <Grid>
         <Row>
           <Col xs={12}>
             <SignUpForm />
@@ -22,9 +22,9 @@ class BuyScreen extends React.Component {
             <TopUpForm />
           </Col>
         </Row>
-        <Row className="chosen-product">
+        <Row>
           <Col xs={12}>
-            <p>Your chosen product: <strong>{chosenProduct.name}</strong></p>
+            <ChosenProduct product={chosenProduct}/>
           </Col>
         </Row>
       </Grid>
