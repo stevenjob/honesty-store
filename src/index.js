@@ -9,9 +9,8 @@ import './index.css';
 ReactDOM.render((
   <Router history={hashHistory}>
     <Route path="/" component={App}>
-      // TODO this should be a link from the Buy buttons, not a route in here
-      <Route path="/buy" component={BuyScreen}/>
       <Route path="/:name" component={StoreScreen}/>
+      <Route path="/:name/buy" component={BuyScreen}/>
     </Route>
   </Router>
 ), document.getElementById('root'));
