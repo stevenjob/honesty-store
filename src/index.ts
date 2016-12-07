@@ -8,10 +8,15 @@ config.credentials = {
 };
 config.region = "eu-west-1";
 
+const warnAndExit = e => {
+  console.error(e);
+  process.exit(1);
+};
+
 program.command('ecr-deploy <image> <repo> <tag>')
   .action((image, repo, tag) => {
     ecrDeploy({ image, repo, tag })
-      .catch(console.error);
+      .catch(warnAndExit);
   });
 
 program.parse(process.argv);
