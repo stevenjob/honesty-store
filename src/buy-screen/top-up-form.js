@@ -14,6 +14,7 @@ class TopUpForm extends React.Component {
     this.handleCardNumberChange = this.handleCardNumberChange.bind(this);
     this.handleExpiryDateChange = this.handleExpiryDateChange.bind(this);
     this.handleCVCNumberChange = this.handleCVCNumberChange.bind(this);
+    this.handleCardDetailsSubmit = this.handleCardDetailsSubmit.bind(this);
   }
 
   handleCardNumberChange(event) {
@@ -28,11 +29,15 @@ class TopUpForm extends React.Component {
     this.setState({cvcNumber: event.target.value});
   }
 
+  handleCardDetailsSubmit(event) {
+    // TODO
+  }
+
   render() {
     return (
       <div>
         <h2>Top Up</h2>
-        <form>
+        <form onSubmit={this.handleCardDetailsSubmit}>
           <FormGroup>
             <Radio checked readOnly>£5</Radio>
           </FormGroup>
