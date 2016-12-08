@@ -5,7 +5,8 @@ import SignUpForm from './sign-up-form';
 import TopUpForm from './top-up-form';
 import ChosenProduct from './chosen-product';
 import BuyButton from './buy-button';
-import store from '../product-store';
+import ErrorMessage from './error-message';
+import mockApi from '../mock-api';
 
 class BuyScreen extends React.Component {
 
@@ -14,32 +15,43 @@ class BuyScreen extends React.Component {
     this.state = {
       isSignedUp: false,
       balance: 0,
-      emailAddress: ''
+      emailAddress: '',
+      showModal: false
     };
 
     this.handleSignUpFormSubmit = this.handleSignUpFormSubmit.bind(this);
     this.handleTopUpFormSubmit = this.handleTopUpFormSubmit.bind(this);
+    this.open = this.open.bind(this);
+    this.close = this.close.bind(this);
   }
 
   handleSignUpFormSubmit(emailAddress) {
-    // API: Is email address is registered?
-    // API: If not, create a new account with zero balance
-    // API: Return account balance
     // TODO magic links etc
+    // TODO handle failure - use promises like we do with the top up submit 
+    const isRegistered = mockApi.isEmailAddressRegistered(emailAddress);
+    if (!isRegistered) {
+      mockApi.createAccount(emailAddress);
+    }
+    const balance = mockApi.getBalance(emailAddress);
+
     this.setState({
       isSignedUp: true,
-      balance: 0,
-      emailAddress: emailAddress
+      balance: balance,
+      emailAddress: emailAddress,
+      showModal: false
     });
   }
 
   handleTopUpFormSubmit(topUpAmount, cardDetails) {
-    // API: request payment for topUpAmount
-    // TODO handle failed payments
-    this.setState({
-      isSignedUp: this.state.isSignedUp,
-      balance: this.state.balance + topUpAmount,
-      emailAddress: this.state.emailAddress
+    mockApi.topUpAccount(topUpAmount, cardDetails).then((result) => {
+      this.setState({
+        isSignedUp: this.state.isSignedUp,
+        balance: this.state.balance + topUpAmount,
+        emailAddress: this.state.emailAddress,
+        showModal: false
+      });
+    }, (err) => {
+      this.open();
     });
   }
 
@@ -47,45 +59,69 @@ class BuyScreen extends React.Component {
     return isSignedUp && balance >= productPrice;
   }
 
+  open() {
+    this.setState({
+      isSignedUp: false,
+      balance: 0,
+      emailAddress: '',
+      showModal: true
+    });
+  }
+
+  close() {
+    this.setState({
+      isSignedUp: false,
+      balance: 0,
+      emailAddress: '',
+      showModal: false
+    })
+  }
+
   render() {
     const isSignedUp = this.state.isSignedUp;
     const chosenProductID = Number(this.props.params.productId);
-    const chosenProduct = store.getProduct(chosenProductID);
+    const chosenProduct = mockApi.getProduct(chosenProductID);
     const isBuyButtonActive = this.isBuyButtonActive(this.state.isSignedUp, this.state.balance, chosenProduct.price);
+    const topUpErrorTitle = 'Top Up Failed';
+    const topUpErrorMessage = 'Sorry, there was a problem topping up your account. Please try again.';
 
     return (
-      <Grid>
+      <div>
+        <Grid>
 
-        <Row>
-          <Col xs={12}>
-            {isSignedUp
-              ? <Balance balance={this.state.balance} emailAddress={this.state.emailAddress}/>
-              : <SignUpForm handleEmailAddressSubmit={this.handleSignUpFormSubmit}/>
-            }
-          </Col>
-        </Row>
-
-        {isSignedUp &&
           <Row>
             <Col xs={12}>
-              <TopUpForm handleTopUpFormSubmit={this.handleTopUpFormSubmit} />
+              {isSignedUp
+                ? <Balance balance={this.state.balance} emailAddress={this.state.emailAddress}/>
+                : <SignUpForm handleEmailAddressSubmit={this.handleSignUpFormSubmit}/>
+              }
             </Col>
           </Row>
-        }
 
-        <Row>
-          <Col xs={12}>
-            <ChosenProduct product={chosenProduct}/>
-          </Col>
-        </Row>
+          {isSignedUp &&
+            <Row>
+              <Col xs={12}>
+                <TopUpForm handleTopUpFormSubmit={this.handleTopUpFormSubmit} />
+              </Col>
+            </Row>
+          }
 
-        <Row>
-          <Col xs={12}>
-            <BuyButton active={isBuyButtonActive}/>
-          </Col>
-        </Row>
+          <Row>
+            <Col xs={12}>
+              <ChosenProduct product={chosenProduct}/>
+            </Col>
+          </Row>
 
-      </Grid>
+          <Row>
+            <Col xs={12}>
+              <BuyButton active={isBuyButtonActive}/>
+            </Col>
+          </Row>
+
+        </Grid>
+
+        <ErrorMessage show={this.state.showModal} onClose={this.close} title={topUpErrorTitle} message={topUpErrorMessage}/>
+      </div>
     );
   }
 }
