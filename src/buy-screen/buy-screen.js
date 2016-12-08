@@ -18,6 +18,7 @@ class BuyScreen extends React.Component {
     };
 
     this.handleSignUpFormSubmit = this.handleSignUpFormSubmit.bind(this);
+    this.handleTopUpFormSubmit = this.handleTopUpFormSubmit.bind(this);
   }
 
   handleSignUpFormSubmit(emailAddress) {
@@ -29,6 +30,16 @@ class BuyScreen extends React.Component {
       isSignedUp: true,
       balance: 0,
       emailAddress: emailAddress
+    });
+  }
+
+  handleTopUpFormSubmit(topUpAmount, cardDetails) {
+    // API: request payment for topUpAmount
+    // TODO handle failed payments
+    this.setState({
+      isSignedUp: this.state.isSignedUp,
+      balance: this.state.balance + topUpAmount,
+      emailAddress: this.state.emailAddress
     });
   }
 
@@ -57,7 +68,7 @@ class BuyScreen extends React.Component {
         {isSignedUp &&
           <Row>
             <Col xs={12}>
-              <TopUpForm />
+              <TopUpForm handleTopUpFormSubmit={this.handleTopUpFormSubmit} />
             </Col>
           </Row>
         }

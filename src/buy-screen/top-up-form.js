@@ -6,6 +6,7 @@ class TopUpForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      topUpAmount: 5,
       cardNumber: '',
       expiryDate: '',
       cvcNumber: ''
@@ -30,7 +31,12 @@ class TopUpForm extends React.Component {
   }
 
   handleCardDetailsSubmit(event) {
-    // TODO
+    this.props.handleTopUpFormSubmit(this.state.topUpAmount,
+    {
+      cardNumber: this.state.cardNumber,
+      expiryDate: this.state.expiryDate,
+      cvcNumber: this.state.cvcNumber
+    });
   }
 
   render() {
@@ -39,7 +45,7 @@ class TopUpForm extends React.Component {
         <h2>Top Up</h2>
         <form onSubmit={this.handleCardDetailsSubmit}>
           <FormGroup>
-            <Radio checked readOnly>£5</Radio>
+            <Radio checked readOnly>£{this.state.topUpAmount}</Radio>
           </FormGroup>
           <FormGroup>
             <ControlLabel>Card Number</ControlLabel>
