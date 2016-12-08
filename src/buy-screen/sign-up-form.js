@@ -5,19 +5,19 @@ class SignUpForm extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {emailAddress: ''};
 
     this.handleEmailAddressChange = this.handleEmailAddressChange.bind(this);
     this.handleEmailAddressSubmit = this.handleEmailAddressSubmit.bind(this);
   }
 
   handleEmailAddressChange(event) {
-    this.setState({value: event.target.value});
+    this.setState({emailAddress: event.target.value});
   }
 
   handleEmailAddressSubmit(event) {
-    // TODO
-    event.preventDefault();
+    // TODO: handle empty address
+    this.props.handleEmailAddressSubmit(this.state.emailAddress);
   }
 
   render() {
@@ -28,7 +28,7 @@ class SignUpForm extends React.Component {
             <ControlLabel>Please enter your email address to create an account</ControlLabel>
             <FormControl
               type="text"
-              value={this.state.value}
+              value={this.state.emailAddress}
               placeholder="Enter email address"
               onChange={this.handleEmailAddressChange} />
           </FormGroup>
