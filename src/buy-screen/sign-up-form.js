@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import { FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 
 class SignUpForm extends React.Component {
 
@@ -17,20 +17,24 @@ class SignUpForm extends React.Component {
 
   handleEmailAddressSubmit(event) {
     // TODO
+    event.preventDefault();
   }
 
   render() {
     return (
-      <form>
-        <FormGroup>
-          <ControlLabel>Please enter your email address to create an account</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.value}
-            placeholder="Enter email address"
-            onChange={this.handleEmailAddressChange} />
-        </FormGroup>
-      </form>
+      <div>
+        <form onSubmit={this.handleEmailAddressSubmit}>
+          <FormGroup>
+            <ControlLabel>Please enter your email address to create an account</ControlLabel>
+            <FormControl
+              type="text"
+              value={this.state.value}
+              placeholder="Enter email address"
+              onChange={this.handleEmailAddressChange} />
+          </FormGroup>
+          <Button type="submit">Submit</Button>
+        </form>
+      </div>
     );
   }
 }
