@@ -5,6 +5,7 @@ class MockApi {
       { id: 1, name: "Extra Peppermint", price: 0.25 },
       { id: 2, name: "Twix", price: 0.20 }
     ];
+    this.balance = 0;
   }
 
   getProduct(id) {
@@ -19,8 +20,12 @@ class MockApi {
     // do nothing for now
   }
 
-  getBalance(emailAddress) {
-    return 0;
+  getBalance() {
+    return this.balance;
+  }
+
+  purchaseProduct(product) {
+    this.balance -= product.price;
   }
 
   topUpAccount(topUpAmount, cardDetails) {
@@ -30,6 +35,7 @@ class MockApi {
         && cardDetails.cvcNumber === '000') {
         reject('Transaction rejected');
       } else {
+        this.balance += topUpAmount;
         resolve('Transaction approved');
       }
     });
