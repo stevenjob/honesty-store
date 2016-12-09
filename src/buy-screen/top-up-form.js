@@ -6,7 +6,7 @@ class TopUpForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      topUpAmount: 5,
+      topUpAmount: this.props.amount,
       cardNumber: '',
       expiryDate: '',
       cvcNumber: ''
@@ -31,6 +31,8 @@ class TopUpForm extends React.Component {
   }
 
   handleCardDetailsSubmit(event) {
+    event.preventDefault();
+    // TODO
     this.props.handleTopUpFormSubmit(this.state.topUpAmount,
     {
       cardNumber: this.state.cardNumber,

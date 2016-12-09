@@ -16,6 +16,7 @@ class SignUpForm extends React.Component {
   }
 
   handleEmailAddressSubmit(event) {
+    event.preventDefault();
     // TODO: handle empty address
     this.props.handleEmailAddressSubmit(this.state.emailAddress);
   }

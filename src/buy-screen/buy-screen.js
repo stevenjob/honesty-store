@@ -16,18 +16,18 @@ class BuyScreen extends React.Component {
       isSignedUp: false,
       balance: 0,
       emailAddress: '',
-      showModal: false
+      showTopUpErrorMessage: false
     };
 
     this.handleSignUpFormSubmit = this.handleSignUpFormSubmit.bind(this);
     this.handleTopUpFormSubmit = this.handleTopUpFormSubmit.bind(this);
-    this.open = this.open.bind(this);
-    this.close = this.close.bind(this);
+    this.handleTopUpErrorMessageOpen = this.handleTopUpErrorMessageOpen.bind(this);
+    this.handleTopUpErrorMessageClose = this.handleTopUpErrorMessageClose.bind(this);
   }
 
   handleSignUpFormSubmit(emailAddress) {
     // TODO magic links etc
-    // TODO handle failure - use promises like we do with the top up submit 
+    // TODO handle failure - use promises like we do with the top up submit
     const isRegistered = mockApi.isEmailAddressRegistered(emailAddress);
     if (!isRegistered) {
       mockApi.createAccount(emailAddress);
@@ -38,7 +38,7 @@ class BuyScreen extends React.Component {
       isSignedUp: true,
       balance: balance,
       emailAddress: emailAddress,
-      showModal: false
+      showTopUpErrorMessage: false
     });
   }
 
@@ -48,10 +48,10 @@ class BuyScreen extends React.Component {
         isSignedUp: this.state.isSignedUp,
         balance: this.state.balance + topUpAmount,
         emailAddress: this.state.emailAddress,
-        showModal: false
+        showTopUpErrorMessage: false
       });
     }, (err) => {
-      this.open();
+      this.handleTopUpErrorMessageOpen();
     });
   }
 
@@ -59,21 +59,21 @@ class BuyScreen extends React.Component {
     return isSignedUp && balance >= productPrice;
   }
 
-  open() {
+  handleTopUpErrorMessageOpen() {
     this.setState({
       isSignedUp: false,
       balance: 0,
       emailAddress: '',
-      showModal: true
+      showTopUpErrorMessage: true
     });
   }
 
-  close() {
+  handleTopUpErrorMessageClose() {
     this.setState({
       isSignedUp: false,
       balance: 0,
       emailAddress: '',
-      showModal: false
+      showTopUpErrorMessage: false
     })
   }
 
@@ -101,7 +101,7 @@ class BuyScreen extends React.Component {
           {isSignedUp &&
             <Row>
               <Col xs={12}>
-                <TopUpForm handleTopUpFormSubmit={this.handleTopUpFormSubmit} />
+                <TopUpForm amount={5} handleTopUpFormSubmit={this.handleTopUpFormSubmit} />
               </Col>
             </Row>
           }
@@ -120,7 +120,7 @@ class BuyScreen extends React.Component {
 
         </Grid>
 
-        <ErrorMessage show={this.state.showModal} onClose={this.close} title={topUpErrorTitle} message={topUpErrorMessage}/>
+        <ErrorMessage show={this.state.showTopUpErrorMessage} onClose={this.handleTopUpErrorMessageClose} title={topUpErrorTitle} message={topUpErrorMessage}/>
       </div>
     );
   }

@@ -24,7 +24,7 @@ class MockApi {
   }
 
   topUpAccount(topUpAmount, cardDetails) {
-    var promise = new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
       if (cardDetails.cardNumber === '1234123412341234'
         && cardDetails.expiryDate === '12/19'
         && cardDetails.cvcNumber === '000') {
@@ -33,7 +33,6 @@ class MockApi {
         resolve('Transaction approved');
       }
     });
-    return promise;
   }
 }
 
