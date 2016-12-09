@@ -34,18 +34,17 @@ class BuyScreen extends React.Component {
     if (!isRegistered) {
       mockApi.createAccount(emailAddress);
     }
-    const balance = mockApi.getBalance(emailAddress);
+    const balance = mockApi.getBalance();
 
     this.setState({
       isSignedUp: true,
       balance: balance,
-      emailAddress: emailAddress
     });
   }
 
   handleTopUpFormSubmit(topUpAmount, cardDetails) {
     mockApi.topUpAccount(topUpAmount, cardDetails).then((result) => {
-      const newBalance = mockApi.getBalance(this.state.emailAddress);
+      const newBalance = mockApi.getBalance();
       this.setState({balance: newBalance});
     }, (err) => {
       this.handleTopUpErrorMessageOpen();

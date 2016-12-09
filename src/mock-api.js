@@ -5,27 +5,32 @@ class MockApi {
       { id: 1, name: "Extra Peppermint", price: 0.25 },
       { id: 2, name: "Twix", price: 0.20 }
     ];
-    this.balance = 0;
+    // Map email address to account balances
+    this.userAccounts = new Map();
+
   }
 
   getProduct(id) {
     return this.inventory.find(element => element.id === id);
   }
 
+  // Assume we want to log users in when this is called
   isEmailAddressRegistered(emailAddress) {
-    return false;
+    return this.userAccounts.has(emailAddress);
   }
 
   createAccount(emailAddress) {
-    // do nothing for now
+    // Create an account with an initial balance of 0
+    this.userAccounts.set(emailAddress, 0);
   }
 
   getBalance() {
-    return this.balance;
+    return this.userAccounts.get(this._currentUserEmailAddress);
   }
 
   purchaseProduct(product) {
-    this.balance -= product.price;
+    const userBalance = this.getBalance(this._currentUserEmailAddress);
+    this.userAccounts.set(this._currentUserEmailAddress, userBalance - product.price);
   }
 
   topUpAccount(topUpAmount, cardDetails) {
@@ -35,7 +40,8 @@ class MockApi {
         && cardDetails.cvcNumber === '000') {
         reject('Transaction rejected');
       } else {
-        this.balance += topUpAmount;
+        const userBalance = this.getBalance(this._currentUserEmailAddress);
+        this.userAccounts.set(this._currentUserEmailAddress, userBalance + topUpAmount);
         resolve('Transaction approved');
       }
     });
