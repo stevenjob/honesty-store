@@ -7,6 +7,7 @@ import { containerInstanceList } from './ecs/instance';
 import { runTask } from './ecs/task/run';
 import { ec2InstanceList, ec2InstanceCreate } from './ec2/instance';
 import registerTaskDefinition from './ecs/task/define';
+import { securityGroupCreate } from './ec2/securitygroup';
 
 config.region = "eu-west-1";
 
@@ -40,9 +41,14 @@ program.command('ecs-list-cluster')
       .catch(warnAndExit));
 
 program.command('ec2-create-instance <cluster>')
-  .action((cluster) => {
-    ec2InstanceCreate({ cluster })
-      .catch(warnAndExit);
+  .action(async (cluster) => {
+    try {
+      const securityGroupId = await securityGroupCreate({ name: 'open2world', open: true });
+
+      await ec2InstanceCreate({ cluster, securityGroupId })
+    } catch (e) {
+      warnAndExit(e);
+    }
   });
 
 program.command('ecs-run-image <image> <cluster>')

@@ -12,7 +12,7 @@ export const ec2InstanceList = async () => {
     .filter((instance) => instance.State.Name === 'running');
 }
 
-export const ec2InstanceCreate = async ({ cluster }) => {
+export const ec2InstanceCreate = async ({ cluster, securityGroupId }) => {
   await throwUnlessClusterExists(cluster);
 
   const runInstanceRequest = {
@@ -30,6 +30,8 @@ export const ec2InstanceCreate = async ({ cluster }) => {
     InstanceType: 't2.micro',
     MinCount: 1,
     MaxCount: 1,
+
+    SecurityGroupIds: [ securityGroupId ]
   };
 
   const response = await new EC2({ apiVersion: '2016-11-15' })
