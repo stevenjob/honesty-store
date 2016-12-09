@@ -16,7 +16,6 @@ class BuyScreen extends React.Component {
     this.state = {
       isSignedUp: false,
       balance: 0,
-      emailAddress: '',
       showTopUpErrorMessage: false
     };
 
@@ -70,7 +69,6 @@ class BuyScreen extends React.Component {
     this.setState({
       isSignedUp: false,
       balance: 0,
-      emailAddress: '',
       showTopUpErrorMessage: false
     });
   }
@@ -94,7 +92,7 @@ class BuyScreen extends React.Component {
           <Row>
             <Col xs={12}>
               {isSignedUp
-                ? <Balance balance={this.state.balance} emailAddress={this.state.emailAddress}/>
+                ? <Balance balance={this.state.balance} emailAddress={mockApi.getCurrentUser()}/>
                 : <SignUpForm handleEmailAddressSubmit={this.handleSignUpFormSubmit}/>
               }
             </Col>

@@ -8,6 +8,7 @@ class MockApi {
     // Map email address to account balances
     this.userAccounts = new Map();
 
+    this._currentUserEmailAddress = '';
   }
 
   getProduct(id) {
@@ -16,12 +17,19 @@ class MockApi {
 
   // Assume we want to log users in when this is called
   isEmailAddressRegistered(emailAddress) {
+    // Store logged in user
+    this._currentUserEmailAddress = emailAddress;
+    // Now check if it already exists
     return this.userAccounts.has(emailAddress);
   }
 
   createAccount(emailAddress) {
     // Create an account with an initial balance of 0
     this.userAccounts.set(emailAddress, 0);
+  }
+
+  getCurrentUser() {
+    return this._currentUserEmailAddress;
   }
 
   getBalance() {
