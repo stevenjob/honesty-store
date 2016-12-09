@@ -1,5 +1,16 @@
 import { EC2 } from 'aws-sdk';
 
+export const ec2InstanceList = async () => {
+  const instances = await new EC2({ apiVersion: '2014-11-13' })
+    .describeInstances({})
+    .promise();
+
+  return instances.Reservations
+    .map((reservation) => reservation.Instances)
+    .reduce((result, instances) => result.concat(instances), [])
+    .filter((instance) => instance.State.Name === 'running');
+}
+
 export const ec2InstanceCreate = async ({ cluster }) => {
   const runInstanceRequest = {
     // amazon docker machine image, see http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html
