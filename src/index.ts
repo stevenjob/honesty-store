@@ -2,6 +2,7 @@ import * as program from 'commander';
 import { config } from 'aws-sdk';
 import ecrDeploy from './ecr/deploy';
 import iamSync from './iam/sync';
+import { clusterCreate } from './ecs/cluster';
 
 config.region = "eu-west-1";
 
@@ -19,6 +20,12 @@ program.command('ecr-deploy <image> <repo> <tag>')
 program.command('iam-sync [paths...]')
   .action((paths) => {
     iamSync({ paths })
+      .catch(warnAndExit);
+  });
+
+program.command('ecs-create-cluster <cluster>')
+  .action((cluster) => {
+    clusterCreate(cluster)
       .catch(warnAndExit);
   });
 
