@@ -13,3 +13,18 @@ export const clusterCreate = async (clusterName) => {
     .createCluster({ clusterName })
     .promise();
 }
+
+export const throwUnlessClusterExists = async (cluster) => {
+  const clusters = (await new ECS({ apiVersion: '2014-11-13' })
+    .describeClusters({ clusters: [ cluster ] })
+    .promise())
+    .clusters;
+
+  if (clusters.length === 0) {
+    throw `cluster ${cluster} doesn't exist`;
+  }
+
+  if (clusters[0].status !== 'ACTIVE') {
+    throw `cluster ${cluster} isn't active`;
+  }
+};

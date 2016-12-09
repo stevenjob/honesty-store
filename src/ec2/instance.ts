@@ -1,4 +1,5 @@
 import { EC2 } from 'aws-sdk';
+import { throwUnlessClusterExists } from '../ecs/cluster';
 
 export const ec2InstanceList = async () => {
   const instances = await new EC2({ apiVersion: '2014-11-13' })
@@ -12,6 +13,8 @@ export const ec2InstanceList = async () => {
 }
 
 export const ec2InstanceCreate = async ({ cluster }) => {
+  await throwUnlessClusterExists(cluster);
+
   const runInstanceRequest = {
     // amazon docker machine image, see http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html
     ImageId: 'ami-a1491ad2',
