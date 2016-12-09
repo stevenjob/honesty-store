@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
+import { hashHistory } from 'react-router';
 import Balance from './balance';
 import SignUpForm from './sign-up-form';
 import TopUpForm from './top-up-form';
@@ -15,7 +16,6 @@ class BuyScreen extends React.Component {
     this.state = {
       isSignedUp: false,
       balance: 0,
-      emailAddress: '',
       showTopUpErrorMessage: false
     };
 
@@ -23,6 +23,7 @@ class BuyScreen extends React.Component {
     this.handleTopUpFormSubmit = this.handleTopUpFormSubmit.bind(this);
     this.handleTopUpErrorMessageOpen = this.handleTopUpErrorMessageOpen.bind(this);
     this.handleTopUpErrorMessageClose = this.handleTopUpErrorMessageClose.bind(this);
+    this.handleBuyButtonClick = this.handleBuyButtonClick.bind(this);
   }
 
   handleSignUpFormSubmit(emailAddress) {
@@ -32,21 +33,28 @@ class BuyScreen extends React.Component {
     if (!isRegistered) {
       mockApi.createAccount(emailAddress);
     }
-    const balance = mockApi.getBalance(emailAddress);
+    const balance = mockApi.getBalance();
 
     this.setState({
       isSignedUp: true,
       balance: balance,
-      emailAddress: emailAddress
     });
   }
 
   handleTopUpFormSubmit(topUpAmount, cardDetails) {
     mockApi.topUpAccount(topUpAmount, cardDetails).then((result) => {
-      this.setState({balance: this.state.balance + topUpAmount});
+      const newBalance = mockApi.getBalance();
+      this.setState({balance: newBalance});
     }, (err) => {
       this.handleTopUpErrorMessageOpen();
     });
+  }
+
+  handleBuyButtonClick() {
+    const product = this.getChosenProduct();
+    mockApi.purchaseProduct(product);
+    const successPath = `/${this.props.params.storeName}/success`
+    hashHistory.push(successPath)
   }
 
   isBuyButtonActive(isSignedUp, balance, productPrice) {
@@ -61,15 +69,18 @@ class BuyScreen extends React.Component {
     this.setState({
       isSignedUp: false,
       balance: 0,
-      emailAddress: '',
       showTopUpErrorMessage: false
     });
   }
 
-  render() {
-    const isSignedUp = this.state.isSignedUp;
+  getChosenProduct() {
     const chosenProductID = Number(this.props.params.productId);
-    const chosenProduct = mockApi.getProduct(chosenProductID);
+    return mockApi.getProduct(chosenProductID);
+  }
+
+  render() {
+    const chosenProduct = this.getChosenProduct();
+    const isSignedUp = this.state.isSignedUp;
     const isBuyButtonActive = this.isBuyButtonActive(this.state.isSignedUp, this.state.balance, chosenProduct.price);
     const topUpErrorTitle = 'Top Up Failed';
     const topUpErrorMessage = 'Sorry, there was a problem topping up your account. Please try again.';
@@ -81,7 +92,7 @@ class BuyScreen extends React.Component {
           <Row>
             <Col xs={12}>
               {isSignedUp
-                ? <Balance balance={this.state.balance} emailAddress={this.state.emailAddress}/>
+                ? <Balance balance={this.state.balance} emailAddress={mockApi.getCurrentUser()}/>
                 : <SignUpForm handleEmailAddressSubmit={this.handleSignUpFormSubmit}/>
               }
             </Col>
@@ -103,7 +114,7 @@ class BuyScreen extends React.Component {
 
           <Row>
             <Col xs={12}>
-              <BuyButton active={isBuyButtonActive}/>
+              <BuyButton active={isBuyButtonActive} clickHandler={this.handleBuyButtonClick}/>
             </Col>
           </Row>
 
