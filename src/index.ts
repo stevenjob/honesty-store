@@ -2,7 +2,7 @@ import * as program from 'commander';
 import { config } from 'aws-sdk';
 import ecrDeploy from './ecr/deploy';
 import iamSync from './iam/sync';
-import { clusterCreate } from './ecs/cluster';
+import { clusterList, clusterCreate } from './ecs/cluster';
 import { ec2InstanceCreate } from './ec2/instance';
 
 config.region = "eu-west-1";
@@ -29,6 +29,12 @@ program.command('ecs-create-cluster <cluster>')
     clusterCreate(cluster)
       .catch(warnAndExit);
   });
+
+program.command('ecs-list-cluster')
+  .action(() =>
+    clusterList()
+      .then(console.dir)
+      .catch(warnAndExit));
 
 program.command('ec2-create-instance <cluster>')
   .action((cluster) => {
