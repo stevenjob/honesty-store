@@ -75,10 +75,14 @@ class BuyScreen extends React.Component {
     });
   }
 
-  render() {
-    const isSignedUp = this.state.isSignedUp;
+  getChosenProduct() {
     const chosenProductID = Number(this.props.params.productId);
-    const chosenProduct = mockApi.getProduct(chosenProductID);
+    return mockApi.getProduct(chosenProductID);
+  }
+
+  render() {
+    const chosenProduct = this.getChosenProduct();
+    const isSignedUp = this.state.isSignedUp;
     const isBuyButtonActive = this.isBuyButtonActive(this.state.isSignedUp, this.state.balance, chosenProduct.price);
     const topUpErrorTitle = 'Top Up Failed';
     const topUpErrorMessage = 'Sorry, there was a problem topping up your account. Please try again.';
