@@ -51,7 +51,7 @@ class BuyScreen extends React.Component {
   }
 
   handleBuyButtonClick() {
-    const product = this.getChosenProduct()
+    const product = this.getChosenProduct();
     mockApi.purchaseProduct(product);
     const successPath = `/${this.props.params.storeName}/success`
     hashHistory.push(successPath)
