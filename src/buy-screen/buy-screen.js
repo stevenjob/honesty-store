@@ -37,19 +37,13 @@ class BuyScreen extends React.Component {
     this.setState({
       isSignedUp: true,
       balance: balance,
-      emailAddress: emailAddress,
-      showTopUpErrorMessage: false
+      emailAddress: emailAddress
     });
   }
 
   handleTopUpFormSubmit(topUpAmount, cardDetails) {
     mockApi.topUpAccount(topUpAmount, cardDetails).then((result) => {
-      this.setState({
-        isSignedUp: this.state.isSignedUp,
-        balance: this.state.balance + topUpAmount,
-        emailAddress: this.state.emailAddress,
-        showTopUpErrorMessage: false
-      });
+      this.setState({balance: this.state.balance + topUpAmount});
     }, (err) => {
       this.handleTopUpErrorMessageOpen();
     });
@@ -60,12 +54,7 @@ class BuyScreen extends React.Component {
   }
 
   handleTopUpErrorMessageOpen() {
-    this.setState({
-      isSignedUp: false,
-      balance: 0,
-      emailAddress: '',
-      showTopUpErrorMessage: true
-    });
+    this.setState({showTopUpErrorMessage: true});
   }
 
   handleTopUpErrorMessageClose() {
@@ -74,7 +63,7 @@ class BuyScreen extends React.Component {
       balance: 0,
       emailAddress: '',
       showTopUpErrorMessage: false
-    })
+    });
   }
 
   render() {
