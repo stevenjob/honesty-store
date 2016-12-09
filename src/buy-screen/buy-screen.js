@@ -45,7 +45,8 @@ class BuyScreen extends React.Component {
 
   handleTopUpFormSubmit(topUpAmount, cardDetails) {
     mockApi.topUpAccount(topUpAmount, cardDetails).then((result) => {
-      this.setState({balance: this.state.balance + topUpAmount});
+      const newBalance = mockApi.getBalance(this.state.emailAddress);
+      this.setState({balance: newBalance});
     }, (err) => {
       this.handleTopUpErrorMessageOpen();
     });
