@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
+import { hashHistory } from 'react-router';
 import Balance from './balance';
 import SignUpForm from './sign-up-form';
 import TopUpForm from './top-up-form';
@@ -23,6 +24,7 @@ class BuyScreen extends React.Component {
     this.handleTopUpFormSubmit = this.handleTopUpFormSubmit.bind(this);
     this.handleTopUpErrorMessageOpen = this.handleTopUpErrorMessageOpen.bind(this);
     this.handleTopUpErrorMessageClose = this.handleTopUpErrorMessageClose.bind(this);
+    this.handleBuyButtonClick = this.handleBuyButtonClick.bind(this);
   }
 
   handleSignUpFormSubmit(emailAddress) {
@@ -47,6 +49,13 @@ class BuyScreen extends React.Component {
     }, (err) => {
       this.handleTopUpErrorMessageOpen();
     });
+  }
+
+  handleBuyButtonClick() {
+    const product = this.getChosenProduct()
+    mockApi.purchaseProduct(product);
+    const successPath = `/${this.props.params.storeName}/success`
+    hashHistory.push(successPath)
   }
 
   isBuyButtonActive(isSignedUp, balance, productPrice) {
@@ -103,7 +112,7 @@ class BuyScreen extends React.Component {
 
           <Row>
             <Col xs={12}>
-              <BuyButton active={isBuyButtonActive}/>
+              <BuyButton active={isBuyButtonActive} clickHandler={this.handleBuyButtonClick}/>
             </Col>
           </Row>
 
