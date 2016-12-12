@@ -6,8 +6,6 @@ import mockApi from '../mock-api';
 
 class StoreScreen extends React.Component {
 
-  // Put store array in here
-
   constructor(props) {
     super(props);
     this.handleBuyButtonClick = this.handleBuyButtonClick.bind(this);
