@@ -6,22 +6,20 @@ import mockApi from '../mock-api';
 
 class StoreScreen extends React.Component {
 
-  // Put store array in here
-
   constructor(props) {
     super(props);
     this.handleBuyButtonClick = this.handleBuyButtonClick.bind(this);
   }
 
-  handleBuyButtonClick(id) {
-    hashHistory.push(`/${this.props.params.storeName}/buy/${id}`);
+  handleBuyButtonClick(product) {
+    hashHistory.push(`/${this.props.params.storeName}/buy/${product.id}`);
   }
 
   render() {
     return (
       <Grid>
-          <h2>{this.props.params.storeName}</h2>
-          <ProductList products={mockApi.inventory} buyButtonClickHandler={this.handleBuyButtonClick}/>
+        <h2>{this.props.params.storeName}</h2>
+        <ProductList products={mockApi.inventory} buyButtonClickHandler={this.handleBuyButtonClick}/>
       </Grid>
     );
   }
