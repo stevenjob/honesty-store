@@ -20,8 +20,8 @@ class StoreScreen extends React.Component {
   render() {
     return (
       <Grid>
-          <h2>{this.props.params.storeName}</h2>
-          <ProductList products={mockApi.inventory} buyButtonClickHandler={this.handleBuyButtonClick}/>
+        <h2>{this.props.params.storeName}</h2>
+        <ProductList products={mockApi.inventory} buyButtonClickHandler={this.handleBuyButtonClick}/>
       </Grid>
     );
   }
