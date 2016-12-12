@@ -9,10 +9,7 @@ class ProductList extends React.Component {
     this.products = this.props.products.map(product =>
       <Product
         key={product.id}
-        // pass product instead of each thing (but still do key separately)
-        id={product.id}
-        name={product.name}
-        price={product.price}
+        product={product}
         buyButtonClickHandler={this.props.buyButtonClickHandler}
       />
     );

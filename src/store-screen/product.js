@@ -8,16 +8,16 @@ class Product extends React.Component {
       <ListGroupItem className="product">
         <Row className="product-row">
           <Col xs={8}>
-            <p className="product-name">{this.props.name}</p>
+            <p className="product-name">{this.props.product.name}</p>
           </Col>
           <Col xs={4}>
             <Button
               bsStyle="success"
               bsSize="small"
               // Just pass the product back
-              onClick={() => this.props.buyButtonClickHandler(this.props.id)}
+              onClick={() => this.props.buyButtonClickHandler(this.props.product)}
             >
-              Buy (£{this.props.price.toFixed(2)})
+              Buy (£{this.props.product.price.toFixed(2)})
             </Button>
           </Col>
         </Row>

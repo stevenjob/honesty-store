@@ -11,8 +11,8 @@ class StoreScreen extends React.Component {
     this.handleBuyButtonClick = this.handleBuyButtonClick.bind(this);
   }
 
-  handleBuyButtonClick(id) {
-    hashHistory.push(`/${this.props.params.storeName}/buy/${id}`);
+  handleBuyButtonClick(product) {
+    hashHistory.push(`/${this.props.params.storeName}/buy/${product.id}`);
   }
 
   render() {
