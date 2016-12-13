@@ -12,12 +12,15 @@
   "scripts": {
     "compile": "tsc",
     "lint": "tslint src",
-    "test": "npm run lint && npm run compile"
+    "test": "npm run lint && npm run compile",
+    "preversion": "rimraf dist && tsc --outDir dist && git add -A dist",
+    "postversion": "git push && git push --tags"
   },
   "homepage": "https://github.com/honesty-store/infrastructure#readme",
   "devDependencies": {
     "@types/commander": "^2.3.31",
     "@types/node": "0.0.2",
+    "rimraf": "^2.5.4",
     "tslint": "^4.0.0",
     "tslint-microsoft-contrib": "^2.0.14",
     "typescript": "^2.1.0"
