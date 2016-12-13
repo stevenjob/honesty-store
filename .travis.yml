@@ -11,6 +11,7 @@ services:
   - docker
 before_install:
   - npm i -g npm@^3.0.0
+  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
 before_script:
   - npm prune
 script:
@@ -19,3 +20,6 @@ script:
   - docker build -t web .
 after_success:
   - echo 'exciting deployment goes here!'
+env:
+  NPM_TOKEN:
+    secure: "lPG9NaNb6CtDooed6OJsl5VG+kELmLl71/P/zOagOLutBcOpC1iO7yKM7QEQFVSGR0COwyVuXRRFmSTg8mC+CDrHiA3tFED+f5iRaDwPIyNs2YxSqtS1MBzeblzks7gyipHEzDK4YG9mam1PqaHkJFKW8YwfBI/EWF7iJ9F+Eb3gEHZfI0sAWMseIIoobmfnWc/MUyZDhR1USHfmzdps/hzu0pbskIVJOLr2uD7y3Q9HUYovOGu3ypG/NM7v/mzugP42QG2hSR5mg8OSYwS4GzokPk/g/0847RZkHHhSOfTSA15QnhR8jp8xXR8dk/7TAu/XUEVtsPjZn5M9eZStk3xaKqtbH2ncFCx+1f5LTAcSDGdIn7DUD7tNgUSy8d6YBBWUvP21PPDxIenXH9dKHyc2n921sCMYVL0NPOhBakOAukr2JQ1zLruPlwPtDo6n/nwUAz+/pByk5fZqqnqtqkUBU8Lq5VT+0uFpQxnJ7UDwBNAq7iZqHPbhiWIOQgwzGwlSSGnEQjYqSX892J1K3b2SFItw2FqyXO6ur2++lrxkbdDjpsKijJ+HWK7qZB3KjNZpuJHaBNatU8K8hpR08IbptylY/xW9b3nGKaNbAB8cIVmV6BoJ3we1uhNfec7JrfRBAGwQ6425IjNevnWJnzs4S4UxqARLDB9Luu1krRY="
