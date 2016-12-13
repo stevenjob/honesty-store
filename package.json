@@ -1,6 +1,6 @@
 {
   "name": "@honesty-store/infrastructure",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -18,13 +18,15 @@
   "devDependencies": {
     "@types/commander": "^2.3.31",
     "@types/node": "0.0.2",
-    "tslint": "^4.0.2",
+    "tslint": "^4.0.0",
     "tslint-microsoft-contrib": "^2.0.14",
-    "typescript": "^2.0.10"
+    "typescript": "^2.1.0"
   },
   "dependencies": {
     "aws-sdk": "^2.7.10",
     "commander": "^2.9.0"
   },
-  "main": "lib/index.js"
+  "bin": {
+    "infrastructure": "./bin/infrastructure"
+  }
 }
