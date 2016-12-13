@@ -31,25 +31,17 @@ requires:
 const registerTaskDefinition = async ({ image, family }) => {
   const ecs = new ECS({ apiVersion: '2014-11-13' });
 
-  try {
-    const existingDefinition = await ecs
-      .describeTaskDefinition({ taskDefinition: `${family}` })
-      .promise();
+  const definitionArns = (await ecs
+    .listTaskDefinitions({ familyPrefix: `${family}` })
+    .promise())
+    .taskDefinitionArns;
 
-    if (existingDefinition.taskDefinition.family === family
-    && existingDefinition.taskDefinition.containerDefinitions[0].image === image)
-    {
-      return `${family}:${existingDefinition.taskDefinition.revision}`;
-    }
-    // else: mismatching definition, fall through below to (re)create it
-
-  } catch (e) {
-    if (e.code !== 'ClientException') {
-      throw e;
-    }
-
-    // no definition found, fall through and create one
-  }
+  await Promise.all(
+    definitionArns.map(
+      (definitionArn) =>
+        ecs
+          .deregisterTaskDefinition({ taskDefinition: definitionArn })
+          .promise()));
 
   return createTaskDefinition({ family, image })
 };
