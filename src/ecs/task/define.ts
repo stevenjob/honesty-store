@@ -24,6 +24,10 @@ const createTaskDefinition = async ({ image, family }) => {
   return `${family}:${definitionResponse.taskDefinition.revision}`;
 }
 
+/*
+requires:
+"Action": "ecs:RegisterTaskDefinition", "ecs:DescribeTaskDefinition"
+*/
 const registerTaskDefinition = async ({ image, family }) => {
   const ecs = new ECS({ apiVersion: '2014-11-13' });
 

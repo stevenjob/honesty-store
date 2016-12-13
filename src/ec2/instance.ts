@@ -1,6 +1,11 @@
 import { EC2 } from 'aws-sdk';
 import { throwUnlessClusterExists } from '../ecs/cluster';
 
+/*
+requires:
+"Action": "ecs:ListContainerInstances
+resource: "arn:aws:ecs:<region>:<uid>:cluster/<glob>"
+*/
 export const ec2InstanceList = async () => {
   const instances = await new EC2({ apiVersion: '2014-11-13' })
     .describeInstances({})
@@ -12,6 +17,19 @@ export const ec2InstanceList = async () => {
     .filter((instance) => instance.State.Name === 'running');
 }
 
+/*
+requires:
+"Action": [
+  "ec2:RunInstances",
+  "iam:PassRole",
+  "iam:ListInstanceProfiles"
+],
+"Resource": [
+  "arn:aws:ec2:*:*",
+  "arn:aws:ecs:*",
+  "arn:aws:iam::*:*"
+]
+*/
 export const ec2InstanceCreate = async ({ cluster, securityGroupId }) => {
   await throwUnlessClusterExists(cluster);
 

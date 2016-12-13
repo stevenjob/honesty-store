@@ -1,5 +1,10 @@
 import { ECS } from 'aws-sdk';
 
+/*
+requires:
+"Action": "ecs:StartTask"
+resource: "arn:aws:ecs:<region>:<uid>:task-definition/<task-glob>"
+*/
 export const runTask = async ({ taskName, cluster, instance }) => {
   const taskLocation = {
     cluster,

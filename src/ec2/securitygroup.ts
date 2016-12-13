@@ -1,5 +1,14 @@
 import { EC2 } from 'aws-sdk';
 
+/*
+requires:
+"Action": [
+  "ec2:DescribeSecurityGroups",
+  "ec2:CreateSecurityGroup",
+  "ec2:AuthorizeSecurityGroupIngress"
+],
+*/
+
 const openUp = async ({ groupId }) => {
   const ingress = {
     GroupId: groupId,
