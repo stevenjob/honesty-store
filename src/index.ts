@@ -15,4 +15,9 @@ program.command('ecr-deploy <image> <repo> <tag>')
       .catch(warnAndExit);
   });
 
+program.command('*')
+  .action(() => {
+    program.help();
+  });
+
 program.parse(process.argv);
