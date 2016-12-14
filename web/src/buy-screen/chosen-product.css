@@ -1,0 +1,8 @@
+.chosen-product {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.chosen-product .chosen-product-label {
+  font-weight: bold;
+}
