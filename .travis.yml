@@ -1,0 +1,19 @@
+sudo: required
+language: node_js
+notifications:
+  email: false
+node_js:
+  - node
+services:
+  - docker
+env:
+  - DIR=api
+  - DIR=aws
+  - DIR=web
+script:
+  - cd ${DIR} && npm install && npm update && npm prune && npm run ci
+cache:
+   - "*/node_modules"
+after_success:
+  # prevent caching of local (relative path) packages between builds
+  - rm -rf */node_modules/@honesty-store

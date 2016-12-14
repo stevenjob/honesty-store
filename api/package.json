@@ -1,0 +1,9 @@
+{
+  "name": "@honesty-store/api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo 'look ma! no tests!'",
+    "ci": "npm test"
+  }
+}
