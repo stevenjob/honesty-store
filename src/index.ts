@@ -181,6 +181,8 @@ program.on('--help', () => console.log(``
     + `\n`
     + `Example query:\n`
     + `  ecs-query-cluster mycluster\n`
+    + `  ecs-query\n`
+    + `  ecs-list-urls mycluster\n`
   ));
 
 program.parse(process.argv);
