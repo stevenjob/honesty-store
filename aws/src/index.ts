@@ -9,10 +9,9 @@ import registerTaskDefinition from './ecs/task/define';
 import { securityGroupCreate } from './ec2/securitygroup';
 import { dumpClusterInformation } from './ecs/cluster/dump'
 import { dumpTaskUrls } from './ecs/task/dump'
+import { basename } from 'path';
 
 config.region = "eu-west-1";
-
-const taskDefinitionNameFamily = 'run-image-family';
 
 const warnAndExit = e => {
   console.error(e);
@@ -60,6 +59,8 @@ program.command('ecs-run-image-with-service <image> <service> <cluster>')
   .description('use this to create an auto-restarting service which will re-run <image> on <cluster>')
   .action(async (image, service, cluster) => {
     try {
+      const taskDefinitionNameFamily = `task-${basename(image).replace(/:/g, '-')}`;
+
       const taskName = await registerTaskDefinition({ image, family: taskDefinitionNameFamily })
 
       await serviceCreate({ name: service, cluster, task: taskName })
