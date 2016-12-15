@@ -31,7 +31,7 @@ requires:
 ]
 */
 export const ec2InstanceCreate = async ({ cluster, securityGroupId }) => {
-  await throwUnlessClusterExists(cluster);
+  await throwUnlessClusterExists({ cluster });
 
   const runInstanceRequest = {
     // amazon docker machine image, see http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html

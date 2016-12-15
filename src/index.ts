@@ -72,7 +72,7 @@ program.command('ecs-query-cluster <cluster>')
   .description('use this to retrieve a list of services and instances running on <cluster>')
   .action(async (clusterName) => {
     try {
-      const cluster = await clusterDescribe({ name: clusterName })
+      const cluster = await clusterDescribe({ cluster: clusterName })
 
       const serviceArnList = await serviceList({ cluster: clusterName });
       const instanceArnList = await containerInstanceList({ cluster: clusterName });
