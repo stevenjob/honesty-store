@@ -27,6 +27,20 @@ export const clusterCreate = async (clusterName) => {
 requires:
 "Action": "ecs:DescribeClusters"
 */
+export const clusterDescribe = async ({ name }) => {
+  const response = await new ECS({ apiVersion: '2014-11-13' })
+    .describeClusters({ clusters: [ name ] })
+    .promise()
+
+  awsCheckFailures(response);
+
+  return response.clusters[0]
+};
+
+/*
+requires:
+"Action": "ecs:DescribeClusters"
+*/
 export const throwUnlessClusterExists = async (cluster) => {
   const response = await new ECS({ apiVersion: '2014-11-13' })
     .describeClusters({ clusters: [ cluster ] })
@@ -43,18 +57,4 @@ export const throwUnlessClusterExists = async (cluster) => {
   if (clusters[0].status !== 'ACTIVE') {
     throw `cluster ${cluster} isn't active`;
   }
-};
-
-/*
-requires:
-"Action": "ecs:DescribeClusters"
-*/
-export const clusterDescribe = async ({ name }) => {
-  const response = await new ECS({ apiVersion: '2014-11-13' })
-    .describeClusters({ clusters: [ name ] })
-    .promise()
-
-  awsCheckFailures(response);
-
-  return response.clusters[0]
 };
