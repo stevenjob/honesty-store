@@ -7,6 +7,8 @@ import { serviceCreate, serviceList, serviceDescribe } from './ecs/service';
 import { containerInstanceList, containerInstanceDescribe } from './ecs/instance';
 import { runTask } from './ecs/task/run';
 import { ec2InstanceList, ec2InstanceCreate } from './ec2/instance';
+import { taskList } from './ecs/task/list';
+import { tasksDescribe } from './ecs/task/describe';
 import registerTaskDefinition from './ecs/task/define';
 import { securityGroupCreate } from './ec2/securitygroup';
 
@@ -56,6 +58,41 @@ const printClusterInformation = async (clusterName) => {
       }
     }
 
+  } catch (e) {
+    warnAndExit(e);
+  }
+};
+
+const printTaskUrls = async (clusterName) => {
+  try {
+    const taskArnList = await taskList({ cluster: clusterName });
+
+    if (taskArnList.length === 0) {
+      console.log(`<no tasks>`);
+      return;
+    }
+
+    const tasks = await tasksDescribe({ tasks: taskArnList, cluster: clusterName });
+
+    for (const task of tasks) {
+      // get the container instance, resolve to an ec2 instance, get its IP, then dump network bindings
+      const containerInstances = await containerInstanceDescribe({
+        containerInstances: [task.containerInstanceArn],
+        cluster: clusterName
+      });
+      const containerInstance = containerInstances[0];
+
+      const ec2Instances = await ec2InstanceList({ instanceIds: [ containerInstance.ec2InstanceId ] });
+      const ec2Instance = ec2Instances[0];
+
+      const networkBindings = task.containers
+        .map((container) => container.networkBindings)
+        .reduce((result, bindings) => result.concat(bindings), []);
+
+      // note: http assumed
+      networkBindings.forEach((networkBinding) =>
+        console.log(`http://${ec2Instance.PublicDnsName}:${networkBinding.hostPort}/`));
+    }
   } catch (e) {
     warnAndExit(e);
   }
@@ -123,6 +160,10 @@ program.command('ecs-query')
       warnAndExit(e);
     }
   });
+
+program.command('ecs-list-urls <cluster>')
+  .description('retrieve a list of urls for all tasks in <cluster>')
+  .action(printTaskUrls);
 
 program.command('*')
   .action(() => {

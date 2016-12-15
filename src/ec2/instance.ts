@@ -6,9 +6,13 @@ requires:
 "Action": "ecs:ListContainerInstances
 resource: "arn:aws:ecs:<region>:<uid>:cluster/<glob>"
 */
-export const ec2InstanceList = async () => {
+export const ec2InstanceList = async ({ instanceIds }) => {
+  const describeParams = {
+    InstanceIds: instanceIds
+  };
+
   const instances = await new EC2({ apiVersion: '2014-11-13' })
-    .describeInstances({})
+    .describeInstances(describeParams)
     .promise();
 
   return instances.Reservations
