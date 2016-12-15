@@ -43,21 +43,3 @@ export const serviceCreate = async ({ name, cluster, task }) => {
 
   await ecs.updateService(updateParams).promise();
 }
-
-export const serviceList = async ({ cluster }) => {
-  const response = await new ECS({ apiVersion: '2014-11-13' })
-    .listServices({ cluster })
-    .promise();
-
-  return response.serviceArns;
-}
-
-export const serviceDescribe = async ({ services, cluster }) => {
-  const response = await new ECS({ apiVersion: '2014-11-13' })
-    .describeServices({ services, cluster })
-    .promise();
-
-  awsCheckFailures(response);
-
-  return response.services;
-}

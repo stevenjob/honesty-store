@@ -2,13 +2,11 @@ import * as program from 'commander';
 import { config } from 'aws-sdk';
 import ecrDeploy from './ecr/deploy';
 import iamSync from './iam/sync';
-import { clusterList, clusterCreate } from './ecs/cluster/cluster';
+import { clusterCreate } from './ecs/cluster/cluster';
 import { serviceCreate } from './ecs/service';
 import { ec2InstanceCreate } from './ec2/instance';
 import registerTaskDefinition from './ecs/task/define';
 import { securityGroupCreate } from './ec2/securitygroup';
-import { dumpClusterInformation } from './ecs/cluster/dump'
-import { dumpTaskUrls } from './ecs/task/dump'
 import { basename } from 'path';
 
 config.region = "eu-west-1";
@@ -35,12 +33,6 @@ program.command('ecs-create-cluster <cluster>')
     clusterCreate(cluster)
       .catch(warnAndExit);
   });
-
-program.command('ecs-list-cluster')
-  .action(() =>
-    clusterList()
-      .then(console.dir)
-      .catch(warnAndExit));
 
 program.command('ec2-create-instance <cluster>')
   .description('use this to add an instance to <cluster>,\n'
@@ -69,36 +61,6 @@ program.command('ecs-run-image-with-service <image> <service> <cluster>')
     }
   });
 
-program.command('ecs-query-cluster <cluster>')
-  .description('use this to retrieve a list of services and instances running on <cluster>')
-  .action((cluster) => {
-    try {
-      dumpClusterInformation(cluster);
-    } catch (e) {
-      warnAndExit(e);
-    }
-  });
-
-program.command('ecs-query')
-  .description('retrieve a list of all clusters, services and instances')
-  .action(async () => {
-    try {
-      (await clusterList()).forEach(dumpClusterInformation);
-    } catch (e) {
-      warnAndExit(e);
-    }
-  });
-
-program.command('ecs-list-urls <cluster>')
-  .description('retrieve a list of urls for all tasks in <cluster>')
-  .action((cluster) => {
-    try {
-      dumpTaskUrls(cluster);
-    } catch (e) {
-      warnAndExit(e);
-    }
-  });
-
 program.command('*')
   .action(() => {
     program.help();
@@ -111,13 +73,7 @@ program.on('--help', () => console.log(``
     + `\n`
     + `Example image deployment:\n`
     + `  ecr-deploy mywebimage mywebrepo latest\n`
-    + `  ecs-run-image-with-service <uid>.dkr.ecr.<region>.amazonaws.com/mywebrepo:latest myservice mycluster\n`
-    + `\n`
-    + `Example query:\n`
-    + `  ecs-query-cluster mycluster\n`
-    + `  ecs-query\n`
-    + `  ecs-list-urls mycluster\n`
-  ));
+    + `  ecs-run-image-with-service <uid>.dkr.ecr.<region>.amazonaws.com/mywebrepo:latest myservice mycluster`));
 
 program.parse(process.argv);
 

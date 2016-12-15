@@ -3,26 +3,6 @@ import { throwUnlessClusterExists } from '../ecs/cluster/cluster';
 
 /*
 requires:
-"Action": "ecs:ListContainerInstances
-resource: "arn:aws:ecs:<region>:<uid>:cluster/<glob>"
-*/
-export const ec2InstanceList = async ({ instanceIds }) => {
-  const describeParams = {
-    InstanceIds: instanceIds
-  };
-
-  const instances = await new EC2({ apiVersion: '2014-11-13' })
-    .describeInstances(describeParams)
-    .promise();
-
-  return instances.Reservations
-    .map((reservation) => reservation.Instances)
-    .reduce((result, instances) => result.concat(instances), [])
-    .filter((instance) => instance.State.Name === 'running');
-}
-
-/*
-requires:
 "Action": [
   "ec2:RunInstances",
   "iam:PassRole",

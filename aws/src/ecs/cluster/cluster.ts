@@ -3,18 +3,6 @@ import { awsCheckFailures } from '../../failure';
 
 /*
 requires:
-"Action": "ecs:ListClusters"
-*/
-export const clusterList = async () => {
-  const response = await new ECS({ apiVersion: '2014-11-13' })
-    .listClusters()
-    .promise();
-
-  return response.clusterArns;
-}
-
-/*
-requires:
 "Action": "ecs:CreateCluster",
 */
 export const clusterCreate = async (clusterName) => {
@@ -27,7 +15,7 @@ export const clusterCreate = async (clusterName) => {
 requires:
 "Action": "ecs:DescribeClusters"
 */
-export const clusterDescribe = async ({ cluster }) => {
+const clusterDescribe = async ({ cluster }) => {
   const response = await new ECS({ apiVersion: '2014-11-13' })
     .describeClusters({ clusters: [ cluster ] })
     .promise()
