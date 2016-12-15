@@ -67,14 +67,15 @@ program.command('*')
     program.help();
   });
 
-program.on('--help', () => console.log(``
-    + `Example first-time setup:\n`
-    + `  ecs-create-cluster mycluster\n`
-    + `  ec2-create-instance mycluster\n`
-    + `\n`
-    + `Example image deployment:\n`
-    + `  ecr-deploy mywebimage mywebrepo latest\n`
-    + `  ecs-run-image-with-service <uid>.dkr.ecr.<region>.amazonaws.com/mywebrepo:latest myservice mycluster`));
+program.on('--help',
+  () => console.log(`
+Example first-time setup:
+  ecs-create-cluster mycluster
+  ec2-create-instance mycluster
+
+Example image deployment:
+  ecr-deploy mywebimage mywebrepo latest
+  ecs-run-image-with-service <uid>.dkr.ecr.<region>.amazonaws.com/mywebrepo:latest myservice mycluster`));
 
 program.parse(process.argv);
 
