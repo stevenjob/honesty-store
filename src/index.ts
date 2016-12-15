@@ -2,15 +2,13 @@ import * as program from 'commander';
 import { config } from 'aws-sdk';
 import ecrDeploy from './ecr/deploy';
 import iamSync from './iam/sync';
-import { clusterList, clusterCreate, clusterDescribe } from './ecs/cluster/cluster';
-import { serviceCreate, serviceList, serviceDescribe } from './ecs/service';
-import { containerInstanceList, containerInstanceDescribe } from './ecs/instance';
-import { runTask } from './ecs/task/run';
-import { ec2InstanceList, ec2InstanceCreate } from './ec2/instance';
-import { taskList } from './ecs/task/list';
-import { tasksDescribe } from './ecs/task/describe';
+import { clusterList, clusterCreate } from './ecs/cluster/cluster';
+import { serviceCreate } from './ecs/service';
+import { ec2InstanceCreate } from './ec2/instance';
 import registerTaskDefinition from './ecs/task/define';
 import { securityGroupCreate } from './ec2/securitygroup';
+import { dumpClusterInformation } from './ecs/cluster/dump'
+import { dumpTaskUrls } from './ecs/task/dump'
 
 config.region = "eu-west-1";
 
@@ -19,83 +17,6 @@ const taskDefinitionNameFamily = 'run-image-family';
 const warnAndExit = e => {
   console.error(e);
   process.exit(1);
-};
-
-const printClusterInformation = async (clusterName) => {
-  try {
-    const cluster = await clusterDescribe({ cluster: clusterName })
-
-    const serviceArnList = await serviceList({ cluster: clusterName });
-    const instanceArnList = await containerInstanceList({ cluster: clusterName });
-
-    console.log(`"${clusterName}": ${cluster.runningTasksCount} running task(s), `
-                + `${serviceArnList.length} service(s), `
-                + `${instanceArnList.length} instance(s)`);
-
-    if (serviceArnList.length) {
-      const services = await serviceDescribe({ services: serviceArnList, cluster: clusterName });
-
-      for (const service of services) {
-        console.log(`  service "${service.serviceName}":\n`
-                    + `    status: ${service.status}\n`
-                    + `    runningCount: ${service.runningCount}\n`
-                    + `    taskDefinition: ${service.taskDefinition}\n`
-                    + `    createdAt: ${service.createdAt}`);
-      }
-    }
-
-    if (instanceArnList.length) {
-      const instances = await containerInstanceDescribe({
-        containerInstances: instanceArnList, cluster: clusterName
-      });
-
-      for (const instance of instances) {
-        console.log(`  instance ${instance.containerInstanceArn}\n`
-                    + `    ec2-instance: ${instance.ec2InstanceId}\n`
-                    + `    status: ${instance.status}\n`
-                    + `    runningTasksCount: ${instance.runningTasksCount}\n`
-                    + `    pendingTasksCount: ${instance.pendingTasksCount}`);
-      }
-    }
-
-  } catch (e) {
-    warnAndExit(e);
-  }
-};
-
-const printTaskUrls = async (clusterName) => {
-  try {
-    const taskArnList = await taskList({ cluster: clusterName });
-
-    if (taskArnList.length === 0) {
-      console.log(`<no tasks>`);
-      return;
-    }
-
-    const tasks = await tasksDescribe({ tasks: taskArnList, cluster: clusterName });
-
-    for (const task of tasks) {
-      // get the container instance, resolve to an ec2 instance, get its IP, then dump network bindings
-      const containerInstances = await containerInstanceDescribe({
-        containerInstances: [task.containerInstanceArn],
-        cluster: clusterName
-      });
-      const containerInstance = containerInstances[0];
-
-      const ec2Instances = await ec2InstanceList({ instanceIds: [ containerInstance.ec2InstanceId ] });
-      const ec2Instance = ec2Instances[0];
-
-      const networkBindings = task.containers
-        .map((container) => container.networkBindings)
-        .reduce((result, bindings) => result.concat(bindings), []);
-
-      // note: http assumed
-      networkBindings.forEach((networkBinding) =>
-        console.log(`http://${ec2Instance.PublicDnsName}:${networkBinding.hostPort}/`));
-    }
-  } catch (e) {
-    warnAndExit(e);
-  }
 };
 
 program.command('ecr-deploy <image> <repo> <tag>')
@@ -149,13 +70,19 @@ program.command('ecs-run-image-with-service <image> <service> <cluster>')
 
 program.command('ecs-query-cluster <cluster>')
   .description('use this to retrieve a list of services and instances running on <cluster>')
-  .action(printClusterInformation);
+  .action((cluster) => {
+    try {
+      dumpClusterInformation(cluster);
+    } catch (e) {
+      warnAndExit(e);
+    }
+  });
 
 program.command('ecs-query')
   .description('retrieve a list of all clusters, services and instances')
   .action(async () => {
     try {
-      (await clusterList()).forEach(printClusterInformation);
+      (await clusterList()).forEach(dumpClusterInformation);
     } catch (e) {
       warnAndExit(e);
     }
@@ -163,7 +90,13 @@ program.command('ecs-query')
 
 program.command('ecs-list-urls <cluster>')
   .description('retrieve a list of urls for all tasks in <cluster>')
-  .action(printTaskUrls);
+  .action((cluster) => {
+    try {
+      dumpTaskUrls(cluster);
+    } catch (e) {
+      warnAndExit(e);
+    }
+  });
 
 program.command('*')
   .action(() => {
