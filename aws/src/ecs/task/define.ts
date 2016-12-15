@@ -36,12 +36,13 @@ const registerTaskDefinition = async ({ image, family }) => {
     .promise())
     .taskDefinitionArns;
 
-  await Promise.all(
-    definitionArns.map(
-      (definitionArn) =>
-        ecs
-          .deregisterTaskDefinition({ taskDefinition: definitionArn })
-          .promise()));
+  const deregisterDefinition = (definitionArn) => {
+    return ecs.deregisterTaskDefinition({ taskDefinition: definitionArn }).promise()
+  };
+
+  const deregisterPromises = definitionArns.map(deregisterDefinition);
+
+  await Promise.all(deregisterPromises);
 
   return createTaskDefinition({ family, image })
 };
