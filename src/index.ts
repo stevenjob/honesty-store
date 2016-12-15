@@ -2,9 +2,9 @@ import * as program from 'commander';
 import { config } from 'aws-sdk';
 import ecrDeploy from './ecr/deploy';
 import iamSync from './iam/sync';
-import { clusterList, clusterCreate } from './ecs/cluster';
-import { serviceCreate } from './ecs/service';
-import { containerInstanceList } from './ecs/instance';
+import { clusterList, clusterCreate, clusterDescribe } from './ecs/cluster';
+import { serviceCreate, serviceList, serviceDescribe } from './ecs/service';
+import { containerInstanceList, containerInstanceDescribe } from './ecs/instance';
 import { runTask } from './ecs/task/run';
 import { ec2InstanceList, ec2InstanceCreate } from './ec2/instance';
 import registerTaskDefinition from './ecs/task/define';
@@ -68,6 +68,50 @@ program.command('ecs-run-image-with-service <image> <service> <cluster>')
     }
   });
 
+program.command('ecs-query-cluster <cluster>')
+  .description('use this to retrieve a list of services and instances running on <cluster>')
+  .action(async (clusterName) => {
+    try {
+      const cluster = await clusterDescribe({ name: clusterName })
+
+      const serviceArnList = await serviceList({ cluster: clusterName });
+      const instanceArnList = await containerInstanceList({ cluster: clusterName });
+
+      console.log(`"${clusterName}": ${cluster.runningTasksCount} running task(s), `
+                  + `${serviceArnList.length} service(s), `
+                  + `${instanceArnList.length} instance(s)`);
+
+      if (serviceArnList.length) {
+        const services = await serviceDescribe({ services: serviceArnList, cluster: clusterName });
+
+        for (const service of services) {
+          console.log(`  service "${service.serviceName}":\n`
+                      + `    status: ${service.status}\n`
+                      + `    runningCount: ${service.runningCount}\n`
+                      + `    taskDefinition: ${service.taskDefinition}\n`
+                      + `    createdAt: ${service.createdAt}`);
+        }
+      }
+
+      if (instanceArnList.length) {
+        const instances = await containerInstanceDescribe({
+          containerInstances: instanceArnList, cluster: clusterName
+        });
+
+        for (const instance of instances) {
+          console.log(`  instance ${instance.containerInstanceArn}\n`
+                      + `    ec2-instance: ${instance.ec2InstanceId}\n`
+                      + `    status: ${instance.status}\n`
+                      + `    runningTasksCount: ${instance.runningTasksCount}\n`
+                      + `    pendingTasksCount: ${instance.pendingTasksCount}`);
+        }
+      }
+
+    } catch (e) {
+      warnAndExit(e);
+    }
+  });
+
 program.command('*')
   .action(() => {
     program.help();
@@ -81,6 +125,9 @@ program.on('--help', () => console.log(``
     + `Example image deployment:\n`
     + `  ecr-deploy mywebimage mywebrepo latest\n`
     + `  ecs-run-image-with-service <uid>.dkr.ecr.<region>.amazonaws.com/mywebrepo:latest myservice mycluster\n`
+    + `\n`
+    + `Example query:\n`
+    + `  ecs-query-cluster mycluster\n`
   ));
 
 program.parse(process.argv);

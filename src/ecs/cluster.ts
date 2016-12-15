@@ -40,3 +40,13 @@ export const throwUnlessClusterExists = async (cluster) => {
     throw `cluster ${cluster} isn't active`;
   }
 };
+
+/*
+requires:
+"Action": "ecs:DescribeClusters"
+*/
+export const clusterDescribe = async ({ name }) =>
+  (await new ECS({ apiVersion: '2014-11-13' })
+    .describeClusters({ clusters: [ name ] })
+    .promise())
+    .clusters[0]
