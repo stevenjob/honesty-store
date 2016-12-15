@@ -105,7 +105,7 @@ program.command('*')
 
 program.on('--help', () => console.log(``
     + `Example first-time setup:\n`
-    + `  ec2-create-cluster mycluster\n`
+    + `  ecs-create-cluster mycluster\n`
     + `  ec2-create-instance mycluster\n`
     + `\n`
     + `Example image deployment:\n`
