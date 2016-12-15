@@ -1,4 +1,5 @@
 import { ECS } from 'aws-sdk';
+import { awsCheckFailures } from '../failure';
 
 /*
 requires:
@@ -55,6 +56,8 @@ export const serviceDescribe = async ({ services, cluster }) => {
   const response = await new ECS({ apiVersion: '2014-11-13' })
     .describeServices({ services, cluster })
     .promise();
+
+  awsCheckFailures(response);
 
   return response.services;
 }

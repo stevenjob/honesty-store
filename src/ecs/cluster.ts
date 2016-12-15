@@ -1,4 +1,5 @@
 import { ECS } from 'aws-sdk';
+import { awsCheckFailures } from '../failure';
 
 /*
 requires:
@@ -27,10 +28,13 @@ requires:
 "Action": "ecs:DescribeClusters"
 */
 export const throwUnlessClusterExists = async (cluster) => {
-  const clusters = (await new ECS({ apiVersion: '2014-11-13' })
+  const response = await new ECS({ apiVersion: '2014-11-13' })
     .describeClusters({ clusters: [ cluster ] })
-    .promise())
-    .clusters;
+    .promise()
+
+  awsCheckFailures(response);
+
+  const clusters = response.clusters;
 
   if (clusters.length === 0) {
     throw `cluster ${cluster} doesn't exist`;
@@ -45,8 +49,12 @@ export const throwUnlessClusterExists = async (cluster) => {
 requires:
 "Action": "ecs:DescribeClusters"
 */
-export const clusterDescribe = async ({ name }) =>
-  (await new ECS({ apiVersion: '2014-11-13' })
+export const clusterDescribe = async ({ name }) => {
+  const response = await new ECS({ apiVersion: '2014-11-13' })
     .describeClusters({ clusters: [ name ] })
-    .promise())
-    .clusters[0]
+    .promise()
+
+  awsCheckFailures(response);
+
+  return response.clusters[0]
+};
