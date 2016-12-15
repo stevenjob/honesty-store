@@ -1,5 +1,5 @@
 import { EC2 } from 'aws-sdk';
-import { throwUnlessClusterExists } from '../ecs/cluster';
+import { throwUnlessClusterExists } from '../ecs/cluster/cluster';
 
 /*
 requires:

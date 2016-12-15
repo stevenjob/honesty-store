@@ -2,7 +2,7 @@ import * as program from 'commander';
 import { config } from 'aws-sdk';
 import ecrDeploy from './ecr/deploy';
 import iamSync from './iam/sync';
-import { clusterList, clusterCreate, clusterDescribe } from './ecs/cluster';
+import { clusterList, clusterCreate, clusterDescribe } from './ecs/cluster/cluster';
 import { serviceCreate, serviceList, serviceDescribe } from './ecs/service';
 import { containerInstanceList, containerInstanceDescribe } from './ecs/instance';
 import { runTask } from './ecs/task/run';
