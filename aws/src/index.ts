@@ -7,7 +7,6 @@ import { serviceCreate } from './ecs/service';
 import { ec2InstanceCreate } from './ec2/instance';
 import registerTaskDefinition from './ecs/task/define';
 import { securityGroupCreate } from './ec2/securitygroup';
-import { basename } from 'path';
 
 config.region = "eu-west-1";
 
@@ -51,7 +50,9 @@ program.command('ecs-run-image-with-service <image> <service> <cluster>')
   .description('use this to create an auto-restarting service which will re-run <image> on <cluster>')
   .action(async (image, service, cluster) => {
     try {
-      const taskDefinitionNameFamily = `task-${basename(image).replace(/:/g, '-')}`;
+      const [ /* entire match */, sanitizedImage ] = image.match(/amazonaws\.com\/(.*):/);
+
+      const taskDefinitionNameFamily = `task-${sanitizedImage}`;
 
       const taskName = await registerTaskDefinition({ image, family: taskDefinitionNameFamily })
 
