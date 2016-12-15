@@ -47,6 +47,7 @@ Maybe it's a good idea to encode the IAM policies in this repo???
 
 import { ECR, IAM, config } from 'aws-sdk';
 import { execSync } from 'child_process';
+import { awsCheckFailures } from '../failure';
 
 const getAccountId = async () => {
   const response = await new IAM({ apiVersion: '2010-05-08' })
@@ -71,6 +72,8 @@ const ensureRepoExists = async (repo) => {
     const response = await new ECR({ apiVersion: '2015-09-21' })
       .describeRepositories({ repositoryNames: [ repo ] })
       .promise();
+
+    awsCheckFailures(response);
   }
   catch (e) {
     if (e.code !== 'RepositoryNotFoundException') {
