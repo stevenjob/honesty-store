@@ -114,6 +114,16 @@ program.command('ecs-query-cluster <cluster>')
   .description('use this to retrieve a list of services and instances running on <cluster>')
   .action(printClusterInformation);
 
+program.command('ecs-query')
+  .description('retrieve a list of all clusters, services and instances')
+  .action(async () => {
+    try {
+      (await clusterList()).forEach(printClusterInformation);
+    } catch (e) {
+      warnAndExit(e);
+    }
+  });
+
 program.command('*')
   .action(() => {
     program.help();
