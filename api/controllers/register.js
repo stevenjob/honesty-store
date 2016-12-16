@@ -1,9 +1,3 @@
-/*
-* Register
-* Params: store code
-* Return: `refreshToken`, response from `/session` (including accessToken)
-*/
-
 const { registerAccount, updateAccount } = require('../services/accounts');
 const HTTPStatus = require('http-status');
 const { getPrice } = require('../services/store');
