@@ -63,18 +63,14 @@ describe('Full registration phase', () => {
           },
           json: true,
           body: {
-            /* eslint-disable*/
-            "emailAddress": "sburnstone@scottlogic.com",
-            "cardDetails": "1234123412341234",
-            "itemID": 1
-            /*eslint-enable*/
+            emailAddress: 'sburnstone@scottlogic.com',
+            cardDetails: '1234123412341234',
+            itemID: 1
           },
         },
         (error2, response2, body2) => {
-          /* eslint-disable dot-notation */
-          assert.property(body2['response'], 'balance');
-          assert.property(body2['response'], 'transactions');
-          /* eslint-enable */
+          assert.property(body2.response, 'balance');
+          assert.property(body2.response, 'transactions');
           done();
         });
       });
