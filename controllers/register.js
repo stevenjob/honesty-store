@@ -5,6 +5,7 @@
 */
 
 const { registerAccount, updateAccount } = require('../services/accounts');
+const HTTPStatus = require('http-status');
 const { getPrice } = require('../services/store');
 const { addItemTransaction, getBalance, getTransactionHistory } = require('../services/transactions');
 const { authenticate } = require('../middleware/authenticate');
@@ -45,7 +46,7 @@ const setupRegisterPhase1 = (router) => {
     (request, response) => {
       const { storeID } = request.body;
       const responseData = register(storeID);
-      response.status(200).json(responseData);
+      response.status(HTTPStatus.OK).json(responseData);
     });
 };
 
@@ -57,7 +58,7 @@ const setupRegisterPhase2 = (router) => {
       const { emailAddress, cardDetails, itemID } = request.body;
       const { accountID } = request;
       const responseData = register2(accountID, emailAddress, cardDetails, itemID);
-      response.status(200).json(responseData);
+      response.status(HTTPStatus.OK).json(responseData);
     });
 };
 

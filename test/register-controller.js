@@ -1,5 +1,6 @@
 const request = require('request');
 const assert = require('chai').assert;
+const HTTPStatus = require('http-status');
 
 require('../app');
 
@@ -28,19 +29,19 @@ describe('/register', () => {
 });
 
 describe('/register2', () => {
-  it('should return a 401 status when no token provided', (done) => {
+  it('should return \'UNAUTHORIZED\' status code when no token provided', (done) => {
     request.post(`${baseURL}/register2`)
       .auth(null, null, true, '')
       .on('response', (response) => {
-        assert.equal(response.statusCode, 401);
+        assert.equal(response.statusCode, HTTPStatus.UNAUTHORIZED);
         done();
       });
   });
-  it('should return a 403 status when invalid token provided', (done) => {
+  it('should return \'UNAUTHORIZED\' status code when invalid token provided', (done) => {
     request.post(`${baseURL}/register2`)
       .auth(null, null, true, '123')
       .on('response', (response) => {
-        assert.equal(response.statusCode, 403);
+        assert.equal(response.statusCode, HTTPStatus.UNAUTHORIZED);
         done();
       });
   });
