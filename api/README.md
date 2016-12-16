@@ -10,7 +10,7 @@ Uses express to generate an API server, serving static data.
 
 * Endpoints
   * All endpoints prefixed with `/api/v1/`
-  * `/register` - accepts store code, returns union of `refreshToken` and `/session` response
+  * `/register` - accepts store code, returns union of `refreshToken` and `/session` response (balance, store data and `accessToken`). Web app then subsequently calls `register2` endpoint which requires authentication (via the recently supplied `accessToken`) and also takes email, CC-details and item in initial purchase.
   * `/signin` - accepts email address, console log url (on the server), always responds with 200 response.  App has an `emailToken` (5 minute expiry). `emailToken` is passed to `/signin2`. This responds with a `refreshToken`. 
   * `/session` (authenticated) - returns all data required to render the UI (including balance, x recent transactions, last used store data, card references, etc.)
   * `/topup` (authenticated) - accepts card reference or details of a new card and the topup amount, returns new balance data
