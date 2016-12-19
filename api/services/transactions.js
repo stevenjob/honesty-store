@@ -16,7 +16,7 @@ const getTransactionHistory = userID => transactions.get(userID);
 
 const getBalance = (userID) => {
   const userTransactions = getTransactionHistory(userID);
-  return userTransactions.reduce((prev, current) => prev + current.amount, 0);
+  return userTransactions.reduce((balance, transaction) => balance + transaction.amount, 0);
 };
 
 module.exports = { addItemTransaction, getBalance, getTransactionHistory };
