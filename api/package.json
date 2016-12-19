@@ -6,7 +6,7 @@
   "scripts": {
     "ci": "npm test",
     "start": "nodemon app.js",
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "mocha"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
