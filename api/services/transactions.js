@@ -6,10 +6,8 @@ const getTimeStamp = () => {
 };
 
 const addItemTransaction = (userID, itemPrice) => {
-  let userTransactions = transactions.get(userID);
-  if (userTransactions == null) {
-    userTransactions = [];
-  }
+  const userTransactions = transactions.get(userID) || [];
+
   const transaction = {
     date: getTimeStamp(),
     amount: -itemPrice,
