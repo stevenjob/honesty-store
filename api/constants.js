@@ -1,3 +1,1 @@
-const secretKey = 'XonXxkgMfWsCapNfQerZfE3k';
-
-module.exports = { secretKey };
+exports.secretKey = 'XonXxkgMfWsCapNfQerZfE3k';
