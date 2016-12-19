@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { setupRegisterPhases } = require('./controllers/register');
+const registerController = require('./controllers/register');
 
 const app = express();
 const router = express.Router();

@@ -61,4 +61,4 @@ const setupRegisterPhases = (router) => {
   setupRegisterPhase2(router);
 };
 
-module.exports = { setupRegisterPhases };
+module.exports = setupRegisterPhases;
