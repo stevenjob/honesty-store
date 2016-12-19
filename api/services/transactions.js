@@ -1,15 +1,10 @@
 const transactions = new Map();
 
-const getTimeStamp = () => {
-  const currentTimeMS = new Date().getTime();
-  return Math.floor(currentTimeMS / 1000);
-};
-
 const addItemTransaction = (userID, itemPrice) => {
   const userTransactions = transactions.get(userID) || [];
 
   const transaction = {
-    date: getTimeStamp(),
+    date: Date.now(),
     amount: -itemPrice,
   };
   userTransactions.push(transaction);
