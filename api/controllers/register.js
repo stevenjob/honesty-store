@@ -5,7 +5,6 @@ const { addItemTransaction, getBalance, getTransactionHistory } = require('../se
 const { authenticate } = require('../middleware/authenticate');
 
 const register = (storeID) => {
-  // Create new account with default store ID
   const { accessToken, refreshToken } = registerAccount(storeID);
 
   return {
@@ -21,9 +20,8 @@ const register = (storeID) => {
 
 const register2 = (accountID, emailAddress, cardDetails, purchasedItemID) => {
   updateAccount(accountID, emailAddress, cardDetails);
-  // Call out to store service to retrieve price for given itemID
+
   const price = getPrice(purchasedItemID);
-  // Transactions service will add new transaction
   addItemTransaction(accountID, price);
 
   return {
