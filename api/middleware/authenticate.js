@@ -8,33 +8,36 @@ const authenticate = (request, response, next) => {
   const token = request.headers.authorization.split(' ')[1];
 
   if (token == null || token === '') {
-    return response.status(HTTPStatus.UNAUTHORIZED)
+    response.status(HTTPStatus.UNAUTHORIZED)
       .json({
         error: {
           message: 'No access token provided',
         },
       });
+    return;
   }
 
   jwt.verify(token, secretKey, (err) => {
     if (err) {
-      return response.status(HTTPStatus.UNAUTHORIZED)
+      response.status(HTTPStatus.UNAUTHORIZED)
         .json({
           error: {
             message: 'Invalid access token provided',
           },
         });
+      return;
     }
 
     // Check valid account
     const accountID = getAccountID(token);
     if (accountID == null) {
-      return response.status(HTTPStatus.UNAUTHORIZED)
+      response.status(HTTPStatus.UNAUTHORIZED)
         .json({
           error: {
             message: 'Invalid access token provided',
           },
         });
+      return;
     }
 
     // eslint-disable-next-line no-param-reassign
