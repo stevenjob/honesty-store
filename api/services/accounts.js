@@ -8,10 +8,7 @@ const generateAccessToken = () => {
   return jsonwebtoken.sign(data, secretKey, options);
 };
 
-const generateRefreshToken = () => {
-  const data = { uuid: uuid() };
-  return jsonwebtoken.sign(data, secretKey);
-};
+const generateRefreshToken = () => jsonwebtoken.sign(uuid(), secretKey);
 
 const accounts = [];
 
