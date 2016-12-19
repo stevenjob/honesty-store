@@ -12,5 +12,3 @@ registerController(router);
 app.use('/api/v1', router);
 
 app.listen(3000);
-
-module.exports = app;
