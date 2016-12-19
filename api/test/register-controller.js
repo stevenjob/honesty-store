@@ -65,7 +65,7 @@ describe('Full registration phase', () => {
           body: {
             emailAddress: 'sburnstone@scottlogic.com',
             cardDetails: '1234123412341234',
-            itemID: 1
+            itemID: 1,
           },
         },
         (error2, response2, body2) => {
