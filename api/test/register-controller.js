@@ -73,7 +73,7 @@ describe('Register Controller', () => {
     it('should return \'UNAUTHORIZED\' status code and relevant message when no email address provided', (done) => {
       sendRequest(null, (response, body) => {
         assert.equal(response.statusCode, HTTPStatus.UNAUTHORIZED);
-        assert.equal(body.error.message, 'No email address provided');
+        assert.equal(body.error.message, 'Invalid email address provided');
         done();
       });
     });
