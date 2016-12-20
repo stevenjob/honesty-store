@@ -1,6 +1,7 @@
 const request = require('request');
 const assert = require('chai').assert;
 const HTTPStatus = require('http-status');
+const { registerAccount } = require('../services/accounts');
 
 require('../app');
 
@@ -44,6 +45,38 @@ describe('/register2 token validation', () => {
         assert.equal(response.statusCode, HTTPStatus.UNAUTHORIZED);
         done();
       });
+  });
+});
+
+describe('/register2 email validation', () => {
+  const sendRequest = (emailAddress, callback) => {
+    const { accessToken } = registerAccount('NCL');
+    request.post({
+      uri: `${baseURL}/register2`,
+      auth: {
+        bearer: accessToken,
+      },
+      json: true,
+      body: { emailAddress },
+    },
+    (error, response, body) => {
+      callback(response, body);
+    });
+  };
+
+  it('should return \'UNAUTHORIZED\' status code and relevant message when no email address provided', (done) => {
+    sendRequest(null, (response, body) => {
+      assert.equal(response.statusCode, HTTPStatus.UNAUTHORIZED);
+      assert.equal(body.error.message, 'No email address provided');
+      done();
+    });
+  });
+  it('should return \'UNAUTHORIZED\' status code and relevant message when invalid email address provided', (done) => {
+    sendRequest('123.co.uk', (response, body) => {
+      assert.equal(response.statusCode, HTTPStatus.UNAUTHORIZED);
+      assert.equal(body.error.message, 'Invalid email address provided');
+      done();
+    });
   });
 });
 
