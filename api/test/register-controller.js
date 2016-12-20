@@ -28,7 +28,7 @@ describe('/register', () => {
   });
 });
 
-describe('/register2', () => {
+describe('/register2 token validation', () => {
   it('should return \'UNAUTHORIZED\' status code when no token provided', (done) => {
     request.post(`${baseURL}/register2`)
       .auth(null, null, true, '')
