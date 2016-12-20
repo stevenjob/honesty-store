@@ -16,7 +16,8 @@
     "jsonwebtoken": "^7.2.1",
     "mocha": "^3.2.0",
     "request": "^2.79.0",
-    "uuid": "^3.0.1"
+    "uuid": "^3.0.1",
+    "validator": "^6.2.0"
   },
   "devDependencies": {
     "eslint": "^3.12.1",
