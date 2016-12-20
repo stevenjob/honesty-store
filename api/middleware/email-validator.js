@@ -24,6 +24,8 @@ const validateEmail = (request, response, next) => {
     return;
   }
 
+  // eslint-disable-next-line no-param-reassign
+  request.emailAddress = emailAddress;
   next();
 };
 
