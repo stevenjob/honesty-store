@@ -42,4 +42,4 @@ const updateAccount = (id, emailAddress, cardDetails) => {
   account.cardDetails = cardDetails;
 };
 
-module.exports = { registerAccount, updateAccount, getAccountID };
+module.exports = { registerAccount, updateAccount, getAccountID, __accounts: accounts };

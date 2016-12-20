@@ -1,13 +1,17 @@
 const request = require('request');
 const assert = require('chai').assert;
 const HTTPStatus = require('http-status');
-const { registerAccount } = require('../services/accounts');
+const { registerAccount, __accounts } = require('../services/accounts');
 
 require('../app');
 
 const baseURL = 'http://localhost:3000/api/v1';
 
 describe('Register Controller', () => {
+  beforeEach(() => {
+    __accounts.length = 0;
+  });
+
   describe('/register', () => {
     it('should contain a refresh token as part of its JSON response', (done) => {
       request.post(`${baseURL}/register`,
