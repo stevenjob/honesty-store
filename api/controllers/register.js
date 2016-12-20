@@ -2,7 +2,7 @@ const { registerAccount, updateAccount } = require('../services/accounts');
 const HTTPStatus = require('http-status');
 const { getPrice } = require('../services/store');
 const { addItemTransaction, getBalance, getTransactionHistory } = require('../services/transactions');
-const { authenticate } = require('../middleware/authenticate');
+const authenticate = require('../middleware/authenticate');
 
 const register = (storeID) => {
   const { accessToken, refreshToken } = registerAccount(storeID);
