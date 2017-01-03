@@ -12,13 +12,13 @@ const generateRefreshToken = () => jsonwebtoken.sign(uuid(), secretKey);
 
 const accounts = [];
 
-const registerAccount = (defaultStoreID) => {
+const registerAccount = (defaultStoreCode) => {
   const account = {
     id: uuid(),
     balance: 0,
     refreshToken: generateRefreshToken(),
     accessToken: generateAccessToken(),
-    defaultStoreID,
+    defaultStoreCode,
   };
 
   accounts.push(account);
@@ -26,12 +26,20 @@ const registerAccount = (defaultStoreID) => {
   return account;
 };
 
-const getAccountID = (accessToken) => {
+const getAccountIDFromAccessToken = (accessToken) => {
   const foundAccount = accounts.find(element => element.accessToken === accessToken);
-  if (foundAccount != null) {
-    return foundAccount.id;
+  if (foundAccount == null) {
+    throw new Error(`No account found with access token '${accessToken}'`);
   }
-  return undefined;
+  return foundAccount.id;
+};
+
+const getAccountIDFromRefreshToken = (refreshToken) => {
+  const foundAccount = accounts.find(element => element.refreshToken === refreshToken);
+  if (foundAccount == null) {
+    throw new Error(`No account found with refresh token '${refreshToken}'`);
+  }
+  return foundAccount.id;
 };
 
 const getAccount = id => accounts.find(element => element.id === id);
@@ -42,4 +50,24 @@ const updateAccount = (id, emailAddress, cardDetails) => {
   account.cardDetails = cardDetails;
 };
 
-module.exports = { registerAccount, updateAccount, getAccountID, __accounts: accounts };
+const getCardNumber = userID => getAccount(userID).cardDetails;
+const getDefaultStoreCode = userID => getAccount(userID).defaultStoreCode;
+const getAccessToken = (userID) => {
+  const newAccessToken = generateAccessToken();
+
+  const account = getAccount(userID);
+  account.accessToken = newAccessToken;
+
+  return newAccessToken;
+};
+
+module.exports = {
+  registerAccount,
+  updateAccount,
+  getAccountIDFromAccessToken,
+  getAccountIDFromRefreshToken,
+  getCardNumber,
+  getDefaultStoreCode,
+  getAccessToken,
+  __accounts: accounts,
+};
