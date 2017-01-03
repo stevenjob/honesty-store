@@ -1,0 +1,14 @@
+[
+    {
+        "name": "container",
+        "image": "${image}",
+        "memory": 128,
+        "essential": true,
+        "portMappings": [
+            {
+                "containerPort": 8080,
+                "protocol": "tcp"
+            }
+        ]
+    }
+]

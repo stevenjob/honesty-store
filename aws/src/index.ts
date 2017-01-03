@@ -1,12 +1,15 @@
 import * as program from 'commander';
 import { config } from 'aws-sdk';
-import ecrDeploy from './ecr/deploy';
 import iamSync from './iam/sync';
-import { clusterCreate } from './ecs/cluster/cluster';
-import { serviceCreate } from './ecs/service';
+import { clusterCreate } from './ecs/cluster';
 import { ec2InstanceCreate } from './ec2/instance';
-import registerTaskDefinition from './ecs/task/define';
 import { securityGroupCreate } from './ec2/securitygroup';
+import deploy from './script/deploy';
+import prune from './script/prune';
+import * as winston from 'winston';
+
+// types, what types?! configure doesn't seem to work so...
+(<any>winston).level = 'debug';
 
 config.region = "eu-west-1";
 
@@ -15,9 +18,15 @@ const warnAndExit = e => {
   process.exit(1);
 };
 
-program.command('ecr-deploy <image> <repo> <tag>')
-  .action((image, repo, tag) => {
-    ecrDeploy({ image, repo, tag })
+program.command('deploy <dir> <branch>')
+  .action((dir, branch) => {
+    deploy({ dir, branch })
+      .catch(warnAndExit);
+  });
+
+program.command('prune')
+  .action(() => {
+    prune()
       .catch(warnAndExit);
   });
 
@@ -34,8 +43,7 @@ program.command('ecs-create-cluster <cluster>')
   });
 
 program.command('ec2-create-instance <cluster>')
-  .description('use this to add an instance to <cluster>,\n'
-               + 'which gives `ecs-run-image-with-service` more instances on which to run')
+  .description('use this to add an ec2 instance to <cluster>')
   .action(async (cluster) => {
     try {
       const securityGroupId = await securityGroupCreate({ name: 'open2world', open: true });
@@ -46,36 +54,10 @@ program.command('ec2-create-instance <cluster>')
     }
   });
 
-program.command('ecs-run-image-with-service <image> <service> <cluster>')
-  .description('use this to create an auto-restarting service which will re-run <image> on <cluster>')
-  .action(async (image, service, cluster) => {
-    try {
-      const [ /* entire match */, sanitizedImage ] = image.match(/amazonaws\.com\/(.*):/);
-
-      const taskDefinitionNameFamily = `task-${sanitizedImage}`;
-
-      const taskName = await registerTaskDefinition({ image, family: taskDefinitionNameFamily })
-
-      await serviceCreate({ name: service, cluster, task: taskName })
-    } catch (e) {
-      warnAndExit(e)
-    }
-  });
-
 program.command('*')
   .action(() => {
     program.help();
   });
-
-program.on('--help',
-  () => console.log(`
-Example first-time setup:
-  ecs-create-cluster mycluster
-  ec2-create-instance mycluster
-
-Example image deployment:
-  ecr-deploy mywebimage mywebrepo latest
-  ecs-run-image-with-service <uid>.dkr.ecr.<region>.amazonaws.com/mywebrepo:latest myservice mycluster`));
 
 program.parse(process.argv);
 

@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "npm run compile",
     "compile": "tsc",
     "lint": "tslint src",
     "test": "npm run lint && npm run compile",
@@ -11,14 +10,18 @@
   },
   "devDependencies": {
     "@types/commander": "^2.3.31",
+    "@types/ms": "^0.7.29",
+    "@types/node": "0.0.2",
+    "@types/winston": "0.0.32",
     "tslint": "^4.0.0",
-    "tslint-microsoft-contrib": "^2.0.14"
+    "tslint-microsoft-contrib": "^2.0.14",
+    "typescript": "^2.1.0"
   },
   "dependencies": {
-    "typescript": "^2.1.0",
-    "@types/node": "0.0.2",
     "aws-sdk": "^2.7.10",
-    "commander": "^2.9.0"
+    "commander": "^2.9.0",
+    "ms": "^0.7.2",
+    "winston": "^2.3.0"
   },
   "bin": {
     "aws": "./bin/aws"

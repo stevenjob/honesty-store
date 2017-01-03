@@ -1,5 +1,5 @@
 import { ECS } from 'aws-sdk';
-import { awsCheckFailures } from '../../failure';
+import { awsCheckFailures } from '../failure';
 
 /*
 requires:
