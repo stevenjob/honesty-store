@@ -2,11 +2,11 @@ const { registerAccount, updateAccount } = require('../services/accounts');
 const HTTPStatus = require('http-status');
 const { getPrice } = require('../services/store');
 const { addItemTransaction, getBalance, getTransactionHistory } = require('../services/transactions');
-const authenticate = require('../middleware/authenticate');
 const isEmail = require('validator/lib/isEmail');
 
 const register = (storeID) => {
   const { accessToken, refreshToken } = registerAccount(storeID);
+const { authenticateAccessToken } = require('../middleware/authenticate');
 
   return {
     response: {
@@ -46,7 +46,7 @@ const setupRegisterPhase1 = (router) => {
 const setupRegisterPhase2 = (router) => {
   router.post(
     '/register2',
-    authenticate,
+    authenticateAccessToken,
     (request, response) => {
       const emailAddress = request.body.emailAddress || '';
       if (!isEmail(emailAddress)) {
