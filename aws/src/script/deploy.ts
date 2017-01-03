@@ -34,6 +34,9 @@ const config = {
         loadBalancer: { pathPattern: '/user/*', priority: 4 },
         taskRoleArn: 'arn:aws:iam::812374064424:role/dynamo-db-role'
     },
+    topup: {
+        loadBalancer: { pathPattern: '/topup/*', priority: 5 }
+    },
 };
 
 const ensureDatabase = async ({ branch, dir }) => {

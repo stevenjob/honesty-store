@@ -16,5 +16,6 @@ script:
   - (cd transaction && npm install && npm run ci)
   - (cd user && npm install && npm run ci)
   - (cd web && npm install && npm run ci)
-  - ./aws/bin/aws deploy $TRAVIS_BRANCH api transaction user web
+  - (cd topup && npm install && npm run ci)
+  - ./aws/bin/aws deploy $TRAVIS_BRANCH api transaction user web topup
   - ./aws/bin/aws prune
