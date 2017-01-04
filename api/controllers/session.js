@@ -34,13 +34,14 @@ const setupSessionEndpoint = (router) => {
     '/session',
     authenticateRefreshToken,
     (request, response) => {
-      response.status(HTTPStatus.OK).json({
-        response: {
-          user: getUserSessionData(request.accountID),
-          store: getStoreSessionData(request.accountID),
-          accessToken: getAccessToken(request.accountID),
-        },
-      });
+      response.status(HTTPStatus.OK)
+        .json({
+          response: {
+            user: getUserSessionData(request.accountID),
+            store: getStoreSessionData(request.accountID),
+            accessToken: getAccessToken(request.accountID),
+          },
+        });
     });
 };
 
