@@ -7,34 +7,44 @@ require('../app');
 
 const baseURL = 'http://localhost:3000/api/v1';
 
-describe('Register Controller', () => {
+describe('/register', () => {
   beforeEach(() => {
     __accounts.length = 0;
   });
 
-  describe('/register', () => {
+  describe('Token response data', () => {
+    const sendRequest = (storeCode, callback) => {
+      const options = {
+        uri: `${baseURL}/register`,
+        json: true,
+        body: { storeCode },
+      };
+
+      request.post(options, callback);
+    };
+
     it('should contain a refresh token as part of its JSON response', (done) => {
-      request.post(`${baseURL}/register`,
+      sendRequest('NCL',
         (error, response, body) => {
-          const parsed = JSON.parse(body);
-          const refreshToken = parsed.response.refreshToken;
+          const refreshToken = body.response.refreshToken;
           assert.isNotNull(refreshToken);
           done();
         });
     });
 
     it('should contain an access token as part of its JSON response', (done) => {
-      request.post(`${baseURL}/register`,
+      sendRequest('NCL',
         (error, response, body) => {
-          const parsed = JSON.parse(body);
-          const accessToken = parsed.response.accessToken;
+          const accessToken = body.response.accessToken;
           assert.isNotNull(accessToken);
           done();
         });
     });
   });
+});
 
-  describe('/register2 token validation', () => {
+describe('/register2', () => {
+  describe('Token validation', () => {
     it('should return \'UNAUTHORIZED\' status code when no token provided', (done) => {
       request.post(`${baseURL}/register2`)
         .auth(null, null, true, '')
@@ -54,24 +64,24 @@ describe('Register Controller', () => {
     });
   });
 
-  describe('/register2 email validation', () => {
-    const sendRequest = (emailAddress, callback) => {
-      const { accessToken } = registerAccount('NCL');
-      request.post({
-        uri: `${baseURL}/register2`,
-        auth: {
-          bearer: accessToken,
-        },
-        json: true,
-        body: { emailAddress },
+  const sendRequest = (attributes, callback) => {
+    const { accessToken } = registerAccount('NCL');
+    request.post({
+      uri: `${baseURL}/register2`,
+      auth: {
+        bearer: accessToken,
       },
-      (error, response, body) => {
-        callback(response, body);
-      });
-    };
+      json: true,
+      body: attributes,
+    },
+    (error, response, body) => {
+      callback(response, body);
+    });
+  };
 
+  describe('Email validation', () => {
     it('should return \'UNAUTHORIZED\' status code and relevant message when no email address provided', (done) => {
-      sendRequest(null, (response, body) => {
+      sendRequest({ emailAddress: null }, (response, body) => {
         assert.equal(response.statusCode, HTTPStatus.UNAUTHORIZED);
         assert.equal(body.error.message, 'Invalid email address provided');
         done();
@@ -79,9 +89,17 @@ describe('Register Controller', () => {
     });
 
     it('should return \'UNAUTHORIZED\' status code and relevant message when invalid email address provided', (done) => {
-      sendRequest('123.co.uk', (response, body) => {
+      sendRequest({ emailAddress: '123.co.uk' }, (response, body) => {
         assert.equal(response.statusCode, HTTPStatus.UNAUTHORIZED);
         assert.equal(body.error.message, 'Invalid email address provided');
+        done();
+      });
+    });
+
+    it('should return \'OK\' status code and response data when valid email address provided', (done) => {
+      sendRequest({ emailAddress: 'test@123.co.uk', itemID: 0 }, (response, body) => {
+        assert.equal(response.statusCode, HTTPStatus.OK);
+        assert.property(body, 'response');
         done();
       });
     });
