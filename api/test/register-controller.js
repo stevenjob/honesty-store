@@ -130,34 +130,4 @@ describe('/register2', () => {
       });
     });
   });
-
-  describe('Full registration phase', () => {
-    it('should return a response with balance and transaction after calling /register2', (done) => {
-      request.post(`${baseURL}/register`,
-        (error1, response1, body1) => {
-          const accessToken = JSON.parse(body1).response.accessToken;
-
-          // Now we have this, call '/register2' to complete registration
-          // TODO: look into promises to clean up this nesting
-          request.post({
-            uri: `${baseURL}/register2`,
-            method: 'POST',
-            auth: {
-              bearer: accessToken,
-            },
-            json: true,
-            body: {
-              emailAddress: 'sburnstone@scottlogic.com',
-              cardDetails: '1234123412341234',
-              itemID: 1,
-            },
-          },
-          (error2, response2, body2) => {
-            assert.property(body2.response, 'balance');
-            assert.property(body2.response, 'transactions');
-            done();
-          });
-        });
-    });
-  });
 });
