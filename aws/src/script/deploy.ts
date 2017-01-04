@@ -11,7 +11,7 @@ import { ensureService } from '../ecs/service';
 import * as winston from 'winston';
 
 
-export const loadBalancerName = 'honesty-store';
+export const loadBalancerName = 'hs';
 export const defaultTargetGroupDir = 'web';
 export const role = 'arn:aws:iam::812374064424:role/ecs-service-role';
 export const cluster = 'test-cluster';
