@@ -58,6 +58,7 @@ program.command('ec2-create-instance <cluster>')
 program.command('local-db <table-name>')
   .description('use this to create a table in a local instance of dynamodb')
   .action((tableName) => {
+    (<any>config).endpoint = 'http://localhost:8000/';
     createLocalDatabase({ tableName })
         .then(console.log)
         .catch(warnAndExit);
