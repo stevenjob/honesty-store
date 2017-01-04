@@ -42,9 +42,9 @@ export const ensureService = async (serviceRequest: ECS.CreateServiceRequest) =>
 
     winston.debug('service: updateService', service);
 
-    const waitResponse = await ecs.waitFor('tasksRunning', {
+    const waitResponse = await ecs.waitFor('servicesStable', {
       cluster: serviceRequest.cluster,
-      tasks: [serviceRequest.taskDefinition]
+      services: [serviceRequest.serviceName]
     })
       .promise();
 
