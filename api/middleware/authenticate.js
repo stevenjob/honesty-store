@@ -6,13 +6,12 @@ const { getAccountIDFromAccessToken, getAccountIDFromRefreshToken } = require('.
 const getToken = request => request.headers.authorization.split(' ')[1];
 
 const tokenIsValid = (token) => {
-  let isValid = true;
-  jwt.verify(token, secretKey, (err) => {
-    if (err) {
-      isValid = false;
-    }
-  });
-  return isValid;
+  try {
+    jwt.verify(token, secretKey);
+    return true;
+  } catch (e) {
+    return false;
+  }
 };
 
 const authenticateToken = (request, response, next, tokenRetrievalGetter) => {
