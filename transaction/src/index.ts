@@ -170,4 +170,9 @@ router.post('/', (req, res) => {
 
 app.use('/transaction/v1', router);
 
+// send healthy response to load balancer probes
+app.get('/', (req, res) => {
+    res.send(200);
+})
+
 app.listen(3000);
