@@ -6,6 +6,7 @@ import { ec2InstanceCreate } from './ec2/instance';
 import { securityGroupCreate } from './ec2/securitygroup';
 import deploy from './script/deploy';
 import prune from './script/prune';
+import { createLocalDatabase } from './script/local-db';
 import * as winston from 'winston';
 
 // types, what types?! configure doesn't seem to work so...
@@ -52,6 +53,14 @@ program.command('ec2-create-instance <cluster>')
     } catch (e) {
       warnAndExit(e);
     }
+  });
+
+program.command('local-db <table-name>')
+  .description('use this to create a table in a local instance of dynamodb')
+  .action((tableName) => {
+    createLocalDatabase({ tableName })
+        .then(console.log)
+        .catch(warnAndExit);
   });
 
 program.command('*')
