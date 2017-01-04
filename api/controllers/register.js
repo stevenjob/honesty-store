@@ -25,6 +25,9 @@ const register2 = (accountID, emailAddress, cardDetails, purchasedItemID) => {
     const price = getPrice(purchasedItemID);
     addItemTransaction(accountID, price);
   } catch (e) {
+    /* We don't want to fail if the item could not be purchased, however the client
+    is expected to assert that a transaction exists for the item and alert the user
+    appropriately if one doesn't. */
     winston.warn(e.message);
   }
 
