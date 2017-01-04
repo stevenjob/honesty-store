@@ -1,9 +1,9 @@
 const request = require('request');
 const assert = require('chai').assert;
 const HTTPStatus = require('http-status');
-const { registerAccount, __accounts } = require('../services/accounts');
+const { registerAccount, __accounts } = require('../src/services/accounts');
 
-require('../app');
+require('../src/app');
 
 const baseURL = 'http://localhost:3000/api/v1';
 
