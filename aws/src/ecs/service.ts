@@ -1,5 +1,6 @@
 import { ECS } from 'aws-sdk';
 import * as winston from 'winston';
+import { awsCheckFailures } from '../failure';
 
 /*
 requires:
@@ -40,6 +41,15 @@ export const ensureService = async (serviceRequest: ECS.CreateServiceRequest) =>
     const service = updateResponse.service;
 
     winston.debug('service: updateService', service);
+
+    const waitResponse = await ecs.waitFor('tasksRunning', {
+      cluster: serviceRequest.cluster,
+      tasks: [serviceRequest.taskDefinition]
+    })
+      .promise();
+
+    awsCheckFailures(waitResponse);
+    // no failures - task(s) are running
 
     return service;
   }
