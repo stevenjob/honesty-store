@@ -21,6 +21,7 @@ const ruleMappings = {
     web: { pathPattern: '/', priority: 10 },
     api: { pathPattern: '/api', priority: 1 },
     nginx: { pathPattern: '/test', priority: 2 },
+    transaction: { pathPattern: '/transaction', priority: 3 },
 };
 
 export const branchToPort = (branch) => {

@@ -1,0 +1,21 @@
+[
+    {
+        "name": "container",
+        "image": "${image}",
+        "memory": 64,
+        "essential": true,
+        "portMappings": [
+            {
+                "containerPort": 3000,
+                "protocol": "tcp"
+            }
+        ],
+        "environment": [
+            {
+                "name": "TABLE_NAME",
+                "value": "${tableName}"
+            }
+        ],
+        "taskRoleArn": "arn:aws:iam::812374064424:role/dynamo-db-role"
+    }
+]
