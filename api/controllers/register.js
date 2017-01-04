@@ -2,22 +2,19 @@ const isEmail = require('validator/lib/isEmail');
 const HTTPStatus = require('http-status');
 
 const { registerAccount, updateAccount } = require('../services/accounts');
-const { getPrice, getItems } = require('../services/store');
-const { addItemTransaction, addTopUpTransaction, getBalance, getTransactionHistory } = require('../services/transactions');
+const { getPrice } = require('../services/store');
+const { addItemTransaction, addTopUpTransaction } = require('../services/transactions');
+const getSessionData = require('../services/session');
 const { authenticateAccessToken } = require('../middleware/authenticate');
 
 const register = (storeCode) => {
-  const { accessToken, refreshToken } = registerAccount(storeCode);
+  const { id, accessToken, refreshToken } = registerAccount(storeCode);
 
-  return {
-    response: {
-      refreshToken,
-      accessToken,
-      sessionData: {
-        // Pulled from `/session` endpoint
-      },
-    },
-  };
+  const response = getSessionData(id);
+  response.refreshToken = refreshToken;
+  response.accessToken = accessToken;
+
+  return { response };
 };
 
 const register2 = (accountID, emailAddress, cardDetails, purchasedItemID) => {
@@ -26,12 +23,8 @@ const register2 = (accountID, emailAddress, cardDetails, purchasedItemID) => {
   const price = getPrice(purchasedItemID);
   addItemTransaction(accountID, price);
 
-  return {
-    response: {
-      balance: getBalance(accountID),
-      transactions: getTransactionHistory(accountID),
-    },
-  };
+  const response = getSessionData(accountID);
+  return { response };
 };
 
 const setupRegisterPhase1 = (router) => {
