@@ -105,18 +105,22 @@ const createTransaction = async ({ accountId, type, amount, data }) => {
         throw new Error(`Balance would be negative ${updatedAccount.balance}`);
     }
 
+    const lastTransactionId = originalAccount.transactions.length === 0 ? null : originalAccount.transactions[0].id;
+
     const response = await new DynamoDB.DocumentClient()
         .update({
             TableName: process.env.TABLE_NAME,
             Key: {
                 id: accountId
             },
-            ConditionExpression: 'balance=:originalBalance',
-            UpdateExpression: "set balance=:updatedBalance, transactions=:transactions",
+            ConditionExpression: 'balance=:originalBalance and (size(transactions) = :zero or transactions[0].id = :lastTransactionId)',
+            UpdateExpression: 'set balance=:updatedBalance, transactions=:transactions',
             ExpressionAttributeValues: {
                 ':originalBalance': originalAccount.balance,
                 ':updatedBalance': updatedAccount.balance,
-                ':transactions': updatedAccount.transactions
+                ':transactions': updatedAccount.transactions,
+                ':zero': 0,
+                ':lastTransactionId': lastTransactionId
             }
         })
         .promise();
