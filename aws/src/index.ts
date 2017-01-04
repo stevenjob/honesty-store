@@ -6,7 +6,7 @@ import { ec2InstanceCreate } from './ec2/instance';
 import { securityGroupCreate } from './ec2/securitygroup';
 import deploy from './script/deploy';
 import prune from './script/prune';
-import { createLocalDatabase } from './script/local-db';
+import { createLocalDatabase } from './script/local';
 import * as winston from 'winston';
 
 // types, what types?! configure doesn't seem to work so...
