@@ -5,45 +5,22 @@ const { getAccountIDFromAccessToken, getAccountIDFromRefreshToken } = require('.
 
 const getToken = request => request.headers.authorization.split(' ')[1];
 
-const tokenIsValid = (token) => {
-  try {
-    jwt.verify(token, secretKey);
-    return true;
-  } catch (e) {
-    return false;
-  }
-};
-
 const authenticateToken = (request, response, next, tokenRetrievalGetter) => {
-  const sendInvalidTokenResponse = () => {
+  try {
+    const token = getToken(request);
+    jwt.verify(token, secretKey);
+    // eslint-disable-next-line no-param-reassign
+    request.accountID = tokenRetrievalGetter(token);
+    next();
+  } catch (e) {
     response.status(HTTPStatus.UNAUTHORIZED)
       .json({
         error: {
           message: 'Invalid token provided',
+          detail: e.message,
         },
       });
-  };
-
-  const token = getToken(request);
-
-  if (!tokenIsValid(token)) {
-    sendInvalidTokenResponse();
-    return;
   }
-
-  // Check valid account
-  let accountID;
-
-  try {
-    accountID = tokenRetrievalGetter(token);
-  } catch (e) {
-    sendInvalidTokenResponse();
-    return;
-  }
-
-  // eslint-disable-next-line no-param-reassign
-  request.accountID = accountID;
-  next();
 };
 
 const authenticateAccessToken = (request, response, next) =>
