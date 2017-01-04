@@ -1,14 +1,24 @@
 const transactions = new Map();
 
-const addItemTransaction = (userID, itemPrice) => {
-  const userTransactions = transactions.get(userID) || [];
+const createTransaction = (amount) => {
+  const transaction = { date: Date.now(), amount };
+  return transaction;
+};
 
-  const transaction = {
-    date: Date.now(),
-    amount: -itemPrice,
-  };
+const addTransaction = (transaction, userID) => {
+  const userTransactions = transactions.get(userID) || [];
   userTransactions.push(transaction);
   transactions.set(userID, userTransactions);
+};
+
+const addItemTransaction = (userID, itemPrice) => {
+  const transaction = createTransaction(-itemPrice);
+  addTransaction(transaction, userID);
+};
+
+const addTopUpTransaction = (userID, amount) => {
+  const transaction = createTransaction(amount);
+  addTransaction(transaction, userID);
 };
 
 // No concept of paging these transactions yet
@@ -19,4 +29,9 @@ const getBalance = (userID) => {
   return userTransactions.reduce((balance, transaction) => balance + transaction.amount, 0);
 };
 
-module.exports = { addItemTransaction, getBalance, getTransactionHistory };
+module.exports = {
+  addItemTransaction,
+  addTopUpTransaction,
+  getBalance,
+  getTransactionHistory,
+};
