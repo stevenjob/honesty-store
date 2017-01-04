@@ -21,7 +21,7 @@ describe('Session Service', () => {
       assert.equal(sessionData.user.cardNumber, expectedCardNumber);
     });
 
-  it('should return user transcation details',
+  it('should return user transaction details',
     () => {
       const account = registerAccount('NCL');
       const itemPrices = [20, 50];
