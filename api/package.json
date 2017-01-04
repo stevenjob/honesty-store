@@ -6,7 +6,7 @@
   "scripts": {
     "ci": "npm test",
     "start": "nodemon ./src/app.js",
-    "test": "mocha"
+    "test": "mocha --recursive"
   },
   "dependencies": {
     "body-parser": "^1.15.2",

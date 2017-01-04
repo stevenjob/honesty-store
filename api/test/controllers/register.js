@@ -1,10 +1,10 @@
 const request = require('request');
 const assert = require('chai').assert;
 const HTTPStatus = require('http-status');
-const { registerAccount, __accounts, getAccountIDFromAccessToken } = require('../src/services/accounts');
-const getSessionData = require('../src/services/session');
+const { registerAccount, __accounts, getAccountIDFromAccessToken } = require('../../src/services/accounts');
+const getSessionData = require('../../src/services/session');
 
-require('../src/app');
+require('../../src/app');
 
 const baseURL = 'http://localhost:3000/api/v1';
 
