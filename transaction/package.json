@@ -10,6 +10,8 @@
     "ci": "npm test"
   },
   "dependencies": {
+    "@types/uuid": "^2.0.29",
+    "@types/validator": "^5.7.35",
     "aws-sdk": "^2.7.10",
     "body-parser": "^1.15.2",
     "chai": "^3.5.0",
