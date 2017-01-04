@@ -10,6 +10,7 @@ import { pruneServices } from '../ecs/service';
 import { pruneRepositories } from '../ecr/repository';
 import { pruneImages } from '../ecr/image';
 import { getOriginBranchNames } from '../git/branch';
+import { pruneTables } from '../dynamodb/table';
 import * as winston from 'winston';
 import ms = require('ms');
 
@@ -55,4 +56,9 @@ export default async () => {
     await pruneRepositories({
         filter: (repository) => filter(repository.repositoryName)
     });
+
+    // TODO: won't prune tables from deleted dirs or dirs which no longer require db
+    await pruneTables({
+        filter
+    })
 };

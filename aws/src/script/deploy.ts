@@ -8,6 +8,7 @@ import { ensureTaskDefinition, pruneTaskDefinitions } from '../ecs/taskDefinitio
 import pushImage from '../ecr/push';
 import { createHash } from 'crypto';
 import { ensureService } from '../ecs/service';
+import { ensureTable } from '../dynamodb/table';
 import * as winston from 'winston';
 
 
@@ -36,8 +37,23 @@ export const branchToPort = (branch) => {
     return port;
 };
 
+const ensureDatabase = async ({ branch, dir }) => {
+    const { config, data } = await templateJSON({
+        type: 'table',
+        name: dir,
+        data: { }
+    });
+    return await ensureTable({
+        config: {
+            ...config,
+            TableName: `${loadBalancerName}-${branch}-${dir}`
+        },
+        data
+    });
+};
+
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
-export default async ({ branch, dir }) => {
+export default async ({ branch, dir, database }) => {
     const port = branchToPort(branch);
     const loadBalancer = await ensureLoadBalancer({
         name: loadBalancerName
@@ -64,10 +80,15 @@ export default async ({ branch, dir }) => {
         repositoryName: `${loadBalancerName}-${branch}-${dir}`,
         tag: 'latest'
     });
+    const db = database ? await ensureDatabase({ branch, dir }) : {};
+    // TODO: create bespoke roles
     const containerDefinitions: ECS.ContainerDefinitions = await templateJSON({
         type: 'containerDefinition',
         name: dir,
-        data: { image }
+        data: {
+            image,
+            tableName: db.TableName
+        }
     });
     const taskDefinition = await ensureTaskDefinition({
         family: `${loadBalancerName}-${branch}-${dir}`,
