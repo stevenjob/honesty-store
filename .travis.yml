@@ -15,7 +15,7 @@ script:
   - docker build -t api api
   - ./aws/bin/aws deploy api $TRAVIS_BRANCH
   - docker build -t transaction transaction
-  - ./aws/bin/aws deploy transaction $TRAVIS_BRANCH --database
+  - ./aws/bin/aws deploy transaction $TRAVIS_BRANCH
   - docker build -t web web
   - ./aws/bin/aws deploy web $TRAVIS_BRANCH
   - ./aws/bin/aws prune

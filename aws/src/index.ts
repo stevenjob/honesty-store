@@ -19,9 +19,8 @@ const warnAndExit = e => {
 };
 
 program.command('deploy <dir> <branch>')
-  .option('-db, --database')
-  .action((dir, branch, { database }) => {
-    deploy({ dir, branch, database })
+  .action((dir, branch) => {
+    deploy({ dir, branch })
       .catch(warnAndExit);
   });
 

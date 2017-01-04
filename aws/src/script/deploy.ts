@@ -17,11 +17,20 @@ export const defaultTargetGroupDir = 'web';
 export const role = 'arn:aws:iam::812374064424:role/ecs-service-role';
 export const cluster = 'test-cluster';
 
-const ruleMappings = {
-    web: { pathPattern: '/', priority: 10 },
-    api: { pathPattern: '/api', priority: 1 },
-    nginx: { pathPattern: '/test', priority: 2 },
-    transaction: { pathPattern: '/transaction', priority: 3 },
+const config = {
+    web: {
+        loadBalancer: { pathPattern: '/', priority: 10 }
+    },
+    api: {
+        loadBalancer: { pathPattern: '/api', priority: 1 }
+    },
+    nginx: {
+        loadBalancer: { pathPattern: '/test', priority: 2 }
+    },
+    transaction: {
+        database: true,
+        loadBalancer: { pathPattern: '/transaction', priority: 3 }
+    },
 };
 
 export const branchToPort = (branch) => {
@@ -54,7 +63,7 @@ const ensureDatabase = async ({ branch, dir }) => {
 };
 
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
-export default async ({ branch, dir, database }) => {
+export default async ({ branch, dir }) => {
     const port = branchToPort(branch);
     const loadBalancer = await ensureLoadBalancer({
         name: loadBalancerName
@@ -73,15 +82,15 @@ export default async ({ branch, dir, database }) => {
     const rule = await ensureRule({
         listenerArn: listener.ListenerArn,
         targetGroupArn: targetGroup.TargetGroupArn,
-        pathPattern: ruleMappings[dir].pathPattern,
-        priority: ruleMappings[dir].priority
+        pathPattern: config[dir].loadBalancer.pathPattern,
+        priority: config[dir].loadBalancer.priority
     });
     const image = await pushImage({
         imageName: dir,
         repositoryName: `${loadBalancerName}-${branch}-${dir}`,
         tag: 'latest'
     });
-    const db = database ? await ensureDatabase({ branch, dir }) : {};
+    const db = config[dir].database ? await ensureDatabase({ branch, dir }) : {};
     // TODO: create bespoke roles
     const containerDefinitions: ECS.ContainerDefinitions = await templateJSON({
         type: 'containerDefinition',
