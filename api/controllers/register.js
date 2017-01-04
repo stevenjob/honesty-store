@@ -1,12 +1,13 @@
-const { registerAccount, updateAccount } = require('../services/accounts');
-const HTTPStatus = require('http-status');
-const { getPrice } = require('../services/store');
-const { addItemTransaction, getBalance, getTransactionHistory } = require('../services/transactions');
 const isEmail = require('validator/lib/isEmail');
+const HTTPStatus = require('http-status');
 
-const register = (storeID) => {
-  const { accessToken, refreshToken } = registerAccount(storeID);
+const { registerAccount, updateAccount } = require('../services/accounts');
+const { getPrice, getItems } = require('../services/store');
+const { addItemTransaction, addTopUpTransaction, getBalance, getTransactionHistory } = require('../services/transactions');
 const { authenticateAccessToken } = require('../middleware/authenticate');
+
+const register = (storeCode) => {
+  const { accessToken, refreshToken } = registerAccount(storeCode);
 
   return {
     response: {
@@ -37,8 +38,8 @@ const setupRegisterPhase1 = (router) => {
   router.post(
     '/register',
     (request, response) => {
-      const { storeID } = request.body;
-      const responseData = register(storeID);
+      const { storeCode } = request.body;
+      const responseData = register(storeCode);
       response.status(HTTPStatus.OK).json(responseData);
     });
 };
