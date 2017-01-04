@@ -4,10 +4,15 @@ const { getCardNumber, getDefaultStoreCode, getAccessToken } = require('../servi
 const { getTransactionHistory, getBalance } = require('../services/transactions');
 const { getItems } = require('../services/store');
 
-const maskCardNumber = cardNumber => cardNumber.replace(/\d(?=\d{4})/g, 'X');
+const maskCardNumber = (cardNumber) => {
+  if (cardNumber != null) {
+    return cardNumber.replace(/\d(?=\d{4})/g, 'X');
+  }
+  return null;
+};
 
 const getUserSessionData = (userID) => {
-  const cardNumber = getCardNumber(userID) || '';
+  const cardNumber = getCardNumber(userID);
   const maskedCardNumber = maskCardNumber(cardNumber);
   return {
     balance: getBalance(userID),
