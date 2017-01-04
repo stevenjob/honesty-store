@@ -121,7 +121,7 @@ describe('/session', () => {
         });
       });
 
-    it('should return user\'s default store ID',
+    it('should return user\'s default Store Code',
       (done) => {
         const storeCode = 'NCL';
         // When registering, we set the user's current store to be 'storeCode'
@@ -135,7 +135,7 @@ describe('/session', () => {
           json: true,
         },
         (error, response, body) => {
-          assert.equal(body.response.store.id, storeCode);
+          assert.equal(body.response.store.code, storeCode);
           done();
         });
       });

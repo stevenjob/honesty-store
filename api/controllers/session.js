@@ -20,7 +20,7 @@ const getStoreSessionData = (userID) => {
   const connectedStoreCode = getDefaultStoreCode(userID);
   return {
     items: getItems(connectedStoreCode),
-    id: connectedStoreCode,
+    code: connectedStoreCode,
   };
 };
 
