@@ -1,5 +1,6 @@
 const isEmail = require('validator/lib/isEmail');
 const HTTPStatus = require('http-status');
+const winston = require('winston');
 
 const { registerAccount, updateAccount } = require('../services/accounts');
 const { getPrice } = require('../services/store');
@@ -20,8 +21,12 @@ const register = (storeCode) => {
 const register2 = (accountID, emailAddress, cardDetails, purchasedItemID) => {
   updateAccount(accountID, emailAddress, cardDetails);
 
-  const price = getPrice(purchasedItemID);
-  addItemTransaction(accountID, price);
+  try {
+    const price = getPrice(purchasedItemID);
+    addItemTransaction(accountID, price);
+  } catch (e) {
+    winston.warn(e.message);
+  }
 
   const response = getSessionData(accountID);
   return { response };

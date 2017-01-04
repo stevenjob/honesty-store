@@ -17,7 +17,8 @@
     "mocha": "^3.2.0",
     "request": "^2.79.0",
     "uuid": "^3.0.1",
-    "validator": "^6.2.0"
+    "validator": "^6.2.0",
+    "winston": "^2.3.0"
   },
   "devDependencies": {
     "eslint": "^3.12.1",
