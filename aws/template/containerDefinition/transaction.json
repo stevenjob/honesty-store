@@ -15,7 +15,6 @@
                 "name": "TABLE_NAME",
                 "value": "${tableName}"
             }
-        ],
-        "taskRoleArn": "arn:aws:iam::812374064424:role/dynamo-db-role"
+        ]
     }
 ]

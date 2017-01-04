@@ -5,9 +5,9 @@ import * as winston from 'winston';
 requires:
 "Action": "ecs:RegisterTaskDefinition", "ecs:DescribeTaskDefinition"
 */
-export const ensureTaskDefinition = async ({ family, containerDefinitions }) => {
+export const ensureTaskDefinition = async ({ family, containerDefinitions, taskRoleArn }) => {
     const definitionResponse = await new ECS({ apiVersion: '2014-11-13' })
-        .registerTaskDefinition({ family, containerDefinitions })
+        .registerTaskDefinition({ family, containerDefinitions, taskRoleArn })
         .promise();
 
     const taskDefinition = definitionResponse.taskDefinition;

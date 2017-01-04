@@ -29,7 +29,8 @@ const config = {
     },
     transaction: {
         database: true,
-        loadBalancer: { pathPattern: '/transaction', priority: 3 }
+        loadBalancer: { pathPattern: '/transaction', priority: 3 },
+        taskRoleArn: 'arn:aws:iam::812374064424:role/dynamo-db-role'
     },
 };
 
@@ -102,7 +103,8 @@ export default async ({ branch, dir }) => {
     });
     const taskDefinition = await ensureTaskDefinition({
         family: `${loadBalancerName}-${branch}-${dir}`,
-        containerDefinitions
+        containerDefinitions,
+        taskRoleArn: config[dir].taskRoleArn
     });
     await pruneTaskDefinitions({
         filter: ({ family, revision }) => family === taskDefinition.family && revision !== taskDefinition.revision,
