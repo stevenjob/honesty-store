@@ -1,0 +1,38 @@
+{
+  "name": "@honesty-store/user",
+  "version": "0.0.0",
+  "private": true,
+  "main": "lib/index.js",
+  "scripts": {
+    "compile": "tsc",
+    "lint": "tslint src",
+    "test": "npm run lint && npm run compile",
+    "ci": "npm test"
+  },
+  "dependencies": {
+    "@types/uuid": "^2.0.29",
+    "@types/validator": "^5.7.35",
+    "aws-sdk": "^2.7.10",
+    "body-parser": "^1.15.2",
+    "chai": "^3.5.0",
+    "express": "^4.14.0",
+    "http-status": "^0.2.3",
+    "jsonwebtoken": "^7.2.1",
+    "mocha": "^3.2.0",
+    "ms": "^0.7.2",
+    "request": "^2.79.0",
+    "uuid": "^3.0.1",
+    "validator": "^6.2.0",
+    "winston": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/commander": "^2.3.31",
+    "@types/express": "^4.0.34",
+    "@types/ms": "^0.7.29",
+    "@types/node": "0.0.2",
+    "@types/winston": "0.0.32",
+    "tslint": "^4.0.0",
+    "tslint-microsoft-contrib": "^2.0.14",
+    "typescript": "^2.1.0"
+  }
+}
