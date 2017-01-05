@@ -1,5 +1,6 @@
 const HTTPStatus = require('http-status');
-const { sendEmailToken, getAccountIDFromEmailToken } = require('../services/accounts');
+const { sendEmailToken, getAccountIDFromEmailToken, getRefreshToken } = require('../services/accounts');
+const getSessionData = require('../services/session');
 
 const setupSignInPhase1 = (router) => {
   router.post(
@@ -20,15 +21,13 @@ const setupSignInPhase2 = (router) => {
 
       try {
         const accountID = getAccountIDFromEmailToken(emailToken);
-        // Update refresh token and send as part of response
-        response.status(HTTPStatus.OK).send({
-          response: {
-            refreshToken: '',
-            session: {},
-          },
-        });
+        const responseData = getSessionData(accountID);
+        responseData.refreshToken = getRefreshToken(accountID);
+
+        response.status(HTTPStatus.OK)
+          .json({ response: responseData });
       } catch (e) {
-        response.status(HTTPStatus.UNAUTHORIZED).send({
+        response.status(HTTPStatus.UNAUTHORIZED).json({
           error: {
             message: 'Invalid token provided',
           },

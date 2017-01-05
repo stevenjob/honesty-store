@@ -3,6 +3,7 @@ const assert = require('chai').assert;
 const HTTPStatus = require('http-status');
 
 const { registerAccount, __accounts, updateAccount, sendEmailToken } = require('../../src/services/accounts');
+const getSessionData = require('../../src/services/session');
 
 require('../../src/app');
 
@@ -35,6 +36,15 @@ describe('/signin2', () => {
     __accounts.length = 0;
   });
 
+  const sendSignIn2Request = (emailToken, callback) => {
+    const options = {
+      uri: `${baseURL}/signin2`,
+      json: true,
+      body: { emailToken },
+    };
+    request.post(options, callback);
+  };
+
   describe('Email Token Validation', () => {
     it('should return \'OK\' response status with valid email token', (done) => {
       const emailAddress = 'test1@test.com';
@@ -43,26 +53,48 @@ describe('/signin2', () => {
       // Simulate sending of email
       sendEmailToken(emailAddress);
 
-      request.post({
-        uri: `${baseURL}/signin2`,
-        json: true,
-        body: { emailToken: account.emailToken },
-      },
-      (error, response) => {
-        assert.equal(response.statusCode, HTTPStatus.OK);
-        done();
-      });
+      sendSignIn2Request(account.emailToken,
+        (error, response) => {
+          assert.equal(response.statusCode, HTTPStatus.OK);
+          done();
+        });
     });
 
     it('should return \'UNAUTHORIZED\' response status invalid email token', (done) => {
-      request.post({
-        uri: `${baseURL}/signin2`,
-        json: true,
-        body: { emailToken: '' },
-      },
-      (error, response) => {
-        assert.equal(response.statusCode, HTTPStatus.UNAUTHORIZED);
-        done();
+      sendSignIn2Request('',
+        (error, response) => {
+          assert.equal(response.statusCode, HTTPStatus.UNAUTHORIZED);
+          done();
+        });
+    });
+
+    describe('Response Data', () => {
+      it('should contain a refresh token as part of response', (done) => {
+        const emailAddress = 'test1@test.com';
+        const account = registerAccount('NCL');
+        updateAccount(account.id, emailAddress, null);
+        sendEmailToken(emailAddress);
+
+        sendSignIn2Request(account.emailToken,
+          (error, response, body) => {
+            assert.property(body.response, 'refreshToken');
+            done();
+          });
+      });
+
+      it('should contain session data as part of response', (done) => {
+        const emailAddress = 'test1@test.com';
+        const account = registerAccount('NCL');
+        updateAccount(account.id, emailAddress, null);
+        sendEmailToken(emailAddress);
+
+        sendSignIn2Request(account.emailToken,
+          (error, response, body) => {
+            const expectedSessionData = getSessionData(account.id);
+            assert.deepEqual(body.response.user, expectedSessionData.user);
+            assert.deepEqual(body.response.store, expectedSessionData.store);
+            done();
+          });
       });
     });
   });
