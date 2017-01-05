@@ -19,17 +19,17 @@ export const cluster = 'test-cluster';
 
 const config = {
     web: {
-        loadBalancer: { pathPattern: '/', priority: 10 }
+        loadBalancer: { pathPattern: '/*', priority: 10 }
     },
     api: {
-        loadBalancer: { pathPattern: '/api', priority: 1 }
+        loadBalancer: { pathPattern: '/api/*', priority: 1 }
     },
     nginx: {
-        loadBalancer: { pathPattern: '/test', priority: 2 }
+        loadBalancer: { pathPattern: '/test/*', priority: 2 }
     },
     transaction: {
         database: true,
-        loadBalancer: { pathPattern: '/transaction', priority: 3 },
+        loadBalancer: { pathPattern: '/transaction/*', priority: 3 },
         taskRoleArn: 'arn:aws:iam::812374064424:role/dynamo-db-role'
     },
 };
