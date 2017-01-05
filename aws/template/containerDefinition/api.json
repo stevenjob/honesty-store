@@ -2,7 +2,7 @@
     {
         "name": "container",
         "image": "${image}",
-        "memory": 128,
+        "memory": 64,
         "essential": true,
         "portMappings": [
             {
