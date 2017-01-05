@@ -12,7 +12,7 @@ import { ensureTable } from '../dynamodb/table';
 import * as winston from 'winston';
 
 
-export const loadBalancerName = 'hs';
+export const prefix = 'hs';
 export const defaultTargetGroupDir = 'web';
 export const role = 'arn:aws:iam::812374064424:role/ecs-service-role';
 export const cluster = 'test-cluster';
@@ -57,7 +57,7 @@ const ensureDatabase = async ({ branch, dir }) => {
     return await ensureTable({
         config: {
             ...config,
-            TableName: `${loadBalancerName}-${branch}-${dir}`
+            TableName: `${prefix}-${branch}-${dir}`
         },
         data
     });
@@ -65,20 +65,18 @@ const ensureDatabase = async ({ branch, dir }) => {
 
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
 export default async ({ branch, dir }) => {
-    const port = branchToPort(branch);
     const loadBalancer = await ensureLoadBalancer({
-        name: loadBalancerName
+        name: `${prefix}-${branch}`
     });
     const defaultTargetGroup = await ensureTargetGroup({
-        name: `${loadBalancerName}-${branch}-${defaultTargetGroupDir}`
+        name: `${prefix}-${branch}-${defaultTargetGroupDir}`
     });
     const listener = await ensureListener({
         loadBalancerArn: loadBalancer.LoadBalancerArn,
-        defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn,
-        port
+        defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn
     });
     const targetGroup = await ensureTargetGroup({
-        name: `${loadBalancerName}-${branch}-${dir}`
+        name: `${prefix}-${branch}-${dir}`
     });
     const rule = await ensureRule({
         listenerArn: listener.ListenerArn,
@@ -88,7 +86,7 @@ export default async ({ branch, dir }) => {
     });
     const image = await pushImage({
         imageName: dir,
-        repositoryName: `${loadBalancerName}-${branch}-${dir}`,
+        repositoryName: `${prefix}-${branch}-${dir}`,
         tag: 'latest'
     });
     const db = config[dir].database ? await ensureDatabase({ branch, dir }) : {};
@@ -102,7 +100,7 @@ export default async ({ branch, dir }) => {
         }
     });
     const taskDefinition = await ensureTaskDefinition({
-        family: `${loadBalancerName}-${branch}-${dir}`,
+        family: `${prefix}-${branch}-${dir}`,
         containerDefinitions,
         taskRoleArn: config[dir].taskRoleArn
     });
@@ -111,7 +109,7 @@ export default async ({ branch, dir }) => {
     });
     // For now assuming all tasks contain only one container with a port mapping which should be load balanced
     const service = await ensureService({
-        serviceName: `${loadBalancerName}-${branch}-${dir}`,
+        serviceName: `${prefix}-${branch}-${dir}`,
         cluster,
         desiredCount: 1,
         taskDefinition: taskDefinition.taskDefinitionArn,
@@ -124,5 +122,5 @@ export default async ({ branch, dir }) => {
         ],
         role
     });
-    winston.info(`Deployed to https://${loadBalancer.DNSName}:${listener.Port}${rule.Conditions[0].Values[0]}.`);
+    winston.info(`Deployed to https://${loadBalancer.DNSName}${rule.Conditions[0].Values[0]}.`);
 };

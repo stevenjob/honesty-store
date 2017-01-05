@@ -2,7 +2,7 @@ import { ELBv2 } from 'aws-sdk';
 import * as winston from 'winston';
 import { describeAll } from '../describe';
 
-export const ensureListener = async ({ defaultTargetGroupArn, loadBalancerArn, port }) => {
+export const ensureListener = async ({ defaultTargetGroupArn, loadBalancerArn }) => {
     const response = await new ELBv2({ apiVersion: '2015-12-01' })
         .createListener({
             Certificates: [
@@ -17,7 +17,7 @@ export const ensureListener = async ({ defaultTargetGroupArn, loadBalancerArn, p
                 }
             ],
             LoadBalancerArn: loadBalancerArn,
-            Port: port,
+            Port: 443,
             Protocol: 'HTTPS'
         })
         .promise();
