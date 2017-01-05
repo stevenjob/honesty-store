@@ -65,7 +65,7 @@ const getAccessToken = (userID) => {
 const sendEmailToken = (emailAddress) => {
   const account = accounts.find(element => element.emailAddress === emailAddress);
   if (account == null) {
-    winston.warn(`Account does not exist with email address '${emailAddress}`);
+    winston.warn(`Account does not exist with email address '${emailAddress}'`);
     return;
   }
 
