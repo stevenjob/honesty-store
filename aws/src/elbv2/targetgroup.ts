@@ -2,7 +2,9 @@ import { ELBv2 } from 'aws-sdk';
 import * as winston from 'winston';
 
 export const ensureTargetGroup = async ({ name }) => {
-    const response = await new ELBv2({ apiVersion: '2015-12-01' })
+    const elbv2 = new ELBv2({ apiVersion: '2015-12-01' });
+
+    const response = await elbv2
         .createTargetGroup({
             Name: name,
             Protocol: 'HTTP',
@@ -14,6 +16,18 @@ export const ensureTargetGroup = async ({ name }) => {
     const targetGroup = response.TargetGroups[0];
 
     winston.debug('targetGroup: ensureTargetGroup', targetGroup);
+
+    const modifyResponse = await elbv2
+        .modifyTargetGroupAttributes({
+            TargetGroupArn: targetGroup.TargetGroupArn,
+            Attributes: [{
+                Key: 'deregistration_delay.timeout_seconds',
+                Value: '5',
+            }]
+        })
+        .promise();
+
+    winston.debug('targetGroup: modifyTargetGroupAttributes', modifyResponse);
 
     return targetGroup;
 };
