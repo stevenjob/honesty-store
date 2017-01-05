@@ -1,6 +1,7 @@
 import { ECS } from 'aws-sdk';
 import * as winston from 'winston';
 import { awsCheckFailures } from '../failure';
+import { listAll } from '../list';
 
 /*
 requires:
@@ -77,13 +78,14 @@ export const pruneServices = async ({ cluster, filter = ({ name }) => false }) =
 
   winston.debug('service: cluster', cluster);
 
-  const listResponse = await ecs.listServices({ cluster })
-    .promise();
+  const listResponse = await listAll(
+    (nextToken) => ecs.listServices({ cluster, nextToken }),
+    (response) => response.serviceArns
+  );
 
-  winston.debug('service: listResponse', listResponse.serviceArns);
+  winston.debug('service: listResponse', listResponse);
 
-  const serviceArnsToPrune = listResponse.serviceArns
-    .filter(serviceArn => filter(parseServiceArn(serviceArn)));
+  const serviceArnsToPrune = listResponse.filter(serviceArn => filter(parseServiceArn(serviceArn)));
 
   winston.debug('service: serviceArnsToPrune', serviceArnsToPrune);
 

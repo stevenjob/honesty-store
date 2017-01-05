@@ -1,4 +1,5 @@
 import { ECS } from 'aws-sdk';
+import { listAll } from '../list';
 import * as winston from 'winston';
 
 /*
@@ -34,13 +35,16 @@ requires:
 export const pruneTaskDefinitions = async ({ filter = ({ family, revision }) => false }) => {
     const ecs = new ECS({ apiVersion: '2014-11-13' });
 
-    const listResponse = await ecs.listTaskDefinitions()
-        .promise();
+    const listResponse = await listAll(
+        (nextToken) => ecs.listTaskDefinitions({ nextToken }),
+        (response) => response.taskDefinitionArns
+    );
 
-    winston.debug('taskDefinition: listResponse', listResponse.taskDefinitionArns);
+    winston.debug('taskDefinition: listResponse', listResponse);
 
-    const taskDefinitionArnsToPrune = listResponse.taskDefinitionArns
-        .filter(taskDefinitionArn => filter(parseTaskDefinitionArn(taskDefinitionArn)));
+    const taskDefinitionArnsToPrune = listResponse.filter(
+        taskDefinitionArn => filter(parseTaskDefinitionArn(taskDefinitionArn))
+    );
 
     winston.debug('taskDefinition: taskDefinitionArnsToPrune', taskDefinitionArnsToPrune);
 

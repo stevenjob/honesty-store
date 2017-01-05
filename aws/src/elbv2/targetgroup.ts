@@ -1,5 +1,6 @@
 import { ELBv2 } from 'aws-sdk';
 import * as winston from 'winston';
+import { describeAll } from '../describe';
 
 export const ensureTargetGroup = async ({ name }) => {
     const elbv2 = new ELBv2({ apiVersion: '2015-12-01' });
@@ -35,13 +36,14 @@ export const ensureTargetGroup = async ({ name }) => {
 export const pruneTargetGroups = async ({ filter = (targetGroup: ELBv2.TargetGroup) => false }) => {
     const elbv2 = new ELBv2({ apiVersion: '2015-12-01' });
 
-    const describeResponse = await elbv2.describeTargetGroups()
-        .promise();
+    const describeResponse = await describeAll(
+        (Marker) => elbv2.describeTargetGroups({ Marker }),
+        (response) => response.TargetGroups
+    );
 
-    winston.debug('targetGroup: describeResponse', describeResponse.TargetGroups);
+    winston.debug('targetGroup: describeResponse', describeResponse);
 
-    const targetGroupsToPrune = describeResponse.TargetGroups
-        .filter(filter);
+    const targetGroupsToPrune = describeResponse.filter(filter);
 
     winston.debug('targetGroup: targetGroupsToPrune', targetGroupsToPrune);
 

@@ -1,5 +1,6 @@
 import { ELBv2 } from 'aws-sdk';
 import * as winston from 'winston';
+import { describeAll } from '../describe';
 
 export const ensureListener = async ({ defaultTargetGroupArn, loadBalancerArn, port }) => {
     const response = await new ELBv2({ apiVersion: '2015-12-01' })
@@ -33,15 +34,16 @@ export const pruneListeners = async ({ loadBalancerArn, filter = (listener: ELBv
 
     winston.debug('listener: loadBalancerArn', loadBalancerArn);
 
-    const describeResponse = await elbv2.describeListeners({
-        LoadBalancerArn: loadBalancerArn
-    })
-        .promise();
+    const describeResponse = await describeAll(
+        (Marker) => elbv2.describeListeners({
+            LoadBalancerArn: loadBalancerArn,
+            Marker
+        }),
+        (response) => response.Listeners);
 
-    winston.debug('listener: listeners', describeResponse.Listeners);
+    winston.debug('listener: listeners', describeResponse);
 
-    const listenersToPrune = describeResponse.Listeners
-        .filter(filter);
+    const listenersToPrune = describeResponse.filter(filter);
 
     winston.debug('listener: listenersToPrune', listenersToPrune);
 
