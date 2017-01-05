@@ -4,7 +4,7 @@ const winston = require('winston');
 
 const { registerAccount, updateAccount } = require('../services/accounts');
 const { getPrice } = require('../services/store');
-const { addItemTransaction, addTopUpTransaction } = require('../services/transactions');
+const { addItemTransaction } = require('../services/transactions');
 const getSessionData = require('../services/session');
 const { authenticateAccessToken } = require('../middleware/authenticate');
 
