@@ -1,8 +1,9 @@
 const jsonwebtoken = require('jsonwebtoken');
 const uuid = require('uuid/v4');
+const winston = require('winston');
 const { secretKey } = require('../constants');
 
-const generateAccessToken = () => {
+const generateExpirableToken = () => {
   const data = { uuid: uuid() };
   const options = { expiresIn: 300 };
   return jsonwebtoken.sign(data, secretKey, options);
@@ -17,7 +18,7 @@ const registerAccount = (defaultStoreCode) => {
     id: uuid(),
     balance: 0,
     refreshToken: generateRefreshToken(),
-    accessToken: generateAccessToken(),
+    accessToken: generateExpirableToken(),
     defaultStoreCode,
   };
 
@@ -53,7 +54,7 @@ const updateAccount = (id, emailAddress, cardDetails) => {
 const getCardNumber = userID => getAccount(userID).cardDetails;
 const getDefaultStoreCode = userID => getAccount(userID).defaultStoreCode;
 const getAccessToken = (userID) => {
-  const newAccessToken = generateAccessToken();
+  const newAccessToken = generateExpirableToken();
 
   const account = getAccount(userID);
   account.accessToken = newAccessToken;
@@ -61,9 +62,24 @@ const getAccessToken = (userID) => {
   return newAccessToken;
 };
 
+const sendEmailToken = (emailAddress) => {
+  const account = accounts.find(element => element.emailAddress === emailAddress);
+  if (account == null) {
+    winston.warn(`Account does not exist with email address '${emailAddress}`);
+    return;
+  }
+
+  const emailToken = generateExpirableToken();
+  account.emailToken = emailToken;
+
+  /* When the eventual service is added, the 'emailToken' will be sent via email */
+  winston.info(`Generated email token: ${emailToken}`);
+};
+
 module.exports = {
   registerAccount,
   updateAccount,
+  sendEmailToken,
   getAccountIDFromAccessToken,
   getAccountIDFromRefreshToken,
   getCardNumber,
