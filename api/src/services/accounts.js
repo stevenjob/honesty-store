@@ -43,6 +43,14 @@ const getAccountIDFromRefreshToken = (refreshToken) => {
   return foundAccount.id;
 };
 
+const getAccountIDFromEmailToken = (emailToken) => {
+  const foundAccount = accounts.find(element => element.emailToken === emailToken);
+  if (foundAccount == null) {
+    throw new Error(`No account found with email token '${emailToken}`);
+  }
+  return foundAccount.id;
+};
+
 const getAccount = id => accounts.find(element => element.id === id);
 
 const updateAccount = (id, emailAddress, cardDetails) => {
@@ -82,6 +90,7 @@ module.exports = {
   sendEmailToken,
   getAccountIDFromAccessToken,
   getAccountIDFromRefreshToken,
+  getAccountIDFromEmailToken,
   getCardNumber,
   getDefaultStoreCode,
   getAccessToken,
