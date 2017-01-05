@@ -69,7 +69,14 @@ const getAccessToken = (userID) => {
 
   return newAccessToken;
 };
-const getRefreshToken = userID => getAccount(userID).refreshToken;
+const updateRefreshToken = (userID) => {
+  const newRefreshToken = generateRefreshToken();
+
+  const account = getAccount(userID);
+  account.refreshToken = newRefreshToken;
+
+  return newRefreshToken;
+};
 
 const sendEmailToken = (emailAddress) => {
   const account = accounts.find(element => element.emailAddress === emailAddress);
@@ -95,6 +102,6 @@ module.exports = {
   getCardNumber,
   getDefaultStoreCode,
   getAccessToken,
-  getRefreshToken,
+  updateRefreshToken,
   __accounts: accounts,
 };

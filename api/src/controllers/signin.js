@@ -1,5 +1,5 @@
 const HTTPStatus = require('http-status');
-const { sendEmailToken, getAccountIDFromEmailToken, getRefreshToken } = require('../services/accounts');
+const { sendEmailToken, getAccountIDFromEmailToken, updateRefreshToken } = require('../services/accounts');
 const getSessionData = require('../services/session');
 
 const setupSignInPhase1 = (router) => {
@@ -22,7 +22,7 @@ const setupSignInPhase2 = (router) => {
       try {
         const accountID = getAccountIDFromEmailToken(emailToken);
         const responseData = getSessionData(accountID);
-        responseData.refreshToken = getRefreshToken(accountID);
+        responseData.refreshToken = updateRefreshToken(accountID);
 
         response.status(HTTPStatus.OK)
           .json({ response: responseData });
