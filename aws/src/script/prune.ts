@@ -4,7 +4,7 @@ import { pruneTargetGroups } from '../elbv2/targetgroup';
 import { pruneRules } from '../elbv2/rule';
 import { templateJSON } from '../template';
 import { pruneTaskDefinitions } from '../ecs/taskDefinition';
-import { prefix, defaultTargetGroupDir, role, cluster, branchToPort } from './deploy';
+import { prefix, defaultTargetGroupDir, role, cluster } from './deploy';
 import { pruneServices } from '../ecs/service';
 import { pruneRepositories } from '../ecr/repository';
 import { pruneImages } from '../ecr/image';

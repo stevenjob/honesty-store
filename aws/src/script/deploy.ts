@@ -34,20 +34,6 @@ const config = {
     },
 };
 
-export const branchToPort = (branch) => {
-    if (branch === 'master') {
-        return 443;
-    }
-    const port = createHash('sha256')
-        .update(branch)
-        .digest()
-        .readUInt16LE(0);
-    if (port === 80 || port === 443) {
-        throw new Error('Port conflict');
-    }
-    return port;
-};
-
 const ensureDatabase = async ({ branch, dir }) => {
     const { config, data } = await templateJSON({
         type: 'table',
