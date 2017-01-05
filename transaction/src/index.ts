@@ -1,9 +1,11 @@
-import { DynamoDB } from 'aws-sdk';
+import { config, DynamoDB } from 'aws-sdk';
 import bodyParser = require('body-parser');
 import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isInt = require('validator/lib/isInt');
+
+config.region = process.env.AWS_REGION;
 
 interface Transaction {
     id: string;
