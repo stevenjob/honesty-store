@@ -1,6 +1,5 @@
 const request = require('request');
 const assert = require('chai').assert;
-const HTTPStatus = require('http-status');
 
 const { registerAccount, __accounts } = require('../../src/services/accounts');
 const { getTransactionHistory } = require('../../src/services/transactions');
