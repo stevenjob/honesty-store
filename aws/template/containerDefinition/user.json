@@ -18,6 +18,10 @@
             {
                 "name": "AWS_REGION",
                 "value": "eu-west-1"
+            },
+            {
+                "name": "JWT_SECRET",
+                "value": "0790b9b8-82c1-44da-8cce-fe46f9a496cb"
             }
         ]
     }

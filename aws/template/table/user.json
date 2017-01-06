@@ -9,46 +9,13 @@
         "ProvisionedThroughput": {
             "ReadCapacityUnits": 10,
             "WriteCapacityUnits": 10
-        },
-        "GlobalSecondaryIndexes": [
-            {
-                "IndexName": "accessToken",
-                "KeySchema": [
-                    { "AttributeName": "accessToken", "KeyType": "HASH" }
-                ],
-                "ProvisionedThroughput": {
-                    "ReadCapacityUnits": 10,
-                    "WriteCapacityUnits": 10
-                }
-            },
-            {
-                "IndexName": "refreshToken",
-                "KeySchema": [
-                    { "AttributeName": "refreshToken", "KeyType": "HASH" }
-                ],
-                "ProvisionedThroughput": {
-                    "ReadCapacityUnits": 10,
-                    "WriteCapacityUnits": 10
-                }
-            },
-            {
-                "IndexName": "emailAddress",
-                "KeySchema": [
-                    { "AttributeName": "emailAddress", "KeyType": "HASH" }
-                ],
-                "ProvisionedThroughput": {
-                    "ReadCapacityUnits": 10,
-                    "WriteCapacityUnits": 10
-                }
-            }
-        ]
+        }
     },
     "data": [
         {
             "id": "c50234ff-6c33-4878-a1ab-05f6b3e7b649",
             "accountID": "b423607f-64de-441f-ac39-12d50aaedbe9",
             "emailAddress": "c50234ff-6c33-4878-a1ab-05f6b3e7b649@example.com",
-            "accessToken": "9ad66bd4-cd58-4e26-b4f1-6133f77e50e9",
             "refreshToken": "34726c71-92aa-4e2e-83ec-0b4a5d83dedf"
         }
     ]

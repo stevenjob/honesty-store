@@ -4,6 +4,7 @@ import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isEmail = require('validator/lib/isEmail');
+import { signAccessToken, signRefreshToken, verifyToken } from './token';
 
 config.region = process.env.AWS_REGION;
 
@@ -11,7 +12,6 @@ interface User {
     id: string;
     accountID: string;
     emailAddress: string;
-    accessToken: string;
     refreshToken: string;
 }
 
@@ -23,7 +23,6 @@ const createAssertValidUuid = (name) =>
     };
 
 const assertValidUserId = createAssertValidUuid('userId');
-const assertValidAccessToken = createAssertValidUuid('accessToken');
 const assertValidRefreshToken = createAssertValidUuid('refreshToken');
 
 const assertValidEmailAddress = (emailAddress) => {
@@ -48,48 +47,46 @@ const get = async ({ userId }): Promise<User> => {
 };
 
 const getByAccessToken = async ({ accessToken }): Promise<User> => {
-    assertValidAccessToken(accessToken);
+    const { userId } = verifyToken(accessToken);
+    assertValidUserId(userId);
 
-    const response = await new DynamoDB.DocumentClient()
-        .get({
-            TableName: process.env.TABLE_NAME,
-            Key: {
-                accessToken
-            }
-        })
-        .promise();
-
-    return <User>response.Item;
+    // We trust the JWT signing to validate access tokens
+    return await get({ userId });
 };
 
 const getByRefreshToken = async ({ refreshToken }): Promise<User> => {
-    assertValidRefreshToken(refreshToken);
+    const { userId, refreshToken: token } = verifyToken(refreshToken);
+    assertValidUserId(userId);
+    assertValidRefreshToken(token);
 
-    const response = await new DynamoDB.DocumentClient()
-        .get({
-            TableName: process.env.TABLE_NAME,
-            Key: {
-                refreshToken
-            }
-        })
-        .promise();
+    const user = await get({ userId });
 
-    return <User>response.Item;
+    // As well as the JWT signing, we validate a stored uuid for refresh tokens
+    if (token !== user.refreshToken) {
+        throw new Error(`Invalid refreshToken`);
+    }
+
+    return user;
 };
 
-const getByEmailAddress = async ({ emailAddress }): Promise<User> => {
+const scanByEmailAddress = async ({ emailAddress }): Promise<User> => {
     assertValidEmailAddress(emailAddress);
 
     const response = await new DynamoDB.DocumentClient()
-        .get({
+        .scan({
             TableName: process.env.TABLE_NAME,
-            Key: {
-                emailAddress
+            FilterExpression: "emailAddress = :emailAddress",
+            ExpressionAttributeValues: {
+                ":emailAddress": emailAddress
             }
         })
         .promise();
 
-    return <User>response.Item;
+    if (response.Items.length > 1) {
+        throw new Error(`Multiple users found with the same emailAddress`);
+    }
+
+    return <User>response.Items[0];
 };
 
 const app = express();
@@ -120,7 +117,7 @@ router.get('/', (req, res) => {
             return getByRefreshToken({ refreshToken });
         }
         if (emailAddress != null) {
-            return getByEmailAddress({ emailAddress });
+            return scanByEmailAddress({ emailAddress });
         }
         return Promise.reject(new Error(`No valid parameters specified`));
     }

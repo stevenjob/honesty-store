@@ -28,6 +28,7 @@
   "devDependencies": {
     "@types/commander": "^2.3.31",
     "@types/express": "^4.0.34",
+    "@types/jsonwebtoken": "^7.2.0",
     "@types/ms": "^0.7.29",
     "@types/node": "0.0.2",
     "@types/winston": "0.0.32",
