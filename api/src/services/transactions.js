@@ -1,7 +1,7 @@
 const transactions = new Map();
 
-const createTransaction = (amount) => {
-  const transaction = { date: Date.now(), amount };
+const createTransaction = (type, amount) => {
+  const transaction = { date: Date.now(), amount, type };
   return transaction;
 };
 
@@ -12,12 +12,12 @@ const addTransaction = (transaction, userID) => {
 };
 
 const addItemTransaction = (userID, itemPrice) => {
-  const transaction = createTransaction(-itemPrice);
+  const transaction = createTransaction('purchase', -itemPrice);
   addTransaction(transaction, userID);
 };
 
 const addTopUpTransaction = (userID, amount) => {
-  const transaction = createTransaction(amount);
+  const transaction = createTransaction('topup', amount);
   addTransaction(transaction, userID);
 };
 
