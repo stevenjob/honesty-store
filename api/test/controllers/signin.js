@@ -39,8 +39,10 @@ describe('/signin2', () => {
   const sendSignIn2Request = (emailToken, callback) => {
     const options = {
       uri: `${baseURL}/signin2`,
+      auth: {
+        bearer: emailToken,
+      },
       json: true,
-      body: { emailToken },
     };
     request.post(options, callback);
   };
