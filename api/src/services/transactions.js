@@ -14,6 +14,7 @@ const addTransaction = (transaction, userID) => {
 const addItemTransaction = (userID, itemPrice) => {
   const transaction = createTransaction('purchase', -itemPrice);
   addTransaction(transaction, userID);
+  return transaction;
 };
 
 const addTopUpTransaction = (userID, amount) => {
