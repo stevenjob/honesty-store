@@ -59,6 +59,11 @@ const updateAccount = (id, emailAddress, cardDetails) => {
   account.cardDetails = cardDetails;
 };
 
+const updateCardDetails = (id, cardDetails) => {
+  const account = getAccount(id);
+  account.cardDetails = cardDetails;
+};
+
 const getCardNumber = userID => getAccount(userID).cardDetails;
 const getDefaultStoreCode = userID => getAccount(userID).defaultStoreCode;
 const getAccessToken = (userID) => {
@@ -103,5 +108,6 @@ module.exports = {
   getDefaultStoreCode,
   getAccessToken,
   updateRefreshToken,
+  updateCardDetails,
   __accounts: accounts,
 };
