@@ -4,6 +4,7 @@ const registerController = require('./controllers/register');
 const sessionController = require('./controllers/session');
 const signInController = require('./controllers/signin');
 const topUpController = require('./controllers/topup');
+const purchaseController = require('./controllers/purchase');
 
 const app = express();
 const router = express.Router();
@@ -14,6 +15,7 @@ registerController(router);
 sessionController(router);
 signInController(router);
 topUpController(router);
+purchaseController(router);
 
 app.use('/api/v1', router);
 
