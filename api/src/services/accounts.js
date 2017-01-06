@@ -64,23 +64,22 @@ const updateCardDetails = (id, cardDetails) => {
   account.cardDetails = cardDetails;
 };
 
-const getCardNumber = userID => getAccount(userID).cardDetails;
-const getDefaultStoreCode = userID => getAccount(userID).defaultStoreCode;
-const getAccessToken = (userID) => {
+const updateAccessToken = (userID) => {
   const newAccessToken = generateExpirableToken();
 
   const account = getAccount(userID);
   account.accessToken = newAccessToken;
 
-  return newAccessToken;
+  return account;
 };
+
 const updateRefreshToken = (userID) => {
   const newRefreshToken = generateRefreshToken();
 
   const account = getAccount(userID);
   account.refreshToken = newRefreshToken;
 
-  return newRefreshToken;
+  return account;
 };
 
 const sendEmailToken = (emailAddress) => {
@@ -104,10 +103,9 @@ module.exports = {
   getAccountIDFromAccessToken,
   getAccountIDFromRefreshToken,
   getAccountIDFromEmailToken,
-  getCardNumber,
-  getDefaultStoreCode,
-  getAccessToken,
+  getAccount,
   updateRefreshToken,
+  updateAccessToken,
   updateCardDetails,
   __accounts: accounts,
 };

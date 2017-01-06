@@ -20,7 +20,9 @@ const setupSignInPhase2 = (router) => {
     authenticateEmailToken,
     (request, response) => {
       const responseData = getSessionData(request.accountID);
-      responseData.refreshToken = updateRefreshToken(request.accountID);
+
+      const { refreshToken } = updateRefreshToken(request.accountID);
+      responseData.refreshToken = refreshToken;
 
       response.status(HTTPStatus.OK)
         .json({ response: responseData });

@@ -1,4 +1,4 @@
-const { getCardNumber, getDefaultStoreCode } = require('../services/accounts');
+const { getAccount } = require('../services/accounts');
 const { getTransactionHistory, getBalance } = require('../services/transactions');
 const { getItems } = require('../services/store');
 
@@ -10,8 +10,8 @@ const maskCardNumber = (cardNumber) => {
 };
 
 const getUserSessionData = (userID) => {
-  const cardNumber = getCardNumber(userID);
-  const maskedCardNumber = maskCardNumber(cardNumber);
+  const { cardDetails } = getAccount(userID);
+  const maskedCardNumber = maskCardNumber(cardDetails);
   return {
     balance: getBalance(userID),
     transactions: getTransactionHistory(userID),
@@ -20,10 +20,10 @@ const getUserSessionData = (userID) => {
 };
 
 const getStoreSessionData = (userID) => {
-  const connectedStoreCode = getDefaultStoreCode(userID);
+  const { defaultStoreCode } = getAccount(userID);
   return {
-    items: getItems(connectedStoreCode),
-    code: connectedStoreCode,
+    items: getItems(defaultStoreCode),
+    code: defaultStoreCode,
   };
 };
 

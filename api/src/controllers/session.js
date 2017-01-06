@@ -1,6 +1,6 @@
 const HTTPStatus = require('http-status');
 const { authenticateRefreshToken } = require('../middleware/authenticate');
-const { getAccessToken } = require('../services/accounts');
+const { updateAccessToken } = require('../services/accounts');
 const getSessionData = require('../services/session');
 
 const setupSessionEndpoint = (router) => {
@@ -9,7 +9,10 @@ const setupSessionEndpoint = (router) => {
     authenticateRefreshToken,
     (request, response) => {
       const sessionResponse = getSessionData(request.accountID);
-      sessionResponse.accessToken = getAccessToken(request.accountID);
+
+      const { accessToken } = updateAccessToken(request.accountID);
+
+      sessionResponse.accessToken = accessToken;
       response.status(HTTPStatus.OK)
         .json({ response: sessionResponse });
     });
