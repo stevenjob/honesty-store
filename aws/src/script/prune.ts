@@ -10,6 +10,7 @@ import { pruneRepositories } from '../ecr/repository';
 import { pruneImages } from '../ecr/image';
 import { getOriginBranchNames } from '../git/branch';
 import { pruneTables } from '../dynamodb/table';
+import { pruneAliases } from '../route53/alias';
 import * as winston from 'winston';
 import ms = require('ms');
 
@@ -37,7 +38,11 @@ export default async () => {
 
     await pruneLoadBalancers({
         filter: ({ LoadBalancerName }) => filter(LoadBalancerName)
-    })
+    });
+
+    await pruneAliases({
+        filter: (name) => !branchNames.some(branchName => branchName === name)
+    });
 
     // pruneListeners/pruneRules - listeners/rules belong to load balancers so are removed implicitly
 
@@ -52,5 +57,5 @@ export default async () => {
     // TODO: won't prune tables from deleted dirs or dirs which no longer require db
     await pruneTables({
         filter
-    })
+    });
 };

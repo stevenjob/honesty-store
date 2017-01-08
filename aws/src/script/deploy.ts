@@ -9,8 +9,8 @@ import pushImage from '../ecr/push';
 import { createHash } from 'crypto';
 import { ensureService } from '../ecs/service';
 import { ensureTable } from '../dynamodb/table';
+import { ensureAlias } from '../route53/alias';
 import * as winston from 'winston';
-
 
 export const prefix = 'hs';
 export const defaultTargetGroupDir = 'web';
@@ -67,6 +67,10 @@ const ensureDatabase = async ({ branch, dir }) => {
 export default async ({ branch, dir }) => {
     const loadBalancer = await ensureLoadBalancer({
         name: `${prefix}-${branch}`
+    });
+    await ensureAlias({
+        name: branch,
+        value: loadBalancer.DNSName
     });
     const defaultTargetGroup = await ensureTargetGroup({
         name: `${prefix}-${branch}-${defaultTargetGroupDir}`
