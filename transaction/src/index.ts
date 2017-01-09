@@ -32,6 +32,9 @@ const assertValidTransaction = ({type, amount, data}: Transaction) => {
     if (type == null || (type !== 'topup' && type !== 'purchase')) {
         throw new Error(`Invalid transaction type ${type}`);
     }
+    if (!Number.isInteger(amount) /* this also checks typeof amount */) {
+        throw new Error(`Non-integral transaction amount ${amount}`);
+    }
     if ((type === 'topup' && amount <= 0) || (type === 'purchase' && amount >= 0)) {
         throw new Error(`Invalid transaction amount for type ${amount} ${type}`);
     }
