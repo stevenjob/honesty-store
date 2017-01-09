@@ -13,39 +13,36 @@ describe('/transactions', () => {
     }
   };
 
+  const sendRequest = (page, callback) => {
+    const { id, accessToken } = registerAccount('NCL');
+    generateDummyTransactions(id);
+
+    request.get({
+      uri: `${baseURL}/transactions?page=${page}`,
+      auth: {
+        bearer: accessToken,
+      },
+    },
+    callback);
+  };
+
   it('should retrieve first page\'s transaction data',
     (done) => {
-      const { id, accessToken } = registerAccount('NCL');
-      generateDummyTransactions(id);
+      sendRequest(0,
+        (error, response, body) => {
+          const result = JSON.parse(body);
+          const transactions = result.response.items;
 
-      request.get({
-        uri: `${baseURL}/transactions?page=0`,
-        auth: {
-          bearer: accessToken,
-        },
-      },
-      (error, response, body) => {
-        const result = JSON.parse(body);
-        const transactions = result.response.items;
+          const expectedNumberTransactions = 10;
 
-        const expectedNumberTransactions = 10;
-
-        assert.equal(transactions.length, expectedNumberTransactions);
-        done();
-      });
+          assert.equal(transactions.length, expectedNumberTransactions);
+          done();
+        });
     });
 
   it('should retrieve last page\'s transaction data',
     (done) => {
-      const { id, accessToken } = registerAccount('NCL');
-      generateDummyTransactions(id);
-
-      request.get({
-        uri: `${baseURL}/transactions?page=1`,
-        auth: {
-          bearer: accessToken,
-        },
-      },
+      sendRequest(1,
       (error, response, body) => {
         const result = JSON.parse(body);
         const transactions = result.response.items;
@@ -59,15 +56,7 @@ describe('/transactions', () => {
 
   it('should return last page number that can be retrieved',
     (done) => {
-      const { id, accessToken } = registerAccount('NCL');
-      generateDummyTransactions(id);
-
-      request.get({
-        uri: `${baseURL}/transactions?page=0`,
-        auth: {
-          bearer: accessToken,
-        },
-      },
+      sendRequest(0,
       (error, response, body) => {
         const result = JSON.parse(body);
 
