@@ -22,7 +22,6 @@ const addTopUpTransaction = (userID, amount) => {
   addTransaction(transaction, userID);
 };
 
-// No concept of paging these transactions yet
 const getTransactionHistory = userID => transactions.get(userID) || [];
 
 const getBalance = (userID) => {
