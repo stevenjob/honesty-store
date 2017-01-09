@@ -12,9 +12,11 @@ const maskCardNumber = (cardNumber) => {
 const getUserSessionData = (userID) => {
   const { cardDetails } = getAccount(userID);
   const maskedCardNumber = maskCardNumber(cardDetails);
+  const recentTransactions = getTransactionHistory(userID).slice(0, 10);
+
   return {
     balance: getBalance(userID),
-    transactions: getTransactionHistory(userID),
+    transactions: recentTransactions,
     cardNumber: maskedCardNumber,
   };
 };
