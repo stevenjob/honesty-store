@@ -5,6 +5,7 @@ const sessionController = require('./controllers/session');
 const signInController = require('./controllers/signin');
 const topUpController = require('./controllers/topup');
 const purchaseController = require('./controllers/purchase');
+const storeController = require('./controllers/store');
 
 const app = express();
 const router = express.Router();
@@ -16,6 +17,7 @@ sessionController(router);
 signInController(router);
 topUpController(router);
 purchaseController(router);
+storeController(router);
 
 app.use('/api/v1', router);
 
