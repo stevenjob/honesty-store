@@ -82,6 +82,11 @@ const updateRefreshToken = (userID) => {
   return account;
 };
 
+const updateDefaultStoreCode = (userID, storeCode) => {
+  const account = getAccount(userID);
+  account.defaultStoreCode = storeCode;
+};
+
 const sendEmailToken = (emailAddress) => {
   const account = accounts.find(element => element.emailAddress === emailAddress);
   if (account == null) {
@@ -107,5 +112,6 @@ module.exports = {
   updateRefreshToken,
   updateAccessToken,
   updateCardDetails,
+  updateDefaultStoreCode,
   __accounts: accounts,
 };
