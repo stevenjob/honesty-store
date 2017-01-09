@@ -1,7 +1,7 @@
 const request = require('request');
 const assert = require('chai').assert;
 const { registerAccount } = require('../../src/services/accounts');
-const { addItemTransaction } = require('../../src/services/transactions');
+const { addItemTransaction, getTransactionHistory } = require('../../src/services/transactions');
 
 const baseURL = 'http://localhost:3000/api/v1';
 
@@ -16,26 +16,25 @@ describe('/transactions', () => {
   const sendRequest = (page, callback) => {
     const { id, accessToken } = registerAccount('NCL');
     generateDummyTransactions(id);
-
     request.get({
       uri: `${baseURL}/transactions?page=${page}`,
       auth: {
         bearer: accessToken,
       },
     },
-    callback);
+    (error, response, body) => callback(error, response, body, id));
   };
 
   it('should retrieve first page\'s transaction data',
     (done) => {
       sendRequest(0,
-        (error, response, body) => {
+        (error, response, body, userID) => {
           const result = JSON.parse(body);
           const transactions = result.response.items;
 
-          const expectedNumberTransactions = 10;
+          const expectedTransactions = getTransactionHistory(userID).slice(0, 10);
 
-          assert.equal(transactions.length, expectedNumberTransactions);
+          assert.deepEqual(transactions, expectedTransactions);
           done();
         });
     });
@@ -43,15 +42,15 @@ describe('/transactions', () => {
   it('should retrieve last page\'s transaction data',
     (done) => {
       sendRequest(1,
-      (error, response, body) => {
-        const result = JSON.parse(body);
-        const transactions = result.response.items;
+        (error, response, body, userID) => {
+          const result = JSON.parse(body);
+          const transactions = result.response.items;
 
-        const expectedNumberTransactions = 5;
+          const expectedTransactions = getTransactionHistory(userID).slice(10, 15);
 
-        assert.equal(transactions.length, expectedNumberTransactions);
-        done();
-      });
+          assert.deepEqual(transactions, expectedTransactions);
+          done();
+        });
     });
 
   it('should return last page number that can be retrieved',
