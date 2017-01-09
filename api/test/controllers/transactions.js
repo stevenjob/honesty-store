@@ -56,13 +56,13 @@ describe('/transactions', () => {
   it('should return last page number that can be retrieved',
     (done) => {
       sendRequest(0,
-      (error, response, body) => {
-        const result = JSON.parse(body);
+        (error, response, body) => {
+          const result = JSON.parse(body);
 
-        const expectedLastPage = 1;
+          const expectedLastPage = 1;
 
-        assert.equal(result.response.lastPage, expectedLastPage);
-        done();
-      });
+          assert.equal(result.response.lastPage, expectedLastPage);
+          done();
+        });
     });
 });
