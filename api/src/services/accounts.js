@@ -87,6 +87,11 @@ const updateDefaultStoreCode = (userID, storeCode) => {
   account.defaultStoreCode = storeCode;
 };
 
+const expireRefreshToken = (userID) => {
+  const account = getAccount(userID);
+  account.refreshToken = null;
+};
+
 const sendEmailToken = (emailAddress) => {
   const account = accounts.find(element => element.emailAddress === emailAddress);
   if (account == null) {
@@ -113,5 +118,6 @@ module.exports = {
   updateAccessToken,
   updateCardDetails,
   updateDefaultStoreCode,
+  expireRefreshToken,
   __accounts: accounts,
 };
