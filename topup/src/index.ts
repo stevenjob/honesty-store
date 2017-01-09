@@ -100,13 +100,14 @@ const getOrCreate = async ({ accountId }): Promise<TopupAccount> => {
     });
 };
 
-const appendTopupTransaction = ({ topupAccount, amount, customerId }) =>
+const appendTopupTransaction = ({ topupAccount, amount, customerId, data }) =>
     post(
         `${process.env.TRANSACTION_URL}/${topupAccount.accountId}`,
         {
             type: 'topup',
             amount: `${amount}`,
             data: {
+                ...data,
                 topupAccountId: topupAccount.id,
                 topupCustomerId: customerId,
             }
@@ -134,10 +135,17 @@ const topupExistingAccount = ({ topupAccount, amount }) => {
             topupId: topupAccount.id,
             accountId: topupAccount.accountId
         },
-        // TODO: expand: ['balance_transaction']
+        expand: ['balance_transaction']
     })
     .then(async (charge) => {
-        await appendTopupTransaction({ amount, topupAccount, customerId });
+        await appendTopupTransaction({
+            amount,
+            topupAccount,
+            customerId,
+            data: {
+                stripeFee: charge.balance_transaction.net
+            }
+        });
         return topupAccount;
     });
 };
