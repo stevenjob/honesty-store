@@ -25,7 +25,7 @@ export interface Account {
 
 const baseUrl = process.env.BASE_URL;
 
-export const createAccount = async (accountId: string): Promise<Transaction> => {
+export const createAccount = async (accountId: string): Promise<Account> => {
     const response = await fetch(`${baseUrl}/Account/v1/`, {
         method: 'POST',
         headers: {
@@ -57,7 +57,7 @@ export const createTransaction = async (accountId: string, transaction: Transact
         },
         body: JSON.stringify(transaction)
     })
-        .then<ApiResponse<Account>>(response => response.json());
+        .then<ApiResponse<Transaction>>(response => response.json());
     if (response.error) {
         throw new Error(response.error.message);
     }
