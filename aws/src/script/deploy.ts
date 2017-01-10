@@ -56,10 +56,13 @@ export default async ({ branch, dir }) => {
     const loadBalancer = await ensureLoadBalancer({
         name: `${prefix}-${branch}`
     });
-    await ensureAlias({
+    const resourceRecordSet = await ensureAlias({
         name: branch,
         value: loadBalancer.DNSName
     });
+    // strip trailing dot from DNS record
+    const hostName = resourceRecordSet.Name.substr(0, resourceRecordSet.Name.length - 1);
+    const baseUrl = `https://${hostName}`;
     const defaultTargetGroup = await ensureTargetGroup({
         name: `${prefix}-${branch}-${defaultTargetGroupDir}`
     });
@@ -88,7 +91,8 @@ export default async ({ branch, dir }) => {
         name: dir,
         data: {
             image,
-            tableName: db.TableName
+            tableName: db.TableName,
+            baseUrl
         }
     });
     const taskDefinition = await ensureTaskDefinition({
@@ -114,5 +118,5 @@ export default async ({ branch, dir }) => {
         ],
         role
     });
-    winston.info(`Deployed to https://${loadBalancer.DNSName}${rule.Conditions[0].Values[0]}.`);
+    winston.info(`Deployed to ${baseUrl}${rule.Conditions[0].Values[0]}.`);
 };
