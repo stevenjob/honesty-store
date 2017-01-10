@@ -6,6 +6,7 @@ import isUUID = require('validator/lib/isUUID');
 import isEmail = require('validator/lib/isEmail');
 import { signAccessToken, signRefreshToken, verifyToken } from './token';
 import { User, UserProfile, UserWithAccessToken, UserWithAccessAndRefreshTokens, UserWithMagicLinkToken } from './client';
+import { createAccount, getAccount, TEST_DATA_EMPTY_ACCOUNT_ID } from '../../transaction/src/client';
 
 config.region = process.env.AWS_REGION;
 
@@ -188,8 +189,8 @@ const updateUser = async ({ userId, userProfile }): Promise<User> => {
     };
 
     if (originalUser.emailAddress == null && updatedUser.emailAddress != null) {
-        // TODO: create real transaction account
-        updatedUser.accountId = await Promise.resolve('b423607f-64de-441f-ac39-12d50aaedbe9')
+        const account = await createAccount(uuid());
+        updatedUser.accountId = account.id;
     }
 
     const response = await new DynamoDB.DocumentClient()
