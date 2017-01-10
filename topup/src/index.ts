@@ -99,34 +99,35 @@ const getOrCreate = async ({ accountId, test }): Promise<TopupAccount> => {
     });
 };
 
-const appendTopupTransaction = ({ topupAccount, amount, data }) => {
+const appendTopupTransaction = async ({ topupAccount, amount, data }) => {
     if (!process.env.TRANSACTION_URL) {
         throw new Error(`no $TRANSACTION_URL in environment`);
     }
 
-    return post(
-        `${process.env.TRANSACTION_URL}/${topupAccount.accountId}`,
-        {
-            type: 'topup',
-            amount,
-            data: {
-                ...data,
-                topupAccountId: topupAccount.id,
-                topupCustomerId: topupAccount.stripeCustomerId,
-            }
-        })
-        .catch((error) => {
-            // remap error message
-            throw new Error(`couldn't add transaction: ${JSON.stringify(error)}`);
-        });
+    try {
+        return await post(
+            `${process.env.TRANSACTION_URL}/${topupAccount.accountId}`,
+            {
+                type: 'topup',
+                amount,
+                data: {
+                    ...data,
+                    topupAccountId: topupAccount.id,
+                    topupCustomerId: topupAccount.stripeCustomerId,
+                }
+            });
+    } catch (error) {
+        // remap error message
+        throw new Error(`couldn't add transaction: ${JSON.stringify(error)}`);
+    }
 };
 
-const topupExistingAccount = ({ topupAccount, amount, test }) => {
+const topupExistingAccount = async ({ topupAccount, amount, test }) => {
     if (topupAccount.stripeCustomerId === '') {
         throw new Error(`No card registered for ${test ? 'test ' : ''} account ${topupAccount.accountId}`);
     }
 
-    return stripeObjectForTest({ test }).charges.create({
+    const charge = await stripeObjectForTest({ test }).charges.create({
         amount,
         currency: 'gbp',
         customer: topupAccount.stripeCustomerId,
@@ -136,20 +137,20 @@ const topupExistingAccount = ({ topupAccount, amount, test }) => {
             accountId: topupAccount.accountId
         },
         expand: ['balance_transaction']
-    })
-    .then(async (charge) => {
-        await appendTopupTransaction({
-            amount,
-            topupAccount,
-            data: {
-                stripeFee: String(charge.balance_transaction.net),
-            }
-        });
-        return topupAccount;
     });
+
+    await appendTopupTransaction({
+        amount,
+        topupAccount,
+        data: {
+            stripeFee: String(charge.balance_transaction.net),
+        }
+    });
+
+    return topupAccount;
 };
 
-const recordCustomerId = ({ customer, topupAccount }): Promise<TopupAccount> => {
+const recordCustomerId = async ({ customer, topupAccount }): Promise<TopupAccount> => {
     return update({
         topupAccount: {
             ...topupAccount,
@@ -159,16 +160,16 @@ const recordCustomerId = ({ customer, topupAccount }): Promise<TopupAccount> => 
 };
 
 const addStripeTokenToAccount = async ({ topupAccount, stripeToken, test }): Promise<TopupAccount> => {
-    return stripeObjectForTest({ test }).customers.create({
+    const customer = await stripeObjectForTest({ test }).customers.create({
         source: stripeToken,
         description: `topup for ${topupAccount.accountId}`,
         metadata: {
             topupId: topupAccount.id,
             accountId: topupAccount.accountId
         }
-    }).then((customer) =>
-        recordCustomerId({ customer, topupAccount })
-    );
+    });
+
+    return await recordCustomerId({ customer, topupAccount });
 };
 
 const app = express();
