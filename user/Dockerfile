@@ -6,6 +6,8 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY transaction /usr/src/transaction
+RUN cd /usr/src/transaction && npm install
+
 COPY user /usr/src/app
 
 RUN npm install
