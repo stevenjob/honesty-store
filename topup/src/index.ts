@@ -21,7 +21,7 @@ interface TopupAccount {
 
 const assertValidAccountId = (accountId) => {
     if (accountId == null || !isUUID(accountId, 4) ) {
-        throw new Error(`Invalid accountId ${accountId}`);
+        throw new Error(`Invalid accountId '${accountId}'`);
     }
 };
 
