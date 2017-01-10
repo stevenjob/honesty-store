@@ -1,6 +1,6 @@
 const HTTPStatus = require('http-status');
 const { authenticateAccessToken } = require('../middleware/authenticate');
-const { getTransactionHistory } = require('../services/transactions');
+const { getTransactionHistory } = require('../services/transaction');
 
 const getPagedTransactions = (userID, page) => {
   const allUserTransactions = getTransactionHistory(userID);

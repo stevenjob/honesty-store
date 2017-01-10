@@ -3,7 +3,7 @@ const assert = require('chai').assert;
 const HTTPStatus = require('http-status');
 
 const { registerAccount, __users } = require('../../src/services/user');
-const { getTransactionHistory, getBalance } = require('../../src/services/transactions');
+const { getTransactionHistory, getBalance } = require('../../src/services/transaction');
 const { getPrice } = require('../../src/services/store');
 
 require('../../src/app');

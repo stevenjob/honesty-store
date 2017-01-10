@@ -1,5 +1,5 @@
 const { getAccount } = require('../services/user');
-const { getTransactionHistory, getBalance } = require('../services/transactions');
+const { getTransactionHistory, getBalance } = require('../services/transaction');
 const { getItems } = require('../services/store');
 
 const maskCardNumber = (cardNumber) => {

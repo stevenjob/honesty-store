@@ -1,6 +1,6 @@
 const assert = require('chai').assert;
 const { registerAccount, updateAccount, __users } = require('../../src/services/user');
-const { addItemTransaction } = require('../../src/services/transactions');
+const { addItemTransaction } = require('../../src/services/transaction');
 const { getItems } = require('../../src/services/store');
 const getSessionData = require('../../src/services/session');
 

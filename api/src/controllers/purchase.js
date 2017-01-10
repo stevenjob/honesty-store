@@ -1,7 +1,7 @@
 const HTTPStatus = require('http-status');
 const { authenticateAccessToken } = require('../middleware/authenticate');
 const { getPrice } = require('../services/store');
-const { addItemTransaction, getBalance } = require('../services/transactions');
+const { addItemTransaction, getBalance } = require('../services/transaction');
 
 const setupPurchaseEndpoint = (router) => {
   router.post(

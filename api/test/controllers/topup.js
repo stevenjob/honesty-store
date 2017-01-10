@@ -2,7 +2,7 @@ const request = require('request');
 const assert = require('chai').assert;
 
 const { registerAccount, __users } = require('../../src/services/user');
-const { getTransactionHistory } = require('../../src/services/transactions');
+const { getTransactionHistory } = require('../../src/services/transaction');
 
 require('../../src/app');
 

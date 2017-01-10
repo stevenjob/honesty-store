@@ -1,6 +1,6 @@
 const HTTPStatus = require('http-status');
 const { authenticateAccessToken } = require('../middleware/authenticate');
-const { getBalance, addTopUpTransaction } = require('../services/transactions');
+const { getBalance, addTopUpTransaction } = require('../services/transaction');
 const { updateCardDetails } = require('../services/user');
 
 const setupTopUpEndpoint = (router) => {
