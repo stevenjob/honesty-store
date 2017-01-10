@@ -2,6 +2,7 @@ const request = require('request');
 const assert = require('chai').assert;
 const HTTPStatus = require('http-status');
 const { registerAccount, __accounts, getAccountIDFromAccessToken } = require('../../src/services/accounts');
+const { getPrice } = require('../../src/services/store');
 const getSessionData = require('../../src/services/session');
 
 require('../../src/app');
@@ -83,6 +84,22 @@ describe('/register2', () => {
           done();
         });
     });
+
+    it('should show correct balance after successful top up and initial purchase',
+      (done) => {
+        const topUpAmount = 500;
+        const itemID = 0;
+        sendRequest({
+          emailAddress: 'test@test.co.uk',
+          itemID,
+          topUpAmount,
+        },
+        (response, body) => {
+          const expectedBalance = topUpAmount - getPrice(itemID);
+          assert.equal(body.response.user.balance, expectedBalance);
+          done();
+        });
+      });
   });
 
   describe('Token validation', () => {
