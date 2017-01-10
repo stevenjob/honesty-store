@@ -4,10 +4,7 @@ import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 
-import { readFileSync } from 'fs';
 import * as stripeFactory from 'stripe';
-import * as httpStatus from 'http-status';
-import winston = require('winston');
 import { post } from './post';
 
 let stripe;
