@@ -162,7 +162,7 @@ const recordCustomerId = async ({ customer, topupAccount }): Promise<TopupAccoun
 const addStripeTokenToAccount = async ({ topupAccount, stripeToken, test }): Promise<TopupAccount> => {
     const customer = await stripeObjectForTest({ test }).customers.create({
         source: stripeToken,
-        description: `topup for ${topupAccount.accountId}`,
+        description: `registration for ${topupAccount.accountId}`,
         metadata: {
             topupId: topupAccount.id,
             accountId: topupAccount.accountId
