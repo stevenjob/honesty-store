@@ -24,9 +24,6 @@ const config = {
     api: {
         loadBalancer: { pathPattern: '/api/*', priority: 1 }
     },
-    nginx: {
-        loadBalancer: { pathPattern: '/test/*', priority: 2 }
-    },
     transaction: {
         database: true,
         loadBalancer: { pathPattern: '/transaction/*', priority: 3 },
