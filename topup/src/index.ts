@@ -112,7 +112,7 @@ const appendTopupTransaction = ({ topupAccount, amount, data }) => {
         `${process.env.TRANSACTION_URL}/${topupAccount.accountId}`,
         {
             type: 'topup',
-            amount: `${amount}`,
+            amount,
             data: {
                 ...data,
                 topupAccountId: topupAccount.id,
