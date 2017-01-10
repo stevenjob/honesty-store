@@ -177,7 +177,7 @@ const addStripeTokenToAccount = async ({ topupAccount, stripeToken, test }): Pro
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // send healthy response to load balancer probes
 app.get('/', (req, res) => {
