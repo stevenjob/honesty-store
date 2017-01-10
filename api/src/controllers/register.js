@@ -41,7 +41,8 @@ const setupRegisterPhase1 = (router) => {
     (request, response) => {
       const { storeCode } = request.body;
       const responseData = register(storeCode);
-      response.status(HTTPStatus.OK).json(responseData);
+      response.status(HTTPStatus.OK)
+        .json(responseData);
     });
 };
 
@@ -65,6 +66,8 @@ const setupRegisterPhase2 = (router) => {
       const { accountID } = request;
       const responseData = register2(accountID, emailAddress, cardDetails, itemID);
       response.status(HTTPStatus.OK).json(responseData);
+      response.status(HTTPStatus.OK)
+        .json(responseData);
     });
 };
 
