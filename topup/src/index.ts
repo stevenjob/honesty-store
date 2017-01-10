@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 
 import * as stripeFactory from 'stripe';
-import { post } from './post';
+import fetch from 'node-fetch';
 
 let stripeTest;
 let stripeProd
@@ -105,7 +105,7 @@ const appendTopupTransaction = async ({ topupAccount, amount, data }) => {
     }
 
     try {
-        return await post(
+        return await fetch(
             `${process.env.TRANSACTION_URL}/${topupAccount.accountId}`,
             {
                 type: 'topup',
