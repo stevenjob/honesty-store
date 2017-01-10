@@ -14,7 +14,7 @@ config.region = process.env.AWS_REGION;
 interface TopupAccount {
     id: string;
     accountId: string;
-    stripeCustomerIds: string[];
+    stripeCustomerId: string;
 };
 
 const assertValidAccountId = (accountId) => {
@@ -61,9 +61,9 @@ const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
                 id: topupAccount.id
             },
             UpdateExpression:
-                `set stripeCustomerIds = :stripeCustomerIds, accountId = :accountId`,
+                `set stripeCustomerId = :stripeCustomerId, accountId = :accountId`,
             ExpressionAttributeValues: {
-                ':stripeCustomerIds': topupAccount.stripeCustomerIds,
+                ':stripeCustomerId': topupAccount.stripeCustomerId,
                 ':accountId': topupAccount.accountId,
             },
         })
@@ -83,12 +83,12 @@ const getOrCreate = async ({ accountId }): Promise<TopupAccount> => {
         topupAccount: {
             id: uuid(),
             accountId,
-            stripeCustomerIds: []
+            stripeCustomerId: '',
         }
     });
 };
 
-const appendTopupTransaction = ({ topupAccount, amount, customerId, data }) => {
+const appendTopupTransaction = ({ topupAccount, amount, data }) => {
     if (!process.env.TRANSACTION_URL) {
         throw new Error(`no $TRANSACTION_URL in environment`);
     }
@@ -101,7 +101,7 @@ const appendTopupTransaction = ({ topupAccount, amount, customerId, data }) => {
             data: {
                 ...data,
                 topupAccountId: topupAccount.id,
-                topupCustomerId: customerId,
+                topupCustomerId: topupAccount.stripeCustomerId,
             }
         })
         .catch((error) => {
@@ -111,18 +111,14 @@ const appendTopupTransaction = ({ topupAccount, amount, customerId, data }) => {
 };
 
 const topupExistingAccount = ({ topupAccount, amount }) => {
-    if (topupAccount.stripeCustomerIds.length === 0) {
-        throw new Error(`No cards registered for account ${topupAccount.accountId}`);
+    if (topupAccount.stripeCustomerId === '') {
+        throw new Error(`No card registered for account ${topupAccount.accountId}`);
     }
-
-    // use the latest card
-    const stripeIds = topupAccount.stripeCustomerIds;
-    const customerId = stripeIds[stripeIds.length - 1];
 
     return stripe.charges.create({
         amount,
         currency: 'gbp',
-        customer: customerId,
+        customer: topupAccount.stripeCustomerId,
         description: `topup for ${topupAccount.accountId}`,
         metadata: {
             topupId: topupAccount.id,
@@ -134,7 +130,6 @@ const topupExistingAccount = ({ topupAccount, amount }) => {
         await appendTopupTransaction({
             amount,
             topupAccount,
-            customerId,
             data: {
                 stripeFee: charge.balance_transaction.net
             }
@@ -144,8 +139,12 @@ const topupExistingAccount = ({ topupAccount, amount }) => {
 };
 
 const recordCustomerId = ({ customer, topupAccount }): Promise<TopupAccount> => {
-    topupAccount.stripeCustomerIds.push(customer.id);
-    return update({ topupAccount });
+    return update({
+        topupAccount: {
+            ...topupAccount,
+            stripeCustomerId: customer.id
+        }
+    });
 };
 
 const addStripeTokenToAccount = async ({ topupAccount, stripeToken }): Promise<TopupAccount> => {
