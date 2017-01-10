@@ -7,7 +7,8 @@ import isUUID = require('validator/lib/isUUID');
 import * as stripeFactory from 'stripe';
 import { post } from './post';
 
-let stripe;
+let stripeTest;
+let stripeProd
 
 config.region = process.env.AWS_REGION;
 
@@ -15,6 +16,7 @@ interface TopupAccount {
     id: string;
     accountId: string;
     stripeCustomerId: string;
+    test: boolean;
 };
 
 const assertValidAccountId = (accountId) => {
@@ -25,6 +27,10 @@ const assertValidAccountId = (accountId) => {
 
 const assertValidTopupAccount = (topupAccount: TopupAccount) => {
     assertValidAccountId(topupAccount.accountId);
+};
+
+const stripeObjectForTest = ({ test }) => {
+    return test ? stripeTest : stripeProd;
 };
 
 const get = async ({ accountId }): Promise<TopupAccount> => {
@@ -61,10 +67,11 @@ const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
                 id: topupAccount.id
             },
             UpdateExpression:
-                `set stripeCustomerId = :stripeCustomerId, accountId = :accountId`,
+                `set stripeCustomerId = :stripeCustomerId, accountId = :accountId, test = :test`,
             ExpressionAttributeValues: {
                 ':stripeCustomerId': topupAccount.stripeCustomerId,
                 ':accountId': topupAccount.accountId,
+                ':test': topupAccount.test,
             },
         })
         .promise();
@@ -72,10 +79,17 @@ const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
     return topupAccount;
 };
 
-const getOrCreate = async ({ accountId }): Promise<TopupAccount> => {
+const getOrCreate = async ({ accountId, test }): Promise<TopupAccount> => {
     const topupAccount: TopupAccount = await get({ accountId });
 
     if (topupAccount) {
+        if (topupAccount.test !== test) {
+            const expectedString = (test ? 'test' : 'prod');
+            const accountString = (topupAccount.test ? 'test' : 'prod');
+
+            throw new Error(`Expected ${expectedString} account, found ${accountString} account`);
+        }
+
         return topupAccount;
     }
 
@@ -84,6 +98,7 @@ const getOrCreate = async ({ accountId }): Promise<TopupAccount> => {
             id: uuid(),
             accountId,
             stripeCustomerId: '',
+            test
         }
     });
 };
@@ -110,12 +125,12 @@ const appendTopupTransaction = ({ topupAccount, amount, data }) => {
         });
 };
 
-const topupExistingAccount = ({ topupAccount, amount }) => {
+const topupExistingAccount = ({ topupAccount, amount, test }) => {
     if (topupAccount.stripeCustomerId === '') {
-        throw new Error(`No card registered for account ${topupAccount.accountId}`);
+        throw new Error(`No card registered for ${test ? 'test ' : ''} account ${topupAccount.accountId}`);
     }
 
-    return stripe.charges.create({
+    return stripeObjectForTest({ test }).charges.create({
         amount,
         currency: 'gbp',
         customer: topupAccount.stripeCustomerId,
@@ -147,8 +162,8 @@ const recordCustomerId = ({ customer, topupAccount }): Promise<TopupAccount> => 
     });
 };
 
-const addStripeTokenToAccount = async ({ topupAccount, stripeToken }): Promise<TopupAccount> => {
-    return stripe.customers.create({
+const addStripeTokenToAccount = async ({ topupAccount, stripeToken, test }): Promise<TopupAccount> => {
+    return stripeObjectForTest({ test }).customers.create({
         source: stripeToken,
         description: `topup for ${topupAccount.accountId}`,
         metadata: {
@@ -170,16 +185,16 @@ app.get('/', (req, res) => {
 });
 
 app.post('/topup', (req, res) => {
-    const { accountId, amount, stripeToken } = req.body;
+    const { accountId, amount, stripeToken, test } = req.body;
 
     const attemptTopup = async () => {
-        const topupAccount = await getOrCreate({ accountId });
+        const topupAccount = await getOrCreate({ accountId, test });
 
         if (stripeToken) {
-            await addStripeTokenToAccount({ topupAccount, stripeToken });
+            await addStripeTokenToAccount({ topupAccount, stripeToken, test });
         }
 
-        return topupExistingAccount({ topupAccount, amount })
+        return topupExistingAccount({ topupAccount, amount, test })
     };
 
     attemptTopup()
@@ -191,6 +206,7 @@ app.post('/topup', (req, res) => {
         });
 });
 
-stripe = stripeFactory(process.env.STRIPE_SECRET_KEY);
+stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
+stripeProd = stripeFactory(process.env.STRIPE_SECRET_KEY_PROD);
 
 app.listen(3000);

@@ -31,6 +31,7 @@
             "id": "df39d529-8f35-4e04-a91f-408c189563f1",
             "accountId": "b423607f-64de-441f-ac39-12d50aaedbe9",
             "stripeCustomerId": "cus_9trnsH8fhkqWtr"
+            "test": true
         }
     ]
 }
