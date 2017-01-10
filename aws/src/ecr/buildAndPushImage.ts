@@ -15,19 +15,21 @@ const getCredentials = async () => {
   return { user, password };
 };
 
-export default async ({ imageName, repositoryName, tag }) => {
+export default async ({ dir, repositoryName }) => {
   winston.debug(`push: gather metadata`);
   const [accountId, { user, password }, { repositoryUri }] = await Promise.all([
     getAccountId(),
     getCredentials(),
     ensureRepository({ name: repositoryName })
   ]);
-  winston.debug(`push: login`);
+  winston.debug(`buildAndPushImage: build`);
+  await spawn(`docker`, `build`, `-t`, `${dir}`, `-f`, `${dir}/Dockerfile`, `.`);
+  winston.debug(`buildAndPushImage: login`);
   await spawn(`docker`, `login`, `-u`, `${user}`, `-p`, `${password}`, `-e`,  `none`, `https://${repositoryUri}`);
-  winston.debug(`push: tag`);
-  await spawn(`docker`, `tag`, `${imageName}:latest`, `${repositoryUri}:${tag}`);
-  winston.debug(`push: push`);
-  await spawn(`docker`, `push`, `${repositoryUri}:${tag}`);
+  winston.debug(`buildAndPushImage: tag`);
+  await spawn(`docker`, `tag`, `${dir}:latest`, `${repositoryUri}:latest`);
+  winston.debug(`buildAndPushImage: push`);
+  await spawn(`docker`, `push`, `${repositoryUri}:latest`);
 
-  return `${repositoryUri}:${tag}`;
+  return `${repositoryUri}:latest`;
 };

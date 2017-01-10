@@ -1,22 +1,12 @@
 FROM node:latest
 
 ENV NPM_CONFIG_LOGLEVEL error
+ENV NODE_ENV production
+EXPOSE 3000
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-COPY transaction /usr/src/transaction
-RUN cd /usr/src/transaction && npm install
-
 COPY user /usr/src/app
-
-RUN npm install
-RUN npm run ci
-
-ENV NODE_ENV production
-EXPOSE 3000
-
-# prune after setting production env to remove dev dependencies
-RUN npm prune
 
 ENTRYPOINT ["node", "."]

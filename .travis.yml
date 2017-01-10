@@ -11,13 +11,13 @@ env:
     - secure: "zXcmNY/5n9FzQ3XLPpLPE0GYEJPm+K6Wg/X40G9O5dO4kcOyEPtCXScE4OnRTDrfAD5LfnGaBWfEHrRt3bI6rGVJawycZT2j+bLQu4UobYUUiHkcNqOsdNBpIvn8LklvsIOEgMowRCzGWUrHQEz+13RhEarzFKFqMYnvDEaXyjvSeUnLA58e+bvzln+4WLgUo/EKJuK8qCq592fk/SWzA2NHhoqgN5XKMk/PAqXBOV6cO001m+pNVBQEWZ7sfJWugAhX4DNNRY36DM6qx2mgdKeVnWckJFpwoQOzXXBdwB7g8ADqXL1mb70ik3ADckFTjFmuxD7IhoHOoTzABkod0aS4r46SlKc7aE//kvieV0gbWff69oIXdE5flTjTIE2dKs5EFGKz6E/rZ8J7xRgc+MQIqPPAHqSt03SMGdsBtk6w35JqyQIYpqKnGz+RWUcHI/qR0ODDtM9RatmlPfptNG5Bg2eWlav7Gq+zIm4tLtVCRvCxN+Gb61KUGK8HpeqS/8OpMWVnm1uuEevtIvqI4Pa8RqdsssWqOzxgu92PQ4/e3bGgUzD7PZkLOYra28mao0elTgoWGjtRkueJxgmpEVoCNPY52tnN1UkpPMuW/R32N3MGrV4Nj0brrwTB1m6LdMeFb1JmG2Q1KOlpn9NrefZy0TduJ9+i32CRbLkvudo="
     - secure: "LdJbBa+i4bd5AhyumkGR5PPhAqZhtHrmzcNIiI/vN+lk+ECcRSe344GGxQwi28Sa5ytqeYFe0kCWcX+w9hbn3f+lTgaWRx0g05FNV6xGQhIfDs2XlorMeBZSn92z1aMYpDj8SNB39h7NZyh5KknFNhL1rrV9R8PT+DkrUdl0EnIKQYynYj1GKcwX7ql2HvGtenZLHJLkepTJj0aJzZPhTp/YfvN12izzPic8Oci4+94EIohfDLfcIKV21p3tjRcr8i4mMoSK063v06FuugC7+Twm1Fl+RZNpTfarkThllbxzKtvAyCsHb1aSRwNLLahOkUTWBJO3J7cL25hnp0+T6qehmB17jEMfts+k7dxd2qxFAOTXiVHfXrrkLtQYfcSO3mHfqrqSIGFPNkHwFM/GwIjwfqHzqjFbET088pgm2Q6KldFPNvwZ2gXnNcZScecYcTc3VMLCSrlAjsOReSVX613T2m79+dupVPycjKrks2FHBq7Rda+TwJCdW1/0hl9xtDcJoGIFUiL/nz1ZRKlAvTNilPdNeFRh/Yb1BpIXSHF2TzA/r5k3sncMLRhZPxRZfKetP8UaBKfRBVZo9z06JRK9PNanK5zF6aNwbpbfTZ6OVL6b4/2/cVr7r5mPIPGj6DVyJ8KrL6E0R/QtkcRGkZ/CuFPWIMEwFnKn/n/uP+g="
 script:
-  - cd aws && npm install && npm run ci && cd ..
-  - docker build -t api -f api/Dockerfile .
+  - (cd api && npm install && npm run ci)
+  - (cd aws && npm install && npm run ci)
+  - (cd transaction && npm install && npm run ci)
+  - (cd user && npm install && npm run ci)
+  - (cd web && npm install && npm run ci)
   - ./aws/bin/aws deploy api $TRAVIS_BRANCH
-  - docker build -t transaction -f transaction/Dockerfile .
   - ./aws/bin/aws deploy transaction $TRAVIS_BRANCH
-  - docker build -t user -f user/Dockerfile .
   - ./aws/bin/aws deploy user $TRAVIS_BRANCH
-  - docker build -t web -f web/Dockerfile .
   - ./aws/bin/aws deploy web $TRAVIS_BRANCH
   - ./aws/bin/aws prune

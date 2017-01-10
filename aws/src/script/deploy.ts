@@ -5,7 +5,7 @@ import { ensureTargetGroup } from '../elbv2/targetgroup';
 import { ensureRule } from '../elbv2/rule';
 import { templateJSON } from '../template';
 import { ensureTaskDefinition, pruneTaskDefinitions } from '../ecs/taskDefinition';
-import pushImage from '../ecr/push';
+import buildAndPushImage from '../ecr/buildAndPushImage';
 import { createHash } from 'crypto';
 import { ensureService } from '../ecs/service';
 import { ensureTable } from '../dynamodb/table';
@@ -79,10 +79,9 @@ export default async ({ branch, dir }) => {
         pathPattern: config[dir].loadBalancer.pathPattern,
         priority: config[dir].loadBalancer.priority
     });
-    const image = await pushImage({
-        imageName: dir,
-        repositoryName: `${prefix}-${branch}-${dir}`,
-        tag: 'latest'
+    const image = await buildAndPushImage({
+        dir,
+        repositoryName: `${prefix}-${branch}-${dir}`
     });
     const db = config[dir].database ? await ensureDatabase({ branch, dir }) : {};
     // TODO: create bespoke roles
