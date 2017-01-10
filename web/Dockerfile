@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 
 RUN npm install -g http-server
 
-COPY . /usr/src/app
+COPY web /usr/src/app
 
 RUN npm install
 RUN npm run ci

@@ -5,8 +5,8 @@ ENV NPM_CONFIG_LOGLEVEL error
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-COPY ../transaction /usr/src/transaction
-COPY . /usr/src/app
+COPY transaction /usr/src/transaction
+COPY user /usr/src/app
 
 RUN npm install
 RUN npm run ci
