@@ -4,26 +4,12 @@ import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isInt = require('validator/lib/isInt');
+import { Account, Transaction, TEST_DATA_EMPTY_ACCOUNT_ID } from './client';
 
 config.region = process.env.AWS_REGION;
 
-interface Transaction {
-    id: string;
-    type: 'topup' | 'purchase';
-    amount: number;
-    data: {
-        [key: string]: string;
-    }
-}
-
-interface Account {
-    id: string;
-    balance: number;
-    transactions: Transaction[];
-}
-
 const assertValidAccountId = (accountId) => {
-    if (accountId == null || !isUUID(accountId, 4) ) {
+    if (accountId == null || !isUUID(accountId, 4)) {
         throw new Error(`Invalid accountId ${accountId}`);
     }
 };
@@ -177,7 +163,13 @@ app.use('/transaction/v1', router);
 
 // send healthy response to load balancer probes
 app.get('/', (req, res) => {
-    res.send(200);
+    get({ accountId: TEST_DATA_EMPTY_ACCOUNT_ID })
+        .then(() => {
+            res.send(200);
+        })
+        .catch(() => {
+            res.send(500);
+        });
 })
 
 app.listen(3000);
