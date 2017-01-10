@@ -18,13 +18,13 @@ const register = (storeCode) => {
   return { response };
 };
 
-const register2 = (accountID, emailAddress, cardDetails, topUpAmount, purchasedItemID) => {
-  updateAccount(accountID, emailAddress, cardDetails);
+const register2 = (userID, emailAddress, cardDetails, topUpAmount, purchasedItemID) => {
+  updateAccount(userID, emailAddress, cardDetails);
 
   try {
     const price = getPrice(purchasedItemID);
-    addTopUpTransaction(accountID, topUpAmount);
-    addItemTransaction(accountID, price);
+    addTopUpTransaction(userID, topUpAmount);
+    addItemTransaction(userID, price);
   } catch (e) {
     /* We don't want to fail if the item could not be purchased, however the client
     is expected to assert that a transaction exists for the item and alert the user
@@ -32,7 +32,7 @@ const register2 = (accountID, emailAddress, cardDetails, topUpAmount, purchasedI
     winston.warn(e.message);
   }
 
-  const response = getSessionData(accountID);
+  const response = getSessionData(userID);
   return { response };
 };
 
@@ -64,8 +64,8 @@ const setupRegisterPhase2 = (router) => {
       }
 
       const { cardDetails, itemID, topUpAmount } = request.body;
-      const { accountID } = request;
-      const responseData = register2(accountID, emailAddress, cardDetails, topUpAmount, itemID);
+      const { userID } = request;
+      const responseData = register2(userID, emailAddress, cardDetails, topUpAmount, itemID);
       response.status(HTTPStatus.OK)
         .json(responseData);
     });

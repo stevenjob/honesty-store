@@ -10,7 +10,7 @@ const authenticateToken = (request, response, next, tokenRetrievalGetter) => {
     const token = getToken(request);
     jwt.verify(token, secretKey);
     // eslint-disable-next-line no-param-reassign
-    request.accountID = tokenRetrievalGetter(token);
+    request.userID = tokenRetrievalGetter(token);
     next();
   } catch (e) {
     response.status(HTTPStatus.UNAUTHORIZED)

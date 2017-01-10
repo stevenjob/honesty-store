@@ -10,13 +10,13 @@ const setupTopUpEndpoint = (router) => {
     (request, response) => {
       const { cardDetails, amount } = request.body;
 
-      updateCardDetails(request.accountID, cardDetails);
-      addTopUpTransaction(request.accountID, amount);
+      updateCardDetails(request.userID, cardDetails);
+      addTopUpTransaction(request.userID, amount);
 
       response.status(HTTPStatus.OK)
         .json({
           response: {
-            balance: getBalance(request.accountID),
+            balance: getBalance(request.userID),
           },
         });
     });

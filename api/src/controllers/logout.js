@@ -7,7 +7,7 @@ const setupLogOutEndpoint = (router) => {
     '/logout',
     authenticateAccessToken,
     (req, res) => {
-      expireRefreshToken(req.accountID);
+      expireRefreshToken(req.userID);
       res.status(HTTPStatus.OK)
         .json({ response: {} });
     });

@@ -12,9 +12,9 @@ const setupPurchaseEndpoint = (router) => {
 
       try {
         const price = getPrice(itemID);
-        const transaction = addItemTransaction(request.accountID, price);
+        const transaction = addItemTransaction(request.userID, price);
         const responseData = {
-          balance: getBalance(request.accountID),
+          balance: getBalance(request.userID),
           transaction,
         };
         response.status(HTTPStatus.OK)

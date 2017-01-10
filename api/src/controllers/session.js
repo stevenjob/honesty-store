@@ -8,9 +8,9 @@ const setupSessionEndpoint = (router) => {
     '/session',
     authenticateRefreshToken,
     (request, response) => {
-      const sessionResponse = getSessionData(request.accountID);
+      const sessionResponse = getSessionData(request.userID);
 
-      const { accessToken } = updateAccessToken(request.accountID);
+      const { accessToken } = updateAccessToken(request.userID);
 
       sessionResponse.accessToken = accessToken;
       response.status(HTTPStatus.OK)

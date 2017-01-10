@@ -19,9 +19,9 @@ const setupSignInPhase2 = (router) => {
     '/signin2',
     authenticateEmailToken,
     (request, response) => {
-      const responseData = getSessionData(request.accountID);
+      const responseData = getSessionData(request.userID);
 
-      const { refreshToken } = updateRefreshToken(request.accountID);
+      const { refreshToken } = updateRefreshToken(request.userID);
       responseData.refreshToken = refreshToken;
 
       response.status(HTTPStatus.OK)

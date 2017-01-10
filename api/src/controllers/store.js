@@ -9,7 +9,7 @@ const setupStoreEndpoint = (router) => {
     authenticateAccessToken,
     (req, res) => {
       const storeCode = req.body.storeCode;
-      updateDefaultStoreCode(req.accountID, req.body.storeCode);
+      updateDefaultStoreCode(req.userID, req.body.storeCode);
       res.status(HTTPStatus.OK)
         .json({ response: getItems(storeCode) });
     });
