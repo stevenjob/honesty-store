@@ -47,14 +47,10 @@ const get = async ({ accountId }): Promise<TopupAccount> => {
         })
         .promise();
 
-    switch (response.Items.length) {
-      case 0:
-        return undefined;
-      case 1:
+        if (response.Items.length > 1) {
+            throw new Error(`Too many database entries for '${accountId}'`);
+        }
         return <TopupAccount>response.Items[0];
-      default:
-        throw new Error(`Too many database entries for ${accountId}`);
-    }
 };
 
 const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
