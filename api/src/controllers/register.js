@@ -4,7 +4,7 @@ const winston = require('winston');
 
 const { registerAccount, updateAccount } = require('../services/accounts');
 const { getPrice } = require('../services/store');
-const { addItemTransaction } = require('../services/transactions');
+const { addItemTransaction, addTopUpTransaction } = require('../services/transactions');
 const getSessionData = require('../services/session');
 const { authenticateAccessToken } = require('../middleware/authenticate');
 
@@ -18,11 +18,12 @@ const register = (storeCode) => {
   return { response };
 };
 
-const register2 = (accountID, emailAddress, cardDetails, purchasedItemID) => {
+const register2 = (accountID, emailAddress, cardDetails, topUpAmount, purchasedItemID) => {
   updateAccount(accountID, emailAddress, cardDetails);
 
   try {
     const price = getPrice(purchasedItemID);
+    addTopUpTransaction(accountID, topUpAmount);
     addItemTransaction(accountID, price);
   } catch (e) {
     /* We don't want to fail if the item could not be purchased, however the client
@@ -62,10 +63,9 @@ const setupRegisterPhase2 = (router) => {
         return;
       }
 
-      const { cardDetails, itemID } = request.body;
+      const { cardDetails, itemID, topUpAmount } = request.body;
       const { accountID } = request;
-      const responseData = register2(accountID, emailAddress, cardDetails, itemID);
-      response.status(HTTPStatus.OK).json(responseData);
+      const responseData = register2(accountID, emailAddress, cardDetails, topUpAmount, itemID);
       response.status(HTTPStatus.OK)
         .json(responseData);
     });
