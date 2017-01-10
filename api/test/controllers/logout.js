@@ -1,6 +1,6 @@
 const request = require('request');
 const assert = require('chai').assert;
-const { getAccount, registerAccount, __users } = require('../../src/services/user');
+const { getUser, registerUser, __users } = require('../../src/services/user');
 
 require('../../src/app');
 
@@ -13,7 +13,7 @@ describe('/logout', () => {
 
   it('should \'expire\' the user\'s refresh token',
     (done) => {
-      const { id, accessToken } = registerAccount('NCL');
+      const { id, accessToken } = registerUser('NCL');
       request.post({
         uri: `${baseURL}/logout`,
         auth: {
@@ -21,7 +21,7 @@ describe('/logout', () => {
         },
       },
       () => {
-        const { refreshToken } = getAccount(id);
+        const { refreshToken } = getUser(id);
         assert.isNull(refreshToken);
         done();
       });

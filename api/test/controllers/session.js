@@ -1,7 +1,7 @@
 const request = require('request');
 const assert = require('chai').assert;
 const HTTPStatus = require('http-status');
-const { registerAccount, __users } = require('../../src/services/user');
+const { registerUser, __users } = require('../../src/services/user');
 
 require('../../src/app');
 
@@ -24,7 +24,7 @@ describe('/session', () => {
       });
     it('should return response with \'OK\' status code when valid refresh token provided',
       (done) => {
-        const { refreshToken } = registerAccount('NCL');
+        const { refreshToken } = registerUser('NCL');
         request.post(`${baseURL}/session`)
           .auth(null, null, true, refreshToken)
           .on('response', (response) => {
@@ -39,14 +39,14 @@ describe('/session', () => {
       (done) => {
         const storeCode = 'NCL';
         // When registering, we set the user's current store to be 'storeCode'
-        const account = registerAccount(storeCode);
+        const user = registerUser(storeCode);
 
-        const previousAccessToken = account.accessToken;
+        const previousAccessToken = user.accessToken;
 
         request.post({
           uri: `${baseURL}/session`,
           auth: {
-            bearer: account.refreshToken,
+            bearer: user.refreshToken,
           },
           json: true,
         },

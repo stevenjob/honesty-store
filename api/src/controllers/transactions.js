@@ -25,7 +25,7 @@ const setupTransactionsEndpoint = (router) => {
       const page = parseInt(request.query.page, 10) || 0;
 
       const responseData = {
-        response: getPagedTransactions(request.accountID, page),
+        response: getPagedTransactions(request.userID, page),
       };
 
       response.status(HTTPStatus.OK)

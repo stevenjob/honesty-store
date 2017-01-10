@@ -1,7 +1,7 @@
 const request = require('request');
 const assert = require('chai').assert;
-const { registerAccount } = require('../../src/services/accounts');
-const { addItemTransaction, getTransactionHistory } = require('../../src/services/transactions');
+const { registerUser } = require('../../src/services/user');
+const { addItemTransaction, getTransactionHistory } = require('../../src/services/transaction');
 
 const baseURL = 'http://localhost:3000/api/v1';
 
@@ -14,7 +14,7 @@ describe('/transactions', () => {
   };
 
   const sendRequest = (page, callback) => {
-    const { id, accessToken } = registerAccount('NCL');
+    const { id, accessToken } = registerUser('NCL');
     generateDummyTransactions(id);
     request.get({
       uri: `${baseURL}/transactions?page=${page}`,

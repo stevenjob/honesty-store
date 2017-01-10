@@ -1,7 +1,7 @@
 const request = require('request');
 const assert = require('chai').assert;
 const HTTPStatus = require('http-status');
-const { registerAccount, __users, getAccountIDFromAccessToken } = require('../../src/services/user');
+const { registerUser, __users, getUserIDFromAccessToken } = require('../../src/services/user');
 const { getPrice } = require('../../src/services/store');
 const getSessionData = require('../../src/services/session');
 
@@ -47,7 +47,7 @@ describe('/register', () => {
       const storeCode = 'NCL';
       sendRequest(storeCode,
         (error, response, body) => {
-          const userID = getAccountIDFromAccessToken(body.response.accessToken);
+          const userID = getUserIDFromAccessToken(body.response.accessToken);
           const expectedSessionData = getSessionData(userID);
           assert.deepEqual(body.response.user, expectedSessionData.user);
           assert.deepEqual(body.response.store, expectedSessionData.store);
@@ -59,7 +59,7 @@ describe('/register', () => {
 
 describe('/register2', () => {
   const sendRequest = (attributes, callback) => {
-    const { accessToken } = registerAccount('NCL');
+    const { accessToken } = registerUser('NCL');
     request.post({
       uri: `${baseURL}/register2`,
       auth: {
@@ -77,7 +77,7 @@ describe('/register2', () => {
     it('should contain session data as part of its JSON response', (done) => {
       sendRequest({ emailAddress: 'test@test.co.uk' },
         (response, body, accessToken) => {
-          const userID = getAccountIDFromAccessToken(accessToken);
+          const userID = getUserIDFromAccessToken(accessToken);
           const expectedSessionData = getSessionData(userID);
           assert.deepEqual(body.response.user, expectedSessionData.user);
           assert.deepEqual(body.response.store, expectedSessionData.store);

@@ -2,14 +2,14 @@ const isEmail = require('validator/lib/isEmail');
 const HTTPStatus = require('http-status');
 const winston = require('winston');
 
-const { registerAccount, updateAccount } = require('../services/user');
+const { registerUser, updateUser } = require('../services/user');
 const { getPrice } = require('../services/store');
 const { addItemTransaction, addTopUpTransaction } = require('../services/transaction');
 const getSessionData = require('../services/session');
 const { authenticateAccessToken } = require('../middleware/authenticate');
 
 const register = (storeCode) => {
-  const { id, accessToken, refreshToken } = registerAccount(storeCode);
+  const { id, accessToken, refreshToken } = registerUser(storeCode);
 
   const response = getSessionData(id);
   response.refreshToken = refreshToken;
@@ -19,7 +19,7 @@ const register = (storeCode) => {
 };
 
 const register2 = (userID, emailAddress, cardDetails, topUpAmount, purchasedItemID) => {
-  updateAccount(userID, emailAddress, cardDetails);
+  updateUser(userID, emailAddress, cardDetails);
 
   try {
     const price = getPrice(purchasedItemID);

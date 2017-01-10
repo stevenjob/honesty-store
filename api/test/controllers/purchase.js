@@ -2,7 +2,7 @@ const request = require('request');
 const assert = require('chai').assert;
 const HTTPStatus = require('http-status');
 
-const { registerAccount, __users } = require('../../src/services/user');
+const { registerUser, __users } = require('../../src/services/user');
 const { getTransactionHistory, getBalance } = require('../../src/services/transaction');
 const { getPrice } = require('../../src/services/store');
 
@@ -17,7 +17,7 @@ describe('/purchase', () => {
 
   it('should return \'OK\' response and error message when given invalid Item ID',
     (done) => {
-      const { accessToken } = registerAccount('NCL');
+      const { accessToken } = registerUser('NCL');
 
       request.post({
         uri: `${baseURL}/purchase`,
@@ -39,7 +39,7 @@ describe('/purchase', () => {
   it('should return \'OK\' response and response data when given valid Item ID',
     (done) => {
       const itemID = 1;
-      const { id, accessToken } = registerAccount('NCL');
+      const { id, accessToken } = registerUser('NCL');
 
       const balanceBeforePurchase = getBalance(id);
 

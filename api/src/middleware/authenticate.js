@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const HTTPStatus = require('http-status');
 const { secretKey } = require('../constants');
-const { getAccountIDFromAccessToken, getAccountIDFromRefreshToken, getAccountIDFromEmailToken } = require('../services/user');
+const { getUserIDFromAccessToken, getUserIDFromRefreshToken, getUserIDFromEmailToken } = require('../services/user');
 
 const getToken = request => request.headers.authorization.split(' ')[1];
 
@@ -24,12 +24,12 @@ const authenticateToken = (request, response, next, tokenRetrievalGetter) => {
 };
 
 const authenticateAccessToken = (request, response, next) =>
-  authenticateToken(request, response, next, getAccountIDFromAccessToken);
+  authenticateToken(request, response, next, getUserIDFromAccessToken);
 
 const authenticateRefreshToken = (request, response, next) =>
-  authenticateToken(request, response, next, getAccountIDFromRefreshToken);
+  authenticateToken(request, response, next, getUserIDFromRefreshToken);
 
 const authenticateEmailToken = (request, response, next) =>
-  authenticateToken(request, response, next, getAccountIDFromEmailToken);
+  authenticateToken(request, response, next, getUserIDFromEmailToken);
 
 module.exports = { authenticateAccessToken, authenticateRefreshToken, authenticateEmailToken };

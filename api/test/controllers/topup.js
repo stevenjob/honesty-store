@@ -1,7 +1,7 @@
 const request = require('request');
 const assert = require('chai').assert;
 
-const { registerAccount, __users } = require('../../src/services/user');
+const { registerUser, __users } = require('../../src/services/user');
 const { getTransactionHistory } = require('../../src/services/transaction');
 
 require('../../src/app');
@@ -13,9 +13,9 @@ describe('/topup', () => {
     __users.length = 0;
   });
 
-  it('should credit account with requested amount and return new balance',
+  it('should credit user with requested amount and return new balance',
     (done) => {
-      const { accessToken } = registerAccount('NCL');
+      const { accessToken } = registerUser('NCL');
 
       const topUpAmount = 500;
 
@@ -38,7 +38,7 @@ describe('/topup', () => {
 
   it('should add new top up transaction to transaction service',
     (done) => {
-      const { id, accessToken } = registerAccount('NCL');
+      const { id, accessToken } = registerUser('NCL');
 
       const topUpAmount = 500;
 

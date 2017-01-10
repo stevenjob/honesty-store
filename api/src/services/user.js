@@ -13,106 +13,106 @@ const generateRefreshToken = () => jsonwebtoken.sign(uuid(), secretKey);
 
 const users = [];
 
-const registerAccount = (defaultStoreCode) => {
-  const account = {
+const registerUser = (defaultStoreCode) => {
+  const user = {
     id: uuid(),
     refreshToken: generateRefreshToken(),
     accessToken: generateExpirableToken(),
     defaultStoreCode,
   };
 
-  users.push(account);
+  users.push(user);
 
-  return account;
+  return user;
 };
 
-const getAccountIDFromAccessToken = (accessToken) => {
-  const foundAccount = users.find(element => element.accessToken === accessToken);
-  if (foundAccount == null) {
-    throw new Error(`No account found with access token '${accessToken}'`);
+const getUserIDFromAccessToken = (accessToken) => {
+  const foundUser = users.find(element => element.accessToken === accessToken);
+  if (foundUser == null) {
+    throw new Error(`No user found with access token '${accessToken}'`);
   }
-  return foundAccount.id;
+  return foundUser.id;
 };
 
-const getAccountIDFromRefreshToken = (refreshToken) => {
-  const foundAccount = users.find(element => element.refreshToken === refreshToken);
-  if (foundAccount == null) {
-    throw new Error(`No account found with refresh token '${refreshToken}'`);
+const getUserIDFromRefreshToken = (refreshToken) => {
+  const foundUser = users.find(element => element.refreshToken === refreshToken);
+  if (foundUser == null) {
+    throw new Error(`No user found with refresh token '${refreshToken}'`);
   }
-  return foundAccount.id;
+  return foundUser.id;
 };
 
-const getAccountIDFromEmailToken = (emailToken) => {
-  const foundAccount = users.find(element => element.emailToken === emailToken);
-  if (foundAccount == null) {
-    throw new Error(`No account found with email token '${emailToken}`);
+const getUserIDFromEmailToken = (emailToken) => {
+  const foundUser = users.find(element => element.emailToken === emailToken);
+  if (foundUser == null) {
+    throw new Error(`No user found with email token '${emailToken}`);
   }
-  return foundAccount.id;
+  return foundUser.id;
 };
 
-const getAccount = id => users.find(element => element.id === id);
+const getUser = id => users.find(element => element.id === id);
 
-const updateAccount = (id, emailAddress, cardDetails) => {
-  const account = getAccount(id);
-  account.emailAddress = emailAddress;
-  account.cardDetails = cardDetails;
+const updateUser = (id, emailAddress, cardDetails) => {
+  const user = getUser(id);
+  user.emailAddress = emailAddress;
+  user.cardDetails = cardDetails;
 };
 
 const updateCardDetails = (id, cardDetails) => {
-  const account = getAccount(id);
-  account.cardDetails = cardDetails;
+  const user = getUser(id);
+  user.cardDetails = cardDetails;
 };
 
 const updateAccessToken = (userID) => {
   const newAccessToken = generateExpirableToken();
 
-  const account = getAccount(userID);
-  account.accessToken = newAccessToken;
+  const user = getUser(userID);
+  user.accessToken = newAccessToken;
 
-  return account;
+  return user;
 };
 
 const updateRefreshToken = (userID) => {
   const newRefreshToken = generateRefreshToken();
 
-  const account = getAccount(userID);
-  account.refreshToken = newRefreshToken;
+  const user = getUser(userID);
+  user.refreshToken = newRefreshToken;
 
-  return account;
+  return user;
 };
 
 const updateDefaultStoreCode = (userID, storeCode) => {
-  const account = getAccount(userID);
-  account.defaultStoreCode = storeCode;
+  const user = getUser(userID);
+  user.defaultStoreCode = storeCode;
 };
 
 const expireRefreshToken = (userID) => {
-  const account = getAccount(userID);
-  account.refreshToken = null;
+  const user = getUser(userID);
+  user.refreshToken = null;
 };
 
 const sendEmailToken = (emailAddress) => {
-  const account = users.find(element => element.emailAddress === emailAddress);
-  if (account == null) {
-    winston.warn(`Account does not exist with email address '${emailAddress}'`);
+  const user = users.find(element => element.emailAddress === emailAddress);
+  if (user == null) {
+    winston.warn(`User does not exist with email address '${emailAddress}'`);
     return;
   }
 
   const emailToken = generateExpirableToken();
-  account.emailToken = emailToken;
+  user.emailToken = emailToken;
 
   /* When the eventual service is added, the 'emailToken' will be sent via email */
   winston.info(`Generated email token: ${emailToken}`);
 };
 
 module.exports = {
-  registerAccount,
-  updateAccount,
+  registerUser,
+  updateUser,
   sendEmailToken,
-  getAccountIDFromAccessToken,
-  getAccountIDFromRefreshToken,
-  getAccountIDFromEmailToken,
-  getAccount,
+  getUserIDFromAccessToken,
+  getUserIDFromRefreshToken,
+  getUserIDFromEmailToken,
+  getUser,
   updateRefreshToken,
   updateAccessToken,
   updateCardDetails,

@@ -2,7 +2,7 @@ const request = require('request');
 const assert = require('chai').assert;
 const HTTPStatus = require('http-status');
 
-const { registerAccount, __users, updateAccount, sendEmailToken } = require('../../src/services/user');
+const { registerUser, __users, updateUser, sendEmailToken } = require('../../src/services/user');
 const getSessionData = require('../../src/services/session');
 
 require('../../src/app');
@@ -16,8 +16,8 @@ describe('/signin', () => {
 
   it('should return \'OK\' response status with already-registered email address', (done) => {
     const emailAddress = 'test1@test.com';
-    const { id } = registerAccount('NCL');
-    updateAccount(id, emailAddress, null);
+    const { id } = registerUser('NCL');
+    updateUser(id, emailAddress, null);
 
     request.post({
       uri: `${baseURL}/signin`,
@@ -50,12 +50,12 @@ describe('/signin2', () => {
   describe('Email Token Validation', () => {
     it('should return \'OK\' response status with valid email token', (done) => {
       const emailAddress = 'test1@test.com';
-      const account = registerAccount('NCL');
-      updateAccount(account.id, emailAddress, null);
+      const user = registerUser('NCL');
+      updateUser(user.id, emailAddress, null);
       // Simulate sending of email
       sendEmailToken(emailAddress);
 
-      sendSignIn2Request(account.emailToken,
+      sendSignIn2Request(user.emailToken,
         (error, response) => {
           assert.equal(response.statusCode, HTTPStatus.OK);
           done();
@@ -73,11 +73,11 @@ describe('/signin2', () => {
     describe('Response Data', () => {
       it('should contain a refresh token as part of response', (done) => {
         const emailAddress = 'test1@test.com';
-        const account = registerAccount('NCL');
-        updateAccount(account.id, emailAddress, null);
+        const user = registerUser('NCL');
+        updateUser(user.id, emailAddress, null);
         sendEmailToken(emailAddress);
 
-        sendSignIn2Request(account.emailToken,
+        sendSignIn2Request(user.emailToken,
           (error, response, body) => {
             assert.property(body.response, 'refreshToken');
             done();
@@ -86,13 +86,13 @@ describe('/signin2', () => {
 
       it('should contain session data as part of response', (done) => {
         const emailAddress = 'test1@test.com';
-        const account = registerAccount('NCL');
-        updateAccount(account.id, emailAddress, null);
+        const user = registerUser('NCL');
+        updateUser(user.id, emailAddress, null);
         sendEmailToken(emailAddress);
 
-        sendSignIn2Request(account.emailToken,
+        sendSignIn2Request(user.emailToken,
           (error, response, body) => {
-            const expectedSessionData = getSessionData(account.id);
+            const expectedSessionData = getSessionData(user.id);
             assert.deepEqual(body.response.user, expectedSessionData.user);
             assert.deepEqual(body.response.store, expectedSessionData.store);
             done();
