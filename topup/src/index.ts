@@ -172,6 +172,16 @@ const addStripeTokenToAccount = async ({ topupAccount, stripeToken, test }): Pro
     return await recordCustomerId({ customer, topupAccount });
 };
 
+const attemptTopup = async ({ accountId, amount, stripeToken, test }) => {
+    const topupAccount = await getOrCreate({ accountId, test });
+
+    if (stripeToken) {
+        await addStripeTokenToAccount({ topupAccount, stripeToken, test });
+    }
+
+    return topupExistingAccount({ topupAccount, amount, test })
+};
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -184,17 +194,7 @@ app.get('/', (req, res) => {
 app.post('/topup', (req, res) => {
     const { accountId, amount, stripeToken, test } = req.body;
 
-    const attemptTopup = async () => {
-        const topupAccount = await getOrCreate({ accountId, test });
-
-        if (stripeToken) {
-            await addStripeTokenToAccount({ topupAccount, stripeToken, test });
-        }
-
-        return topupExistingAccount({ topupAccount, amount, test })
-    };
-
-    attemptTopup()
+    attemptTopup({ accountId, amount, stripeToken, test })
         .then((topupAccount: TopupAccount) => {
             res.json({ response: { topupAccount } });
         })
