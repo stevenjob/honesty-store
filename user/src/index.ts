@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isEmail = require('validator/lib/isEmail');
 import { signAccessToken, signRefreshToken, verifyToken } from './token';
-import { User, UserProfile, UserWithAccessToken, UserWithAccessAndRefreshTokens, UserWithMagicLinkToken } from './client';
+import { User, UserProfile, UserWithAccessToken, UserWithAccessAndRefreshTokens, UserWithMagicLinkToken, TEST_DATA_USER_ID } from './client';
 import { createAccount, getAccount, TEST_DATA_EMPTY_ACCOUNT_ID } from '../../transaction/src/client';
 
 config.region = process.env.AWS_REGION;
@@ -292,7 +292,7 @@ app.use('/user/v1', router);
 
 // send healthy response to load balancer probes
 app.get('/', (req, res) => {
-    get({ userId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649' })
+    get({ userId: TEST_DATA_USER_ID })
         .then(() => {
             res.send(200);
         })
