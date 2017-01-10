@@ -1,12 +1,12 @@
 const assert = require('chai').assert;
-const { registerAccount, updateAccount, __accounts } = require('../../src/services/accounts');
+const { registerAccount, updateAccount, __users } = require('../../src/services/user');
 const { addItemTransaction } = require('../../src/services/transactions');
 const { getItems } = require('../../src/services/store');
 const getSessionData = require('../../src/services/session');
 
 describe('Session Service', () => {
   beforeEach(() => {
-    __accounts.length = 0;
+    __users.length = 0;
   });
 
   it('should return masked user card number',

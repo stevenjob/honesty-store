@@ -1,6 +1,6 @@
 const HTTPStatus = require('http-status');
 const { authenticateAccessToken } = require('../middleware/authenticate');
-const { expireRefreshToken } = require('../services/accounts');
+const { expireRefreshToken } = require('../services/user');
 
 const setupLogOutEndpoint = (router) => {
   router.post(

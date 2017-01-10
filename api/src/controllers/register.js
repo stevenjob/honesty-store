@@ -2,7 +2,7 @@ const isEmail = require('validator/lib/isEmail');
 const HTTPStatus = require('http-status');
 const winston = require('winston');
 
-const { registerAccount, updateAccount } = require('../services/accounts');
+const { registerAccount, updateAccount } = require('../services/user');
 const { getPrice } = require('../services/store');
 const { addItemTransaction, addTopUpTransaction } = require('../services/transactions');
 const getSessionData = require('../services/session');

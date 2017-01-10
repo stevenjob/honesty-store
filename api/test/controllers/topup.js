@@ -1,7 +1,7 @@
 const request = require('request');
 const assert = require('chai').assert;
 
-const { registerAccount, __accounts } = require('../../src/services/accounts');
+const { registerAccount, __users } = require('../../src/services/user');
 const { getTransactionHistory } = require('../../src/services/transactions');
 
 require('../../src/app');
@@ -10,7 +10,7 @@ const baseURL = 'http://localhost:3000/api/v1';
 
 describe('/topup', () => {
   beforeEach(() => {
-    __accounts.length = 0;
+    __users.length = 0;
   });
 
   it('should credit account with requested amount and return new balance',

@@ -1,6 +1,6 @@
 const HTTPStatus = require('http-status');
 const { authenticateAccessToken } = require('../middleware/authenticate');
-const { updateDefaultStoreCode } = require('../services/accounts');
+const { updateDefaultStoreCode } = require('../services/user');
 const { getItems } = require('../services/store');
 
 const setupStoreEndpoint = (router) => {

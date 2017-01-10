@@ -11,24 +11,23 @@ const generateExpirableToken = () => {
 
 const generateRefreshToken = () => jsonwebtoken.sign(uuid(), secretKey);
 
-const accounts = [];
+const users = [];
 
 const registerAccount = (defaultStoreCode) => {
   const account = {
     id: uuid(),
-    balance: 0,
     refreshToken: generateRefreshToken(),
     accessToken: generateExpirableToken(),
     defaultStoreCode,
   };
 
-  accounts.push(account);
+  users.push(account);
 
   return account;
 };
 
 const getAccountIDFromAccessToken = (accessToken) => {
-  const foundAccount = accounts.find(element => element.accessToken === accessToken);
+  const foundAccount = users.find(element => element.accessToken === accessToken);
   if (foundAccount == null) {
     throw new Error(`No account found with access token '${accessToken}'`);
   }
@@ -36,7 +35,7 @@ const getAccountIDFromAccessToken = (accessToken) => {
 };
 
 const getAccountIDFromRefreshToken = (refreshToken) => {
-  const foundAccount = accounts.find(element => element.refreshToken === refreshToken);
+  const foundAccount = users.find(element => element.refreshToken === refreshToken);
   if (foundAccount == null) {
     throw new Error(`No account found with refresh token '${refreshToken}'`);
   }
@@ -44,14 +43,14 @@ const getAccountIDFromRefreshToken = (refreshToken) => {
 };
 
 const getAccountIDFromEmailToken = (emailToken) => {
-  const foundAccount = accounts.find(element => element.emailToken === emailToken);
+  const foundAccount = users.find(element => element.emailToken === emailToken);
   if (foundAccount == null) {
     throw new Error(`No account found with email token '${emailToken}`);
   }
   return foundAccount.id;
 };
 
-const getAccount = id => accounts.find(element => element.id === id);
+const getAccount = id => users.find(element => element.id === id);
 
 const updateAccount = (id, emailAddress, cardDetails) => {
   const account = getAccount(id);
@@ -93,7 +92,7 @@ const expireRefreshToken = (userID) => {
 };
 
 const sendEmailToken = (emailAddress) => {
-  const account = accounts.find(element => element.emailAddress === emailAddress);
+  const account = users.find(element => element.emailAddress === emailAddress);
   if (account == null) {
     winston.warn(`Account does not exist with email address '${emailAddress}'`);
     return;
@@ -119,5 +118,5 @@ module.exports = {
   updateCardDetails,
   updateDefaultStoreCode,
   expireRefreshToken,
-  __accounts: accounts,
+  __users: users,
 };

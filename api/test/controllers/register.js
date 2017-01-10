@@ -1,7 +1,7 @@
 const request = require('request');
 const assert = require('chai').assert;
 const HTTPStatus = require('http-status');
-const { registerAccount, __accounts, getAccountIDFromAccessToken } = require('../../src/services/accounts');
+const { registerAccount, __users, getAccountIDFromAccessToken } = require('../../src/services/user');
 const { getPrice } = require('../../src/services/store');
 const getSessionData = require('../../src/services/session');
 
@@ -11,7 +11,7 @@ const baseURL = 'http://localhost:3000/api/v1';
 
 describe('/register', () => {
   beforeEach(() => {
-    __accounts.length = 0;
+    __users.length = 0;
   });
 
   describe('Response Data', () => {

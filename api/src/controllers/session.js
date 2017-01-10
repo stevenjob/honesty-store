@@ -1,6 +1,6 @@
 const HTTPStatus = require('http-status');
 const { authenticateRefreshToken } = require('../middleware/authenticate');
-const { updateAccessToken } = require('../services/accounts');
+const { updateAccessToken } = require('../services/user');
 const getSessionData = require('../services/session');
 
 const setupSessionEndpoint = (router) => {

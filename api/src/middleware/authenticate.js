@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const HTTPStatus = require('http-status');
 const { secretKey } = require('../constants');
-const { getAccountIDFromAccessToken, getAccountIDFromRefreshToken, getAccountIDFromEmailToken } = require('../services/accounts');
+const { getAccountIDFromAccessToken, getAccountIDFromRefreshToken, getAccountIDFromEmailToken } = require('../services/user');
 
 const getToken = request => request.headers.authorization.split(' ')[1];
 

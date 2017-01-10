@@ -1,5 +1,5 @@
 const HTTPStatus = require('http-status');
-const { sendEmailToken, updateRefreshToken } = require('../services/accounts');
+const { sendEmailToken, updateRefreshToken } = require('../services/user');
 const getSessionData = require('../services/session');
 const { authenticateEmailToken } = require('../middleware/authenticate');
 

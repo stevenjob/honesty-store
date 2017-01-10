@@ -1,4 +1,4 @@
-const { getAccount } = require('../services/accounts');
+const { getAccount } = require('../services/user');
 const { getTransactionHistory, getBalance } = require('../services/transactions');
 const { getItems } = require('../services/store');
 

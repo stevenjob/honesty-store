@@ -1,7 +1,7 @@
 const request = require('request');
 const assert = require('chai').assert;
 
-const { registerAccount, getAccount, __accounts } = require('../../src/services/accounts');
+const { registerAccount, getAccount, __users } = require('../../src/services/user');
 const { getItems } = require('../../src/services/store');
 
 require('../../src/app');
@@ -9,7 +9,7 @@ require('../../src/app');
 const baseURL = 'http://localhost:3000/api/v1';
 
 beforeEach(() => {
-  __accounts.length = 0;
+  __users.length = 0;
 });
 
 describe('/store', () => {

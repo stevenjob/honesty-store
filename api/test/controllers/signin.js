@@ -2,7 +2,7 @@ const request = require('request');
 const assert = require('chai').assert;
 const HTTPStatus = require('http-status');
 
-const { registerAccount, __accounts, updateAccount, sendEmailToken } = require('../../src/services/accounts');
+const { registerAccount, __users, updateAccount, sendEmailToken } = require('../../src/services/user');
 const getSessionData = require('../../src/services/session');
 
 require('../../src/app');
@@ -11,7 +11,7 @@ const baseURL = 'http://localhost:3000/api/v1';
 
 describe('/signin', () => {
   beforeEach(() => {
-    __accounts.length = 0;
+    __users.length = 0;
   });
 
   it('should return \'OK\' response status with already-registered email address', (done) => {
@@ -33,7 +33,7 @@ describe('/signin', () => {
 
 describe('/signin2', () => {
   beforeEach(() => {
-    __accounts.length = 0;
+    __users.length = 0;
   });
 
   const sendSignIn2Request = (emailToken, callback) => {
