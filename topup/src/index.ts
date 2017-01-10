@@ -17,15 +17,6 @@ interface TopupAccount {
     stripeCustomerIds: string[];
 };
 
-const assertEnvironment = (names: string[]) => {
-    for (const name of names) {
-        if (!process.env[name]) {
-            console.error(`$${name} not present in environment`);
-            process.exit(1);
-        }
-    }
-};
-
 const assertValidAccountId = (accountId) => {
     if (accountId == null || !isUUID(accountId, 4) ) {
         throw new Error(`Invalid accountId ${accountId}`);
@@ -97,8 +88,12 @@ const getOrCreate = async ({ accountId }): Promise<TopupAccount> => {
     });
 };
 
-const appendTopupTransaction = ({ topupAccount, amount, customerId, data }) =>
-    post(
+const appendTopupTransaction = ({ topupAccount, amount, customerId, data }) => {
+    if (!process.env.TRANSACTION_URL) {
+        throw new Error(`no $TRANSACTION_URL in environment`);
+    }
+
+    return post(
         `${process.env.TRANSACTION_URL}/${topupAccount.accountId}`,
         {
             type: 'topup',
@@ -113,6 +108,7 @@ const appendTopupTransaction = ({ topupAccount, amount, customerId, data }) =>
             // remap error message
             throw new Error(`couldn't add transaction: ${JSON.stringify(error)}`);
         });
+};
 
 const topupExistingAccount = ({ topupAccount, amount }) => {
     if (topupAccount.stripeCustomerIds.length === 0) {
@@ -195,15 +191,6 @@ app.post('/topup', (req, res) => {
             res.json({ error: error.message });
         });
 });
-
-assertEnvironment([
-    'AWS_REGION',
-    'TABLE_NAME',
-    'TABLE_NAME',
-    'TRANSACTION_URL',
-    'STRIPE_PUBLISHABLE_KEY',
-    'STRIPE_SECRET_KEY',
-]);
 
 stripe = stripeFactory(process.env.STRIPE_SECRET_KEY);
 
