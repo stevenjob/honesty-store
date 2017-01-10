@@ -146,7 +146,7 @@ const topupExistingAccount = ({ topupAccount, amount, test }) => {
             amount,
             topupAccount,
             data: {
-                stripeFee: charge.balance_transaction.net
+                stripeFee: String(charge.balance_transaction.net),
             }
         });
         return topupAccount;
