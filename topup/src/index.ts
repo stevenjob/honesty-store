@@ -215,13 +215,38 @@ const attemptTopup = async ({ accountId, amount, stripeToken, test }) => {
     return topupExistingAccount({ topupAccount, amount, test })
 };
 
+const assertDynamoConnectivity = async () => {
+    await new DynamoDB.DocumentClient()
+        .get({
+            TableName: process.env.TABLE_NAME,
+            Key: {
+                id: 'non-existent-id'
+            },
+        })
+        .promise();
+};
+
+const assertStripeConnectivity = async ({ test }) => {
+    await stripeObjectForTest({ test })
+        .balance
+        .retrieve()
+};
+
+const assertConnectivity = async () => {
+    await assertDynamoConnectivity();
+    await assertStripeConnectivity({ test: false });
+    await assertStripeConnectivity({ test: true });
+};
+
 const app = express();
 
 app.use(bodyParser.json());
 
 // send healthy response to load balancer probes
 app.get('/', (req, res) => {
-    res.sendStatus(200);
+    assertConnectivity()
+        .then(() => res.status(200).json({ response: "connectivity okay" }))
+        .catch((error) => res.status(500).json({ error }));
 });
 
 app.post('/topup', (req, res) => {
