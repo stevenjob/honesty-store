@@ -44,10 +44,10 @@ const get = async ({ accountId }): Promise<TopupAccount> => {
     assertValidAccountId(accountId);
 
     const response = await new DynamoDB.DocumentClient()
-        .scan({
+        .query({
             TableName: process.env.TABLE_NAME,
             IndexName: 'accountId',
-            FilterExpression: 'accountId = :accountId',
+            KeyConditionExpression: 'accountId = :accountId',
             ExpressionAttributeValues: {
                 ':accountId': accountId,
             },
