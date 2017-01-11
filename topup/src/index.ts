@@ -33,7 +33,7 @@ const assertValidTopupAccount = (topupAccount: TopupAccount) => {
     assertValidAccountId(topupAccount.accountId);
 };
 
-const stripeObjectForTest = ({ test }) => {
+const stripeForUser = ({ test }) => {
     return test ? stripeTest : stripeProd;
 };
 
@@ -125,7 +125,7 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
         throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''} account ${topupAccount.accountId}`);
     }
 
-    const charge = await stripeObjectForTest(topupAccount).charges.create({
+    const charge = await stripeForUser(topupAccount).charges.create({
         amount,
         currency: 'gbp',
         customer: topupAccount.stripe.customer.id,
@@ -159,7 +159,7 @@ const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupA
 };
 
 const addStripeTokenToAccount = async ({ topupAccount, stripeToken }): Promise<TopupAccount> => {
-    const customer = await stripeObjectForTest(topupAccount.test)
+    const customer = await stripeForUser(topupAccount)
         .customers
         .create({
             source: stripeToken,
@@ -198,7 +198,7 @@ const assertDynamoConnectivity = async () => {
 };
 
 const assertStripeConnectivity = async ({ test }) => {
-    await stripeObjectForTest({ test })
+    await stripeForUser({ test })
         .balance
         .retrieve()
 };
