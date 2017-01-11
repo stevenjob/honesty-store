@@ -216,7 +216,7 @@ app.use(bodyParser.json());
 // send healthy response to load balancer probes
 app.get('/', (req, res) => {
     assertConnectivity()
-        .then(() => res.status(200).json({ response: "connectivity okay" }))
+        .then(() => res.sendStatus(200))
         .catch((error) => res.status(500).json({ error }));
 });
 
