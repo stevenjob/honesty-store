@@ -15,8 +15,15 @@ config.region = process.env.AWS_REGION;
 interface TopupAccount {
     id: string;
     accountId: string;
-    stripeCustomerId: string;
     test: boolean;
+    stripe: {
+        customerId: string;
+        card: {
+            exp_month: number;
+            exp_year: number;
+            last4: string;
+        }
+    };
 };
 
 const assertValidAccountId = (accountId) => {
@@ -63,9 +70,9 @@ const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
                 id: topupAccount.id
             },
             UpdateExpression:
-                `set stripeCustomerId = :stripeCustomerId, accountId = :accountId, test = :test`,
+                `set stripe = :stripe, accountId = :accountId, test = :test`,
             ExpressionAttributeValues: {
-                ':stripeCustomerId': topupAccount.stripeCustomerId,
+                ':stripe': topupAccount.stripe,
                 ':accountId': topupAccount.accountId,
                 ':test': topupAccount.test,
             },
@@ -93,8 +100,15 @@ const getOrCreate = async ({ accountId, test }): Promise<TopupAccount> => {
         topupAccount: {
             id: uuid(),
             accountId,
-            stripeCustomerId: '',
-            test
+            test,
+            stripe: {
+                customerId: '',
+                card: {
+                    exp_month: 0,
+                    exp_year: 0,
+                    last4: '',
+                }
+            },
         }
     });
 };
@@ -113,7 +127,7 @@ const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAcc
                 data: {
                     ...data,
                     topupAccountId: topupAccount.id,
-                    topupCustomerId: topupAccount.stripeCustomerId,
+                    topupCustomerId: topupAccount.stripe.customerId,
                 }
             });
     } catch (error) {
@@ -123,14 +137,14 @@ const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAcc
 };
 
 const topupExistingAccount = async ({ topupAccount, amount, test }: { topupAccount: TopupAccount, amount: number, test: boolean }) => {
-    if (topupAccount.stripeCustomerId === '') {
+    if (topupAccount.stripe.customerId === '') {
         throw new Error(`No card registered for ${test ? 'test ' : ''} account ${topupAccount.accountId}`);
     }
 
     const charge = await stripeObjectForTest({ test }).charges.create({
         amount,
         currency: 'gbp',
-        customer: topupAccount.stripeCustomerId,
+        customer: topupAccount.stripe.customerId,
         description: `topup for ${topupAccount.accountId}`,
         metadata: {
             topupId: topupAccount.id,
@@ -150,26 +164,47 @@ const topupExistingAccount = async ({ topupAccount, amount, test }: { topupAccou
     return topupAccount;
 };
 
-const recordCustomerId = async ({ customer, topupAccount }): Promise<TopupAccount> => {
+const findcard = (paymentSources) => {
+    for (const source of paymentSources) {
+        if (source.object === 'card') {
+            const { exp_month, exp_year, last4 } = source;
+            return { exp_month, exp_year, last4 };
+        }
+    }
+};
+
+const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupAccount> => {
+    const card = findcard(customer.sources.data);
+
+    if (!card) {
+        // may have been a bitcoin payment - disallowed for now
+        throw new Error(`Can't find card details for registration`);
+    }
+
     return update({
         topupAccount: {
             ...topupAccount,
-            stripeCustomerId: customer.id
+            stripe: {
+                customerId: customer.id,
+                card
+            },
         }
     });
 };
 
 const addStripeTokenToAccount = async ({ topupAccount, stripeToken, test }): Promise<TopupAccount> => {
-    const customer = await stripeObjectForTest({ test }).customers.create({
-        source: stripeToken,
-        description: `registration for ${topupAccount.accountId}`,
-        metadata: {
-            topupId: topupAccount.id,
-            accountId: topupAccount.accountId
-        }
-    });
+    const customer = await stripeObjectForTest({ test })
+        .customers
+        .create({
+            source: stripeToken,
+            description: `registration for ${topupAccount.accountId}`,
+            metadata: {
+                topupId: topupAccount.id,
+                accountId: topupAccount.accountId
+            }
+        });
 
-    return await recordCustomerId({ customer, topupAccount });
+    return await recordCustomerDetails({ customer, topupAccount });
 };
 
 const attemptTopup = async ({ accountId, amount, stripeToken, test }) => {
@@ -202,6 +237,25 @@ app.post('/topup', (req, res) => {
             res.json({ error: error.message });
         });
 });
+/* "/topup" returns the following response:
+{
+  "response": {
+    "topupAccount": {
+      "accountId": "45cf84b2-229a-4210-a78b-c53ce280131e",
+      "id": "011c5f29-9a38-48bf-b380-94eff3f9a68a",
+      "stripe": {
+        "customerId": "cus_9uXz4SUGk6lBKT",
+        "card": {
+          "last4": "4242",
+          "exp_month": 12,
+          "exp_year": 2018
+        }
+      },
+      "test": true
+    }
+  }
+}
+*/
 
 stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
 stripeProd = stripeFactory(process.env.STRIPE_SECRET_KEY_PROD);
