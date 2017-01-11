@@ -7,9 +7,9 @@ import { templateJSON } from '../template';
 import { ensureTaskDefinition, pruneTaskDefinitions } from '../ecs/taskDefinition';
 import buildAndPushImage from '../ecr/buildAndPushImage';
 import { createHash } from 'crypto';
-import { ensureService } from '../ecs/service';
+import { ensureService, waitForServicesStable } from '../ecs/service';
 import { ensureTable } from '../dynamodb/table';
-import { ensureAlias } from '../route53/alias';
+import { ensureAlias, aliasToBaseUrl } from '../route53/alias';
 import * as winston from 'winston';
 
 export const prefix = 'hs';
@@ -52,7 +52,8 @@ const ensureDatabase = async ({ branch, dir }) => {
 };
 
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
-export default async ({ branch, dir }) => {
+export default async ({ branch, dirs }) => {
+    const baseUrl = aliasToBaseUrl(branch);
     const loadBalancer = await ensureLoadBalancer({
         name: `${prefix}-${branch}`
     });
@@ -60,9 +61,6 @@ export default async ({ branch, dir }) => {
         name: branch,
         value: loadBalancer.DNSName
     });
-    // strip trailing dot from DNS record
-    const hostName = resourceRecordSet.Name.substr(0, resourceRecordSet.Name.length - 1);
-    const baseUrl = `https://${hostName}`;
     const defaultTargetGroup = await ensureTargetGroup({
         name: `${prefix}-${branch}-${defaultTargetGroupDir}`
     });
@@ -70,52 +68,63 @@ export default async ({ branch, dir }) => {
         loadBalancerArn: loadBalancer.LoadBalancerArn,
         defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn
     });
-    const targetGroup = await ensureTargetGroup({
-        name: `${prefix}-${branch}-${dir}`
-    });
-    const rule = await ensureRule({
-        listenerArn: listener.ListenerArn,
-        targetGroupArn: targetGroup.TargetGroupArn,
-        pathPattern: config[dir].loadBalancer.pathPattern,
-        priority: config[dir].loadBalancer.priority
-    });
-    const image = await buildAndPushImage({
-        dir,
-        repositoryName: `${prefix}-${branch}-${dir}`
-    });
-    const db = config[dir].database ? await ensureDatabase({ branch, dir }) : {};
-    // TODO: create bespoke roles
-    const containerDefinitions: ECS.ContainerDefinitions = await templateJSON({
-        type: 'containerDefinition',
-        name: dir,
-        data: {
-            image,
-            tableName: db.TableName,
-            baseUrl
-        }
-    });
-    const taskDefinition = await ensureTaskDefinition({
-        family: `${prefix}-${branch}-${dir}`,
-        containerDefinitions,
-        taskRoleArn: config[dir].taskRoleArn
-    });
-    await pruneTaskDefinitions({
-        filter: ({ family, revision }) => family === taskDefinition.family && revision !== taskDefinition.revision,
-    });
-    // For now assuming all tasks contain only one container with a port mapping which should be load balanced
-    const service = await ensureService({
-        serviceName: `${prefix}-${branch}-${dir}`,
-        cluster,
-        desiredCount: 1,
-        taskDefinition: taskDefinition.taskDefinitionArn,
-        loadBalancers: [
-            {
-                containerName: containerDefinitions[0].name,
-                containerPort: containerDefinitions[0].portMappings[0].containerPort,
-                targetGroupArn: targetGroup.TargetGroupArn
+    const services: ECS.Service[] = await Promise.all(dirs.map(async (dir) => {
+        const targetGroup = await ensureTargetGroup({
+            name: `${prefix}-${branch}-${dir}`
+        });
+        const rule = await ensureRule({
+            listenerArn: listener.ListenerArn,
+            targetGroupArn: targetGroup.TargetGroupArn,
+            pathPattern: config[dir].loadBalancer.pathPattern,
+            priority: config[dir].loadBalancer.priority
+        });
+        const image = await buildAndPushImage({
+            dir,
+            repositoryName: `${prefix}-${branch}-${dir}`
+        });
+        const db = config[dir].database ? await ensureDatabase({ branch, dir }) : {};
+        // TODO: create bespoke roles
+        const containerDefinitions: ECS.ContainerDefinitions = await templateJSON({
+            type: 'containerDefinition',
+            name: dir,
+            data: {
+                image,
+                tableName: db.TableName,
+                baseUrl
             }
-        ],
-        role
+        });
+        const taskDefinition = await ensureTaskDefinition({
+            family: `${prefix}-${branch}-${dir}`,
+            containerDefinitions,
+            taskRoleArn: config[dir].taskRoleArn
+        });
+        await pruneTaskDefinitions({
+            filter: ({ family, revision }) => family === taskDefinition.family && revision !== taskDefinition.revision,
+        });
+        // For now assuming all tasks contain only one container with a port mapping which should be load balanced
+        const service = await ensureService({
+            serviceName: `${prefix}-${branch}-${dir}`,
+            cluster,
+            desiredCount: 1,
+            taskDefinition: taskDefinition.taskDefinitionArn,
+            loadBalancers: [
+                {
+                    containerName: taskDefinition.containerDefinitions[0].name,
+                    containerPort: taskDefinition.containerDefinitions[0].portMappings[0].containerPort,
+                    targetGroupArn: targetGroup.TargetGroupArn
+                }
+            ],
+            role
+        });
+        return service;
+    }));
+
+    winston.info(`Waiting for stability`);
+
+    await waitForServicesStable({
+        cluster,
+        services: services.map(service => service.serviceName)
     });
-    winston.info(`Deployed to ${baseUrl}${rule.Conditions[0].Values[0]}.`);
+
+    winston.info(`Deployed to ${baseUrl}`);
 };

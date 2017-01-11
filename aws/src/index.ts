@@ -30,9 +30,9 @@ const warnAndExit = e => {
   process.exit(1);
 };
 
-program.command('deploy <dir> <branch>')
-  .action((dir, branch) => {
-    deploy({ dir, branch })
+program.command('deploy <branch> [dirs...]')
+  .action((branch, dirs) => {
+    deploy({ branch, dirs })
       .catch(warnAndExit);
   });
 

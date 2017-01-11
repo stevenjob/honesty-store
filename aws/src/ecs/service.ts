@@ -43,17 +43,21 @@ export const ensureService = async (serviceRequest: ECS.CreateServiceRequest) =>
 
     winston.debug('service: updateService', service);
 
-    const waitResponse = await ecs.waitFor('servicesStable', {
-      cluster: serviceRequest.cluster,
-      services: [serviceRequest.serviceName]
-    })
-      .promise();
-
-    awsCheckFailures(waitResponse);
-    // no failures - task(s) are running
-
     return service;
   }
+};
+
+export const waitForServicesStable = async ({ cluster, services }) => {
+
+  const waitResponse = await new ECS({ apiVersion: '2014-11-13' })
+    .waitFor('servicesStable', {
+      cluster,
+      services
+    })
+    .promise();
+
+  awsCheckFailures(waitResponse);
+  // no failures - task(s) are running
 };
 
 const parseServiceArn = (serviceArn) => {
