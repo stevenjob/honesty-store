@@ -9,8 +9,19 @@ import prune from './script/prune';
 import { createLocalDatabase } from './script/local';
 import * as winston from 'winston';
 
-// types, what types?! configure doesn't seem to work so...
-(<any>winston).level = 'debug';
+winston.configure({
+  level: 'debug',
+  transports: [
+    new winston.transports.Console({
+      timestamp() {
+        return Date.now();
+      },
+      formatter(options) {
+        return `${new Date(options.timestamp()).toISOString()} ${options.level.toUpperCase()} ${options.message} ${JSON.stringify(options.meta)}`;
+      }
+    })
+  ]
+});
 
 config.region = "eu-west-1";
 
