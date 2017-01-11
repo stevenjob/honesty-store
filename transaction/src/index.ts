@@ -129,7 +129,7 @@ router.get('/:accountId', (req, res) => {
     const { accountId } = req.params;
     get({ accountId })
         .then((account) => {
-            res.json({ account });
+            res.json({ response: account });
         })
         .catch(({ message }) => {
             res.json({ error: { message } });
@@ -141,7 +141,7 @@ router.post('/:accountId', (req, res) => {
     const { type, amount, data } = req.body;
     createTransaction({ accountId, type, amount, data })
         .then((account) => {
-            res.json({ account });
+            res.json({ response: account });
         })
         .catch(({ message }) => {
             res.json({ error: { message } });
@@ -152,7 +152,7 @@ router.post('/', (req, res) => {
     const { accountId } = req.body;
     createAccount({ accountId })
         .then((account) => {
-            res.json({ account });
+            res.json({ response: account });
         })
         .catch(({ message }) => {
             res.json({ error: { message } });
