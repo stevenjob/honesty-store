@@ -99,7 +99,7 @@ const getOrCreate = async ({ accountId, test }): Promise<TopupAccount> => {
     });
 };
 
-const appendTopupTransaction = async ({ topupAccount, amount, data }) => {
+const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAccount: TopupAccount, amount: number, data: any }) => {
     if (!process.env.TRANSACTION_URL) {
         throw new Error(`no $TRANSACTION_URL in environment`);
     }
@@ -122,7 +122,7 @@ const appendTopupTransaction = async ({ topupAccount, amount, data }) => {
     }
 };
 
-const topupExistingAccount = async ({ topupAccount, amount, test }) => {
+const topupExistingAccount = async ({ topupAccount, amount, test }: { topupAccount: TopupAccount, amount: number, test: boolean }) => {
     if (topupAccount.stripeCustomerId === '') {
         throw new Error(`No card registered for ${test ? 'test ' : ''} account ${topupAccount.accountId}`);
     }
