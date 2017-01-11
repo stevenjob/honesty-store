@@ -17,7 +17,7 @@
                 { "AttributeName": "id", "KeyType": "HASH" }
             ],
             "Projection": {
-                "ProjectionType": "ALL"
+                "ProjectionType": "KEYS_ONLY"
             },
             "ProvisionedThroughput": {
                 "ReadCapacityUnits": 10,
