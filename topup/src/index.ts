@@ -7,8 +7,8 @@ import isUUID = require('validator/lib/isUUID');
 import * as stripeFactory from 'stripe';
 import fetch from 'node-fetch';
 
-let stripeTest;
-let stripeProd
+const stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
+const stripeProd = stripeFactory(process.env.STRIPE_SECRET_KEY_PROD);
 
 config.region = process.env.AWS_REGION;
 
@@ -243,8 +243,5 @@ app.post('/topup', (req, res) => {
   }
 }
 */
-
-stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
-stripeProd = stripeFactory(process.env.STRIPE_SECRET_KEY_PROD);
 
 app.listen(3000);
