@@ -4,7 +4,8 @@
             { "AttributeName": "id", "KeyType": "HASH" }
         ],
         "AttributeDefinitions": [
-            { "AttributeName": "id", "AttributeType": "S" }
+            { "AttributeName": "id", "AttributeType": "S" },
+            { "AttributeName": "accountId", "AttributeType": "S" }
         ],
         "ProvisionedThroughput": {
             "ReadCapacityUnits": 10,
@@ -14,7 +15,7 @@
           {
             "IndexName": "accountId",
             "KeySchema": [
-                { "AttributeName": "id", "KeyType": "HASH" }
+                { "AttributeName": "accountId", "KeyType": "HASH" }
             ],
             "Projection": {
                 "ProjectionType": "KEYS_ONLY"
