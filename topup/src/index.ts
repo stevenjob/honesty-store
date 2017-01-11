@@ -19,6 +19,7 @@ interface TopupAccount {
 
     stripe?: {
         customer: any;
+        nextChargeToken: string;
     };
 };
 
@@ -118,7 +119,8 @@ const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAcc
 
 const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: TopupAccount, amount: number }) => {
     if (!topupAccount.stripe
-    || !topupAccount.stripe.customer)
+    || !topupAccount.stripe.customer
+    || !topupAccount.stripe.nextChargeToken)
     {
         throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''} account ${topupAccount.accountId}`);
     }
@@ -131,6 +133,7 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
         metadata: {
             accountId: topupAccount.accountId
         },
+        idempotency_key: topupAccount.stripe.nextChargeToken,
         expand: ['balance_transaction']
     });
 
@@ -142,18 +145,17 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
         }
     });
 
+    topupAccount.stripe.nextChargeToken = uuid();
+
     return topupAccount;
 };
 
 const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupAccount> => {
-    return update({
-        topupAccount: {
-            ...topupAccount,
-            stripe: {
-                customer
-            }
-        }
-    });
+    const newAccount = { ...topupAccount };
+
+    newAccount.stripe.customer = customer;
+
+    return update({ topupAccount: newAccount });
 };
 
 const addStripeTokenToAccount = async ({ topupAccount, stripeToken }): Promise<TopupAccount> => {
