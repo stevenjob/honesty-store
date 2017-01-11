@@ -81,17 +81,10 @@ const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
     return topupAccount;
 };
 
-const getOrCreate = async ({ accountId, test }): Promise<TopupAccount> => {
+const getOrCreate = async ({ accountId }): Promise<TopupAccount> => {
     const topupAccount: TopupAccount = await get({ accountId });
 
     if (topupAccount) {
-        if (topupAccount.test !== test) {
-            const expectedString = (test ? 'test' : 'prod');
-            const accountString = (topupAccount.test ? 'test' : 'prod');
-
-            throw new Error(`Expected ${expectedString} account, found ${accountString} account`);
-        }
-
         return topupAccount;
     }
 
@@ -99,7 +92,7 @@ const getOrCreate = async ({ accountId, test }): Promise<TopupAccount> => {
         topupAccount: {
             id: uuid(),
             accountId,
-            test,
+            test: false,
             stripe: {
                 customerId: '',
                 card: {
@@ -135,12 +128,12 @@ const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAcc
     }
 };
 
-const topupExistingAccount = async ({ topupAccount, amount, test }: { topupAccount: TopupAccount, amount: number, test: boolean }) => {
+const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: TopupAccount, amount: number }) => {
     if (topupAccount.stripe.customerId === '') {
-        throw new Error(`No card registered for ${test ? 'test ' : ''} account ${topupAccount.accountId}`);
+        throw new Error(`No card registered for ${topupAccount.test ? 'test ' : ''} account ${topupAccount.accountId}`);
     }
 
-    const charge = await stripeObjectForTest({ test }).charges.create({
+    const charge = await stripeObjectForTest(topupAccount).charges.create({
         amount,
         currency: 'gbp',
         customer: topupAccount.stripe.customerId,
@@ -190,8 +183,8 @@ const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupA
     });
 };
 
-const addStripeTokenToAccount = async ({ topupAccount, stripeToken, test }): Promise<TopupAccount> => {
-    const customer = await stripeObjectForTest({ test })
+const addStripeTokenToAccount = async ({ topupAccount, stripeToken }): Promise<TopupAccount> => {
+    const customer = await stripeObjectForTest(topupAccount.test)
         .customers
         .create({
             source: stripeToken,
@@ -204,14 +197,14 @@ const addStripeTokenToAccount = async ({ topupAccount, stripeToken, test }): Pro
     return await recordCustomerDetails({ customer, topupAccount });
 };
 
-const attemptTopup = async ({ accountId, amount, stripeToken, test }) => {
-    const topupAccount = await getOrCreate({ accountId, test });
+const attemptTopup = async ({ accountId, amount, stripeToken }) => {
+    const topupAccount = await getOrCreate({ accountId });
 
     if (stripeToken) {
-        await addStripeTokenToAccount({ topupAccount, stripeToken, test });
+        await addStripeTokenToAccount({ topupAccount, stripeToken });
     }
 
-    return topupExistingAccount({ topupAccount, amount, test })
+    return topupExistingAccount({ topupAccount, amount })
 };
 
 const assertDynamoConnectivity = async () => {
@@ -249,9 +242,9 @@ app.get('/', (req, res) => {
 });
 
 app.post('/topup', (req, res) => {
-    const { accountId, amount, stripeToken, test } = req.body;
+    const { accountId, amount, stripeToken } = req.body;
 
-    attemptTopup({ accountId, amount, stripeToken, test })
+    attemptTopup({ accountId, amount, stripeToken })
         .then((topupAccount: TopupAccount) => {
             res.json({ response: { topupAccount } });
         })
