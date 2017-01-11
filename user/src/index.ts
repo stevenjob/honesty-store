@@ -83,7 +83,13 @@ const getInternal = async ({ userId }): Promise<InternalUser> => {
         })
         .promise();
 
-    return <InternalUser>response.Item;
+    const user = <InternalUser>response.Item
+
+    if (user == null) {
+        throw new Error(`User not found ${userId}`);
+    }
+
+    return user;
 };
 
 const get = async ({ userId }): Promise<User> => externaliseUser(await getInternal({ userId }));
@@ -145,7 +151,13 @@ const scanByEmailAddress = async ({ emailAddress }): Promise<UserWithMagicLinkTo
         throw new Error(`Multiple users found with the same emailAddress`);
     }
 
-    return externaliseUserWithMagicLinkToken(<InternalUser>response.Items[0]);
+    const user = <InternalUser>response.Items[0];
+
+    if (user == null) {
+        throw new Error(`User not found ${emailAddress}`);
+    }
+
+    return externaliseUserWithMagicLinkToken(user);
 };
 
 const createUser = async ({ userId, userProfile }): Promise<UserWithAccessAndRefreshTokens> => {
