@@ -5,7 +5,7 @@
         ],
         "AttributeDefinitions": [
             { "AttributeName": "id", "AttributeType": "S" },
-            { "AttributeName": "accountId", "AttributeType": "S" }
+            { "AttributeName": "userId", "AttributeType": "S" }
         ],
         "ProvisionedThroughput": {
             "ReadCapacityUnits": 10,
@@ -13,9 +13,9 @@
         },
         "GlobalSecondaryIndexes": [
           {
-            "IndexName": "accountId",
+            "IndexName": "userId",
             "KeySchema": [
-                { "AttributeName": "accountId", "KeyType": "HASH" }
+                { "AttributeName": "userId", "KeyType": "HASH" }
             ],
             "Projection": {
                 "ProjectionType": "KEYS_ONLY"
@@ -31,6 +31,7 @@
         {
             "id": "df39d529-8f35-4e04-a91f-408c189563f1",
             "accountId": "b423607f-64de-441f-ac39-12d50aaedbe9",
+            "userId": "a4b9dae6-10fa-4230-bed8-8568dd1a9ecf",
             "test": true,
             "stripe": {
                 "customer": {

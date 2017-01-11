@@ -15,6 +15,7 @@ config.region = process.env.AWS_REGION;
 interface TopupAccount {
     id: string;
     accountId: string;
+    userId: string;
     test: boolean;
 
     stripe?: {
@@ -23,11 +24,16 @@ interface TopupAccount {
     };
 };
 
-const assertValidAccountId = (accountId) => {
-    if (accountId == null || !isUUID(accountId, 4) ) {
-        throw new Error(`Invalid accountId '${accountId}'`);
-    }
-};
+const createAssertValidUuid = (name) =>
+    (uuid) => {
+        if (uuid == null || !isUUID(uuid, 4)) {
+            throw new Error(`Invalid ${name} ${uuid}`);
+        }
+    };
+
+
+const assertValidAccountId = createAssertValidUuid('accountId');
+const assertValidUserId = createAssertValidUuid('userId');
 
 const assertValidTopupAccount = (topupAccount: TopupAccount) => {
     assertValidAccountId(topupAccount.accountId);
@@ -37,22 +43,22 @@ const stripeForUser = ({ test }) => {
     return test ? stripeTest : stripeProd;
 };
 
-const get = async ({ accountId }): Promise<TopupAccount> => {
-    assertValidAccountId(accountId);
+const get = async ({ userId }): Promise<TopupAccount> => {
+    assertValidUserId(userId);
 
     const response = await new DynamoDB.DocumentClient()
         .query({
             TableName: process.env.TABLE_NAME,
-            IndexName: 'accountId',
-            KeyConditionExpression: 'accountId = :accountId',
+            IndexName: 'userId',
+            KeyConditionExpression: 'userId = :userId',
             ExpressionAttributeValues: {
-                ':accountId': accountId,
+                ':userId': userId,
             },
         })
         .promise();
 
         if (response.Items.length > 1) {
-            throw new Error(`Too many database entries for '${accountId}'`);
+            throw new Error(`Too many database entries for userId '${userId}'`);
         }
         return <TopupAccount>response.Items[0];
 };
@@ -67,10 +73,11 @@ const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
                 id: topupAccount.id
             },
             UpdateExpression:
-                `set stripe = :stripe, accountId = :accountId`,
+                `set stripe = :stripe, accountId = :accountId, userId = :userId`,
             ExpressionAttributeValues: {
                 ':stripe': topupAccount.stripe,
                 ':accountId': topupAccount.accountId,
+                ':userId': topupAccount.userId,
             },
         })
         .promise();
@@ -78,8 +85,11 @@ const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
     return topupAccount;
 };
 
-const getOrCreate = async ({ accountId }): Promise<TopupAccount> => {
-    const topupAccount: TopupAccount = await get({ accountId });
+const getOrCreate = async ({ accountId, userId }): Promise<TopupAccount> => {
+    assertValidAccountId(accountId);
+    assertValidAccountId(userId);
+
+    const topupAccount: TopupAccount = await get({ userId });
 
     if (topupAccount) {
         return topupAccount;
@@ -88,6 +98,7 @@ const getOrCreate = async ({ accountId }): Promise<TopupAccount> => {
     return update({
         topupAccount: {
             id: uuid(),
+            userId,
             accountId,
             test: false,
         }
@@ -173,8 +184,8 @@ const addStripeTokenToAccount = async ({ topupAccount, stripeToken }): Promise<T
     return await recordCustomerDetails({ customer, topupAccount });
 };
 
-const attemptTopup = async ({ accountId, amount, stripeToken }) => {
-    const topupAccount = await getOrCreate({ accountId });
+const attemptTopup = async ({ accountId, userId, amount, stripeToken }) => {
+    const topupAccount = await getOrCreate({ accountId, userId });
 
     if (stripeToken) {
         if (topupAccount.stripe){
@@ -223,9 +234,9 @@ router.get('/', (req, res) => {
 });
 
 router.post('/topup', (req, res) => {
-    const { accountId, amount, stripeToken } = req.body;
+    const { accountId, userId, amount, stripeToken } = req.body;
 
-    attemptTopup({ accountId, amount, stripeToken })
+    attemptTopup({ accountId, userId, amount, stripeToken })
         .then((topupAccount: TopupAccount) => {
             res.json({ response: { topupAccount } });
         })
