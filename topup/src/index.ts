@@ -147,7 +147,6 @@ const topupExistingAccount = async ({ topupAccount, amount, test }: { topupAccou
         customer: topupAccount.stripe.customerId,
         description: `topup for ${topupAccount.accountId}`,
         metadata: {
-            topupId: topupAccount.id,
             accountId: topupAccount.accountId
         },
         expand: ['balance_transaction']
@@ -199,7 +198,6 @@ const addStripeTokenToAccount = async ({ topupAccount, stripeToken, test }): Pro
             source: stripeToken,
             description: `registration for ${topupAccount.accountId}`,
             metadata: {
-                topupId: topupAccount.id,
                 accountId: topupAccount.accountId
             }
         });
