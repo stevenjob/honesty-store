@@ -142,6 +142,7 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
         topupAccount,
         data: {
             stripeFee: String(charge.balance_transaction.fee),
+            chargeId: String(charge.id),
         }
     });
 
