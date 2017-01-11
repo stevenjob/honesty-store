@@ -168,6 +168,10 @@ const attemptTopup = async ({ accountId, amount, stripeToken }) => {
     const topupAccount = await getOrCreate({ accountId });
 
     if (stripeToken) {
+        if (topupAccount.stripeCustomer){
+            throw new Error(`Already have stripe details for '${accountId}'`);
+        }
+
         await addStripeTokenToAccount({ topupAccount, stripeToken });
     }
 
