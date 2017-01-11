@@ -33,11 +33,13 @@
             "accountId": "b423607f-64de-441f-ac39-12d50aaedbe9",
             "test": true,
             "stripe": {
-                "customerId": "cus_9trnsH8fhkqWtr",
-                "card": {
-                    "exp_month": 8,
-                    "exp_year": 2050,
-                    "last4": "4242"
+                "customer": {
+                    "id": "cus_9trnsH8fhkqWtr",
+                    "card": {
+                        "exp_month": 8,
+                        "exp_year": 2050,
+                        "last4": "4242"
+                    }
                 }
             }
         }

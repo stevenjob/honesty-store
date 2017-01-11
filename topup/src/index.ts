@@ -17,7 +17,9 @@ interface TopupAccount {
     accountId: string;
     test: boolean;
 
-    stripeCustomer?: any;
+    stripe?: {
+        customer: any;
+    };
 };
 
 const assertValidAccountId = (accountId) => {
@@ -64,9 +66,9 @@ const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
                 id: topupAccount.id
             },
             UpdateExpression:
-                `set stripeCustomer = :stripeCustomer, accountId = :accountId`,
+                `set stripe = :stripe, accountId = :accountId`,
             ExpressionAttributeValues: {
-                ':stripeCustomer': topupAccount.stripeCustomer,
+                ':stripe': topupAccount.stripe,
                 ':accountId': topupAccount.accountId,
             },
         })
@@ -105,7 +107,7 @@ const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAcc
                 data: {
                     ...data,
                     topupAccountId: topupAccount.id,
-                    topupCustomerId: topupAccount.stripeCustomer.id,
+                    topupCustomerId: topupAccount.stripe.customer.id,
                 }
             });
     } catch (error) {
@@ -115,14 +117,16 @@ const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAcc
 };
 
 const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: TopupAccount, amount: number }) => {
-    if (topupAccount.stripeCustomer.id === '') {
-        throw new Error(`No card registered for ${topupAccount.test ? 'test ' : ''} account ${topupAccount.accountId}`);
+    if (!topupAccount.stripe
+    || !topupAccount.stripe.customer)
+    {
+        throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''} account ${topupAccount.accountId}`);
     }
 
     const charge = await stripeObjectForTest(topupAccount).charges.create({
         amount,
         currency: 'gbp',
-        customer: topupAccount.stripeCustomer.id,
+        customer: topupAccount.stripe.customer.id,
         description: `topup for ${topupAccount.accountId}`,
         metadata: {
             accountId: topupAccount.accountId
@@ -145,7 +149,9 @@ const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupA
     return update({
         topupAccount: {
             ...topupAccount,
-            stripeCustomer: customer,
+            stripe: {
+                customer
+            }
         }
     });
 };
@@ -168,7 +174,7 @@ const attemptTopup = async ({ accountId, amount, stripeToken }) => {
     const topupAccount = await getOrCreate({ accountId });
 
     if (stripeToken) {
-        if (topupAccount.stripeCustomer){
+        if (topupAccount.stripe){
             throw new Error(`Already have stripe details for '${accountId}'`);
         }
 
@@ -230,7 +236,7 @@ app.post('/topup', (req, res) => {
       "accountId": "45cf84b2-229a-4210-a78b-c53ce280131e",
       "id": "011c5f29-9a38-48bf-b380-94eff3f9a68a",
       "test": true
-      "stripeCustomer": { ... },
+      "stripe": { "customer": { ... } }
     }
   }
 }
