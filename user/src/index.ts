@@ -4,7 +4,7 @@ import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isEmail = require('validator/lib/isEmail');
-import { signAccessToken, signRefreshToken, verifyToken } from './token';
+import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from './token';
 import { User, UserProfile, UserWithAccessToken, UserWithAccessAndRefreshTokens, UserWithMagicLinkToken, TEST_DATA_USER_ID } from './client';
 import { createAccount, getAccount, TEST_DATA_EMPTY_ACCOUNT_ID } from '../../transaction/src/client';
 
@@ -95,19 +95,15 @@ const getInternal = async ({ userId }): Promise<InternalUser> => {
 const get = async ({ userId }): Promise<User> => externaliseUser(await getInternal({ userId }));
 
 const getByAccessToken = async ({ accessToken }): Promise<User> => {
-    const { userId, refreshToken } = verifyToken(accessToken);
+    const { userId } = verifyAccessToken(accessToken);
     assertValidUserId(userId);
-
-    if (refreshToken != null) {
-        throw new Error(`Invalid accessToken`);
-    }
 
     // We trust the JWT signing to validate access tokens
     return await get({ userId });
 };
 
 const getByRefreshToken = async ({ refreshToken }): Promise<UserWithAccessToken> => {
-    const { userId, refreshToken: token } = verifyToken(refreshToken);
+    const { userId, refreshToken: token } = verifyRefreshToken(refreshToken);
     assertValidUserId(userId);
     assertValidRefreshToken(token);
 
@@ -122,14 +118,10 @@ const getByRefreshToken = async ({ refreshToken }): Promise<UserWithAccessToken>
 };
 
 const getByMagicLinkToken = async ({ magicLinkToken }): Promise<UserWithAccessAndRefreshTokens> => {
-    const { userId, refreshToken } = verifyToken(magicLinkToken);
+    const { userId } = verifyAccessToken(magicLinkToken);
     assertValidUserId(userId);
 
     const user = await getInternal({ userId });
-
-    if (refreshToken != null) {
-        throw new Error(`Invalid magicLinkToken`);
-    }
 
     return externaliseUserWithAccessTokenAndRefreshToken(user);
 };
