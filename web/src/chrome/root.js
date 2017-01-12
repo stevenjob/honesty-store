@@ -5,8 +5,6 @@ import NavBar from './nav-bar';
 import { BRAND_DARK } from './colors';
 import './root.css'
 
-// TODO: namespace all css selectors
-
 const itemRenderer = (data, index) => (
   <b>{data}</b>
 );

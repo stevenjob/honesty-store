@@ -1,23 +1,23 @@
-header {
+.chrome-title-bar {
   position: fixed;
   top: 0;
   right: 0;
   left: 0;
 }
 
-header>div {
+.chrome-title-bar>div {
   height: 5.9rem;
   margin-bottom: 0.1rem;
   overflow: hidden; /* prevent margin collapse */
   text-align: center;
 }
 
-header>div>h1 {
+.chrome-title-bar>div>h1 {
   font-size: 2.4rem;
   margin: 0.5rem;
 }
 
-header>div>h2 {
+.chrome-title-bar>div>h2 {
   font-size: 1.4rem;
   margin: 0;
 }

@@ -3,7 +3,7 @@ import { BRAND_WHITE } from './colors';
 import './nav-bar.css'
 
 export default () => (
-  <nav style={{ background: BRAND_WHITE }}>
+  <nav className="chrome-nav-bar" style={{ background: BRAND_WHITE }}>
     <div style={{ background: BRAND_WHITE }}>
       <a href="#">Store</a>
       <a href="#">History</a>
