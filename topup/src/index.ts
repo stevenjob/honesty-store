@@ -256,7 +256,7 @@ app.use('/topup/v1', router);
 app.get('/', (req, res) => {
     assertConnectivity()
         .then(() => res.sendStatus(200))
-        .catch((error) => res.status(500).json({ error }));
+        .catch(() => res.sendStatus(500));
 });
 
 app.listen(3000);
