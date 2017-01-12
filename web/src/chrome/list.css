@@ -1,0 +1,14 @@
+.chrome-list {
+  list-style: none;
+  padding: 0;
+}
+
+.chrome-list>li {
+  height: 10rem;
+  border-bottom: 1px solid black;
+  padding: 1rem 0;
+}
+
+.chrome-list>li:last-of-type {
+  border-bottom: none;
+}

@@ -4,3 +4,4 @@ export const BRAND_LIGHT = '#43BCD6';
 export const BRAND_HIGHLIGHT = '#FFCD00';
 
 export const LIGHT_TEXT = '#FFFFFF';
+export const MUTED_TEXT = '#A9B8B9';

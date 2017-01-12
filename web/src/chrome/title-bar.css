@@ -6,10 +6,10 @@ header {
 }
 
 header>div {
-  height: 6rem;
+  height: 5.9rem;
+  margin-bottom: 0.1rem;
+  overflow: hidden; /* prevent margin collapse */
   text-align: center;
-  overflow: hidden;
-  margin-bottom: 0.1em;
 }
 
 header>div>h1 {
