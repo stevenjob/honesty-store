@@ -1,0 +1,19 @@
+html {
+  font-size: 62.5%;
+}
+
+body {
+  height: 100%;
+  background: #F8F9FA; /* BRAND_WHITE */
+}
+
+.chrome-root {
+  height: 100%;
+}
+
+.chrome-root>section {
+  font-size: 1.4rem;
+  margin-top: 6rem; /* title-bar height */
+  margin-bottom: 6rem; /* nav-bar height */
+  padding: 1rem;
+}
