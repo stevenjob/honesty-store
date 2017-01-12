@@ -1,17 +1,17 @@
 export const RECEIVE_REGISTRATION_PHASE1 = 'RECEIVE_REGISTRATION_PHASE1';
 export const RECEIVE_REGISTRATION_PHASE2 = 'RECEIVE_REGISTRATION_PHASE2';
 
-const receiveRegistrationPhase1 = (jsonBody) => {
+const receiveRegistrationPhase1 = (response) => {
   return {
     type: RECEIVE_REGISTRATION_PHASE1,
-    jsonBody
+    response
   };
 };
 
-const receiveRegistrationPhase2 = (jsonBody) => {
+const receiveRegistrationPhase2 = (response) => {
   return {
     type: RECEIVE_REGISTRATION_PHASE2,
-    jsonBody
+    response
   };
 };
 
@@ -41,7 +41,7 @@ const performRegistrationPhase1 = (storeCode) => {
 export const performFullRegistration = storeCode => (dispatch, getState) => {
   performRegistrationPhase1(storeCode)
     .then(json => {
-      dispatch(receiveRegistrationPhase1(json));
+      dispatch(receiveRegistrationPhase1(json.response));
       const accessToken = getState().accessToken;
       const requestBody = {
         emailAddress: 'testuser@example.com',
@@ -52,6 +52,6 @@ export const performFullRegistration = storeCode => (dispatch, getState) => {
       return performRegistrationPhase2(accessToken, requestBody);
     })
     .then(json => {
-      dispatch(receiveRegistrationPhase2(json));
+      dispatch(receiveRegistrationPhase2(json.response));
     });
 };

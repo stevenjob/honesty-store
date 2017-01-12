@@ -12,9 +12,9 @@ const getInitialState = () => {
 export default (state = getInitialState(), action) => {
   switch (action.type) {
     case  RECEIVE_REGISTRATION_PHASE1:
-      return action.jsonBody.response;
+      return action.response;
     case RECEIVE_REGISTRATION_PHASE2:
-      const { user, store } = action.jsonBody.response;
+      const { user, store } = action.response;
       return {
         ...state,
         user: user,
