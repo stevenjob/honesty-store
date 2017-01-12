@@ -15,6 +15,7 @@
   display: block;
   flex: 1;
   text-align: center;
+  text-decoration: none;
 }
 
 .chrome-nav-bar>div>a::before {
