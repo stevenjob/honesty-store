@@ -111,7 +111,7 @@ const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAcc
     }
 
     try {
-        return await fetch(
+        const account = await fetch(
             `${process.env.BASE_URL}/transaction/v1/${topupAccount.accountId}`,
             {
                 type: 'topup',
@@ -122,6 +122,10 @@ const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAcc
                     topupCustomerId: topupAccount.stripe.customer.id,
                 }
             });
+
+        // in future this will be the transaction, but for now we return the balance
+        return account.balance;
+
     } catch (error) {
         // remap error message
         throw new Error(`couldn't add transaction: ${JSON.stringify(error)}`);
@@ -148,7 +152,7 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
         expand: ['balance_transaction']
     });
 
-    await appendTopupTransaction({
+    const accountBalance = await appendTopupTransaction({
         amount,
         topupAccount,
         data: {
@@ -159,7 +163,7 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
 
     topupAccount.stripe.nextChargeToken = uuid();
 
-    return topupAccount;
+    return accountBalance;
 };
 
 const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupAccount> => {
@@ -230,25 +234,13 @@ router.post('/topup', (req, res) => {
     const { accountId, userId, amount, stripeToken } = req.body;
 
     attemptTopup({ accountId, userId, amount, stripeToken })
-        .then((topupAccount: TopupAccount) => {
-            res.json({ response: { topupAccount } });
+        .then((accountBalance) => {
+            res.json({ response: { accountBalance } });
         })
         .catch((error) => {
             res.json({ error: error.message });
         });
 });
-/* "/topup" returns the following response:
-{
-  "response": {
-    "topupAccount": {
-      "accountId": "45cf84b2-229a-4210-a78b-c53ce280131e",
-      "id": "011c5f29-9a38-48bf-b380-94eff3f9a68a",
-      "test": true
-      "stripe": { "customer": { ... } }
-    }
-  }
-}
-*/
 
 app.use('/topup/v1', router);
 
