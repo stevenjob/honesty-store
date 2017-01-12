@@ -9,6 +9,28 @@
                 "containerPort": 3000,
                 "protocol": "tcp"
             }
+        ],
+        "environment": [
+            {
+                "name": "TABLE_NAME",
+                "value": "${tableName}"
+            },
+            {
+                "name": "AWS_REGION",
+                "value": "eu-west-1"
+            },
+            {
+                "name": "BASE_URL",
+                "value": "${baseUrl}"
+            },
+            {
+                "name": "STRIPE_SECRET_KEY_LIVE",
+                "value": "sk_test_Bl10VC4MyzRrhd41nq4f31jD"
+            },
+            {
+                "name": "STRIPE_SECRET_KEY_TEST",
+                "value": "sk_test_Bl10VC4MyzRrhd41nq4f31jD"
+            }
         ]
     }
 ]

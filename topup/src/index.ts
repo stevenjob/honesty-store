@@ -8,7 +8,7 @@ import * as stripeFactory from 'stripe';
 import fetch from 'node-fetch';
 
 const stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
-const stripeProd = stripeFactory(process.env.STRIPE_SECRET_KEY_PROD);
+const stripeProd = stripeFactory(process.env.STRIPE_SECRET_KEY_LIVE);
 
 config.region = process.env.AWS_REGION;
 
@@ -106,13 +106,13 @@ const getOrCreate = async ({ accountId, userId }): Promise<TopupAccount> => {
 };
 
 const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAccount: TopupAccount, amount: number, data: any }) => {
-    if (!process.env.TRANSACTION_URL) {
-        throw new Error(`no $TRANSACTION_URL in environment`);
+    if (!process.env.BASE_URL) {
+        throw new Error(`no $BASE_URL in environment`);
     }
 
     try {
         return await fetch(
-            `${process.env.TRANSACTION_URL}/${topupAccount.accountId}`,
+            `${process.env.BASE_URL}/transaction/v1/${topupAccount.accountId}`,
             {
                 type: 'topup',
                 amount,
