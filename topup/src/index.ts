@@ -226,13 +226,6 @@ const app = express();
 
 app.use(bodyParser.json());
 
-// send healthy response to load balancer probes
-router.get('/', (req, res) => {
-    assertConnectivity()
-        .then(() => res.sendStatus(200))
-        .catch((error) => res.status(500).json({ error }));
-});
-
 router.post('/topup', (req, res) => {
     const { accountId, userId, amount, stripeToken } = req.body;
 
@@ -258,5 +251,12 @@ router.post('/topup', (req, res) => {
 */
 
 app.use('/topup/v1', router);
+
+// send healthy response to load balancer probes
+app.get('/', (req, res) => {
+    assertConnectivity()
+        .then(() => res.sendStatus(200))
+        .catch((error) => res.status(500).json({ error }));
+});
 
 app.listen(3000);
