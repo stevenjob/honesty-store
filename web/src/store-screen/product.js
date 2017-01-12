@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListGroupItem, Button, Col, Row } from 'react-bootstrap';
-import './product.css'
+import './product.css';
 
 class Product extends React.Component {
   render() {
@@ -22,7 +22,7 @@ class Product extends React.Component {
           </Col>
         </Row>
       </ListGroupItem>
-    )
+    );
   }
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { IndexRedirect, Router, Route, hashHistory } from 'react-router'
+import { IndexRedirect, Router, Route, hashHistory } from 'react-router';
 import Root from './chrome/root';
 import Intro from './intro/intro';
 import StoreTitle from './store/title';

@@ -5,14 +5,14 @@ const receiveRegistrationPhase1 = (jsonBody) => {
   return {
     type: RECEIVE_REGISTRATION_PHASE1,
     jsonBody
-  }
-}
+  };
+};
 
 const receiveRegistrationPhase2 = (jsonBody) => {
   return {
     type: RECEIVE_REGISTRATION_PHASE2,
     jsonBody
-  }
+  };
 };
 
 const performRegistrationPhase2 = (accessToken, requestBody) => {
@@ -24,7 +24,7 @@ const performRegistrationPhase2 = (accessToken, requestBody) => {
       'Authorization': `Bearer: ${accessToken}` 
     }
   })
-    .then(r => r.json())
+    .then(r => r.json());
 };
 
 const performRegistrationPhase1 = (storeCode) => {
@@ -35,7 +35,7 @@ const performRegistrationPhase1 = (storeCode) => {
       'Content-Type': 'application/json'
     }
   })
-    .then(r => r.json())
+    .then(r => r.json());
 };
 
 export const performFullRegistration = storeCode => (dispatch, getState) => {
@@ -48,7 +48,7 @@ export const performFullRegistration = storeCode => (dispatch, getState) => {
         itemID: 0,
         cardDetails: '1234123412341234',
         topUpAmount: 500
-      }
+      };
       return performRegistrationPhase2(accessToken, requestBody);
     })
     .then(json => {

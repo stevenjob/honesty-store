@@ -1,5 +1,5 @@
 import React from 'react';
-import { hashHistory } from 'react-router'
+import { hashHistory } from 'react-router';
 import { Grid } from 'react-bootstrap';
 import ProductList from './product-list';
 import mockApi from '../mock-api';

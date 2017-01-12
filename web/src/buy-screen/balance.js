@@ -1,5 +1,5 @@
 import React from 'react';
-import './balance.css'
+import './balance.css';
 
 class Balance extends React.Component {
   render() {
