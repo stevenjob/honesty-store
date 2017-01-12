@@ -15,43 +15,40 @@ const receiveRegistrationPhase2 = (response) => {
   };
 };
 
-const performRegistrationPhase2 = (accessToken, requestBody) => {
-  return fetch('/api/v1/register2', {
+const performRegistrationPhase2 = async (accessToken, requestBody) => {
+  const response = await fetch('/api/v1/register2', {
     method: 'POST',
     body: JSON.stringify(requestBody),
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer: ${accessToken}` 
     }
-  })
-    .then(r => r.json());
+  });
+  return await response.json();
 };
 
-const performRegistrationPhase1 = (storeCode) => {
-  return fetch('/api/v1/register', {
+const performRegistrationPhase1 = async (storeCode) => {
+  const response = await fetch('/api/v1/register', {
     method: 'POST',
     body: JSON.stringify({ storeCode }),
     headers: {
       'Content-Type': 'application/json'
     }
-  })
-    .then(r => r.json());
+  });
+  return await response.json();
 };
 
-export const performFullRegistration = storeCode => (dispatch, getState) => {
-  performRegistrationPhase1(storeCode)
-    .then(json => {
-      dispatch(receiveRegistrationPhase1(json.response));
-      const accessToken = getState().accessToken;
-      const requestBody = {
-        emailAddress: 'testuser@example.com',
-        itemID: 0,
-        cardDetails: '1234123412341234',
-        topUpAmount: 500
-      };
-      return performRegistrationPhase2(accessToken, requestBody);
-    })
-    .then(json => {
-      dispatch(receiveRegistrationPhase2(json.response));
-    });
+export const performFullRegistration = (storeCode) => async (dispatch, getState) => {
+  const phase1Response = await performRegistrationPhase1(storeCode);
+  dispatch(receiveRegistrationPhase1(phase1Response.response));
+
+  const accessToken = getState().accessToken;
+  const requestBody = {
+    emailAddress: `${Date.now()}@example.com`,
+    itemID: 0,
+    cardDetails: '1234123412341234',
+    topUpAmount: 500
+  };
+  const phase2Response = await performRegistrationPhase2(accessToken, requestBody);
+  dispatch(receiveRegistrationPhase2(phase2Response.response));
 };
