@@ -14,11 +14,11 @@ export default (state = getInitialState(), action) => {
     case  RECEIVE_REGISTRATION_PHASE1:
       return action.jsonBody.response;
     case RECEIVE_REGISTRATION_PHASE2:
-      const response = action.jsonBody.response;
+      const { user, store } = action.jsonBody.response;
       return {
         ...state,
-        user: response.user,
-        store: response.store
+        user: user,
+        store: store
       };
     default:
       return state;
