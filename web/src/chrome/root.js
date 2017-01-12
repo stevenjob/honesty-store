@@ -1,20 +1,15 @@
 import React from 'react';
 import TitleBar from './title-bar';
-import List from './list';
 import NavBar from './nav-bar';
 import { BRAND_DARK } from './colors';
 import './root.css'
 
-const itemRenderer = (data, index) => (
-  <b>{data}</b>
-);
-
-export default () => (
+export default ({ children, routeParams: { storeId } }) => (
   <div className="chrome-root">
-    <TitleBar />
+    <TitleBar storeId={storeId}/>
     <section style={{color: BRAND_DARK }}>
-      <List data={[1,2,3,4,5]} itemRenderer={itemRenderer}/>
+      { children }
     </section>
-    <NavBar />
+    <NavBar storeId={storeId}/>
   </div>
 );
