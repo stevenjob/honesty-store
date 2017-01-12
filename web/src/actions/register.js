@@ -44,7 +44,7 @@ export const performFullRegistration = storeCode => (dispatch, getState) => {
       dispatch(receiveRegistrationPhase1(json));
       const accessToken = getState().accessToken;
       const requestBody = {
-        emailAddress: 'test@test.com',
+        emailAddress: 'testuser@example.com',
         itemID: 0,
         cardDetails: '1234123412341234',
         topUpAmount: 500
