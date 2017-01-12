@@ -11,6 +11,25 @@ import ProfileTitle from './profile/title';
 import Profile from './profile/profile';
 import HelpTitle from './help/title';
 import Help from './help/help';
+import { createStore, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import createLogger from 'redux-logger';
+import reducer from './reducers/reducer';
+import { performFullRegistration } from './actions/register';
+
+const middlewares = [thunkMiddleware];
+
+if (process.env.NODE_ENV === `development`) {
+  const logger = createLogger();
+  middlewares.push(logger);
+}
+
+const store = createStore(
+  reducer,
+  applyMiddleware(...middlewares)
+);
+
+store.dispatch(performFullRegistration('NCL'));
 
 ReactDOM.render((
   <Router history={hashHistory} onUpdate={() => scrollTo(0, 0)}>
