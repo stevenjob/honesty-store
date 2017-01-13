@@ -6,7 +6,7 @@
         "essential": true,
         "portMappings": [
             {
-                "containerPort": 3001,
+                "containerPort": 3000,
                 "protocol": "tcp"
             }
         ]

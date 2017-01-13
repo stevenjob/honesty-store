@@ -2,7 +2,7 @@ FROM node:latest
 
 ENV NPM_CONFIG_LOGLEVEL error
 ENV NODE_ENV production
-EXPOSE 3001
+EXPOSE 3000
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
