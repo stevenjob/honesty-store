@@ -18,7 +18,7 @@
     "redux-thunk": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "npm run lint && react-scripts test --env=jsdom",
     "lint": "eslint src",
@@ -29,5 +29,5 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://localhost:3001"
+  "proxy": "http://localhost:3000"
 }
