@@ -1,14 +1,13 @@
 import React from 'react';
-import TitleBar from './title-bar';
 import NavBar from './nav-bar';
 import { BRAND_DARK } from './colors';
 import './root.css'
 
-export default ({ children, routeParams: { storeId } }) => (
+export default ({ title, body, routeParams: { storeId } }) => (
   <div className="chrome-root">
-    <TitleBar storeId={storeId}/>
+    {title}
     <section style={{color: BRAND_DARK }}>
-      { children }
+      {body}
     </section>
     <NavBar storeId={storeId}/>
   </div>
