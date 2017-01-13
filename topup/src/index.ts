@@ -169,9 +169,17 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
 };
 
 const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupAccount> => {
-    const newAccount = { ...topupAccount };
+    if (topupAccount.stripe) {
+        throw new Error(`already have stripe details for ${topupAccount.accountId}`);
+    }
 
-    newAccount.stripe.customer = customer;
+    const newAccount = {
+        ...topupAccount,
+        stripe: {
+            customer,
+            nextChargeToken: uuid(),
+        }
+    }
 
     return update({ topupAccount: newAccount });
 };
