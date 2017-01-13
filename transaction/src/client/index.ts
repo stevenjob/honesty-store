@@ -23,6 +23,11 @@ export interface Account {
     transactions: Transaction[];
 }
 
+export interface TransactionAndBalance {
+    transaction: TransactionDetails;
+    balance: number;
+};
+
 const baseUrl = process.env.BASE_URL;
 
 export const createAccount = async (accountId: string): Promise<Account> => {
@@ -49,7 +54,7 @@ export const getAccount = async (accountId: string): Promise<Account> => {
     return response.response;
 };
 
-export const createTransaction = async (accountId: string, transaction: TransactionDetails): Promise<TransactionDetails> => {
+export const createTransaction = async (accountId: string, transaction: TransactionDetails): Promise<TransactionAndBalance> => {
     const response = await fetch(`${baseUrl}/transaction/v1/${accountId}`, {
         method: 'POST',
         headers: {
@@ -57,7 +62,7 @@ export const createTransaction = async (accountId: string, transaction: Transact
         },
         body: JSON.stringify(transaction)
     })
-        .then<ApiResponse<TransactionDetails>>(response => response.json());
+        .then<ApiResponse<TransactionAndBalance>>(response => response.json());
     if (response.error) {
         throw new Error(response.error.message);
     }

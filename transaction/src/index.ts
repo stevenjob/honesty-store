@@ -4,7 +4,7 @@ import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isInt = require('validator/lib/isInt');
-import { Account, Transaction, TransactionDetails, TEST_DATA_EMPTY_ACCOUNT_ID } from './client';
+import { Account, Transaction, TransactionDetails, TransactionAndBalance, TEST_DATA_EMPTY_ACCOUNT_ID } from './client';
 
 config.region = process.env.AWS_REGION;
 
@@ -73,7 +73,7 @@ const externaliseTransaction = (transaction: Transaction): TransactionDetails =>
     return details;
 }
 
-const createTransaction = async ({ accountId, type, amount, data }): Promise<TransactionDetails> => {
+const createTransaction = async ({ accountId, type, amount, data }): Promise<TransactionAndBalance> => {
     assertValidAccountId(accountId);
 
     const originalAccount = await get({ accountId });
@@ -121,7 +121,10 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
         })
         .promise();
 
-    return externaliseTransaction(transaction);
+    return {
+        transaction: externaliseTransaction(transaction),
+        balance: updatedAccount.balance
+    };
 };
 
 const app = express();
@@ -145,8 +148,8 @@ router.post('/:accountId', (req, res) => {
     const { accountId } = req.params;
     const { type, amount, data } = req.body;
     createTransaction({ accountId, type, amount, data })
-        .then((transaction: TransactionDetails) => {
-            res.json({ response: transaction });
+        .then(({ transaction, balance }: TransactionAndBalance) => {
+            res.json({ response: { transaction, balance } });
         })
         .catch(({ message }) => {
             res.json({ error: { message } });
