@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 
 import * as stripeFactory from 'stripe';
-import fetch from 'node-fetch';
+import { TransactionDetails, createTransaction } from '../../transaction/src/client/index';
 
 const stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
 const stripeProd = stripeFactory(process.env.STRIPE_SECRET_KEY_LIVE);
@@ -106,26 +106,18 @@ const getOrCreate = async ({ accountId, userId }): Promise<TopupAccount> => {
 };
 
 const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAccount: TopupAccount, amount: number, data: any }) => {
-    if (!process.env.BASE_URL) {
-        throw new Error(`no $BASE_URL in environment`);
-    }
+    const transactionDetails: TransactionDetails = {
+        type: 'topup',
+        amount,
+        data: {
+            ...data,
+            topupAccountId: topupAccount.id,
+            topupCustomerId: topupAccount.stripe.customer.id,
+        }
+    };
 
     try {
-        const account = await fetch(
-            `${process.env.BASE_URL}/transaction/v1/${topupAccount.accountId}`,
-            {
-                type: 'topup',
-                amount,
-                data: {
-                    ...data,
-                    topupAccountId: topupAccount.id,
-                    topupCustomerId: topupAccount.stripe.customer.id,
-                }
-            });
-
-        // in future this will be the transaction, but for now we return the balance
-        return account.balance;
-
+        return await createTransaction(topupAccount.accountId, transactionDetails);
     } catch (error) {
         // remap error message
         throw new Error(`couldn't add transaction: ${JSON.stringify(error)}`);
@@ -152,7 +144,7 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
         expand: ['balance_transaction']
     });
 
-    const accountBalance = await appendTopupTransaction({
+    const transactionDetails = await appendTopupTransaction({
         amount,
         topupAccount,
         data: {
@@ -163,7 +155,7 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
 
     topupAccount.stripe.nextChargeToken = uuid();
 
-    return accountBalance;
+    return transactionDetails;
 };
 
 const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupAccount> => {
@@ -234,8 +226,8 @@ router.post('/topup', (req, res) => {
     const { accountId, userId, amount, stripeToken } = req.body;
 
     attemptTopup({ accountId, userId, amount, stripeToken })
-        .then((accountBalance) => {
-            res.json({ response: { accountBalance } });
+        .then((transactionDetails: TransactionDetails) => {
+            res.json({ response: transactionDetails });
         })
         .catch((error) => {
             res.json({ error: error.message });
