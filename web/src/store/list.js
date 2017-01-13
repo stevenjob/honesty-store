@@ -1,11 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import List from '../chrome/list';
 import './list.css';
 
 const itemRenderer = (storeId) => (data, index) => (
-  <b>{storeId} Item {data}</b>
+  <b>{JSON.stringify(data)}</b>
 );
 
-export default ({ params: { storeId } }) => (
-  <List data={[1,2,3,4,5]} itemRenderer={itemRenderer(storeId)}/>
+const StoreList = ({ params: { storeId }, items }) => (
+  <List data={items} itemRenderer={itemRenderer(storeId)}/>
 );
+
+const mapStateToProps = ({ store: { items } }) => ({ items });
+
+export default connect(mapStateToProps)(StoreList);
