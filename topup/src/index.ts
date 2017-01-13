@@ -46,7 +46,7 @@ const stripeForUser = ({ test }) => {
 const get = async ({ userId }): Promise<TopupAccount> => {
     assertValidUserId(userId);
 
-    const response = await new DynamoDB.DocumentClient()
+    const queryResponse = await new DynamoDB.DocumentClient()
         .query({
             TableName: process.env.TABLE_NAME,
             IndexName: 'userId',
@@ -57,10 +57,20 @@ const get = async ({ userId }): Promise<TopupAccount> => {
         })
         .promise();
 
-        if (response.Items.length > 1) {
-            throw new Error(`Too many database entries for userId '${userId}'`);
-        }
-        return <TopupAccount>response.Items[0];
+    if (queryResponse.Items.length > 1) {
+        throw new Error(`Too many database entries for userId '${userId}'`);
+    }
+
+    const id = queryResponse.Items[0]['id'];
+
+    const getResponse = await new DynamoDB.DocumentClient()
+        .get({
+            TableName: process.env.TABLE_NAME,
+            Key: { id }
+        })
+        .promise();
+
+    return <TopupAccount>getResponse.Item;
 };
 
 const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
