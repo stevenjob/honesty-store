@@ -13,7 +13,7 @@ stores.set('sl-edn', allItems);
 stores.set('sl-brs', allItems);
 stores.set('sl-ldn', allItems);
 
-const getPrice = (itemID) => {
+export const getPrice = (itemID) => {
   const item = items.get(itemID);
   if (item == null) {
     throw new Error(`Item does not exist with ID '${itemID}'`);
@@ -21,7 +21,7 @@ const getPrice = (itemID) => {
   return item.price;
 };
 
-const getItems = (storeCode) => {
+export const getItems = (storeCode) => {
   const storeItemIDs = stores.get(storeCode);
 
   const storeItems = storeItemIDs.map((itemID) => {
@@ -35,5 +35,3 @@ const getItems = (storeCode) => {
 
   return storeItems;
 };
-
-module.exports = { getPrice, getItems };

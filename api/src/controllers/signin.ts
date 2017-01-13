@@ -1,7 +1,7 @@
 import HTTPStatus = require('http-status');
-const { sendEmailToken, updateRefreshToken } = require('../services/user');
-import getSessionData = require('../services/session');
-const { authenticateEmailToken } = require('../middleware/authenticate');
+import { sendEmailToken, updateRefreshToken } from '../services/user'
+import { getSessionData } from '../services/session'
+import { authenticateEmailToken } from '../middleware/authenticate'
 
 const setupSignInPhase1 = (router) => {
   router.post(
@@ -19,7 +19,7 @@ const setupSignInPhase2 = (router) => {
     '/signin2',
     authenticateEmailToken,
     (request, response) => {
-      const responseData = getSessionData(request.userID);
+      const responseData: any = getSessionData(request.userID);
 
       const { refreshToken } = updateRefreshToken(request.userID);
       responseData.refreshToken = refreshToken;
@@ -29,9 +29,7 @@ const setupSignInPhase2 = (router) => {
     });
 };
 
-const setupSignInPhases = (router) => {
+export default (router) => {
   setupSignInPhase1(router);
   setupSignInPhase2(router);
 };
-
-module.exports = setupSignInPhases;

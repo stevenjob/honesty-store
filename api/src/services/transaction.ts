@@ -11,27 +11,20 @@ const addTransaction = (transaction, userID) => {
   transactions.set(userID, userTransactions);
 };
 
-const addItemTransaction = (userID, itemPrice) => {
+export const addItemTransaction = (userID, itemPrice) => {
   const transaction = createTransaction('purchase', -itemPrice);
   addTransaction(transaction, userID);
   return transaction;
 };
 
-const addTopUpTransaction = (userID, amount) => {
+export const addTopUpTransaction = (userID, amount) => {
   const transaction = createTransaction('topup', amount);
   addTransaction(transaction, userID);
 };
 
-const getTransactionHistory = userID => transactions.get(userID) || [];
+export const getTransactionHistory = userID => transactions.get(userID) || [];
 
-const getBalance = (userID) => {
+export const getBalance = (userID) => {
   const userTransactions = getTransactionHistory(userID);
   return userTransactions.reduce((balance, transaction) => balance + transaction.amount, 0);
-};
-
-module.exports = {
-  addItemTransaction,
-  addTopUpTransaction,
-  getBalance,
-  getTransactionHistory,
 };

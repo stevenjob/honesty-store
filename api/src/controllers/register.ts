@@ -2,16 +2,16 @@ import isEmail = require('validator/lib/isEmail');
 import HTTPStatus = require('http-status');
 import winston = require('winston');
 
-const { registerUser, updateUser } = require('../services/user');
-const { getPrice } = require('../services/store');
-const { addItemTransaction, addTopUpTransaction } = require('../services/transaction');
-import getSessionData = require('../services/session');
-const { authenticateAccessToken } = require('../middleware/authenticate');
+import { registerUser, updateUser } from '../services/user';
+import { getPrice } from '../services/store';
+import { addItemTransaction, addTopUpTransaction } from '../services/transaction';
+import { getSessionData } from '../services/session';
+import { authenticateAccessToken } from '../middleware/authenticate';
 
 const register = (storeCode) => {
   const { id, accessToken, refreshToken } = registerUser(storeCode);
 
-  const response = getSessionData(id);
+  const response: any = getSessionData(id);
   response.refreshToken = refreshToken;
   response.accessToken = accessToken;
 
@@ -71,9 +71,7 @@ const setupRegisterPhase2 = (router) => {
     });
 };
 
-const setupRegisterPhases = (router) => {
+export default (router) => {
   setupRegisterPhase1(router);
   setupRegisterPhase2(router);
 };
-
-module.exports = setupRegisterPhases;

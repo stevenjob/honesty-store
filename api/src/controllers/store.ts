@@ -1,9 +1,9 @@
 import HTTPStatus = require('http-status');
-const { authenticateAccessToken } = require('../middleware/authenticate');
-const { updateDefaultStoreCode } = require('../services/user');
-const { getItems } = require('../services/store');
+import { authenticateAccessToken } from '../middleware/authenticate'
+import { updateDefaultStoreCode } from '../services/user'
+import { getItems } from '../services/store'
 
-const setupStoreEndpoint = (router) => {
+export default (router) => {
   router.post(
     '/store',
     authenticateAccessToken,
@@ -14,5 +14,3 @@ const setupStoreEndpoint = (router) => {
         .json({ response: getItems(storeCode) });
     });
 };
-
-module.exports = setupStoreEndpoint;

@@ -1,1 +1,1 @@
-exports.secretKey = 'XonXxkgMfWsCapNfQerZfE3k';
+export const secretKey = 'XonXxkgMfWsCapNfQerZfE3k';

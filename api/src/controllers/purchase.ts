@@ -1,9 +1,9 @@
 import HTTPStatus = require('http-status');
-const { authenticateAccessToken } = require('../middleware/authenticate');
-const { getPrice } = require('../services/store');
-const { addItemTransaction, getBalance } = require('../services/transaction');
+import { authenticateAccessToken } from '../middleware/authenticate';
+import { getPrice } from '../services/store';
+import { addItemTransaction, getBalance } from '../services/transaction';
 
-const setupPurchaseEndpoint = (router) => {
+export default (router) => {
   router.post(
     '/purchase',
     authenticateAccessToken,
@@ -29,5 +29,3 @@ const setupPurchaseEndpoint = (router) => {
       }
     });
 };
-
-module.exports = setupPurchaseEndpoint;

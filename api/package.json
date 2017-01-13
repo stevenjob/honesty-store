@@ -22,12 +22,13 @@
     "winston": "^2.3.0"
   },
   "devDependencies": {
+    "@types/http-status": "^0.2.29",
     "chai": "^3.5.0",
-    "tslint": "^4.0.0",
-    "tslint-microsoft-contrib": "^2.0.14",
-    "typescript": "^2.1.0",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
-    "request": "^2.79.0"
+    "request": "^2.79.0",
+    "tslint": "^4.0.0",
+    "tslint-microsoft-contrib": "^2.0.14",
+    "typescript": "^2.1.0"
   }
 }

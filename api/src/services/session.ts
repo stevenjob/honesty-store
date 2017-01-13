@@ -1,6 +1,6 @@
-const { getUser } = require('../services/user');
-const { getTransactionHistory, getBalance } = require('../services/transaction');
-const { getItems } = require('../services/store');
+import { getUser } from '../services/user'
+import { getTransactionHistory, getBalance } from '../services/transaction'
+import { getItems } from '../services/store'
 
 const maskCardNumber = (cardNumber) => {
   if (cardNumber != null) {
@@ -29,12 +29,10 @@ const getStoreSessionData = (userID) => {
   };
 };
 
-const getSessionData = (userID) => {
+export const getSessionData = (userID) => {
   const response = {
     user: getUserSessionData(userID),
     store: getStoreSessionData(userID),
   };
   return response;
 };
-
-module.exports = getSessionData;

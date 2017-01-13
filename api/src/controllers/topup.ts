@@ -1,9 +1,9 @@
 import HTTPStatus = require('http-status');
-const { authenticateAccessToken } = require('../middleware/authenticate');
-const { getBalance, addTopUpTransaction } = require('../services/transaction');
-const { updateCardDetails } = require('../services/user');
+import { authenticateAccessToken } from '../middleware/authenticate'
+import { getBalance, addTopUpTransaction } from '../services/transaction'
+import { updateCardDetails } from '../services/user'
 
-const setupTopUpEndpoint = (router) => {
+export default (router) => {
   router.post(
     '/topup',
     authenticateAccessToken,
@@ -21,5 +21,3 @@ const setupTopUpEndpoint = (router) => {
         });
     });
 };
-
-module.exports = setupTopUpEndpoint;

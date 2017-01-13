@@ -1,8 +1,8 @@
 import HTTPStatus = require('http-status');
-const { authenticateAccessToken } = require('../middleware/authenticate');
-const { expireRefreshToken } = require('../services/user');
+import { authenticateAccessToken } from '../middleware/authenticate';
+import { expireRefreshToken } from '../services/user';
 
-const setupLogOutEndpoint = (router) => {
+export default (router) => {
   router.post(
     '/logout',
     authenticateAccessToken,
@@ -12,5 +12,3 @@ const setupLogOutEndpoint = (router) => {
         .json({ response: {} });
     });
 };
-
-module.exports = setupLogOutEndpoint;

@@ -1,6 +1,6 @@
 import HTTPStatus = require('http-status');
-const { authenticateAccessToken } = require('../middleware/authenticate');
-const { getTransactionHistory } = require('../services/transaction');
+import { authenticateAccessToken } from '../middleware/authenticate'
+import { getTransactionHistory } from '../services/transaction'
 
 const getPagedTransactions = (userID, page) => {
   const allUserTransactions = getTransactionHistory(userID);
@@ -17,7 +17,7 @@ const getPagedTransactions = (userID, page) => {
   return { items, lastPage };
 };
 
-const setupTransactionsEndpoint = (router) => {
+export default (router) => {
   router.get(
     '/transactions',
     authenticateAccessToken,
@@ -32,5 +32,3 @@ const setupTransactionsEndpoint = (router) => {
         .json(responseData);
     });
 };
-
-module.exports = setupTransactionsEndpoint;

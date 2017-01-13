@@ -1,6 +1,6 @@
-const request = require('request');
-const assert = require('chai').assert;
-const { getUser, registerUser, __users } = require('../../src/services/user');
+import request from 'request';
+import { assert } from 'chai';
+import { getUser, registerUser, __users } from '../../src/services/user';
 
 require('../../src/app');
 

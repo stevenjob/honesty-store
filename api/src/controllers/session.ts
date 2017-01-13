@@ -1,14 +1,14 @@
 import HTTPStatus = require('http-status');
-const { authenticateRefreshToken } = require('../middleware/authenticate');
-const { updateAccessToken } = require('../services/user');
-import getSessionData = require('../services/session');
+import { authenticateRefreshToken } from '../middleware/authenticate';
+import { updateAccessToken } from '../services/user';
+import { getSessionData } from '../services/session';
 
-const setupSessionEndpoint = (router) => {
+export default (router) => {
   router.post(
     '/session',
     authenticateRefreshToken,
     (request, response) => {
-      const sessionResponse = getSessionData(request.userID);
+      const sessionResponse: any = getSessionData(request.userID);
 
       const { accessToken } = updateAccessToken(request.userID);
 
@@ -17,5 +17,3 @@ const setupSessionEndpoint = (router) => {
         .json({ response: sessionResponse });
     });
 };
-
-module.exports = setupSessionEndpoint;
