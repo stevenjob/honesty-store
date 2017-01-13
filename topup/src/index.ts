@@ -87,7 +87,7 @@ const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
 
 const getOrCreate = async ({ accountId, userId }): Promise<TopupAccount> => {
     assertValidAccountId(accountId);
-    assertValidAccountId(userId);
+    assertValidUserId(userId);
 
     const topupAccount: TopupAccount = await get({ userId });
 
