@@ -10,12 +10,14 @@ class Root extends React.Component {
     const { dispatch, routeParams: { storeId }} = this.props;
     dispatch(performFullRegistration(storeId));
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.routeParams.storeId !== this.props.routeParams.storeId) {
       const { dispatch, routeParams: { storeId } } = nextProps;
       dispatch(performFullRegistration(storeId));
     }
   }
+  
   render() {
     const { loading, title, body, routeParams: { storeId } } = this.props;
     return (
