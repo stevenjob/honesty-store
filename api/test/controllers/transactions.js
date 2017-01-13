@@ -3,7 +3,7 @@ const assert = require('chai').assert;
 const { registerUser } = require('../../src/services/user');
 const { addItemTransaction, getTransactionHistory } = require('../../src/services/transaction');
 
-const baseURL = 'http://localhost:3001/api/v1';
+const baseURL = 'http://localhost:3000/api/v1';
 
 describe('/transactions', () => {
   const generateDummyTransactions = (userID) => {
