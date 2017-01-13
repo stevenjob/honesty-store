@@ -14,7 +14,7 @@ describe('/transactions', () => {
   };
 
   const sendRequest = (page, callback) => {
-    const { id, accessToken } = registerUser('NCL');
+    const { id, accessToken } = registerUser('SL-NCL');
     generateDummyTransactions(id);
     request.get({
       uri: `${baseURL}/transactions?page=${page}`,

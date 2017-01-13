@@ -26,7 +26,7 @@ describe('/register', () => {
     };
 
     it('should contain a refresh token as part of its JSON response', (done) => {
-      sendRequest('NCL',
+      sendRequest('SL-NCL',
         (error, response, body) => {
           const refreshToken = body.response.refreshToken;
           assert.isNotNull(refreshToken);
@@ -35,7 +35,7 @@ describe('/register', () => {
     });
 
     it('should contain an access token as part of its JSON response', (done) => {
-      sendRequest('NCL',
+      sendRequest('SL-NCL',
         (error, response, body) => {
           const accessToken = body.response.accessToken;
           assert.isNotNull(accessToken);
@@ -44,7 +44,7 @@ describe('/register', () => {
     });
 
     it('should contain session data as part of its JSON response', (done) => {
-      const storeCode = 'NCL';
+      const storeCode = 'SL-NCL';
       sendRequest(storeCode,
         (error, response, body) => {
           const userID = getUserIDFromAccessToken(body.response.accessToken);
@@ -59,7 +59,7 @@ describe('/register', () => {
 
 describe('/register2', () => {
   const sendRequest = (attributes, callback) => {
-    const { accessToken } = registerUser('NCL');
+    const { accessToken } = registerUser('SL-NCL');
     request.post({
       uri: `${baseURL}/register2`,
       auth: {

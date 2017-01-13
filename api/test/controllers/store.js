@@ -29,7 +29,7 @@ describe('/store', () => {
 
   it('should return the items associated with given store when store code is valid',
     (done) => {
-      const storeCode = 'NCL';
+      const storeCode = 'SL-NCL';
       const { accessToken } = registerUser(storeCode);
       sendRequest(accessToken,
         storeCode,
@@ -42,10 +42,10 @@ describe('/store', () => {
 
   it('should update the user\'s default store',
     (done) => {
-      const initialStoreCode = 'NCL';
+      const initialStoreCode = 'SL-NCL';
       const { id, accessToken } = registerUser(initialStoreCode);
 
-      const newStoreCode = 'EDIN';
+      const newStoreCode = 'SL-EDN';
       sendRequest(accessToken,
         newStoreCode,
         () => {

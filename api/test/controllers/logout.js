@@ -13,7 +13,7 @@ describe('/logout', () => {
 
   it('should \'expire\' the user\'s refresh token',
     (done) => {
-      const { id, accessToken } = registerUser('NCL');
+      const { id, accessToken } = registerUser('SL-NCL');
       request.post({
         uri: `${baseURL}/logout`,
         auth: {

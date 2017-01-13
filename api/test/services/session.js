@@ -11,7 +11,7 @@ describe('Session Service', () => {
 
   it('should return masked user card number',
     () => {
-      const user = registerUser('NCL');
+      const user = registerUser('SL-NCL');
       const cardDetails = '1234123412341234';
       updateUser(user.id, '', cardDetails);
 
@@ -23,7 +23,7 @@ describe('Session Service', () => {
 
   it('should return user transaction details',
     () => {
-      const user = registerUser('NCL');
+      const user = registerUser('SL-NCL');
       const itemPrices = [20, 50];
 
       addItemTransaction(user.id, itemPrices[0]);
@@ -39,7 +39,7 @@ describe('Session Service', () => {
 
   it('should return user\'s balance',
     () => {
-      const user = registerUser('NCL');
+      const user = registerUser('SL-NCL');
       const itemPrice = 100;
 
       addItemTransaction(user.id, itemPrice);
@@ -52,7 +52,7 @@ describe('Session Service', () => {
 
   it('should return store items',
     () => {
-      const storeCode = 'NCL';
+      const storeCode = 'SL-NCL';
       const user = registerUser(storeCode);
 
       const sessionData = getSessionData(user.id);
@@ -63,7 +63,7 @@ describe('Session Service', () => {
 
   it('should return user\'s default Store Code',
     () => {
-      const storeCode = 'NCL';
+      const storeCode = 'SL-NCL';
       // When registering, we set the user's current store to be 'storeCode'
       const user = registerUser(storeCode);
 

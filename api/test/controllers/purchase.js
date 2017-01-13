@@ -17,7 +17,7 @@ describe('/purchase', () => {
 
   it('should return \'OK\' response and error message when given invalid Item ID',
     (done) => {
-      const { accessToken } = registerUser('NCL');
+      const { accessToken } = registerUser('SL-NCL');
 
       request.post({
         uri: `${baseURL}/purchase`,
@@ -39,7 +39,7 @@ describe('/purchase', () => {
   it('should return \'OK\' response and response data when given valid Item ID',
     (done) => {
       const itemID = 1;
-      const { id, accessToken } = registerUser('NCL');
+      const { id, accessToken } = registerUser('SL-NCL');
 
       const balanceBeforePurchase = getBalance(id);
 
