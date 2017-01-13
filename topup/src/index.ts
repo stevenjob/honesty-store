@@ -180,6 +180,7 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
     });
 
     topupAccount.stripe.nextChargeToken = uuid();
+    await update({ topupAccount });
 
     return transactionDetails;
 };
