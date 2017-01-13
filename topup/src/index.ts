@@ -7,22 +7,12 @@ import isUUID = require('validator/lib/isUUID');
 import * as stripeFactory from 'stripe';
 import { TransactionDetails, TransactionAndBalance, createTransaction } from '../../transaction/src/client/index';
 
+import { TopupAccount, TopupRequest } from './client/index';
+
 const stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
 const stripeProd = stripeFactory(process.env.STRIPE_SECRET_KEY_LIVE);
 
 config.region = process.env.AWS_REGION;
-
-interface TopupAccount {
-    id: string;
-    accountId: string;
-    userId: string;
-    test: boolean;
-
-    stripe?: {
-        customer: any;
-        nextChargeToken: string;
-    };
-};
 
 const createAssertValidUuid = (name) =>
     (uuid) => {
@@ -218,7 +208,7 @@ const addStripeTokenToAccount = async ({ topupAccount, stripeToken }): Promise<T
     return await recordCustomerDetails({ customer, topupAccount });
 };
 
-const attemptTopup = async ({ accountId, userId, amount, stripeToken }) => {
+const attemptTopup = async ({ accountId, userId, amount, stripeToken }: TopupRequest) => {
     const topupAccount = await getOrCreate({ accountId, userId });
 
     if (stripeToken) {
