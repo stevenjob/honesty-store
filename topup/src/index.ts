@@ -130,7 +130,7 @@ const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAcc
         return await createTransaction(topupAccount.accountId, transactionDetails);
     } catch (error) {
         // remap error message
-        throw new Error(`couldn't add transaction: ${JSON.stringify(error)}`);
+        throw new Error(`couldn't add transaction: ${error.message}`);
     }
 };
 
