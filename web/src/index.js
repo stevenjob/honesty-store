@@ -16,7 +16,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import reducer from './reducers/reducer';
-import { performFullRegistration } from './actions/register';
+
 
 const middlewares = [thunkMiddleware];
 
@@ -29,8 +29,6 @@ const store = createStore(
   reducer,
   applyMiddleware(...middlewares)
 );
-
-store.dispatch(performFullRegistration('NCL'));
 
 ReactDOM.render((
   <Provider store={store}>

@@ -3,8 +3,8 @@ items.set(0, { name: 'Twix', price: 20 });
 items.set(1, { name: 'Mars', price: 30 });
 
 const stores = new Map();
-stores.set('NCL', [0, 1]);
-stores.set('EDIN', [1]);
+stores.set('SL-NCL', [0, 1]);
+stores.set('SL-EDN', [1]);
 
 const getPrice = (itemID) => {
   const item = items.get(itemID);
