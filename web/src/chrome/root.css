@@ -16,4 +16,6 @@ body {
   margin-top: 6rem; /* title-bar height */
   margin-bottom: 6rem; /* nav-bar height */
   padding: 0 1rem;
+  width: 100%;
+  overflow: hidden;
 }
