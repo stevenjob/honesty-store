@@ -1,6 +1,6 @@
 import React from 'react';
 import List from '../chrome/list';
-import './list.css'
+import './list.css';
 
 const itemRenderer = (data, index) => (
   <b>Transaction {data}</b>

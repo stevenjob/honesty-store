@@ -1,6 +1,6 @@
 import React from 'react';
 import List from '../chrome/list';
-import './list.css'
+import './list.css';
 
 const itemRenderer = (storeId) => (data, index) => (
   <b>{storeId} Item {data}</b>

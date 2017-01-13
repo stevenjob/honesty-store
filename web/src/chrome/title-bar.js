@@ -1,6 +1,6 @@
 import React from 'react';
 import { BRAND_DARK, BRAND_WHITE, LIGHT_TEXT } from './colors';
-import './title-bar.css'
+import './title-bar.css';
 
 export default ({ title, subtitle }) => (
   <header className="chrome-title-bar" style={{ background: BRAND_WHITE }}>

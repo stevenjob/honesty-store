@@ -1,6 +1,6 @@
 import React from 'react';
 import { MUTED_TEXT } from './colors';
-import './list.css'
+import './list.css';
 
 export default ({ data, itemRenderer }) => (
   <ul className="chrome-list">

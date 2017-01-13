@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router'
+import { Link } from 'react-router';
 import { BRAND_DARK, BRAND_WHITE, MUTED_TEXT } from './colors';
-import './nav-bar.css'
+import './nav-bar.css';
 
 const NavLink = ({ path, label, storeId }) => (
   <Link to={`/${storeId}${path}`}
