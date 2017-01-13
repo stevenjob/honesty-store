@@ -142,17 +142,33 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
         throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please provide stripeToken`);
     }
 
-    const charge = await stripeForUser(topupAccount).charges.create({
-        amount,
-        currency: 'gbp',
-        customer: topupAccount.stripe.customer.id,
-        description: `topup for ${topupAccount.accountId}`,
-        metadata: {
-            accountId: topupAccount.accountId
+    let charge;
+    try {
+        charge = await stripeForUser(topupAccount).charges.create({
+            amount,
+            currency: 'gbp',
+            customer: topupAccount.stripe.customer.id,
+            description: `topup for ${topupAccount.accountId}`,
+            metadata: {
+                accountId: topupAccount.accountId
+            },
+            expand: ['balance_transaction'],
         },
-        idempotency_key: topupAccount.stripe.nextChargeToken,
-        expand: ['balance_transaction']
-    });
+        {
+            idempotency_key: topupAccount.stripe.nextChargeToken,
+        });
+    } catch (error) {
+        if (error.message === 'Must provide source or customer.') {
+            /* Note to future devs: this error appears to be a bug with stripe's API.
+             *
+             * We've correctly provided a customer, so the error seems odd. I
+             * believe it's to do with the idempotency_key being incorrect, so
+             * that's the first place to start looking. */
+            throw new Error(`${error.message} (from topup: or the idempotency_key has already been used)`);
+        }
+
+        throw error;
+    }
 
     const transactionDetails = await appendTopupTransaction({
         amount,
