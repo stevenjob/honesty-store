@@ -1,11 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import List from '../chrome/list';
 import './list.css';
 
 const itemRenderer = (data, index) => (
-  <b>Transaction {data}</b>
+  <b>{JSON.stringify(data)}</b>
 );
 
-export default ({ children }) => (
-  <List data={[1,2,3,4,5]} itemRenderer={itemRenderer}/>
+const HistoryList = ({ transactions }) => (
+  <List data={transactions} itemRenderer={itemRenderer}/>
 );
+
+const mapStateToProps = ({ user: { transactions } }) => ({ transactions });
+
+export default connect(mapStateToProps)(HistoryList);
