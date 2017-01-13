@@ -49,7 +49,7 @@ export const getAccount = async (accountId: string): Promise<Account> => {
     return response.response;
 };
 
-export const createTransaction = async (accountId: string, transaction: TransactionDetails): Promise<Account> => {
+export const createTransaction = async (accountId: string, transaction: TransactionDetails): Promise<TransactionDetails> => {
     const response = await fetch(`${baseUrl}/transaction/v1/${accountId}`, {
         method: 'POST',
         headers: {
@@ -57,7 +57,7 @@ export const createTransaction = async (accountId: string, transaction: Transact
         },
         body: JSON.stringify(transaction)
     })
-        .then<ApiResponse<Account>>(response => response.json());
+        .then<ApiResponse<TransactionDetails>>(response => response.json());
     if (response.error) {
         throw new Error(response.error.message);
     }
