@@ -1,9 +1,6 @@
 import fetch from 'node-fetch';
 
-export interface ApiResponse<T> {
-    response?: T;
-    error?: { message: string };
-}
+import { ApiResponse } from '../../../shared/types';
 
 export interface TransactionDetails {
     type: 'topup' | 'purchase';
