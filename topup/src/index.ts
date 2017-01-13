@@ -129,7 +129,7 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
     || !topupAccount.stripe.customer
     || !topupAccount.stripe.nextChargeToken)
     {
-        throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''} account ${topupAccount.accountId}`);
+        throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId}`);
     }
 
     const charge = await stripeForUser(topupAccount).charges.create({
