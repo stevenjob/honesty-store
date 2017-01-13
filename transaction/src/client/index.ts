@@ -26,7 +26,7 @@ export interface Account {
 const baseUrl = process.env.BASE_URL;
 
 export const createAccount = async (accountId: string): Promise<Account> => {
-    const response = await fetch(`${baseUrl}/Account/v1/`, {
+    const response = await fetch(`${baseUrl}/transaction/v1/`, {
         method: 'POST',
         headers: {
             'content-type': 'application/json'
@@ -41,7 +41,7 @@ export const createAccount = async (accountId: string): Promise<Account> => {
 };
 
 export const getAccount = async (accountId: string): Promise<Account> => {
-    const response = await fetch(`${baseUrl}/Account/v1/${accountId}`)
+    const response = await fetch(`${baseUrl}/transaction/v1/${accountId}`)
         .then<ApiResponse<Account>>(response => response.json());
     if (response.error) {
         throw new Error(response.error.message);
@@ -50,7 +50,7 @@ export const getAccount = async (accountId: string): Promise<Account> => {
 };
 
 export const createTransaction = async (accountId: string, transaction: TransactionDetails): Promise<Account> => {
-    const response = await fetch(`${baseUrl}/Account/v1/${accountId}`, {
+    const response = await fetch(`${baseUrl}/transaction/v1/${accountId}`, {
         method: 'POST',
         headers: {
             'content-type': 'application/json'
