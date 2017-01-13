@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import { ApiResponse } from '../../../shared/types';
 import { TransactionAndBalance } from '../../../transaction/src/client/index';
+import { baseUrl } from '../../../shared/baseUrl';
 
 export interface TopupAccount {
     id: string;
@@ -20,8 +21,6 @@ export interface TopupRequest {
     amount: number;
     stripeToken: string;
 };
-
-const baseUrl = process.env.BASE_URL;
 
 export const createTopup = async (request: TopupRequest): Promise<TransactionAndBalance> => {
     const response = await fetch(`${baseUrl}/topup/v1/`, {

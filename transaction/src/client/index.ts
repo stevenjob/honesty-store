@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 
 import { ApiResponse } from '../../../shared/types';
+import { baseUrl } from '../../../shared/baseUrl';
 
 export interface TransactionDetails {
     type: 'topup' | 'purchase';
@@ -24,8 +25,6 @@ export interface TransactionAndBalance {
     transaction: TransactionDetails;
     balance: number;
 };
-
-const baseUrl = process.env.BASE_URL;
 
 export const createAccount = async (accountId: string): Promise<Account> => {
     const response = await fetch(`${baseUrl}/transaction/v1/`, {
