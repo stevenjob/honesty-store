@@ -31,19 +31,8 @@
         {
             "id": "df39d529-8f35-4e04-a91f-408c189563f1",
             "accountId": "b423607f-64de-441f-ac39-12d50aaedbe9",
-            "userId": "a4b9dae6-10fa-4230-bed8-8568dd1a9ecf",
-            "test": true,
-            "stripe": {
-                "customer": {
-                    "id": "cus_9trnsH8fhkqWtr",
-                    "card": {
-                        "exp_month": 8,
-                        "exp_year": 2050,
-                        "last4": "4242"
-                    }
-                },
-                "nextChargeToken": "d31644f2-692e-4b25-8263-265f58522c43"
-            }
+            "userId": "c50234ff-6c33-4878-a1ab-05f6b3e7b649",
+            "test": true
         }
     ]
 }
