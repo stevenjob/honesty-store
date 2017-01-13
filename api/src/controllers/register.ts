@@ -1,11 +1,11 @@
-const isEmail = require('validator/lib/isEmail');
-const HTTPStatus = require('http-status');
-const winston = require('winston');
+import isEmail = require('validator/lib/isEmail');
+import HTTPStatus = require('http-status');
+import winston = require('winston');
 
 const { registerUser, updateUser } = require('../services/user');
 const { getPrice } = require('../services/store');
 const { addItemTransaction, addTopUpTransaction } = require('../services/transaction');
-const getSessionData = require('../services/session');
+import getSessionData = require('../services/session');
 const { authenticateAccessToken } = require('../middleware/authenticate');
 
 const register = (storeCode) => {

@@ -1,4 +1,4 @@
-const HTTPStatus = require('http-status');
+import HTTPStatus = require('http-status');
 const { authenticateAccessToken } = require('../middleware/authenticate');
 const { getBalance, addTopUpTransaction } = require('../services/transaction');
 const { updateCardDetails } = require('../services/user');

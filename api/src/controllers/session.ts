@@ -1,7 +1,7 @@
-const HTTPStatus = require('http-status');
+import HTTPStatus = require('http-status');
 const { authenticateRefreshToken } = require('../middleware/authenticate');
 const { updateAccessToken } = require('../services/user');
-const getSessionData = require('../services/session');
+import getSessionData = require('../services/session');
 
 const setupSessionEndpoint = (router) => {
   router.post(

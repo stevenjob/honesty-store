@@ -1,6 +1,6 @@
-const HTTPStatus = require('http-status');
+import HTTPStatus = require('http-status');
 const { sendEmailToken, updateRefreshToken } = require('../services/user');
-const getSessionData = require('../services/session');
+import getSessionData = require('../services/session');
 const { authenticateEmailToken } = require('../middleware/authenticate');
 
 const setupSignInPhase1 = (router) => {

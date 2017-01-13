@@ -1,6 +1,6 @@
-const jsonwebtoken = require('jsonwebtoken');
-const uuid = require('uuid/v4');
-const winston = require('winston');
+import jsonwebtoken = require('jsonwebtoken');
+import uuid = require('uuid/v4');
+import winston = require('winston');
 const { secretKey } = require('../constants');
 
 const generateExpirableToken = () => {

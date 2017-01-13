@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const HTTPStatus = require('http-status');
+import jwt = require('jsonwebtoken');
+import HTTPStatus = require('http-status');
 const { secretKey } = require('../constants');
 const { getUserIDFromAccessToken, getUserIDFromRefreshToken, getUserIDFromEmailToken } = require('../services/user');
 
