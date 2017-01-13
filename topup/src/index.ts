@@ -75,7 +75,7 @@ const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
             UpdateExpression:
                 `set stripe = :stripe, accountId = :accountId, userId = :userId`,
             ExpressionAttributeValues: {
-                ':stripe': topupAccount.stripe,
+                ':stripe': topupAccount.stripe || {},
                 ':accountId': topupAccount.accountId,
                 ':userId': topupAccount.userId,
             },
