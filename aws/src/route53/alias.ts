@@ -49,6 +49,10 @@ export const pruneAliases = async ({ filter = (name: string) => false }) => {
             if (resourceRecordSet.Type !== 'CNAME') {
                 return false;
             }
+            if (resourceRecordSet.Name.match(/_domainkey/)) {
+                // required for DKIM email signing
+                return false;
+            }
             return filter(extractName(resourceRecordSet.Name));
         });
 
