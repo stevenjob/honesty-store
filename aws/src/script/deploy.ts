@@ -10,6 +10,7 @@ import { createHash } from 'crypto';
 import { ensureService, waitForServicesStable } from '../ecs/service';
 import { ensureTable } from '../dynamodb/table';
 import { ensureAlias, aliasToBaseUrl } from '../route53/alias';
+import { ensureLogGroup } from '../cloudwatchlogs/loggroup';
 import * as winston from 'winston';
 
 export const prefix = 'hs';
@@ -74,6 +75,11 @@ export default async ({ branch, dirs }) => {
         defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn
     });
     const services: ECS.Service[] = await Promise.all(dirs.map(async (dir) => {
+        const logGroup = `${prefix}-${branch}-${dir}`;
+        await ensureLogGroup({
+            name: logGroup,
+            retention: branch === 'master' ? 30 : 1
+        })
         const targetGroup = await ensureTargetGroup({
             name: `${prefix}-${branch}-${dir}`
         });

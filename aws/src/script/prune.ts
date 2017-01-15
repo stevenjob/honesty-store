@@ -11,6 +11,7 @@ import { pruneImages } from '../ecr/image';
 import { getOriginBranchNames } from '../git/branch';
 import { pruneTables } from '../dynamodb/table';
 import { pruneAliases } from '../route53/alias';
+import { pruneLogGroups } from '../cloudwatchlogs/loggroup'
 import * as winston from 'winston';
 import ms = require('ms');
 
@@ -58,4 +59,8 @@ export default async () => {
     await pruneTables({
         filter
     });
+
+    await pruneLogGroups({
+        filter: ({ name }) => filter(name)
+    })
 };
