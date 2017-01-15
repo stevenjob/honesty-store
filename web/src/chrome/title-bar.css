@@ -9,15 +9,22 @@
   height: 5.9rem;
   margin-bottom: 0.1rem;
   overflow: hidden; /* prevent margin collapse */
-  text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .chrome-title-bar>div>h1 {
   font-size: 2.4rem;
-  margin: 0.5rem;
+  margin: auto;
+  margin-bottom: 0;
+}
+
+.chrome-title-bar>div>h1:last-child {
+  margin-bottom: auto;
 }
 
 .chrome-title-bar>div>h2 {
   font-size: 1.4rem;
-  margin: 0;
+  margin: auto;
+  margin-top: 0;
 }
