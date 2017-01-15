@@ -100,6 +100,7 @@ export default async ({ branch, dirs }) => {
             name: dir,
             data: {
                 image,
+                logGroup,
                 tableName: db.TableName,
                 baseUrl
             }

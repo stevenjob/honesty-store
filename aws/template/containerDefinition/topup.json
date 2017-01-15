@@ -31,6 +31,14 @@
                 "name": "STRIPE_SECRET_KEY_TEST",
                 "value": "sk_test_Bl10VC4MyzRrhd41nq4f31jD"
             }
-        ]
+        ],
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-group": "${logGroup}",
+                "awslogs-region": "eu-west-1",
+                "awslogs-stream-prefix": "container"
+            }
+        }
     }
 ]

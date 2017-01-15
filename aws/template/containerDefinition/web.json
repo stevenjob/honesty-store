@@ -9,6 +9,14 @@
                 "containerPort": 8080,
                 "protocol": "tcp"
             }
-        ]
+        ],
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-group": "${logGroup}",
+                "awslogs-region": "eu-west-1",
+                "awslogs-stream-prefix": "container"
+            }
+        }
     }
 ]
