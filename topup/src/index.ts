@@ -134,17 +134,9 @@ const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAcc
     }
 };
 
-const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: TopupAccount, amount: number }) => {
-    if (!topupAccount.stripe
-    || !topupAccount.stripe.customer
-    || !topupAccount.stripe.nextChargeToken)
-    {
-        throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please provide stripeToken`);
-    }
-
-    let charge;
+const createStripeCharge = async ({ topupAccount, amount }: { topupAccount: TopupAccount, amount: number }) => {
     try {
-        charge = await stripeForUser(topupAccount).charges.create({
+        return await stripeForUser(topupAccount).charges.create({
             amount,
             currency: 'gbp',
             customer: topupAccount.stripe.customer.id,
@@ -169,6 +161,17 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
 
         throw error;
     }
+};
+
+const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: TopupAccount, amount: number }) => {
+    if (!topupAccount.stripe
+    || !topupAccount.stripe.customer
+    || !topupAccount.stripe.nextChargeToken)
+    {
+        throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please provide stripeToken`);
+    }
+
+    const charge = await createStripeCharge({ topupAccount, amount });
 
     const transactionDetails = await appendTopupTransaction({
         amount,
