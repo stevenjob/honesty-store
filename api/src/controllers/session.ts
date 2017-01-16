@@ -8,12 +8,17 @@ export default (router) => {
     '/session',
     authenticateRefreshToken,
     (request, response) => {
-      const sessionResponse: any = getSessionData(request.userID);
+        getSessionData(request.userID)
+            .then((sessionResponse: any) => {
+                const { accessToken } = updateAccessToken(request.userID);
 
-      const { accessToken } = updateAccessToken(request.userID);
-
-      sessionResponse.accessToken = accessToken;
-      response.status(HTTPStatus.OK)
-        .json({ response: sessionResponse });
+                sessionResponse.accessToken = accessToken;
+                response.status(HTTPStatus.OK)
+                    .json({ response: sessionResponse });
+            })
+            .catch((error) => {
+                response.status(HTTPStatus.INTERNAL_SERVER_ERROR)
+                    .json({ error: error.message });
+            });
     });
 };

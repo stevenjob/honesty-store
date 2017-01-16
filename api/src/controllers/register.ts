@@ -8,17 +8,17 @@ import { addItemTransaction, addTopUpTransaction } from '../services/transaction
 import { getSessionData } from '../services/session';
 import { authenticateAccessToken } from '../middleware/authenticate';
 
-const register = (storeCode) => {
+const register = async (storeCode) => {
   const { id, accessToken, refreshToken } = registerUser(storeCode);
 
-  const response: any = getSessionData(id);
+  const response: any = await getSessionData(id);
   response.refreshToken = refreshToken;
   response.accessToken = accessToken;
 
   return { response };
 };
 
-const register2 = (userID, emailAddress, cardDetails, topUpAmount, purchasedItemID) => {
+const register2 = async (userID, emailAddress, cardDetails, topUpAmount, purchasedItemID) => {
   updateUser(userID, emailAddress, cardDetails);
 
   try {
@@ -32,7 +32,7 @@ const register2 = (userID, emailAddress, cardDetails, topUpAmount, purchasedItem
     winston.warn(e.message);
   }
 
-  const response = getSessionData(userID);
+  const response = await getSessionData(userID);
   return { response };
 };
 
@@ -41,9 +41,13 @@ const setupRegisterPhase1 = (router) => {
     '/register',
     (request, response) => {
       const { storeCode } = request.body;
-      const responseData = register(storeCode);
-      response.status(HTTPStatus.OK)
-        .json(responseData);
+      register(storeCode)
+        .then((responseData) =>
+            response.status(HTTPStatus.OK)
+                .json(responseData))
+        .catch((error) =>
+            response.status(HTTPStatus.INTERNAL_SERVER_ERROR)
+                .json({ error: error.message }))
     });
 };
 
@@ -65,9 +69,13 @@ const setupRegisterPhase2 = (router) => {
 
       const { cardDetails, itemID, topUpAmount } = request.body;
       const { userID } = request;
-      const responseData = register2(userID, emailAddress, cardDetails, topUpAmount, itemID);
-      response.status(HTTPStatus.OK)
-        .json(responseData);
+      register2(userID, emailAddress, cardDetails, topUpAmount, itemID)
+        .then((responseData) =>
+          response.status(HTTPStatus.OK)
+            .json(responseData))
+        .catch((error) =>
+          response.status(HTTPStatus.INTERNAL_SERVER_ERROR)
+            .json({ error: error.message }));
     });
 };
 

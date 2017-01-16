@@ -19,13 +19,18 @@ const setupSignInPhase2 = (router) => {
     '/signin2',
     authenticateEmailToken,
     (request, response) => {
-      const responseData: any = getSessionData(request.userID);
+      getSessionData(request.userID)
+        .then((responseData: any) => {
+            const { refreshToken } = updateRefreshToken(request.userID);
+            responseData.refreshToken = refreshToken;
 
-      const { refreshToken } = updateRefreshToken(request.userID);
-      responseData.refreshToken = refreshToken;
-
-      response.status(HTTPStatus.OK)
-        .json({ response: responseData });
+            response.status(HTTPStatus.OK)
+                .json({ response: responseData });
+        })
+        .catch((error) => {
+            response.status(HTTPStatus.INTERNAL_SERVER_ERROR)
+                .json({ error: error.message });
+        });
     });
 };
 

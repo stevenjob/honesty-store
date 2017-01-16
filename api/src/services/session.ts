@@ -9,13 +9,13 @@ const maskCardNumber = (cardNumber) => {
   return null;
 };
 
-const getUserSessionData = (userID) => {
+const getUserSessionData = async (userID) => {
   const { cardDetails } = getUser(userID);
   const maskedCardNumber = maskCardNumber(cardDetails);
-  const recentTransactions = getTransactionHistory(userID).slice(0, 10);
+  const recentTransactions = (await getTransactionHistory(userID)).slice(0, 10);
 
   return {
-    balance: getBalance(userID),
+    balance: await getBalance(userID),
     transactions: recentTransactions,
     cardNumber: maskedCardNumber,
   };
@@ -29,9 +29,9 @@ const getStoreSessionData = (userID) => {
   };
 };
 
-export const getSessionData = (userID) => {
+export const getSessionData = async (userID) => {
   const response = {
-    user: getUserSessionData(userID),
+    user: await getUserSessionData(userID),
     store: getStoreSessionData(userID),
   };
   return response;

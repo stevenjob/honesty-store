@@ -13,12 +13,16 @@ export default (router) => {
       try {
         const price = getPrice(itemID);
         const transaction = addItemTransaction(request.userID, price);
-        const responseData = {
-          balance: getBalance(request.userID),
-          transaction,
-        };
-        response.status(HTTPStatus.OK)
-          .json({ response: responseData });
+
+        getBalance(request.userID)
+            .then((balance) => {
+                const responseData = {
+                    balance,
+                    transaction,
+                };
+                response.status(HTTPStatus.OK)
+                .json({ response: responseData });
+            });
       } catch (e) {
         response.status(HTTPStatus.OK)
           .json({
