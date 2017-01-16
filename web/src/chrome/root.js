@@ -1,7 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import NavBar from './nav-bar';
-import { BRAND_DARK } from './colors';
 import { performFullRegistration } from '../actions/register';
 import './fonts.css';
 import './root.css';
@@ -20,27 +18,8 @@ class Root extends React.Component {
   }
 
   render() {
-    const {
-      routeParams: { storeId },
-      loading,
-      title,
-      body,
-      nav = <NavBar storeId={storeId}/>
-    } = this.props;
-    return (
-      <div className="chrome-root">
-        {title}
-        <section style={{color: BRAND_DARK }}>
-          { loading ? "Loading..." : body }
-        </section>
-        {nav}
-      </div>
-    );
+    return this.props.children;
   }
 }
 
-const mapStateToProps = ({ pending }) => ({
-  loading: pending.length > 0
-});
-
-export default connect(mapStateToProps)(Root);
+export default connect(() => ({}))(Root);

@@ -1,5 +1,5 @@
 import React from 'react';
-import './intro.css';
+import './index.css';
 
 export default ({ children }) => (
   <div>

@@ -1,0 +1,42 @@
+.chrome-page {
+  height: 100%;
+}
+
+.chrome-page-title-bar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 6rem;
+  display: flex;
+  padding: 1rem;
+}
+.chrome-page-title-bar-middle {
+  text-align: center;
+  flex: 1;
+  align-self: center;
+}
+
+.chrome-page-title-bar-middle>h1 {
+  font-size: 2.4rem;
+  margin: 0;
+}
+
+.chrome-page-title-bar-middle>h2 {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.chrome-page-title-bar-right, .chrome-page-title-bar-left {
+  align-self: center;
+  width: 20%;
+}
+
+.chrome-page>section {
+  font-size: 1.4rem;
+  margin-top: 6rem; /* title-bar height */
+  margin-bottom: 6rem; /* nav-bar height */
+  padding: 0 1rem;
+  width: 100%;
+  overflow: hidden;
+}
