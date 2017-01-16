@@ -27,5 +27,5 @@
     "uuid": "^3.0.1",
     "validator": "^6.2.1"
   },
-  "main": "lib/index.js"
+  "main": "lib/topup/src/index.js"
 }
