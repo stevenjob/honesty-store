@@ -10,6 +10,7 @@
   height: 6rem;
   display: flex;
   padding: 1rem;
+  border-bottom: 1px solid black;
 }
 .chrome-page-title-bar-middle {
   text-align: center;

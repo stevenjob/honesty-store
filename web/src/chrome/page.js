@@ -1,11 +1,11 @@
 import React from 'react';
 import NavBar from './nav-bar';
-import { BRAND_DARK, BRAND_WHITE, LIGHT_TEXT } from './colors';
+import { BRAND_DARK, BRAND_WHITE, MUTED_TEXT, LIGHT_TEXT } from './colors';
 import './page.css';
 
 const headerStyles = (invert) => invert ?
-  { border: BRAND_WHITE, background: BRAND_WHITE, color: BRAND_DARK } :
-  { border: BRAND_WHITE, background: BRAND_DARK, color: LIGHT_TEXT };
+  { borderColor: BRAND_WHITE, background: BRAND_WHITE, color: BRAND_DARK } :
+  { borderColor: BRAND_WHITE, background: BRAND_DARK, color: LIGHT_TEXT };
 
 export default ({ title, subtitle, left, right, invert = false, children, nav = true, storeId, loading }) =>
   <div className="chrome-page">
