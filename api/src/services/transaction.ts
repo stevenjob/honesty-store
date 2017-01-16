@@ -1,30 +1,37 @@
-const transactions = new Map();
+import { createTransaction, getAccount, TransactionDetails } from '../../../transaction/src/client/index';
+import { getUsersAccountId } from '../../../user/src/client/index';
 
-const createTransaction = (type, amount) => {
-  const transaction = { date: Date.now(), amount, type };
-  return transaction;
+export const addItemTransaction = async (userID, itemPrice) => {
+  const transaction: TransactionDetails = {
+      type: 'purchase',
+      amount: -itemPrice,
+      data: {}
+  };
+
+  return await createTransaction(
+    await getUsersAccountId(userID),
+    transaction);
 };
 
-const addTransaction = (transaction, userID) => {
-  const userTransactions = transactions.get(userID) || [];
-  userTransactions.push(transaction);
-  transactions.set(userID, userTransactions);
+export const addTopUpTransaction = async (userID, amount) => {
+  const transaction: TransactionDetails = {
+      type: 'topup',
+      amount,
+      data: {}
+  };
+
+  return await createTransaction(
+    await getUsersAccountId(userID),
+    transaction);
 };
 
-export const addItemTransaction = (userID, itemPrice) => {
-  const transaction = createTransaction('purchase', -itemPrice);
-  addTransaction(transaction, userID);
-  return transaction;
+export const getTransactionHistory = async (userID) => {
+    const { transactions } = await getAccount(await getUsersAccountId(userID));
+
+    return transactions;
 };
 
-export const addTopUpTransaction = (userID, amount) => {
-  const transaction = createTransaction('topup', amount);
-  addTransaction(transaction, userID);
-};
-
-export const getTransactionHistory = userID => transactions.get(userID) || [];
-
-export const getBalance = (userID) => {
-  const userTransactions = getTransactionHistory(userID);
+export const getBalance = async (userID) => {
+  const userTransactions = await getTransactionHistory(userID);
   return userTransactions.reduce((balance, transaction) => balance + transaction.amount, 0);
 };
