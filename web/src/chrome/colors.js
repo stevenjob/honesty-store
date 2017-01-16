@@ -5,3 +5,5 @@ export const BRAND_HIGHLIGHT = '#FFCD00';
 
 export const LIGHT_TEXT = '#FFFFFF';
 export const MUTED_TEXT = '#A9B8B9';
+
+export const DANGER = '#AE0000';
