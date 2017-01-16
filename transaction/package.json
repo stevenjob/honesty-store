@@ -2,7 +2,7 @@
   "name": "@honesty-store/transaction",
   "version": "0.0.0",
   "private": true,
-  "main": "lib/index.js",
+  "main": "lib/transaction/src/index.js",
   "scripts": {
     "compile": "tsc",
     "lint": "tslint src",
