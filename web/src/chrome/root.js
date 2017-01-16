@@ -19,14 +19,20 @@ class Root extends React.Component {
   }
   
   render() {
-    const { loading, title, body, routeParams: { storeId } } = this.props;
+    const {
+      routeParams: { storeId },
+      loading,
+      title,
+      body,
+      nav = <NavBar storeId={storeId}/>
+    } = this.props;
     return (
       <div className="chrome-root">
         {title}
         <section style={{color: BRAND_DARK }}>
           { loading ? "Loading..." : body }
         </section>
-        <NavBar storeId={storeId}/>
+        {nav}
       </div>
     );
   }
