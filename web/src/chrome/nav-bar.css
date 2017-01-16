@@ -5,10 +5,12 @@
   left: 0;
   height: 6rem;
   display: flex;
+  border-top: 1px solid black;
 }
 
 .chrome-nav-bar>a {
   display: block;
+  margin: auto 0;
   flex: 1;
   text-align: center;
 }
@@ -18,8 +20,8 @@
 .chrome-nav-bar-icon-profile,
 .chrome-nav-bar-icon-help {
   margin: 0 auto;
-  width: 6rem;
-  height: 3.8rem;
+  width: 5.7rem;
+  height: 3.6rem;
   display: block;
   background-repeat: no-repeat;
 }
