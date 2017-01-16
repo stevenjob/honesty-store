@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 30">
+	<path fill="none" stroke="#a4aab3" stroke-width="1" d="M40.5,27.5h-33c-1.1,0-2-0.9-2-2v-21
+		c0-1.1,0.9-2,2-2h33c1.1,0,2,0.9,2,2v21C42.5,26.6,41.6,27.5,40.5,27.5z"/>
+	<path fill="#a4aab3" d="M13,11h-3V8h3V11z M36,9H16v1h20V9z M13,14h-3v3h3V14z M36,15H16v1h20V15z M13,20h-3v3h3V20z M36,21H16v1h20V21z"/>
+</svg>

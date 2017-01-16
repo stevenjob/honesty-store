@@ -3,22 +3,55 @@
   right: 0;
   bottom: 0;
   left: 0;
-}
-
-.chrome-nav-bar>div {
+  height: 6rem;
   display: flex;
-  height: 5.9rem;
-  margin-top: 0.1rem;
 }
 
-.chrome-nav-bar>div>a {
+.chrome-nav-bar>a {
   display: block;
   flex: 1;
   text-align: center;
 }
 
-.chrome-nav-bar>div>a::before {
-  content: '#';
-  font-size: 2.5rem;
+.chrome-nav-bar-icon-store,
+.chrome-nav-bar-icon-history,
+.chrome-nav-bar-icon-profile,
+.chrome-nav-bar-icon-help {
+  margin: 0 auto;
+  width: 6rem;
+  height: 3.8rem;
   display: block;
+  background-repeat: no-repeat;
+}
+
+.chrome-nav-bar-icon-help {
+  background-image: url(./assets/help-unselected.svg);
+}
+
+.chrome-nav-bar-icon-history {
+  background-image: url(./assets/history-unselected.svg);
+}
+
+.chrome-nav-bar-icon-profile {
+  background-image: url(./assets/profile-unselected.svg);
+}
+
+.chrome-nav-bar-icon-store {
+  background-image: url(./assets/store-unselected.svg);
+}
+
+.chrome-nav-bar-active>.chrome-nav-bar-icon-help {
+  background-image: url(./assets/help-selected.svg);
+}
+
+.chrome-nav-bar-active>.chrome-nav-bar-icon-history {
+  background-image: url(./assets/history-selected.svg);
+}
+
+.chrome-nav-bar-active>.chrome-nav-bar-icon-profile {
+  background-image: url(./assets/profile-selected.svg);
+}
+
+.chrome-nav-bar-active>.chrome-nav-bar-icon-store {
+  background-image: url(./assets/store-selected.svg);
 }
