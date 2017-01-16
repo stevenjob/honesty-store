@@ -7,3 +7,5 @@ export const LIGHT_TEXT = '#FFFFFF';
 export const MUTED_TEXT = '#A9B8B9';
 
 export const DANGER = '#AE0000';
+
+export const LIGHT_BACKGROUND = '#FFFFFF';

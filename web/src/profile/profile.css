@@ -34,17 +34,21 @@
 }
 
 .profile-badge-action {
-  font-size: 2.4rem;
+  font-size: 2.1rem;
   align-self: center;
 }
 
 .profile-info, .profile-actions {
   border: 1px solid black;
   border-width: 1px 0;
-  margin: 2.4rem -1rem;
-  font-size: 2.4rem;
-  padding-left: 2.4rem;
+  margin: 2.1rem -1rem;
+  font-size: 2.1rem;
+  padding-left: 2.1rem;
   list-style-type: none;
+}
+
+.profile-info>li>a, .profile-actions>li>a {
+  display: block;
 }
 
 .profile-info>li, .profile-actions>li {
