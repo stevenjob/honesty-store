@@ -2,7 +2,7 @@
   "name": "@honesty-store/api",
   "version": "0.0.0",
   "private": true,
-  "main": "./src/app.js",
+  "main": "./lib/api/src/app.js",
   "scripts": {
     "compile": "tsc",
     "ci": "npm run lint && npm run compile",
