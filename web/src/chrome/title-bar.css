@@ -3,30 +3,27 @@
   top: 0;
   right: 0;
   left: 0;
-}
-
-.chrome-title-bar>div {
-  height: 5.9rem;
-  margin-bottom: 0.1rem;
-  overflow: hidden; /* prevent margin collapse */
+  height: 6rem;
   display: flex;
-  flex-direction: column;
+  padding: 1rem;
+}
+.chrome-title-bar-middle {
+  text-align: center;
+  flex: 1;
+  align-self: center;
 }
 
-.chrome-title-bar>div>h1 {
+.chrome-title-bar-middle>h1 {
   font-size: 2.4rem;
-  font-weight: normal;
-  margin: auto;
-  margin-bottom: 0;
+  margin: 0;
 }
 
-.chrome-title-bar>div>h1:last-child {
-  margin-bottom: auto;
-}
-
-.chrome-title-bar>div>h2 {
+.chrome-title-bar-middle>h2 {
   font-size: 1.4rem;
-  font-weight: normal;
-  margin: auto;
-  margin-top: 0;
+  margin: 0;
+}
+
+.chrome-title-bar-right, .chrome-title-bar-left {
+  align-self: center;
+  width: 20%;
 }
