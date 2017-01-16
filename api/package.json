@@ -5,10 +5,9 @@
   "main": "./src/app.js",
   "scripts": {
     "compile": "tsc",
-    "ci": "npm test",
+    "ci": "npm run lint && npm run compile",
     "lint": "tslint src",
-    "start": "nodemon ./src/app.js",
-    "test": "npm run lint && npm run compile && mocha --recursive"
+    "start": "nodemon ./src/app.js"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
