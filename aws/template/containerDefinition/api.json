@@ -10,6 +10,12 @@
                 "protocol": "tcp"
             }
         ],
+        "environment": [
+            {
+                "name": "BASE_URL",
+                "value": "${baseUrl}"
+            }
+        ],
         "logConfiguration": {
             "logDriver": "awslogs",
             "options": {
