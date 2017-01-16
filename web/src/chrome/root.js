@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import NavBar from './nav-bar';
 import { BRAND_DARK } from './colors';
 import { performFullRegistration } from '../actions/register';
+import './fonts.css';
 import './root.css';
 
 class Root extends React.Component {
@@ -17,7 +18,7 @@ class Root extends React.Component {
       dispatch(performFullRegistration(storeId));
     }
   }
-  
+
   render() {
     const {
       routeParams: { storeId },
