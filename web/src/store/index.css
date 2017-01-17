@@ -11,3 +11,17 @@
   color: inherit;
   padding-right: 0.2rem;
 }
+
+.store-item {
+  display: flex;
+}
+
+.store-item>img {
+  height: 8rem;
+  margin: 0;
+}
+
+.store-item>p {
+  flex: 1;
+  text-align: right;
+}

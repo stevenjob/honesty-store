@@ -15,7 +15,10 @@ const Balance = ({ balance }) => {
 };
 
 const itemRenderer = (data, index) => (
-  <b>{JSON.stringify(data)}</b>
+  <div className="store-item">
+    <img src={require("./assets/freddo.png")}/>
+    <p>Dairy Milk Freddo Caramel</p>
+  </div>
 );
 
 const Store = ({ params: { storeId }, balance, loading, items }) =>
