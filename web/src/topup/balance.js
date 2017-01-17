@@ -25,7 +25,7 @@ export default ({ params: { storeId } }) =>
                     <Button>+</Button>
                 </div>
                 <p style={{color: MUTED_TEXT}}>Your balance will be<br/>£11.45</p>
-                <p><Button to={`/${storeId}/topup/500`}>Top Up using a Card</Button></p>
+                <p><Button to={`/${storeId}/topup/card/5`}>Top Up using a Card</Button></p>
             </div>
         </div>
     </Page>;

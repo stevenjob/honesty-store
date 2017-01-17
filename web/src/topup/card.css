@@ -1,0 +1,67 @@
+.topup-card {
+    height: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.topup-card-chooser {
+    flex: 1;
+}
+
+.topup-card-selected {
+    position: relative;
+    margin: 0 auto;
+    width: 30rem;
+    height: 19.5rem;
+}
+
+.topup-card-selected-background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: url(./assets/card.svg);
+    background-size: 100%;
+}
+
+.topup-card-selected-visa, .topup-card-selected-mastercard {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    bottom: 0;
+    width: 15rem;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.topup-card-selected-visa {
+    background-image: url(./assets/visa.svg);
+}
+
+.topup-card-selected-mastercard {
+    background-image: url(./assets/mastercard.svg);
+}
+
+.topup-card-selected-number {
+    position: absolute;
+    font-size: 2.4rem;
+    margin: 0 1rem;
+    top: 10.5rem;
+    right: 0;
+    left: 0;
+    display: flex;
+}
+
+.topup-card-selected-number>span {
+    flex: 1;
+}
+
+.topup-card-selected-expiry {
+    position: absolute;
+    font-size: 1.4rem;
+    margin: 0;
+    bottom: 3.5rem;
+    left: 15rem;
+}
