@@ -45,7 +45,7 @@ describe('/store', () => {
       const initialStoreCode = 'sl-ncl';
       const { id, accessToken } = registerUser(initialStoreCode);
 
-      const newStoreCode = 'sl-ednEDN';
+      const newStoreCode = 'sl-edn';
       sendRequest(accessToken,
         newStoreCode,
         () => {
