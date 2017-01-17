@@ -180,7 +180,7 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
 
 const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupAccount> => {
     if (topupAccount.stripe) {
-        throw new Error(`already have stripe details for ${topupAccount.accountId}`);
+        throw new Error(`Already have stripe details for '${topupAccount.accountId}'`);
     }
 
     const newAccount = {
