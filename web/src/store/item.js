@@ -5,6 +5,7 @@ export default ({ name, price }) =>
   <div className="store-item">
     <img 
       src={require("./assets/freddo.png")}
+      alt=""
     />
     <div className="store-item-description">
       <p>{name}</p>
