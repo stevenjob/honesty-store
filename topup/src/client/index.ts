@@ -29,11 +29,11 @@ export const createTopup = async (request: TopupRequest): Promise<TransactionAnd
             'content-type': 'application/json'
         },
         body: JSON.stringify(request)
-    })
-        .then<ApiResponse<TransactionAndBalanceAccount>>(response => response.json());
+    });
+    const json: ApiResponse<TransactionAndBalance> = response.json();
 
-    if (response.error) {
-        throw new Error(response.error.message);
+    if (json.error) {
+        throw new Error(json.error.message);
     }
-    return response.response;
+    return json.response;
 };
