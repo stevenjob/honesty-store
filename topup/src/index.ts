@@ -217,6 +217,10 @@ const attemptTopup = async ({ accountId, userId, amount, stripeToken }: TopupReq
         }
 
         await addStripeTokenToAccount({ topupAccount, stripeToken });
+
+        // update our view of topupAccount
+        const updatedAccount = await get({ userId });
+        return topupExistingAccount({ topupAccount: updatedAccount, amount })
     }
 
     return topupExistingAccount({ topupAccount, amount })
