@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
-import { ApiResponse } from '../../../shared/types';
-import { baseUrl } from '../../../shared/baseUrl';
+import { ApiResponse } from '../../../service/types';
+import { baseUrl } from '../../../service/baseUrl';
 
 export interface TransactionDetails {
     type: 'topup' | 'purchase';
