@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Page from '../chrome/page';
 import List from '../chrome/list';
+import StoreItem from './item';
 import './index.css';
 
 const Balance = ({ balance }) => {
@@ -14,14 +15,8 @@ const Balance = ({ balance }) => {
   );
 };
 
-const itemRenderer = (data, index) => (
-  <div className="store-item">
-    <img src={require("./assets/freddo.png")}/>
-    <div className="store-item-description">
-      <p>{data.name}</p>
-      <p>{data.price}p</p>
-    </div>
-  </div>
+const itemRenderer = ({ name, price }, index) => (
+  <StoreItem name={name} price={price}/>
 );
 
 const Store = ({ params: { storeId }, balance, loading, items }) =>

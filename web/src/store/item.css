@@ -1,0 +1,25 @@
+.store-item {
+  display: flex;
+}
+
+.store-item>img {
+  height: 8rem;
+  margin: 0;
+}
+
+.store-item-description {
+  flex: 1;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  margin: 0.3rem 0;
+}
+
+.store-item-description>p:first-child {
+  flex-grow: 1;
+}
+
+.store-item-description>p {
+  margin: 0;
+  font-size: 2.1rem;
+}
