@@ -117,8 +117,4 @@ export const createMagicLinkToken = async (userId: string): Promise<UserWithMagi
     return response.response;
 };
 
-export const getUsersAccountId = async (userId: string): Promise<string> => {
-    return (await getUser(userId)).accountId;
-}
-
 export const TEST_DATA_USER_ID = 'c50234ff-6c33-4878-a1ab-05f6b3e7b649';

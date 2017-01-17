@@ -105,3 +105,7 @@ export const sendEmailToken = (emailAddress) => {
   /* When the eventual service is added, the 'emailToken' will be sent via email */
   winston.info(`Generated email token: ${emailToken}`);
 };
+
+export const getUsersAccountId = async (userId: string): Promise<string> => {
+    return (await getUser(userId)).accountId;
+}

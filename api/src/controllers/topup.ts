@@ -1,6 +1,6 @@
 import HTTPStatus = require('http-status');
 import { authenticateAccessToken } from '../middleware/authenticate'
-import { getUsersAccountId } from '../../../user/src/client/index'
+import { getUsersAccountId } from '../services/user';
 import { createTopup } from '../../../topup/src/client/index'
 
 const performTopup = async ({ stripeToken, amount, userId }: { stripeToken: string, amount: number, userId: string }) => {
