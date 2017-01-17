@@ -23,7 +23,7 @@ export interface TopupRequest {
 };
 
 export const createTopup = async (request: TopupRequest): Promise<TransactionAndBalance> => {
-    const response = await fetch(`${baseUrl}/topup/v1/`, {
+    const response = await fetch(`${baseUrl}/topup/v1/topup`, {
         method: 'POST',
         headers: {
             'content-type': 'application/json'
