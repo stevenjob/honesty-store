@@ -16,7 +16,7 @@ describe('/signin', () => {
 
   it('should return \'OK\' response status with already-registered email address', (done) => {
     const emailAddress = 'test1@test.com';
-    const { id } = registerUser('SL-NCL');
+    const { id } = registerUser('sl-ncl');
     updateUser(id, emailAddress, null);
 
     request.post({
@@ -50,7 +50,7 @@ describe('/signin2', () => {
   describe('Email Token Validation', () => {
     it('should return \'OK\' response status with valid email token', (done) => {
       const emailAddress = 'test1@test.com';
-      const user = registerUser('SL-NCL');
+      const user = registerUser('sl-ncl');
       updateUser(user.id, emailAddress, null);
       // Simulate sending of email
       sendEmailToken(emailAddress);
@@ -73,7 +73,7 @@ describe('/signin2', () => {
     describe('Response Data', () => {
       it('should contain a refresh token as part of response', (done) => {
         const emailAddress = 'test1@test.com';
-        const user = registerUser('SL-NCL');
+        const user = registerUser('sl-ncl');
         updateUser(user.id, emailAddress, null);
         sendEmailToken(emailAddress);
 
@@ -86,7 +86,7 @@ describe('/signin2', () => {
 
       it('should contain session data as part of response', (done) => {
         const emailAddress = 'test1@test.com';
-        const user = registerUser('SL-NCL');
+        const user = registerUser('sl-ncl');
         updateUser(user.id, emailAddress, null);
         sendEmailToken(emailAddress);
 

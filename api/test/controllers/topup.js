@@ -15,7 +15,7 @@ describe('/topup', () => {
 
   it('should credit user with requested amount and return new balance',
     (done) => {
-      const { accessToken } = registerUser('SL-NCL');
+      const { accessToken } = registerUser('sl-ncl');
 
       const topUpAmount = 500;
 
@@ -38,7 +38,7 @@ describe('/topup', () => {
 
   it('should add new top up transaction to transaction service',
     (done) => {
-      const { id, accessToken } = registerUser('SL-NCL');
+      const { id, accessToken } = registerUser('sl-ncl');
 
       const topUpAmount = 500;
 

@@ -24,7 +24,7 @@ describe('/session', () => {
       });
     it('should return response with \'OK\' status code when valid refresh token provided',
       (done) => {
-        const { refreshToken } = registerUser('SL-NCL');
+        const { refreshToken } = registerUser('sl-ncl');
         request.post(`${baseURL}/session`)
           .auth(null, null, true, refreshToken)
           .on('response', (response) => {
@@ -37,7 +37,7 @@ describe('/session', () => {
   describe('Response Data', () => {
     it('should return a new access token',
       (done) => {
-        const storeCode = 'SL-NCL';
+        const storeCode = 'sl-ncl';
         // When registering, we set the user's current store to be 'storeCode'
         const user = registerUser(storeCode);
 
