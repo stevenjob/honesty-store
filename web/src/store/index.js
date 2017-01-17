@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { performFullRegistration } from '../actions/register';
 import Page from '../chrome/page';
 import List from '../chrome/list';
 import './index.css';

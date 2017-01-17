@@ -1,6 +1,6 @@
 import React from 'react';
 import NavBar from './nav-bar';
-import { BRAND_DARK, BRAND_WHITE, MUTED_TEXT, LIGHT_TEXT } from './colors';
+import { BRAND_DARK, BRAND_WHITE, LIGHT_TEXT } from './colors';
 import './page.css';
 
 const headerStyles = (invert) => invert ?
