@@ -1,17 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import Page from '../chrome/page';
 import List from '../chrome/list';
 import StoreItem from './item';
 import './index.css';
 
-const Balance = ({ balance }) => {
+const Balance = ({ storeId, balance }) => {
   const formattedBalance = (balance/100).toFixed(2);
   return (
-    <div className="store-title-balance">
+    <Link to={`/${storeId}/topup/balance`} className="store-title-balance">
       <small>Balance</small>
       <h1><small>£</small>{formattedBalance}</h1>
-    </div>
+    </Link>
   );
 };
 
@@ -22,7 +23,7 @@ const itemRenderer = (item, index) => (
 const Store = ({ params: { storeId }, balance, loading, items }) =>
   <Page title="Store"
     subtitle={`@${storeId}`}
-    right={<Balance balance={balance}/>}
+    right={<Balance balance={balance} storeId={storeId}/>}
     storeId={storeId}
     loading={loading}>
     <List data={items} itemRenderer={itemRenderer}/>

@@ -1,0 +1,13 @@
+.topup-balance {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.topup-balance-balance {
+    flex: 1;
+}
+
+.topup-balance-topup {
+
+}
