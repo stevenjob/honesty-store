@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { IndexRedirect, Router, Route, hashHistory } from 'react-router';
 import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import createLogger from 'redux-logger';
 import Root from './chrome/root';
 import Intro from './intro/index';
 import AboutInfo from './info/about';
@@ -25,9 +28,7 @@ import RegisterSuccess from './register/success';
 import SignIn from './signin/index';
 import SignInSuccess from './signin/success';
 import Help from './help/index';
-import { createStore, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import createLogger from 'redux-logger';
+import ItemDetail from './item/index';
 import reducer from './reducers/reducer';
 
 
@@ -55,6 +56,7 @@ ReactDOM.render((
         <Route path="signin" component={SignIn}/>
         <Route path="signin/success" component={SignInSuccess}/>
         <Route path="store" component={Store}/>
+        <Route path="item/:itemId" component={ItemDetail}/>
         <Route path="topup" component={TopupAmount}/>
         <Route path="topup/success"component={TopupSuccess}/>
         <Route path="topup/error"component={TopupError}/>

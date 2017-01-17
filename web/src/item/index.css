@@ -1,0 +1,14 @@
+.item-details>h1 {
+  text-align: center;
+  font-size: 2.4rem;
+  margin-bottom: 0;
+}
+
+.item-details>h2 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.item-details>img {
+  height: 15rem;
+}
