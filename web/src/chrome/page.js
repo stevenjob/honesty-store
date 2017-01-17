@@ -7,7 +7,7 @@ const headerStyles = (invert) => invert ?
   { borderColor: BRAND_WHITE, background: BRAND_WHITE, color: BRAND_DARK } :
   { borderColor: BRAND_WHITE, background: BRAND_DARK, color: LIGHT_TEXT };
 
-export default ({ title, subtitle, left, right, invert = false, children, nav = true, storeId, loading }) =>
+export default ({ title, subtitle, left, right, invert = false, children, nav = true, storeId, fullscreen, loading }) =>
   <div className="chrome-page">
     <header className="chrome-page-title-bar" style={headerStyles(invert)}>
       { (right || left) &&
@@ -27,7 +27,7 @@ export default ({ title, subtitle, left, right, invert = false, children, nav = 
         </div>
       }
     </header>
-    <section style={{color: BRAND_DARK }}>
+    <section style={{color: BRAND_DARK }} className={fullscreen ? 'chrome-page-section-fullscreen chrome-page-section' : 'chrome-page-section'}>
       { loading ? "Loading..." : children }
     </section>
     { nav &&

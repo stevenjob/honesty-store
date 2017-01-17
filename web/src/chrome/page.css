@@ -33,11 +33,20 @@
   width: 20%;
 }
 
-.chrome-page>section {
+.chrome-page-section {
   font-size: 1.4rem;
   margin-top: 6rem; /* title-bar height */
   margin-bottom: 6rem; /* nav-bar height */
   padding: 0 1rem;
   width: 100%;
   overflow: hidden;
+}
+
+.chrome-page-section-fullscreen {
+  margin-bottom: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
