@@ -11,7 +11,7 @@ export default ({ params: { storeId } }) =>
         fullscreen={true}>
         <Link to={`/${storeId}/topup/balance`} className="topup-error">
             <div>
-                <h3>Opps! Something went wrong...</h3>
+                <h3>Oops! Something went wrong...</h3>
                 <img src={error} alt="error"/>
                 <h2>Can you try that again, please?</h2>
             </div>
