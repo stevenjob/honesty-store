@@ -12,11 +12,19 @@ env:
     - secure: "LdJbBa+i4bd5AhyumkGR5PPhAqZhtHrmzcNIiI/vN+lk+ECcRSe344GGxQwi28Sa5ytqeYFe0kCWcX+w9hbn3f+lTgaWRx0g05FNV6xGQhIfDs2XlorMeBZSn92z1aMYpDj8SNB39h7NZyh5KknFNhL1rrV9R8PT+DkrUdl0EnIKQYynYj1GKcwX7ql2HvGtenZLHJLkepTJj0aJzZPhTp/YfvN12izzPic8Oci4+94EIohfDLfcIKV21p3tjRcr8i4mMoSK063v06FuugC7+Twm1Fl+RZNpTfarkThllbxzKtvAyCsHb1aSRwNLLahOkUTWBJO3J7cL25hnp0+T6qehmB17jEMfts+k7dxd2qxFAOTXiVHfXrrkLtQYfcSO3mHfqrqSIGFPNkHwFM/GwIjwfqHzqjFbET088pgm2Q6KldFPNvwZ2gXnNcZScecYcTc3VMLCSrlAjsOReSVX613T2m79+dupVPycjKrks2FHBq7Rda+TwJCdW1/0hl9xtDcJoGIFUiL/nz1ZRKlAvTNilPdNeFRh/Yb1BpIXSHF2TzA/r5k3sncMLRhZPxRZfKetP8UaBKfRBVZo9z06JRK9PNanK5zF6aNwbpbfTZ6OVL6b4/2/cVr7r5mPIPGj6DVyJ8KrL6E0R/QtkcRGkZ/CuFPWIMEwFnKn/n/uP+g="
 script:
   - npm i -g yarn
-  - (cd api && yarn install && npm run ci)
-  - (cd aws && yarn install && npm run ci)
-  - (cd transaction && yarn install && npm run ci)
-  - (cd user && yarn install && npm run ci)
-  - (cd web && yarn install && npm run ci)
-  - (cd topup && yarn install && npm run ci)
+  # install all dependencies first to prevent problems with cross-module dependencies
+  - (cd api && yarn install)
+  - (cd aws && yarn install)
+  - (cd transaction && yarn install)
+  - (cd user && yarn install)
+  - (cd web && yarn install)
+  - (cd topup && yarn install)
+  # now we have all dependencies installed, do the compilation
+  - (cd api && npm run ci)
+  - (cd aws && npm run ci)
+  - (cd transaction && npm run ci)
+  - (cd user && npm run ci)
+  - (cd web && npm run ci)
+  - (cd topup && npm run ci)
   - ./aws/bin/aws deploy $TRAVIS_BRANCH api transaction user web topup
   - ./aws/bin/aws prune
