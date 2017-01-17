@@ -16,7 +16,7 @@ const Balance = ({ balance }) => {
 };
 
 const itemRenderer = (item, index) => (
-  <StoreItem image="freddo.png" name={item.name} price={item.price}/>
+  <StoreItem image="packet.svg" name={item.name} price={item.price}/>
 );
 
 const Store = ({ params: { storeId }, balance, loading, items }) =>
