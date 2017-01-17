@@ -1,12 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router';
 import { BRAND_LIGHT, MUTED_TEXT } from '../chrome/colors';
 import Button from '../chrome/button';
 import Page from '../chrome/page';
+import { Close } from '../chrome/link';
 import './balance.css';
 
 export default ({ params: { storeId } }) =>
-    <Page left={<Link style={{color: BRAND_LIGHT}} to={`/${storeId}/store`}>Close</Link>}
+    <Page left={<Close to={`/${storeId}/store`}/>}
         title="Balance"
         storeId={storeId}
         invert={true}
@@ -20,9 +20,9 @@ export default ({ params: { storeId } }) =>
             <div className="topup-balance-topup">
                 <h2>Would you like to top up?</h2>
                 <div className="topup-balance-topup-amount">
-                    <Button>-</Button>
+                    <Button type="disabled">-</Button>
                     <h1 style={{color: BRAND_LIGHT}}><small>£</small>5</h1>
-                    <Button>+</Button>
+                    <Button type="disabled">+</Button>
                 </div>
                 <p style={{color: MUTED_TEXT}}>Your balance will be<br/>£11.45</p>
                 <p><Button to={`/${storeId}/topup/card/5`}>Top Up using a Card</Button></p>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { BRAND_LIGHT } from '../chrome/colors';
-import Button from '../chrome/button';
 import Page from '../chrome/page';
 import success from './assets/success.svg';
 import './success.css';

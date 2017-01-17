@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router';
-import { BRAND_LIGHT } from '../chrome/colors';
 import Button from '../chrome/button';
+import { Back } from '../chrome/link';
 import Page from '../chrome/page';
 
 export default ({ params: { storeId, amount } }) =>
-    <Page left={<Link className="chrome-link-back" style={{color: BRAND_LIGHT}} to={`/${storeId}/topup/card/${amount}`}>Card</Link>}
+    <Page left={<Back>Card</Back>}
         title={`£${amount} Top Up`}
         storeId={storeId}
         invert={true}

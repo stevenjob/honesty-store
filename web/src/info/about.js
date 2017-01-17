@@ -1,10 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router';
-import { BRAND_LIGHT } from '../chrome/colors';
+import { Back } from '../chrome/link';
 import Page from '../chrome/page';
 
 export default ({ params: { storeId } }) =>
-    <Page left={<Link style={{color: BRAND_LIGHT}} to={`/${storeId}/profile`}>Close</Link>}
+    <Page left={<Back/>}
         title="About"
         subtitle="honesty.store"
         storeId={storeId}
