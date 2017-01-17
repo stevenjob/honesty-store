@@ -2,12 +2,33 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    text-align: center;
 }
 
 .topup-balance-balance {
-    flex: 1;
+    margin: auto 0;
+}
+
+.topup-balance-balance>h1 {
+    font-size: 7.2rem;
+    margin: 0;
 }
 
 .topup-balance-topup {
+    display: flex;
+    flex-direction: column;
+}
 
+.topup-balance-topup-amount {
+    display: flex;
+}
+
+.topup-balance-topup-amount>a {
+    margin: auto;
+    display: block;
+    width: 4.8rem;
+}
+
+.topup-balance-topup-amount>h1 {
+    flex: 0.6;
 }

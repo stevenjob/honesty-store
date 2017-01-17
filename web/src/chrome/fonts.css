@@ -14,7 +14,7 @@
     src: url('assets/32D3D0_3_0.woff2') format('woff2'),url('assets/32D3D0_3_0.woff') format('woff');
 }
 
-/* Allowed sizes (0.1rem is equivalent to 1px) - 10, 11, 12, 14, 16, 21, 24, 36 */
+/* Allowed sizes (0.1rem is equivalent to 1px) - 10, 11, 12, 14, 16, 21, 24, 36, 72 */
 html {
   font-size: 62.5%;
 }
@@ -48,4 +48,8 @@ h4 {
 
 h5 {
   font-size: 1.4rem;
+}
+
+small {
+  font-size: 66.66%;
 }
