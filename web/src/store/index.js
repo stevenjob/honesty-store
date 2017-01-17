@@ -17,7 +17,10 @@ const Balance = ({ balance }) => {
 const itemRenderer = (data, index) => (
   <div className="store-item">
     <img src={require("./assets/freddo.png")}/>
-    <p>Dairy Milk Freddo Caramel</p>
+    <div className="store-item-description">
+      <p>{data.name}</p>
+      <p>{data.price}p</p>
+    </div>
   </div>
 );
 
