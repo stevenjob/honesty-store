@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Button from '../chrome/button';
 import Page from '../chrome/page';
 
 export default ({ params: { storeId } }) =>
@@ -11,6 +12,6 @@ export default ({ params: { storeId } }) =>
         <div>
             <h1>Want to log out?</h1>
             <p>You can always login again using your email address.</p>
-            <p><Link to={`/logout`}>Log Out</Link></p>
+            <p><Button to={`/logout`} type="danger">Log Out</Button></p>
         </div>
     </Page>;
