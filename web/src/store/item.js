@@ -1,10 +1,10 @@
 import React from 'react';
 import './item.css';
 
-export default ({ name, price }) => 
+export default ({ image, name, price }) => 
   <div className="store-item">
     <img 
-      src={require("./assets/freddo.png")}
+      src={require(`./assets/${image}`)}
       alt=""
     />
     <div className="store-item-description">
