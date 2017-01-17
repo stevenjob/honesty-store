@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { BRAND_LIGHT } from '../chrome/colors';
 import Page from '../chrome/page';
 
 export default ({ params: { storeId } }) =>
-    <Page left={<Link to={`/${storeId}/profile`}>Close</Link>}
+    <Page left={<Link style={{color: BRAND_LIGHT}} to={`/${storeId}/profile`}>Close</Link>}
         title="Terms &amp; Conditions"
         storeId={storeId}
         invert={true}
