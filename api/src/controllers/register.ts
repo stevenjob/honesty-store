@@ -11,11 +11,13 @@ import { authenticateAccessToken } from '../middleware/authenticate';
 const register = async (storeCode) => {
   const { id, accessToken, refreshToken } = registerUser(storeCode);
 
-  const response: any = await getSessionData(id);
-  response.refreshToken = refreshToken;
-  response.accessToken = accessToken;
-
-  return { response };
+  return {
+      response: {
+          ...await getSessionData(id),
+          refreshToken,
+          accessToken,
+      }
+  };
 };
 
 const register2 = async (userID, emailAddress, cardDetails, topUpAmount, purchasedItemID) => {
