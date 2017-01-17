@@ -209,18 +209,14 @@ const addStripeTokenToAccount = async ({ topupAccount, stripeToken }): Promise<T
 };
 
 const attemptTopup = async ({ accountId, userId, amount, stripeToken }: TopupRequest) => {
-    const topupAccount = await getOrCreate({ accountId, userId });
+    let topupAccount = await getOrCreate({ accountId, userId });
 
     if (stripeToken) {
         if (topupAccount.stripe){
             throw new Error(`Already have stripe details for '${accountId}'`);
         }
 
-        await addStripeTokenToAccount({ topupAccount, stripeToken });
-
-        // update our view of topupAccount
-        const updatedAccount = await get({ userId });
-        return topupExistingAccount({ topupAccount: updatedAccount, amount })
+        topupAccount = await addStripeTokenToAccount({ topupAccount, stripeToken });
     }
 
     return topupExistingAccount({ topupAccount, amount })
