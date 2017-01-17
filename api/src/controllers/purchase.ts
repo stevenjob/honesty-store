@@ -3,33 +3,33 @@ import { authenticateAccessToken } from '../middleware/authenticate';
 import { getPrice } from '../services/store';
 import { addItemTransaction, getBalance } from '../services/transaction';
 
+const attemptPurchase = async ({ userID, itemID }) => {
+    const price = getPrice(itemID);
+    const transaction = await addItemTransaction(userID, price);
+
+    const balance = await getBalance(userID);
+
+    return {
+        balance,
+        transaction,
+    };
+};
+
 export default (router) => {
   router.post(
     '/purchase',
     authenticateAccessToken,
     (request, response) => {
-      const { itemID } = request.body;
+      const { itemID, userID } = request.body;
 
-      try {
-        const price = getPrice(itemID);
-        const transaction = addItemTransaction(request.userID, price);
-
-        getBalance(request.userID)
-            .then((balance) => {
-                const responseData = {
-                    balance,
-                    transaction,
-                };
-                response.status(HTTPStatus.OK)
-                .json({ response: responseData });
-            });
-      } catch (e) {
-        response.status(HTTPStatus.OK)
-          .json({
-            error: {
-              message: e.message,
-            },
-          });
-      }
+      attemptPurchase({ itemID, userID })
+        .then(({ balance, transaction }) => {
+            response.status(HTTPStatus.OK)
+                .json({ response: { balance, transaction }});
+        })
+        .catch((error) => {
+            response.status(HTTPStatus.OK)
+                .json({ error: error.message });
+        });
     });
 };
