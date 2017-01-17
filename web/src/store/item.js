@@ -9,7 +9,6 @@ export default ({ image, name, price }) =>
     />
     <div className="store-item-description">
       <p>{name}</p>
-      <p></p>
       <p>{price}<small>p</small></p>
     </div>
   </div>;
