@@ -1,3 +1,15 @@
+.item {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.item-details {
+  margin: 1rem 0 auto 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .item-details>h1 {
   text-align: center;
   font-size: 2.4rem;
@@ -10,5 +22,5 @@
 }
 
 .item-details>img {
-  height: 15rem;
+  height: 13rem; /* TODO: Fix breaking on iPhone 5-sized devices */
 }
