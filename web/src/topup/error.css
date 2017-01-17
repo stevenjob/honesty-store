@@ -1,0 +1,13 @@
+.topup-error {
+    height: 100%;
+    display: flex;
+}
+
+.topup-error>div {
+    text-align: center;
+    margin: auto;
+}
+
+.topup-error>div>img {
+    height: 12rem;
+}

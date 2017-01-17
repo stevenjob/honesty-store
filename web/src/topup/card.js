@@ -31,7 +31,8 @@ export default ({ params: { storeId, amount }, brand = 'visa' }) =>
                 </p>
             </div>
             <p className="topup-card-topup">
-                <Button onClick={()=>alert(amount)}>Confirm £{amount} Top Up</Button>
+                <Button to={`/${storeId}/topup/success`}>Confirm £{amount} Top Up</Button>
+                <Link to={`/${storeId}/topup/error`}>ERROR</Link>
             </p>
         </div>
     </Page>;

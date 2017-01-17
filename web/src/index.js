@@ -17,6 +17,8 @@ import LogoutProfile from './profile/logout';
 import Balance from './topup/balance';
 import Card from './topup/card';
 import AddCard from './topup/add-card';
+import TopupSuccess from './topup/success';
+import TopupError from './topup/error';
 import Help from './help/index';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -46,6 +48,8 @@ ReactDOM.render((
         <Route path="topup/balance" component={Balance}/>
         <Route path="topup/card/:amount" component={Card}/>
         <Route path="topup/addcard/:amount" component={AddCard}/>
+        <Route path="topup/success" component={TopupSuccess}/>
+        <Route path="topup/error" component={TopupError}/>
         <Route path="history" component={History}/>
         <Route path="profile" component={Profile}/>
         <Route path="profile/close" component={CloseProfile}/>
