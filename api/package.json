@@ -10,13 +10,15 @@
     "start": "nodemon ./src/app.js"
   },
   "dependencies": {
+    "@types/node": "^7.0.0",
+    "@types/node-fetch": "^1.6.7",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "http-status": "^0.2.3",
     "jsonwebtoken": "^7.2.1",
+    "node-fetch": "^1.6.3",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
-    "node-fetch": "^1.6.3",
     "uuid": "^3.0.1",
     "validator": "^6.2.0",
     "winston": "^2.3.0"
