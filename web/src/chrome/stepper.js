@@ -6,8 +6,9 @@ import './stepper.css';
 class Stepper extends React.Component {
   constructor(props) {
     super(props);
+    const { initialValue } = props; 
     this.state = {
-      value: props.initialValue
+      value: initialValue
     };
   }
 
@@ -40,5 +41,16 @@ class Stepper extends React.Component {
     this.setState({ value: updatedValue });
   }
 }
+
+Stepper.propTypes = {
+  label: React.PropTypes.string,
+  onClick: React.PropTypes.func.isRequired,
+  onIncrement: React.PropTypes.func.isRequired,
+  onDecrement: React.PropTypes.func.isRequired,
+  formatDescription: React.PropTypes.func.isRequired,
+  formatValue: React.PropTypes.func.isRequired,
+  formatButton: React.PropTypes.func.isRequired,
+  initialValue: React.PropTypes.number.isRequired
+};
 
 export default Stepper;
