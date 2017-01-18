@@ -76,6 +76,17 @@ export const getUserByMagicLinkToken = async (magicLinkToken: string): Promise<U
     return response.response;
 };
 
+export const getUserByEmailAddress = async (emailAddress: string): Promise<User> => {
+    const response = await fetch(`${baseUrl}/user/v1/emailAddress/${emailAddress}`, {
+        method: 'GET'
+    })
+        .then<ApiResponse<UserWithAccessAndRefreshTokens>>(response => response.json());
+    if (response.error) {
+        throw new Error(response.error.message);
+    }
+    return response.response;
+};
+
 export const createUser = async (userId: string, userProfile: UserProfile): Promise<UserWithAccessAndRefreshTokens> => {
     const response = await fetch(`${baseUrl}/user/v1/`, {
         method: 'POST',

@@ -280,6 +280,17 @@ router.get('/magicLink/:magicLinkToken', (req, res) => {
         res);
 });
 
+router.get('/emailAddress/:emailAddress', (req, res) => {
+    const { emailAddress } = req.params;
+    scanByEmailAddress({ emailAddress })
+        .then((user) => {
+            res.json({ response: user });
+        })
+        .catch(({ message }) => {
+            res.json({ error: { message } });
+        });
+});
+
 router.post('/', (req, res) => {
     const { userId, ...userProfile } = req.body;
 
