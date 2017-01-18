@@ -2,9 +2,9 @@ import jwt = require('jsonwebtoken');
 import HTTPStatus = require('http-status');
 import { secretKey } from '../constants'
 import {
-  getUserIDFromAccessToken,
-  getUserIDAndAccessTokenFromRefreshToken,
-  getUserIDAndAccessAndRefreshTokensFromEmailToken } from '../services/user'
+  getUserByAccessToken,
+  getUserByRefreshToken,
+  getUserByMagicLinkToken } from '../../../user/src/client/index';
 import * as winston from 'winston';
 
 const getToken = request => request.headers.authorization.split(' ')[1];
@@ -35,10 +35,10 @@ const authenticateToken = (request, response, next, tokenRetrievalGetter) => {
 };
 
 export const authenticateAccessToken = (request, response, next) =>
-  authenticateToken(request, response, next, getUserIDFromAccessToken);
+  authenticateToken(request, response, next, getUserByAccessToken);
 
 export const authenticateRefreshToken = (request, response, next) =>
-  authenticateToken(request, response, next, getUserIDAndAccessTokenFromRefreshToken);
+  authenticateToken(request, response, next, getUserByRefreshToken);
 
 export const authenticateEmailToken = (request, response, next) =>
-  authenticateToken(request, response, next, getUserIDAndAccessAndRefreshTokensFromEmailToken);
+  authenticateToken(request, response, next, getUserByMagicLinkToken);

@@ -1,12 +1,12 @@
 import HTTPStatus = require('http-status');
 import { authenticateAccessToken } from '../middleware/authenticate'
-import { getUsersAccountId } from '../services/user';
+import { getUser } from '../../../user/src/client/index';
 import { createTopup } from '../../../topup/src/client/index'
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
 import { TransactionAndBalance } from '../../../transaction/src/client/index';
 
 const performTopup = async ({ stripeToken, amount, userId }: { stripeToken: string, amount: number, userId: string }) => {
-    const accountId = await getUsersAccountId(userId);
+    const accountId = (await getUser(userId)).accountId;
 
     return await createTopup({ accountId, userId, amount, stripeToken });
 };

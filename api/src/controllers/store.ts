@@ -1,7 +1,11 @@
 import HTTPStatus = require('http-status');
 import { authenticateAccessToken } from '../middleware/authenticate'
-import { updateDefaultStoreCode } from '../services/user'
-import { getItems } from '../services/store'
+import { updateUser } from '../../../user/src/client/index';
+import { getItems, storeCodeToStoreID } from '../services/store'
+
+const updateDefaultStoreCode = async (userID, storeCode) => {
+  return await updateUser(userID, { defaultStoreId: storeCodeToStoreID(storeCode) });
+};
 
 export default (router) => {
   router.post(

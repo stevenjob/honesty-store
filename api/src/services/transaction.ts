@@ -1,5 +1,7 @@
 import { createTransaction, getAccount, TransactionDetails } from '../../../transaction/src/client/index';
-import { getUsersAccountId } from '../services/user';
+import { getUser } from '../../../user/src/client/index';
+
+const getUsersAccountId = async (userId) => (await getUser(userId)).accountId;
 
 export const addItemTransaction = async (userID, itemPrice) => {
   const transaction: TransactionDetails = {
