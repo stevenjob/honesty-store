@@ -10,9 +10,11 @@ export default (router) => {
     (req, res) => {
       const storeCode = req.body.storeCode;
       updateDefaultStoreCode(req.user.id, storeCode)
-        .then(() =>
+        .then((user) => {
+          req.user = user;
           res.status(HTTPStatus.OK)
-            .json({ response: getItems(storeCode) }))
+            .json({ response: getItems(storeCode) })
+        })
         .catch((error) =>
           res.status(HTTPStatus.OK)
             .json({ error: error.message }))
