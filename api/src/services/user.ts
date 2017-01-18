@@ -15,18 +15,15 @@ export const registerUser = async (defaultStoreCode) => {
 };
 
 export const getUserIDFromAccessToken = async (accessToken) => {
-  const { id } = await UserClient.getUserByAccessToken(accessToken);
-  return { id };
+  return await UserClient.getUserByAccessToken(accessToken);
 };
 
 export const getUserIDAndAccessTokenFromRefreshToken = async (refreshToken) => {
-  const { id, accessToken } = await UserClient.getUserByRefreshToken(refreshToken);
-  return { id, accessToken };
+  return await UserClient.getUserByRefreshToken(refreshToken);
 };
 
 export const getUserIDAndAccessAndRefreshTokensFromEmailToken = async (emailToken) => {
-  const { id, accessToken, refreshToken } = await UserClient.getUserByMagicLinkToken(emailToken);
-  return { id, accessToken, refreshToken };
+  return await UserClient.getUserByMagicLinkToken(emailToken);
 };
 
 export const updateUser = async (id, emailAddress) => {

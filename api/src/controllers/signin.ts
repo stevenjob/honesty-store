@@ -30,7 +30,7 @@ const setupSignInPhase2 = (router) => {
     authenticateEmailToken,
     (request, response) => {
       promiseResponse<SessionData & WithRefreshToken>(
-          signin2(request.userID),
+          signin2(request.user.id),
           response,
           HTTPStatus.INTERNAL_SERVER_ERROR);
     });

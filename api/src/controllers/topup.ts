@@ -19,7 +19,7 @@ export default (router) => {
       const { stripeToken, amount } = request.body;
 
       promiseResponse<TransactionAndBalance>(
-          performTopup({ stripeToken, amount, userId: request.userId }),
+          performTopup({ stripeToken, amount, userId: request.user.id }),
           response,
           HTTPStatus.INTERNAL_SERVER_ERROR);
     })

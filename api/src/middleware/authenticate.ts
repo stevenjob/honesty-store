@@ -25,8 +25,8 @@ const authenticateToken = (request, response, next, tokenRetrievalGetter) => {
 
   // token verification is handled by the user service / tokenRetrievalGetter
   tokenRetrievalGetter(token)
-    .then((authProperties) => {
-      Object.assign(request, authProperties);
+    .then((user) => {
+      request.user = user;
 
       next(); // we assume next doesn't throw, and don't return its result here
     })

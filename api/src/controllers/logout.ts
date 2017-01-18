@@ -7,7 +7,7 @@ export default (router) => {
     '/logout',
     authenticateAccessToken,
     (req, res) => {
-      expireRefreshToken(req.userID)
+      expireRefreshToken(req.user.id)
         .then(() =>
           res.status(HTTPStatus.OK)
             .json({ response: {} }))

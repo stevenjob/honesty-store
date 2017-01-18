@@ -27,7 +27,7 @@ export default (router) => {
       const page = parseInt(request.query.page, 10) || 0;
 
       promiseResponse<{ lastPage: number, items: Transaction[] }>(
-        getPagedTransactions(request.userID, page),
+        getPagedTransactions(request.user.id, page),
         response,
         HTTPStatus.INTERNAL_SERVER_ERROR);
     });

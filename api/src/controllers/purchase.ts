@@ -6,12 +6,7 @@ import { TransactionAndBalance } from '../../../transaction/src/client/index';
 
 const purchase = async ({ itemID, userID }) => {
     const price = getPrice(itemID);
-    const { transaction, balance } = await addItemTransaction(userID, price);
-
-    return {
-      balance,
-      transaction,
-    };
+    return await addItemTransaction(userID, price);
 };
 
 export default (router) => {
@@ -21,7 +16,7 @@ export default (router) => {
     (request, response) => {
       const { itemID, userID } = request.body;
 
-      promiseResponse<{ balance: number, transaction: TransactionAndBalance}>(
+      promiseResponse<TransactionAndBalance>(
           purchase({ itemID, userID }),
           response);
     });
