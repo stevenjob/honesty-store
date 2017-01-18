@@ -30,7 +30,7 @@ export const getUserIDAndAccessAndRefreshTokensFromEmailToken = async (emailToke
 };
 
 export const updateUser = async (id, emailAddress) => {
-  await updateUser(id, { emailAddress });
+  await UserClient.updateUser(id, { emailAddress });
 };
 
 export const updateDefaultStoreCode = async (userID, storeCode) => {
