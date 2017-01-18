@@ -1,8 +1,8 @@
-.store-item {
+.store-item>a {
   display: flex;
 }
 
-.store-item>img {
+.store-item img {
   height: 8rem;
   transform: rotate(-40deg);
   margin: 0 3rem;
@@ -15,7 +15,7 @@
   flex-direction: column;
 }
 
-.store-item-description>p {
+.store-item-description p {
   margin: auto 0;
   font-size: 2.1rem;
 }

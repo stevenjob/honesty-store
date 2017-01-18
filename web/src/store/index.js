@@ -13,9 +13,9 @@ const Balance = ({ storeId, balance }) =>
       <h1><small>£</small>{currency(balance)}</h1>
     </Link>;
 
-const itemRenderer = (item, index) => (
-  <StoreItem image="packet.svg" name={item.name} price={item.price}/>
-);
+const itemRenderer = (storeId) => {
+  return (item, index) => <StoreItem item={item} image="packet.svg" storeId={storeId}/>;
+};
 
 const Store = ({ params: { storeId }, balance, loading, items }) =>
   <Page title="Store"
@@ -23,7 +23,7 @@ const Store = ({ params: { storeId }, balance, loading, items }) =>
     right={<Balance balance={balance} storeId={storeId}/>}
     storeId={storeId}
     loading={loading}>
-    <List data={items} itemRenderer={itemRenderer}/>
+    <List data={items} itemRenderer={itemRenderer(storeId)}/>
   </Page>;
 
 const mapStateToProps = ({ pending, user: { balance }, store: { items } }) => ({
