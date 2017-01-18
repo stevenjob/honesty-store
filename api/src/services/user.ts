@@ -37,11 +37,8 @@ export const updateDefaultStoreCode = async (userID, storeCode) => {
   await updateUser(userID, { defaultStoreCode: storeCode });
 };
 
-export const expireRefreshToken = async (userID) => { // TODO
-  return {
-    ...await UserClient.getUser(userID),
-    refreshToken: undefined
-  };
+export const expireRefreshToken = async (userID) => {
+    throw new Error(`logout not supported yet (expireRefreshToken())`);
 };
 
 export const sendEmailToken = async (emailAddress) => {
