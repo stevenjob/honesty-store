@@ -1,4 +1,3 @@
-import jsonwebtoken = require('jsonwebtoken');
 import uuid = require('uuid/v4');
 import winston = require('winston');
 import { secretKey } from '../constants'
@@ -7,18 +6,11 @@ import { storeCodeToStoreID } from './store'
 
 export const getUser = UserClient.getUser;
 
-const generateExpirableToken = () => {
-  const data = { uuid: uuid() };
-  const options = { expiresIn: 300 };
-  return jsonwebtoken.sign(data, secretKey, options);
-};
-
 const generateRefreshToken = () => jsonwebtoken.sign(uuid(), secretKey);
 
 export const registerUser = async (defaultStoreCode) => {
   const userId = uuid();
   const refreshToken = generateRefreshToken();
-  const accessToken = generateExpirableToken();
 
   const profile = {
     defaultStoreId: storeCodeToStoreID(defaultStoreCode),
