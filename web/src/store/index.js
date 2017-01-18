@@ -4,17 +4,14 @@ import { Link } from 'react-router';
 import Page from '../chrome/page';
 import List from '../chrome/list';
 import StoreItem from './item';
+import currency from '../format/currency';
 import './index.css';
 
-const Balance = ({ storeId, balance }) => {
-  const formattedBalance = (balance/100).toFixed(2);
-  return (
-    <Link to={`/${storeId}/topup/balance`} className="store-title-balance">
+const Balance = ({ storeId, balance }) =>
+    <Link to={`/${storeId}/topup`} className="store-title-balance">
       <small>Balance</small>
-      <h1><small>£</small>{formattedBalance}</h1>
-    </Link>
-  );
-};
+      <h1><small>£</small>{currency(balance)}</h1>
+    </Link>;
 
 const itemRenderer = (item, index) => (
   <StoreItem image="packet.svg" name={item.name} price={item.price}/>

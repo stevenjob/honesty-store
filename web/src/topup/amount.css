@@ -1,34 +1,34 @@
-.topup-balance {
+.topup-amount {
     height: 100%;
     display: flex;
     flex-direction: column;
     text-align: center;
 }
 
-.topup-balance-balance {
+.topup-amount-balance {
     margin: auto 0;
 }
 
-.topup-balance-balance>h1 {
+.topup-amount-balance>h1 {
     font-size: 7.2rem;
     margin: 0;
 }
 
-.topup-balance-topup {
+.topup-amount-topup {
     display: flex;
     flex-direction: column;
 }
 
-.topup-balance-topup-amount {
+.topup-amount-topup-amount {
     display: flex;
 }
 
-.topup-balance-topup-amount>a {
+.topup-amount-topup-amount>a {
     margin: auto;
     display: block;
     width: 4.8rem;
 }
 
-.topup-balance-topup-amount>h1 {
+.topup-amount-topup-amount>h1 {
     flex: 0.6;
 }

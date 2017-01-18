@@ -14,9 +14,9 @@ import Profile from './profile/index';
 import CloseProfile from './profile/close';
 import EditProfile from './profile/edit';
 import LogoutProfile from './profile/logout';
-import Balance from './topup/balance';
-import Card from './topup/card';
-import AddCard from './topup/add-card';
+import TopupAmount from './topup/amount';
+import TopupExistingCard from './topup/existing-card';
+import TopupNewCard from './topup/new-card';
 import TopupSuccess from './topup/success';
 import TopupError from './topup/error';
 import Help from './help/index';
@@ -45,11 +45,11 @@ ReactDOM.render((
       <Route path="/:storeId" component={Root}>
         <IndexRedirect to="store"/>
         <Route path="store" component={Store}/>
-        <Route path="topup/balance" component={Balance}/>
-        <Route path="topup/card/:amount" component={Card}/>
-        <Route path="topup/addcard/:amount" component={AddCard}/>
-        <Route path="topup/success" component={TopupSuccess}/>
-        <Route path="topup/error" component={TopupError}/>
+        <Route path="topup" component={TopupAmount}/>
+        <Route path="topup/success"component={TopupSuccess}/>
+        <Route path="topup/error"component={TopupError}/>
+        <Route path="topup/:amount"component={TopupExistingCard}/>
+        <Route path="topup/:amount/new"component={TopupNewCard}/>
         <Route path="history" component={History}/>
         <Route path="profile" component={Profile}/>
         <Route path="profile/close" component={CloseProfile}/>

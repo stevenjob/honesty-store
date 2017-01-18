@@ -5,7 +5,7 @@ import Page from '../chrome/page';
 
 export default ({ params: { storeId, amount } }) =>
     <Page left={<Back>Card</Back>}
-        title={`£${amount} Top Up`}
+        title={`Top Up`}
         storeId={storeId}
         invert={true}
         nav={false}
