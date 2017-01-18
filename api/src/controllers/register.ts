@@ -1,15 +1,24 @@
 import isEmail = require('validator/lib/isEmail');
 import HTTPStatus = require('http-status');
 import winston = require('winston');
+import uuid = require('uuid/v4');
 
-import { registerUser } from '../services/user';
-import { updateUser } from '../../../user/src/client/index';
+import { createUser, updateUser } from '../../../user/src/client/index';
 import { getPrice } from '../services/store';
 import { addItemTransaction, addTopUpTransaction } from '../services/transaction';
 import { getSessionData, SessionData } from '../services/session';
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
 import { WithRefreshToken, WithAccessToken } from '../../../user/src/client/index';
+import { storeCodeToStoreID } from '../services/store'
+
+const registerUser = async (defaultStoreCode) => {
+  const userId = uuid();
+  const profile = {
+    defaultStoreId: storeCodeToStoreID(defaultStoreCode),
+  };
+  return await createUser(userId, profile)
+};
 
 const register = async (storeCode) => {
   const { id, accessToken, refreshToken } = await registerUser(storeCode);

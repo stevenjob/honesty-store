@@ -1,6 +1,9 @@
 import HTTPStatus = require('http-status');
 import { authenticateAccessToken } from '../middleware/authenticate';
-import { expireRefreshToken } from '../services/user';
+
+const expireRefreshToken = async (userID) => {
+    throw new Error(`logout not supported yet (expireRefreshToken())`);
+};
 
 export default (router) => {
   router.post(

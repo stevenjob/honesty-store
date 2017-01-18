@@ -1,9 +1,14 @@
 import HTTPStatus = require('http-status');
-import { sendEmailToken } from '../services/user'
+import winston = require('winston');
 import { getSessionData, SessionData } from '../services/session';
 import { authenticateEmailToken } from '../middleware/authenticate'
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
-import { WithRefreshToken } from '../../../user/src/client/index';
+import { WithRefreshToken, sendMagicLinkEmail } from '../../../user/src/client/index';
+
+export const sendEmailToken = async (emailAddress) => {
+  await sendMagicLinkEmail(emailAddress);
+  winston.info(`send email token to ${emailAddress}`);
+};
 
 const setupSignInPhase1 = (router) => {
   router.post(
