@@ -66,7 +66,7 @@ export const getUserByRefreshToken = async (refreshToken: string): Promise<UserW
 };
 
 export const getUserByMagicLinkToken = async (magicLinkToken: string): Promise<UserWithAccessAndRefreshTokens> => {
-    const response = await fetch(`${baseUrl}/user/v1/magicLinkToken/${magicLinkToken}`, {
+    const response = await fetch(`${baseUrl}/user/v1/magicLink/${magicLinkToken}`, {
         method: 'GET'
     })
         .then<ApiResponse<UserWithAccessAndRefreshTokens>>(response => response.json());
@@ -106,15 +106,14 @@ export const updateUser = async (userId: string, userProfile: UserProfile): Prom
     return response.response;
 };
 
-export const createMagicLinkToken = async (userId: string): Promise<UserWithMagicLinkToken> => {
-    const response = await fetch(`${baseUrl}/user/v1/${userId}/magicLinkToken`, {
-        method: 'GET'
+export const sendMagicLinkEmail = async (emailAddress: string): Promise<void> => {
+    const response = await fetch(`${baseUrl}/user/v1/magicLink/${emailAddress}`, {
+        method: 'POST'
     })
-        .then<ApiResponse<UserWithMagicLinkToken>>(response => response.json());
+        .then<ApiResponse<void>>(response => response.json());
     if (response.error) {
         throw new Error(response.error.message);
     }
-    return response.response;
 };
 
 export const TEST_DATA_USER_ID = 'c50234ff-6c33-4878-a1ab-05f6b3e7b649';

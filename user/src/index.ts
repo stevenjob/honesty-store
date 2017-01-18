@@ -1,12 +1,13 @@
-import { config, DynamoDB } from 'aws-sdk';
+import { config, DynamoDB, SES } from 'aws-sdk';
 import bodyParser = require('body-parser');
 import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isEmail = require('validator/lib/isEmail');
 import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from './token';
-import { User, UserProfile, UserWithAccessToken, UserWithAccessAndRefreshTokens, UserWithMagicLinkToken, TEST_DATA_USER_ID } from './client';
+import { User, UserProfile, UserWithAccessToken, UserWithAccessAndRefreshTokens, TEST_DATA_USER_ID } from './client';
 import { createAccount, getAccount, TEST_DATA_EMPTY_ACCOUNT_ID } from '../../transaction/src/client';
+import { baseUrl } from '../../service/baseUrl';
 
 config.region = process.env.AWS_REGION;
 
@@ -66,11 +67,6 @@ const externaliseUserWithAccessTokenAndRefreshToken = (user: InternalUser): User
     refreshToken: signRefreshToken({ userId: user.id, refreshToken: user.refreshToken })
 });
 
-const externaliseUserWithMagicLinkToken = (user: InternalUser): UserWithMagicLinkToken => ({
-    ...externaliseUserWithAccessToken(user),
-    magicLinkToken: signAccessToken({ userId: user.id })
-});
-
 const getInternal = async ({ userId }): Promise<InternalUser> => {
     assertValidUserId(userId);
 
@@ -126,7 +122,7 @@ const getByMagicLinkToken = async ({ magicLinkToken }): Promise<UserWithAccessAn
     return externaliseUserWithAccessTokenAndRefreshToken(user);
 };
 
-const scanByEmailAddress = async ({ emailAddress }): Promise<UserWithMagicLinkToken> => {
+const scanByEmailAddress = async ({ emailAddress }) => {
     assertValidEmailAddress(emailAddress);
 
     const response = await new DynamoDB.DocumentClient()
@@ -149,7 +145,7 @@ const scanByEmailAddress = async ({ emailAddress }): Promise<UserWithMagicLinkTo
         throw new Error(`User not found ${emailAddress}`);
     }
 
-    return externaliseUserWithMagicLinkToken(user);
+    return user;
 };
 
 const createUser = async ({ userId, userProfile }): Promise<UserWithAccessAndRefreshTokens> => {
@@ -219,6 +215,33 @@ const updateUser = async ({ userId, userProfile }): Promise<User> => {
     return updatedUser;
 };
 
+const sendMagicLinkEmail = async ({ emailAddress }) => {
+    const user = await scanByEmailAddress({ emailAddress });
+
+    const message = `( https://honesty.store )
+
+*********************************************************************
+Tap the button below on your phone to log in to honesty.store
+*********************************************************************
+
+Log in to honesty.store ( ${baseUrl}/${user.defaultStoreId}?code=${signAccessToken({ userId: user.id })} )                
+`;
+    const response = await new SES({apiVersion: '2010-12-01'})
+        .sendEmail({
+            Destination: {
+                ToAddresses: [user.emailAddress]
+            },
+            Source: 'no-reply@honesty.store',
+            Message: { 
+                Subject: { Charset: 'UTF-8', Data: 'Log in to honesty.store' },
+                Body: { Text: { Charset: 'UTF-8', Data: message } }
+            }
+        })
+        .promise();
+    
+    return response.MessageId;
+};
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -258,7 +281,7 @@ router.get('/refreshToken/:refreshToken', (req, res) => {
         });
 });
 
-router.get('/magicLinkToken/:magicLinkToken', (req, res) => {
+router.get('/magicLink/:magicLinkToken', (req, res) => {
     const { magicLinkToken } = req.params;
     getByMagicLinkToken({ magicLinkToken })
         .then((user) => {
@@ -286,6 +309,17 @@ router.put('/:userId', (req, res) => {
     updateUser({ userId, userProfile })
         .then((user) => {
             res.json({ response: user });
+        })
+        .catch(({ message }) => {
+            res.json({ error: { message } });
+        });
+});
+
+router.post('/magicLink/:emailAddress', (req, res) => {
+    const { emailAddress } = req.params;
+    sendMagicLinkEmail({ emailAddress })
+        .then((user) => {
+            res.json({ response: null });
         })
         .catch(({ message }) => {
             res.json({ error: { message } });
