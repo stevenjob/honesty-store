@@ -1,5 +1,5 @@
 import HTTPStatus = require('http-status');
-import { sendEmailToken, updateRefreshToken } from '../services/user'
+import { sendEmailToken } from '../services/user'
 import { getSessionData, SessionData } from '../services/session';
 import { authenticateEmailToken } from '../middleware/authenticate'
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
@@ -21,15 +21,7 @@ const setupSignInPhase1 = (router) => {
 };
 
 const signin2 = async (userID) => {
-  const [sessionResponse, { refreshToken }] = await Promise.all([
-    getSessionData(userID),
-    updateRefreshToken(userID),
-  ]);
-
-  return {
-    ...sessionResponse,
-    refreshToken
-  };
+  return await getSessionData(userID);
 }
 
 const setupSignInPhase2 = (router) => {

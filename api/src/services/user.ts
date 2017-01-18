@@ -6,12 +6,8 @@ import { storeCodeToStoreID } from './store'
 
 export const getUser = UserClient.getUser;
 
-const generateRefreshToken = () => jsonwebtoken.sign(uuid(), secretKey);
-
 export const registerUser = async (defaultStoreCode) => {
   const userId = uuid();
-  const refreshToken = generateRefreshToken();
-
   const profile = {
     defaultStoreId: storeCodeToStoreID(defaultStoreCode),
   };
@@ -19,37 +15,22 @@ export const registerUser = async (defaultStoreCode) => {
 };
 
 export const getUserIDFromAccessToken = async (accessToken) => {
-  return (await UserClient.getUserByAccessToken(accessToken)).id;
+  const { id } = await UserClient.getUserByAccessToken(accessToken);
+  return { id };
 };
 
-export const getUserIDFromRefreshToken = async (refreshToken) => {
-  return (await UserClient.getUserByRefreshToken(refreshToken)).id;
+export const getUserIDAndAccessTokenFromRefreshToken = async (refreshToken) => {
+  const { id, accessToken } = await UserClient.getUserByRefreshToken(refreshToken);
+  return { id, accessToken };
 };
 
-export const getUserIDFromEmailToken = async (emailToken) => {
-  return (await UserClient.getUserByMagicLinkToken(emailToken)).id;
+export const getUserIDAndAccessAndRefreshTokensFromEmailToken = async (emailToken) => {
+  const { id, accessToken, refreshToken } = await UserClient.getUserByMagicLinkToken(emailToken);
+  return { id, accessToken, refreshToken };
 };
 
 export const updateUser = async (id, emailAddress) => {
   await updateUser(id, { emailAddress });
-};
-
-export const updateAccessToken = async (userID): Promise<UserClient.UserWithAccessToken> => { // TODO
-  const newAccessToken = generateExpirableToken();
-
-  return {
-      ...await UserClient.getUser(userID),
-      accessToken: newAccessToken,
-  };
-};
-
-export const updateRefreshToken = async (userID): Promise<UserClient.UserWithRefreshToken> => {
-  const newRefreshToken = generateRefreshToken(); // TODO
-
-  return {
-      ...await UserClient.getUser(userID),
-      refreshToken: newRefreshToken,
-  };
 };
 
 export const updateDefaultStoreCode = async (userID, storeCode) => {
@@ -64,11 +45,8 @@ export const expireRefreshToken = async (userID) => { // TODO
 };
 
 export const sendEmailToken = async (emailAddress) => {
-  const user = await UserClient.getUserByEmailAddress(emailAddress);
-  const token = await UserClient.createMagicLinkToken(user.id);
-
-  /* When the eventual service is added, the 'emailToken' will be sent via email */
-  winston.info(`Generated email token: ${token}`);
+  await UserClient.sendMagicLinkEmail(emailAddress);
+  winston.info(`send email token to ${emailAddress}`);
 };
 
 export const getUsersAccountId = async (userId: string): Promise<string> => {
