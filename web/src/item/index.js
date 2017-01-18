@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import Page from '../chrome/page';
 import Stepper from '../chrome/stepper';
 import { BRAND_LIGHT } from '../chrome/colors';
+import currency from '../format/currency';
 import './index.css';
 
 const getBackLink = (storeId) => <Link 
@@ -35,6 +36,11 @@ const ItemDetail = ({
     return balanceRemaining >= 0 ? updatedNumItems : numItems; 
   };
 
+  const formatBalance = (numItems) => {
+    const balance = calculateBalanceRemaining(numItems);
+    return `Your balance will be £${currency(balance)}`;
+  };
+
   return (
     <Page 
       storeId={storeId}
@@ -53,7 +59,7 @@ const ItemDetail = ({
           label="How many would you like to pay for?"
           onDecrement={decrementNumItems}
           onIncrement={incrementNumItems}
-          formatDescription={(numItems) => `Your balance will be ${calculateBalanceRemaining(numItems)}`}
+          formatDescription={formatBalance}
           formatValue={(numItems) => numItems}
           formatButton={(numItems) => `Pay for ${numItems} ${name}`}
           initialValue={1}
