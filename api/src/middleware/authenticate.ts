@@ -12,7 +12,6 @@ const authenticateToken = (request, response, next, tokenRetrievalGetter) => {
     jwt.verify(token, secretKey);
     // eslint-disable-next-line no-param-reassign
     request.userID = tokenRetrievalGetter(token);
-    next();
   } catch (e) {
     winston.error(`couldn't authenticate token`, e);
     response.status(HTTPStatus.UNAUTHORIZED)
@@ -23,6 +22,7 @@ const authenticateToken = (request, response, next, tokenRetrievalGetter) => {
         },
       });
   }
+  next();
 };
 
 export const authenticateAccessToken = (request, response, next) =>
