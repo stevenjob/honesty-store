@@ -27,11 +27,11 @@ export const getUserIDAndAccessAndRefreshTokensFromEmailToken = async (emailToke
 };
 
 export const updateUser = async (id, emailAddress) => {
-  await UserClient.updateUser(id, { emailAddress });
+  return await UserClient.updateUser(id, { emailAddress });
 };
 
 export const updateDefaultStoreCode = async (userID, storeCode) => {
-  await updateUser(userID, { defaultStoreCode: storeCode });
+  return await updateUser(userID, { defaultStoreCode: storeCode });
 };
 
 export const expireRefreshToken = async (userID) => {
