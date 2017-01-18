@@ -1,6 +1,7 @@
 import {
     RECEIVE_REGISTRATION_PHASE1, RECEIVE_REGISTRATION_PHASE2,
     REQUEST_REGISTRATION_PHASE1, REQUEST_REGISTRATION_PHASE2 } from '../actions/register';
+import { TOPUP_REQUEST, TOPUP_SUCCESS, TOPUP_FAILURE } from '../actions/topup';
 
 const getInitialState = () => {
   return {
@@ -37,6 +38,26 @@ export default (state = getInitialState(), action) => {
         user: user,
         store: store,
         pending: state.pending.filter(e => e !== 'register2')
+      };
+    case TOPUP_REQUEST:
+      return {
+        ...state,
+        pending: [...state.pending, 'topup']
+      };
+    case TOPUP_SUCCESS:
+      const { balance } = action.response;
+      return {
+        ...state,
+        user: {
+          ...user,
+          balance
+        },
+        pending: state.pending.filter(e => e !== 'topup')
+      };
+    case TOPUP_FAILURE:
+      return {
+        ...state,
+        pending: state.pending.filter(e => e !== 'topup')
       };
     default:
       return state;
