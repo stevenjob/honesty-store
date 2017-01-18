@@ -1,0 +1,7 @@
+.register-card {
+    text-align: center;
+}
+
+.register-card-tight>input {
+    width: 33%;
+}

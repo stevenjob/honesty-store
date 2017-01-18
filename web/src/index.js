@@ -19,6 +19,11 @@ import TopupExistingCard from './topup/existing-card';
 import TopupNewCard from './topup/new-card';
 import TopupSuccess from './topup/success';
 import TopupError from './topup/error';
+import RegisterEmail from './register/email';
+import RegisterCard from './register/card';
+import RegisterSuccess from './register/success';
+import SignIn from './signin/index';
+import SignInSuccess from './signin/success';
 import Help from './help/index';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -44,6 +49,11 @@ ReactDOM.render((
       <Route path="/" component={Intro}/>
       <Route path="/:storeId" component={Root}>
         <IndexRedirect to="store"/>
+        <Route path="register/:itemId" component={RegisterEmail}/>
+        <Route path="register/success" component={RegisterSuccess}/>
+        <Route path="register/:itemId/:emailAddress" component={RegisterCard}/>
+        <Route path="signin" component={SignIn}/>
+        <Route path="signin/success" component={SignInSuccess}/>
         <Route path="store" component={Store}/>
         <Route path="topup" component={TopupAmount}/>
         <Route path="topup/success"component={TopupSuccess}/>

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { performFullRegistration } from '../actions/register';
 import './fonts.css';
+import './form.css';
 import './link.css';
 import './root.css';
 

@@ -1,0 +1,13 @@
+input {
+    background: none;
+    border: none;
+    border-bottom: 1px solid #A9B8B9; /* MUTED_TEXT */
+    border-right: 1px solid #A9B8B9; /* MUTED_TEXT */
+    padding: 1rem;
+    font-size: 1.4rem;
+    width: 100%;
+}
+
+input:last-of-type {
+    border-right: none;
+}
