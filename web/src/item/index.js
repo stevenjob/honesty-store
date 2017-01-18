@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Page from '../chrome/page';
 import Stepper from '../chrome/stepper';
@@ -12,24 +13,68 @@ const getBackLink = (storeId) => <Link
     Close
   </Link>;
 
-export default ({ params: { storeId } }) =>
-  <Page 
-    storeId={storeId}
-    invert={true}
-    nav={false}
-    fullscreen={true}
-    left={getBackLink(storeId)}
-  >
-    <div className="item">
-      <div className="item-details">
-        <h1>Dairy Milk Freddo Caramel</h1>
-        <h2>55<small>p</small></h2>
-        <img src={require('../store/assets/packet.svg')} alt=""/>
+const ItemDetail = ({ 
+  storeId,
+  item: { id, name, price },
+  loading,
+  balance
+}) => {
+  const calculateBalanceRemaining = (numItems) => {
+    const balanceRemaining = balance - (price * numItems);
+    return balanceRemaining;
+  };
+
+  const decrementNumItems = (numItems) => {
+    const minNumItems = 1;
+    return numItems > minNumItems ? (numItems - 1) : minNumItems;
+  };
+
+  const incrementNumItems = (numItems) => {
+    const updatedNumItems = numItems + 1;
+    const balanceRemaining = calculateBalanceRemaining(updatedNumItems);
+    return balanceRemaining >= 0 ? updatedNumItems : numItems; 
+  };
+
+  return (
+    <Page 
+      storeId={storeId}
+      invert={true}
+      nav={false}
+      fullscreen={true}
+      left={getBackLink(storeId)}
+      loading={loading}
+    >
+      <div className="item">
+        <div className="item-details">
+          <h2>{name}<br/>{price}<small>p</small></h2>
+        </div>
+        <img src={require('../store/assets/packet.svg')} alt={name}/>
+        <Stepper
+          label="How many would you like to pay for?"
+          onDecrement={decrementNumItems}
+          onIncrement={incrementNumItems}
+          formatDescription={(numItems) => `Your balance will be ${calculateBalanceRemaining(numItems)}`}
+          formatValue={(numItems) => numItems}
+          formatButton={(numItems) => `Pay for ${numItems} ${name}`}
+          initialValue={1}
+          onClick={(numItems) => { /* TODO */ }}
+        />
       </div>
-      <Stepper
-        queryText="How many would you like to pay for?"
-        submitText="Pay for 1 Freddo Caramel"
-        stepperValue={1}
-      />
-    </div>
-  </Page>;
+    </Page>
+  );
+};
+
+const mapStateToProps = (
+  { store: { items = [] }, user: { balance } },
+  { params: { storeId, itemId } }
+) => {
+  const item = items.find(el => el.id === Number(itemId));
+  return {
+    storeId,
+    loading: item == null,
+    item: item || {},
+    balance
+  };
+};
+
+export default connect(mapStateToProps)(ItemDetail);

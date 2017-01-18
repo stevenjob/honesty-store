@@ -3,16 +3,42 @@ import Button from '../chrome/button';
 import { BRAND_LIGHT, MUTED_TEXT } from '../chrome/colors';
 import './stepper.css';
 
-export default ({ queryText, to, submitText, stepperSymbol, stepperValue }) =>
-  <div className="stepper">
-    <h2>{queryText}</h2>
-    <div className="stepper-amount">
-      <Button>-</Button>
-      <h1 style={{color: BRAND_LIGHT}}>
-        <small>{stepperSymbol}</small>{stepperValue}
-      </h1>
-      <Button>+</Button>
-    </div>
-    <p style={{color: MUTED_TEXT}}>Your balance will be<br/>£11.45</p>
-    <p><Button to={to}>{submitText}</Button></p>
-  </div>;
+class Stepper extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.initialValue
+    };
+  }
+
+  render() {
+    const { 
+      label, onClick, formatButton, formatValue, 
+      formatDescription, onIncrement, onDecrement
+    } = this.props;
+
+    const { value } = this.state;
+   
+    return (
+      <div className="chrome-stepper">
+      <h2>{label}</h2>
+      <div className="chrome-stepper-amount">
+        <Button onClick={() => this.updateValue(onDecrement)}>-</Button>
+        <h1 style={{color: BRAND_LIGHT}}>
+          {formatValue(value)}
+        </h1>
+        <Button onClick={() => this.updateValue(onIncrement) }>+</Button>
+      </div>
+      <p style={{color: MUTED_TEXT}}>{formatDescription(value)}</p>
+        <p><Button onClick={() => onClick(value)}>{formatButton(value)}</Button></p>
+      </div>
+    );
+  }
+
+  updateValue(updateFn) {
+    const updatedValue = updateFn(this.state.value);
+    this.setState({ value: updatedValue });
+  }
+}
+
+export default Stepper;
