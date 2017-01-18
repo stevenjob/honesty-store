@@ -19,13 +19,13 @@ const handleInvalidToken = (response, error) => {
 
 const authenticateToken = (request, response, next, tokenRetrievalGetter) => {
   const token = getToken(request);
-  jwt.verify(token, secretKey);
 
+  // token verification is handled by the user service / tokenRetrievalGetter
   tokenRetrievalGetter(token)
     .then((userID) => {
       // eslint-disable-next-line no-param-reassign
       request.userID = userID;
-      next();
+      next(); // we assume next doesn't throw, and don't return its result here
     })
     .catch((error) =>
       handleInvalidToken(response, error));
