@@ -2,25 +2,10 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-}
-
-.item-details {
-  margin: 1rem 0 auto 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.item-details>h1 {
-  text-align: center;
-  font-size: 2.4rem;
-  margin-bottom: 0;
-}
-
-.item-details>h2 {
-  margin-top: 0;
+  justify-content: space-between;
   text-align: center;
 }
 
-.item-details>img {
-  height: 13rem; /* TODO: Fix breaking on iPhone 5-sized devices */
+.item>img {
+  height: 8rem;
 }
