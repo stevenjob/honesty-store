@@ -1,43 +1,40 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { BRAND_LIGHT, MUTED_TEXT } from '../chrome/colors';
-import Button from '../chrome/button';
+import { hashHistory } from 'react-router';
+import { BRAND_LIGHT } from '../chrome/colors';
 import Page from '../chrome/page';
+import Stepper from '../chrome/stepper';
 import { Close } from '../chrome/link';
 import currency from '../format/currency';
 import './amount.css';
 
-const Amount = ({ params: { storeId }, balance }) =>
-    <Page left={<Close to={`/${storeId}/store`}/>}
-        title="Balance"
-        storeId={storeId}
-        invert={true}
-        nav={false}
-        fullscreen={true}>
-        <div className="topup-amount">
-            <div className="topup-amount-balance">
-                <h3>Your balance is currently</h3>
-                <h1 style={{color: BRAND_LIGHT}}><small>£</small>{currency(balance)}</h1>
-            </div>
-            <div className="topup-amount-topup">
-                <h2>Would you like to top up?</h2>
-                <div className="topup-amount-topup-amount">
-                    <Button type="disabled">-</Button>
-                    <h1 style={{color: BRAND_LIGHT}}><small>£</small>5</h1>
-                    <Button type="disabled">+</Button>
+const Amount = ({ params: { storeId }, balance }) => {
+    return (
+        <Page left={<Close to={`/${storeId}/store`}/>}
+            title="Balance"
+            storeId={storeId}
+            invert={true}
+            nav={false}
+            fullscreen={true}>
+            <div className="topup-amount">
+                <div className="topup-amount-balance">
+                    <h3>Your balance is currently</h3>
+                    <h1 style={{color: BRAND_LIGHT}}><small>£</small>{currency(balance)}</h1>
                 </div>
-                <p style={{color: MUTED_TEXT}}>
-                    Your balance will be<br/>
-                    £{currency(balance + 500)}
-                </p>
-                <p>
-                    <Button to={`/${storeId}/topup/${500}`}>
-                        Top Up using a Card
-                    </Button>
-                </p>
+                <Stepper 
+                    label="Would you like to top up?"
+                    onIncrement={(amount) => amount}
+                    onDecrement={(amount) => amount}
+                    formatDescription={(amount) => `Your balance will be £${currency(balance + amount)}`}
+                    formatValue={(amount) => `£${currency(amount)}`}
+                    formatButton={(amount) => 'Top Up using a Card'}
+                    initialValue={500}
+                    onClick={(amount) => { hashHistory.push(`/${storeId}/topup/${amount}`); }}
+                />
             </div>
-        </div>
-    </Page>;
+        </Page>
+    );
+};
 
 const mapStateToProps = ({ user: { balance = 0 } }) => ({
     balance
