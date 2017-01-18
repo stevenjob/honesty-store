@@ -6,8 +6,7 @@ import { TransactionAndBalance } from '../../../transaction/src/client/index';
 
 const purchase = async ({ itemID, userID }) => {
     const price = getPrice(itemID);
-    const transaction = await addItemTransaction(userID, price);
-    const balance = await getBalance(userID)
+    const { transaction, balance } = await addItemTransaction(userID, price);
 
     return {
       balance,
