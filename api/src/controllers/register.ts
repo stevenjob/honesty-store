@@ -5,18 +5,18 @@ import winston = require('winston');
 import { registerUser, updateUser } from '../services/user';
 import { getPrice } from '../services/store';
 import { addItemTransaction, addTopUpTransaction } from '../services/transaction';
-import { getSessionData } from '../services/session';
+import { getSessionData, SessionData } from '../services/session';
 import { authenticateAccessToken } from '../middleware/authenticate';
+import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { WithRefreshToken, WithAccessToken } from '../../../user/src/client/index';
 
 const register = async (storeCode) => {
   const { id, accessToken, refreshToken } = registerUser(storeCode);
 
   return {
-      response: {
-          ...await getSessionData(id),
-          refreshToken,
-          accessToken,
-      }
+      ...await getSessionData(id),
+      refreshToken,
+      accessToken,
   };
 };
 
@@ -34,8 +34,7 @@ const register2 = async (userID, emailAddress, cardDetails, topUpAmount, purchas
     winston.warn(e.message);
   }
 
-  const response = await getSessionData(userID);
-  return { response };
+  return await getSessionData(userID);
 };
 
 const setupRegisterPhase1 = (router) => {
@@ -43,13 +42,10 @@ const setupRegisterPhase1 = (router) => {
     '/register',
     (request, response) => {
       const { storeCode } = request.body;
-      register(storeCode)
-        .then((responseData) =>
-            response.status(HTTPStatus.OK)
-                .json(responseData))
-        .catch((error) =>
-            response.status(HTTPStatus.INTERNAL_SERVER_ERROR)
-                .json({ error: error.message }))
+
+      type ResultType = SessionData & WithRefreshToken & WithAccessToken;
+
+      promiseResponse<ResultType>(register(storeCode), response, HTTPStatus.INTERNAL_SERVER_ERROR);
     });
 };
 
@@ -71,13 +67,11 @@ const setupRegisterPhase2 = (router) => {
 
       const { cardDetails, itemID, topUpAmount } = request.body;
       const { userID } = request;
-      register2(userID, emailAddress, cardDetails, topUpAmount, itemID)
-        .then((responseData) =>
-          response.status(HTTPStatus.OK)
-            .json(responseData))
-        .catch((error) =>
-          response.status(HTTPStatus.INTERNAL_SERVER_ERROR)
-            .json({ error: error.message }));
+
+      promiseResponse<SessionData>(
+          register2(userID, emailAddress, cardDetails, topUpAmount, itemID),
+          response,
+          HTTPStatus.INTERNAL_SERVER_ERROR);
     });
 };
 

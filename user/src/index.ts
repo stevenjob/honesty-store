@@ -8,6 +8,7 @@ import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToke
 import { User, UserProfile, UserWithAccessToken, UserWithAccessAndRefreshTokens, TEST_DATA_USER_ID } from './client';
 import { createAccount, getAccount, TEST_DATA_EMPTY_ACCOUNT_ID } from '../../transaction/src/client';
 import { baseUrl } from '../../service/src/baseUrl';
+import { promiseResponse } from '../../service/src/endpoint-then-catch';
 
 config.region = process.env.AWS_REGION;
 
@@ -250,69 +251,50 @@ const router = express.Router();
 
 router.get('/:userId', (req, res) => {
     const { userId } = req.params;
-    get({ userId })
-        .then((user) => {
-            res.json({ response: user });
-        })
-        .catch(({ message }) => {
-            res.json({ error: { message } });
-        });
+    promiseResponse<User>(
+        get({ userId }),
+        res);
 });
 
 router.get('/accessToken/:accessToken', (req, res) => {
     const { accessToken } = req.params;
-    getByAccessToken({ accessToken })
-        .then((user) => {
-            res.json({ response: user });
-        })
-        .catch(({ message }) => {
-            res.json({ error: { message } });
-        });
+
+    promiseResponse<User>(
+        getByAccessToken({ accessToken }),
+        res);
 });
 
 router.get('/refreshToken/:refreshToken', (req, res) => {
     const { refreshToken } = req.params;
-    getByRefreshToken({ refreshToken })
-        .then((user) => {
-            res.json({ response: user });
-        })
-        .catch(({ message }) => {
-            res.json({ error: { message } });
-        });
+
+    promiseResponse<UserWithAccessToken>(
+        getByRefreshToken({ refreshToken }),
+        res);
 });
 
 router.get('/magicLink/:magicLinkToken', (req, res) => {
     const { magicLinkToken } = req.params;
-    getByMagicLinkToken({ magicLinkToken })
-        .then((user) => {
-            res.json({ response: user });
-        })
-        .catch(({ message }) => {
-            res.json({ error: { message } });
-        });
+
+    promiseResponse<UserWithAccessAndRefreshTokens>(
+        getByMagicLinkToken({ magicLinkToken }),
+        res);
 });
 
 router.post('/', (req, res) => {
     const { userId, ...userProfile } = req.body;
-    createUser({ userId, userProfile })
-        .then((user) => {
-            res.json({ response: user });
-        })
-        .catch(({ message }) => {
-            res.json({ error: { message } });
-        });
+
+    promiseResponse<UserWithAccessAndRefreshTokens>(
+        createUser({ userId, userProfile }),
+        res);
 });
 
 router.put('/:userId', (req, res) => {
     const { userId } = req.params;
     const userProfile = req.body;
-    updateUser({ userId, userProfile })
-        .then((user) => {
-            res.json({ response: user });
-        })
-        .catch(({ message }) => {
-            res.json({ error: { message } });
-        });
+
+    promiseResponse<User>(
+        updateUser({ userId, userProfile }),
+        res);
 });
 
 router.post('/magicLink/:emailAddress', (req, res) => {

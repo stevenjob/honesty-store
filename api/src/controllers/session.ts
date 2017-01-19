@@ -1,24 +1,28 @@
 import HTTPStatus = require('http-status');
 import { authenticateRefreshToken } from '../middleware/authenticate';
 import { updateAccessToken } from '../services/user';
-import { getSessionData } from '../services/session';
+import { getSessionData, SessionData } from '../services/session';
+import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+
+const session = async (userID) => {
+    const sessionResponse = await getSessionData(userID)
+    const { accessToken } = updateAccessToken(userID); // this is going to get rebased the funk out
+
+    return {
+        ...sessionResponse,
+        accessToken,
+    };
+};
 
 export default (router) => {
   router.post(
     '/session',
     authenticateRefreshToken,
     (request, response) => {
-        getSessionData(request.userID)
-            .then((sessionResponse: any) => {
-                const { accessToken } = updateAccessToken(request.userID);
 
-                sessionResponse.accessToken = accessToken;
-                response.status(HTTPStatus.OK)
-                    .json({ response: sessionResponse });
-            })
-            .catch((error) => {
-                response.status(HTTPStatus.INTERNAL_SERVER_ERROR)
-                    .json({ error: error.message });
-            });
+      promiseResponse<SessionData>(
+          session(request.userID),
+          response,
+          HTTPStatus.INTERNAL_SERVER_ERROR);
     });
 };

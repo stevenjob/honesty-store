@@ -3,11 +3,11 @@ import bodyParser = require('body-parser');
 import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
-
 import * as stripeFactory from 'stripe';
-import { TransactionDetails, TransactionAndBalance, createTransaction } from '../../transaction/src/client/index';
 
+import { TransactionDetails, TransactionAndBalance, createTransaction } from '../../transaction/src/client/index';
 import { TopupAccount, TopupRequest } from './client/index';
+import { promiseResponse } from '../../service/src/endpoint-then-catch';
 
 const stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
 const stripeProd = stripeFactory(process.env.STRIPE_SECRET_KEY_LIVE);
@@ -253,13 +253,9 @@ app.use(bodyParser.json());
 router.post('/topup', (req, res) => {
     const { accountId, userId, amount, stripeToken } = req.body;
 
-    attemptTopup({ accountId, userId, amount, stripeToken })
-        .then((transactionAndBalance: TransactionAndBalance) => {
-            res.json({ response: transactionAndBalance });
-        })
-        .catch((error) => {
-            res.json({ error: error.message });
-        });
+    promiseResponse<TransactionAndBalance>(
+        attemptTopup({ accountId, userId, amount, stripeToken }),
+        res);
 });
 
 app.use('/topup/v1', router);

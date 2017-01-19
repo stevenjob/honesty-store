@@ -2,6 +2,8 @@ import HTTPStatus = require('http-status');
 import { authenticateAccessToken } from '../middleware/authenticate'
 import { getUsersAccountId } from '../services/user';
 import { createTopup } from '../../../topup/src/client/index'
+import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { TransactionAndBalance } from '../../../transaction/src/client/index';
 
 const performTopup = async ({ stripeToken, amount, userId }: { stripeToken: string, amount: number, userId: string }) => {
     const accountId = await getUsersAccountId(userId);
@@ -16,14 +18,9 @@ export default (router) => {
     (request, response) => {
       const { stripeToken, amount } = request.body;
 
-      performTopup({ stripeToken, amount, userId: request.userId })
-        .then((topupJson) =>
-          response.status(HTTPStatus.OK)
-            .json(topupJson)
-        )
-        .catch((error) =>
-          response.status(HTTPStatus.INTERNAL_SERVER_ERROR)
-            .json({ error: error.message })
-        );
+      promiseResponse<TransactionAndBalance>(
+          performTopup({ stripeToken, amount, userId: request.userId }),
+          response,
+          HTTPStatus.INTERNAL_SERVER_ERROR);
     })
 };

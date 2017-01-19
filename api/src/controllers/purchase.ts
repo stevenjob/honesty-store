@@ -1,7 +1,8 @@
-import HTTPStatus = require('http-status');
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { getPrice } from '../services/store';
 import { addItemTransaction, getBalance } from '../services/transaction';
+import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { TransactionAndBalance } from '../../../transaction/src/client/index';
 
 const attemptPurchase = async ({ userID, itemID }) => {
     const price = getPrice(itemID);
@@ -22,14 +23,8 @@ export default (router) => {
     (request, response) => {
       const { itemID, userID } = request.body;
 
-      attemptPurchase({ itemID, userID })
-        .then(({ balance, transaction }) => {
-            response.status(HTTPStatus.OK)
-                .json({ response: { balance, transaction }});
-        })
-        .catch((error) => {
-            response.status(HTTPStatus.OK)
-                .json({ error: error.message });
-        });
+      promiseResponse<{ balance: number, transaction: TransactionAndBalance}>(
+          attemptPurchase({ itemID, userID }),
+          response);
     });
 };

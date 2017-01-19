@@ -1,6 +1,24 @@
 import { getUser } from '../services/user'
 import { getTransactionHistory, getBalance } from '../services/transaction'
 import { getItems } from '../services/store'
+import { Transaction } from '../../../transaction/src/client/index';
+
+export interface SessionData {
+    user: {
+        balance: number;
+        transactions: Transaction[];
+        cardNumber: string;
+    };
+    store: {
+        code: string;
+        items: {
+            id: string;
+            name: string;
+            price: number;
+            count: number;
+        }[];
+    };
+};
 
 const maskCardNumber = (cardNumber) => {
   if (cardNumber != null) {

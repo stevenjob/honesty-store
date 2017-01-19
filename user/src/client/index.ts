@@ -12,11 +12,11 @@ export interface User {
     emailAddress: string;
 }
 
-interface WithRefreshToken {
+export interface WithRefreshToken {
     refreshToken: string;
 }
 
-interface WithAccessToken {
+export interface WithAccessToken {
     accessToken: string;
 }
 

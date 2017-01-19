@@ -1,7 +1,9 @@
 import HTTPStatus = require('http-status');
 import { sendEmailToken, updateRefreshToken } from '../services/user'
-import { getSessionData } from '../services/session'
+import { getSessionData, SessionData } from '../services/session';
 import { authenticateEmailToken } from '../middleware/authenticate'
+import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { WithRefreshToken } from '../../../user/src/client/index';
 
 const setupSignInPhase1 = (router) => {
   router.post(
@@ -14,23 +16,25 @@ const setupSignInPhase1 = (router) => {
     });
 };
 
+const signin2 = async (userID) => {
+    const sessionData = await getSessionData(userID);
+    const { refreshToken } = updateRefreshToken(userID); // this is gonna get rebased to oblivion
+
+    return {
+        ...sessionData,
+        refreshToken
+    };
+}
+
 const setupSignInPhase2 = (router) => {
   router.post(
     '/signin2',
     authenticateEmailToken,
     (request, response) => {
-      getSessionData(request.userID)
-        .then((responseData: any) => {
-            const { refreshToken } = updateRefreshToken(request.userID);
-            responseData.refreshToken = refreshToken;
-
-            response.status(HTTPStatus.OK)
-                .json({ response: responseData });
-        })
-        .catch((error) => {
-            response.status(HTTPStatus.INTERNAL_SERVER_ERROR)
-                .json({ error: error.message });
-        });
+      promiseResponse<SessionData & WithRefreshToken>(
+          signin2(request.userID),
+          response,
+          HTTPStatus.INTERNAL_SERVER_ERROR);
     });
 };
 

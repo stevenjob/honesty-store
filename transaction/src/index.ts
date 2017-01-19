@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isInt = require('validator/lib/isInt');
 import { Account, Transaction, TransactionDetails, TransactionAndBalance, TEST_DATA_EMPTY_ACCOUNT_ID } from './client';
+import { promiseResponse } from '../../service/src/endpoint-then-catch';
 
 config.region = process.env.AWS_REGION;
 
@@ -135,36 +136,27 @@ const router = express.Router();
 
 router.get('/:accountId', (req, res) => {
     const { accountId } = req.params;
-    get({ accountId })
-        .then((account) => {
-            res.json({ response: account });
-        })
-        .catch(({ message }) => {
-            res.json({ error: { message } });
-        });
+
+    promiseResponse<Account>(
+        get({ accountId }),
+        res);
 });
 
 router.post('/:accountId', (req, res) => {
     const { accountId } = req.params;
     const { type, amount, data } = req.body;
-    createTransaction({ accountId, type, amount, data })
-        .then(({ transaction, balance }: TransactionAndBalance) => {
-            res.json({ response: { transaction, balance } });
-        })
-        .catch(({ message }) => {
-            res.json({ error: { message } });
-        });
+
+    promiseResponse<TransactionAndBalance>(
+        createTransaction({ accountId, type, amount, data }),
+        res);
 });
 
 router.post('/', (req, res) => {
     const { accountId } = req.body;
-    createAccount({ accountId })
-        .then((account) => {
-            res.json({ response: account });
-        })
-        .catch(({ message }) => {
-            res.json({ error: { message } });
-        });
+
+    promiseResponse<Account>(
+        createAccount({ accountId }),
+        res);
 });
 
 app.use('/transaction/v1', router);

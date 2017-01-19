@@ -1,6 +1,8 @@
 import HTTPStatus = require('http-status');
 import { authenticateAccessToken } from '../middleware/authenticate'
 import { getTransactionHistory } from '../services/transaction'
+import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { Transaction } from '../../../transaction/src/client/index';
 
 const getPagedTransactions = async (userID, page) => {
   const allUserTransactions = await getTransactionHistory(userID);
@@ -24,16 +26,9 @@ export default (router) => {
     (request, response) => {
       const page = parseInt(request.query.page, 10) || 0;
 
-      getPagedTransactions(request.userID, page)
-        .then((pagedTxs) =>
-          response.status(HTTPStatus.OK)
-            .json({
-                response: pagedTxs
-            })
-        )
-        .catch((error) =>
-          response.status(HTTPStatus.INTERNAL_SERVER_ERROR)
-            .json({ error: error.message })
-        );
+      promiseResponse<{ lastPage: number, items: Transaction[] }>(
+        getPagedTransactions(request.userID, page),
+        response,
+        HTTPStatus.INTERNAL_SERVER_ERROR);
     });
 };
