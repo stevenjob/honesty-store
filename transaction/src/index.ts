@@ -47,6 +47,10 @@ const get = async ({ accountId }): Promise<Account> => {
         })
         .promise();
 
+    if (response.Item == null) {
+        throw new Error(`Account not found ${accountId}`);
+    }
+
     return <Account>response.Item;
 };
 
@@ -78,10 +82,6 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
     assertValidAccountId(accountId);
 
     const originalAccount = await get({ accountId });
-
-    if (originalAccount == null) {
-        throw new Error(`Account not found ${accountId}`);
-    }
 
     const transaction: Transaction = {
         id: uuid(),
