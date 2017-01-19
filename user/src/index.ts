@@ -224,7 +224,7 @@ const sendMagicLinkEmail = async ({ emailAddress }) => {
 Tap the button below on your phone to log in to honesty.store
 *********************************************************************
 
-Log in to honesty.store ( ${baseUrl}/${user.defaultStoreId}?code=${signAccessToken({ userId: user.id })} )                
+Log in to honesty.store ( ${baseUrl}/${user.defaultStoreId}?code=${signAccessToken({ userId: user.id })} )
 `;
     const response = await new SES({apiVersion: '2010-12-01'})
         .sendEmail({
@@ -232,13 +232,13 @@ Log in to honesty.store ( ${baseUrl}/${user.defaultStoreId}?code=${signAccessTok
                 ToAddresses: [user.emailAddress]
             },
             Source: 'no-reply@honesty.store',
-            Message: { 
+            Message: {
                 Subject: { Charset: 'UTF-8', Data: 'Log in to honesty.store' },
                 Body: { Text: { Charset: 'UTF-8', Data: message } }
             }
         })
         .promise();
-    
+
     return response.MessageId;
 };
 
@@ -319,7 +319,7 @@ router.post('/magicLink/:emailAddress', (req, res) => {
     const { emailAddress } = req.params;
     sendMagicLinkEmail({ emailAddress })
         .then((user) => {
-            res.json({ response: null });
+            res.json({ response: {} });
         })
         .catch(({ message }) => {
             res.json({ error: { message } });

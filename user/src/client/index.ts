@@ -106,14 +106,15 @@ export const updateUser = async (userId: string, userProfile: UserProfile): Prom
     return response.response;
 };
 
-export const sendMagicLinkEmail = async (emailAddress: string): Promise<void> => {
+export const sendMagicLinkEmail = async (emailAddress: string): Promise<{}> => {
     const response = await fetch(`${baseUrl}/user/v1/magicLink/${emailAddress}`, {
         method: 'POST'
     })
-        .then<ApiResponse<void>>(response => response.json());
+        .then<ApiResponse<{}>>(response => response.json());
     if (response.error) {
         throw new Error(response.error.message);
     }
+    return response.response;
 };
 
 export const TEST_DATA_USER_ID = 'c50234ff-6c33-4878-a1ab-05f6b3e7b649';
