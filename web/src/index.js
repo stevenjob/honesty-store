@@ -29,6 +29,7 @@ import SignIn from './signin/index';
 import SignInSuccess from './signin/success';
 import Help from './help/index';
 import ItemDetail from './item/detail';
+import ItemPurchaseSuccess from './item/success';
 import reducer from './reducers/reducer';
 
 
@@ -57,6 +58,7 @@ ReactDOM.render((
         <Route path="signin/success" component={SignInSuccess}/>
         <Route path="store" component={Store}/>
         <Route path="item/:itemId" component={ItemDetail}/>
+        <Route path="item/:itemId/success" component={ItemPurchaseSuccess}/>
         <Route path="topup" component={TopupAmount}/>
         <Route path="topup/success"component={TopupSuccess}/>
         <Route path="topup/error"component={TopupError}/>
