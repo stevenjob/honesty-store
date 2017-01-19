@@ -14,7 +14,8 @@ export default (router) => {
     '/purchase',
     authenticateAccessToken,
     (request, response) => {
-      const { itemID, userID } = request.body;
+      const { itemID } = request.body;
+      const { user: { id: userID } } = request;
 
       promiseResponse<TransactionAndBalance>(
           purchase({ itemID, userID }),
