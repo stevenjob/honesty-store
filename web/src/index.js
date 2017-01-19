@@ -49,6 +49,7 @@ ReactDOM.render((
   <Provider store={store}>
     <Router history={hashHistory} onUpdate={() => scrollTo(0, 0)}>
       <Route path="/" component={Intro}/>
+      <Route path="/error" component={() => <b>Problem, probably store code either invalid or not your default</b>}/>
       <Route path="/:storeId" component={Root}>
         <IndexRedirect to="store"/>
         <Route path="register/:itemId" component={RegisterEmail}/>
