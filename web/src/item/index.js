@@ -1,18 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Back } from '../chrome/link';
 import Page from '../chrome/page';
 import Stepper from '../chrome/stepper';
-import { BRAND_LIGHT } from '../chrome/colors';
 import currency from '../format/currency';
 import './index.css';
-
-const getBackLink = (storeId) => <Link 
-    style={{color: BRAND_LIGHT}}
-    to={`/${storeId}/store`}
-  >
-    Close
-  </Link>;
 
 const ItemDetail = ({ 
   storeId,
@@ -47,7 +39,7 @@ const ItemDetail = ({
       invert={true}
       nav={false}
       fullscreen={true}
-      left={getBackLink(storeId)}
+      left={<Back/>}
       loading={loading}
     >
       <div className="item">
