@@ -1,15 +1,16 @@
 import React from 'react';
 import { hashHistory } from 'react-router';
-import Page from '../chrome/page';
+import Page from './page';
 import error from './assets/error.svg';
 import './error.css';
 
-export default ({ params: { storeId } }) =>
+export default ({ params: { storeId }, route: { returnPage } }) =>
     <Page storeId={storeId}
         invert={true}
         nav={false}
-        fullscreen={true}>
-        <div onClick={() => hashHistory.replace(`/${storeId}/topup`)} className="topup-error">
+        fullscreen={true}
+    >
+        <div onClick={() => hashHistory.replace(`${storeId}/${returnPage}`)} className="chrome-error">
             <div>
                 <h3>Oops! Something went wrong...</h3>
                 <img src={error} alt="error"/>

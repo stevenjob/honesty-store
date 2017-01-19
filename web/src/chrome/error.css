@@ -1,13 +1,13 @@
-.topup-error {
+.chrome-error {
     height: 100%;
     display: flex;
 }
 
-.topup-error>div {
+.chrome-error>div {
     text-align: center;
     margin: auto;
 }
 
-.topup-error>div>img {
+.chrome-error>div>img {
     height: 12rem;
 }

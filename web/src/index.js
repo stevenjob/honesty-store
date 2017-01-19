@@ -6,6 +6,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import Root from './chrome/root';
+import Error from './chrome/error';
 import Intro from './intro/index';
 import AboutInfo from './info/about';
 import AppInfo from './info/app';
@@ -21,7 +22,6 @@ import TopupAmount from './topup/amount';
 import TopupExistingCard from './topup/existing-card';
 import TopupNewCard from './topup/new-card';
 import TopupSuccess from './topup/success';
-import TopupError from './topup/error';
 import RegisterEmail from './register/email';
 import RegisterCard from './register/card';
 import RegisterSuccess from './register/success';
@@ -57,11 +57,12 @@ ReactDOM.render((
         <Route path="signin" component={SignIn}/>
         <Route path="signin/success" component={SignInSuccess}/>
         <Route path="store" component={Store}/>
+        <Route path="item/error" returnPage="store" component={Error} />
         <Route path="item/:itemId" component={ItemDetail}/>
         <Route path="item/:itemId/success" component={ItemPurchaseSuccess}/>
         <Route path="topup" component={TopupAmount}/>
         <Route path="topup/success"component={TopupSuccess}/>
-        <Route path="topup/error"component={TopupError}/>
+        <Route path="topup/error" returnPage="topup" component={Error}/>
         <Route path="topup/:amount"component={TopupExistingCard}/>
         <Route path="topup/:amount/new"component={TopupNewCard}/>
         <Route path="history" component={History}/>

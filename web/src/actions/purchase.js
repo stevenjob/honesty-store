@@ -44,8 +44,6 @@ export const performPurchase = (storeId, itemID) => async (dispatch, getState) =
   }
   catch (e) {
     dispatch(purchaseFailure());
-    // hashHistory.push(`{storeId}/item/error`);
-    /* TODO ^ */
-    console.log('Show error screen');
+    hashHistory.push(`${storeId}/item/error`);
   }
 };
