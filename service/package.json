@@ -1,0 +1,17 @@
+{
+  "name": "@honesty-store/service",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "compile": "tsc",
+    "lint": "tslint src",
+    "test": "npm run lint && npm run compile",
+    "ci": "npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^7.0.0",
+    "tslint": "^4.0.0",
+    "tslint-microsoft-contrib": "^2.0.14",
+    "typescript": "^2.1.0"
+  }
+}

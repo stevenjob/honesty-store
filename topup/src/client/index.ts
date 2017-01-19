@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
-import { ApiResponse } from '../../../service/types';
+import { ApiResponse } from '../../../service/src/types';
 import { TransactionAndBalance } from '../../../transaction/src/client/index';
-import { baseUrl } from '../../../service/baseUrl';
+import { baseUrl } from '../../../service/src/baseUrl';
 
 export interface TopupAccount {
     id: string;

@@ -7,7 +7,7 @@ import isEmail = require('validator/lib/isEmail');
 import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from './token';
 import { User, UserProfile, UserWithAccessToken, UserWithAccessAndRefreshTokens, TEST_DATA_USER_ID } from './client';
 import { createAccount, getAccount, TEST_DATA_EMPTY_ACCOUNT_ID } from '../../transaction/src/client';
-import { baseUrl } from '../../service/baseUrl';
+import { baseUrl } from '../../service/src/baseUrl';
 
 config.region = process.env.AWS_REGION;
 
