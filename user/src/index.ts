@@ -210,7 +210,7 @@ const updateUser = async ({ userId, userProfile }): Promise<User> => {
                 id: userId
             },
             ConditionExpression: 'version=:originalVersion',
-            UpdateExpression: 'set accountId=:transactions, defaultStoreId=:defaultStoreId, emailAddress=:emailAddress, refreshToken=:refreshToken, version=:updatedVersion',
+            UpdateExpression: 'set accountId=:accountId, defaultStoreId=:defaultStoreId, emailAddress=:emailAddress, refreshToken=:refreshToken, version=:updatedVersion',
             ExpressionAttributeValues: {
                 ':originalVersion': originalUser.version,
                 ':accountId': updatedUser.accountId,
