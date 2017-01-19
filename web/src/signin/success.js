@@ -1,7 +1,4 @@
 import React from 'react';
-import { hashHistory } from 'react-router';
-import Button from '../chrome/button';
-import { NotNow } from '../chrome/link';
 import Page from '../chrome/page';
 import success from '../topup/assets/success.svg';
 import './success.css';
