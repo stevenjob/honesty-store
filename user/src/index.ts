@@ -48,6 +48,12 @@ const assertValidUserProfile = (userProfile: UserProfile) => {
     return true;
 };
 
+const assertNotNull = (name, value) => {
+    if (value == null) {
+        throw new Error(`${name} is null`);
+    }
+}
+
 const externaliseUser = (user: InternalUser): User => {
     const {
         created,
@@ -150,6 +156,9 @@ const scanByEmailAddress = async ({ emailAddress }) => {
 };
 
 const createUser = async ({ userId, userProfile }): Promise<UserWithAccessAndRefreshTokens> => {
+    assertNotNull("defaultStoreId", userProfile.defaultStoreId);
+    assertNotNull("accountId", userProfile.accountId);
+
     const user: InternalUser = {
         id: userId,
         created: Date.now(),

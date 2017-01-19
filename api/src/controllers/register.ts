@@ -15,6 +15,7 @@ import { storeCodeToStoreID } from '../services/store'
 const registerUser = async (defaultStoreCode) => {
   const userId = uuid();
   const profile = {
+    accountId: uuid(),
     defaultStoreId: storeCodeToStoreID(defaultStoreCode),
   };
   return await createUser(userId, profile)
