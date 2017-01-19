@@ -35,7 +35,7 @@ const performRegistrationPhase2 = async (accessToken, requestBody) => {
     body: JSON.stringify(requestBody),
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer: ${accessToken}` 
+      'Authorization': `Bearer: ${accessToken}`
     }
   });
   return await response.json();

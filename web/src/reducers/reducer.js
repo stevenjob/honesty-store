@@ -1,6 +1,7 @@
 import {
     RECEIVE_REGISTRATION_PHASE1, RECEIVE_REGISTRATION_PHASE2,
     REQUEST_REGISTRATION_PHASE1, REQUEST_REGISTRATION_PHASE2 } from '../actions/register';
+import { STRIPE_REQUEST, STRIPE_SUCCESS, STRIPE_FAILURE } from '../actions/stripe';
 import { TOPUP_REQUEST, TOPUP_SUCCESS, TOPUP_FAILURE } from '../actions/topup';
 
 const getInitialState = () => {
@@ -8,6 +9,7 @@ const getInitialState = () => {
     pending: [],
     user: {},
     store: {},
+    stripe: {},
     accessToken: null,
     refreshToken: null
   };
@@ -38,6 +40,29 @@ export default (state = getInitialState(), action) => {
         user: user,
         store: store,
         pending: state.pending.filter(e => e !== 'register2')
+      };
+    case STRIPE_REQUEST:
+      return {
+        ...state,
+        pending: [...state.pending, 'stripe']
+      };
+    case STRIPE_SUCCESS:
+      const { token } = action;
+      return {
+        ...state,
+        stripe: {
+          token
+        },
+        pending: state.pending.filter(e => e !== 'stripe')
+      };
+    case STRIPE_FAILURE:
+      const { error } = action;
+      return {
+        ...state,
+        stripe: {
+          error
+        },
+        pending: state.pending.filter(e => e !== 'stripe')
       };
     case TOPUP_REQUEST:
       return {
