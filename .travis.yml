@@ -19,6 +19,7 @@ script:
   - (cd user && yarn install)
   - (cd web && yarn install)
   - (cd topup && yarn install)
+  - (cd service && yarn install)
   # now we have all dependencies installed, do the compilation
   - (cd api && npm run ci)
   - (cd aws && npm run ci)
@@ -26,5 +27,6 @@ script:
   - (cd user && npm run ci)
   - (cd web && npm run ci)
   - (cd topup && npm run ci)
+  - (cd service && npm run ci)
   - ./aws/bin/aws deploy $TRAVIS_BRANCH api transaction user web topup
   - ./aws/bin/aws prune
