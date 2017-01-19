@@ -28,6 +28,14 @@ export default async () => {
 
     const filter = (name) => matchesGlobalPrefix(name) && !matchesBranchPrefixes(name)
 
+    await pruneLoadBalancers({
+        filter: ({ LoadBalancerName }) => filter(LoadBalancerName)
+    });
+
+    await pruneAliases({
+        filter: (name) => !branchNames.some(branchName => branchName === name)
+    });
+
     await pruneServices({
         cluster,
         filter: ({ name }) => filter(name)
@@ -35,14 +43,6 @@ export default async () => {
 
     await pruneTaskDefinitions({
         filter: ({ family, revision }) => filter(family)
-    });
-
-    await pruneLoadBalancers({
-        filter: ({ LoadBalancerName }) => filter(LoadBalancerName)
-    });
-
-    await pruneAliases({
-        filter: (name) => !branchNames.some(branchName => branchName === name)
     });
 
     // pruneListeners/pruneRules - listeners/rules belong to load balancers so are removed implicitly
