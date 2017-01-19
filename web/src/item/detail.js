@@ -4,7 +4,7 @@ import { Back } from '../chrome/link';
 import Page from '../chrome/page';
 import Stepper from '../chrome/stepper';
 import currency from '../format/currency';
-import './index.css';
+import './detail.css';
 
 const minNumItems = 1;
 

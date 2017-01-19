@@ -28,7 +28,7 @@ import RegisterSuccess from './register/success';
 import SignIn from './signin/index';
 import SignInSuccess from './signin/success';
 import Help from './help/index';
-import ItemDetail from './item/index';
+import ItemDetail from './item/detail';
 import reducer from './reducers/reducer';
 
 
