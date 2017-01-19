@@ -18,15 +18,23 @@ const ItemDetail = ({
 
   const decrementNumItems = (numItems) => Math.max(minNumItems, numItems - 1);
 
-  const incrementNumItems = (numItems) => {
-    const updatedNumItems = numItems + 1;
-    const balanceRemaining = calculateBalanceRemaining(updatedNumItems);
-    return balanceRemaining >= 0 ? updatedNumItems : numItems;
-  };
-
   const formatBalance = (numItems) => {
     const balance = calculateBalanceRemaining(numItems);
     return `Your balance will be £${currency(balance)}`;
+  };
+
+  const formatPurchaseButton = (numItems) => {
+    const balance = calculateBalanceRemaining(numItems);
+    if (balance < 0) {
+      return {
+        disabled: true,
+        text: `Insufficient funds`
+      };
+    }
+    return {
+      disabled: false,
+      text: `Pay for ${numItems} ${name}`
+    };
   };
 
   return (
@@ -46,10 +54,10 @@ const ItemDetail = ({
         <Stepper
           label="How many would you like to pay for?"
           onDecrement={decrementNumItems}
-          onIncrement={incrementNumItems}
+          onIncrement={(numItems) => numItems + 1}
           formatDescription={formatBalance}
           formatValue={(numItems) => numItems}
-          formatButton={(numItems) => `Pay for ${numItems} ${name}`}
+          formatButton={formatPurchaseButton}
           initialValue={1}
           onClick={(numItems) => { /* TODO */ }}
         />

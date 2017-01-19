@@ -14,8 +14,8 @@ class Stepper extends React.Component {
 
   render() {
     const { 
-      label, onClick, formatButton, formatValue, 
-      formatDescription, onIncrement, onDecrement
+      label, formatValue, formatDescription,
+      onIncrement, onDecrement
     } = this.props;
 
     const { value } = this.state;
@@ -31,7 +31,7 @@ class Stepper extends React.Component {
         <Button onClick={() => this.updateValue(onIncrement) }>+</Button>
       </div>
       <p style={{color: MUTED_TEXT}}>{formatDescription(value)}</p>
-        <p><Button onClick={() => onClick(value)}>{formatButton(value)}</Button></p>
+        <p>{this.getFormattedButton()}</p>
       </div>
     );
   }
@@ -39,6 +39,20 @@ class Stepper extends React.Component {
   updateValue(updateFn) {
     const updatedValue = updateFn(this.state.value);
     this.setState({ value: updatedValue });
+  }
+
+  getFormattedButton() {
+    const { onClick, formatButton } = this.props;
+    const { value } = this.state;
+    const { disabled, text } = formatButton(value); 
+    return (
+      <Button 
+        onClick={() => onClick(value)}
+        type={disabled ? 'disabled' : ''}
+      >
+        {text}
+      </Button>
+    );
   }
 }
 
