@@ -27,7 +27,7 @@ const Amount = ({ params: { storeId }, balance }) => {
                     onDecrement={(amount) => amount}
                     formatDescription={(amount) => `Your balance will be £${currency(balance + amount)}`}
                     formatValue={(amount) => `£${currency(amount)}`}
-                    formatButton={(amount) => 'Top Up using a Card'}
+                    formatButton={(amount) => ({ text: 'Top Up using a Card', disabled: false })}
                     initialValue={500}
                     onClick={(amount) => { hashHistory.push(`/${storeId}/topup/${amount}`); }}
                 />
