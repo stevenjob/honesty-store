@@ -3,6 +3,7 @@ import {
     REQUEST_REGISTRATION_PHASE1, REQUEST_REGISTRATION_PHASE2 } from '../actions/register';
 import { STRIPE_REQUEST, STRIPE_SUCCESS, STRIPE_FAILURE } from '../actions/stripe';
 import { TOPUP_REQUEST, TOPUP_SUCCESS, TOPUP_FAILURE } from '../actions/topup';
+import { PURCHASE_REQUEST, PURCHASE_SUCCESS, PURCHASE_FAILURE } from '../actions/purchase';
 
 const getInitialState = () => {
   return {
@@ -17,23 +18,26 @@ const getInitialState = () => {
 
 export default (state = getInitialState(), action) => {
   switch (action.type) {
-    case REQUEST_REGISTRATION_PHASE1:
+    case REQUEST_REGISTRATION_PHASE1: {
       return {
         ...state,
         pending: [...state.pending, 'register']
       };
-    case REQUEST_REGISTRATION_PHASE2:
+    }
+    case REQUEST_REGISTRATION_PHASE2: {
       return {
         ...state,
         pending: [...state.pending, 'register2']
       };
-    case  RECEIVE_REGISTRATION_PHASE1:
+    }
+    case  RECEIVE_REGISTRATION_PHASE1: {
       return {
         ...state,
         ...action.response,
         pending: state.pending.filter(e => e !== 'register')
       };
-    case RECEIVE_REGISTRATION_PHASE2:
+    }
+    case RECEIVE_REGISTRATION_PHASE2: {
       const { user, store } = action.response;
       return {
         ...state,
@@ -41,12 +45,14 @@ export default (state = getInitialState(), action) => {
         store: store,
         pending: state.pending.filter(e => e !== 'register2')
       };
-    case STRIPE_REQUEST:
+    }
+    case STRIPE_REQUEST: {
       return {
         ...state,
         pending: [...state.pending, 'stripe']
       };
-    case STRIPE_SUCCESS:
+    }
+    case STRIPE_SUCCESS: {
       const { token } = action;
       return {
         ...state,
@@ -55,7 +61,8 @@ export default (state = getInitialState(), action) => {
         },
         pending: state.pending.filter(e => e !== 'stripe')
       };
-    case STRIPE_FAILURE:
+    }
+    case STRIPE_FAILURE: {
       const { error } = action;
       return {
         ...state,
@@ -64,13 +71,16 @@ export default (state = getInitialState(), action) => {
         },
         pending: state.pending.filter(e => e !== 'stripe')
       };
-    case TOPUP_REQUEST:
+    }
+    case TOPUP_REQUEST: {
       return {
         ...state,
         pending: [...state.pending, 'topup']
       };
-    case TOPUP_SUCCESS:
+    }
+    case TOPUP_SUCCESS: {
       const { balance } = action.response;
+      const { user } = state;
       return {
         ...state,
         user: {
@@ -79,11 +89,38 @@ export default (state = getInitialState(), action) => {
         },
         pending: state.pending.filter(e => e !== 'topup')
       };
-    case TOPUP_FAILURE:
+    }
+    case TOPUP_FAILURE: {
       return {
         ...state,
         pending: state.pending.filter(e => e !== 'topup')
       };
+    }
+    case PURCHASE_REQUEST: {
+      return {
+        ...state, 
+        pending: [...state.pending, 'purchase']
+      };
+    }
+    case PURCHASE_SUCCESS: {
+      const { balance, transaction } = action.response;
+      const { user } = state;
+      return {
+        ...state,
+        user: {
+          ...user,
+          balance,
+          transactions: [transaction, ...state.user.transactions]
+        },
+        pending: state.pending.filter(e => e !== 'purchase')
+      };
+    }
+    case PURCHASE_FAILURE: {
+      return {
+        ...state,
+        pending: state.pending.filter(e => e !== 'purchase')
+      };
+    }
     default:
       return state;
   }
