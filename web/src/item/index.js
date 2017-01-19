@@ -6,26 +6,22 @@ import Stepper from '../chrome/stepper';
 import currency from '../format/currency';
 import './index.css';
 
+const minNumItems = 1;
+
 const ItemDetail = ({ 
   storeId,
   item: { id, name, price },
   loading,
   balance
 }) => {
-  const calculateBalanceRemaining = (numItems) => {
-    const balanceRemaining = balance - (price * numItems);
-    return balanceRemaining;
-  };
+  const calculateBalanceRemaining = (numItems) => balance - (price * numItems);
 
-  const decrementNumItems = (numItems) => {
-    const minNumItems = 1;
-    return numItems > minNumItems ? (numItems - 1) : minNumItems;
-  };
+  const decrementNumItems = (numItems) => Math.max(minNumItems, numItems - 1);
 
   const incrementNumItems = (numItems) => {
     const updatedNumItems = numItems + 1;
     const balanceRemaining = calculateBalanceRemaining(updatedNumItems);
-    return balanceRemaining >= 0 ? updatedNumItems : numItems; 
+    return balanceRemaining >= 0 ? updatedNumItems : numItems;
   };
 
   const formatBalance = (numItems) => {
