@@ -31,7 +31,7 @@ const register2 = async (userID, emailAddress, cardDetails, topUpAmount, purchas
     /* We don't want to fail if the item could not be purchased, however the client
     is expected to assert that a transaction exists for the item and alert the user
     appropriately if one doesn't. */
-    winston.warn(e.message);
+    winston.error(`couldn't purchase item ${purchasedItemID}`, e);
   }
 
   return await getSessionData(userID);

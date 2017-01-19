@@ -4,6 +4,7 @@ import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import * as stripeFactory from 'stripe';
+import * as winston from 'winston';
 
 import { TransactionDetails, TransactionAndBalance, createTransaction } from '../../transaction/src/client/index';
 import { TopupAccount, TopupRequest } from './client/index';
@@ -119,6 +120,7 @@ const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAcc
     try {
         return await createTransaction(topupAccount.accountId, transactionDetails);
     } catch (error) {
+        winston.error(`couldn't createTransaction()`, error);
         // remap error message
         throw new Error(`couldn't add transaction: ${error.message}`);
     }
@@ -140,6 +142,7 @@ const createStripeCharge = async ({ topupAccount, amount }: { topupAccount: Topu
             idempotency_key: topupAccount.stripe.nextChargeToken,
         });
     } catch (error) {
+        winston.error(`couldn't create stripe charge`, error);
         if (error.message === 'Must provide source or customer.') {
             /* Note to future devs: this error appears to be a bug with stripe's API.
              *
