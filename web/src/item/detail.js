@@ -4,6 +4,7 @@ import { Back } from '../chrome/link';
 import Page from '../chrome/page';
 import Stepper from '../chrome/stepper';
 import currency from '../format/currency';
+import { performPurchase } from '../actions/purchase';
 import './detail.css';
 
 const minNumItems = 1;
@@ -12,7 +13,8 @@ const ItemDetail = ({
   storeId,
   item: { id, name, price },
   loading,
-  balance
+  balance,
+  performPurchase
 }) => {
   const calculateBalanceRemaining = (numItems) => balance - (price * numItems);
 
@@ -59,7 +61,7 @@ const ItemDetail = ({
           formatValue={(numItems) => numItems}
           formatButton={formatPurchaseButton}
           initialValue={1}
-          onClick={(numItems) => { /* TODO */ }}
+          onClick={(numItems) => performPurchase(storeId, id)}
         />
       </div>
     </Page>
@@ -79,4 +81,6 @@ const mapStateToProps = (
   };
 };
 
-export default connect(mapStateToProps)(ItemDetail);
+const mapDispatchToProps = { performPurchase };
+
+export default connect(mapStateToProps, mapDispatchToProps)(ItemDetail);
