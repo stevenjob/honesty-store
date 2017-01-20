@@ -57,12 +57,12 @@ const register2 = async ({ userID, emailAddress, topUpAmount, itemID, stripeToke
 
   const user = await updateUser(userID, { emailAddress });
 
-  const topup = await createTopup({ accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
+  const topupTx = await createTopup({ accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
 
-  let purchase: TransactionAndBalance = null;
+  let purchaseTx: TransactionAndBalance = null;
   try {
     const price = getPrice(itemID);
-    purchase = await addItemTransaction(userID, price);
+    purchaseTx = await addItemTransaction(userID, price);
   } catch (e) {
     /* We don't want to fail if the item could not be purchased, however the client
        is expected to assert that a transaction exists for the item and alert the user
@@ -74,10 +74,10 @@ const register2 = async ({ userID, emailAddress, topUpAmount, itemID, stripeToke
     ...sessionData,
     user: {
       ...user,
-      balance: purchase == null ? topup.balance : purchase.balance,
+      balance: purchaseTx == null ? topupTx.balance : purchaseTx.balance,
       transactions: [
-        ...(purchase != null ? [purchase.transaction] : []),
-        topup.transaction,
+        ...(purchaseTx != null ? [purchaseTx.transaction] : []),
+        topupTx.transaction,
         ...sessionData.user.transactions, // should be empty
       ],
     },
