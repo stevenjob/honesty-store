@@ -7,7 +7,7 @@ import { WithRefreshToken, sendMagicLinkEmail } from '../../../user/src/client/i
 
 export const sendEmailToken = async (emailAddress) => {
   await sendMagicLinkEmail(emailAddress);
-  winston.info(`send email token to ${emailAddress}`);
+  return {};
 };
 
 const setupSignInPhase1 = (router) => {
