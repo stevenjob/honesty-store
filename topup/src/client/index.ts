@@ -30,7 +30,7 @@ export const createTopup = async (request: TopupRequest): Promise<TransactionAnd
         },
         body: JSON.stringify(request)
     });
-    const json: ApiResponse<TransactionAndBalance> = response.json();
+    const json: ApiResponse<TransactionAndBalance> = await response.json();
 
     if (json.error) {
         throw new Error(json.error.message);
