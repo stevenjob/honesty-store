@@ -7,8 +7,12 @@ export default (router) => {
     '/logout',
     authenticateAccessToken,
     (req, res) => {
-      expireRefreshToken(req.userID);
-      res.status(HTTPStatus.OK)
-        .json({ response: {} });
+      expireRefreshToken(req.userID)
+        .then(() =>
+          res.status(HTTPStatus.OK)
+            .json({ response: {} }))
+        .catch((error) =>
+          res.status(HTTPStatus.OK)
+            .json({ error: error.message }));
     });
 };

@@ -11,7 +11,7 @@ import { promiseResponse } from '../../../service/src/endpoint-then-catch';
 import { WithRefreshToken, WithAccessToken } from '../../../user/src/client/index';
 
 const register = async (storeCode) => {
-  const { id, accessToken, refreshToken } = registerUser(storeCode);
+  const { id, accessToken, refreshToken } = await registerUser(storeCode);
 
   return {
       ...await getSessionData(id),
@@ -20,8 +20,8 @@ const register = async (storeCode) => {
   };
 };
 
-const register2 = async (userID, emailAddress, cardDetails, topUpAmount, purchasedItemID) => {
-  updateUser(userID, emailAddress, cardDetails);
+const register2 = async (userID, emailAddress, topUpAmount, purchasedItemID) => {
+  await updateUser(userID, { emailAddress });
 
   try {
     const price = getPrice(purchasedItemID);
@@ -65,11 +65,11 @@ const setupRegisterPhase2 = (router) => {
         return;
       }
 
-      const { cardDetails, itemID, topUpAmount } = request.body;
+      const { itemID, topUpAmount } = request.body;
       const { userID } = request;
 
       promiseResponse<SessionData>(
-          register2(userID, emailAddress, cardDetails, topUpAmount, itemID),
+          register2(userID, emailAddress, topUpAmount, itemID),
           response,
           HTTPStatus.INTERNAL_SERVER_ERROR);
     });

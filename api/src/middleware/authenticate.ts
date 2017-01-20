@@ -6,23 +6,29 @@ import * as winston from 'winston';
 
 const getToken = request => request.headers.authorization.split(' ')[1];
 
+const handleInvalidToken = (response, error) => {
+  winston.error(`couldn't authenticate token`, e);
+  response.status(HTTPStatus.UNAUTHORIZED)
+    .json({
+      error: {
+        message: 'Invalid token provided',
+        detail: error.message,
+      },
+    });
+};
+
 const authenticateToken = (request, response, next, tokenRetrievalGetter) => {
-  try {
-    const token = getToken(request);
-    jwt.verify(token, secretKey);
-    // eslint-disable-next-line no-param-reassign
-    request.userID = tokenRetrievalGetter(token);
-  } catch (e) {
-    winston.error(`couldn't authenticate token`, e);
-    response.status(HTTPStatus.UNAUTHORIZED)
-      .json({
-        error: {
-          message: 'Invalid token provided',
-          detail: e.message,
-        },
-      });
-  }
-  next();
+  const token = getToken(request);
+  jwt.verify(token, secretKey);
+
+  tokenRetrievalGetter(token)
+    .then((userID) => {
+      // eslint-disable-next-line no-param-reassign
+      request.userID = userID;
+      next();
+    })
+    .catch((error) =>
+      handleInvalidToken(response, error));
 };
 
 export const authenticateAccessToken = (request, response, next) =>

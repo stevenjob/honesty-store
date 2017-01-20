@@ -10,20 +10,26 @@ const setupSignInPhase1 = (router) => {
     '/signin',
     (request, response) => {
       const { emailAddress } = request.body;
-      sendEmailToken(emailAddress);
-      response.status(HTTPStatus.OK)
-        .json({ response: {} });
+      sendEmailToken(emailAddress)
+        .then(() =>
+          response.status(HTTPStatus.OK)
+            .json({ response: {} }))
+        .catch((error) =>
+          response.status(HTTPStatus.OK)
+            .json({ error: error.message }))
     });
 };
 
 const signin2 = async (userID) => {
-    const sessionData = await getSessionData(userID);
-    const { refreshToken } = updateRefreshToken(userID); // this is gonna get rebased to oblivion
+  const [sessionResponse, { refreshToken }] = await Promise.all([
+    getSessionData(userID),
+    updateRefreshToken(userID),
+  ]);
 
-    return {
-        ...sessionData,
-        refreshToken
-    };
+  return {
+    ...sessionResponse,
+    refreshToken
+  };
 }
 
 const setupSignInPhase2 = (router) => {

@@ -32,6 +32,8 @@ export interface UserProfile {
 
 export type UserWithAccessToken = User & WithAccessToken;
 
+export type UserWithRefreshToken = User & WithRefreshToken;
+
 export type UserWithAccessAndRefreshTokens = User & WithAccessToken & WithRefreshToken;
 
 export type UserWithMagicLinkToken = User & WithMagicLinkToken;

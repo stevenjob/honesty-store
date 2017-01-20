@@ -2,6 +2,10 @@ import jsonwebtoken = require('jsonwebtoken');
 import uuid = require('uuid/v4');
 import winston = require('winston');
 import { secretKey } from '../constants'
+import * as UserClient from '../../../user/src/client/index';
+import { storeCodeToStoreID } from './store'
+
+export const getUser = UserClient.getUser;
 
 const generateExpirableToken = () => {
   const data = { uuid: uuid() };
@@ -11,101 +15,70 @@ const generateExpirableToken = () => {
 
 const generateRefreshToken = () => jsonwebtoken.sign(uuid(), secretKey);
 
-const users = [];
-export { users as __users };
+export const registerUser = async (defaultStoreCode) => {
+  const userId = uuid();
+  const refreshToken = generateRefreshToken();
+  const accessToken = generateExpirableToken();
 
-export const registerUser = (defaultStoreCode) => {
-  const user = {
-    id: uuid(),
-    refreshToken: generateRefreshToken(),
-    accessToken: generateExpirableToken(),
-    defaultStoreCode,
+  const profile = {
+    defaultStoreId: storeCodeToStoreID(defaultStoreCode),
   };
-
-  users.push(user);
-
-  return user;
+  return await UserClient.createUser(userId, profile)
 };
 
-export const getUserIDFromAccessToken = (accessToken) => {
-  const foundUser = users.find(element => element.accessToken === accessToken);
-  if (foundUser == null) {
-    throw new Error(`No user found with access token '${accessToken}'`);
-  }
-  return foundUser.id;
+export const getUserIDFromAccessToken = async (accessToken) => {
+  return (await UserClient.getUserByAccessToken(accessToken)).id;
 };
 
-export const getUserIDFromRefreshToken = (refreshToken) => {
-  const foundUser = users.find(element => element.refreshToken === refreshToken);
-  if (foundUser == null) {
-    throw new Error(`No user found with refresh token '${refreshToken}'`);
-  }
-  return foundUser.id;
+export const getUserIDFromRefreshToken = async (refreshToken) => {
+  return (await UserClient.getUserByRefreshToken(refreshToken)).id;
 };
 
-export const getUserIDFromEmailToken = (emailToken) => {
-  const foundUser = users.find(element => element.emailToken === emailToken);
-  if (foundUser == null) {
-    throw new Error(`No user found with email token '${emailToken}`);
-  }
-  return foundUser.id;
+export const getUserIDFromEmailToken = async (emailToken) => {
+  return (await UserClient.getUserByMagicLinkToken(emailToken)).id;
 };
 
-export const getUser = id => users.find(element => element.id === id);
-
-export const updateUser = (id, emailAddress, cardDetails) => {
-  const user = getUser(id);
-  user.emailAddress = emailAddress;
-  user.cardDetails = cardDetails;
+export const updateUser = async (id, emailAddress) => {
+  await updateUser(id, { emailAddress });
 };
 
-export const updateCardDetails = (id, cardDetails) => {
-  const user = getUser(id);
-  user.cardDetails = cardDetails;
-};
-
-export const updateAccessToken = (userID) => {
+export const updateAccessToken = async (userID): Promise<UserClient.UserWithAccessToken> => { // TODO
   const newAccessToken = generateExpirableToken();
 
-  const user = getUser(userID);
-  user.accessToken = newAccessToken;
-
-  return user;
+  return {
+      ...await UserClient.getUser(userID),
+      accessToken: newAccessToken,
+  };
 };
 
-export const updateRefreshToken = (userID) => {
-  const newRefreshToken = generateRefreshToken();
+export const updateRefreshToken = async (userID): Promise<UserClient.UserWithRefreshToken> => {
+  const newRefreshToken = generateRefreshToken(); // TODO
 
-  const user = getUser(userID);
-  user.refreshToken = newRefreshToken;
-
-  return user;
+  return {
+      ...await UserClient.getUser(userID),
+      refreshToken: newRefreshToken,
+  };
 };
 
-export const updateDefaultStoreCode = (userID, storeCode) => {
-  const user = getUser(userID);
-  user.defaultStoreCode = storeCode;
+export const updateDefaultStoreCode = async (userID, storeCode) => {
+  await updateUser(userID, { defaultStoreCode: storeCode });
 };
 
-export const expireRefreshToken = (userID) => {
-  const user = getUser(userID);
-  user.refreshToken = null;
+export const expireRefreshToken = async (userID) => { // TODO
+  return {
+    ...await UserClient.getUser(userID),
+    refreshToken: undefined
+  };
 };
 
-export const sendEmailToken = (emailAddress) => {
-  const user = users.find(element => element.emailAddress === emailAddress);
-  if (user == null) {
-    winston.warn(`User does not exist with email address '${emailAddress}'`);
-    return;
-  }
-
-  const emailToken = generateExpirableToken();
-  user.emailToken = emailToken;
+export const sendEmailToken = async (emailAddress) => {
+  const user = await UserClient.getUserByEmailAddress(emailAddress);
+  const token = await UserClient.createMagicLinkToken(user.id);
 
   /* When the eventual service is added, the 'emailToken' will be sent via email */
-  winston.info(`Generated email token: ${emailToken}`);
+  winston.info(`Generated email token: ${token}`);
 };
 
 export const getUsersAccountId = async (userId: string): Promise<string> => {
-    return (await getUser(userId)).accountId;
+    return (await UserClient.getUser(userId)).accountId;
 }

@@ -9,8 +9,12 @@ export default (router) => {
     authenticateAccessToken,
     (req, res) => {
       const storeCode = req.body.storeCode;
-      updateDefaultStoreCode(req.userID, req.body.storeCode);
-      res.status(HTTPStatus.OK)
-        .json({ response: getItems(storeCode) });
+      updateDefaultStoreCode(req.userID, req.body.storeCode)
+        .then(() =>
+          res.status(HTTPStatus.OK)
+            .json({ response: getItems(storeCode) }))
+        .catch((error) =>
+          res.status(HTTPStatus.OK)
+            .json({ error: error.message }))
     });
 };

@@ -1,7 +1,7 @@
 import { getUser } from '../services/user'
 import { getTransactionHistory, getBalance } from '../services/transaction'
-import { getItems } from '../services/store'
 import { Transaction } from '../../../transaction/src/client/index';
+import { getItems, storeIDToStoreCode } from '../services/store'
 
 export interface SessionData {
     user: {
@@ -20,27 +20,20 @@ export interface SessionData {
     };
 };
 
-const maskCardNumber = (cardNumber) => {
-  if (cardNumber != null) {
-    return cardNumber.replace(/\d(?=\d{4})/g, 'X');
-  }
-  return null;
-};
-
 const getUserSessionData = async (userID) => {
-  const { cardDetails } = getUser(userID);
-  const maskedCardNumber = maskCardNumber(cardDetails);
   const recentTransactions = (await getTransactionHistory(userID)).slice(0, 10);
 
   return {
     balance: await getBalance(userID),
     transactions: recentTransactions,
-    cardNumber: maskedCardNumber,
   };
 };
 
-const getStoreSessionData = (userID) => {
-  const { defaultStoreCode } = getUser(userID);
+const getStoreSessionData = async (userID) => {
+  const { defaultStoreId } = await getUser(userID);
+
+  const defaultStoreCode = storeIDToStoreCode(defaultStoreId);
+
   return {
     items: getItems(defaultStoreCode),
     code: defaultStoreCode,
@@ -48,9 +41,9 @@ const getStoreSessionData = (userID) => {
 };
 
 export const getSessionData = async (userID) => {
-  const response = {
-    user: await getUserSessionData(userID),
-    store: getStoreSessionData(userID),
-  };
-  return response;
+  const [ user, store ] = await Promise.all([
+    getUserSessionData(userID),
+    getStoreSessionData(userID),
+  ]);
+  return { user, store };
 };

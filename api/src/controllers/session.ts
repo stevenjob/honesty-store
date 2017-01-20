@@ -14,12 +14,23 @@ const session = async (userID) => {
     };
 };
 
+const updateSession = async (userID) => {
+  const [sessionResponse, { accessToken }] = await Promise.all([
+    getSessionData(userID),
+    updateAccessToken(userID),
+  ]);
+
+  return {
+    ...sessionResponse,
+    accessToken,
+  };
+};
+
 export default (router) => {
   router.post(
     '/session',
     authenticateRefreshToken,
     (request, response) => {
-
       promiseResponse<SessionData>(
           session(request.userID),
           response,

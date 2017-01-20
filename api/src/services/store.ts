@@ -10,6 +10,10 @@ stores.set('sl-ldn', defaultBox);
 
 export const getPrice = itemID => getItem(itemID).price;
 
+// currently storeCode and storeID are identical
+export const storeIDToStoreCode = (storeID) => storeID;
+export const storeCodeToStoreID = (storeCode) => storeCode;
+
 export const getStore = (storeCode) => {
   const store = stores.get(storeCode);
   if (store == null) {
