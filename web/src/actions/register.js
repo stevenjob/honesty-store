@@ -62,7 +62,7 @@ export const performFullRegistration = (storeCode) => async (dispatch, getState)
   const requestBody = {
     emailAddress: `${Date.now()}@example.com`,
     itemID: 0,
-    cardDetails: '1234123412341234',
+    stripeToken: '1234123412341234',
     topUpAmount: 500
   };
   const phase2Response = await performRegistrationPhase2(accessToken, requestBody);
