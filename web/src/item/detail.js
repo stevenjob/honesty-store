@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { hashHistory } from 'react-router';
 import { Back } from '../chrome/link';
 import Page from '../chrome/page';
 import Stepper from '../chrome/stepper';
+import Button from '../chrome/button';
 import currency from '../format/currency';
 import { performPurchase } from '../actions/purchase';
 import './detail.css';
@@ -14,7 +16,8 @@ const ItemDetail = ({
   item: { id, name, price },
   loading,
   balance,
-  performPurchase
+  performPurchase,
+  registered
 }) => {
   const calculateBalanceRemaining = (numItems) => balance - (price * numItems);
 
@@ -39,6 +42,24 @@ const ItemDetail = ({
     };
   };
 
+  const getStepper = () => <Stepper
+    label="How many would you like to pay for?"
+    onDecrement={decrementNumItems}
+    onIncrement={(numItems) => numItems + 1}
+    formatDescription={formatBalance}
+    formatValue={(numItems) => numItems}
+    formatButton={formatPurchaseButton}
+    initialValue={1}
+    onClick={(numItems) => performPurchase({storeId, itemId: id})}
+  />;
+
+  const getUnregisteredPurchaseButton = () => <p>
+      <Button onClick={() => hashHistory.push(`/${storeId}/register/${id}`)}>
+        Purchase 1 {name}
+      </Button>
+    </p>;
+
+
   return (
     <Page 
       storeId={storeId}
@@ -53,23 +74,14 @@ const ItemDetail = ({
           <h2>{name}<br/>{price}<small>p</small></h2>
         </div>
         <img src={require('../store/assets/packet.svg')} alt={name}/>
-        <Stepper
-          label="How many would you like to pay for?"
-          onDecrement={decrementNumItems}
-          onIncrement={(numItems) => numItems + 1}
-          formatDescription={formatBalance}
-          formatValue={(numItems) => numItems}
-          formatButton={formatPurchaseButton}
-          initialValue={1}
-          onClick={(numItems) => performPurchase({storeId, itemId: id})}
-        />
+        { registered ? getStepper() : getUnregisteredPurchaseButton() }
       </div>
     </Page>
   );
 };
 
 const mapStateToProps = (
-  { store: { items = [] }, user: { balance } },
+  { store: { items = [] }, user: { balance }, refreshToken },
   { params: { storeId, itemId } }
 ) => {
   const item = items.find(el => el.id === Number(itemId));
@@ -77,7 +89,8 @@ const mapStateToProps = (
     storeId,
     loading: item == null,
     item: item || {},
-    balance
+    balance,
+    registered: false
   };
 };
 
