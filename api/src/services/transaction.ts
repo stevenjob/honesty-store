@@ -24,9 +24,9 @@ export const purchase = async ({ itemID, userID, accountID, storeID, quantity })
         amount: -price,
         data: {
             quantity,
-            itemID,
-            userID,
-            storeID,
+            itemId: itemID,
+            userId: userID,
+            storeId:storeID,
         }
     };
 
