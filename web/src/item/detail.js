@@ -43,7 +43,7 @@ const ItemDetail = ({
     };
   };
 
-  const getStepper = () => <Stepper
+  const PurchaseStepper = <Stepper
     label="How many would you like to pay for?"
     onDecrement={decrementNumItems}
     onIncrement={(numItems) => numItems + 1}
@@ -54,7 +54,7 @@ const ItemDetail = ({
     onClick={(numItems) => performPurchase({storeId, itemId: id})}
   />;
 
-  const getUnregisteredPurchaseButton = () => <p>
+  const UnregisteredPurchaseButton = <p>
       <Button onClick={() => hashHistory.push(`/${storeId}/register/${id}`)}>
         Purchase 1 {name}
       </Button>
@@ -75,7 +75,7 @@ const ItemDetail = ({
           <h2>{name}<br/>{price}<small>p</small></h2>
         </div>
         <img src={require('../store/assets/packet.svg')} alt={name}/>
-        { registered ? getStepper() : getUnregisteredPurchaseButton() }
+        { registered ? PurchaseStepper : UnregisteredPurchaseButton }
       </div>
     </Page>
   );
