@@ -62,4 +62,7 @@ export const updateUser = (key, userId: string, userProfile: UserProfile) =>
 export const sendMagicLinkEmail = (key, emailAddress: string) =>
     post<{}>(1, key, `/magicLink/${emailAddress}`, {});
 
+export const logout = async (key, userId: string) =>
+    post<{}>(1, key, `/logout/${userId}`, {});
+
 export const TEST_DATA_USER_ID = 'c50234ff-6c33-4878-a1ab-05f6b3e7b649';

@@ -256,6 +256,24 @@ Log in to honesty.store ( ${baseUrl}/${user.defaultStoreId}?code=${signAccessTok
     return response.MessageId;
 };
 
+const logoutUser = async (userId) => {
+    const originalUser = await getInternal({ userId });
+
+    if (originalUser == null) {
+        throw new Error(`User not found ${userId}`);
+    }
+
+    // can't clear access token, but it'll expire soon enough
+    const loggedoutUser: InternalUser = {
+        ...originalUser,
+        refreshToken: uuid(),
+    };
+
+    await update({ user: loggedoutUser, originalVersion: originalUser.version });
+
+    return {};
+};
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -311,6 +329,12 @@ router.post(
         const messageId = await sendMagicLinkEmail({ emailAddress});
         return {};
     }
+);
+
+router.put(
+    '/logout/:userId',
+    1,
+    async (key, { userId }, {}) => await logoutUser(userId)
 );
 
 app.use(router);
