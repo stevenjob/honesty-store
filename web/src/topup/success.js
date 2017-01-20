@@ -12,7 +12,7 @@ export const Success = ({ params: { storeId }, balance }) =>
         invert={true}
         nav={false}
         fullscreen={true}>
-        <div onClick={() => hashHistory.replace(`/${storeId}`)} className="topup-success">
+        <div onClick={() => hashHistory.replace(`/${storeId}/history`)} className="topup-success">
             <h2>Thank you for your top up!</h2>
             <img src={success} alt="Success"/>
             <div className="topup-success-balance">
