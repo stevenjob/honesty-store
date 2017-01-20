@@ -19,10 +19,10 @@ export const verifyAccessToken = (token) => {
     return { userId };
 };
 
-export const verifyRefreshToken = ({ token, expectedRefreshToken }) => {
+export const verifyRefreshToken = (token) => {
     const { userId, refreshToken } = verifyToken(token);
-    if (refreshToken !== expectedRefreshToken) {
-        throw new Error(`Invalid refresh token`);
+    if (refreshToken == null) {
+        throw new Error(`Access token used in place of refresh token`);
     }
     return { userId, refreshToken };
 };
