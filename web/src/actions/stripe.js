@@ -1,9 +1,8 @@
+import { hashHistory } from 'react-router';
 
 const Stripe = window.Stripe;
 
-Stripe.setPublishableKey(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY );
-
-const createToken = (data) =>
+export const createToken = (data) =>
     new Promise((resolve, reject) => {
         const stripeResponseHandler = (status, response) => {
             if (response.error != null) {
@@ -15,10 +14,9 @@ const createToken = (data) =>
             }
             resolve(response.id);
         };
+        Stripe.setPublishableKey(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
         Stripe.card.createToken(data, stripeResponseHandler);
     });
-
-import { hashHistory } from 'react-router';
 
 export const STRIPE_REQUEST = 'STRIPE_REQUEST';
 export const STRIPE_SUCCESS = 'STRIPE_SUCCESS';

@@ -1,3 +1,5 @@
+import { createToken } from './stripe';
+
 export const RECEIVE_REGISTRATION_PHASE1 = 'RECEIVE_REGISTRATION_PHASE1';
 export const RECEIVE_REGISTRATION_PHASE2 = 'RECEIVE_REGISTRATION_PHASE2';
 export const REQUEST_REGISTRATION_PHASE1 = 'REQUEST_REGISTRATION_PHASE1';
@@ -62,7 +64,12 @@ export const performFullRegistration = (storeCode) => async (dispatch, getState)
   const requestBody = {
     emailAddress: `${Date.now()}@example.com`,
     itemID: 0,
-    stripeToken: '1234123412341234',
+    stripeToken: await createToken({
+        number: '4242424242424242',
+        exp_month: 12,
+        exp_year: 2019,
+        cvc: '123'
+    }),
     topUpAmount: 500
   };
   const phase2Response = await performRegistrationPhase2(accessToken, requestBody);

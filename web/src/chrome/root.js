@@ -9,7 +9,8 @@ import './root.css';
 class Root extends React.Component {
   componentDidMount() {
     const { dispatch, routeParams: { storeId }} = this.props;
-    dispatch(performFullRegistration(storeId));
+    // HACK!!! This is a short-term workaround to ensure Stripe is loaded before we dispatch our registration requests.
+    setTimeout(() => dispatch(performFullRegistration(storeId)), 100);
   }
 
   componentWillReceiveProps(nextProps) {
