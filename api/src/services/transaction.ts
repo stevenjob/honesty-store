@@ -1,18 +1,35 @@
 import { createTransaction, getAccount, TransactionDetails } from '../../../transaction/src/client/index';
+import { getPrice } from '../services/store';
 import { getUser } from '../../../user/src/client/index';
 
 const getUsersAccountId = async (userId) => (await getUser(userId)).accountId;
 
-export const addItemTransaction = async (userID, itemPrice) => {
-  const transaction: TransactionDetails = {
-      type: 'purchase',
-      amount: -itemPrice,
-      data: {}
-  };
+const assertValidQuantity = (quantity) => {
+    if (!Number.isInteger(quantity)) {
+        throw new Error(`quantity ${quantity} isn't an integer`);
+    }
+    if (quantity <= 0) {
+        throw new Error(`quantity ${quantity} too small`);
+    }
+    if (quantity > 10) {
+        throw new Error(`quantity ${quantity} too large`);
+    }
+};
 
-  return await createTransaction(
-    await getUsersAccountId(userID),
-    transaction);
+export const purchase = async ({ itemID, userID, quantity }) => {
+    assertValidQuantity(quantity);
+
+    const price = quantity * getPrice(itemID);
+
+    const transaction: TransactionDetails = {
+        type: 'purchase',
+        amount: -price,
+        data: {}
+    };
+
+    return await createTransaction(
+        await getUsersAccountId(userID),
+        transaction);
 };
 
 export const getTransactionHistory = async (userID) => {

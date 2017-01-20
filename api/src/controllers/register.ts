@@ -6,7 +6,7 @@ import uuid = require('uuid/v4');
 import { createUser, updateUser } from '../../../user/src/client/index';
 import { createAccount, TransactionDetails, TransactionAndBalance } from '../../../transaction/src/client/index';
 import { getPrice } from '../services/store';
-import { addItemTransaction } from '../services/transaction';
+import { purchase } from '../services/transaction';
 import { getSessionData, SessionData } from '../services/session';
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
@@ -61,8 +61,7 @@ const register2 = async ({ userID, emailAddress, topUpAmount, itemID, stripeToke
 
   let purchaseTx: TransactionAndBalance = null;
   try {
-    const price = getPrice(itemID);
-    purchaseTx = await addItemTransaction(userID, price);
+    purchaseTx = await purchase({ userID, itemID, quantity: 1 });
   } catch (e) {
     /* We don't want to fail if the item could not be purchased, however the client
        is expected to assert that a transaction exists for the item and alert the user
