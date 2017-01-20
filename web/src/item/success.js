@@ -16,7 +16,7 @@ const ItemPurchaseSuccess = ({
             fullscreen={true}
             loading={loading}
         >
-            <div onClick={() => hashHistory.replace(`/${storeId}`)} className="item-success">
+            <div onClick={() => hashHistory.replace(`/${storeId}/history`)} className="item-success">
                 <div className="item-success-detail">
                     <h3>Enjoy your {name}</h3>
                     <div className="item-success-detail-image">
