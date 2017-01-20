@@ -57,12 +57,12 @@ ReactDOM.render((
         <Route path="signin" component={SignIn}/>
         <Route path="signin/success" component={SignInSuccess}/>
         <Route path="store" component={Store}/>
-        <Route path="item/error" returnPage="store" component={Error} />
+        <Route path="item/error" component={Error} />
         <Route path="item/:itemId" component={ItemDetail}/>
         <Route path="item/:itemId/success" component={ItemPurchaseSuccess}/>
         <Route path="topup" component={TopupAmount}/>
         <Route path="topup/success"component={TopupSuccess}/>
-        <Route path="topup/error" returnPage="topup" component={Error}/>
+        <Route path="topup/error" component={Error}/>
         <Route path="topup/:amount"component={TopupExistingCard}/>
         <Route path="topup/:amount/new"component={TopupNewCard}/>
         <Route path="history" component={History}/>

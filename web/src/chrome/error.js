@@ -10,7 +10,7 @@ export default ({ params: { storeId }, route: { returnPage } }) =>
         nav={false}
         fullscreen={true}
     >
-        <div onClick={() => hashHistory.replace(`${storeId}/${returnPage}`)} className="chrome-error">
+        <div onClick={() => hashHistory.goBack()} className="chrome-error">
             <div>
                 <h3>Oops! Something went wrong...</h3>
                 <img src={error} alt="error"/>
