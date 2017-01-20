@@ -68,6 +68,7 @@ const setupRegisterPhase2 = (router) => {
       const { itemID, topUpAmount } = request.body;
       const { userID } = request;
 
+      // FIXME: card details --> stripe token
       promiseResponse<SessionData>(
           register2(userID, emailAddress, topUpAmount, itemID),
           response,
