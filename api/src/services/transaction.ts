@@ -2,8 +2,6 @@ import { createTransaction, getAccount, TransactionDetails } from '../../../tran
 import { getPrice } from '../services/store';
 import { getUser } from '../../../user/src/client/index';
 
-const getUsersAccountId = async (userId) => (await getUser(userId)).accountId;
-
 const assertValidQuantity = (quantity) => {
     if (!Number.isInteger(quantity)) {
         throw new Error(`quantity ${quantity} isn't an integer`);
@@ -16,7 +14,7 @@ const assertValidQuantity = (quantity) => {
     }
 };
 
-export const purchase = async ({ itemID, userID, storeID, quantity }) => {
+export const purchase = async ({ itemID, userID, accountID, storeID, quantity }) => {
     assertValidQuantity(quantity);
 
     const price = quantity * getPrice(itemID);
@@ -32,13 +30,11 @@ export const purchase = async ({ itemID, userID, storeID, quantity }) => {
         }
     };
 
-    return await createTransaction(
-        await getUsersAccountId(userID),
-        transaction);
+    return await createTransaction(accountID, transaction);
 };
 
-export const getTransactionHistory = async (userID) => {
-    const { transactions } = await getAccount(await getUsersAccountId(userID));
+export const getTransactionHistory = async ({ accountID }) => {
+    const { transactions } = await getAccount(accountID);
 
     return transactions;
 };

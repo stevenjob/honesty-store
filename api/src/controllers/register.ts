@@ -25,7 +25,7 @@ const register = async (storeCode) => {
   const account = await createAccount(accountId);
 
   return {
-      ...await getSessionData(user.id),
+      ...await getSessionData({ userID: user.id, accountID: user.accountId }),
       refreshToken: user.refreshToken,
       accessToken: user.accessToken,
   };
@@ -53,15 +53,21 @@ interface SessionDataWithoutTransactionIds {
 };
 
 const register2 = async ({ userID, emailAddress, topUpAmount, itemID, stripeToken }) => {
-  const sessionData = await getSessionData(userID);
-
   const user = await updateUser(userID, { emailAddress });
+
+  const sessionData = await getSessionData({ userID: user.id, accountID: user.accountId });
 
   const topupTx = await createTopup({ accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
 
   let purchaseTx: TransactionAndBalance = null;
   try {
-    purchaseTx = await purchase({ userID, itemID, storeID: user.defaultStoreId, quantity: 1 });
+    purchaseTx = await purchase({
+        itemID,
+        userID,
+        quantity: 1,
+        accountID: user.accountId,
+        storeID: user.defaultStoreId,
+    });
   } catch (e) {
     /* We don't want to fail if the item could not be purchased, however the client
        is expected to assert that a transaction exists for the item and alert the user

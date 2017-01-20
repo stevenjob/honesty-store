@@ -12,7 +12,13 @@ export default (router) => {
       const { user } = request;
 
       promiseResponse<TransactionAndBalance>(
-          purchase({ itemID, userID: user.id, storeID: user.defaultStoreId, quantity }),
+          purchase({
+              itemID,
+              userID: user.id,
+              quantity,
+              accountID: user.accountId,
+              storeID: user.defaultStoreId,
+          }),
           response);
     });
 };
