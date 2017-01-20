@@ -7,6 +7,7 @@ import Stepper from '../chrome/stepper';
 import Button from '../chrome/button';
 import currency from '../format/currency';
 import { performPurchase } from '../actions/purchase';
+import isRegistered from '../reducers/is-registered-user';
 import './detail.css';
 
 const minNumItems = 1;
@@ -81,16 +82,17 @@ const ItemDetail = ({
 };
 
 const mapStateToProps = (
-  { store: { items = [] }, user: { balance }, refreshToken },
+  { store: { items = [] }, user },
   { params: { storeId, itemId } }
 ) => {
   const item = items.find(el => el.id === Number(itemId));
+  const { balance } = user;
   return {
     storeId,
     loading: item == null,
     item: item || {},
     balance,
-    registered: false
+    registered: isRegistered(user)
   };
 };
 
