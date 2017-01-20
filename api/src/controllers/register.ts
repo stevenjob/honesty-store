@@ -4,7 +4,7 @@ import winston = require('winston');
 import uuid = require('uuid/v4');
 
 import { createUser, updateUser } from '../../../user/src/client/index';
-import { createAccount } from '../../../transaction/src/client/index';
+import { createAccount, TransactionDetails, TransactionAndBalance } from '../../../transaction/src/client/index';
 import { getPrice } from '../services/store';
 import { addItemTransaction } from '../services/transaction';
 import { getSessionData, SessionData } from '../services/session';
@@ -31,22 +31,57 @@ const register = async (storeCode) => {
   };
 };
 
+/* createTopup() and addItemTransaction() return TransactionDetails, which don't have ids.
+ * SessionData also has cardNumber.
+ *
+ * This is a copy of SessionData with TransactionDetails instead of Transaction
+ * and cardNumber removed, to facilitate this for now */
+interface SessionDataWithoutTransactionIds {
+    user: {
+        balance: number;
+        transactions: TransactionDetails[];
+    };
+    store: {
+        code: string;
+        items: {
+            id: string;
+            name: string;
+            price: number;
+            count: number;
+        }[];
+    };
+};
+
 const register2 = async ({ userID, emailAddress, topUpAmount, itemID, stripeToken }) => {
+  const sessionData = await getSessionData(userID);
+
   const user = await updateUser(userID, { emailAddress });
 
-  await createTopup({ accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
+  const topup = await createTopup({ accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
 
+  let purchase: TransactionAndBalance = null;
   try {
     const price = getPrice(itemID);
-    await addItemTransaction(userID, price);
+    purchase = await addItemTransaction(userID, price);
   } catch (e) {
     /* We don't want to fail if the item could not be purchased, however the client
-    is expected to assert that a transaction exists for the item and alert the user
-    appropriately if one doesn't. */
+       is expected to assert that a transaction exists for the item and alert the user
+       appropriately if one doesn't. */
     winston.error(`couldn't purchase item ${itemID}`, e);
   }
 
-  return await getSessionData(userID);
+  return {
+    ...sessionData,
+    user: {
+      ...user,
+      balance: purchase == null ? topup.balance : purchase.balance,
+      transactions: [
+        ...(purchase != null ? [purchase.transaction] : []),
+        topup.transaction,
+        ...sessionData.user.transactions, // should be empty
+      ],
+    },
+  };
 };
 
 const setupRegisterPhase1 = (router) => {
@@ -80,7 +115,7 @@ const setupRegisterPhase2 = (router) => {
       const { itemID, topUpAmount, stripeToken } = request.body;
       const { user: { id: userID } } = request;
 
-      promiseResponse<SessionData>(
+      promiseResponse<SessionDataWithoutTransactionIds>(
           register2({ userID, emailAddress, topUpAmount, itemID, stripeToken }),
           response,
           HTTPStatus.INTERNAL_SERVER_ERROR);
