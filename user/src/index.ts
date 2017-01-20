@@ -179,6 +179,29 @@ const createUser = async ({ userId, userProfile }): Promise<UserWithAccessAndRef
     return externaliseUserWithAccessTokenAndRefreshToken(user);
 };
 
+const update = async ({ user, originalVersion }: { user: InternalUser, originalVersion: number }) => {
+    const response = await new DynamoDB.DocumentClient()
+        .update({
+            TableName: process.env.TABLE_NAME,
+            Key: {
+                id: user.id
+            },
+            ConditionExpression: 'version=:originalVersion',
+            UpdateExpression: 'set accountId=:accountId, defaultStoreId=:defaultStoreId, emailAddress=:emailAddress, refreshToken=:refreshToken, version=:updatedVersion',
+            ExpressionAttributeValues: {
+                ':originalVersion': originalVersion,
+                ':accountId': user.accountId,
+                ':defaultStoreId': user.defaultStoreId,
+                ':emailAddress': user.emailAddress,
+                ':refreshToken': user.refreshToken,
+                ':updatedVersion': user.version,
+            }
+        })
+        .promise();
+
+    return user;
+};
+
 const updateUser = async ({ userId, userProfile }): Promise<User> => {
     assertValidUserId(userId);
 
@@ -203,26 +226,7 @@ const updateUser = async ({ userId, userProfile }): Promise<User> => {
         updatedUser.accountId = account.id;
     }
 
-    const response = await new DynamoDB.DocumentClient()
-        .update({
-            TableName: process.env.TABLE_NAME,
-            Key: {
-                id: userId
-            },
-            ConditionExpression: 'version=:originalVersion',
-            UpdateExpression: 'set accountId=:accountId, defaultStoreId=:defaultStoreId, emailAddress=:emailAddress, refreshToken=:refreshToken, version=:updatedVersion',
-            ExpressionAttributeValues: {
-                ':originalVersion': originalUser.version,
-                ':accountId': updatedUser.accountId,
-                ':defaultStoreId': updatedUser.defaultStoreId,
-                ':emailAddress': updatedUser.emailAddress,
-                ':refreshToken': updatedUser.refreshToken,
-                ':updatedVersion': updatedUser.version,
-            }
-        })
-        .promise();
-
-    return updatedUser;
+    return await update({ user: updatedUser, originalVersion: originalUser.version });
 };
 
 const sendMagicLinkEmail = async ({ emailAddress }) => {
