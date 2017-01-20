@@ -1,10 +1,7 @@
 import HTTPStatus = require('http-status');
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
-
-const expireRefreshToken = async (userID): Promise<{}> => {
-    throw new Error(`logout not supported yet (expireRefreshToken())`);
-};
+import { logout } from  '../../../user/src/client';
 
 export default (router) => {
   router.post(
@@ -12,7 +9,7 @@ export default (router) => {
     authenticateAccessToken,
     (req, res) => {
       promiseResponse<{}>(
-        expireRefreshToken(req.user.id),
+        logout(req.key, req.user.id),
         res,
         HTTPStatus.OK);
     });
