@@ -291,13 +291,10 @@ router.get('/magicLink/:magicLinkToken', (req, res) => {
 
 router.get('/emailAddress/:emailAddress', (req, res) => {
     const { emailAddress } = req.params;
-    scanByEmailAddress({ emailAddress })
-        .then((user) => {
-            res.json({ response: user });
-        })
-        .catch(({ message }) => {
-            res.json({ error: { message } });
-        });
+
+    promiseResponse<User>(
+        async () => externaliseUser(await scanByEmailAddress({ emailAddress })),
+        response);
 });
 
 router.post('/', (req, res) => {
@@ -319,13 +316,15 @@ router.put('/:userId', (req, res) => {
 
 router.post('/magicLink/:emailAddress', (req, res) => {
     const { emailAddress } = req.params;
-    sendMagicLinkEmail({ emailAddress })
-        .then((user) => {
-            res.json({ response: {} });
-        })
-        .catch(({ message }) => {
-            res.json({ error: { message } });
-        });
+
+    const sendMagicLinkEmailAndReturnEmpty = async () => {
+        await sendMagicLinkEmail({ emailAddress });
+        return {};
+    };
+
+    promiseResponse<{}>(
+        sendMagicLinkEmailAndReturnEmpty,
+        response);
 });
 
 app.use('/user/v1', router);

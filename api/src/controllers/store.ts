@@ -3,8 +3,21 @@ import { authenticateAccessToken } from '../middleware/authenticate'
 import { updateUser } from '../../../user/src/client/index';
 import { getItems, storeCodeToStoreID } from '../services/store'
 
+interface Item {
+    id: string;
+    name: string;
+    price: number;
+};
+
+type ItemAndCount = Item & { count: number };
+
 const updateDefaultStoreCode = async (userID, storeCode) => {
   return await updateUser(userID, { defaultStoreId: storeCodeToStoreID(storeCode) });
+};
+
+const updateStoreAndGetItems = async (userId, storeCode) => {
+    await updateDefaultStoreCode(userId, storeCode);
+    return getItems(storeCode);
 };
 
 export default (router) => {
@@ -12,15 +25,11 @@ export default (router) => {
     '/store',
     authenticateAccessToken,
     (req, res) => {
-      const storeCode = req.body.storeCode;
-      updateDefaultStoreCode(req.user.id, storeCode)
-        .then((user) => {
-          req.user = user;
-          res.status(HTTPStatus.OK)
-            .json({ response: getItems(storeCode) })
-        })
-        .catch((error) =>
-          res.status(HTTPStatus.OK)
-            .json({ error: error.message }))
+      const { storeCode } = req.body;
+
+      promiseResponse<ItemAndCount[]>(
+          updateStoreAndGetItems(req.user.id, storeCode),
+          response,
+          HTTPStatus.OK);
     });
 };

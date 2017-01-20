@@ -15,18 +15,6 @@ export const addItemTransaction = async (userID, itemPrice) => {
     transaction);
 };
 
-export const addTopUpTransaction = async (userID, amount) => {
-  const transaction: TransactionDetails = {
-      type: 'topup',
-      amount,
-      data: {}
-  };
-
-  return await createTransaction(
-    await getUsersAccountId(userID),
-    transaction);
-};
-
 export const getTransactionHistory = async (userID) => {
     const { transactions } = await getAccount(await getUsersAccountId(userID));
 

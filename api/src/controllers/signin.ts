@@ -15,13 +15,10 @@ const setupSignInPhase1 = (router) => {
     '/signin',
     (request, response) => {
       const { emailAddress } = request.body;
-      sendEmailToken(emailAddress)
-        .then(() =>
-          response.status(HTTPStatus.OK)
-            .json({ response: {} }))
-        .catch((error) =>
-          response.status(HTTPStatus.OK)
-            .json({ error: error.message }))
+      promiseResponse<{}>(
+          sendEmailToken(emailAddress),
+          response,
+          HTTPStatus.OK);
     });
 };
 
