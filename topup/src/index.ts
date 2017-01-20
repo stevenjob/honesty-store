@@ -52,7 +52,13 @@ const get = async ({ userId }): Promise<TopupAccount> => {
         throw new Error(`Too many database entries for userId '${userId}'`);
     }
 
-    const id = queryResponse.Items[0]['id'];
+    const indexItem = queryResponse.Items[0];
+
+    if (indexItem == null) {
+        throw new Error(`No topup account for ${userId}`);
+    }
+
+    const { id } = indexItem;
 
     const getResponse = await new DynamoDB.DocumentClient()
         .get({
@@ -61,7 +67,13 @@ const get = async ({ userId }): Promise<TopupAccount> => {
         })
         .promise();
 
-    return <TopupAccount>getResponse.Item;
+    const item = <TopupAccount>getResponse.Item;
+
+    if (item == null) {
+        throw new Error(`Index lookup failed for ${userId} ${id}`);
+    }
+
+    return item;
 };
 
 const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
@@ -90,20 +102,20 @@ const getOrCreate = async ({ accountId, userId }): Promise<TopupAccount> => {
     assertValidAccountId(accountId);
     assertValidUserId(userId);
 
-    const topupAccount: TopupAccount = await get({ userId });
-
-    if (topupAccount) {
-        return topupAccount;
+    try {
+        return await get({ userId });
     }
-
-    return update({
-        topupAccount: {
-            id: uuid(),
-            userId,
-            accountId,
-            test: false,
-        }
-    });
+    catch (e) {
+        winston.log('TopupAccount lookup failed, creating account', e);
+        return update({
+            topupAccount: {
+                id: uuid(),
+                userId,
+                accountId,
+                test: false,
+            }
+        });
+    }
 };
 
 const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAccount: TopupAccount, amount: number, data: any }) => {
