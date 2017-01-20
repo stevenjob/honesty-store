@@ -9,7 +9,8 @@
     "ci": "npm test"
   },
   "dependencies": {
-    "http-status": "^0.2.5"
+    "http-status": "^0.2.5",
+    "winston": "^2.3.0"
   },
   "devDependencies": {
     "@types/node": "^7.0.0",
