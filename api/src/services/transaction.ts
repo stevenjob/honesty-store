@@ -24,7 +24,10 @@ export const purchase = async ({ itemID, userID, quantity }) => {
     const transaction: TransactionDetails = {
         type: 'purchase',
         amount: -price,
-        data: {}
+        data: {
+            quantity,
+            itemID
+        }
     };
 
     return await createTransaction(
