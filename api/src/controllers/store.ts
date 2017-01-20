@@ -2,6 +2,7 @@ import HTTPStatus = require('http-status');
 import { authenticateAccessToken } from '../middleware/authenticate'
 import { updateUser } from '../../../user/src/client/index';
 import { getItems, storeCodeToStoreID } from '../services/store'
+import { promiseResponse } from '../../../service/src/endpoint-then-catch';
 
 interface Item {
     id: string;
@@ -29,7 +30,7 @@ export default (router) => {
 
       promiseResponse<ItemAndCount[]>(
           updateStoreAndGetItems(req.user.id, storeCode),
-          response,
+          res,
           HTTPStatus.OK);
     });
 };

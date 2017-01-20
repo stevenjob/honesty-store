@@ -293,8 +293,8 @@ router.get('/emailAddress/:emailAddress', (req, res) => {
     const { emailAddress } = req.params;
 
     promiseResponse<User>(
-        async () => externaliseUser(await scanByEmailAddress({ emailAddress })),
-        response);
+        (async () => externaliseUser(await scanByEmailAddress({ emailAddress })))(),
+        res);
 });
 
 router.post('/', (req, res) => {
@@ -323,8 +323,8 @@ router.post('/magicLink/:emailAddress', (req, res) => {
     };
 
     promiseResponse<{}>(
-        sendMagicLinkEmailAndReturnEmpty,
-        response);
+        sendMagicLinkEmailAndReturnEmpty(),
+        res);
 });
 
 app.use('/user/v1', router);
