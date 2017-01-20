@@ -61,7 +61,7 @@ const ItemDetail = ({
           formatValue={(numItems) => numItems}
           formatButton={formatPurchaseButton}
           initialValue={1}
-          onClick={(numItems) => performPurchase(storeId, id)}
+          onClick={(numItems) => performPurchase({storeId, itemId: id})}
         />
       </div>
     </Page>
