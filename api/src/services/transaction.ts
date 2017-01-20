@@ -16,7 +16,7 @@ const assertValidQuantity = (quantity) => {
     }
 };
 
-export const purchase = async ({ itemID, userID, quantity }) => {
+export const purchase = async ({ itemID, userID, storeID, quantity }) => {
     assertValidQuantity(quantity);
 
     const price = quantity * getPrice(itemID);
@@ -26,7 +26,9 @@ export const purchase = async ({ itemID, userID, quantity }) => {
         amount: -price,
         data: {
             quantity,
-            itemID
+            itemID,
+            userID,
+            storeID,
         }
     };
 
