@@ -9,7 +9,7 @@ export default (router) => {
     authenticateRefreshToken,
     (request, response) => {
       promiseResponse<SessionData>(
-          getSessionData(request.user.id),
+          getSessionData({ userID: request.user.id, accountID: request.user.accountId }),
           response,
           HTTPStatus.INTERNAL_SERVER_ERROR);
     });
