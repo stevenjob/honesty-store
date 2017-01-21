@@ -8,7 +8,7 @@ import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToke
 import { User, UserProfile, UserWithAccessToken, UserWithAccessAndRefreshTokens, TEST_DATA_USER_ID } from './client';
 import { createAccount, getAccount, TEST_DATA_EMPTY_ACCOUNT_ID } from '../../transaction/src/client';
 import { baseUrl } from '../../service/src/baseUrl';
-import { promiseResponse } from '../../service/src/endpoint-then-catch';
+import serviceRouter from '../../service/src/router';
 
 config.region = process.env.AWS_REGION;
 
@@ -236,7 +236,7 @@ Tap the button below on your phone to log in to honesty.store
 
 Log in to honesty.store ( ${baseUrl}/${user.defaultStoreId}?code=${signAccessToken({ userId: user.id })} )
 `;
-    const response = await new SES({apiVersion: '2010-12-01'})
+    const response = await new SES({ apiVersion: '2010-12-01' })
         .sendEmail({
             Destination: {
                 ToAddresses: [user.emailAddress]
@@ -256,76 +256,47 @@ const app = express();
 
 app.use(bodyParser.json());
 
-const router = express.Router();
+const router = serviceRouter();
 
-router.get('/:userId', (req, res) => {
-    const { userId } = req.params;
-    promiseResponse<User>(
-        get({ userId }),
-        res);
-});
+router.get(
+    '/:userId',
+    async (key, { userId }) => get({ userId })
+);
 
-router.get('/accessToken/:accessToken', (req, res) => {
-    const { accessToken } = req.params;
+router.get(
+    '/accessToken/:accessToken',
+    async (key, { accessToken }) => getByAccessToken({ accessToken })
+);
 
-    promiseResponse<User>(
-        getByAccessToken({ accessToken }),
-        res);
-});
+router.get(
+    '/refreshToken/:refreshToken',
+    async (key, { refreshToken }) => getByRefreshToken({ refreshToken })
+);
 
-router.get('/refreshToken/:refreshToken', (req, res) => {
-    const { refreshToken } = req.params;
+router.get(
+    '/magicLink/:magicLinkToken',
+    async (key, { magicLinkToken }) => getByMagicLinkToken({ magicLinkToken })
+);
 
-    promiseResponse<UserWithAccessToken>(
-        getByRefreshToken({ refreshToken }),
-        res);
-});
+router.get(
+    '/emailAddress/:emailAddress',
+    async (key, { emailAddress }) => externaliseUser(await scanByEmailAddress({ emailAddress }))
+);
 
-router.get('/magicLink/:magicLinkToken', (req, res) => {
-    const { magicLinkToken } = req.params;
+router.post(
+    '/',
+    async (key, {}, { userId, ...userProfile}) => createUser({ userId, userProfile })
+);
 
-    promiseResponse<UserWithAccessAndRefreshTokens>(
-        getByMagicLinkToken({ magicLinkToken }),
-        res);
-});
+router.put(
+    '/:userId',
+    async (key, { userId }, userProfile) => updateUser({ userId, userProfile })
+);
 
-router.get('/emailAddress/:emailAddress', (req, res) => {
-    const { emailAddress } = req.params;
-
-    promiseResponse<User>(
-        (async () => externaliseUser(await scanByEmailAddress({ emailAddress })))(),
-        res);
-});
-
-router.post('/', (req, res) => {
-    const { userId, ...userProfile } = req.body;
-
-    promiseResponse<UserWithAccessAndRefreshTokens>(
-        createUser({ userId, userProfile }),
-        res);
-});
-
-router.put('/:userId', (req, res) => {
-    const { userId } = req.params;
-    const userProfile = req.body;
-
-    promiseResponse<User>(
-        updateUser({ userId, userProfile }),
-        res);
-});
-
-router.post('/magicLink/:emailAddress', (req, res) => {
-    const { emailAddress } = req.params;
-
-    const sendMagicLinkEmailAndReturnEmpty = async () => {
-        await sendMagicLinkEmail({ emailAddress });
-        return {};
-    };
-
-    promiseResponse<{}>(
-        sendMagicLinkEmailAndReturnEmpty(),
-        res);
-});
+router.post(
+    '/magicLink/:emailAddress',
+    async (key, { emailAddress }, {}) => void sendMagicLinkEmail({ emailAddress})
+);
 
 app.use('/user/v1', router);
 
