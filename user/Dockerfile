@@ -9,6 +9,4 @@ WORKDIR /usr/src/app
 
 COPY user /usr/src/app
 
-RUN npm install
-
 ENTRYPOINT ["node", "."]

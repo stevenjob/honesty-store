@@ -28,5 +28,13 @@ script:
   - (cd web && npm run ci)
   - (cd topup && npm run ci)
   - (cd service && npm run ci)
+  # prune back to production only dependencies for containerisation
+  - (cd api && yarn install --production --ignore-scripts --prefer-offline)
+  - (cd aws && yarn install --production --ignore-scripts --prefer-offline)
+  - (cd transaction && yarn install --production --ignore-scripts --prefer-offline)
+  - (cd user && yarn install --production --ignore-scripts --prefer-offline)
+  - (cd web && yarn install --production --ignore-scripts --prefer-offline)
+  - (cd topup && yarn install --production --ignore-scripts --prefer-offline)
+  - (cd service && yarn install --production --ignore-scripts --prefer-offline)
   - ./aws/bin/aws deploy $TRAVIS_BRANCH api transaction user web topup
   - ./aws/bin/aws prune
