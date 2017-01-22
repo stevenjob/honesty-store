@@ -74,7 +74,8 @@ export default async ({ branch, dirs }) => {
         loadBalancerArn: loadBalancer.LoadBalancerArn,
         defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn
     });
-    const services: ECS.Service[] = await Promise.all(dirs.map(async (dir) => {
+    const services: ECS.Service[] = [];
+    for (const dir of dirs) {
         const logGroup = `${prefix}-${branch}-${dir}`;
         await ensureLogGroup({
             name: logGroup,
@@ -128,8 +129,8 @@ export default async ({ branch, dirs }) => {
             ],
             role
         });
-        return service;
-    }));
+        services.push(service);
+    }
 
     winston.info(`Waiting for stability`);
 
