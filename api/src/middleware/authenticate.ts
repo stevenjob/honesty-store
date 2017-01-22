@@ -5,6 +5,7 @@ import {
   getUserByAccessToken,
   getUserByRefreshToken,
   getUserByMagicLinkToken } from '../../../user/src/client/index';
+import { createAuthenticationKey, createUserKey } from '../../../service/src/key'
 import * as winston from 'winston';
 
 const getToken = request => request.headers.authorization.split(' ')[1];
@@ -24,8 +25,10 @@ const authenticateToken = (request, response, next, tokenRetrievalGetter) => {
   const token = getToken(request);
 
   // token verification is handled by the user service / tokenRetrievalGetter
-  tokenRetrievalGetter(token)
+  const authKey = createAuthenticationKey();
+  tokenRetrievalGetter(authKey, token)
     .then((user) => {
+      request.key = authKey.setUserId(user.id);
       request.user = user;
 
       next(); // we assume next doesn't throw, and don't return its result here

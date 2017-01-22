@@ -3,7 +3,6 @@ import { authenticateAccessToken } from '../middleware/authenticate'
 import { updateUser } from '../../../user/src/client/index';
 import { getItems, storeCodeToStoreID } from '../services/store'
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
-import { createUserKey } from '../../../service/src/key';
 
 interface Item {
     id: string;
@@ -13,13 +12,12 @@ interface Item {
 
 type ItemAndCount = Item & { count: number };
 
-const updateDefaultStoreCode = async (userID, storeCode) => {
-  const key = createUserKey({ userId: userID });
+const updateDefaultStoreCode = async (key, userID, storeCode) => {
   return await updateUser(key, userID, { defaultStoreId: storeCodeToStoreID(storeCode) });
 };
 
-const updateStoreAndGetItems = async (userId, storeCode) => {
-    await updateDefaultStoreCode(userId, storeCode);
+const updateStoreAndGetItems = async (key, userId, storeCode) => {
+    await updateDefaultStoreCode(key, userId, storeCode);
     return getItems(storeCode);
 };
 
@@ -31,7 +29,7 @@ export default (router) => {
       const { storeCode } = req.body;
 
       promiseResponse<ItemAndCount[]>(
-          updateStoreAndGetItems(req.user.id, storeCode),
+          updateStoreAndGetItems(req.key, req.user.id, storeCode),
           res,
           HTTPStatus.OK);
     });

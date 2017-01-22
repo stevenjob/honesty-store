@@ -23,17 +23,13 @@ const setupSignInPhase1 = (router) => {
     });
 };
 
-const signin2 = async (userID) => {
-  return await getSessionData(createUserKey({ userId: userID }), userID);
-}
-
 const setupSignInPhase2 = (router) => {
   router.post(
     '/signin2',
     authenticateEmailToken,
     (request, response) => {
       promiseResponse<SessionData & WithRefreshToken>(
-          signin2(request.user.id),
+          getSessionData(request.key, { userID: request.user.id, accountID: request.user.accountId }),
           response,
           HTTPStatus.INTERNAL_SERVER_ERROR);
     });

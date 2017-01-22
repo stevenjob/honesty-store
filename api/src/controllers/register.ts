@@ -54,8 +54,7 @@ interface SessionDataWithoutTransactionIds {
     };
 };
 
-const register2 = async ({ userID, emailAddress, topUpAmount, itemID, stripeToken }) => {
-  const key = createUserKey({ userId: userID });
+const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, stripeToken }) => {
   const user = await updateUser(key, userID, { emailAddress });
 
   const sessionData = await getSessionData(key, { userID: user.id, accountID: user.accountId });
@@ -121,10 +120,10 @@ const setupRegisterPhase2 = (router) => {
       }
 
       const { itemID, topUpAmount, stripeToken } = request.body;
-      const { user: { id: userID } } = request;
+      const { user: { id: userID }, key } = request;
 
       promiseResponse<SessionDataWithoutTransactionIds>(
-          register2({ userID, emailAddress, topUpAmount, itemID, stripeToken }),
+          register2(key, { userID, emailAddress, topUpAmount, itemID, stripeToken }),
           response,
           HTTPStatus.INTERNAL_SERVER_ERROR);
     });
