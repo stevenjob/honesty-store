@@ -37,25 +37,25 @@ export type UserWithAccessAndRefreshTokens = User & WithAccessToken & WithRefres
 export type UserWithMagicLinkToken = User & WithMagicLinkToken;
 
 export const getUser = (key, userId: string) =>
-    get<User>(key, '/user/v1/${userId}');
+    get<User>(key, `/user/v1/${userId}`);
 
 export const getUserByAccessToken = (key, accessToken: string) =>
-    get<User>(key, '/user/v1/${accessToken}');
+    get<User>(key, `/user/v1/${accessToken}`);
 
 export const getUserByRefreshToken = (key, refreshToken: string) =>
-    get<UserWithAccessToken>(key, '/user/v1/${refreshToken}');
+    get<UserWithAccessToken>(key, `/user/v1/${refreshToken}`);
 
 export const getUserByMagicLinkToken = (key, magicLinkToken: string) =>
-    get<UserWithAccessAndRefreshTokens>(key, '/user/v1/${magicLinkToken}');
+    get<UserWithAccessAndRefreshTokens>(key, `/user/v1/${magicLinkToken}`);
 
 export const getUserByEmailAddress = (key, emailAddress: string) =>
-    get<User>(key, '/user/v1/${emailAddress}');
+    get<User>(key, `/user/v1/${emailAddress}`);
 
 export const createUser = (key, userId: string, userProfile: UserProfile) =>
-    post<UserWithAccessAndRefreshTokens>(key, '/user/v1/', { userId, ...userProfile });
+    post<UserWithAccessAndRefreshTokens>(key, `/user/v1/`, { userId, ...userProfile });
 
 export const updateUser = (key, userId: string, userProfile: UserProfile) =>
-    post<User>(key, '/user/v1/${userId}', userProfile);
+    post<User>(key, `/user/v1/${userId}`, userProfile);
 
 export const sendMagicLinkEmail = (key, emailAddress: string) =>
     post<{}>(key, `/user/v1/magicLink/${emailAddress}`, {});
