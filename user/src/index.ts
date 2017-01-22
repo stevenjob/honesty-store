@@ -306,7 +306,7 @@ router.post(
     async (key, { emailAddress }, {}) => void sendMagicLinkEmail({ emailAddress})
 );
 
-app.use('/user/v1', router);
+app.use(router);
 
 // send healthy response to load balancer probes
 app.get('/', (req, res) => {
