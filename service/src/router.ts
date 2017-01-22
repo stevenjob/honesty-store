@@ -1,10 +1,7 @@
-import * as winston from 'winston';
+import { info, error } from './log';
 import HTTPStatus = require('http-status');
 import express = require('express');
-
-interface Key {
-
-}
+import { Key } from './key';
 
 interface Params {
     [key: string]: string;
@@ -35,51 +32,54 @@ export default (service: string): Router => {
 
     router.get = <Result>(path, version: number, action: Action<Result>) => {
         internalRouter.get(`/${service}/v${version}${path}`, (request, response) => {
-            winston.info(`GET ${request.url} request`);
-            action(extractKey(request), request.params)
+            const key = extractKey(request);
+            info(key, `GET ${request.url} request`);
+            action(key, request.params)
                 .then(result => {
-                    winston.info(`GET ${request.url} success`, result);
+                    info(key, `GET ${request.url} success`, result);
                     response.status(HTTPStatus.OK)
                         .json({ response: result });
                 })
-                .catch((error) => {
-                    winston.error(`GET ${request.url} failure`, error);
+                .catch((e) => {
+                    error(key, `GET ${request.url} failure`, e);
                     response.status(200)
-                        .json({ error: { message: error.message }});
+                        .json({ error: { message: e.message }});
                 });
         });
     };
 
     router.post = <Body, Result>(path, version: number, action: BodyAction<Body, Result>) => {
         internalRouter.post(`/${service}/v${version}${path}`, (request, response) => {
-            winston.info(`POST ${request.url} request`, request.body);
-            action(extractKey(request), request.params, request.body)
+            const key = extractKey(request);
+            info(key, `POST ${request.url} request`, request.body);
+            action(key, request.params, request.body)
                 .then(result => {
-                    winston.info(`POST ${request.url} success`, result);
+                    info(key, `POST ${request.url} success`, result);
                     response.status(HTTPStatus.OK)
                         .json({ response: result });
                 })
-                .catch((error) => {
-                    winston.error(`POST ${request.url} failure`, error);
+                .catch((e) => {
+                    error(key, `POST ${request.url} failure`, e);
                     response.status(200)
-                        .json({ error: { message: error.message }});
+                        .json({ error: { message: e.message }});
                 });
         });
     };
 
     router.put = <Body, Result>(path, version: number, action: BodyAction<Body, Result>) => {
         internalRouter.put(`/${service}/v${version}${path}`, (request, response) => {
-            winston.info(`PUT ${request.url} request`, request.body);
-            action(extractKey(request), request.params, request.body)
+            const key = extractKey(request);
+            info(key, `PUT ${request.url} request`, request.body);
+            action(key, request.params, request.body)
                 .then(result => {
-                    winston.info(`PUT ${request.url} success`, result);
+                    info(key, `PUT ${request.url} success`, result);
                     response.status(HTTPStatus.OK)
                         .json({ response: result });
                 })
-                .catch((error) => {
-                    winston.error(`PUT ${request.url} failure`, error);
+                .catch((e) => {
+                    error(key, `PUT ${request.url} failure`, e);
                     response.status(200)
-                        .json({ error: { message: error.message }});
+                        .json({ error: { message: e.message }});
                 });
         });
     };
