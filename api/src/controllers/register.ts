@@ -3,6 +3,7 @@ import HTTPStatus = require('http-status');
 import winston = require('winston');
 import uuid = require('uuid/v4');
 
+import { createUserKey } from '../../../service/src/key';
 import { createUser, updateUser } from '../../../user/src/client/index';
 import { createAccount, TransactionDetails, TransactionAndBalance } from '../../../transaction/src/client/index';
 import { getPrice } from '../services/store';
@@ -21,11 +22,12 @@ const register = async (storeCode) => {
     accountId,
     defaultStoreId: storeCodeToStoreID(storeCode),
   };
-  const user = await createUser(userId, profile)
+  const key = createUserKey({ userId });
+  const user = await createUser(key, userId, profile)
   const account = await createAccount(accountId);
 
   return {
-      ...await getSessionData({ userID: user.id, accountID: user.accountId }),
+      ...await getSessionData(key, { userID: user.id, accountID: user.accountId }),
       refreshToken: user.refreshToken,
       accessToken: user.accessToken,
   };
@@ -53,9 +55,10 @@ interface SessionDataWithoutTransactionIds {
 };
 
 const register2 = async ({ userID, emailAddress, topUpAmount, itemID, stripeToken }) => {
-  const user = await updateUser(userID, { emailAddress });
+  const key = createUserKey({ userId: userID });
+  const user = await updateUser(key, userID, { emailAddress });
 
-  const sessionData = await getSessionData({ userID: user.id, accountID: user.accountId });
+  const sessionData = await getSessionData(key, { userID: user.id, accountID: user.accountId });
 
   const topupTx = await createTopup({ accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
 

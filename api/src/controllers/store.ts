@@ -3,6 +3,7 @@ import { authenticateAccessToken } from '../middleware/authenticate'
 import { updateUser } from '../../../user/src/client/index';
 import { getItems, storeCodeToStoreID } from '../services/store'
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { createUserKey } from '../../../service/src/key';
 
 interface Item {
     id: string;
@@ -13,7 +14,8 @@ interface Item {
 type ItemAndCount = Item & { count: number };
 
 const updateDefaultStoreCode = async (userID, storeCode) => {
-  return await updateUser(userID, { defaultStoreId: storeCodeToStoreID(storeCode) });
+  const key = createUserKey({ userId: userID });
+  return await updateUser(key, userID, { defaultStoreId: storeCodeToStoreID(storeCode) });
 };
 
 const updateStoreAndGetItems = async (userId, storeCode) => {

@@ -5,12 +5,6 @@ import { createTopup } from '../../../topup/src/client/index'
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
 import { TransactionAndBalance } from '../../../transaction/src/client/index';
 
-const performTopup = async ({ stripeToken, amount, userId }: { stripeToken: string, amount: number, userId: string }) => {
-    const accountId = (await getUser(userId)).accountId;
-
-    return await createTopup({ accountId, userId, amount, stripeToken });
-};
-
 export default (router) => {
   router.post(
     '/topup',
@@ -19,7 +13,12 @@ export default (router) => {
       const { stripeToken, amount } = request.body;
 
       promiseResponse<TransactionAndBalance>(
-          performTopup({ stripeToken, amount, userId: request.user.id }),
+          createTopup({
+              stripeToken,
+              amount,
+              userId: request.user.id,
+              accountId: request.user.accountId
+          }),
           response,
           HTTPStatus.INTERNAL_SERVER_ERROR);
     })

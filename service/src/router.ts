@@ -25,10 +25,7 @@ interface Router {
     put<Body, Result>(path: string, action: BodyAction<Body, Result>);
 }
 
-const extractKey = (request: Express.Request): Key => {
-    // TODO: something useful
-    return Math.random();
-}
+const extractKey = (request): Key => request.get('key');
 
 export default (): Router => {
     const internalRouter = express.Router();

@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import { get, post, put } from '../../../service/src/fetch';
 
 export interface ApiResponse<T> {
     response?: T;
@@ -36,96 +36,28 @@ export type UserWithAccessAndRefreshTokens = User & WithAccessToken & WithRefres
 
 export type UserWithMagicLinkToken = User & WithMagicLinkToken;
 
-const baseUrl = process.env.BASE_URL;
+export const getUser = (key, userId: string) =>
+    get<User>(key, '/user/v1/${userId}');
 
-export const getUser = async (userId: string): Promise<User> => {
-    const response = await fetch(`${baseUrl}/user/v1/${userId}`)
-        .then<ApiResponse<User>>(response => response.json());
-    if (response.error) {
-        throw new Error(response.error.message);
-    }
-    return response.response;
-};
+export const getUserByAccessToken = (key, accessToken: string) =>
+    get<User>(key, '/user/v1/${accessToken}');
 
-export const getUserByAccessToken = async (accessToken: string): Promise<User> => {
-    const response = await fetch(`${baseUrl}/user/v1/accessToken/${accessToken}`)
-        .then<ApiResponse<User>>(response => response.json());
-    if (response.error) {
-        throw new Error(response.error.message);
-    }
-    return response.response;
-};
+export const getUserByRefreshToken = (key, refreshToken: string) =>
+    get<UserWithAccessToken>(key, '/user/v1/${refreshToken}');
 
-export const getUserByRefreshToken = async (refreshToken: string): Promise<UserWithAccessToken> => {
-    const response = await fetch(`${baseUrl}/user/v1/refreshToken/${refreshToken}`)
-        .then<ApiResponse<UserWithAccessToken>>(response => response.json());
-    if (response.error) {
-        throw new Error(response.error.message);
-    }
-    return response.response;
-};
+export const getUserByMagicLinkToken = (key, magicLinkToken: string) =>
+    get<UserWithAccessAndRefreshTokens>(key, '/user/v1/${magicLinkToken}');
 
-export const getUserByMagicLinkToken = async (magicLinkToken: string): Promise<UserWithAccessAndRefreshTokens> => {
-    const response = await fetch(`${baseUrl}/user/v1/magicLink/${magicLinkToken}`, {
-        method: 'GET'
-    })
-        .then<ApiResponse<UserWithAccessAndRefreshTokens>>(response => response.json());
-    if (response.error) {
-        throw new Error(response.error.message);
-    }
-    return response.response;
-};
+export const getUserByEmailAddress = (key, emailAddress: string) =>
+    get<User>(key, '/user/v1/${emailAddress}');
 
-export const getUserByEmailAddress = async (emailAddress: string): Promise<User> => {
-    const response = await fetch(`${baseUrl}/user/v1/emailAddress/${emailAddress}`, {
-        method: 'GET'
-    })
-        .then<ApiResponse<UserWithAccessAndRefreshTokens>>(response => response.json());
-    if (response.error) {
-        throw new Error(response.error.message);
-    }
-    return response.response;
-};
+export const createUser = (key, userId: string, userProfile: UserProfile) =>
+    post<UserWithAccessAndRefreshTokens>(key, '/user/v1/', { userId, ...userProfile });
 
-export const createUser = async (userId: string, userProfile: UserProfile): Promise<UserWithAccessAndRefreshTokens> => {
-    const response = await fetch(`${baseUrl}/user/v1/`, {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json'
-        },
-        body: JSON.stringify({ userId, ...userProfile })
-    })
-        .then<ApiResponse<UserWithAccessAndRefreshTokens>>(response => response.json());
-    if (response.error) {
-        throw new Error(response.error.message);
-    }
-    return response.response;
-};
+export const updateUser = (key, userId: string, userProfile: UserProfile) =>
+    post<User>(key, '/user/v1/${userId}', userProfile);
 
-export const updateUser = async (userId: string, userProfile: UserProfile): Promise<User> => {
-    const response = await fetch(`${baseUrl}/user/v1/${userId}`, {
-        method: 'PUT',
-        headers: {
-            'content-type': 'application/json'
-        },
-        body: JSON.stringify(userProfile)
-    })
-        .then<ApiResponse<User>>(response => response.json());
-    if (response.error) {
-        throw new Error(response.error.message);
-    }
-    return response.response;
-};
-
-export const sendMagicLinkEmail = async (emailAddress: string): Promise<{}> => {
-    const response = await fetch(`${baseUrl}/user/v1/magicLink/${emailAddress}`, {
-        method: 'POST'
-    })
-        .then<ApiResponse<{}>>(response => response.json());
-    if (response.error) {
-        throw new Error(response.error.message);
-    }
-    return response.response;
-};
+export const sendMagicLinkEmail = (key, emailAddress: string) =>
+    post<{}>(key, `/user/v1/magicLink/${emailAddress}`, {});
 
 export const TEST_DATA_USER_ID = 'c50234ff-6c33-4878-a1ab-05f6b3e7b649';

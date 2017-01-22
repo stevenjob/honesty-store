@@ -30,8 +30,8 @@ const getAccountSessionData = async (accountID) => {
   };
 };
 
-const getStoreSessionData = async (userID) => {
-  const { defaultStoreId } = await getUser(userID);
+const getStoreSessionData = async (key, userID) => {
+  const { defaultStoreId } = await getUser(key, userID);
 
   const defaultStoreCode = storeIDToStoreCode(defaultStoreId);
 
@@ -41,10 +41,10 @@ const getStoreSessionData = async (userID) => {
   };
 };
 
-export const getSessionData = async ({ userID, accountID }) => {
+export const getSessionData = async (key, { userID, accountID }) => {
   const [ user, store ] = await Promise.all([
     getAccountSessionData(accountID),
-    getStoreSessionData(userID),
+    getStoreSessionData(key, userID),
   ]);
   return { user, store };
 };
