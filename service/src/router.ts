@@ -35,10 +35,10 @@ export default (): Router => {
 
     router.get = <Result>(path, action: Action<Result>) => {
         internalRouter.get(path, (request, response) => {
-            winston.debug(`GET ${request.url} request`);
+            winston.info(`GET ${request.url} request`);
             action(extractKey(request), request.params)
                 .then(result => {
-                    winston.info(`GET ${request.url} success`);
+                    winston.info(`GET ${request.url} success`, result);
                     response.status(HTTPStatus.OK)
                         .json({ response: result });
                 })
@@ -52,10 +52,10 @@ export default (): Router => {
 
     router.post = <Body, Result>(path, action: BodyAction<Body, Result>) => {
         internalRouter.post(path, (request, response) => {
-            winston.debug(`POST ${request.url} request`);
+            winston.info(`POST ${request.url} request`, request.body);
             action(extractKey(request), request.params, request.body)
                 .then(result => {
-                    winston.info(`POST ${request.url} success`);
+                    winston.info(`POST ${request.url} success`, result);
                     response.status(HTTPStatus.OK)
                         .json({ response: result });
                 })
@@ -69,10 +69,10 @@ export default (): Router => {
 
     router.put = <Body, Result>(path, action: BodyAction<Body, Result>) => {
         internalRouter.put(path, (request, response) => {
-            winston.debug(`PUT ${request.url} request`);
+            winston.info(`PUT ${request.url} request`, request.body);
             action(extractKey(request), request.params, request.body)
                 .then(result => {
-                    winston.info(`PUT ${request.url} success`);
+                    winston.info(`PUT ${request.url} success`, result);
                     response.status(HTTPStatus.OK)
                         .json({ response: result });
                 })
