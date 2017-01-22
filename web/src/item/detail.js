@@ -12,7 +12,7 @@ import './detail.css';
 
 const minNumItems = 1;
 
-const ItemDetail = ({ 
+const ItemDetail = ({
   storeId,
   item: { id, name, price },
   loading,
@@ -62,7 +62,7 @@ const ItemDetail = ({
 
 
   return (
-    <Page 
+    <Page
       storeId={storeId}
       invert={true}
       nav={false}
@@ -74,7 +74,7 @@ const ItemDetail = ({
         <div className="item-details">
           <h2>{name}<br/>{price}<small>p</small></h2>
         </div>
-        <img src={require('../store/assets/packet.svg')} alt={name}/>
+        <div className="item-image" style={{ backgroundImage: `url(${require('../store/assets/packet.svg')})` }}/>
         { registered ? PurchaseStepper : UnregisteredPurchaseButton }
       </div>
     </Page>

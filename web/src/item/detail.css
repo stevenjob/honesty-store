@@ -6,6 +6,9 @@
   text-align: center;
 }
 
-.item>img {
-  height: 8rem;
+.item-image {
+  flex: 1;
+  margin: 20%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
