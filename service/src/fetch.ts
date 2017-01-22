@@ -7,7 +7,11 @@ import { Key } from './key';
 export default (service: string) => {
 
     const get = async <Result>(version: number, key: Key, path: String) => {
-        const response = await fetch(`${baseUrl}/${service}/v${version}${path}`)
+        const response = await fetch(`${baseUrl}/${service}/v${version}${path}`, {
+            headers: {
+                key
+            }
+        })
             .then<ApiResponse<Result>>(response => response.json());
         if (response.error) {
             throw new Error(response.error.message);
@@ -20,7 +24,7 @@ export default (service: string) => {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
-                'key': key
+                key
             },
             body: JSON.stringify(body)
         })
@@ -36,7 +40,7 @@ export default (service: string) => {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json',
-                'key': key
+                key
             },
             body: JSON.stringify(body)
         })
