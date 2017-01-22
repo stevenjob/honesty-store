@@ -256,45 +256,53 @@ const app = express();
 
 app.use(bodyParser.json());
 
-const router = serviceRouter();
+const router = serviceRouter('user');
 
 router.get(
     '/:userId',
+    1,
     async (key, { userId }) => get({ userId })
 );
 
 router.get(
     '/accessToken/:accessToken',
+    1,
     async (key, { accessToken }) => getByAccessToken({ accessToken })
 );
 
 router.get(
     '/refreshToken/:refreshToken',
+    1,
     async (key, { refreshToken }) => getByRefreshToken({ refreshToken })
 );
 
 router.get(
     '/magicLink/:magicLinkToken',
+    1,
     async (key, { magicLinkToken }) => getByMagicLinkToken({ magicLinkToken })
 );
 
 router.get(
     '/emailAddress/:emailAddress',
+    1,
     async (key, { emailAddress }) => externaliseUser(await scanByEmailAddress({ emailAddress }))
 );
 
 router.post(
     '/',
+    1,
     async (key, {}, { userId, ...userProfile}) => createUser({ userId, userProfile })
 );
 
 router.put(
     '/:userId',
+    1,
     async (key, { userId }, userProfile) => updateUser({ userId, userProfile })
 );
 
 router.post(
     '/magicLink/:emailAddress',
+    1,
     async (key, { emailAddress }, {}) => void sendMagicLinkEmail({ emailAddress})
 );
 
