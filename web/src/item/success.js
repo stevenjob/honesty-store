@@ -4,10 +4,10 @@ import { hashHistory } from 'react-router';
 import Page from '../chrome/page';
 import './success.css';
 
-const ItemPurchaseSuccess = ({ 
+const ItemPurchaseSuccess = ({
     loading,
     storeId,
-    item: { id, name, price } 
+    item: { id, name, price }
 }) => {
     return (
         <Page
@@ -31,9 +31,9 @@ const ItemPurchaseSuccess = ({
 
 const mapStateToProps = (
     { store: { items = [] } },
-    { params: { storeId, itemId } } 
+    { params: { storeId, itemId } }
 ) => {
-    const item = items.find(el => el.id === Number(itemId));
+    const item = items.find(el => el.id === itemId);
     return {
         storeId,
         loading: item == null,

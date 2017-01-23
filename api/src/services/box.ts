@@ -1,11 +1,11 @@
 const boxes = new Map();
 boxes.set(0, {
   items: [
-    { itemID: 0, count: 10 },
-    { itemID: 1, count: 35 },
-    { itemID: 2, count: 28 },
-    { itemID: 3, count: 20 },
-    { itemID: 4, count: 27 },
+    { itemID: '0', count: 10 },
+    { itemID: '1', count: 35 },
+    { itemID: '2', count: 28 },
+    { itemID: '3', count: 20 },
+    { itemID: '4', count: 27 },
   ],
 });
 

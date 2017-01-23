@@ -85,7 +85,7 @@ const mapStateToProps = (
   { store: { items = [] }, user },
   { params: { storeId, itemId } }
 ) => {
-  const item = items.find(el => el.id === Number(itemId));
+  const item = items.find(el => el.id === itemId);
   const { balance } = user;
   return {
     storeId,
