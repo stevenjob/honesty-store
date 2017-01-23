@@ -4,13 +4,15 @@ import Button from '../chrome/button';
 import { DANGER } from '../chrome/colors';
 import { Back } from '../chrome/link';
 import Page from '../chrome/page';
-import { createCardToken } from '../actions/stripe';
+import { performRegister2 } from '../actions/register2';
 import './card.css';
+
+const TOPUP_AMOUNT = 500;
 
 class Card extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {value: ''};
+        this.state = {};
     }
 
     handleChange(event) {
@@ -32,9 +34,10 @@ class Card extends React.Component {
     }
 
     handleSubmit() {
-        const { createCardToken } = this.props;
-        const { storeId, name, number, cvc, exp_month, exp_year, address_zip } = this.state;
-        createCardToken({ storeId, name, number, cvc, exp_month, exp_year, address_zip });
+        const { storeId, itemId, emailAddress, performRegister2 } = this.props;
+        const { name, number, cvc, exp_month, exp_year, address_zip } = this.state;
+        const cardDetails = { name, number, cvc, exp_month, exp_year, address_zip };
+        performRegister2({ storeId, itemID: itemId, topUpAmount: TOPUP_AMOUNT, emailAddress, cardDetails });
     }
 
     style(name, error) {
@@ -42,7 +45,7 @@ class Card extends React.Component {
     }
 
     render() {
-        const  { storeId, /*itemId, */error } = this.props;
+        const  { storeId, error } = this.props;
         const  { exp = '' } = this.state;
         return <Page left={<Back>Register</Back>}
             title={`Top Up`}
@@ -102,19 +105,14 @@ class Card extends React.Component {
     }
 }
 
-const mapStateToProps = ({ stripe: { error, token } }) => ({
-    error,
-    token
-});
-
-const mapDispatchToProps = { createCardToken };
-
-const mergeProps = (stateProps, dispatchProps, { params: { storeId, itemId }}) => ({
-    ...stateProps,
-    ...dispatchProps,
+const mapStateToProps = ({ register: { error } }, { params: { storeId, itemId, emailAddress }}) => ({
     storeId,
-    itemId
+    itemId,
+    emailAddress,
+    error
 });
 
+const mapDispatchToProps = { performRegister2 };
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Card);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Card);

@@ -1,6 +1,5 @@
 import { REGISTER_REQUEST, REGISTER_SUCESSS, REGISTER_FAILURE } from '../actions/register';
 import { REGISTER2_REQUEST, REGISTER2_SUCESSS, REGISTER2_FAILURE } from '../actions/register2';
-import { STRIPE_REQUEST, STRIPE_SUCCESS, STRIPE_FAILURE } from '../actions/stripe';
 import { SESSION_REQUEST, SESSION_SUCCESS, SESSION_FAILURE } from '../actions/session';
 import { TOPUP_REQUEST, TOPUP_SUCCESS, TOPUP_FAILURE } from '../actions/topup';
 import { PURCHASE_REQUEST, PURCHASE_SUCCESS, PURCHASE_FAILURE } from '../actions/purchase';
@@ -11,7 +10,7 @@ const getInitialState = () => {
     pending: [],
     user: {},
     store: {},
-    stripe: {},
+    register: {},
     accessToken: null,
     refreshToken: localStorage.refreshToken
   };
@@ -43,6 +42,7 @@ export default (state = getInitialState(), action) => {
     case REGISTER2_REQUEST: {
       return {
         ...state,
+        register: {},
         pending: [...state.pending, 'register2']
       };
     }
@@ -56,35 +56,13 @@ export default (state = getInitialState(), action) => {
       };
     }
     case  REGISTER2_FAILURE: {
-      return {
-        ...state,
-        pending: state.pending.filter(e => e !== 'register2')
-      };
-    }
-    case STRIPE_REQUEST: {
-      return {
-        ...state,
-        pending: [...state.pending, 'stripe']
-      };
-    }
-    case STRIPE_SUCCESS: {
-      const { token } = action;
-      return {
-        ...state,
-        stripe: {
-          token
-        },
-        pending: state.pending.filter(e => e !== 'stripe')
-      };
-    }
-    case STRIPE_FAILURE: {
       const { error } = action;
       return {
         ...state,
-        stripe: {
+        register: {
           error
         },
-        pending: state.pending.filter(e => e !== 'stripe')
+        pending: state.pending.filter(e => e !== 'register2')
       };
     }
     case SESSION_REQUEST: {
