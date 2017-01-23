@@ -169,11 +169,14 @@ const createStripeCharge = async ({ topupAccount, amount }: { topupAccount: Topu
     }
 };
 
+const stripeDetailsValid = (topupAccount: TopupAccount) => {
+    return topupAccount.stripe
+        && topupAccount.stripe.customer
+        && topupAccount.stripe.nextChargeToken;
+};
+
 const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, topupAccount: TopupAccount, amount: number }) => {
-    if (!topupAccount.stripe
-    || !topupAccount.stripe.customer
-    || !topupAccount.stripe.nextChargeToken)
-    {
+    if (!stripeDetailsValid(topupAccount)) {
         throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please provide stripeToken`);
     }
 
@@ -196,7 +199,7 @@ const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, t
 };
 
 const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupAccount> => {
-    if (topupAccount.stripe) {
+    if (stripeDetailsValid(topupAccount)) {
         throw new Error(`Already have stripe details for '${topupAccount.accountId}'`);
     }
 
@@ -229,7 +232,7 @@ const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: Top
     let topupAccount = await getOrCreate({ accountId, userId });
 
     if (stripeToken) {
-        if (topupAccount.stripe){
+        if (stripeDetailsValid(topupAccount)) {
             throw new Error(`Already have stripe details for '${accountId}'`);
         }
 
