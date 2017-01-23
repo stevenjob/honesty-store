@@ -45,7 +45,7 @@ const register2Failure = (error) => {
   };
 };
 
-const createStripeToken = ({ name, number, cvc, exp_month, exp_year, address_zip }) => async (dispatch, getState) => {
+const createStripeToken = ({ name, number, cvc, exp_month, exp_year, address_zip }) => {
   if (name == null || name.length === 0) {
     throw Object.assign(new Error('Missing name'), { param: 'name' });
   }
@@ -61,7 +61,7 @@ const createStripeToken = ({ name, number, cvc, exp_month, exp_year, address_zip
   if (address_zip == null || address_zip.length === 0) {
     throw Object.assign(new Error('Missing postcode'), { param: 'address_zip' });
   }
-  return await createToken({ name, number, cvc, exp: `${exp_month}/${exp_year}`, address_zip });
+  return createToken({ name, number, cvc, exp: `${exp_month}/${exp_year}`, address_zip });
 };
 
 export const performRegister2 = ({ storeId, itemID, topUpAmount, emailAddress, cardDetails }) => async (dispatch, getState) => {
