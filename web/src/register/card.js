@@ -42,7 +42,7 @@ class Card extends React.Component {
     }
 
     render() {
-        const  { storeId, itemId, error } = this.props;
+        const  { storeId, /*itemId, */error } = this.props;
         const  { exp = '' } = this.state;
         return <Page left={<Back>Register</Back>}
             title={`Top Up`}
