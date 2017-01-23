@@ -21,7 +21,8 @@ export default class extends React.Component {
         this.setState({ emailAddress });
     }
 
-    handleSubmit() {
+    handleSubmit(e) {
+        e.preventDefault();
         const { params: { storeId, itemId } } = this.props;
         const { emailAddress } = this.state;
         const valid = isEmail(emailAddress);
@@ -45,7 +46,7 @@ export default class extends React.Component {
             invert={true}
             nav={false}
             fullscreen={true}>
-            <div className="register-email">
+            <form className="register-email" onSubmit={(e) => this.handleSubmit(e)}>
                 <h2>Want to sign up to {storeId}?</h2>
                 {
                     valid !== false ?
@@ -60,9 +61,9 @@ export default class extends React.Component {
                         onChange={(e) => this.handleChange(e)}
                         style={this.style()}/>
                 </p>
-                <p><Button onClick={() => this.handleSubmit()}>Continue to Top Up</Button></p>
+                <p><Button onClick={(e) => this.handleSubmit(e)}>Continue to Top Up</Button></p>
                 <p><Link to={`/${storeId}/signin`} style={{ color: BRAND_LIGHT }}>Already have an account?</Link></p>
-            </div>
+            </form>
         </Page>;
     }
 }

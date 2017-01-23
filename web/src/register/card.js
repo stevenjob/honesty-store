@@ -33,7 +33,8 @@ class Card extends React.Component {
         });
     }
 
-    handleSubmit() {
+    handleSubmit(e) {
+        e.preventDefault();
         const { storeId, itemId, emailAddress, performRegister2 } = this.props;
         const { name, number, cvc, exp_month, exp_year, address_zip } = this.state;
         const cardDetails = { name, number, cvc, exp_month, exp_year, address_zip };
@@ -53,7 +54,7 @@ class Card extends React.Component {
             invert={true}
             nav={false}
             fullscreen={true}>
-            <div className="register-card">
+            <form className="register-card" onSubmit={(e) => this.handleSubmit(e)}>
                 {
                     error ?
                     <div style={{ color: DANGER }}>
@@ -99,8 +100,8 @@ class Card extends React.Component {
                         style={this.style('address_zip', error)}
                         onChange={(e) => this.handleChange(e)}/>
                 </p>
-                <p><Button onClick={() => this.handleSubmit()}>Confirm £5 Top Up & Purchase</Button></p>
-            </div>
+                <p><Button onClick={(e) => this.handleSubmit(e)}>Confirm £5 Top Up & Purchase</Button></p>
+            </form>
         </Page>;
     }
 }
