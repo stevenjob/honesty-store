@@ -29,7 +29,7 @@ export const performPurchase = ({storeId, itemId}) => async (dispatch, getState)
     const { accessToken } = getState();
     const response = await fetch('/api/v1/purchase', {
       method: 'POST',
-      body: JSON.stringify({ itemID: itemId }),
+      body: JSON.stringify({ itemID: itemId, quantity: 1 }),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer: ${accessToken}`
