@@ -6,9 +6,9 @@ import isUUID = require('validator/lib/isUUID');
 import * as stripeFactory from 'stripe';
 import * as winston from 'winston';
 
-import { TransactionDetails, TransactionAndBalance, createTransaction } from '../../transaction/src/client/index';
+import { TransactionDetails, createTransaction } from '../../transaction/src/client/index';
 import { TopupAccount, TopupRequest } from './client/index';
-import { promiseResponse } from '../../service/src/endpoint-then-catch';
+import serviceRouter from '../../service/src/router';
 import { Key } from '../../service/src/key';
 
 const stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
@@ -262,20 +262,20 @@ const assertConnectivity = async () => {
     await assertStripeConnectivity({ test: true });
 };
 
-const router = express.Router();
 const app = express();
 
 app.use(bodyParser.json());
 
-router.post('/topup', (req, res) => {
-    const { accountId, userId, amount, stripeToken, key } = req.body;
+const router = serviceRouter('topup');
 
-    promiseResponse<TransactionAndBalance>(
-        attemptTopup({ key, accountId, userId, amount, stripeToken }),
-        res);
-});
+router.post(
+    '/',
+    1,
+    async (key, {}, { accountId, userId, amount, stripeToken }) =>
+        attemptTopup({ key, accountId, userId, amount, stripeToken })
+);
 
-app.use('/topup/v1', router);
+app.use(router);
 
 // send healthy response to load balancer probes
 app.get('/', (req, res) => {

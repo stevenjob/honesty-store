@@ -55,7 +55,7 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
 
   const sessionData = await getSessionData(key, { user });
 
-  const topupTx = await createTopup({ accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
+  const topupTx = await createTopup(key, { accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
 
   let purchaseTx: TransactionAndBalance = null;
   try {

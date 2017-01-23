@@ -1,7 +1,5 @@
-import fetch from 'node-fetch';
-import { ApiResponse } from '../../../service/src/types';
 import { TransactionAndBalance } from '../../../transaction/src/client/index';
-import { baseUrl } from '../../../service/src/baseUrl';
+import fetch from '../../../service/src/fetch';
 
 export interface TopupAccount {
     id: string;
@@ -22,18 +20,7 @@ export interface TopupRequest {
     stripeToken: string;
 };
 
-export const createTopup = async (request: TopupRequest): Promise<TransactionAndBalance> => {
-    const response = await fetch(`${baseUrl}/topup/v1/topup`, {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json'
-        },
-        body: JSON.stringify(request)
-    });
-    const json: ApiResponse<TransactionAndBalance> = await response.json();
+const { post } = fetch('topup');
 
-    if (json.error) {
-        throw new Error(json.error.message);
-    }
-    return json.response;
-};
+export const createTopup = (key, request: TopupRequest) =>
+    post<TransactionAndBalance>(1, key, `/`, request);
