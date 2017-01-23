@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import fetch from '../../../service/src/fetch';
 
 import { ApiResponse } from '../../../service/src/types';
 import { baseUrl } from '../../../service/src/baseUrl';
@@ -26,43 +26,15 @@ export interface TransactionAndBalance {
     balance: number;
 };
 
-export const createAccount = async (accountId: string): Promise<Account> => {
-    const response = await fetch(`${baseUrl}/transaction/v1/`, {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json'
-        },
-        body: JSON.stringify({ accountId })
-    })
-        .then<ApiResponse<Account>>(response => response.json());
-    if (response.error) {
-        throw new Error(response.error.message);
-    }
-    return response.response;
-};
+const { get, post } = fetch('transaction');
 
-export const getAccount = async (accountId: string): Promise<Account> => {
-    const response = await fetch(`${baseUrl}/transaction/v1/${accountId}`)
-        .then<ApiResponse<Account>>(response => response.json());
-    if (response.error) {
-        throw new Error(response.error.message);
-    }
-    return response.response;
-};
+export const createAccount = (key, accountId: string) =>
+    post<Account>(1, key, `/`, accountId);
 
-export const createTransaction = async (accountId: string, transaction: TransactionDetails): Promise<TransactionAndBalance> => {
-    const response = await fetch(`${baseUrl}/transaction/v1/${accountId}`, {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json'
-        },
-        body: JSON.stringify(transaction)
-    })
-        .then<ApiResponse<TransactionAndBalance>>(response => response.json());
-    if (response.error) {
-        throw new Error(response.error.message);
-    }
-    return response.response;
-};
+export const getAccount = (key, accountId: string) =>
+    get<Account>(1, key, `/${accountId}`);
+
+export const createTransaction = (key, accountId: string, transaction: TransactionDetails) =>
+    post<TransactionAndBalance>(1, key, `/${accountId}`, transaction);
 
 export const TEST_DATA_EMPTY_ACCOUNT_ID = 'b423607f-64de-441f-ac39-12d50aaedbe9';

@@ -5,7 +5,7 @@ import {
   getUserByAccessToken,
   getUserByRefreshToken,
   getUserByMagicLinkToken } from '../../../user/src/client/index';
-import { createAuthenticationKey, createUserKey } from '../../../service/src/key'
+import { createAuthenticationKey } from '../../../service/src/key'
 import * as winston from 'winston';
 
 const getToken = request => request.headers.authorization.split(' ')[1];

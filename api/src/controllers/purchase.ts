@@ -9,10 +9,11 @@ export default (router) => {
     authenticateAccessToken,
     (request, response) => {
       const { itemID, quantity } = request.body;
-      const { user } = request;
+      const { user, key } = request;
 
       promiseResponse<TransactionAndBalance>(
           purchase({
+              key,
               itemID,
               userID: user.id,
               quantity,

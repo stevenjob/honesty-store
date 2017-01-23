@@ -4,7 +4,7 @@ import { getSessionData, SessionData } from '../services/session';
 import { authenticateEmailToken } from '../middleware/authenticate'
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
 import { WithRefreshToken, sendMagicLinkEmail } from '../../../user/src/client/index';
-import { createUserKey, createEmailKey } from '../../../service/src/key';
+import { createEmailKey } from '../../../service/src/key';
 
 export const sendEmailToken = async (emailAddress) => {
   await sendMagicLinkEmail(createEmailKey({ emailAddress }), emailAddress);

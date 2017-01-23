@@ -14,7 +14,7 @@ const assertValidQuantity = (quantity) => {
     }
 };
 
-export const purchase = async ({ itemID, userID, accountID, storeID, quantity }) => {
+export const purchase = async ({ key, itemID, userID, accountID, storeID, quantity }) => {
     assertValidQuantity(quantity);
 
     const price = quantity * getPrice(itemID);
@@ -30,11 +30,11 @@ export const purchase = async ({ itemID, userID, accountID, storeID, quantity })
         }
     };
 
-    return await createTransaction(accountID, transaction);
+    return await createTransaction(key, accountID, transaction);
 };
 
-export const getTransactionHistory = async ({ accountID }) => {
-    const { transactions } = await getAccount(accountID);
+export const getTransactionHistory = async ({ key, accountID }) => {
+    const { transactions } = await getAccount(key, accountID);
 
     return transactions;
 };

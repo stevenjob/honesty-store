@@ -24,7 +24,7 @@ const register = async (storeCode) => {
   };
   const key = createUserKey({ userId });
   const user = await createUser(key, userId, profile)
-  const account = await createAccount(accountId);
+  const account = await createAccount(key, accountId);
 
   return await getSessionData(key, { user });
 };
@@ -60,6 +60,7 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
   let purchaseTx: TransactionAndBalance = null;
   try {
     purchaseTx = await purchase({
+        key,
         itemID,
         userID,
         quantity: 1,

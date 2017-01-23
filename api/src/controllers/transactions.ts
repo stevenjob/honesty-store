@@ -4,8 +4,8 @@ import { getTransactionHistory } from '../services/transaction'
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
 import { Transaction } from '../../../transaction/src/client/index';
 
-const getPagedTransactions = async ({ accountID, page }) => {
-  const allUserTransactions = await getTransactionHistory({ accountID });
+const getPagedTransactions = async ({ key, accountID, page }) => {
+  const allUserTransactions = await getTransactionHistory({ key, accountID });
   const transactionsPerPage = 10;
 
   const lastPage = Math.max(
@@ -27,7 +27,7 @@ export default (router) => {
       const page = parseInt(request.query.page, 10) || 0;
 
       promiseResponse<{ lastPage: number, items: Transaction[] }>(
-        getPagedTransactions({ accountID: request.user.accountId, page }),
+        getPagedTransactions({ key: request.key, accountID: request.user.accountId, page }),
         response,
         HTTPStatus.INTERNAL_SERVER_ERROR);
     });

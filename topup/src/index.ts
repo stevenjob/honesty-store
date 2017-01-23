@@ -9,6 +9,7 @@ import * as winston from 'winston';
 import { TransactionDetails, TransactionAndBalance, createTransaction } from '../../transaction/src/client/index';
 import { TopupAccount, TopupRequest } from './client/index';
 import { promiseResponse } from '../../service/src/endpoint-then-catch';
+import { Key } from '../../service/src/key';
 
 const stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
 const stripeProd = stripeFactory(process.env.STRIPE_SECRET_KEY_LIVE);
@@ -118,7 +119,7 @@ const getOrCreate = async ({ accountId, userId }): Promise<TopupAccount> => {
     }
 };
 
-const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAccount: TopupAccount, amount: number, data: any }) => {
+const appendTopupTransaction = async ({ key, topupAccount, amount, data }: { key: Key, topupAccount: TopupAccount, amount: number, data: any }) => {
     const transactionDetails: TransactionDetails = {
         type: 'topup',
         amount,
@@ -130,7 +131,7 @@ const appendTopupTransaction = async ({ topupAccount, amount, data }: { topupAcc
     };
 
     try {
-        return await createTransaction(topupAccount.accountId, transactionDetails);
+        return await createTransaction(key, topupAccount.accountId, transactionDetails);
     } catch (error) {
         winston.error(`couldn't createTransaction()`, error);
         // remap error message
@@ -168,7 +169,7 @@ const createStripeCharge = async ({ topupAccount, amount }: { topupAccount: Topu
     }
 };
 
-const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: TopupAccount, amount: number }) => {
+const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, topupAccount: TopupAccount, amount: number }) => {
     if (!topupAccount.stripe
     || !topupAccount.stripe.customer
     || !topupAccount.stripe.nextChargeToken)
@@ -179,6 +180,7 @@ const topupExistingAccount = async ({ topupAccount, amount }: { topupAccount: To
     const charge = await createStripeCharge({ topupAccount, amount });
 
     const transactionDetails = await appendTopupTransaction({
+        key,
         amount,
         topupAccount,
         data: {
@@ -223,7 +225,7 @@ const addStripeTokenToAccount = async ({ topupAccount, stripeToken }): Promise<T
     return await recordCustomerDetails({ customer, topupAccount });
 };
 
-const attemptTopup = async ({ accountId, userId, amount, stripeToken }: TopupRequest) => {
+const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: TopupRequest & { key: Key }) => {
     let topupAccount = await getOrCreate({ accountId, userId });
 
     if (stripeToken) {
@@ -234,7 +236,7 @@ const attemptTopup = async ({ accountId, userId, amount, stripeToken }: TopupReq
         topupAccount = await addStripeTokenToAccount({ topupAccount, stripeToken });
     }
 
-    return topupExistingAccount({ topupAccount, amount })
+    return topupExistingAccount({ key, topupAccount, amount })
 };
 
 const assertDynamoConnectivity = async () => {
@@ -266,10 +268,10 @@ const app = express();
 app.use(bodyParser.json());
 
 router.post('/topup', (req, res) => {
-    const { accountId, userId, amount, stripeToken } = req.body;
+    const { accountId, userId, amount, stripeToken, key } = req.body;
 
     promiseResponse<TransactionAndBalance>(
-        attemptTopup({ accountId, userId, amount, stripeToken }),
+        attemptTopup({ key, accountId, userId, amount, stripeToken }),
         res);
 });
 

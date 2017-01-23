@@ -202,7 +202,7 @@ const update = async ({ user, originalVersion }: { user: InternalUser, originalV
     return user;
 };
 
-const updateUser = async ({ userId, userProfile }): Promise<User> => {
+const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
     assertValidUserId(userId);
 
     const originalUser = await getInternal({ userId });
@@ -222,7 +222,7 @@ const updateUser = async ({ userId, userProfile }): Promise<User> => {
     };
 
     if (originalUser.emailAddress == null && updatedUser.emailAddress != null) {
-        const account = await createAccount(uuid());
+        const account = await createAccount(key, uuid());
         updatedUser.accountId = account.id;
     }
 
@@ -319,7 +319,7 @@ router.post(
 router.put(
     '/:userId',
     1,
-    async (key, { userId }, userProfile) => await updateUser({ userId, userProfile })
+    async (key, { userId }, userProfile) => await updateUser({ key, userId, userProfile })
 );
 
 router.post(
