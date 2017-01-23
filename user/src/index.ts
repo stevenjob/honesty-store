@@ -267,19 +267,19 @@ router.get(
 router.get(
     '/accessToken/:accessToken',
     1,
-    async (key, { accessToken }) => getByAccessToken({ accessToken })
+    async (key, { accessToken }) => await getByAccessToken({ accessToken })
 );
 
 router.get(
     '/refreshToken/:refreshToken',
     1,
-    async (key, { refreshToken }) => getByRefreshToken({ refreshToken })
+    async (key, { refreshToken }) => await getByRefreshToken({ refreshToken })
 );
 
 router.get(
     '/magicLink/:magicLinkToken',
     1,
-    async (key, { magicLinkToken }) => getByMagicLinkToken({ magicLinkToken })
+    async (key, { magicLinkToken }) => await getByMagicLinkToken({ magicLinkToken })
 );
 
 router.get(
@@ -291,19 +291,22 @@ router.get(
 router.post(
     '/',
     1,
-    async (key, {}, { userId, ...userProfile}) => createUser({ userId, userProfile })
+    async (key, {}, { userId, ...userProfile}) => await createUser({ userId, userProfile })
 );
 
 router.put(
     '/:userId',
     1,
-    async (key, { userId }, userProfile) => updateUser({ userId, userProfile })
+    async (key, { userId }, userProfile) => await updateUser({ userId, userProfile })
 );
 
 router.post(
     '/magicLink/:emailAddress',
     1,
-    async (key, { emailAddress }, {}) => void sendMagicLinkEmail({ emailAddress})
+    async (key, { emailAddress }, {}) => {
+        const messageId = await sendMagicLinkEmail({ emailAddress});
+        return {};
+    }
 );
 
 app.use(router);
