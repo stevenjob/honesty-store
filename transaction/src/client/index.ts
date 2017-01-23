@@ -29,7 +29,7 @@ export interface TransactionAndBalance {
 const { get, post } = fetch('transaction');
 
 export const createAccount = (key, accountId: string) =>
-    post<Account>(1, key, `/`, accountId);
+    post<Account>(1, key, `/`, { accountId });
 
 export const getAccount = (key, accountId: string) =>
     get<Account>(1, key, `/${accountId}`);
