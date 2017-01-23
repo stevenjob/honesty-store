@@ -226,7 +226,7 @@ const updateUser = async ({ userId, userProfile }): Promise<User> => {
         updatedUser.accountId = account.id;
     }
 
-    return await update({ user: updatedUser, originalVersion: originalUser.version });
+    return externaliseUser(await update({ user: updatedUser, originalVersion: originalUser.version }));
 };
 
 const sendMagicLinkEmail = async ({ emailAddress }) => {
