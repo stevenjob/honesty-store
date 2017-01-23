@@ -14,7 +14,7 @@ export default ({ params: { storeId }, balance = 1234 }) =>
         <div className="register-success" onClick={() => hashHistory.replace(`/${storeId}/history`)}>
             <h2>Thank you for your signing up to {storeId}!</h2>
             <img src={success} alt="Success"/>
-            <div className="topup-success-balance">
+            <div className="register-success-balance">
                 <h3>Your balance is now</h3>
                 <h1 style={{color: BRAND_LIGHT}}><small>£</small>{currency(balance)}</h1>
             </div>

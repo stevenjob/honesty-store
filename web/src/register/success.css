@@ -1,7 +1,11 @@
-.signin-success {
+.register-success {
     text-align: center;
 }
 
-.signin-success>img {
+.register-success>img {
+    height: 12rem;
+}
+
+.register-success-balance {
     height: 12rem;
 }
