@@ -25,6 +25,7 @@ import TopupSuccess from './topup/success';
 import RegisterEmail from './register/email';
 import RegisterCard from './register/card';
 import RegisterSuccess from './register/success';
+import RegisterPartialSuccess from './register/partial-success';
 import SignIn from './signin/index';
 import SignInSuccess from './signin/success';
 import Help from './help/index';
@@ -52,8 +53,9 @@ ReactDOM.render((
       <Route path="/error" component={() => <b>Problem, probably store code either invalid or not your default</b>}/>
       <Route path="/:storeId" component={Root}>
         <IndexRedirect to="store"/>
-        <Route path="register/:itemId" component={RegisterEmail}/>
         <Route path="register/success" component={RegisterSuccess}/>
+        <Route path="register/:itemId" component={RegisterEmail}/>
+        <Route path="register/:itemId/success" component={RegisterPartialSuccess}/>
         <Route path="register/:itemId/:emailAddress" component={RegisterCard}/>
         <Route path="signin" component={SignIn}/>
         <Route path="signin/success" component={SignInSuccess}/>

@@ -1,0 +1,11 @@
+.register-partial-success {
+    text-align: center;
+}
+
+.register-partial-success>img {
+    height: 12rem;
+}
+
+.register-partial-success-balance {
+    height: 12rem;
+}

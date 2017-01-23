@@ -42,8 +42,10 @@ export const performRegister2 = ({ storeId, itemID, topUpAmount, stripeToken, em
     if (json.error) {
       throw new Error(json.error.message);
     }
-    dispatch(register2Success(json.response));
-    hashHistory.push(`/${storeId}`);
+    const { user, store } = json.response;
+    dispatch(register2Success({ user, store }));
+    const path = user.transactions.length !== 2 ? `/${storeId}/register/success` : `/${storeId}/register/${itemID}/success`;
+    hashHistory.push(path);
   }
   catch (e) {
     dispatch(register2Failure());
