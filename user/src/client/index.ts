@@ -57,7 +57,7 @@ export const createUser = (key, userId: string, userProfile: UserProfile) =>
     post<UserWithAccessAndRefreshTokens>(1, key, `/`, { userId, ...userProfile });
 
 export const updateUser = (key, userId: string, userProfile: UserProfile) =>
-    post<User>(1, key, `/${userId}`, userProfile);
+    put<User>(1, key, `/${userId}`, userProfile);
 
 export const sendMagicLinkEmail = (key, emailAddress: string) =>
     post<{}>(1, key, `/magicLink/${emailAddress}`, {});
