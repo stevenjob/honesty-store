@@ -4,6 +4,7 @@ import { STRIPE_REQUEST, STRIPE_SUCCESS, STRIPE_FAILURE } from '../actions/strip
 import { SESSION_REQUEST, SESSION_SUCCESS, SESSION_FAILURE } from '../actions/session';
 import { TOPUP_REQUEST, TOPUP_SUCCESS, TOPUP_FAILURE } from '../actions/topup';
 import { PURCHASE_REQUEST, PURCHASE_SUCCESS, PURCHASE_FAILURE } from '../actions/purchase';
+import { LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE } from '../actions/logout';
 
 const getInitialState = () => {
   return {
@@ -103,6 +104,21 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         pending: state.pending.filter(e => e !== 'session')
+      };
+    }
+    case LOGOUT_REQUEST: {
+      return {
+        ...state,
+        pending: [...state.pending, 'logout']
+      };
+    }
+    case LOGOUT_SUCCESS: {
+      return getInitialState();
+    }
+    case LOGOUT_FAILURE: {
+      return {
+        ...state,
+        pending: state.pending.filter(e => e !== 'logout')
       };
     }
     case TOPUP_REQUEST: {
