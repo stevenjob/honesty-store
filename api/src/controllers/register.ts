@@ -26,11 +26,7 @@ const register = async (storeCode) => {
   const user = await createUser(key, userId, profile)
   const account = await createAccount(accountId);
 
-  return {
-      ...await getSessionData(key, { userID: user.id, accountID: user.accountId }),
-      refreshToken: user.refreshToken,
-      accessToken: user.accessToken,
-  };
+  return await getSessionData(key, { user });
 };
 
 /* createTopup() and addItemTransaction() return TransactionDetails, which don't have ids.
@@ -57,7 +53,7 @@ interface SessionDataWithoutTransactionIds {
 const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, stripeToken }) => {
   const user = await updateUser(key, userID, { emailAddress });
 
-  const sessionData = await getSessionData(key, { userID: user.id, accountID: user.accountId });
+  const sessionData = await getSessionData(key, { user });
 
   const topupTx = await createTopup({ accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
 

@@ -7,7 +7,6 @@ export interface SessionData {
     user: {
         balance: number;
         transactions: Transaction[];
-        cardNumber: string;
     };
     store: {
         code: string;
@@ -20,7 +19,8 @@ export interface SessionData {
     };
 };
 
-const getAccountSessionData = async (accountID) => {
+
+const getUserSessionData = async ({ accountId: accountID }) => {
   const allTransactions = await getTransactionHistory({ accountID });
   const recentTransactions = allTransactions.slice(0, 10);
 
@@ -41,10 +41,16 @@ const getStoreSessionData = async (key, userID) => {
   };
 };
 
-export const getSessionData = async (key, { userID, accountID }) => {
-  const [ user, store ] = await Promise.all([
-    getAccountSessionData(accountID),
-    getStoreSessionData(key, userID),
+export const getSessionData = async (key, { user }) => {
+  const { id, accessToken, refreshToken } = user;
+  const [ userProfile, store ] = await Promise.all([
+    getUserSessionData(user),
+    getStoreSessionData(key, id),
   ]);
-  return { user, store };
+  return {
+    user: userProfile,
+    store,
+    refreshToken,
+    accessToken
+  };
 };
