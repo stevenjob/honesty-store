@@ -5,6 +5,7 @@ import { TOPUP_REQUEST, TOPUP_SUCCESS, TOPUP_FAILURE } from '../actions/topup';
 import { PURCHASE_REQUEST, PURCHASE_SUCCESS, PURCHASE_FAILURE } from '../actions/purchase';
 import { LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE } from '../actions/logout';
 import { SUPPORT_REQUEST, SUPPORT_SUCCESS, SUPPORT_FAILURE } from '../actions/support';
+import { SIGNIN_REQUEST, SIGNIN_SUCCESS, SIGNIN_FAILURE } from '../actions/signin';
 import { SIGNIN2_REQUEST, SIGNIN2_SUCCESS, SIGNIN2_FAILURE } from '../actions/signin2';
 
 const getInitialState = () => {
@@ -39,6 +40,24 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         pending: state.pending.filter(e => e !== 'register')
+      };
+    }
+    case SIGNIN_REQUEST: {
+      return {
+        ...state,
+        pending: [...state.pending, 'signin']
+      };
+    }
+    case  SIGNIN_SUCCESS: {
+      return {
+        ...state,
+        pending: state.pending.filter(e => e !== 'signin')
+      };
+    }
+    case  SIGNIN_FAILURE: {
+      return {
+        ...state,
+        pending: state.pending.filter(e => e !== 'signin')
       };
     }
     case SIGNIN2_REQUEST: {
