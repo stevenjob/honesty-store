@@ -1,12 +1,14 @@
 import { performRegister } from './register';
 import { performSession } from './session';
+import { performSignin2 } from './signin2';
 
-export const performLoad = ({ storeId }) => async (dispatch, getState) => {
+export const performLoad = ({ storeId, emailToken }) => async (dispatch, getState) => {
     const { refreshToken } = getState();
-    // TODO: look for magic link code
-    if (refreshToken == null) {
-        return dispatch(performRegister({ storeId }));
+    if (emailToken != null) {
+        return dispatch(performSignin2({ storeId, emailToken }));
+    } else if (refreshToken != null) {
+        return dispatch(performSession({ storeId }));
     } else {
-        dispatch(performSession({ storeId }));
+        return dispatch(performRegister({ storeId }));
     }
 };

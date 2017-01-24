@@ -8,14 +8,15 @@ import './root.css';
 
 class Root extends React.Component {
   componentDidMount() {
-    const { dispatch, routeParams: { storeId }} = this.props;
-    dispatch(performLoad({ storeId }));
+    const { dispatch, params: { storeId }, location: { query: { code: emailToken } } } = this.props;
+    dispatch(performLoad({ storeId, emailToken }));
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.routeParams.storeId !== this.props.routeParams.storeId) {
-      const { dispatch, routeParams: { storeId } } = nextProps;
-      dispatch(performLoad({ storeId }));
+    const { dispatch, params: { storeId }, location: { query: { code: emailToken } } } = nextProps;
+    const existingStoreId = this.props.params.storeId;
+    if (storeId !== existingStoreId || emailToken != null) {
+      dispatch(performLoad({ storeId, emailToken }));
     }
   }
 
