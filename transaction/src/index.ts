@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isInt = require('validator/lib/isInt');
 import { Account, Transaction, TransactionDetails, TransactionAndBalance, TEST_DATA_EMPTY_ACCOUNT_ID } from './client';
-import { promiseResponse } from '../../service/src/endpoint-then-catch';
+import serviceRouter from '../../service/src/router';
 
 config.region = process.env.AWS_REGION;
 
@@ -132,34 +132,28 @@ const app = express();
 
 app.use(bodyParser.json());
 
-const router = express.Router();
+const router = serviceRouter('transaction');
 
-router.get('/:accountId', (req, res) => {
-    const { accountId } = req.params;
+router.get(
+    '/:accountId',
+    1,
+    async (key, { accountId }) => await get({ accountId })
+);
 
-    promiseResponse<Account>(
-        get({ accountId }),
-        res);
-});
+router.post(
+    '/:accountId',
+    1,
+    async (key, { accountId }, { type, amount, data }) =>
+        await createTransaction({ accountId, type, amount, data })
+);
 
-router.post('/:accountId', (req, res) => {
-    const { accountId } = req.params;
-    const { type, amount, data } = req.body;
+router.post(
+    '/',
+    1,
+    async (key, {}, { accountId }) => await createAccount({ accountId })
+);
 
-    promiseResponse<TransactionAndBalance>(
-        createTransaction({ accountId, type, amount, data }),
-        res);
-});
-
-router.post('/', (req, res) => {
-    const { accountId } = req.body;
-
-    promiseResponse<Account>(
-        createAccount({ accountId }),
-        res);
-});
-
-app.use('/transaction/v1', router);
+app.use(router);
 
 // send healthy response to load balancer probes
 app.get('/', (req, res) => {
