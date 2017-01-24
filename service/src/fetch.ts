@@ -1,8 +1,12 @@
 import * as winston from 'winston';
 import fetch from 'node-fetch';
 import { baseUrl } from './baseUrl';
-import { ApiResponse } from './types';
 import { Key } from './key';
+
+interface ApiResponse<T> {
+    response?: T;
+    error?: { message: string };
+}
 
 export default (service: string) => {
 

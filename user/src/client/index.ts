@@ -1,10 +1,5 @@
 import fetch from '../../../service/src/fetch';
 
-export interface ApiResponse<T> {
-    response?: T;
-    error?: { message: string };
-}
-
 export interface User {
     id: string;
     accountId: string;

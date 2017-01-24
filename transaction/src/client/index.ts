@@ -1,8 +1,5 @@
 import fetch from '../../../service/src/fetch';
 
-import { ApiResponse } from '../../../service/src/types';
-import { baseUrl } from '../../../service/src/baseUrl';
-
 export interface TransactionDetails {
     type: 'topup' | 'purchase';
     amount: number;
