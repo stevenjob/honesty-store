@@ -9,6 +9,15 @@ if (process.argv.length !== 3) {
 const baseUrl = process.argv[2];
 const version = 1;
 const emailAddress = `${process.env.USER}@scottlogic.co.uk`;
+const item1 = "46ced0c0-8815-4ed2-bfb6-40537f5bd512";
+const item2 = "faeda516-bd9f-41ec-b949-7a676312b0ae";
+const card = {
+    "number": "4242424242424242",
+    "exp_month": 12,
+    "exp_year": 2019,
+    "cvc": "123"
+};
+const storeCode = "sl-ncl";
 
 const globals = {
     refreshToken: '',
@@ -42,9 +51,7 @@ const register = async () => {
         'api',
         '/register',
         undefined,
-        {
-            storeCode: "sl-ncl"
-        });
+        { storeCode });
 
     globals.refreshToken = refreshToken;
     globals.accessToken = accessToken;
@@ -59,14 +66,7 @@ const generateStripeToken = async () => {
     }
 
     const stripe = Stripe(key);
-    const token = await stripe.tokens.create({
-        card: {
-            "number": "4242424242424242",
-            "exp_month": 12,
-            "exp_year": 2019,
-            "cvc": "123"
-        }
-    });
+    const token = await stripe.tokens.create({ card });
 
     return token.id;
 };
@@ -80,7 +80,7 @@ const topupAndPurchase = async () => {
         },
         {
             emailAddress,
-            itemID: "46ced0c0-8815-4ed2-bfb6-40537f5bd512",
+            itemID: item1,
             stripeToken: await generateStripeToken(),
             topUpAmount: 500,
         });
@@ -119,7 +119,7 @@ const purchaseMultiple = async () => {
             authorization: `Bearer: ${globals.accessToken}`,
         },
         {
-            itemID: "faeda516-bd9f-41ec-b949-7a676312b0ae",
+            itemID: item2,
             quantity: 3,
         });
 };
