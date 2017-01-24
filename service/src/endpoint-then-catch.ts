@@ -14,11 +14,9 @@ export const promiseResponse = <T>(promise: Promise<T>, request /*: express.Requ
         .catch((e) => {
             error(
                 request.key,
-                `promise caught, returning HTTP ${httpErrorCode}`,
+                `${request.method} ${request.url} handled raised an error, returning HTTP ${httpErrorCode}`,
                 e,
-                e.message,
-                backtrace,
-                request.url);
+                backtrace);
 
             response.status(httpErrorCode)
                 .json({ error: { message: e.message }});
