@@ -1,0 +1,21 @@
+.home {
+  text-align: center;
+  padding: 1rem;
+}
+
+.home-store-code {
+  position: relative;
+}
+
+.home-store-code::before {
+  content: 'https://honesty.store/';
+  position: absolute;
+  padding: 1rem;
+  padding-left: 0;
+  width: 50%;
+  text-align: right;
+}
+
+.home-store-code>input {
+  padding-left: 50%;
+}

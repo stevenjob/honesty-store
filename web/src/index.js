@@ -7,7 +7,8 @@ import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import Root from './chrome/root';
 import Error from './chrome/error';
-import Intro from './intro/index';
+import Home from './home/index';
+import HomeSuccess from './home/success';
 import AboutInfo from './info/about';
 import AppInfo from './info/app';
 import PrivacyInfo from './info/privacy';
@@ -49,7 +50,8 @@ const store = createStore(
 ReactDOM.render((
   <Provider store={store}>
     <Router history={hashHistory} onUpdate={() => scrollTo(0, 0)}>
-      <Route path="/" component={Intro}/>
+      <Route path="/" component={Home}/>
+      <Route path="/success" component={HomeSuccess}/>
       <Route path="/error" component={() => <b>Problem, probably store code either invalid or not your default</b>}/>
       <Route path="/:storeId" component={Root}>
         <IndexRedirect to="store"/>
