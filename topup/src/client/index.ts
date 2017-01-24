@@ -1,4 +1,4 @@
-import { TransactionAndBalance } from '../../../transaction/src/client/index';
+import { Transaction } from '../../../transaction/src/client/index';
 import fetch from '../../../service/src/fetch';
 
 export interface TopupAccount {
@@ -27,10 +27,16 @@ export interface CardDetails {
     expYear: number;
 }
 
+export interface TopupResponse {
+    balance: number;
+    transaction: Transaction;
+    cardDetails: CardDetails;
+}
+
 const { get, post } = fetch('topup');
 
 export const createTopup = (key, request: TopupRequest) =>
-    post<TransactionAndBalance>(1, key, `/`, request);
+    post<TopupResponse>(1, key, `/`, request);
 
 export const getCardDetails = (key, userId: string) =>
     get<CardDetails>(1, key, `/${userId}/cardDetails`);

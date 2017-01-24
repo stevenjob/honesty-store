@@ -204,7 +204,10 @@ const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, t
     topupAccount.stripe.nextChargeToken = uuid();
     await update({ topupAccount });
 
-    return transactionDetails;
+    return {
+        ...transactionDetails,
+        cardDetails: extractCardDetails(topupAccount)
+    };
 };
 
 const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupAccount> => {
@@ -259,18 +262,21 @@ const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: Top
     return topupExistingAccount({ key, topupAccount, amount })
 };
 
-const getCardDetails = async ({ userId }) => {
-    const topupAccount = await get({ userId });
-    assertValidStripeDetails(topupAccount);
+const extractCardDetails = (topupAccount: TopupAccount): CardDetails => {
     const customerData = topupAccount.stripe.customer.sources.data[0];
     const { brand, exp_month, exp_year, last4 } = customerData;
-
-    return {
-        brand,
+    return { 
+        brand, 
         expMonth: exp_month,
         expYear: exp_year,
         last4
-    }
+    };
+};
+
+const getCardDetails = async ({ userId }) => {
+    const topupAccount: TopupAccount = await get({ userId });
+    assertValidStripeDetails(topupAccount);
+    return extractCardDetails(topupAccount);
 };
 
 const assertDynamoConnectivity = async () => {

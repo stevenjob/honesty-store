@@ -84,6 +84,7 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
         topupTx.transaction,
         ...sessionData.user.transactions, // should be empty
       ],
+      cardDetails: topupTx.cardDetails,
     },
   };
 };
