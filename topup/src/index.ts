@@ -178,10 +178,14 @@ const stripeDetailsValid = (topupAccount: TopupAccount) => {
         && topupAccount.stripe.nextChargeToken;
 };
 
-const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, topupAccount: TopupAccount, amount: number }) => {
+const assertValidStripeDetails = (topupAccount) => {
     if (!stripeDetailsValid(topupAccount)) {
         throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please provide stripeToken`);
     }
+};
+
+const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, topupAccount: TopupAccount, amount: number }) => {
+    assertValidStripeDetails(topupAccount);
 
     await assertBalanceWithinLimit({ key, accountId: topupAccount.accountId, amount });
 
@@ -257,9 +261,7 @@ const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: Top
 
 const getCardDetails = async ({ userId }) => {
     const topupAccount = await get({ userId });
-    if (!stripeDetailsValid(topupAccount)) {
-        throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please provide stripeToken`)
-    }
+    assertValidStripeDetails(topupAccount);
     const customerData = topupAccount.stripe.customer.sources.data[0];
     const { brand, exp_month, exp_year, last4 } = customerData;
 
