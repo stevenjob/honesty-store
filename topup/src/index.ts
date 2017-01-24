@@ -7,7 +7,7 @@ import * as stripeFactory from 'stripe';
 import * as winston from 'winston';
 
 import { TransactionDetails, createTransaction, getAccount, assertBalanceWithinLimit } from '../../transaction/src/client/index';
-import { TopupAccount, TopupRequest } from './client/index';
+import { TopupAccount, TopupRequest, CardDetails } from './client/index';
 import serviceRouter from '../../service/src/router';
 import { Key } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
@@ -255,6 +255,19 @@ const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: Top
     return topupExistingAccount({ key, topupAccount, amount })
 };
 
+const getCardDetails = async ({ userId }) => {
+    const topupAccount = await get({ userId });
+    const customerData = topupAccount.stripe.customer.sources.data[0];
+    const { brand, exp_month, exp_year, last4 } = customerData;
+
+    return {
+        brand,
+        expMonth: exp_month,
+        expYear: exp_year,
+        last4
+    }
+};
+
 const assertDynamoConnectivity = async () => {
     await new DynamoDB.DocumentClient()
         .get({
@@ -289,6 +302,13 @@ router.post(
     1,
     async (key, {}, { accountId, userId, amount, stripeToken }) =>
         attemptTopup({ key, accountId, userId, amount, stripeToken })
+);
+
+router.get(
+    '/:userId/cardDetails',
+    1,
+    async (key, { userId }) =>
+        getCardDetails({ userId })
 );
 
 app.use(router);

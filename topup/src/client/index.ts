@@ -20,7 +20,17 @@ export interface TopupRequest {
     stripeToken: string;
 };
 
-const { post } = fetch('topup');
+export interface CardDetails {
+    brand: string;
+    last4: string;
+    expMonth: number;
+    expYear: number;
+}
+
+const { get, post } = fetch('topup');
 
 export const createTopup = (key, request: TopupRequest) =>
     post<TransactionAndBalance>(1, key, `/`, request);
+
+export const getCardDetails = (key, userId: string) =>
+    get<CardDetails>(1, key, `/${userId}/cardDetails`);
