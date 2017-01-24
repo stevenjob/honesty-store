@@ -16,17 +16,17 @@ winston.configure({
 });
 
 export const debug = (key: Key, message: string, ...args: any[]) => {
-    winston.debug(message, { key, args });
+  winston.debug(message, { key, args });
 };
 
 export const info = (key: Key, message: string, ...args: any[]) => {
-    winston.info(message, { key, args });
+  winston.info(message, { key, args });
 };
 
 export const warn = (key: Key, message: string, ...args: any[]) => {
-    winston.warn(message, { key, args });
+  winston.warn(message, { key, args });
 };
 
 export const error = (key: Key, message: string, ...args: any[]) => {
-    winston.error(message, { key, args });
+  winston.error(message, { key, args });
 };
