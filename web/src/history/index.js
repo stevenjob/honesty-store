@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import List from '../chrome/list';
 import Page from '../chrome/page';
 import HistoryItem from './item';
 import './index.css';
