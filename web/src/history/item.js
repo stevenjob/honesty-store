@@ -8,17 +8,18 @@ const AmountLabel = ({ amount, isTopUp }) => {
   if (isTopUp) {
     return <h4 style={{ color: BRAND_LIGHT }}><small>+ £</small>{currency(amount)}</h4>;
   }
-  return <h4>{amount}<small>p</small></h4>;
+  return <h4>{Math.abs(amount)}<small>p</small></h4>;
 };
 
-const HistoryItem = ({ isTopUp, imagePath, text, amount }) => {
+const HistoryItem = ({ isTopUp, text, amount }) => {
   const imageRotation = isTopUp ? 0 : -35;
+  const imagePath = isTopUp ? require('./assets/top-up.svg') : require('../store/assets/packet.svg');
   return (
     <div className="history-item">
       <img 
         src={imagePath}
         style={{ transform: `rotate(${imageRotation}deg)` }}
-        alt="TODO" 
+        alt={text}
       />
       <div className="history-item-info" style={{borderBottomColor: MUTED_TEXT}}>
         <h4>{text}</h4>
@@ -28,12 +29,13 @@ const HistoryItem = ({ isTopUp, imagePath, text, amount }) => {
   );
 };
 
-const getItemNameById = (id, items) => {
-  const foundItem = items.find(e => e.id === id);
-  if (foundItem == null) {
-    return 'Unknown Item';
-  }
-  return foundItem.name;
+const getItemText = (data, items) => {
+  const { itemId, quantity } = data;
+  const foundItem = items.find(e => e.id === itemId);
+
+  const itemText = foundItem != null ? foundItem.name : 'Unknown Item';
+  const quantityText = quantity > 1 ? ` x ${quantity}` : '';
+  return `${itemText}${quantityText}`;
 };
 
 const mapStateToProps = (
@@ -43,8 +45,7 @@ const mapStateToProps = (
   const isTopUp = transaction.type === 'topup';
   return {
     isTopUp,
-    imagePath: isTopUp ? require('./assets/top-up.svg') : require('../store/assets/packet.svg'),
-    text: isTopUp ? 'TOP UP' : getItemNameById(transaction.data.itemId, items),
+    text: isTopUp ? 'TOP UP' : getItemText(transaction.data, items),
     amount: transaction.amount
   };
 };
