@@ -40,12 +40,20 @@ export const ExisitingCard = ({ storeId, amount, brand, digits, expiry, performT
         </div>
     </Page>;
 
-const mapStateToProps = ({ user: { balance = 0 } }) => ({
-    balance,
-    brand: 'visa',
-    digits: '3927',
-    expiry: '04/18'
-});
+const mapStateToProps = ({ 
+    user: {
+        balance = 0,
+        cardDetails: { brand, expMonth, expYear, last4 },
+    }
+}) => {
+
+    return {
+        balance,
+        brand: brand,
+        digits: last4,
+        expiry: `${expMonth}/${expYear}`,
+    };
+};
 
 const mapDispatchToProps = { performTopup };
 
