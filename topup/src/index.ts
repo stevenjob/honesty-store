@@ -257,6 +257,9 @@ const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: Top
 
 const getCardDetails = async ({ userId }) => {
     const topupAccount = await get({ userId });
+    if (!stripeDetailsValid(topupAccount)) {
+        throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please provide stripeToken`)
+    }
     const customerData = topupAccount.stripe.customer.sources.data[0];
     const { brand, exp_month, exp_year, last4 } = customerData;
 
