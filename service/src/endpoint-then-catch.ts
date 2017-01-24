@@ -15,12 +15,10 @@ export const promiseResponse = <T>(promise: Promise<T>, request /*: express.Requ
             error(
                 request.key,
                 `promise caught, returning HTTP ${httpErrorCode}`,
-                JSON.stringify({
-                    error: e,
-                    message: e.message,
-                    backtrace,
-                    url: request.url,
-                }));
+                e,
+                e.message,
+                backtrace,
+                request.url);
 
             response.status(httpErrorCode)
                 .json({ error: { message: e.message }});
