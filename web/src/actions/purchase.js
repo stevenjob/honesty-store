@@ -23,13 +23,13 @@ const purchaseFailure = () => {
   };
 };
 
-export const performPurchase = ({storeId, itemId}) => async (dispatch, getState) => {
+export const performPurchase = ({ storeId, itemId, quantity }) => async (dispatch, getState) => {
   dispatch(purchaseRequest());
   try {
     const { accessToken } = getState();
     const response = await fetch('/api/v1/purchase', {
       method: 'POST',
-      body: JSON.stringify({ itemID: itemId, quantity: 1 }),
+      body: JSON.stringify({ itemID: itemId, quantity }),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer: ${accessToken}`

@@ -51,7 +51,7 @@ const ItemDetail = ({
     formatValue={(numItems) => numItems}
     formatButton={formatPurchaseButton}
     initialValue={1}
-    onClick={(numItems) => performPurchase({storeId, itemId: id})}
+    onClick={(numItems) => performPurchase({ storeId, itemId: id, quantity: numItems })}
   />;
 
   const UnregisteredPurchaseButton = <p>
