@@ -1,7 +1,5 @@
 import { hashHistory } from 'react-router';
 
-const Stripe = window.Stripe;
-
 const createToken = (data) =>
     new Promise((resolve, reject) => {
         const stripeResponseHandler = (status, response) => {
@@ -14,6 +12,7 @@ const createToken = (data) =>
             }
             resolve(response.id);
         };
+        const Stripe = window.Stripe;
         Stripe.setPublishableKey(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
         Stripe.card.createToken(data, stripeResponseHandler);
     });
@@ -49,6 +48,8 @@ const createStripeToken = ({ name, number, cvc, exp_month, exp_year, address_zip
   if (name == null || name.length === 0) {
     throw Object.assign(new Error('Missing name'), { param: 'name' });
   }
+  
+  const Stripe = window.Stripe;
   if (!Stripe.card.validateCardNumber(number)) {
     throw Object.assign(new Error('Invalid card number'), { param: 'number' });
   }
