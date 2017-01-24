@@ -331,7 +331,7 @@ router.post(
     }
 );
 
-router.put(
+router.post(
     '/logout/:userId',
     1,
     async (key, { userId }, {}) => await logoutUser(userId)
