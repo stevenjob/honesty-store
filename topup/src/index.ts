@@ -12,6 +12,8 @@ import serviceRouter from '../../service/src/router';
 import { Key } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
 
+const fixedTopupAmount = 500; // £5
+
 const stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
 const stripeProd = stripeFactory(process.env.STRIPE_SECRET_KEY_LIVE);
 
@@ -229,7 +231,15 @@ const addStripeTokenToAccount = async ({ topupAccount, stripeToken }): Promise<T
     return await recordCustomerDetails({ customer, topupAccount });
 };
 
+const assertValidTopupAmount = (amount) => {
+    if (amount !== fixedTopupAmount) {
+        throw new Error(`topup amount must be £${fixedTopupAmount / 100}`);
+    }
+};
+
 const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: TopupRequest & { key: Key }) => {
+    assertValidTopupAmount(amount);
+
     let topupAccount = await getOrCreate({ key, accountId, userId });
 
     if (stripeToken) {
