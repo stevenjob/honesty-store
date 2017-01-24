@@ -13,7 +13,7 @@ const replaceErrors = (key, value) => {
   }
 
   return value;
-}
+};
 
 winston.configure({
   level: 'debug',
