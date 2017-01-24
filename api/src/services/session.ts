@@ -24,7 +24,14 @@ export interface SessionData {
 const getUserSessionData = async ({ key, id, accountId: accountID, emailAddress }) => {
   const allTransactions = await getTransactionHistory({ key, accountID });
   const recentTransactions = allTransactions.slice(0, 10);
-  const cardDetails = await getCardDetails(key, id);
+
+  let cardDetails;
+  try {
+    cardDetails = await getCardDetails(key, id);
+  }
+  catch (e) {
+    // Silence error in valid case where no topup account is associated with the user
+  }
 
   return {
     emailAddress,
