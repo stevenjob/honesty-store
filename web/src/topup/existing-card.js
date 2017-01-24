@@ -44,16 +44,13 @@ const mapStateToProps = ({
     user: {
         balance = 0,
         cardDetails: { brand, expMonth, expYear, last4 },
-    }
-}) => {
-
-    return {
-        balance,
-        brand: brand,
-        digits: last4,
-        expiry: `${expMonth}/${expYear}`,
-    };
-};
+    },
+}) => ({
+    balance,
+    brand: brand,
+    digits: last4,
+    expiry: `${expMonth}/${expYear % 100}`,
+});
 
 const mapDispatchToProps = { performTopup };
 
