@@ -43,6 +43,15 @@ const ItemDetail = ({
     };
   };
 
+  const onClick = (numItems) => {
+    const balance = calculateBalanceRemaining(numItems);
+    if (balance < 0) {
+      hashHistory.push(`/${storeId}/topup`);
+    } else {
+      performPurchase({ storeId, itemId: id, quantity: numItems });
+    }
+  };
+
   const PurchaseStepper = <Stepper
     label="How many would you like to pay for?"
     onDecrement={decrementNumItems}
@@ -51,7 +60,7 @@ const ItemDetail = ({
     formatValue={(numItems) => numItems}
     formatButton={formatPurchaseButton}
     initialValue={1}
-    onClick={(numItems) => performPurchase({ storeId, itemId: id, quantity: numItems })}
+    onClick={onClick}
   />;
 
   const UnregisteredPurchaseButton = <p>
