@@ -20,11 +20,12 @@ export interface SessionData {
 };
 
 
-const getUserSessionData = async ({ key, accountId: accountID }) => {
+const getUserSessionData = async ({ key, accountId: accountID, emailAddress }) => {
   const allTransactions = await getTransactionHistory({ key, accountID });
   const recentTransactions = allTransactions.slice(0, 10);
 
   return {
+    emailAddress,
     balance: allTransactions.reduce((balance, transaction) => balance + transaction.amount, 0),
     transactions: recentTransactions,
   };
