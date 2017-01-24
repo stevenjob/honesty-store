@@ -22,7 +22,7 @@ export default (router) => {
                   userId: request.user.id,
                   accountId: request.user.accountId
               }),
-          key,
+          request,
           response,
           HTTPStatus.INTERNAL_SERVER_ERROR);
     })

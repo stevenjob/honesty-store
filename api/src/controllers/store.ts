@@ -31,7 +31,7 @@ export default (router) => {
 
       promiseResponse<ItemAndCount[]>(
           updateStoreAndGetItems(key, req.user.id, storeCode),
-          key,
+          req,
           res,
           HTTPStatus.OK);
     });

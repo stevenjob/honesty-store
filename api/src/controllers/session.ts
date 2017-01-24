@@ -11,8 +11,8 @@ export default (router) => {
       const { key } = request;
       promiseResponse<SessionData>(
         getSessionData(key, { user: request.user }),
-          key,
-          response,
-          HTTPStatus.INTERNAL_SERVER_ERROR);
+        request,
+        response,
+        HTTPStatus.INTERNAL_SERVER_ERROR);
     });
 };

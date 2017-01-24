@@ -29,7 +29,7 @@ export default (router) => {
 
       promiseResponse<{ lastPage: number, items: Transaction[] }>(
         getPagedTransactions({ key, accountID: request.user.accountId, page }),
-        key,
+        request,
         response,
         HTTPStatus.INTERNAL_SERVER_ERROR);
     });

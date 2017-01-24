@@ -20,7 +20,7 @@ export default (router) => {
               accountID: user.accountId,
               storeID: user.defaultStoreId,
           }),
-          key,
+          request,
           response);
     });
 };

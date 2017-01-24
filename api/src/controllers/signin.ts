@@ -17,7 +17,7 @@ const setupSignInPhase1 = (router) => {
       const { emailAddress } = request.body;
       promiseResponse<{}>(
           sendEmailToken(emailAddress),
-          request.key,
+          request,
           response,
           HTTPStatus.OK);
     });
@@ -32,7 +32,7 @@ const setupSignInPhase2 = (router) => {
 
       promiseResponse<SessionData & WithRefreshToken>(
           getSessionData(key, { user: request.user }),
-          key,
+          request,
           response,
           HTTPStatus.INTERNAL_SERVER_ERROR);
     });
