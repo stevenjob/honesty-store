@@ -132,6 +132,7 @@ export default (state = getInitialState(), action) => {
       };
     }
     case LOGOUT_SUCCESS: {
+      delete localStorage.refreshToken;
       return getInitialState();
     }
     case LOGOUT_FAILURE: {
