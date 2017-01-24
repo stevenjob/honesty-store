@@ -10,10 +10,7 @@ const History = ({ transactions = [], params: { storeId }, loading }) => (
     storeId={storeId}
     loading={loading}>
     <ul className="history-list">
-      { [
-        { type: 'topup', amount: 500 }, 
-        { type: 'purchase', amount: 50, data: { itemId: 0, quantity: 1 }}
-      ].map((transaction, index) => <li key={index}><HistoryItem transaction={transaction}/></li>) }
+      { transactions.map((transaction, index) => <li key={index}><HistoryItem transaction={transaction}/></li>) }
     </ul>
   </Page>
 );
