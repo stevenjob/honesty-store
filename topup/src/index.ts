@@ -6,12 +6,13 @@ import isUUID = require('validator/lib/isUUID');
 import * as stripeFactory from 'stripe';
 import * as winston from 'winston';
 
-import { TransactionDetails, createTransaction } from '../../transaction/src/client/index';
+import { TransactionDetails, createTransaction, getAccount } from '../../transaction/src/client/index';
 import { TopupAccount, TopupRequest } from './client/index';
 import serviceRouter from '../../service/src/router';
 import { Key } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
 
+const balanceLimit = 1000; // £10
 const fixedTopupAmount = 500; // £5
 
 const stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
@@ -178,10 +179,20 @@ const stripeDetailsValid = (topupAccount: TopupAccount) => {
         && topupAccount.stripe.nextChargeToken;
 };
 
+const assertBalanceWithinLimit = async ({ key, accountId, amount }) => {
+    const currentBalance = (await getAccount(key, accountId)).balance;
+
+    if (currentBalance + amount > balanceLimit) {
+        throw new Error(`topping up would increase balance over the limit of £${balanceLimit / 100}`);
+    }
+};
+
 const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, topupAccount: TopupAccount, amount: number }) => {
     if (!stripeDetailsValid(topupAccount)) {
         throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please provide stripeToken`);
     }
+
+    await assertBalanceWithinLimit({ key, accountId: topupAccount.accountId, amount });
 
     const charge = await createStripeCharge({ key, topupAccount, amount });
 
