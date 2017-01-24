@@ -83,7 +83,8 @@ export const performRegister2 = ({ storeId, itemID, topUpAmount, emailAddress, c
     }
     const { user, store } = json.response;
     dispatch(register2Success({ user, store }));
-    const path = user.transactions.length !== 2 ? `/${storeId}/register/success` : `/${storeId}/register/${itemID}/success`;
+    // ensure both the topup and purchase transactions were recorded
+    const path = user.transactions.length === 2 ? `/${storeId}/register/success` : `/${storeId}/register/${itemID}/success`;
     hashHistory.push(path);
   }
   catch (e) {
