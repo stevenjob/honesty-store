@@ -25,9 +25,11 @@ export default (router) => {
     authenticateAccessToken,
     (request, response) => {
       const page = parseInt(request.query.page, 10) || 0;
+      const { key } = request;
 
       promiseResponse<{ lastPage: number, items: Transaction[] }>(
-        getPagedTransactions({ key: request.key, accountID: request.user.accountId, page }),
+        getPagedTransactions({ key, accountID: request.user.accountId, page }),
+        key,
         response,
         HTTPStatus.INTERNAL_SERVER_ERROR);
     });

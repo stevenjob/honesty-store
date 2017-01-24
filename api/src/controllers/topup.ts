@@ -10,7 +10,8 @@ export default (router) => {
     '/topup',
     authenticateAccessToken,
     (request, response) => {
-      const { stripeToken, amount, key } = request.body;
+      const { stripeToken, amount } = request.body;
+      const { key } = request;
 
       promiseResponse<TransactionAndBalance>(
           createTopup(
@@ -21,6 +22,7 @@ export default (router) => {
                   userId: request.user.id,
                   accountId: request.user.accountId
               }),
+          key,
           response,
           HTTPStatus.INTERNAL_SERVER_ERROR);
     })

@@ -8,8 +8,10 @@ export default (router) => {
     '/session',
     authenticateRefreshToken,
     (request, response) => {
+      const { key } = request;
       promiseResponse<SessionData>(
-        getSessionData(request.key, { user: request.user }),
+        getSessionData(key, { user: request.user }),
+          key,
           response,
           HTTPStatus.INTERNAL_SERVER_ERROR);
     });

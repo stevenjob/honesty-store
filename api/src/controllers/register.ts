@@ -96,7 +96,7 @@ const setupRegisterPhase1 = (router) => {
 
       type ResultType = SessionData & WithRefreshToken & WithAccessToken;
 
-      promiseResponse<ResultType>(register(storeCode), response, HTTPStatus.INTERNAL_SERVER_ERROR);
+      promiseResponse<ResultType>(register(storeCode), request.key, response, HTTPStatus.INTERNAL_SERVER_ERROR);
     });
 };
 
@@ -121,6 +121,7 @@ const setupRegisterPhase2 = (router) => {
 
       promiseResponse<SessionDataWithoutTransactionIds>(
           register2(key, { userID, emailAddress, topUpAmount, itemID, stripeToken }),
+          key,
           response,
           HTTPStatus.INTERNAL_SERVER_ERROR);
     });

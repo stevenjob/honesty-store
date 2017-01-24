@@ -10,6 +10,7 @@ export default (router) => {
     (req, res) => {
       promiseResponse<{}>(
         logout(req.key, req.user.id),
+        req.key,
         res,
         HTTPStatus.OK);
     });

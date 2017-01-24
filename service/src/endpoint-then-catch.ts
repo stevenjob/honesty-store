@@ -1,8 +1,9 @@
 import HTTPStatus = require('http-status');
 import * as winston from 'winston';
+import { Key } from './key';
 
 // generic to allow callers to assert the type of what's being sent back
-export const promiseResponse = <T>(promise: Promise<T>, response, httpErrorCode = HTTPStatus.OK) => {
+export const promiseResponse = <T>(promise: Promise<T>, key: Key, response, httpErrorCode = HTTPStatus.OK) => {
     const backtrace = new Error().stack;
 
     promise

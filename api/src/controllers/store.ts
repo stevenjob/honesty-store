@@ -27,9 +27,11 @@ export default (router) => {
     authenticateAccessToken,
     (req, res) => {
       const { storeCode } = req.body;
+      const { key } = req;
 
       promiseResponse<ItemAndCount[]>(
-          updateStoreAndGetItems(req.key, req.user.id, storeCode),
+          updateStoreAndGetItems(key, req.user.id, storeCode),
+          key,
           res,
           HTTPStatus.OK);
     });
