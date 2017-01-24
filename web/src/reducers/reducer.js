@@ -4,6 +4,7 @@ import { SESSION_REQUEST, SESSION_SUCCESS, SESSION_FAILURE } from '../actions/se
 import { TOPUP_REQUEST, TOPUP_SUCCESS, TOPUP_FAILURE } from '../actions/topup';
 import { PURCHASE_REQUEST, PURCHASE_SUCCESS, PURCHASE_FAILURE } from '../actions/purchase';
 import { LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE } from '../actions/logout';
+import { SUPPORT_REQUEST, SUPPORT_SUCCESS, SUPPORT_FAILURE } from '../actions/support';
 
 const getInitialState = () => {
   return {
@@ -82,6 +83,24 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         pending: state.pending.filter(e => e !== 'session')
+      };
+    }
+    case SUPPORT_REQUEST: {
+      return {
+        ...state,
+        pending: [...state.pending, 'support']
+      };
+    }
+    case SUPPORT_SUCCESS: {
+      return {
+        ...state,
+        pending: state.pending.filter(e => e !== 'support')
+      };
+    }
+    case  SUPPORT_FAILURE: {
+      return {
+        ...state,
+        pending: state.pending.filter(e => e !== 'support')
       };
     }
     case LOGOUT_REQUEST: {

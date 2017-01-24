@@ -30,6 +30,7 @@ import RegisterPartialSuccess from './register/partial-success';
 import SignIn from './signin/index';
 import SignInSuccess from './signin/success';
 import Help from './help/index';
+import HelpSuccess from './help/success';
 import ItemDetail from './item/detail';
 import ItemPurchaseSuccess from './item/success';
 import reducer from './reducers/reducer';
@@ -80,6 +81,7 @@ ReactDOM.render((
         <Route path="info/privacy" component={PrivacyInfo}/>
         <Route path="info/app" component={AppInfo}/>
         <Route path="help" component={Help}/>
+        <Route path="help/success" component={HelpSuccess}/>
       </Route>
     </Router>
   </Provider>

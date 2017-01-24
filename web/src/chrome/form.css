@@ -1,11 +1,19 @@
-input {
+input, textarea {
     background: none;
     border: none;
-    border-bottom: 1px solid #A9B8B9; /* MUTED_TEXT */
-    border-right: 1px solid #A9B8B9; /* MUTED_TEXT */
+    border-radius: 0;
     padding: 1rem;
     font-size: 1.4rem;
     width: 100%;
+}
+
+textarea {
+    border: 1px solid #A9B8B9; /* MUTED_TEXT */
+}
+
+input {
+    border-bottom: 1px solid #A9B8B9; /* MUTED_TEXT */
+    border-right: 1px solid #A9B8B9; /* MUTED_TEXT */
 }
 
 input:last-of-type {

@@ -8,6 +8,7 @@ import purchaseController from './controllers/purchase';
 import storeController from './controllers/store';
 import logoutController from './controllers/logout';
 import transactionsController from './controllers/transactions';
+import supportController from './controllers/support';
 
 const app = express();
 const router = express.Router();
@@ -22,6 +23,7 @@ purchaseController(router);
 storeController(router);
 logoutController(router);
 transactionsController(router);
+supportController(router);
 
 app.use('/api/v1', router);
 
