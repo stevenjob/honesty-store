@@ -3,7 +3,7 @@ import HTTPStatus = require('http-status');
 import { error } from '../../../service/src/log';
 import uuid = require('uuid/v4');
 
-import { createUserKey } from '../../../service/src/key';
+import { createUserKey, createUnauthenticatedKey } from '../../../service/src/key';
 import { createUser, updateUser } from '../../../user/src/client/index';
 import { createAccount, TransactionDetails, TransactionAndBalance } from '../../../transaction/src/client/index';
 import { getPrice } from '../services/store';
@@ -93,6 +93,7 @@ const setupRegisterPhase1 = (router) => {
     '/register',
     (request, response) => {
       const { storeCode } = request.body;
+      request.key = createUnauthenticatedKey();
 
       type ResultType = SessionData & WithRefreshToken & WithAccessToken;
 
