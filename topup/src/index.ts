@@ -10,6 +10,7 @@ import { TransactionDetails, createTransaction } from '../../transaction/src/cli
 import { TopupAccount, TopupRequest } from './client/index';
 import serviceRouter from '../../service/src/router';
 import { Key } from '../../service/src/key';
+import { error, info } from '../../service/src/log';
 
 const stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
 const stripeProd = stripeFactory(process.env.STRIPE_SECRET_KEY_LIVE);
@@ -99,7 +100,7 @@ const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
     return topupAccount;
 };
 
-const getOrCreate = async ({ accountId, userId }): Promise<TopupAccount> => {
+const getOrCreate = async ({ key, accountId, userId }): Promise<TopupAccount> => {
     assertValidAccountId(accountId);
     assertValidUserId(userId);
 
@@ -107,7 +108,7 @@ const getOrCreate = async ({ accountId, userId }): Promise<TopupAccount> => {
         return await get({ userId });
     }
     catch (e) {
-        winston.log('TopupAccount lookup failed, creating account', e);
+        info(key, 'TopupAccount lookup failed, creating account', e);
         return update({
             topupAccount: {
                 id: uuid(),
@@ -132,14 +133,14 @@ const appendTopupTransaction = async ({ key, topupAccount, amount, data }: { key
 
     try {
         return await createTransaction(key, topupAccount.accountId, transactionDetails);
-    } catch (error) {
-        winston.error(`couldn't createTransaction()`, error);
+    } catch (e) {
+        error(key, `couldn't createTransaction()`, e);
         // remap error message
-        throw new Error(`couldn't add transaction: ${error.message}`);
+        throw new Error(`couldn't add transaction: ${e.message}`);
     }
 };
 
-const createStripeCharge = async ({ topupAccount, amount }: { topupAccount: TopupAccount, amount: number }) => {
+const createStripeCharge = async ({ key, topupAccount, amount }: { key: Key, topupAccount: TopupAccount, amount: number }) => {
     try {
         return await stripeForUser(topupAccount).charges.create({
             amount,
@@ -154,18 +155,18 @@ const createStripeCharge = async ({ topupAccount, amount }: { topupAccount: Topu
         {
             idempotency_key: topupAccount.stripe.nextChargeToken,
         });
-    } catch (error) {
-        winston.error(`couldn't create stripe charge`, error);
-        if (error.message === 'Must provide source or customer.') {
+    } catch (e) {
+        error(key, `couldn't create stripe charge`, e);
+        if (e.message === 'Must provide source or customer.') {
             /* Note to future devs: this error appears to be a bug with stripe's API.
              *
              * We've correctly provided a customer, so the error seems odd. I
              * believe it's to do with the idempotency_key being incorrect, so
              * that's the first place to start looking. */
-            throw new Error(`${error.message} (from topup: or the idempotency_key has already been used)`);
+            throw new Error(`${e.message} (from topup: or the idempotency_key has already been used)`);
         }
 
-        throw error;
+        throw e;
     }
 };
 
@@ -180,7 +181,7 @@ const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, t
         throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please provide stripeToken`);
     }
 
-    const charge = await createStripeCharge({ topupAccount, amount });
+    const charge = await createStripeCharge({ key, topupAccount, amount });
 
     const transactionDetails = await appendTopupTransaction({
         key,
@@ -229,7 +230,7 @@ const addStripeTokenToAccount = async ({ topupAccount, stripeToken }): Promise<T
 };
 
 const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: TopupRequest & { key: Key }) => {
-    let topupAccount = await getOrCreate({ accountId, userId });
+    let topupAccount = await getOrCreate({ key, accountId, userId });
 
     if (stripeToken) {
         if (stripeDetailsValid(topupAccount)) {

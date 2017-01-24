@@ -5,18 +5,18 @@ import {
   getUserByAccessToken,
   getUserByRefreshToken,
   getUserByMagicLinkToken } from '../../../user/src/client/index';
-import { createAuthenticationKey } from '../../../service/src/key'
-import * as winston from 'winston';
+import { createAuthenticationKey, createUnauthenticatedKey } from '../../../service/src/key'
+import { error } from '../../../service/src/log';
 
 const getToken = request => request.headers.authorization.split(' ')[1];
 
-const handleInvalidToken = (response, error) => {
-  winston.error(`couldn't authenticate token`, error);
+const handleInvalidToken = (response, e) => {
+  error(createUnauthenticatedKey(), `couldn't authenticate token`, e);
   response.status(HTTPStatus.UNAUTHORIZED)
     .json({
       error: {
         message: 'Invalid token provided',
-        detail: error.message,
+        detail: e.message,
       },
     });
 };

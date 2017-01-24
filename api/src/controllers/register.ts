@@ -1,6 +1,6 @@
 import isEmail = require('validator/lib/isEmail');
 import HTTPStatus = require('http-status');
-import winston = require('winston');
+import { error } from '../../../service/src/log';
 import uuid = require('uuid/v4');
 
 import { createUserKey } from '../../../service/src/key';
@@ -71,7 +71,7 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
     /* We don't want to fail if the item could not be purchased, however the client
        is expected to assert that a transaction exists for the item and alert the user
        appropriately if one doesn't. */
-    winston.error(`couldn't purchase item ${itemID}`, e);
+    error(key, `couldn't purchase item ${itemID}`, e);
   }
 
   return {

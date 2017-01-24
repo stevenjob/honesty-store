@@ -52,3 +52,12 @@ export const createEmailKey = ({ emailAddress }) => {
         }
     };
 };
+
+export const createUnauthenticatedKey = () => {
+    const correlationKey = uuid();
+    return <Key>{
+        toString() {
+            return `unauthenticated:${correlationKey}`;
+        }
+    };
+};

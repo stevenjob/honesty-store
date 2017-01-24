@@ -1,5 +1,4 @@
 import HTTPStatus = require('http-status');
-import winston = require('winston');
 import { getSessionData, SessionData } from '../services/session';
 import { authenticateEmailToken } from '../middleware/authenticate'
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';

@@ -1,4 +1,3 @@
-import * as winston from 'winston';
 import fetch from 'node-fetch';
 import { baseUrl } from './baseUrl';
 import { Key } from './key';

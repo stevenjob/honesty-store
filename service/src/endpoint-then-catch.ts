@@ -1,6 +1,6 @@
 import HTTPStatus = require('http-status');
-import * as winston from 'winston';
 import { Key } from './key';
+import { error } from './log';
 
 // generic to allow callers to assert the type of what's being sent back
 export const promiseResponse = <T>(promise: Promise<T>, key: Key, response, httpErrorCode = HTTPStatus.OK) => {
@@ -11,14 +11,15 @@ export const promiseResponse = <T>(promise: Promise<T>, key: Key, response, http
             response.status(HTTPStatus.OK)
                 .json({ response: result });
         })
-        .catch((error) => {
-            winston.error(
+        .catch((e) => {
+            error(
+                key,
                 `promiseResponse() failed, returning HTTP ${httpErrorCode}`,
-                error,
+                e,
                 'instantiation backtrace:',
                 backtrace);
 
             response.status(httpErrorCode)
-                .json({ error: { message: error.message }});
+                .json({ error: { message: e.message }});
         });
 };
