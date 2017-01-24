@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, hashHistory } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import Button from '../chrome/button';
 import { BRAND_LIGHT, DANGER } from '../chrome/colors';
 import { NotNow } from '../chrome/link';
@@ -28,7 +28,7 @@ export default class extends React.Component {
         const valid = isEmail(emailAddress);
         this.setState({ valid });
         if (valid) {
-            hashHistory.push(`/${storeId}/register/${itemId}/${emailAddress}`);
+            browserHistory.push(`/${storeId}/register/${itemId}/${emailAddress}`);
         }
     }
 

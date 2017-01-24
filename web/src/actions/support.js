@@ -1,4 +1,4 @@
-import { hashHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 
 export const SUPPORT_REQUEST = 'SUPPORT_REQUEST';
 export const SUPPORT_SUCCESS = 'SUPPORT_SUCCESS';
@@ -39,10 +39,10 @@ export const performSupport = ({ storeId, message }) => async (dispatch, getStat
       throw new Error(json.error.message);
     }
     dispatch(supportSuccess(json.response));
-    hashHistory.push(`/${storeId}/help/success`);
+    browserHistory.push(`/${storeId}/help/success`);
   }
   catch (e) {
     dispatch(supportFailure());
-    hashHistory.push(`/error`);
+    browserHistory.push(`/error`);
   }
 };

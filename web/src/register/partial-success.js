@@ -1,5 +1,5 @@
 import React from 'react';
-import { hashHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 import { BRAND_LIGHT } from '../chrome/colors';
 import Page from '../chrome/page';
 import success from '../topup/assets/success.svg';
@@ -11,7 +11,7 @@ export default ({ params: { storeId, itemId }, balance = 1234 }) =>
         invert={true}
         nav={false}
         fullscreen={true}>
-        <div className="register-partial-success" onClick={() => hashHistory.replace(`/${storeId}/item/${itemId}`)}>
+        <div className="register-partial-success" onClick={() => browserHistory.replace(`/${storeId}/item/${itemId}`)}>
             <h2>Thank you for your signing up to {storeId}!</h2>
             <h3>Your topup succeeded but we had trouble recording your purchase, please try again</h3>
             <img src={success} alt="Success"/>

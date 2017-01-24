@@ -1,4 +1,4 @@
-import { hashHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 
 export const PURCHASE_REQUEST = 'PURCHASE_REQUEST';
 export const PURCHASE_SUCCESS = 'PURCHASE_SUCCESS';
@@ -40,10 +40,10 @@ export const performPurchase = ({ storeId, itemId, quantity }) => async (dispatc
       throw new Error(json.error.message);
     }
     dispatch(purchaseSuccess(json.response));
-    hashHistory.push(`${storeId}/item/${itemId}/success`);
+    browserHistory.push(`${storeId}/item/${itemId}/success`);
   }
   catch (e) {
     dispatch(purchaseFailure());
-    hashHistory.push(`${storeId}/item/error`);
+    browserHistory.push(`${storeId}/item/error`);
   }
 };

@@ -1,4 +1,4 @@
-import { hashHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 
 export const SESSION_REQUEST = 'SESSION_REQUEST';
 export const SESSION_SUCCESS = 'SESSION_SUCCESS';
@@ -43,10 +43,10 @@ export const performSession = ({ storeId }) => async (dispatch, getState) => {
         throw new Error(`Attempt to load non-default store ${storeId} ${session.store.code}`);
     }
     dispatch(sessionSuccess(session));
-    hashHistory.push(`/${session.store.code}`);
+    browserHistory.push(`/${session.store.code}`);
   }
   catch (e) {
     dispatch(sessionFailure());
-    hashHistory.push(`/error`);
+    browserHistory.push(`/error`);
   }
 };

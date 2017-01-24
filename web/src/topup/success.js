@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { hashHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 import { BRAND_LIGHT } from '../chrome/colors';
 import Page from '../chrome/page';
 import currency from '../format/currency';
@@ -12,7 +12,7 @@ export const Success = ({ params: { storeId }, balance }) =>
         invert={true}
         nav={false}
         fullscreen={true}>
-        <div onClick={() => hashHistory.replace(`/${storeId}/history`)} className="topup-success">
+        <div onClick={() => browserHistory.replace(`/${storeId}/history`)} className="topup-success">
             <h2>Thank you for your top up!</h2>
             <img src={success} alt="Success"/>
             <div className="topup-success-balance">

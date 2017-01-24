@@ -1,4 +1,4 @@
-import { hashHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 
 const createToken = (data) =>
     new Promise((resolve, reject) => {
@@ -48,7 +48,7 @@ const createStripeToken = ({ name, number, cvc, exp_month, exp_year, address_zip
   if (name == null || name.length === 0) {
     throw Object.assign(new Error('Missing name'), { param: 'name' });
   }
-  
+
   const Stripe = window.Stripe;
   if (!Stripe.card.validateCardNumber(number)) {
     throw Object.assign(new Error('Invalid card number'), { param: 'number' });
@@ -86,7 +86,7 @@ export const performRegister2 = ({ storeId, itemID, topUpAmount, emailAddress, c
     dispatch(register2Success({ user, store }));
     // ensure both the topup and purchase transactions were recorded
     const path = user.transactions.length === 2 ? `/${storeId}/register/success` : `/${storeId}/register/${itemID}/success`;
-    hashHistory.push(path);
+    browserHistory.push(path);
   }
   catch (e) {
     dispatch(register2Failure(e));

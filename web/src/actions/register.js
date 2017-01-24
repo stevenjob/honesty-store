@@ -1,4 +1,4 @@
-import { hashHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
 export const REGISTER_SUCESSS = 'REGISTER_SUCESSS';
@@ -37,10 +37,10 @@ export const performRegister = ({ storeId }) => async (dispatch, getState) => {
       throw new Error(json.error.message);
     }
     dispatch(registerSuccess(json.response));
-    hashHistory.push(`/${storeId}`);
+    browserHistory.push(`/${storeId}`);
   }
   catch (e) {
     dispatch(registerFailure());
-    hashHistory.push(`/error`);
+    browserHistory.push(`/error`);
   }
 };

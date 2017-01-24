@@ -1,5 +1,5 @@
 import React from 'react';
-import { hashHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 import { BRAND_DARK, BRAND_LIGHT } from '../chrome/colors';
 import Button from '../chrome/button';
 import './index.css';
@@ -23,7 +23,7 @@ export default class extends React.Component {
     e.preventDefault();
     const { storeId } = this.state;
     if (storeId !== '') {
-      hashHistory.push(`/${storeId}`);
+      browserHistory.push(`/${storeId}`);
     }
   }
 

@@ -1,4 +1,4 @@
-import { hashHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 
 export const TOPUP_REQUEST = 'TOPUP_REQUEST';
 export const TOPUP_SUCCESS = 'TOPUP_SUCCESS';
@@ -40,10 +40,10 @@ export const performTopup = ({ storeId, amount }) => async (dispatch, getState) 
       throw new Error(json.error.message);
     }
     dispatch(topupSuccess(json.response));
-    hashHistory.push(`/${storeId}/topup/success`);
+    browserHistory.push(`/${storeId}/topup/success`);
   }
   catch (e) {
     dispatch(topupFailure());
-    hashHistory.push(`/${storeId}/topup/error`);
+    browserHistory.push(`/${storeId}/topup/error`);
   }
 };

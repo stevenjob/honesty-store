@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { IndexRedirect, Router, Route, hashHistory } from 'react-router';
+import { IndexRedirect, Router, Route, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -50,7 +50,7 @@ const store = createStore(
 
 ReactDOM.render((
   <Provider store={store}>
-    <Router history={hashHistory} onUpdate={() => scrollTo(0, 0)}>
+    <Router history={browserHistory} onUpdate={() => scrollTo(0, 0)}>
       <Route path="/" component={Home}/>
       <Route path="/success" component={HomeSuccess}/>
       <Route path="/error" component={() => <b>Problem, probably store code either invalid or not your default</b>}/>

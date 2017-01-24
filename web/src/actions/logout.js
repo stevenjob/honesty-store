@@ -1,4 +1,4 @@
-import { hashHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
@@ -39,7 +39,7 @@ export const performLogout = () => async (dispatch, getState) => {
       throw new Error(json.error.message);
     }
     dispatch(logoutSuccess(json.response));
-    hashHistory.push(`/`);
+    browserHistory.push(`/`);
   }
   catch (e) {
     dispatch(logoutFailure());
