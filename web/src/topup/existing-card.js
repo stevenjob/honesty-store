@@ -47,7 +47,7 @@ const mapStateToProps = ({
     },
 }) => ({
     balance,
-    brand: brand,
+    brand: brand.toLowerCase(),
     digits: last4,
     expiry: `${expMonth}/${expYear % 100}`,
 });
