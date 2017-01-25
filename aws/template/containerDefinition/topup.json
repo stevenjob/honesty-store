@@ -33,7 +33,7 @@
             },
             {
                 "name": "SERVICE_TOKEN_SECRET",
-                "value": "${serviceTokenSecret}"
+                "value": "${serviceSecret}"
             }
         ],
         "logConfiguration": {

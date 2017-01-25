@@ -25,11 +25,11 @@
             },
             {
                 "name": "USER_TOKEN_SECRET",
-                "value": "${userTokenSecret}"
+                "value": "${userSecret}"
             },
             {
                 "name": "SERVICE_TOKEN_SECRET",
-                "value": "${serviceTokenSecret}"
+                "value": "${serviceSecret}"
             }
         ],
         "logConfiguration": {
