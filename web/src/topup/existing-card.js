@@ -49,8 +49,13 @@ const mapStateToProps = ({
     balance,
     brand: brand.toLowerCase(),
     digits: last4,
-    expiry: `${expMonth}/${expYear % 100}`,
+    expiry: `${zeroPadMonth(expMonth)}/${expYear % 100}`,
 });
+
+const zeroPadMonth = (month) => {
+    const prefix = month < 10 ? '0' : '';
+    return `${prefix}${month}`;
+};
 
 const mapDispatchToProps = { performTopup };
 
