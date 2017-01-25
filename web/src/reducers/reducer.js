@@ -91,11 +91,10 @@ export default (state = getInitialState(), action) => {
       };
     }
     case REGISTER2_SUCESSS: {
-      const { user, store } = action.response;
+      const { user } = action.response;
       return {
         ...state,
         user: user,
-        store: store,
         pending: state.pending.filter(e => e !== 'register2')
       };
     }

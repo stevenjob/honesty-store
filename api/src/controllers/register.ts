@@ -13,7 +13,7 @@ import { authenticateAccessToken } from '../middleware/authenticate';
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
 import { WithRefreshToken, WithAccessToken } from '../../../user/src/client/index';
 import { storeCodeToStoreID } from '../services/store'
-import { createTopup, TopupResponse } from '../../../topup/src/client/index'
+import { createTopup, TopupResponse, CardDetails } from '../../../topup/src/client/index'
 
 const register = async (storeCode) => {
   const userId = uuid();
@@ -29,31 +29,16 @@ const register = async (storeCode) => {
   return await getSessionData(key, { user });
 };
 
-/* createTopup() and addItemTransaction() return TransactionDetails, which don't have ids.
- * SessionData also has cardNumber.
- *
- * This is a copy of SessionData with TransactionDetails instead of Transaction
- * and cardNumber removed, to facilitate this for now */
-interface SessionDataWithoutTransactionIds {
-    user: {
-        balance: number;
-        transactions: TransactionDetails[];
-    };
-    store: {
-        code: string;
-        items: {
-            id: string;
-            name: string;
-            price: number;
-            count: number;
-        }[];
-    };
-};
+interface RegistrationSessionData {
+  user: {
+    balance: number;
+    transactions: TransactionDetails[];
+    cardDetails: CardDetails;
+  };
+}
 
 const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, stripeToken }) => {
   const user = await updateUser(key, userID, { emailAddress });
-
-  const sessionData = await getSessionData(key, { user });
 
   const topupTx = await createTopup(key, { accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
 
@@ -75,17 +60,15 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
   }
 
   return {
-    ...sessionData,
     user: {
       ...user,
       balance: purchaseTx == null ? topupTx.balance : purchaseTx.balance,
       transactions: [
         ...(purchaseTx != null ? [purchaseTx.transaction] : []),
-        topupTx.transaction,
-        ...sessionData.user.transactions, // should be empty
+        topupTx.transaction
       ],
       cardDetails: topupTx.cardDetails,
-    },
+    }
   };
 };
 
@@ -121,7 +104,7 @@ const setupRegisterPhase2 = (router) => {
       const { itemID, topUpAmount, stripeToken } = request.body;
       const { user: { id: userID }, key } = request;
 
-      promiseResponse<SessionDataWithoutTransactionIds>(
+      promiseResponse<RegistrationSessionData>(
           register2(key, { userID, emailAddress, topUpAmount, itemID, stripeToken }),
           request,
           response,
