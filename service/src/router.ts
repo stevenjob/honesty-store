@@ -2,6 +2,8 @@ import { info, error } from './log';
 import HTTPStatus = require('http-status');
 import express = require('express');
 import { Key } from './key';
+import { baseUrl } from './baseUrl';
+import { verifyServiceSecret } from './serviceSecret';
 
 interface Params {
     [key: string]: string;
@@ -24,6 +26,21 @@ interface Router {
 
 const extractKey = (request): Key => JSON.parse(request.get('key'));
 
+const extractServiceSecret = (request) => request.get('service-secret');
+
+const serviceSecretInvalid = (request, response): boolean => {
+    const serviceSecret = extractServiceSecret(request);
+
+    try {
+        verifyServiceSecret(serviceSecret, baseUrl);
+        return true;
+    } catch (e) {
+        response.status(HTTPStatus.UNAUTHORIZED)
+            .json({ error: { message: e.message }});
+        return false;
+    }
+};
+
 export default (service: string): Router => {
     const internalRouter = express.Router();
 
@@ -32,6 +49,10 @@ export default (service: string): Router => {
 
     router.get = <Result>(path, version: number, action: Action<Result>) => {
         internalRouter.get(`/${service}/v${version}${path}`, (request, response) => {
+            if (serviceSecretInvalid(request, response)) {
+                return;
+            }
+
             const key = extractKey(request);
             info(key, `handling GET ${request.url}`);
             action(key, request.params)
@@ -50,6 +71,10 @@ export default (service: string): Router => {
 
     router.post = <Body, Result>(path, version: number, action: BodyAction<Body, Result>) => {
         internalRouter.post(`/${service}/v${version}${path}`, (request, response) => {
+            if (serviceSecretInvalid(request, response)) {
+                return;
+            }
+
             const key = extractKey(request);
             info(key, `handling POST ${request.url}`, request.body);
             action(key, request.params, request.body)
@@ -68,6 +93,10 @@ export default (service: string): Router => {
 
     router.put = <Body, Result>(path, version: number, action: BodyAction<Body, Result>) => {
         internalRouter.put(`/${service}/v${version}${path}`, (request, response) => {
+            if (serviceSecretInvalid(request, response)) {
+                return;
+            }
+
             const key = extractKey(request);
             info(key, `handling PUT ${request.url}`, request.body);
             action(key, request.params, request.body)

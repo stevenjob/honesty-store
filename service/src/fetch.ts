@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import { baseUrl } from './baseUrl';
 import { Key } from './key';
 import { info, error } from './log';
+import { signServiceSecret } from './serviceSecret';
 
 interface ApiResponse<T> {
     response?: T;
@@ -17,6 +18,7 @@ export default (service: string) => {
         const response = await fetch(url, {
             method,
             headers: {
+                'service-secret': signServiceSecret({ baseUrl }),
                 key: JSON.stringify(key),
                 ...headers,
             },
