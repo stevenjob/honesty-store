@@ -39,7 +39,7 @@ export default class extends React.Component {
       <p>If you have a store code and want to sign up, please enter it below</p>
       <form onSubmit={(e) => this.openStore(e)}>
         <p className="home-store-code">
-          <input name="storeId" value={storeId} type="text" placeholder="your-store-code" onChange={(e) => this.handleChange(e)}/>
+          <input name="storeId" autoComplete="off" value={storeId} type="text" placeholder="your-store-code" onChange={(e) => this.handleChange(e)}/>
         </p>
         <p>
           <Button onClick={(e) => this.openStore(e)}>Browse Store</Button>
@@ -51,7 +51,7 @@ export default class extends React.Component {
         method="post"
         target="_NEW">
         <p>
-          <input name="EMAIL" type="email" />
+          <input name="EMAIL" autoComplete="email" type="email" />
         </p>
         <p>
           <Button onClick={() => document.forms.update.submit()}>Keep Me Updated</Button>

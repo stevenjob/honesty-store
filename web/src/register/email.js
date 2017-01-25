@@ -57,6 +57,7 @@ export default class extends React.Component {
                 <p>
                     <input type="email"
                         name="emailAddress"
+                        autoComplete="email"
                         placeholder="honest.jo@honesty.store"
                         onChange={(e) => this.handleChange(e)}
                         style={this.style()}/>

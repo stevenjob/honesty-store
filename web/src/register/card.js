@@ -58,17 +58,20 @@ class Card extends React.Component {
                 }
                 <p>
                     <input name="number"
+                        autoComplete="cc-number"
                         placeholder="1111 2222 3333 4444"
                         style={this.style('number', error)}
                         onChange={(e) => this.handleChange(e)}/>
                 </p>
                 <p className="register-card-tight">
                     <input name="exp"
+                        autoComplete="cc-exp"
                         value={exp}
                         placeholder="Expiry (MM / YY)"
                         style={this.style('exp', error)}
                         onChange={(e) => this.handleChange(e)}/>
                     <input name="cvc"
+                        autoComplete="cc-csc"
                         placeholder="CVV (3-digits)"
                         style={this.style('cvc', error)}
                         onChange={(e) => this.handleChange(e)}/>
