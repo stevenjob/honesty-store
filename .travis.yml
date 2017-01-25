@@ -13,7 +13,7 @@ env:
     # The key used by jwt to generate communication tokens for inter-service HTTP requests.
     # Master branch only. All other branches use keys derived from the branch name.
     # Eventually this will be secure/travis-encrypted.
-    - MASTER_BRANCH_SECRET: 'abc'
+    - LIVE_SERVICE_TOKEN_SECRET: 'abc'
 script:
   - npm i -g yarn
   # install all dependencies first to prevent problems with cross-module dependencies
@@ -43,5 +43,5 @@ script:
   - (cd topup && yarn install --production --ignore-scripts --prefer-offline)
   - (cd service && yarn install --production --ignore-scripts --prefer-offline)
   - (cd test && yarn install --production --ignore-scripts --prefer-offline)
-  - ./aws/bin/aws deploy $TRAVIS_BRANCH $MASTER_BRANCH_SECRET api transaction user web topup
+  - ./aws/bin/aws deploy $TRAVIS_BRANCH $LIVE_SERVICE_TOKEN_SECRET api transaction user web topup
   - ./aws/bin/aws prune
