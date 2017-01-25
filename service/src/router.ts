@@ -33,15 +33,15 @@ export default (service: string): Router => {
     router.get = <Result>(path, version: number, action: Action<Result>) => {
         internalRouter.get(`/${service}/v${version}${path}`, (request, response) => {
             const key = extractKey(request);
-            info(key, `GET ${request.url} request`);
+            info(key, `handling GET ${request.url}`);
             action(key, request.params)
                 .then(result => {
-                    info(key, `GET ${request.url} success`, result);
+                    info(key, `successful GET ${request.url}`, result);
                     response.status(HTTPStatus.OK)
                         .json({ response: result });
                 })
                 .catch((e) => {
-                    error(key, `GET ${request.url} failure`, e);
+                    error(key, `failed GET ${request.url}`, e);
                     response.status(200)
                         .json({ error: { message: e.message }});
                 });
@@ -51,15 +51,15 @@ export default (service: string): Router => {
     router.post = <Body, Result>(path, version: number, action: BodyAction<Body, Result>) => {
         internalRouter.post(`/${service}/v${version}${path}`, (request, response) => {
             const key = extractKey(request);
-            info(key, `POST ${request.url} request`, request.body);
+            info(key, `handling POST ${request.url}`, request.body);
             action(key, request.params, request.body)
                 .then(result => {
-                    info(key, `POST ${request.url} success`, result);
+                    info(key, `successful POST ${request.url}`, result);
                     response.status(HTTPStatus.OK)
                         .json({ response: result });
                 })
                 .catch((e) => {
-                    error(key, `POST ${request.url} failure`, e);
+                    error(key, `failed POST ${request.url}`, e);
                     response.status(200)
                         .json({ error: { message: e.message }});
                 });
@@ -69,15 +69,15 @@ export default (service: string): Router => {
     router.put = <Body, Result>(path, version: number, action: BodyAction<Body, Result>) => {
         internalRouter.put(`/${service}/v${version}${path}`, (request, response) => {
             const key = extractKey(request);
-            info(key, `PUT ${request.url} request`, request.body);
+            info(key, `handling PUT ${request.url}`, request.body);
             action(key, request.params, request.body)
                 .then(result => {
-                    info(key, `PUT ${request.url} success`, result);
+                    info(key, `successful PUT ${request.url}`, result);
                     response.status(HTTPStatus.OK)
                         .json({ response: result });
                 })
                 .catch((e) => {
-                    error(key, `PUT ${request.url} failure`, e);
+                    error(key, `failed PUT ${request.url}`, e);
                     response.status(200)
                         .json({ error: { message: e.message }});
                 });
