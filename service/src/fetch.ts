@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import { baseUrl } from './baseUrl';
 import { Key } from './key';
+import { info } from './log';
 
 interface ApiResponse<T> {
     response?: T;
@@ -10,7 +11,9 @@ interface ApiResponse<T> {
 export default (service: string) => {
 
     const get = async <Result>(version: number, key: Key, path: String) => {
-        const response = await fetch(`${baseUrl}/${service}/v${version}${path}`, {
+        const url = `${baseUrl}/${service}/v${version}${path}`;
+        info(key, `send GET ${url}`);
+        const response = await fetch(url, {
             headers: {
                 key
             }
@@ -23,7 +26,9 @@ export default (service: string) => {
     };
 
     const post = async <Result>(version: number, key: Key, path: String, body: any): Promise<Result> => {
-        const response = await fetch(`${baseUrl}/${service}/v${version}${path}`, {
+        const url = `${baseUrl}/${service}/v${version}${path}`;
+        info(key, `send POST ${url}`);
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
@@ -39,7 +44,9 @@ export default (service: string) => {
     };
 
     const put = async <Result>(version: number, key: Key, path: String, body: any): Promise<Result> => {
-        const response = await fetch(`${baseUrl}/${service}/v${version}${path}`, {
+        const url = `${baseUrl}/${service}/v${version}${path}`;
+        info(key, `send PUT ${url}`);
+        const response = await fetch(url, {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json',
