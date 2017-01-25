@@ -24,39 +24,40 @@ const extractKey = (request): Key => JSON.parse(request.get('key'));
 
 const extractServiceSecret = (request) => request.get('service-secret');
 
-const serviceSecretInvalid = (request, response): boolean => {
+const serviceAuthentication = (request, response, next) => {
     const serviceSecret = extractServiceSecret(request);
 
     try {
         verifyServiceSecret(serviceSecret, baseUrl);
-        return true;
     } catch (e) {
         response.status(HTTPStatus.UNAUTHORIZED)
             .json({ error: { message: e.message }});
-        return false;
+
+        return;
     }
+
+    next();
 };
 
 const createEndPoint = (service, internalRouter, method) => <Body, Result>(path, version: number, action: BodyAction<Body, Result>) => {
-    internalRouter[method/* .get/.post/.put */](`/${service}/v${version}${path}`, (request, response) => {
-        if (serviceSecretInvalid(request, response)) {
-            return;
-        }
-
-        const key = extractKey(request);
-        info(key, `handling ${method} ${request.url}`);
-        action(key, request.params, /* maybe undefined */request.body)
-            .then(result => {
-                info(key, `successful ${method} ${request.url}`, result);
-                response.status(HTTPStatus.OK)
-                    .json({ response: result });
-            })
-            .catch((e) => {
-                error(key, `failed ${method} ${request.url}`, e);
-                response.status(200)
-                    .json({ error: { message: e.message }});
-            });
-    });
+    internalRouter[method/* .get/.post/.put */](
+        `/${service}/v${version}${path}`,
+        serviceAuthentication,
+        (request, response) => {
+            const key = extractKey(request);
+            info(key, `handling ${method} ${request.url}`);
+            action(key, request.params, /* maybe undefined */request.body)
+                .then(result => {
+                    info(key, `successful ${method} ${request.url}`, result);
+                    response.status(HTTPStatus.OK)
+                        .json({ response: result });
+                })
+                .catch((e) => {
+                    error(key, `failed ${method} ${request.url}`, e);
+                    response.status(200)
+                        .json({ error: { message: e.message }});
+                });
+        });
 };
 
 export default (service: string): Router => {
