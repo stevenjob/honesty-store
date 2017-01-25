@@ -27,13 +27,16 @@ export default (service: string) => {
         try {
             json = await response.json();
         } catch (e) {
+            error(key, `failed ${method} ${url} couldn't parse json, HTTP ${response.status}`);
             throw new Error(`${method} ${path} failed (couldn't parse json), HTTP ${response.status}`);
         }
 
         if (json.error) {
+            error(key, `error ${method} ${url} ${json.error.message}`);
             throw new Error(json.error.message);
         }
 
+        info(key, `success ${method} ${url}`);
         return json.response;
     };
 
