@@ -43,7 +43,6 @@ export const performSession = ({ storeId }) => async (dispatch, getState) => {
         throw new Error(`Attempt to load non-default store ${storeId} ${session.store.code}`);
     }
     dispatch(sessionSuccess(session));
-    browserHistory.push(`/${session.store.code}`);
   }
   catch (e) {
     dispatch(sessionFailure());
