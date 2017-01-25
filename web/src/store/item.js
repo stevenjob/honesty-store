@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router';
 import './item.css';
 
-export default ({ item: { id, name, price }, image, storeId }) => 
+export default ({ item: { id, name, price }, image, storeId }) =>
   <div className="store-item">
-    <Link to={`${storeId}/item/${id}`}>
-      <img 
+    <Link to={`/${storeId}/item/${id}`}>
+      <img
         src={require(`./assets/${image}`)}
         alt={name}
       />
