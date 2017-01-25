@@ -22,7 +22,7 @@ const signinFailure = () => {
   };
 };
 
-export const performSignin = ({ storeId, emailAddress }) => async (dispatch, getState) => {
+export const performSignin = ({ storeId, itemId, emailAddress }) => async (dispatch, getState) => {
   dispatch(signinRequest());
   try {
     const response = await fetch('/api/v1/signin', {
@@ -41,6 +41,11 @@ export const performSignin = ({ storeId, emailAddress }) => async (dispatch, get
   }
   catch (e) {
     dispatch(signinFailure());
-    browserHistory.push(`/error`);
+    if (e.message.match(/User not found/)) {
+      // Register user
+      browserHistory.push(`/${storeId}/register/${itemId}/${emailAddress}`);
+    } else {
+      browserHistory.push(`/error`);
+    }
   }
 };

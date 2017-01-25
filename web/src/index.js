@@ -27,7 +27,6 @@ import RegisterEmail from './register/email';
 import RegisterCard from './register/card';
 import RegisterSuccess from './register/success';
 import RegisterPartialSuccess from './register/partial-success';
-import SignIn from './signin/index';
 import SignInSuccess from './signin/success';
 import Help from './help/index';
 import HelpSuccess from './help/success';
@@ -60,7 +59,6 @@ ReactDOM.render((
         <Route path="register/:itemId" component={RegisterEmail}/>
         <Route path="register/:itemId/success" component={RegisterPartialSuccess}/>
         <Route path="register/:itemId/:emailAddress" component={RegisterCard}/>
-        <Route path="signin" component={SignIn}/>
         <Route path="signin/success" component={SignInSuccess}/>
         <Route path="store" component={Store}/>
         <Route path="item/error" component={Error} />

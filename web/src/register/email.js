@@ -1,13 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link, browserHistory } from 'react-router';
 import Button from '../chrome/button';
 import { BRAND_LIGHT, DANGER } from '../chrome/colors';
 import { NotNow } from '../chrome/link';
 import Page from '../chrome/page';
 import isEmail from 'validator/lib/isEmail';
+import { performSignin } from '../actions/signin';
 import './email.css';
 
-export default class extends React.Component {
+class Email extends React.Component {
 
     constructor(props) {
         super(props);
@@ -23,12 +25,12 @@ export default class extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const { params: { storeId, itemId } } = this.props;
+        const { performSignin, params: { storeId, itemId } } = this.props;
         const { emailAddress } = this.state;
         const valid = isEmail(emailAddress);
         this.setState({ valid });
         if (valid) {
-            browserHistory.push(`/${storeId}/register/${itemId}/${emailAddress}`);
+            performSignin({ storeId, itemId, emailAddress });
         }
     }
 
@@ -47,10 +49,10 @@ export default class extends React.Component {
             nav={false}
             fullscreen={true}>
             <form className="register-email" onSubmit={(e) => this.handleSubmit(e)}>
-                <h2>Want to sign up to {storeId}?</h2>
+                <h2>Want to sign up or sign in?</h2>
                 {
                     valid !== false ?
-                    <p>If you want to sign up for an account please enter your email address below</p>
+                    <p>Please enter your email address below</p>
                     :
                     <p style={{ color: DANGER }}>Please enter a valid email address</p>
                 }
@@ -62,9 +64,18 @@ export default class extends React.Component {
                         onChange={(e) => this.handleChange(e)}
                         style={this.style()}/>
                 </p>
-                <p><Button onClick={(e) => this.handleSubmit(e)}>Continue to Top Up</Button></p>
-                <p><Link to={`/${storeId}/signin`} style={{ color: BRAND_LIGHT }}>Already have an account?</Link></p>
+                <p><Button onClick={(e) => this.handleSubmit(e)}>Continue</Button></p>
+                <p><Link to={`/${storeId}/help`} style={{ color: BRAND_LIGHT }}>Problems signing in?</Link></p>
             </form>
         </Page>;
     }
 }
+
+const mapStateToProps = (_, { params: { storeId, itemId }}) => ({
+    storeId,
+    itemId
+});
+
+const mapDispatchToProps = { performSignin };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Email);
