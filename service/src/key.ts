@@ -4,6 +4,7 @@ import isEmail = require('validator/lib/isEmail');
 
 export interface Key {
     __IS__A__KEY__: void;
+    toJSON(): string;
 }
 
 export interface AuthenticationKey extends Key {
@@ -23,6 +24,9 @@ export const createAuthenticationKey = () => {
                 }
             };
         },
+        toJSON() {
+            return toString();
+        },
         toString() {
             return `auth:${correlationKey}`;
         }
@@ -35,6 +39,9 @@ export const createUserKey = ({ userId }) => {
     }
     const correlationKey = uuid();
     return <Key>{
+        toJSON() {
+            return toString();
+        },
         toString() {
             return `user:${userId}:${correlationKey}`;
         }
@@ -47,6 +54,9 @@ export const createEmailKey = ({ emailAddress }) => {
     }
     const correlationKey = uuid();
     return <Key>{
+        toJSON() {
+            return toString();
+        },
         toString() {
             return `email:${emailAddress}:${correlationKey}`;
         }
@@ -56,6 +66,9 @@ export const createEmailKey = ({ emailAddress }) => {
 export const createUnauthenticatedKey = () => {
     const correlationKey = uuid();
     return <Key>{
+        toJSON() {
+            return toString();
+        },
         toString() {
             return `unauthenticated:${correlationKey}`;
         }

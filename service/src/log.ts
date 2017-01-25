@@ -1,46 +1,39 @@
 import { Key } from './key';
-import * as winston from 'winston';
 
-const replaceErrors = (key, value) => {
+type Level = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
+
+const replacer = (key, value) => {
   if (value instanceof Error) {
-    var error = {};
-
-    Object.getOwnPropertyNames(value).forEach(function (key) {
-      error[key] = value[key];
-    });
-
-    return error;
+    const { message, stack } = value;
+    return { message, stack };
   }
-
   return value;
 };
 
-winston.configure({
-  level: 'debug',
-  transports: [
-    new winston.transports.Console({
-      timestamp() {
-        return Date.now();
-      },
-      formatter(options) {
-        return `${new Date(options.timestamp()).toISOString()} ${options.level.toUpperCase()} ${options.message} ${JSON.stringify(options.meta, replaceErrors)}`;
-      }
-    })
-  ]
-});
+const log = (level: Level, key: Key, message: string, ...args: any[]) => {
+  const output = {
+    timestamp: new Date().toISOString(),
+    level,
+    key,
+    message,
+    args
+  };
+  const json = JSON.stringify(output, replacer);
+  console.log(json);
+};
 
 export const debug = (key: Key, message: string, ...args: any[]) => {
-  winston.debug(message, { key, args });
+   log('DEBUG', key, message, args);
 };
 
 export const info = (key: Key, message: string, ...args: any[]) => {
-  winston.info(message, { key, args });
+  log('INFO', key, message, args);
 };
 
 export const warn = (key: Key, message: string, ...args: any[]) => {
-  winston.warn(message, { key, args });
+  log('WARN', key, message, args);
 };
 
 export const error = (key: Key, message: string, ...args: any[]) => {
-  winston.error(message, { key, args });
+  log('ERROR', key, message, args);
 };

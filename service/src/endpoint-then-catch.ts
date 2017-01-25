@@ -16,7 +16,6 @@ export const promiseResponse = <T>(promise: Promise<T>, request /*: express.Requ
                 request.key,
                 `${request.method} ${request.url} handled raised an error, returning HTTP ${httpErrorCode}`,
                 e,
-                e.message, // HACK: this is emitted by winston, while `e` isn't - so we use this to get error logs for now
                 backtrace);
 
             response.status(httpErrorCode)
