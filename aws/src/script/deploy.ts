@@ -58,14 +58,14 @@ const ensureDatabase = async ({ branch, dir }) => {
 };
 
 const generateServiceSecret = ({ branch, masterSecret }) => {
-    if (branch === 'master') {
-        return masterSecret;
-    }
-    const secret = createHash('sha256')
-        .update(branch)
-        .digest()
-        .toString();
-    return secret;
+    const bareSecret = () => {
+        if (branch === 'master') {
+            return masterSecret;
+        }
+        return branch;
+    };
+
+    return `service:${bareSecret()}`;
 };
 
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
