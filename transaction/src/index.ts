@@ -4,7 +4,7 @@ import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isInt = require('validator/lib/isInt');
-import { Account, Transaction, TransactionDetails, TransactionAndBalance, TEST_DATA_EMPTY_ACCOUNT_ID } from './client';
+import { Account, Transaction, TransactionDetails, TransactionAndBalance, TEST_DATA_EMPTY_ACCOUNT_ID, balanceLimit } from './client';
 import serviceRouter from '../../service/src/router';
 
 config.region = process.env.AWS_REGION;
@@ -100,6 +100,9 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
 
     if (updatedAccount.balance < 0) {
         throw new Error(`Balance would be negative ${updatedAccount.balance}`);
+    }
+    if (updatedAccount.balance > balanceLimit) {
+        throw new Error(`Balance would be greater than ${balanceLimit} (${updatedAccount.balance})`);
     }
 
     const lastTransactionId = originalAccount.transactions.length === 0 ? null : originalAccount.transactions[0].id;

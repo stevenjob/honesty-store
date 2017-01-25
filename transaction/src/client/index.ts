@@ -1,5 +1,7 @@
 import fetch from '../../../service/src/fetch';
 
+export const balanceLimit = 1000; // £10
+
 export interface TransactionDetails {
     type: 'topup' | 'purchase';
     amount: number;

@@ -6,13 +6,12 @@ import isUUID = require('validator/lib/isUUID');
 import * as stripeFactory from 'stripe';
 import * as winston from 'winston';
 
-import { TransactionDetails, createTransaction, getAccount } from '../../transaction/src/client/index';
+import { TransactionDetails, createTransaction, getAccount, balanceLimit } from '../../transaction/src/client/index';
 import { TopupAccount, TopupRequest } from './client/index';
 import serviceRouter from '../../service/src/router';
 import { Key } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
 
-const balanceLimit = 1000; // £10
 const fixedTopupAmount = 500; // £5
 
 const stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
