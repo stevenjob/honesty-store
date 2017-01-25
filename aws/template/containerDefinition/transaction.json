@@ -22,6 +22,10 @@
             {
                 "name": "BASE_URL",
                 "value": "${baseUrl}"
+            },
+            {
+                "name": "JWT_SERVICE_SECRET",
+                "value": "${jwtServiceSecret}"
             }
         ],
         "logConfiguration": {

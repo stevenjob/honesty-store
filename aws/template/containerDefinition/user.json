@@ -26,6 +26,10 @@
             {
                 "name": "JWT_TOKEN_SECRET",
                 "value": "0790b9b8-82c1-44da-8cce-fe46f9a496cb"
+            },
+            {
+                "name": "JWT_SERVICE_SECRET",
+                "value": "${jwtServiceSecret}"
             }
         ],
         "logConfiguration": {

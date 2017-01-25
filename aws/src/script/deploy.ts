@@ -57,8 +57,19 @@ const ensureDatabase = async ({ branch, dir }) => {
     });
 };
 
+const generateServiceSecret = ({ branch, masterSecret }) => {
+    if (branch === 'master') {
+        return masterSecret;
+    }
+    const secret = createHash('sha256')
+        .update(branch)
+        .digest()
+        .toString();
+    return secret;
+};
+
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
-export default async ({ branch, dirs }) => {
+export default async ({ branch, masterSecret, dirs }) => {
     const baseUrl = aliasToBaseUrl(branch);
     const loadBalancer = await ensureLoadBalancer({
         name: `${prefix}-${branch}`
@@ -74,6 +85,7 @@ export default async ({ branch, dirs }) => {
         loadBalancerArn: loadBalancer.LoadBalancerArn,
         defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn
     });
+    const jwtServiceSecret = generateServiceSecret({ branch, masterSecret });
     const services: ECS.Service[] = [];
     for (const dir of dirs) {
         const logGroup = `${prefix}-${branch}-${dir}`;
@@ -103,7 +115,8 @@ export default async ({ branch, dirs }) => {
                 image,
                 logGroup,
                 tableName: db.TableName,
-                baseUrl
+                baseUrl,
+                jwtServiceSecret,
             }
         });
         const taskDefinition = await ensureTaskDefinition({

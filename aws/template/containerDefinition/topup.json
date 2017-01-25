@@ -30,6 +30,10 @@
             {
                 "name": "STRIPE_SECRET_KEY_TEST",
                 "value": "sk_test_Bl10VC4MyzRrhd41nq4f31jD"
+            },
+            {
+                "name": "JWT_SERVICE_SECRET",
+                "value": "${jwtServiceSecret}"
             }
         ],
         "logConfiguration": {
