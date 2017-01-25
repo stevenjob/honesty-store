@@ -11,7 +11,9 @@ import { SIGNIN2_REQUEST, SIGNIN2_SUCCESS, SIGNIN2_FAILURE } from '../actions/si
 const getInitialState = () => {
   return {
     pending: [],
-    user: {},
+    user: {
+      cardDetails: {}
+    },
     store: {},
     register: {},
     accessToken: null,
