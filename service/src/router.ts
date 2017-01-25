@@ -28,7 +28,7 @@ const serviceAuthentication = (request, response, next) => {
     const serviceSecret = extractServiceSecret(request);
 
     try {
-        verifyServiceSecret(serviceSecret, baseUrl);
+        verifyServiceSecret(serviceSecret);
     } catch (e) {
         response.status(HTTPStatus.UNAUTHORIZED)
             .json({ error: { message: e.message }});

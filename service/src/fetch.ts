@@ -19,7 +19,7 @@ export default (service: string) => {
             method,
             headers: {
                 'content-type': body ? 'application/json' : undefined,
-                'service-secret': signServiceSecret({ baseUrl }),
+                'service-secret': signServiceSecret(),
                 key: JSON.stringify(key),
             },
             body: body ? JSON.stringify(body) : undefined,
