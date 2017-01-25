@@ -6,7 +6,7 @@ import isUUID = require('validator/lib/isUUID');
 import * as stripeFactory from 'stripe';
 import * as winston from 'winston';
 
-import { TransactionDetails, createTransaction, getAccount, balanceLimit } from '../../transaction/src/client/index';
+import { TransactionDetails, createTransaction, getAccount, assertBalanceWithinLimit } from '../../transaction/src/client/index';
 import { TopupAccount, TopupRequest } from './client/index';
 import serviceRouter from '../../service/src/router';
 import { Key } from '../../service/src/key';
@@ -176,14 +176,6 @@ const stripeDetailsValid = (topupAccount: TopupAccount) => {
     return topupAccount.stripe
         && topupAccount.stripe.customer
         && topupAccount.stripe.nextChargeToken;
-};
-
-const assertBalanceWithinLimit = async ({ key, accountId, amount }) => {
-    const currentBalance = (await getAccount(key, accountId)).balance;
-
-    if (currentBalance + amount > balanceLimit) {
-        throw new Error(`topping up would increase balance over the limit of £${balanceLimit / 100}`);
-    }
 };
 
 const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, topupAccount: TopupAccount, amount: number }) => {

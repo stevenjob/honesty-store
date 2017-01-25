@@ -36,4 +36,12 @@ export const getAccount = (key, accountId: string) =>
 export const createTransaction = (key, accountId: string, transaction: TransactionDetails) =>
     post<TransactionAndBalance>(1, key, `/${accountId}`, transaction);
 
+export const assertBalanceWithinLimit = async ({ key, accountId, amount }) => {
+    const currentBalance = (await getAccount(key, accountId)).balance;
+
+    if (currentBalance + amount > balanceLimit) {
+        throw new Error(`topping up would increase balance over the limit of £${balanceLimit / 100}`);
+    }
+};
+
 export const TEST_DATA_EMPTY_ACCOUNT_ID = 'b423607f-64de-441f-ac39-12d50aaedbe9';
