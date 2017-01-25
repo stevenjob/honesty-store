@@ -13,7 +13,7 @@ import { authenticateAccessToken } from '../middleware/authenticate';
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
 import { WithRefreshToken, WithAccessToken } from '../../../user/src/client/index';
 import { storeCodeToStoreID } from '../services/store'
-import { createTopup } from '../../../topup/src/client/index'
+import { createTopup, TopupResponse } from '../../../topup/src/client/index'
 
 const register = async (storeCode) => {
   const userId = uuid();
