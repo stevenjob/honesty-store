@@ -17,5 +17,13 @@ export const templateText = async ({ type, name, data = {}, extension = 'json' }
     return template.replace(/\$\{([\w\d]+)\}/gi, (substring, token) => data[token]);
 };
 
-export const templateJSON = async ({ type, name, data = {}, extension = 'json' }) =>
-    JSON.parse(await templateText({ type, name, data, extension}));
+export const templateJSON = async ({ type, name, data = {}, extension = 'json' }) => {
+    const text = await templateText({ type, name, data, extension});
+
+    try {
+        return JSON.parse(text);
+    } catch (e) {
+        console.error(`couldn't parse JSON ${JSON.stringify({ type, name, extension })}, text: ${text}`);
+        throw e;
+    }
+};
