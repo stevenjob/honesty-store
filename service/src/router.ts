@@ -39,8 +39,8 @@ const serviceAuthentication = (request, response, next) => {
     next();
 };
 
-const createEndPoint = (service, internalRouter, method) => <Body, Result>(path, version: number, action: BodyAction<Body, Result>) => {
-    internalRouter[method/* .get/.post/.put */](
+const createEndPoint = (service, internalRouter, method: 'get' | 'post' | 'put') => <Body, Result>(path, version: number, action: BodyAction<Body, Result>) => {
+    internalRouter[method](
         `/${service}/v${version}${path}`,
         serviceAuthentication,
         (request, response) => {
