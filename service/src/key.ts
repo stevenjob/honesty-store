@@ -19,6 +19,9 @@ export const createAuthenticationKey = () => {
                 throw new Error(`Invalid userId specified ${userId}`);
             }
             return <Key>{
+                toJSON() {
+                    return this.toString();
+                },
                 toString() {
                     return `user:${userId}:${correlationKey}`;
                 }
