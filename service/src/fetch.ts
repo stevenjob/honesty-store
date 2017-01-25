@@ -15,15 +15,17 @@ export default (service: string) => {
 
         info(key, `send ${method} ${url}`);
 
-        const response = await fetch(url, {
+        const fetchOptions = {
             method,
             headers: {
+                'content-type': body ? 'application/json' : undefined,
                 'service-secret': signServiceSecret({ baseUrl }),
                 key: JSON.stringify(key),
-                ...headers,
             },
             body: body ? JSON.stringify(body) : undefined,
-        });
+        };
+
+        const response = await fetch(url, fetchOptions);
 
         let json: ApiResponse<Result>;
         try {
@@ -56,9 +58,6 @@ export default (service: string) => {
             method: 'POST',
             version,
             path,
-            headers: {
-                'content-type': 'application/json',
-            },
             key,
             body,
         });
@@ -69,9 +68,6 @@ export default (service: string) => {
             method: 'PUT',
             version,
             path,
-            headers: {
-                'content-type': 'application/json',
-            },
             key,
             body,
         });
