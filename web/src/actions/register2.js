@@ -44,25 +44,18 @@ const register2Failure = (error) => {
   };
 };
 
-const createStripeToken = ({ name, number, cvc, exp_month, exp_year, address_zip }) => {
-  if (name == null || name.length === 0) {
-    throw Object.assign(new Error('Missing name'), { param: 'name' });
-  }
-
+const createStripeToken = ({ number, cvc, exp }) => {
   const Stripe = window.Stripe;
   if (!Stripe.card.validateCardNumber(number)) {
     throw Object.assign(new Error('Invalid card number'), { param: 'number' });
   }
-  if (!Stripe.card.validateExpiry(exp_month, exp_year)) {
+  if (!Stripe.card.validateExpiry(exp)) {
     throw Object.assign(new Error('Invalid expiry'), { param: 'exp' });
   }
   if (!Stripe.card.validateCVC(cvc)) {
     throw Object.assign(new Error('Invalid CVC'), { param: 'cvc' });
   }
-  if (address_zip == null || address_zip.length === 0) {
-    throw Object.assign(new Error('Missing postcode'), { param: 'address_zip' });
-  }
-  return createToken({ name, number, cvc, exp: `${exp_month}/${exp_year}`, address_zip });
+  return createToken({ number, cvc, exp });
 };
 
 export const performRegister2 = ({ storeId, itemID, topUpAmount, emailAddress, cardDetails }) => async (dispatch, getState) => {

@@ -21,23 +21,11 @@ class Card extends React.Component {
         });
     }
 
-    handleExpiryChange(event) {
-        let { value: exp } = event.target;
-        exp = exp.replace(/[^0-9]/, '');
-        const exp_month = exp.substr(0, 2);
-        const exp_year = exp.substr(2, 2);
-        this.setState({
-            exp: `${exp_month}${exp_year}`,
-            exp_month,
-            exp_year
-        });
-    }
-
     handleSubmit(e) {
         e.preventDefault();
         const { storeId, itemId, emailAddress, performRegister2 } = this.props;
-        const { name, number, cvc, exp_month, exp_year, address_zip } = this.state;
-        const cardDetails = { name, number, cvc, exp_month, exp_year, address_zip };
+        const { number, cvc, exp } = this.state;
+        const cardDetails = { number, cvc, exp };
         performRegister2({ storeId, itemID: itemId, topUpAmount: TOPUP_AMOUNT, emailAddress, cardDetails });
     }
 
@@ -69,15 +57,7 @@ class Card extends React.Component {
                     </div>
                 }
                 <p>
-                    <input name="name"
-                        type="text"
-                        placeholder="Name"
-                        style={this.style('name', error)}
-                        onChange={(e) => this.handleChange(e)}/>
-                </p>
-                <p>
                     <input name="number"
-                        type="number"
                         placeholder="1111 2222 3333 4444"
                         style={this.style('number', error)}
                         onChange={(e) => this.handleChange(e)}/>
@@ -85,19 +65,12 @@ class Card extends React.Component {
                 <p className="register-card-tight">
                     <input name="exp"
                         value={exp}
-                        type="number"
-                        placeholder="MMYY"
+                        placeholder="Expiry (MM / YY)"
                         style={this.style('exp', error)}
-                        onChange={(e) => this.handleExpiryChange(e)}/>
-                    <input name="cvc"
-                        type="number"
-                        placeholder="CVC"
-                        style={this.style('cvc', error)}
                         onChange={(e) => this.handleChange(e)}/>
-                    <input name="address_zip"
-                        type="string"
-                        placeholder="Postcode"
-                        style={this.style('address_zip', error)}
+                    <input name="cvc"
+                        placeholder="CVV (3-digits)"
+                        style={this.style('cvc', error)}
                         onChange={(e) => this.handleChange(e)}/>
                 </p>
                 <p><Button onClick={(e) => this.handleSubmit(e)}>Confirm £5 Top Up & Purchase</Button></p>
