@@ -2,7 +2,8 @@ import { getUser } from '../../../user/src/client/index';
 import { getTransactionHistory, getBalance } from '../services/transaction'
 import { Transaction } from '../../../transaction/src/client/index';
 import { getCardDetails } from '../../../topup/src/client/index';
-import { getItems, storeIDToStoreCode } from '../services/store'
+import { getItems, storeIDToStoreCode } from '../services/store';
+import { userRegistered } from '../../../user/src/client';
 
 export interface SessionData {
     user: {
@@ -21,16 +22,14 @@ export interface SessionData {
 };
 
 
-const getUserSessionData = async ({ key, id, accountId: accountID, emailAddress }) => {
+const getUserSessionData = async (key, user) => {
+  const { id, accountId: accountID, emailAddress } = user;
   const allTransactions = await getTransactionHistory({ key, accountID });
   const recentTransactions = allTransactions.slice(0, 10);
 
   let cardDetails;
-  try {
+  if (userRegistered(user)) {
     cardDetails = await getCardDetails(key, id);
-  }
-  catch (e) {
-    // Silence error in valid case where no topup account is associated with the user
   }
 
   return {
@@ -55,7 +54,7 @@ const getStoreSessionData = async (key, userID) => {
 export const getSessionData = async (key, { user }) => {
   const { id, accessToken, refreshToken } = user;
   const [ userProfile, store ] = await Promise.all([
-    getUserSessionData({ ...user, key }),
+    getUserSessionData(key, user),
     getStoreSessionData(key, id),
   ]);
   return {

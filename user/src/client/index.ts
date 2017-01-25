@@ -54,6 +54,8 @@ export const createUser = (key, userId: string, userProfile: UserProfile) =>
 export const updateUser = (key, userId: string, userProfile: UserProfile) =>
     put<User>(1, key, `/${userId}`, userProfile);
 
+export const userRegistered = (user: User) => user.emailAddress != null;
+
 export const sendMagicLinkEmail = (key, emailAddress: string) =>
     post<{}>(1, key, `/magicLink/${emailAddress}`, {});
 
