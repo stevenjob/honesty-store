@@ -25,7 +25,7 @@ export const createAuthenticationKey = () => {
             };
         },
         toJSON() {
-            return toString();
+            return this.toString();
         },
         toString() {
             return `auth:${correlationKey}`;
@@ -40,7 +40,7 @@ export const createUserKey = ({ userId }) => {
     const correlationKey = uuid();
     return <Key>{
         toJSON() {
-            return toString();
+            return this.toString();
         },
         toString() {
             return `user:${userId}:${correlationKey}`;
@@ -55,7 +55,7 @@ export const createEmailKey = ({ emailAddress }) => {
     const correlationKey = uuid();
     return <Key>{
         toJSON() {
-            return toString();
+            return this.toString();
         },
         toString() {
             return `email:${emailAddress}:${correlationKey}`;
@@ -67,7 +67,7 @@ export const createUnauthenticatedKey = () => {
     const correlationKey = uuid();
     return <Key>{
         toJSON() {
-            return toString();
+            return this.toString();
         },
         toString() {
             return `unauthenticated:${correlationKey}`;
