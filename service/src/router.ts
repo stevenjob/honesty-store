@@ -22,7 +22,7 @@ interface Router {
     put<Body, Result>(path: string, version: number, action: BodyAction<Body, Result>);
 }
 
-const extractKey = (request): Key => request.get('key');
+const extractKey = (request): Key => JSON.parse(request.get('key'));
 
 export default (service: string): Router => {
     const internalRouter = express.Router();

@@ -15,7 +15,7 @@ export default (service: string) => {
         info(key, `send GET ${url}`);
         const response = await fetch(url, {
             headers: {
-                key
+                key: JSON.stringify(key),
             }
         })
             .then<ApiResponse<Result>>(response => response.json());
@@ -32,7 +32,7 @@ export default (service: string) => {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
-                key
+                key: JSON.stringify(key),
             },
             body: JSON.stringify(body)
         })
@@ -50,7 +50,7 @@ export default (service: string) => {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json',
-                key
+                key: JSON.stringify(key),
             },
             body: JSON.stringify(body)
         })
