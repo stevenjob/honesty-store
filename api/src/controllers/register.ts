@@ -53,6 +53,8 @@ interface SessionDataWithoutTransactionIds {
 const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, stripeToken }) => {
   const user = await updateUser(key, userID, { emailAddress });
 
+  const sessionData = await getSessionData(key, { user });
+
   const topupTx = await createTopup(key, { accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
 
   let purchaseTx: TransactionAndBalance = null;
@@ -71,8 +73,6 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
        appropriately if one doesn't. */
     error(key, `couldn't purchase item ${itemID}`, e);
   }
-
-  const sessionData = await getSessionData(key, { user });
 
   return {
     ...sessionData,
