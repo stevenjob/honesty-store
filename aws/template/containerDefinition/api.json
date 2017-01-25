@@ -16,8 +16,8 @@
                 "value": "${baseUrl}"
             },
             {
-                "name": "JWT_SERVICE_SECRET",
-                "value": "${jwtServiceSecret}"
+                "name": "SERVICE_TOKEN_SECRET",
+                "value": "${serviceTokenSecret}"
             }
         ],
         "logConfiguration": {

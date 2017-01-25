@@ -1,7 +1,7 @@
 import jwt = require('jsonwebtoken');
 import ms = require('ms');
 
-const secret = process.env.JWT_SERVICE_SECRET;
+const secret = process.env.SERVICE_TOKEN_SECRET;
 
 export const signServiceSecret = ({ baseUrl }) => jwt.sign({ baseUrl }, secret, { algorithm: 'HS256', expiresIn: '30s' })
 

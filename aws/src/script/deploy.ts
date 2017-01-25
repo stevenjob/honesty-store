@@ -85,7 +85,7 @@ export default async ({ branch, masterSecret, dirs }) => {
         loadBalancerArn: loadBalancer.LoadBalancerArn,
         defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn
     });
-    const jwtServiceSecret = generateServiceSecret({ branch, masterSecret });
+    const serviceTokenSecret = generateServiceSecret({ branch, masterSecret });
     const services: ECS.Service[] = [];
     for (const dir of dirs) {
         const logGroup = `${prefix}-${branch}-${dir}`;
@@ -116,7 +116,7 @@ export default async ({ branch, masterSecret, dirs }) => {
                 logGroup,
                 tableName: db.TableName,
                 baseUrl,
-                jwtServiceSecret,
+                serviceTokenSecret,
             }
         });
         const taskDefinition = await ensureTaskDefinition({
