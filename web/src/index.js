@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { IndexRedirect, Router, Route, browserHistory } from 'react-router';
+import { Router, Route, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
-import Root from './chrome/root';
 import { Error } from './chrome/modal';
 import Home from './home/index';
 import HomeSuccess from './home/success';
@@ -33,6 +32,8 @@ import HelpSuccess from './help/success';
 import ItemDetail from './item/detail';
 import ItemPurchaseSuccess from './item/success';
 import reducer from './reducers/reducer';
+import { performInitialise } from './actions/inititialise';
+import './chrome/style';
 
 
 const middlewares = [thunkMiddleware];
@@ -47,14 +48,15 @@ const store = createStore(
   applyMiddleware(...middlewares)
 );
 
+store.dispatch(performInitialise({}));
+
 ReactDOM.render((
   <Provider store={store}>
     <Router history={browserHistory} onUpdate={() => scrollTo(0, 0)}>
       <Route path="/" component={Home}/>
       <Route path="/success" component={HomeSuccess}/>
       <Route path="/error" component={Error}/>
-      <Route path="/:storeId" component={Root}>
-        <IndexRedirect to="store"/>
+      <Route path="/" component={({ children }) => children}>
         <Route path="register/success" component={RegisterSuccess}/>
         <Route path="register/:itemId" component={RegisterEmail}/>
         <Route path="register/:itemId/success" component={RegisterPartialSuccess}/>
@@ -80,6 +82,12 @@ ReactDOM.render((
         <Route path="info/app" component={AppInfo}/>
         <Route path="help" component={Help}/>
         <Route path="help/success" component={HelpSuccess}/>
+        <Route path=":storeCode"
+          onEnter={(nextState, replace) => {
+            const { params: { storeCode }, location: { query: { code: emailToken } } } = nextState;
+            store.dispatch(performInitialise({ storeCode, emailToken }));
+            replace('/store');
+          }}/>
       </Route>
     </Router>
   </Provider>

@@ -1,3 +1,4 @@
+import { INITIALISE } from '../actions/inititialise';
 import { REGISTER_REQUEST, REGISTER_SUCESSS, REGISTER_FAILURE } from '../actions/register';
 import { REGISTER2_REQUEST, REGISTER2_SUCESSS, REGISTER2_FAILURE } from '../actions/register2';
 import { SESSION_REQUEST, SESSION_SUCCESS, SESSION_FAILURE } from '../actions/session';
@@ -10,6 +11,7 @@ import { SIGNIN2_REQUEST, SIGNIN2_SUCCESS, SIGNIN2_FAILURE } from '../actions/si
 
 const getInitialState = () => {
   return {
+    initialised: false,
     pending: [],
     user: {
       cardDetails: {}
@@ -23,6 +25,12 @@ const getInitialState = () => {
 
 export default (state = getInitialState(), action) => {
   switch (action.type) {
+    case INITIALISE: {
+      return {
+        ...state,
+        initialised: true
+      };
+    }
     case REGISTER_REQUEST: {
       return {
         ...state,
