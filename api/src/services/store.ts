@@ -28,9 +28,8 @@ export const getItems = (storeCode) => {
   const storeItems = box.items.map(({ itemID, count }) => {
     const item = getItem(itemID);
     return {
+      ...item,
       id: itemID,
-      name: item.name,
-      price: item.price,
       count,
     };
   });
