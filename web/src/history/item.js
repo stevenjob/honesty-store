@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { MUTED_TEXT, BRAND_LIGHT } from '../chrome/colors';
+import { BRAND_LIGHT } from '../chrome/colors';
 import './item.css';
 import currency from '../format/currency';
 
