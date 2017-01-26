@@ -30,6 +30,11 @@ const serviceAuthentication = (request, response, next) => {
     try {
         verifyServiceSecret(serviceSecret);
     } catch (e) {
+        error(
+            request.key,
+            `failed ${request.method} ${request.url} - service secret mismatch`,
+            e);
+
         response.status(HTTPStatus.UNAUTHORIZED)
             .json({ error: { message: e.message }});
 

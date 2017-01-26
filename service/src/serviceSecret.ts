@@ -12,6 +12,8 @@ export const verifyServiceSecret = (opaqueObject) => {
     const { baseUrl: foundBaseUrl } = jwt.verify(opaqueObject, secret, { algorithms: ['HS256'], clockTolerance: ms('30s') })
 
     if (foundBaseUrl !== baseUrl) {
-        throw new Error(`Incorrect service secret`);
+        const e: any = new Error(`Incorrect service secret`);
+        e.invalidServiceSecret = foundBaseUrl;
+        throw e;
     }
 };
