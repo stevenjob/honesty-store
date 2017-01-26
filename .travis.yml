@@ -14,6 +14,7 @@ env:
     # Master branch only. All other branches use keys derived from the branch name.
     # Eventually this will be secure/travis-encrypted.
     - LIVE_SERVICE_TOKEN_SECRET: 'abc'
+    - LIVE_USER_TOKEN_SECRET: 'def'
 script:
   - npm i -g yarn
   # install all dependencies first to prevent problems with cross-module dependencies
@@ -43,5 +44,5 @@ script:
   - (cd topup && yarn install --production --ignore-scripts --prefer-offline)
   - (cd service && yarn install --production --ignore-scripts --prefer-offline)
   - (cd test && yarn install --production --ignore-scripts --prefer-offline)
-  - ./aws/bin/aws deploy $TRAVIS_BRANCH $LIVE_SERVICE_TOKEN_SECRET api transaction user web topup
+  - ./aws/bin/aws deploy $TRAVIS_BRANCH $LIVE_SERVICE_TOKEN_SECRET $LIVE_USER_TOKEN_SECRET api transaction user web topup
   - ./aws/bin/aws prune
