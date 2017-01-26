@@ -15,7 +15,7 @@ const mapStateToProps = (
 ) => {
     const item = items.find(item => item.id === itemId);
     return {
-        params: { storeId },
+        storeId,
         item: item || {}
     };
 };
