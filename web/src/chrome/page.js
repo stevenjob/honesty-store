@@ -48,7 +48,7 @@ const Page = ({
     { nav && <NavBar/> }
   </div>;
 
-const mapStateToProps = ({ user, pending }, foo) => ({
+const mapStateToProps = ({ user, pending }) => ({
   loading: pending.length > 0
 });
 
