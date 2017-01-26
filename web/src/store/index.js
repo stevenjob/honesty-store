@@ -20,7 +20,7 @@ const Balance = ({ balance }) =>
     </Link>;
 
 const itemRenderer = () => {
-  return (item, index) => <StoreItem item={item} image="packet.svg"/>;
+  return (item, index) => <StoreItem item={item}/>;
 };
 
 const Store = ({ registered, storeCode, balance, loading, items }) =>

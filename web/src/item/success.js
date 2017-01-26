@@ -3,10 +3,10 @@ import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { Success } from '../chrome/modal';
 
-export const ItemPurchaseSuccess = ({ item: { name } }) =>
+export const ItemPurchaseSuccess = ({ item: { name, image } }) =>
     <Success title={`Enjoy your ${name}!`}
         subtitle="Thank you for your honesty!"
-        image={require("../store/assets/packet.svg")}
+        image={require(`../item/assets/${image}`)}
         onClick={() => browserHistory.replace(`/history`)}/>;
 
 const mapStateToProps = (

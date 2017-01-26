@@ -4,9 +4,12 @@
     height: 100%;
 }
 
-.history-item>img {
+.history-item-image {
     height: 4rem;
+    width: 4rem;
     min-width: 5rem;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .history-item-info {
