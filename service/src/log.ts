@@ -12,10 +12,10 @@ const replacer = (key, value) => {
 
 const log = (level: Level, key: Key, message: string, ...args: any[]) => {
   const output = {
-    timestamp: new Date().toISOString(),
-    level,
+    time: new Date().toISOString(),
+    lvl: level,
     key,
-    message,
+    msg: message,
     args
   };
   const json = JSON.stringify(output, replacer);
