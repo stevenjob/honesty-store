@@ -15,7 +15,7 @@ interface BodyAction<Result, Body> {
 
 interface Router {
     (request, response, next): void;
-    get<Result>(path: string, version: number, action: BodyAction<void, Result>);
+    get<Result>(path: string, version: number, action: BodyAction<undefined, Result>);
     post<Body, Result>(path: string, version: number, action: BodyAction<Body, Result>);
     put<Body, Result>(path: string, version: number, action: BodyAction<Body, Result>);
 }
