@@ -8,10 +8,6 @@ import createLogger from 'redux-logger';
 import { Error } from './chrome/modal';
 import Home from './home/index';
 import HomeSuccess from './home/success';
-import AboutInfo from './info/about';
-import AppInfo from './info/app';
-import PrivacyInfo from './info/privacy';
-import TermsInfo from './info/terms';
 import Store from './store/index';
 import History from './history/index';
 import Profile from './profile/index';
@@ -76,10 +72,6 @@ ReactDOM.render((
         <Route path="profile/close" component={CloseProfile}/>
         <Route path="profile/edit" component={EditProfile}/>
         <Route path="profile/logout" component={LogoutProfile}/>
-        <Route path="info/about" component={AboutInfo}/>
-        <Route path="info/terms" component={TermsInfo}/>
-        <Route path="info/privacy" component={PrivacyInfo}/>
-        <Route path="info/app" component={AppInfo}/>
         <Route path="help" component={Help}/>
         <Route path="help/success" component={HelpSuccess}/>
         <Route path=":storeCode"

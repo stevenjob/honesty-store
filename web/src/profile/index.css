@@ -38,7 +38,7 @@
   align-self: center;
 }
 
-.profile-info, .profile-actions {
+.profile-actions {
   border: 1px solid black;
   border-width: 1px 0;
   margin: 2.1rem -1rem;
@@ -47,15 +47,15 @@
   list-style-type: none;
 }
 
-.profile-info>li>a, .profile-actions>li>a {
+.profile-actions>li>a {
   display: block;
 }
 
-.profile-info>li, .profile-actions>li {
+.profile-actions>li {
   border-bottom: 1px solid black;
   padding: 1rem 0;
 }
 
-.profile-info>li:last-child, .profile-actions>li:last-child {
+.profile-actions>li:last-child {
   border-bottom: none;
 }
