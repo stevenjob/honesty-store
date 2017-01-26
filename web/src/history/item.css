@@ -1,4 +1,12 @@
 .history-item {
+}
+
+.history-item-timestamp {
+    text-align: center;
+    font-size: 1rem;
+}
+
+.history-item-details {
     display: flex;
     align-items: center;
     height: 100%;

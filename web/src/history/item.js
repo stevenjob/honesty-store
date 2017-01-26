@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import { BRAND_LIGHT } from '../chrome/colors';
 import './item.css';
@@ -11,17 +12,20 @@ const AmountLabel = ({ amount, isTopUp }) => {
   return <h4>{Math.abs(amount)}<small>p</small></h4>;
 };
 
-const HistoryItem = ({ isTopUp, text, amount, image }) => {
+const HistoryItem = ({ isTopUp, text, timestamp, amount, image }) => {
   return (
     <div className="history-item">
-      <div
-        className="history-item-image"
-        style={{ backgroundImage: `url(${image})` }}
-        alt={text}
-      />
-      <div className="history-item-info">
-        <h4>{text}</h4>
-        <AmountLabel amount={amount} isTopUp={isTopUp}/>
+      <div className="history-item-timestamp">{moment(timestamp).fromNow()}</div>
+      <div className="history-item-details">
+        <div
+          className="history-item-image"
+          style={{ backgroundImage: `url(${image})` }}
+          alt={text}
+        />
+        <div className="history-item-info">
+          <h4>{text}</h4>
+          <AmountLabel amount={amount} isTopUp={isTopUp}/>
+        </div>
       </div>
     </div>
   );
@@ -36,6 +40,7 @@ const mapStateToProps = (
   if (isTopUp) {
     return {
       isTopUp,
+      timestamp: transaction.timestamp,
       amount: transaction.amount,
       image: require('./assets/top-up.svg'),
       text: 'TOP UP',
@@ -48,6 +53,7 @@ const mapStateToProps = (
   if (foundItem) {
     return {
       isTopUp,
+      timestamp: transaction.timestamp,
       amount: transaction.amount,
       image: require(`../item/assets/${foundItem.image}`),
       text: `${foundItem.name}${quantity > 1 ? ` x ${quantity}` : ''}`
@@ -57,6 +63,7 @@ const mapStateToProps = (
   // fallback/error case
   return {
     isTopUp,
+    timestamp: transaction.timestamp,
     amount: transaction.amount,
     image: require('../item/assets/not-found.svg'),
     text: 'Unknown Item',
