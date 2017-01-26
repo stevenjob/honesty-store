@@ -79,6 +79,8 @@ const getAndAssertEnvironment = (key) => {
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
 export default async ({ branch, dirs }) => {
 
+    const liveStripeKey = getAndAssertEnvironment('LIVE_STRIPE_KEY');
+    const testStripeKey = getAndAssertEnvironment('TEST_STRIPE_KEY');
     const serviceSecretForLive = getAndAssertEnvironment('LIVE_SERVICE_TOKEN_SECRET');
     const userSecretForLive = getAndAssertEnvironment('LIVE_USER_TOKEN_SECRET');
 
@@ -132,6 +134,8 @@ export default async ({ branch, dirs }) => {
                 baseUrl,
                 serviceSecret,
                 userSecret,
+                liveStripeKey,
+                testStripeKey,
             }
         });
         const taskDefinition = await ensureTaskDefinition({

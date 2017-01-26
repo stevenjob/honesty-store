@@ -16,6 +16,9 @@ env:
     - LIVE_SERVICE_TOKEN_SECRET: 'abc'
     # The key used by jwt to create refresh and access tokens
     - LIVE_USER_TOKEN_SECRET: 'def'
+    # Stripe keys
+    - LIVE_STRIPE_KEY: 'sk_test_Bl10VC4MyzRrhd41nq4f31jD'
+    - TEST_STRIPE_KEY: 'sk_test_Bl10VC4MyzRrhd41nq4f31jD'
 script:
   - npm i -g yarn
   # install all dependencies first to prevent problems with cross-module dependencies

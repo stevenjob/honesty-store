@@ -14,8 +14,8 @@ import { error, info } from '../../service/src/log';
 
 const fixedTopupAmount = 500; // £5
 
-const stripeTest = stripeFactory(process.env.STRIPE_SECRET_KEY_TEST);
-const stripeProd = stripeFactory(process.env.STRIPE_SECRET_KEY_LIVE);
+const stripeTest = stripeFactory(process.env.TEST_STRIPE_KEY);
+const stripeProd = stripeFactory(process.env.LIVE_STRIPE_KEY);
 
 config.region = process.env.AWS_REGION;
 

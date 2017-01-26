@@ -24,12 +24,12 @@
                 "value": "${baseUrl}"
             },
             {
-                "name": "STRIPE_SECRET_KEY_LIVE",
-                "value": "sk_test_Bl10VC4MyzRrhd41nq4f31jD"
+                "name": "LIVE_STRIPE_KEY",
+                "value": "${liveStripeKey}"
             },
             {
-                "name": "STRIPE_SECRET_KEY_TEST",
-                "value": "sk_test_Bl10VC4MyzRrhd41nq4f31jD"
+                "name": "TEST_STRIPE_KEY",
+                "value": "${testStripeKey}"
             },
             {
                 "name": "SERVICE_TOKEN_SECRET",
