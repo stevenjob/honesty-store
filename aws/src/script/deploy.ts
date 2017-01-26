@@ -68,8 +68,23 @@ const generateSecret = ({ prefix, branch, liveSecret }) => {
     return `${prefix}:${bareSecret()}`;
 };
 
+const getAndAssertEnvironment = (key) => {
+    const value = process.env[key];
+    if (!value) {
+        throw new Error(`$${key} not present in environment`);
+    }
+    return value;
+}
+
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
-export default async ({ branch, secrets: { service: serviceSecretForLive, user: userSecretForLive }, dirs }) => {
+export default async ({ branch, dirs }) => {
+
+    const serviceSecretForLive = getAndAssertEnvironment('LIVE_SERVICE_TOKEN_SECRET');
+    const userSecretForLive = getAndAssertEnvironment('LIVE_USER_TOKEN_SECRET');
+
+    const serviceSecret = generateSecret({ prefix: 'service', branch, liveSecret: serviceSecretForLive });
+    const userSecret = generateSecret({ prefix: 'user', branch, liveSecret: userSecretForLive });
+
     const baseUrl = aliasToBaseUrl(branch);
     const loadBalancer = await ensureLoadBalancer({
         name: `${prefix}-${branch}`
@@ -85,8 +100,6 @@ export default async ({ branch, secrets: { service: serviceSecretForLive, user: 
         loadBalancerArn: loadBalancer.LoadBalancerArn,
         defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn
     });
-    const serviceSecret = generateSecret({ prefix: 'service', branch, liveSecret: serviceSecretForLive });
-    const userSecret = generateSecret({ prefix: 'user', branch, liveSecret: userSecretForLive });
     const services: ECS.Service[] = [];
     for (const dir of dirs) {
         const logGroup = `${prefix}-${branch}-${dir}`;
