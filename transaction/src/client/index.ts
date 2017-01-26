@@ -12,6 +12,7 @@ export interface TransactionDetails {
 
 export interface Transaction extends TransactionDetails {
     id: string;
+    timestamp: number;
 }
 
 export interface Account {
@@ -21,7 +22,7 @@ export interface Account {
 }
 
 export interface TransactionAndBalance {
-    transaction: TransactionDetails;
+    transaction: Transaction;
     balance: number;
 };
 

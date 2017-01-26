@@ -73,11 +73,6 @@ const createAccount = async ({ accountId }) => {
     return account;
 };
 
-const externaliseTransaction = (transaction: Transaction): TransactionDetails => {
-    const { id, ...details } = transaction;
-    return details;
-}
-
 const createTransaction = async ({ accountId, type, amount, data }): Promise<TransactionAndBalance> => {
     assertValidAccountId(accountId);
 
@@ -85,6 +80,7 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
 
     const transaction: Transaction = {
         id: uuid(),
+        timestamp: Date.now(),
         type,
         amount,
         data
@@ -126,7 +122,7 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
         .promise();
 
     return {
-        transaction: externaliseTransaction(transaction),
+        transaction: transaction,
         balance: updatedAccount.balance
     };
 };
