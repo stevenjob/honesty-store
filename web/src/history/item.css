@@ -7,18 +7,15 @@
 .history-item-image {
     height: 4rem;
     width: 4rem;
-    min-width: 5rem;
     background-position: center;
     background-repeat: no-repeat;
 }
 
 .history-item-info {
+    margin-left: 1rem;
     display: flex;
     justify-content: space-between;
     width: 100%;
     height: 100%;
     align-items: center;
-    border-bottom: 1px solid black;
-    margin: 0 -1rem 0 1rem;
-    padding-right: 1rem;
 }

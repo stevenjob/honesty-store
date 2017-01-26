@@ -12,18 +12,14 @@ const AmountLabel = ({ amount, isTopUp }) => {
 };
 
 const HistoryItem = ({ isTopUp, text, amount, image }) => {
-  const imageRotation = isTopUp ? 0 : -35;
   return (
     <div className="history-item">
       <div
         className="history-item-image"
-        style={{
-          backgroundImage: `url(${image})`,
-          transform: `rotate(${imageRotation}deg)`,
-        }}
+        style={{ backgroundImage: `url(${image})` }}
         alt={text}
       />
-      <div className="history-item-info" style={{borderBottomColor: MUTED_TEXT}}>
+      <div className="history-item-info">
         <h4>{text}</h4>
         <AmountLabel amount={amount} isTopUp={isTopUp}/>
       </div>

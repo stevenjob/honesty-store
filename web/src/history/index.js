@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import List from '../chrome/list';
 import Page from '../chrome/page';
 import HistoryItem from './item';
-import './index.css';
+
+const itemRenderer = (transaction) => <HistoryItem transaction={transaction}/>;
 
 const History = ({ transactions = [], loading }) => (
   <Page title="History">
-    <ul className="history-list">
-      { transactions.map((transaction, index) => <li key={index}><HistoryItem transaction={transaction}/></li>) }
-    </ul>
+    <List data={transactions} itemRenderer={itemRenderer}/>
   </Page>
 );
 
