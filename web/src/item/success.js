@@ -1,42 +1,22 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import Page from '../chrome/page';
-import './success.css';
+import { connect } from 'react-redux';
+import { Success } from '../chrome/modal';
+import currency from '../format/currency';
 
-const ItemPurchaseSuccess = ({
-    loading,
-    storeId,
-    item: { id, name, price }
-}) => {
-    return (
-        <Page
-            invert={true}
-            nav={false}
-            fullscreen={true}
-            loading={loading}
-        >
-            <div onClick={() => browserHistory.replace(`/${storeId}/history`)} className="item-success">
-                <div className="item-success-detail">
-                    <h3>Enjoy your {name}</h3>
-                    <div className="item-success-detail-image">
-                        <img src={require("../store/assets/packet.svg")} alt="NAME HERE" />
-                    </div>
-                </div>
-                <h3>Thank you for your honesty!</h3>
-            </div>
-        </Page>
-    );
-};
+export const ItemPurchaseSuccess = ({ item: { name }, storeId }) =>
+    <Success title={`Enjoy your ${name}!`}
+        subtitle="Thank you for your honesty!"
+        image={require("../store/assets/packet.svg")}
+        onClick={() => browserHistory.replace(`/${storeId}/history`)}/>;
 
 const mapStateToProps = (
     { store: { items = [] } },
     { params: { storeId, itemId } }
 ) => {
-    const item = items.find(el => el.id === itemId);
+    const item = items.find(item => item.id === itemId);
     return {
-        storeId,
-        loading: item == null,
+        params: { storeId },
         item: item || {}
     };
 };

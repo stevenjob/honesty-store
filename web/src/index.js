@@ -6,7 +6,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import Root from './chrome/root';
-import Error from './chrome/error';
+import { Error } from './chrome/modal';
 import Home from './home/index';
 import HomeSuccess from './home/success';
 import AboutInfo from './info/about';
@@ -52,7 +52,7 @@ ReactDOM.render((
     <Router history={browserHistory} onUpdate={() => scrollTo(0, 0)}>
       <Route path="/" component={Home}/>
       <Route path="/success" component={HomeSuccess}/>
-      <Route path="/error" component={() => <b>Problem, probably store code either invalid or not your default</b>}/>
+      <Route path="/error" component={Error}/>
       <Route path="/:storeId" component={Root}>
         <IndexRedirect to="store"/>
         <Route path="register/success" component={RegisterSuccess}/>

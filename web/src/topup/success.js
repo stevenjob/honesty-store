@@ -1,31 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import { BRAND_LIGHT } from '../chrome/colors';
-import Page from '../chrome/page';
+import { Success } from '../chrome/modal';
 import currency from '../format/currency';
-import success from './assets/success.svg';
-import './success.css';
 
-export const Success = ({ params: { storeId }, balance }) =>
-    <Page storeId={storeId}
-        invert={true}
-        nav={false}
-        fullscreen={true}>
-        <div onClick={() => browserHistory.replace(`/${storeId}/history`)} className="topup-success">
-            <h2>Thank you for your top up!</h2>
-            <img src={success} alt="Success"/>
-            <div className="topup-success-balance">
-                <h3>Your balance is now</h3>
-                <h1 style={{color: BRAND_LIGHT}}><small>£</small>{currency(balance)}</h1>
-            </div>
-        </div>
-    </Page>;
-
+export const TopupSuccess = ({ balance, params: { storeId } }) =>
+    <Success title={`Your balance is now £${currency(balance)}`}
+        subtitle="Thank you for your top up!"
+        onClick={() => browserHistory.replace(`/${storeId}/history`)}/>;
 
 const mapStateToProps = ({ user: { balance = 0 } }) => ({
     balance
 });
 
-
-export default connect(mapStateToProps)(Success);
+export default connect(mapStateToProps)(TopupSuccess);

@@ -1,13 +1,13 @@
-.chrome-error {
+.chrome-modal {
     height: 100%;
     display: flex;
 }
 
-.chrome-error>div {
+.chrome-modal>div {
     text-align: center;
     margin: auto;
 }
 
-.chrome-error>div>img {
+.chrome-modal>div>img {
     height: 12rem;
 }
