@@ -9,9 +9,13 @@ import storeController from './controllers/store';
 import logoutController from './controllers/logout';
 import transactionsController from './controllers/transactions';
 import supportController from './controllers/support';
+import expressLogging = require('express-logging');
+import logger = require('logops');
 
 const app = express();
 const router = express.Router();
+
+app.use(expressLogging(logger));
 
 app.use(bodyParser.json());
 
