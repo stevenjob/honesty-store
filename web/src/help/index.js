@@ -39,7 +39,7 @@ const Help = class extends React.Component {
     render() {
         const { registered } = this.props;
         return <Page title="Help"
-            left={<Store/>}
+            left={registered ? null : <Store/>}
             nav={registered}>
             <form className="help" onSubmit={(e) => this.handleSubmit(e)}>
                 <h2>Having problems?</h2>
