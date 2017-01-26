@@ -5,6 +5,11 @@ import Button from '../chrome/button';
 import { performRegister } from '../actions/register';
 import './index.css';
 
+const extractStoreCode = (url) => {
+  const [ storeCode ] = url.match(/([^/]*)$/);
+  return storeCode === 'honesty.store' ? '' : storeCode;
+};
+
 class Home extends React.Component {
 
   constructor(props) {
@@ -14,16 +19,18 @@ class Home extends React.Component {
     };
   }
 
-  handleChange(event) {
+  handleStoreCodeChange(event) {
+    const { value } = event.target;
+    const storeCode = extractStoreCode(value);
     this.setState({
-      [event.target.name]: event.target.value.toLowerCase()
+      storeCode: `https://honesty.store/${storeCode}`
     });
   }
 
   openStore(e) {
     e.preventDefault();
     const { performRegister } = this.props;
-    const { storeCode } = this.state;
+    const storeCode = extractStoreCode(this.state.storeCode);
     if (storeCode !== '') {
       performRegister({ storeCode });;
     }
@@ -41,7 +48,15 @@ class Home extends React.Component {
       <p>If you have a store code and want to sign up, please enter it below</p>
       <form onSubmit={(e) => this.openStore(e)}>
         <p className="home-store-code">
-          <input name="storeCode" autoComplete="off" autoCorrect="off" autoCapitalize="off" value={storeCode} type="text" placeholder="your-store-code" onChange={(e) => this.handleChange(e)}/>
+          <input name="storeCode"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            value={storeCode}
+            type="text"
+            placeholder="https://honesty.store/your-store-code"
+            onFocus={(e) => this.handleStoreCodeChange(e)}
+            onChange={(e) => this.handleStoreCodeChange(e)}/>
         </p>
         <p>
           <Button onClick={(e) => this.openStore(e)}>Browse Store</Button>
