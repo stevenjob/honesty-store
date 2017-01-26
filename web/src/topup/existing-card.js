@@ -9,6 +9,11 @@ import { Back } from '../chrome/link';
 import currency from '../format/currency';
 import './existing-card.css';
 
+const zeroPadMonth = (month) => {
+    const prefix = month < 10 ? '0' : '';
+    return `${prefix}${month}`;
+};
+
 export const ExisitingCard = ({ storeId, amount, brand, digits, expiry, performTopup }) =>
     <Page left={<Back>Balance</Back>}
         title={`Top Up`}
@@ -40,7 +45,7 @@ export const ExisitingCard = ({ storeId, amount, brand, digits, expiry, performT
         </div>
     </Page>;
 
-const mapStateToProps = ({ 
+const mapStateToProps = ({
     user: {
         balance = 0,
         cardDetails: { brand, expMonth, expYear, last4 },
@@ -51,11 +56,6 @@ const mapStateToProps = ({
     digits: last4,
     expiry: `${zeroPadMonth(expMonth)}/${expYear % 100}`,
 });
-
-const zeroPadMonth = (month) => {
-    const prefix = month < 10 ? '0' : '';
-    return `${prefix}${month}`;
-};
 
 const mapDispatchToProps = { performTopup };
 
