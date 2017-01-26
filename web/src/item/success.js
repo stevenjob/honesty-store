@@ -2,7 +2,6 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { Success } from '../chrome/modal';
-import currency from '../format/currency';
 
 export const ItemPurchaseSuccess = ({ item: { name }, storeId }) =>
     <Success title={`Enjoy your ${name}!`}

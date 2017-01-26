@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import Button from '../chrome/button';
 import { BRAND_LIGHT, DANGER } from '../chrome/colors';
 import { NotNow } from '../chrome/link';
