@@ -1,6 +1,5 @@
 import jwt = require('jsonwebtoken');
 import HTTPStatus = require('http-status');
-import { secretKey } from '../constants'
 import {
   getUserByAccessToken,
   getUserByRefreshToken,
