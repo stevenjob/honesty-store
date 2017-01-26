@@ -41,7 +41,7 @@ class Home extends React.Component {
       <p>If you have a store code and want to sign up, please enter it below</p>
       <form onSubmit={(e) => this.openStore(e)}>
         <p className="home-store-code">
-          <input name="storeCode" autoComplete="off" autoCapitalize="none" value={storeCode} type="text" placeholder="your-store-code" onChange={(e) => this.handleChange(e)}/>
+          <input name="storeCode" autoComplete="off" autoCorrect="off" autoCapitalize="off" value={storeCode} type="text" placeholder="your-store-code" onChange={(e) => this.handleChange(e)}/>
         </p>
         <p>
           <Button onClick={(e) => this.openStore(e)}>Browse Store</Button>
