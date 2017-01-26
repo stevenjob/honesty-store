@@ -51,6 +51,7 @@ export default (router) => {
 
             promiseResponse<{}>(
                 sendSlackSupportMessage({ key, user, message }),
+                req,
                 res,
                 HTTPStatus.OK);
         });
