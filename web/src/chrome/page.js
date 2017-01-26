@@ -25,7 +25,7 @@ const Page = ({
 }) =>
   <div className="chrome-page">
     <header className="chrome-page-title-bar" style={headerStyles(invert)}>
-      { (right || left) &&
+      { (right || left) && !loading &&
         <div className="chrome-page-title-bar-left">
           { left }
         </div>
@@ -36,7 +36,7 @@ const Page = ({
           <h2>{subtitle}</h2>
         }
       </div>
-      { (right || left) &&
+      { (right || left) && !loading &&
         <div className="chrome-page-title-bar-right">
           { right }
         </div>
