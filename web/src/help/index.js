@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import Button from '../chrome/button';
 import Page from '../chrome/page';
 import { performSupport } from '../actions/support';
-import isRegistedUser from '../reducers/is-registered-user';
+import isRegisteredUser from '../reducers/is-registered-user';
 import './index.css';
 
 
@@ -56,7 +56,7 @@ const Help = class extends React.Component {
 };
 
 const mapStateToProps = ({ user }) => ({
-  registered: isRegistedUser(user)
+  registered: isRegisteredUser(user)
 });
 
 const mapDispatchToProps = { performSupport };
