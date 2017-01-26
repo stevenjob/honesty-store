@@ -13,7 +13,6 @@ import './detail.css';
 const minNumItems = 1;
 
 const ItemDetail = ({
-  storeId,
   item: { id, name, price },
   loading,
   balance,
@@ -46,9 +45,9 @@ const ItemDetail = ({
   const onClick = (numItems) => {
     const balance = calculateBalanceRemaining(numItems);
     if (balance < 0) {
-      browserHistory.push(`/${storeId}/topup`);
+      browserHistory.push(`/topup`);
     } else {
-      performPurchase({ storeId, itemId: id, quantity: numItems });
+      performPurchase({ itemId: id, quantity: numItems });
     }
   };
 
@@ -64,7 +63,7 @@ const ItemDetail = ({
   />;
 
   const UnregisteredPurchaseButton = <p>
-      <Button onClick={() => browserHistory.push(`/${storeId}/register/${id}`)}>
+      <Button onClick={() => browserHistory.push(`/register/${id}`)}>
         Purchase 1 {name}
       </Button>
     </p>;
@@ -72,7 +71,6 @@ const ItemDetail = ({
 
   return (
     <Page
-      storeId={storeId}
       invert={true}
       nav={false}
       fullscreen={true}
@@ -92,12 +90,11 @@ const ItemDetail = ({
 
 const mapStateToProps = (
   { store: { items = [] }, user },
-  { params: { storeId, itemId } }
+  { params: { itemId } }
 ) => {
   const item = items.find(el => el.id === itemId);
   const { balance } = user;
   return {
-    storeId,
     loading: item == null,
     item: item || {},
     balance,

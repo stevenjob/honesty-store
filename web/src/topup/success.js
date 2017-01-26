@@ -4,10 +4,10 @@ import { browserHistory } from 'react-router';
 import { Success } from '../chrome/modal';
 import currency from '../format/currency';
 
-export const TopupSuccess = ({ balance, params: { storeId } }) =>
+export const TopupSuccess = ({ balance }) =>
     <Success title={`Your balance is now £${currency(balance)}`}
         subtitle="Thank you for your top up!"
-        onClick={() => browserHistory.replace(`/${storeId}/history`)}/>;
+        onClick={() => browserHistory.replace(`/history`)}/>;
 
 const mapStateToProps = ({ user: { balance = 0 } }) => ({
     balance

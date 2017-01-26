@@ -1,15 +1,16 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
+import { connect } from 'react-redux';
 import { BRAND_DARK, BRAND_LIGHT } from '../chrome/colors';
 import Button from '../chrome/button';
+import { performRegister } from '../actions/register';
 import './index.css';
 
-export default class extends React.Component {
+class Home extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      storeId: ''
+      storeCode: ''
     };
   }
 
@@ -21,14 +22,15 @@ export default class extends React.Component {
 
   openStore(e) {
     e.preventDefault();
-    const { storeId } = this.state;
-    if (storeId !== '') {
-      browserHistory.push(`/${storeId}`);
+    const { performRegister } = this.props;
+    const { storeCode } = this.state;
+    if (storeCode !== '') {
+      performRegister({ storeCode });;
     }
   }
 
   render() {
-    const { storeId } = this.state;
+    const { storeCode } = this.state;
     return <div className="home">
       <h1>
         <span style={{ color: BRAND_DARK }}>honesty</span>
@@ -39,7 +41,7 @@ export default class extends React.Component {
       <p>If you have a store code and want to sign up, please enter it below</p>
       <form onSubmit={(e) => this.openStore(e)}>
         <p className="home-store-code">
-          <input name="storeId" autoComplete="off" value={storeId} type="text" placeholder="your-store-code" onChange={(e) => this.handleChange(e)}/>
+          <input name="storeCode" autoComplete="off" value={storeCode} type="text" placeholder="your-store-code" onChange={(e) => this.handleChange(e)}/>
         </p>
         <p>
           <Button onClick={(e) => this.openStore(e)}>Browse Store</Button>
@@ -60,3 +62,5 @@ export default class extends React.Component {
     </div>;
   }
 }
+
+export default connect(() => ({}), { performRegister })(Home);

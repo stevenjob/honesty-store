@@ -1,3 +1,4 @@
+import { browserHistory } from 'react-router';
 import { performRegister } from './register';
 import { performSession } from './session';
 import { performSignin2 } from './signin2';
@@ -17,14 +18,15 @@ export const performInitialise = ({ storeCode, emailToken }) => async (dispatch,
     }
     if (refreshToken != null) {
         dispatch(initialise());
-        return dispatch(performSession({ storeId: storeCode }));
+        browserHistory.push('/store');
+        return dispatch(performSession({ storeCode }));
     }
     if (emailToken != null) {
         dispatch(initialise());
-        return dispatch(performSignin2({ storeId: storeCode, emailToken }));
+        return dispatch(performSignin2({ storeCode, emailToken }));
     }
     if (storeCode != null) {
         dispatch(initialise());
-        return dispatch(performRegister({ storeId: storeCode }));
+        return dispatch(performRegister({ storeCode }));
     }
 };

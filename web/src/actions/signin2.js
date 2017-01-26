@@ -23,7 +23,7 @@ const signin2Failure = () => {
   };
 };
 
-export const performSignin2 = ({ storeId, emailToken }) => async (dispatch, getState) => {
+export const performSignin2 = ({ emailToken }) => async (dispatch, getState) => {
   dispatch(signin2Request());
   try {
     const response = await fetch('/api/v1/signin2', {
@@ -39,7 +39,7 @@ export const performSignin2 = ({ storeId, emailToken }) => async (dispatch, getS
       throw new Error(json.error.message);
     }
     dispatch(signin2Success(json.response));
-    browserHistory.push(`/${storeId}`);
+    browserHistory.push(`/store`);
   }
   catch (e) {
     dispatch(signin2Failure());

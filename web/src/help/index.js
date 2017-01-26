@@ -22,16 +22,14 @@ const Help = class extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         const { message } = this.state;
-        const { storeId, performSupport } = this.props;
+        const { performSupport } = this.props;
         if (message !== '') {
-          performSupport({ message, storeId });
+          performSupport({ message });
         }
     }
 
     render() {
-        const { params: { storeId } } = this.props;
-        return <Page title="Help"
-          storeId={storeId}>
+        return <Page title="Help">
             <form className="help" onSubmit={(e) => this.handleSubmit(e)}>
                 <h2>Having problems?</h2>
                 <p>
@@ -46,9 +44,6 @@ const Help = class extends React.Component {
     }
 };
 
-
-const mapStateToProps = (_, { params: { storeId } }) => ({ storeId });
-
 const mapDispatchToProps = { performSupport };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Help);
+export default connect(() => ({}), mapDispatchToProps)(Help);

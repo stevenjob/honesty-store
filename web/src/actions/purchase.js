@@ -23,7 +23,7 @@ const purchaseFailure = () => {
   };
 };
 
-export const performPurchase = ({ storeId, itemId, quantity }) => async (dispatch, getState) => {
+export const performPurchase = ({ itemId, quantity }) => async (dispatch, getState) => {
   dispatch(purchaseRequest());
   try {
     const { accessToken } = getState();
@@ -40,10 +40,10 @@ export const performPurchase = ({ storeId, itemId, quantity }) => async (dispatc
       throw new Error(json.error.message);
     }
     dispatch(purchaseSuccess(json.response));
-    browserHistory.push(`${storeId}/item/${itemId}/success`);
+    browserHistory.push(`/item/${itemId}/success`);
   }
   catch (e) {
     dispatch(purchaseFailure());
-    browserHistory.push(`${storeId}/item/error`);
+    browserHistory.push(`/item/error`);
   }
 };

@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { Success } from '../chrome/modal';
 import currency from '../format/currency';
 
-export const RegisterSuccess = ({balance, params: { storeId } }) =>
+export const RegisterSuccess = ({balance }) =>
     <Success title={`Your balance is now £${currency(balance)}`}
         subtitle="Thank you for signing up!"
-        onClick={() => browserHistory.replace(`/${storeId}/history`)}/>;
+        onClick={() => browserHistory.replace(`/history`)}/>;
 
 const mapStateToProps = ({ user: { balance = 0 } }) => ({
     balance

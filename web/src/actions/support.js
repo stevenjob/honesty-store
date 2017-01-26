@@ -22,7 +22,7 @@ const supportFailure = () => {
   };
 };
 
-export const performSupport = ({ storeId, message }) => async (dispatch, getState) => {
+export const performSupport = ({ message }) => async (dispatch, getState) => {
   dispatch(supportRequest());
   try {
     const accessToken = getState().accessToken;
@@ -39,7 +39,7 @@ export const performSupport = ({ storeId, message }) => async (dispatch, getStat
       throw new Error(json.error.message);
     }
     dispatch(supportSuccess(json.response));
-    browserHistory.push(`/${storeId}/help/success`);
+    browserHistory.push(`/help/success`);
   }
   catch (e) {
     dispatch(supportFailure());

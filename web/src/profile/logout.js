@@ -5,10 +5,9 @@ import Button from '../chrome/button';
 import Page from '../chrome/page';
 import { performLogout } from '../actions/logout.js';
 
-export const Logout = ({ params: { storeId }, performLogout }) =>
+export const Logout = ({ performLogout }) =>
     <Page left={<NotNow/>}
         title="Log Out"
-        storeId={storeId}
         invert={true}
         nav={false}>
         <div>

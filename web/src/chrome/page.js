@@ -7,7 +7,7 @@ const headerStyles = (invert) => invert ?
   { borderColor: BRAND_WHITE, background: BRAND_WHITE, color: BRAND_DARK } :
   { borderColor: BRAND_WHITE, background: BRAND_DARK, color: LIGHT_TEXT };
 
-export default ({ title, subtitle, left, right, invert = false, children, nav = true, storeId, fullscreen, loading }) =>
+export default ({ title, subtitle, left, right, invert = false, children, nav = true, fullscreen, loading }) =>
   <div className="chrome-page">
     <header className="chrome-page-title-bar" style={headerStyles(invert)}>
       { (right || left) &&
@@ -31,6 +31,6 @@ export default ({ title, subtitle, left, right, invert = false, children, nav = 
       { loading ? "Loading..." : children }
     </section>
     { nav &&
-      <NavBar storeId={storeId}/>
+      <NavBar/>
     }
   </div>;

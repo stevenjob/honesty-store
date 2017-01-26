@@ -8,11 +8,10 @@ import { Close } from '../chrome/link';
 import currency from '../format/currency';
 import './amount.css';
 
-const Amount = ({ params: { storeId }, balance }) => {
+const Amount = ({ balance }) => {
     return (
-        <Page left={<Close to={`/${storeId}/store`}/>}
+        <Page left={<Close to={`/store`}/>}
             title="Balance"
-            storeId={storeId}
             invert={true}
             nav={false}
             fullscreen={true}>
@@ -29,7 +28,7 @@ const Amount = ({ params: { storeId }, balance }) => {
                     formatValue={(amount) => `£${currency(amount)}`}
                     formatButton={(amount) => ({ text: 'Top Up using a Card', disabled: false })}
                     initialValue={500}
-                    onClick={(amount) => { browserHistory.push(`/${storeId}/topup/${amount}`); }}
+                    onClick={(amount) => { browserHistory.push(`/topup/${amount}`); }}
                 />
             </div>
         </Page>

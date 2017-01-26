@@ -23,10 +23,10 @@ class Card extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const { storeId, itemId, emailAddress, performRegister2 } = this.props;
+        const { storeCode, itemId, emailAddress, performRegister2 } = this.props;
         const { number, cvc, exp } = this.state;
         const cardDetails = { number, cvc, exp };
-        performRegister2({ storeId, itemID: itemId, topUpAmount: TOPUP_AMOUNT, emailAddress, cardDetails });
+        performRegister2({ storeCode, itemID: itemId, topUpAmount: TOPUP_AMOUNT, emailAddress, cardDetails });
     }
 
     style(name, error) {
@@ -34,11 +34,10 @@ class Card extends React.Component {
     }
 
     render() {
-        const  { storeId, error } = this.props;
+        const  { error } = this.props;
         const  { exp = '' } = this.state;
         return <Page left={<Back>Register</Back>}
             title={`Top Up`}
-            storeId={storeId}
             invert={true}
             nav={false}
             fullscreen={true}>
@@ -82,8 +81,7 @@ class Card extends React.Component {
     }
 }
 
-const mapStateToProps = ({ register: { error } }, { params: { storeId, itemId, emailAddress }}) => ({
-    storeId,
+const mapStateToProps = ({ register: { error } }, { params: { itemId, emailAddress }}) => ({
     itemId,
     emailAddress,
     error

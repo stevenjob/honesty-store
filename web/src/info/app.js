@@ -2,10 +2,9 @@ import React from 'react';
 import { Back } from '../chrome/link';
 import Page from '../chrome/page';
 
-export default ({ params: { storeId } }) =>
+export default () =>
     <Page left={<Back/>}
         title="App Version"
-        storeId={storeId}
         invert={true}
         nav={false}>
         <div>

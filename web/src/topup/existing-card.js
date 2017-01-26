@@ -14,10 +14,9 @@ const zeroPadMonth = (month) => {
     return `${prefix}${month}`;
 };
 
-export const ExisitingCard = ({ storeId, amount, brand, digits, expiry, performTopup }) =>
+export const ExisitingCard = ({ amount, brand, digits, expiry, performTopup }) =>
     <Page left={<Back>Balance</Back>}
         title={`Top Up`}
-        storeId={storeId}
         invert={true}
         nav={false}
         fullscreen={true}>
@@ -36,11 +35,11 @@ export const ExisitingCard = ({ storeId, amount, brand, digits, expiry, performT
                     <p className="topup-existing-card-image-expiry" style={{color: LIGHT_TEXT }}>{expiry}</p>
                 </div>
                 <p>
-                    <Link to={`/${storeId}/topup/${amount}/new`} style={{color: BRAND_LIGHT}}>Add a different card</Link>
+                    <Link to={`/topup/${amount}/new`} style={{color: BRAND_LIGHT}}>Add a different card</Link>
                 </p>
             </div>
             <p className="topup-existing-card-topup">
-                <Button onClick={() => performTopup({ storeId, amount })}>Confirm £{currency(amount)} Top Up</Button>
+                <Button onClick={() => performTopup({ amount })}>Confirm £{currency(amount)} Top Up</Button>
             </p>
         </div>
     </Page>;
@@ -59,10 +58,9 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = { performTopup };
 
-const mergeProps = (stateProps, dispatchProps, { params: { storeId, amount }}) => ({
+const mergeProps = (stateProps, dispatchProps, { params: { amount }}) => ({
     ...stateProps,
     ...dispatchProps,
-    storeId,
     amount: Number(amount)
 });
 

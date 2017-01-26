@@ -23,7 +23,7 @@ const topupFailure = () => {
   };
 };
 
-export const performTopup = ({ storeId, amount }) => async (dispatch, getState) => {
+export const performTopup = ({ amount }) => async (dispatch, getState) => {
   dispatch(topupRequest());
   try {
     const accessToken = getState().accessToken;
@@ -40,10 +40,10 @@ export const performTopup = ({ storeId, amount }) => async (dispatch, getState) 
       throw new Error(json.error.message);
     }
     dispatch(topupSuccess(json.response));
-    browserHistory.push(`/${storeId}/topup/success`);
+    browserHistory.push(`/topup/success`);
   }
   catch (e) {
     dispatch(topupFailure());
-    browserHistory.push(`/${storeId}/topup/error`);
+    browserHistory.push(`/topup/error`);
   }
 };

@@ -59,10 +59,8 @@ export default (state = getInitialState(), action) => {
       };
     }
     case  SIGNIN_SUCCESS: {
-      return {
-        ...state,
-        pending: state.pending.filter(e => e !== 'signin')
-      };
+      delete localStorage.refreshToken;
+      return getInitialState();
     }
     case  SIGNIN_FAILURE: {
       return {

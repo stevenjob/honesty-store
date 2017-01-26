@@ -30,7 +30,7 @@ const sessionUnauthorised = () => {
   };
 };
 
-export const performSession = ({ storeId }) => async (dispatch, getState) => {
+export const performSession = () => async (dispatch, getState) => {
   dispatch(sessionRequest());
   try {
     const refreshToken = getState().refreshToken;

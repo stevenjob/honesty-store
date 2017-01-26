@@ -58,7 +58,7 @@ const createStripeToken = ({ number, cvc, exp }) => {
   return createToken({ number, cvc, exp });
 };
 
-export const performRegister2 = ({ storeId, itemID, topUpAmount, emailAddress, cardDetails }) => async (dispatch, getState) => {
+export const performRegister2 = ({ itemID, topUpAmount, emailAddress, cardDetails }) => async (dispatch, getState) => {
   dispatch(register2Request());
   try {
     const stripeToken = await createStripeToken(cardDetails);
@@ -78,7 +78,7 @@ export const performRegister2 = ({ storeId, itemID, topUpAmount, emailAddress, c
     const { user, store } = json.response;
     dispatch(register2Success({ user, store }));
     // ensure both the topup and purchase transactions were recorded
-    const path = user.transactions.length === 2 ? `/${storeId}/register/success` : `/${storeId}/register/${itemID}/success`;
+    const path = user.transactions.length === 2 ? `/register/success` : `/register/${itemID}/success`;
     browserHistory.push(path);
   }
   catch (e) {

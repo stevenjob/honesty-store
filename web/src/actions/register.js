@@ -22,12 +22,12 @@ const registerFailure = () => ({
   type: REGISTER_FAILURE
 });
 
-export const performRegister = ({ storeId }) => async (dispatch, getState) => {
+export const performRegister = ({ storeCode }) => async (dispatch, getState) => {
   dispatch(registerRequest());
   try {
     const response = await fetch('/api/v1/register', {
       method: 'POST',
-      body: JSON.stringify({ storeCode: storeId }),
+      body: JSON.stringify({ storeCode }),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -37,7 +37,7 @@ export const performRegister = ({ storeId }) => async (dispatch, getState) => {
       throw new Error(json.error.message);
     }
     dispatch(registerSuccess(json.response));
-    browserHistory.push(`/${storeId}`);
+    browserHistory.push(`/store`);
   }
   catch (e) {
     dispatch(registerFailure());

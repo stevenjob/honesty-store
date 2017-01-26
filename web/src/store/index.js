@@ -7,26 +7,26 @@ import StoreItem from './item';
 import currency from '../format/currency';
 import './index.css';
 
-const Balance = ({ storeId, balance }) =>
-    <Link to={`/${storeId}/topup`} className="store-title-balance">
+const Balance = ({ balance }) =>
+    <Link to={`/topup`} className="store-title-balance">
       <small>Balance</small>
       <h1><small>£</small>{currency(balance)}</h1>
     </Link>;
 
-const itemRenderer = (storeId) => {
-  return (item, index) => <StoreItem item={item} image="packet.svg" storeId={storeId}/>;
+const itemRenderer = () => {
+  return (item, index) => <StoreItem item={item} image="packet.svg"/>;
 };
 
-const Store = ({ params: { storeId }, balance, loading, items }) =>
+const Store = ({ storeCode, balance, loading, items }) =>
   <Page title="Store"
-    subtitle={`@${storeId}`}
-    right={<Balance balance={balance} storeId={storeId}/>}
-    storeId={storeId}
+    subtitle={`@${storeCode}`}
+    right={<Balance balance={balance}/>}
     loading={loading}>
-    <List data={items} itemRenderer={itemRenderer(storeId)}/>
+    <List data={items} itemRenderer={itemRenderer()}/>
   </Page>;
 
-const mapStateToProps = ({ pending, user: { balance }, store: { items } }) => ({
+const mapStateToProps = ({ pending, user: { balance }, store: { code, items } }) => ({
+  storeCode: code,
   loading: pending.length > 0,
   balance: balance || 0,
   items

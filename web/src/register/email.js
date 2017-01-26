@@ -25,12 +25,12 @@ class Email extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const { performSignin, params: { storeId, itemId } } = this.props;
+        const { performSignin, params: { itemId } } = this.props;
         const { emailAddress } = this.state;
         const valid = isEmail(emailAddress);
         this.setState({ valid });
         if (valid) {
-            performSignin({ storeId, itemId, emailAddress });
+            performSignin({ itemId, emailAddress });
         }
     }
 
@@ -40,11 +40,9 @@ class Email extends React.Component {
     }
 
     render() {
-        const { params: { storeId } } = this.props;
         const { valid } = this.state;
         return <Page left={<NotNow/>}
             title={`Register`}
-            storeId={storeId}
             invert={true}
             nav={false}
             fullscreen={true}>
@@ -65,14 +63,13 @@ class Email extends React.Component {
                         style={this.style()}/>
                 </p>
                 <p><Button onClick={(e) => this.handleSubmit(e)}>Continue</Button></p>
-                <p><Link to={`/${storeId}/help`} style={{ color: BRAND_LIGHT }}>Problems signing in?</Link></p>
+                <p><Link to={`/help`} style={{ color: BRAND_LIGHT }}>Problems signing in?</Link></p>
             </form>
         </Page>;
     }
 }
 
-const mapStateToProps = (_, { params: { storeId, itemId }}) => ({
-    storeId,
+const mapStateToProps = (_, { params: { itemId }}) => ({
     itemId
 });
 
