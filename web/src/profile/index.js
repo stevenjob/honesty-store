@@ -18,12 +18,12 @@ const Profile = ({ emailAddress }) => (
           <Link to={`/profile/edit`}>Edit</Link>
         </div>
       </div>
-      <ul className="profile-info" style={{ borderColor: MUTED_TEXT, color: BRAND_LIGHT, background: LIGHT_BACKGROUND }}>
+      {/*<ul className="profile-info" style={{ borderColor: MUTED_TEXT, color: BRAND_LIGHT, background: LIGHT_BACKGROUND }}>
         <li style={{ borderColor: MUTED_TEXT }}><Link to={`/info/about`}>About honesty.store</Link></li>
         <li style={{ borderColor: MUTED_TEXT }}><Link to={`/info/terms`}>Terms &amp; Conditions</Link></li>
         <li style={{ borderColor: MUTED_TEXT }}><Link to={`/info/privacy`}>Privacy Policy</Link></li>
         <li style={{ borderColor: MUTED_TEXT }}><Link to={`/info/app`}>App Version</Link></li>
-      </ul>
+      </ul>*/}
       <ul className="profile-actions" style={{ borderColor: MUTED_TEXT, color: DANGER, background: LIGHT_BACKGROUND }}>
         <li style={{ borderColor: MUTED_TEXT }}><Link to={`/profile/logout`}>Log Out</Link></li>
         <li style={{ borderColor: MUTED_TEXT }}><Link to={`/profile/close`}>Close Account</Link></li>
@@ -33,8 +33,7 @@ const Profile = ({ emailAddress }) => (
 );
 
 
-const mapStateToProps = ({ pending, user: { emailAddress } }) => ({
-  loading: pending.length > 0,
+const mapStateToProps = ({ user: { emailAddress } }) => ({
   emailAddress
 });
 

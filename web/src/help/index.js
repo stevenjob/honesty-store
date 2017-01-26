@@ -1,9 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import Button from '../chrome/button';
 import Page from '../chrome/page';
 import { performSupport } from '../actions/support';
+import isRegistedUser from '../reducers/is-registered-user';
 import './index.css';
+
+
+const Store = () =>
+  <Link to={`/store`} className="help-title-store">
+    <h5>Store</h5>
+  </Link>;
 
 const Help = class extends React.Component {
 
@@ -29,7 +37,10 @@ const Help = class extends React.Component {
     }
 
     render() {
-        return <Page title="Help">
+        const { registered } = this.props;
+        return <Page title="Help"
+            left={<Store/>}
+            nav={registered}>
             <form className="help" onSubmit={(e) => this.handleSubmit(e)}>
                 <h2>Having problems?</h2>
                 <p>
@@ -44,6 +55,10 @@ const Help = class extends React.Component {
     }
 };
 
+const mapStateToProps = ({ user }) => ({
+  registered: isRegistedUser(user)
+});
+
 const mapDispatchToProps = { performSupport };
 
-export default connect(() => ({}), mapDispatchToProps)(Help);
+export default connect(mapStateToProps, mapDispatchToProps)(Help);

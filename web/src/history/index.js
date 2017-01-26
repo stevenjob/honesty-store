@@ -5,16 +5,14 @@ import HistoryItem from './item';
 import './index.css';
 
 const History = ({ transactions = [], loading }) => (
-  <Page title="History"
-    loading={loading}>
+  <Page title="History">
     <ul className="history-list">
       { transactions.map((transaction, index) => <li key={index}><HistoryItem transaction={transaction}/></li>) }
     </ul>
   </Page>
 );
 
-const mapStateToProps = ({ pending, user: { transactions } }) => ({
-  loading: pending.length > 0,
+const mapStateToProps = ({ user: { transactions } }) => ({
   transactions
 });
 

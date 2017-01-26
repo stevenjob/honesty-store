@@ -1,13 +1,28 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import NavBar from './nav-bar';
 import { BRAND_DARK, BRAND_WHITE, LIGHT_TEXT } from './colors';
 import './page.css';
+
+const Loading = () => <div className="chrome-page-loading">
+  <h1>Loading</h1>
+</div>;
 
 const headerStyles = (invert) => invert ?
   { borderColor: BRAND_WHITE, background: BRAND_WHITE, color: BRAND_DARK } :
   { borderColor: BRAND_WHITE, background: BRAND_DARK, color: LIGHT_TEXT };
 
-export default ({ title, subtitle, left, right, invert = false, children, nav = true, fullscreen, loading }) =>
+const Page = ({
+  title,
+  subtitle,
+  left,
+  right,
+  invert = false,
+  children,
+  nav = true,
+  fullscreen,
+  loading
+}) =>
   <div className="chrome-page">
     <header className="chrome-page-title-bar" style={headerStyles(invert)}>
       { (right || left) &&
@@ -28,9 +43,13 @@ export default ({ title, subtitle, left, right, invert = false, children, nav = 
       }
     </header>
     <section style={{color: BRAND_DARK }} className={fullscreen ? 'chrome-page-section-fullscreen chrome-page-section' : 'chrome-page-section'}>
-      { loading ? "Loading..." : children }
+      { loading ? <Loading/> : children }
     </section>
-    { nav &&
-      <NavBar/>
-    }
+    { nav && <NavBar/> }
   </div>;
+
+const mapStateToProps = ({ user, pending }, foo) => ({
+  loading: pending.length > 0
+});
+
+export default connect(mapStateToProps, {})(Page);

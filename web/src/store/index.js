@@ -5,7 +5,13 @@ import Page from '../chrome/page';
 import List from '../chrome/list';
 import StoreItem from './item';
 import currency from '../format/currency';
+import isRegistedUser from '../reducers/is-registered-user';
 import './index.css';
+
+const Help = () =>
+  <Link to={`/help`} className="store-title-help">
+    <h5>Help</h5>
+  </Link>;
 
 const Balance = ({ balance }) =>
     <Link to={`/topup`} className="store-title-balance">
@@ -17,18 +23,18 @@ const itemRenderer = () => {
   return (item, index) => <StoreItem item={item} image="packet.svg"/>;
 };
 
-const Store = ({ storeCode, balance, loading, items }) =>
+const Store = ({ registered, storeCode, balance, loading, items }) =>
   <Page title="Store"
-    subtitle={`@${storeCode}`}
-    right={<Balance balance={balance}/>}
-    loading={loading}>
+    subtitle={storeCode ? `@${storeCode}` : ''}
+    right={registered ? <Balance balance={balance}/> : <Help/>}
+    nav={registered}>
     <List data={items} itemRenderer={itemRenderer()}/>
   </Page>;
 
-const mapStateToProps = ({ pending, user: { balance }, store: { code, items } }) => ({
+const mapStateToProps = ({ user, store: { code, items } }) => ({
+  registered: isRegistedUser(user),
   storeCode: code,
-  loading: pending.length > 0,
-  balance: balance || 0,
+  balance: user.balance || 0,
   items
 });
 
