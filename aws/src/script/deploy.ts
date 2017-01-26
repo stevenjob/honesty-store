@@ -57,7 +57,7 @@ const ensureDatabase = async ({ branch, dir }) => {
     });
 };
 
-const generateServiceSecret = ({ branch, liveSecret }) => {
+const generateSecret = ({ prefix, branch, liveSecret }) => {
     const bareSecret = () => {
         if (branch === 'master') {
             return liveSecret;
@@ -65,7 +65,7 @@ const generateServiceSecret = ({ branch, liveSecret }) => {
         return branch;
     };
 
-    return `service:${bareSecret()}`;
+    return `${prefix}:${bareSecret()}`;
 };
 
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
@@ -85,8 +85,8 @@ export default async ({ branch, secrets: { service: serviceSecretForLive, user: 
         loadBalancerArn: loadBalancer.LoadBalancerArn,
         defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn
     });
-    const serviceSecret = generateServiceSecret({ branch, liveSecret: serviceSecretForLive });
-    const userSecret = generateServiceSecret({ branch, liveSecret: userSecretForLive });
+    const serviceSecret = generateSecret({ prefix: 'service', branch, liveSecret: serviceSecretForLive });
+    const userSecret = generateSecret({ prefix: 'user', branch, liveSecret: userSecretForLive });
     const services: ECS.Service[] = [];
     for (const dir of dirs) {
         const logGroup = `${prefix}-${branch}-${dir}`;
