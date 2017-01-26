@@ -39,9 +39,6 @@ export const performSession = ({ storeId }) => async (dispatch, getState) => {
       throw new Error(json.error.message);
     }
     const session = json.response;
-    if (storeId != null && session.store.code !== storeId) {
-        throw new Error(`Attempt to load non-default store ${storeId} ${session.store.code}`);
-    }
     dispatch(sessionSuccess(session));
   }
   catch (e) {
