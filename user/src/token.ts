@@ -2,6 +2,9 @@ import jwt = require('jsonwebtoken');
 import ms = require('ms');
 
 const secret = process.env.USER_TOKEN_SECRET;
+if (!secret) {
+    throw new Error(`no $USER_TOKEN_SECRET provided`);
+}
 
 const signToken = (payload, expiresIn) => jwt.sign(payload, secret, { algorithm: 'HS256', expiresIn });
 
