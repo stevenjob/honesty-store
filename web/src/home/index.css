@@ -2,3 +2,7 @@
   text-align: center;
   padding: 1rem;
 }
+
+.home>h1>img {
+  max-width: 80%;
+}

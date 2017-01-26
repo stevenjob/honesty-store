@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { BRAND_DARK, BRAND_LIGHT } from '../chrome/colors';
 import Button from '../chrome/button';
 import { performRegister } from '../actions/register';
+import logo from '../chrome/assets/logo.svg';
 import './index.css';
 
 const extractStoreCode = (url) => {
@@ -40,8 +40,7 @@ class Home extends React.Component {
     const { storeCode } = this.state;
     return <div className="home">
       <h1>
-        <span style={{ color: BRAND_DARK }}>honesty</span>
-        <span style={{ color: BRAND_LIGHT }}>.store</span>
+        <img src={logo} alt="honesty.store"/>
       </h1>
       <h3>Welcome to honesty.store</h3>
       <p>We're currently alpha testing our new service at a limited number of locations.</p>
