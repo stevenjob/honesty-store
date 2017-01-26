@@ -12,12 +12,43 @@ const TOPUP_AMOUNT = 500;
 class Card extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            number: '',
+            exp: '',
+            cvc: ''
+        };
     }
 
-    handleChange(event) {
+    handleNumberChange(event) {
+        const matches = event.target.value.match(/\d/g);
+        const numbers = matches == null ? [] : [...matches];
+        const number = numbers.reduce((output, number, index) => {
+            const separator = (index % 4 === 0 && index > 0) ? ' ' : '';
+            return `${output}${separator}${number}`;
+        }, '');
         this.setState({
-            [event.target.name]: event.target.value
+            number: number.substr(0, 19)
+        });
+    }
+
+    handleExpChange(event) {
+        const matches = event.target.value.match(/\d/g);
+        const numbers = matches == null ? [] : [...matches];
+        const exp = numbers.reduce((output, number, index) => {
+            const separator = (index % 2 === 0 && index > 0) ? ' / ' : '';
+            return `${output}${separator}${number}`;
+        }, '');
+        this.setState({
+            exp: exp.substr(0, 7)
+        });
+    }
+
+    handleCVCChange(event) {
+        const matches = event.target.value.match(/\d/g);
+        const numbers = matches == null ? [] : [...matches];
+        const cvc = numbers.join('');
+        this.setState({
+            cvc: cvc.substr(0, 3)
         });
     }
 
@@ -35,7 +66,7 @@ class Card extends React.Component {
 
     render() {
         const  { error } = this.props;
-        const  { exp = '' } = this.state;
+        const  { number, exp, cvc } = this.state;
         return <Page left={<Back>Register</Back>}
             title={`Top Up`}
             invert={true}
@@ -60,20 +91,28 @@ class Card extends React.Component {
                         autoComplete="cc-number"
                         placeholder="1111 2222 3333 4444"
                         style={this.style('number', error)}
-                        onChange={(e) => this.handleChange(e)}/>
+                        value={number}
+                        pattern="[0-9]*"
+                        noValidate
+                        onChange={(e) => this.handleNumberChange(e)}/>
                 </p>
                 <p className="register-card-tight">
                     <input name="exp"
                         autoComplete="cc-exp"
                         value={exp}
+                        pattern="[0-9]*"
+                        noValidate
                         placeholder="Expiry (MM / YY)"
                         style={this.style('exp', error)}
-                        onChange={(e) => this.handleChange(e)}/>
+                        onChange={(e) => this.handleExpChange(e)}/>
                     <input name="cvc"
                         autoComplete="cc-csc"
+                        value={cvc}
+                        pattern="[0-9]*"
+                        noValidate
                         placeholder="CVV (3-digits)"
                         style={this.style('cvc', error)}
-                        onChange={(e) => this.handleChange(e)}/>
+                        onChange={(e) => this.handleCVCChange(e)}/>
                 </p>
                 <p><Button onClick={(e) => this.handleSubmit(e)}>Confirm £5 Top Up & Purchase</Button></p>
             </form>
