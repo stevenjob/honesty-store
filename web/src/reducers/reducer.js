@@ -1,7 +1,7 @@
 import { INITIALISE } from '../actions/inititialise';
 import { REGISTER_REQUEST, REGISTER_SUCESSS, REGISTER_FAILURE } from '../actions/register';
 import { REGISTER2_REQUEST, REGISTER2_SUCESSS, REGISTER2_FAILURE } from '../actions/register2';
-import { SESSION_REQUEST, SESSION_SUCCESS, SESSION_FAILURE } from '../actions/session';
+import { SESSION_REQUEST, SESSION_SUCCESS, SESSION_UNAUTHORISED, SESSION_FAILURE } from '../actions/session';
 import { TOPUP_REQUEST, TOPUP_SUCCESS, TOPUP_FAILURE } from '../actions/topup';
 import { PURCHASE_REQUEST, PURCHASE_SUCCESS, PURCHASE_FAILURE } from '../actions/purchase';
 import { LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE } from '../actions/logout';
@@ -128,6 +128,10 @@ export default (state = getInitialState(), action) => {
         ...action.response,
         pending: state.pending.filter(e => e !== 'session')
       };
+    }
+    case SESSION_UNAUTHORISED: {
+      delete localStorage.refreshToken;
+      return getInitialState();
     }
     case  SESSION_FAILURE: {
       return {

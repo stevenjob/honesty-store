@@ -2,6 +2,7 @@ import { browserHistory } from 'react-router';
 
 export const SESSION_REQUEST = 'SESSION_REQUEST';
 export const SESSION_SUCCESS = 'SESSION_SUCCESS';
+export const SESSION_UNAUTHORISED = 'SESSION_UNAUTHORISED';
 export const SESSION_FAILURE = 'SESSION_FAILURE';
 
 const sessionRequest = () => {
@@ -23,6 +24,12 @@ const sessionFailure = () => {
   };
 };
 
+const sessionUnauthorised = () => {
+  return {
+    type: SESSION_UNAUTHORISED
+  };
+};
+
 export const performSession = ({ storeId }) => async (dispatch, getState) => {
   dispatch(sessionRequest());
   try {
@@ -34,6 +41,11 @@ export const performSession = ({ storeId }) => async (dispatch, getState) => {
         'Authorization': `Bearer: ${refreshToken}`
       }
     });
+    if (response.status === 401) {
+      dispatch(sessionUnauthorised());
+      browserHistory.push(`/`);
+      return;
+    }
     const json = await response.json();
     if (json.error) {
       throw new Error(json.error.message);
