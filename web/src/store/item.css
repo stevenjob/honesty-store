@@ -5,8 +5,6 @@
 .store-item-image {
   height: 8rem;
   width: 8rem;
-  transform: rotate(-40deg);
-  margin: 0 3rem;
   background-position: center;
   background-repeat: no-repeat;
 }
