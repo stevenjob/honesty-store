@@ -46,7 +46,7 @@ const Help = class extends React.Component {
                 <p>
                     <textarea rows="8"
                         name="emailAddress"
-                        placeholder="We've automatically captured your account details, please just need to describe your problem here"
+                        placeholder="We've automatically captured your account details, please describe your problem here"
                         onChange={(e) => this.handleChange(e)}/>
                 </p>
                 <p><Button onClick={(e) => this.handleSubmit(e)}>Send to Customer Support</Button></p>
