@@ -32,6 +32,7 @@
 .chrome-page-title-bar-right, .chrome-page-title-bar-left {
   align-self: center;
   width: 20%;
+  user-select: none;
 }
 
 .chrome-page-section {
