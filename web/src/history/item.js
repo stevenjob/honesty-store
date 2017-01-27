@@ -3,21 +3,21 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import { BRAND_LIGHT } from '../chrome/colors';
 import './item.css';
-import currency from '../format/currency';
+import Currency from '../format/Currency';
 
 const AmountLabel = ({ amount, isTopUp }) => {
   if (isTopUp) {
-    return <h4 style={{ color: BRAND_LIGHT }}><small>+ £</small>{currency(amount)}</h4>;
+    return (
+      <h4 style={{ color: BRAND_LIGHT }}>
+        <small>+ </small>
+        <Currency amount={amount} />
+      </h4>
+    );
   }
-
-  const absoluteAmount = Math.abs(amount);
-  const showPence = absoluteAmount < 100;
 
   return (
     <h4>
-    { showPence || <small>£</small> }
-    { showPence ? absoluteAmount : currency(absoluteAmount) }
-    { showPence && <small>p</small> }
+      <Currency amount={Math.abs(amount)} />
     </h4>
   );
 };

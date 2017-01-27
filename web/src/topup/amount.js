@@ -5,7 +5,7 @@ import { BRAND_LIGHT } from '../chrome/colors';
 import Page from '../chrome/page';
 import Stepper from '../chrome/stepper';
 import { Close } from '../chrome/link';
-import currency from '../format/currency';
+import Currency from '../format/Currency';
 import './amount.css';
 
 const Amount = ({ balance }) => {
@@ -18,7 +18,7 @@ const Amount = ({ balance }) => {
             <div className="topup-amount">
                 <div className="topup-amount-balance">
                     <h3>Your balance is currently</h3>
-                    <h1 style={{color: BRAND_LIGHT}}><small>£</small>{currency(balance)}</h1>
+                    <h1 style={{color: BRAND_LIGHT}}><Currency amount={balance} /></h1>
                 </div>
                 <Stepper
                     label="Would you like to top up?"
@@ -26,8 +26,8 @@ const Amount = ({ balance }) => {
                     incrementDisabled={() => true}
                     onDecrement={(amount) => amount}
                     decrementDisabled={() => true}
-                    formatDescription={(amount) => `Your balance will be £${currency(balance + amount)}`}
-                    formatValue={(amount) => `£${currency(amount)}`}
+                    formatDescription={(amount) => <span>Your balance will be <Currency amount={balance + amount} smallSymbols={false} /></span>}
+                    formatValue={(amount) => <Currency amount={amount} />}
                     formatButton={(amount) => ({ text: 'Top Up using a Card', disabled: false })}
                     initialValue={500}
                     onClick={(amount) => { browserHistory.push(`/topup/${amount}`); }}

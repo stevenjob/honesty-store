@@ -5,7 +5,7 @@ import { Back } from '../chrome/link';
 import Page from '../chrome/page';
 import Stepper from '../chrome/stepper';
 import Button from '../chrome/button';
-import currency from '../format/currency';
+import Currency from '../format/Currency';
 import { performPurchase } from '../actions/purchase';
 import isRegistered from '../reducers/is-registered-user';
 import './detail.css';
@@ -25,7 +25,11 @@ const ItemDetail = ({
 
   const formatBalance = (numItems) => {
     const balance = calculateBalanceRemaining(numItems);
-    return `Your balance will be £${currency(balance)}`;
+    return (
+      <p>
+        Your balance will be <Currency amount={balance} />
+      </p>
+    );
   };
 
   const formatPurchaseButton = (numItems) => {

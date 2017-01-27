@@ -2,10 +2,10 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { Success } from '../chrome/modal';
-import currency from '../format/currency';
+import Currency from '../format/Currency';
 
 export const RegisterSuccess = ({balance }) =>
-    <Success title={`Your balance is now £${currency(balance)}`}
+    <Success title={<span>Your balance is now <Currency amount={balance} smallSymbols={false}/></span>}
         subtitle="Thank you for signing up!"
         onClick={() => browserHistory.replace(`/history`)}/>;
 

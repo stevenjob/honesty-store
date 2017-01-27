@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import Page from '../chrome/page';
 import List from '../chrome/list';
 import StoreItem from './item';
-import currency from '../format/currency';
+import Currency from '../format/Currency';
 import isRegistedUser from '../reducers/is-registered-user';
 import './index.css';
 
@@ -16,7 +16,9 @@ const Help = () =>
 const Balance = ({ balance }) =>
     <Link to={`/topup`} className="store-title-balance">
       <small>Balance</small>
-      <h1><small>£</small>{currency(balance)}</h1>
+      <h1>
+        <Currency amount={balance} />
+      </h1>
     </Link>;
 
 const itemRenderer = (item, index) => <StoreItem item={item}/>;

@@ -6,7 +6,7 @@ import { BRAND_LIGHT, MUTED_TEXT, LIGHT_TEXT } from '../chrome/colors';
 import Button from '../chrome/button';
 import Page from '../chrome/page';
 import { Back } from '../chrome/link';
-import currency from '../format/currency';
+import Currency from '../format/Currency';
 import './existing-card.css';
 
 const zeroPadMonth = (month) => {
@@ -21,7 +21,7 @@ export const ExisitingCard = ({ amount, brand, digits, expiry, performTopup }) =
         nav={false}
         fullscreen={true}>
         <div className="topup-existing-card">
-            <h4>Please check this is the card you want to top up £{currency(amount)} from</h4>
+            <h4>Please check this is the card you want to top up <Currency amount={amount} /> from</h4>
             <div className="topup-existing-card-container">
                 <div className="topup-existing-card-image">
                     <div className="topup-existing-card-image-background"/>
@@ -39,7 +39,7 @@ export const ExisitingCard = ({ amount, brand, digits, expiry, performTopup }) =
                 </p>
             </div>
             <p className="topup-existing-card-topup">
-                <Button onClick={() => performTopup({ amount })}>Confirm £{currency(amount)} Top Up</Button>
+                <Button onClick={() => performTopup({ amount })}>Confirm <Currency amount={amount} /> Top Up</Button>
             </p>
         </div>
     </Page>;
