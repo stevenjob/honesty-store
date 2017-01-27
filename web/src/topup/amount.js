@@ -23,7 +23,9 @@ const Amount = ({ balance }) => {
                 <Stepper
                     label="Would you like to top up?"
                     onIncrement={(amount) => amount}
+                    incrementDisabled={() => true}
                     onDecrement={(amount) => amount}
+                    decrementDisabled={() => true}
                     formatDescription={(amount) => `Your balance will be £${currency(balance + amount)}`}
                     formatValue={(amount) => `£${currency(amount)}`}
                     formatButton={(amount) => ({ text: 'Top Up using a Card', disabled: false })}

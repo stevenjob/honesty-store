@@ -54,7 +54,9 @@ const ItemDetail = ({
   const PurchaseStepper = <Stepper
     label="How many would you like to pay for?"
     onDecrement={decrementNumItems}
+    incrementDisabled={() => false}
     onIncrement={(numItems) => numItems + 1}
+    decrementDisabled={(numItems) => numItems <= 1}
     formatDescription={formatBalance}
     formatValue={(numItems) => numItems}
     formatButton={formatPurchaseButton}
@@ -70,13 +72,9 @@ const ItemDetail = ({
 
 
   return (
-    <Page
-      invert={true}
-      nav={false}
+    <Page invert={true}
       fullscreen={true}
-      left={<Back/>}
-      loading={loading}
-    >
+      left={<Back/>}>
       <div className="item">
         <div className="item-details">
           <h2>{name}<br/>{price}<small>p</small></h2>
