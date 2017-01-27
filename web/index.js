@@ -7,6 +7,15 @@ const app = express();
 
 app.use(expressLogging(logger));
 
+// Needs to be served with this exact url but with JSON
+app.use(
+  '/.well-known/apple-app-site-association',
+  express.static(
+    __dirname + '/build/.well-known/apple-app-site-association',
+    { setHeaders: (res) => res.type('json') }
+  )
+);
+
 // serve static assets normally
 app.use(express.static(__dirname + '/build'));
 
