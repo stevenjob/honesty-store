@@ -86,3 +86,15 @@ ReactDOM.render((
 ), document.getElementById('root'));
 
 document.documentElement.className = 'loaded';
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const registration = await navigator.serviceWorker.register('/sw.js');
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }
+    catch (e) {
+        console.log('ServiceWorker registration failed: ', e);
+    }
+  });
+}
