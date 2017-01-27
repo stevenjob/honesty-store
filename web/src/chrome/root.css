@@ -1,4 +1,4 @@
-html {
+html.loaded {
   /* revert index.html inline styles */
   height: auto;
   background: none;

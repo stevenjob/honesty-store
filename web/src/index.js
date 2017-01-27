@@ -84,3 +84,5 @@ ReactDOM.render((
     </Router>
   </Provider>
 ), document.getElementById('root'));
+
+document.documentElement.className = 'loaded';
