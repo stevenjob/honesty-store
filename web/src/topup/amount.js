@@ -26,7 +26,7 @@ const Amount = ({ balance }) => {
                     incrementDisabled={() => true}
                     onDecrement={(amount) => amount}
                     decrementDisabled={() => true}
-                    formatDescription={(amount) => <span>Your balance will be <Currency amount={balance + amount} smallSymbols={false} /></span>}
+                    formatDescription={(amount) => <span>Your balance will be <Currency amount={balance + amount} /></span>}
                     formatValue={(amount) => <Currency amount={amount} />}
                     formatButton={(amount) => ({ text: 'Top Up using a Card', disabled: false })}
                     initialValue={500}

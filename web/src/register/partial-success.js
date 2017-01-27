@@ -8,7 +8,7 @@ export const RegisterPartialSuccess = ({balance, params: { itemId } }) =>
     <Success
       title={
         <span>
-          Your top up succeeded but we had trouble recording your purchase, please try again from the store screen. Your balance is now <Currency amount={balance} smallSymbols={false}/>
+          Your top up succeeded but we had trouble recording your purchase, please try again from the store screen. Your balance is now <Currency amount={balance} />
         </span>
       }
       subtitle="Thank you for signing up!"

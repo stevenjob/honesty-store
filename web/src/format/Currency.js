@@ -11,17 +11,14 @@ const formatAny = (value) => {
     throw new Error(`Parsing not supported`);
 };
 
-const Currency = ({ amount, smallSymbols = true }) => {
+const Currency = ({ amount }) => {
   const showPence = Math.abs(amount) < 100;
-
-  const smallComponent = (content) =>
-    smallSymbols ? <small>{content}</small> : <span>{content}</span>;
 
   return (
     <span>
-      { showPence || smallComponent('£') }
+      { showPence || <small>£</small> }
       { showPence ? amount : formatAny(amount) }
-      { showPence && smallComponent('p') }
+      { showPence && <small>p</small> }
     </span>
   );
 };

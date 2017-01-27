@@ -5,7 +5,7 @@ import { Success } from '../chrome/modal';
 import Currency from '../format/Currency';
 
 export const RegisterSuccess = ({balance }) =>
-    <Success title={<span>Your balance is now <Currency amount={balance} smallSymbols={false}/></span>}
+    <Success title={<span>Your balance is now <Currency amount={balance}/></span>}
         subtitle="Thank you for signing up!"
         onClick={() => browserHistory.replace(`/history`)}/>;
 
