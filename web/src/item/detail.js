@@ -76,13 +76,15 @@ const ItemDetail = ({
       fullscreen={true}
       nav={false}
       left={<Back/>}>
-      <div className="item">
-        <div className="item-details">
-          <h2>{name}<br/>{price}<small>p</small></h2>
+      { id != null &&
+        <div className="item">
+          <div className="item-details">
+            <h2>{name}<br/>{price}<small>p</small></h2>
+          </div>
+          <div className="item-image" style={{ backgroundImage: `url(${require(`../item/assets/${image}`)})` }}/>
+          { registered ? PurchaseStepper : UnregisteredPurchaseButton }
         </div>
-        <div className="item-image" style={{ backgroundImage: `url(${require(`../item/assets/${image}`)})` }}/>
-        { registered ? PurchaseStepper : UnregisteredPurchaseButton }
-      </div>
+      }
     </Page>
   );
 };
