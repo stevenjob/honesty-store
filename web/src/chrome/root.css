@@ -1,3 +1,9 @@
+html {
+  /* revert index.html inline styles */
+  height: auto;
+  background: none;
+}
+
 body {
   height: 100%;
   background: #F8F9FA; /* BRAND_WHITE */
