@@ -5,3 +5,7 @@
     text-align: center;
     line-height: 2;
 }
+
+.chrome-button {
+    user-select: none;
+}
