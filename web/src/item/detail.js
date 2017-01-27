@@ -74,6 +74,7 @@ const ItemDetail = ({
   return (
     <Page invert={true}
       fullscreen={true}
+      nav={false}
       left={<Back/>}>
       <div className="item">
         <div className="item-details">
