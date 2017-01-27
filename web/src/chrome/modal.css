@@ -10,4 +10,5 @@
 
 .chrome-modal>div>img {
     height: 12rem;
+    max-width: 80%;
 }
