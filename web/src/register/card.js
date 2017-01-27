@@ -9,6 +9,12 @@ import './card.css';
 
 const TOPUP_AMOUNT = 500;
 
+const setCursorPosition = (element) => () => {
+    requestAnimationFrame(() => {
+        element.selectionStart = element.selectionEnd = element.value.length;
+    });
+};
+
 class Card extends React.Component {
     constructor(props) {
         super(props);
@@ -26,9 +32,8 @@ class Card extends React.Component {
             const separator = (index % 4 === 0 && index > 0) ? ' ' : '';
             return `${output}${separator}${number}`;
         }, '');
-        this.setState({
-            number: number.substr(0, 19)
-        });
+
+        this.setState({ number: number.substr(0, 19) }, setCursorPosition(event.target));
     }
 
     handleExpChange(event) {
@@ -38,18 +43,14 @@ class Card extends React.Component {
             const separator = (index % 2 === 0 && index > 0) ? ' / ' : '';
             return `${output}${separator}${number}`;
         }, '');
-        this.setState({
-            exp: exp.substr(0, 7)
-        });
+        this.setState({ exp: exp.substr(0, 7) }, setCursorPosition(event.target));
     }
 
     handleCVCChange(event) {
         const matches = event.target.value.match(/\d/g);
         const numbers = matches == null ? [] : [...matches];
         const cvc = numbers.join('');
-        this.setState({
-            cvc: cvc.substr(0, 3)
-        });
+        this.setState({ cvc: cvc.substr(0, 3) }, setCursorPosition(event.target));
     }
 
     handleSubmit(e) {
