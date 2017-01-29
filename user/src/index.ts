@@ -9,6 +9,7 @@ import { User, UserProfile, UserWithAccessToken, UserWithAccessAndRefreshTokens,
 import { createAccount, getAccount, TEST_DATA_EMPTY_ACCOUNT_ID } from '../../transaction/src/client';
 import { baseUrl } from '../../service/src/baseUrl';
 import serviceRouter from '../../service/src/router';
+import { info } from '../../service/src/log';
 
 config.region = process.env.AWS_REGION;
 
@@ -229,7 +230,7 @@ const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
     return externaliseUser(await update({ user: updatedUser, originalVersion: originalUser.version }));
 };
 
-const sendMagicLinkEmail = async ({ emailAddress }) => {
+const sendMagicLinkEmail = async ({ key, emailAddress }) => {
     const user = await scanByEmailAddress({ emailAddress });
 
     const message = `( https://honesty.store )
@@ -252,6 +253,8 @@ Log in to honesty.store ( ${baseUrl}/${user.defaultStoreId}?code=${signAccessTok
             }
         })
         .promise();
+
+    info(key, `Magic link email sent to ${emailAddress}: ${response.MessageId}`);
 
     return response.MessageId;
 };
@@ -326,7 +329,7 @@ router.post(
     '/magicLink/:emailAddress',
     1,
     async (key, { emailAddress }, {}) => {
-        const messageId = await sendMagicLinkEmail({ emailAddress});
+        const messageId = await sendMagicLinkEmail({ key, emailAddress});
         return {};
     }
 );
