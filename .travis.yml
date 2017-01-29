@@ -19,7 +19,7 @@ env:
     -   secure: "j9pEDvfG75CcckwqfRi3J7I+6ueqWEY83q695JorvnBRjNWgonAZKtAKUF39YbrFKE61DhCUpq4N1blFCF5IwHpH4Xr3+THWshlvwo1jYoBbqx/TqyR78S133kz+rCiZeZ3NbUDV81uQX0VkUZ2yhdOr2NPf+/ARSlD7zBE7SHMLvM9kNBy6ueXhW0VbDeYWWdELxDhCujxH7lbsFvcMhOSFgVrR36ggZ1h/IBckXdCoLxx+l3y7nZYfLPb+WAEBJKtNBmlzBqiP/q8WHvf4ancjsWcPc3zlUgYjJAsmkhIc77HHggVTQyFCcb9+HMoBg+KTfhzFPWi/w/lw0q4KPfqSTSgFrIp77IBcqQr9smkg7hFhJ66ZiCiKhuCtv0w6mDW2LuVrIYavCZYZCS34mmuF+DB0nlTtCsEp05IZHu3L+PVjWC4GWl65+H5OLF3yTTvF8wcuSCS/Nr7N5ZA95ENky093mpMfFj1iLc8TDbD7IJqUCHRbiFk5/iY1PMxzhKD4XHlIC7dYPJUD19AMUkpJJpbgvyP5BD8LEPBsL9ROf431hPQXYijEs7aWgDJGO/9hdVcZP01e3lzU2Dj3Hq2RJRpJiAmruflB5Pt2HmKrFbyOo0R9LgsLIr9TgsfVGz2miQ2g/LgPj+Th5TNiopBJvy9xRVTZhaxPFnInX8g="
     - TEST_STRIPE_KEY: 'sk_test_qqeGkZVE30FLH76H2g2Fd4NL'
 script:
-  - if [ $TRAVIS_BRANCH = 'live' ]; export REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_live_koh6JFFsmJxYyGBok5DHRtJZ; fi
+  - if [ $TRAVIS_BRANCH = 'live' ]; then export REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_live_koh6JFFsmJxYyGBok5DHRtJZ; fi
   - npm i -g yarn
   # install all dependencies first to prevent problems with cross-module dependencies
   - (cd api && yarn install)
