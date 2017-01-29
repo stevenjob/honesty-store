@@ -4,7 +4,7 @@ html.loaded {
   background: none;
 }
 
-body {
+html.loaded>body {
   height: 100%;
   background: #F8F9FA; /* BRAND_WHITE */
   margin: 0;
