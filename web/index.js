@@ -6,9 +6,9 @@ const port = process.env.PORT || 8080;
 const app = express();
 
 // Upgrade HTTP connections to HTTPS automatically
-app.enable('trust proxy');
+// (ignore non-proxied requests i.e. LB probes)
 app.use((req, res, next) => {
-	if (req.protocol === 'http') {
+	if (req.get('X-Forwarded-Proto') === 'http') {
 		return res.redirect(301, `https://${req.hostname}${req.originalUrl}`);
 	} else {
 		return next();
