@@ -15,7 +15,7 @@ import * as winston from 'winston';
 
 export const prefix = 'hs';
 export const defaultTargetGroupDir = 'web';
-export const role = 'arn:aws:iam::812374064424:role/ecs-service-role';
+export const ecsServiceRole = 'arn:aws:iam::812374064424:role/ecs-service-role';
 export const cluster = 'test-cluster';
 
 const config = {
@@ -27,19 +27,23 @@ const config = {
     },
     transaction: {
         database: true,
-        loadBalancer: { pathPattern: '/transaction/*', priority: 3 },
-        taskRoleArn: 'arn:aws:iam::812374064424:role/dynamo-db-role'
+        loadBalancer: { pathPattern: '/transaction/*', priority: 3 }
     },
     user: {
         database: true,
-        loadBalancer: { pathPattern: '/user/*', priority: 4 },
-        taskRoleArn: 'arn:aws:iam::812374064424:role/dynamo-db-role'
+        loadBalancer: { pathPattern: '/user/*', priority: 4 }
     },
     topup: {
         database: true,
-        loadBalancer: { pathPattern: '/topup/*', priority: 5 },
-        taskRoleArn: 'arn:aws:iam::812374064424:role/dynamo-db-role'
+        loadBalancer: { pathPattern: '/topup/*', priority: 5 }
     },
+};
+
+const isLive = (branch) => branch === 'live';
+
+const generateName = ({ branch, dir }: { branch: string, dir?: string }) => {
+    const base = isLive(branch) ? `honesty-store` : `hs-${branch}`;
+    return dir == null ? base : `${base}-${dir}`;
 };
 
 const ensureDatabase = async ({ branch, dir }) => {
@@ -51,15 +55,22 @@ const ensureDatabase = async ({ branch, dir }) => {
     return await ensureTable({
         config: {
             ...config,
-            TableName: `${prefix}-${branch}-${dir}`
+            TableName: generateName({ branch, dir })
         },
         data
     });
 };
 
+const generateStripeKey = ({ branch, type }) => {
+    if (isLive(branch) && type === 'live') {
+        return getAndAssertEnvironment('LIVE_STRIPE_KEY');
+    }
+    return getAndAssertEnvironment('TEST_STRIPE_KEY');
+}
+
 const generateSecret = ({ prefix, branch, liveSecret }) => {
     const bareSecret = () => {
-        if (branch === 'master') {
+        if (isLive(branch)) {
             return liveSecret;
         }
         return branch;
@@ -74,29 +85,40 @@ const getAndAssertEnvironment = (key) => {
         throw new Error(`$${key} not present in environment`);
     }
     return value;
+};
+
+const getTaskRoleArn = ({ branch, database }) => {
+    if (database) {
+        return isLive(branch) ?
+            'arn:aws:iam::812374064424:role/live-task-role' :
+            'arn:aws:iam::812374064424:role/dynamo-db-role';
+    }
+    return undefined;
 }
 
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
 export default async ({ branch, dirs }) => {
-
-    const liveStripeKey = getAndAssertEnvironment('LIVE_STRIPE_KEY');
-    const testStripeKey = getAndAssertEnvironment('TEST_STRIPE_KEY');
-    const serviceSecretForLive = getAndAssertEnvironment('LIVE_SERVICE_TOKEN_SECRET');
-    const userSecretForLive = getAndAssertEnvironment('LIVE_USER_TOKEN_SECRET');
-
-    const serviceSecret = generateSecret({ prefix: 'service', branch, liveSecret: serviceSecretForLive });
-    const userSecret = generateSecret({ prefix: 'user', branch, liveSecret: userSecretForLive });
+    const serviceSecret = generateSecret({
+        prefix: 'service',
+        branch,
+        liveSecret: getAndAssertEnvironment('LIVE_SERVICE_TOKEN_SECRET')
+    });
+    const userSecret = generateSecret({
+        prefix: 'user',
+        branch,
+        liveSecret: getAndAssertEnvironment('LIVE_USER_TOKEN_SECRET')
+    });
 
     const baseUrl = aliasToBaseUrl(branch);
     const loadBalancer = await ensureLoadBalancer({
-        name: `${prefix}-${branch}`
+        name: generateName({ branch })
     });
     const resourceRecordSet = await ensureAlias({
         name: branch,
         value: loadBalancer.DNSName
     });
     const defaultTargetGroup = await ensureTargetGroup({
-        name: `${prefix}-${branch}-${defaultTargetGroupDir}`
+        name: generateName({ branch, dir: defaultTargetGroupDir })
     });
     const listener = await ensureListener({
         loadBalancerArn: loadBalancer.LoadBalancerArn,
@@ -104,13 +126,13 @@ export default async ({ branch, dirs }) => {
     });
     const services: ECS.Service[] = [];
     for (const dir of dirs) {
-        const logGroup = `${prefix}-${branch}-${dir}`;
+        const logGroup = generateName({ branch, dir });
         await ensureLogGroup({
             name: logGroup,
-            retention: branch === 'master' ? 30 : 1
+            retention: isLive(branch) ? 30 : 1
         })
         const targetGroup = await ensureTargetGroup({
-            name: `${prefix}-${branch}-${dir}`
+            name: generateName({ branch, dir })
         });
         const rule = await ensureRule({
             listenerArn: listener.ListenerArn,
@@ -120,7 +142,7 @@ export default async ({ branch, dirs }) => {
         });
         const image = await buildAndPushImage({
             dir,
-            repositoryName: `${prefix}-${branch}-${dir}`
+            repositoryName: generateName({ branch, dir })
         });
         const db = config[dir].database ? await ensureDatabase({ branch, dir }) : {};
         // TODO: create bespoke roles
@@ -134,21 +156,22 @@ export default async ({ branch, dirs }) => {
                 baseUrl,
                 serviceSecret,
                 userSecret,
-                liveStripeKey,
-                testStripeKey,
+                liveStripeKey: generateStripeKey({ branch, type: 'live' }),
+                testStripeKey: generateStripeKey({ branch, type: 'test' }),
             }
         });
+
         const taskDefinition = await ensureTaskDefinition({
-            family: `${prefix}-${branch}-${dir}`,
+            family: generateName({ branch, dir }),
             containerDefinitions,
-            taskRoleArn: config[dir].taskRoleArn
+            taskRoleArn: getTaskRoleArn({ branch, database: config[dir].database })
         });
         await pruneTaskDefinitions({
             filter: ({ family, revision }) => family === taskDefinition.family && revision !== taskDefinition.revision,
         });
         // For now assuming all tasks contain only one container with a port mapping which should be load balanced
         const service = await ensureService({
-            serviceName: `${prefix}-${branch}-${dir}`,
+            serviceName: generateName({ branch, dir }),
             cluster,
             desiredCount: 1,
             taskDefinition: taskDefinition.taskDefinitionArn,
@@ -159,7 +182,7 @@ export default async ({ branch, dirs }) => {
                     targetGroupArn: targetGroup.TargetGroupArn
                 }
             ],
-            role
+            role: ecsServiceRole
         });
         services.push(service);
     }
