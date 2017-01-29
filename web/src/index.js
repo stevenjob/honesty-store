@@ -85,7 +85,9 @@ ReactDOM.render((
   </Provider>
 ), document.getElementById('root'));
 
-document.documentElement.className = 'loaded';
+requestAnimationFrame(() => {
+  document.documentElement.className = 'loaded';
+});
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
