@@ -12,14 +12,14 @@ env:
     - secure: "LdJbBa+i4bd5AhyumkGR5PPhAqZhtHrmzcNIiI/vN+lk+ECcRSe344GGxQwi28Sa5ytqeYFe0kCWcX+w9hbn3f+lTgaWRx0g05FNV6xGQhIfDs2XlorMeBZSn92z1aMYpDj8SNB39h7NZyh5KknFNhL1rrV9R8PT+DkrUdl0EnIKQYynYj1GKcwX7ql2HvGtenZLHJLkepTJj0aJzZPhTp/YfvN12izzPic8Oci4+94EIohfDLfcIKV21p3tjRcr8i4mMoSK063v06FuugC7+Twm1Fl+RZNpTfarkThllbxzKtvAyCsHb1aSRwNLLahOkUTWBJO3J7cL25hnp0+T6qehmB17jEMfts+k7dxd2qxFAOTXiVHfXrrkLtQYfcSO3mHfqrqSIGFPNkHwFM/GwIjwfqHzqjFbET088pgm2Q6KldFPNvwZ2gXnNcZScecYcTc3VMLCSrlAjsOReSVX613T2m79+dupVPycjKrks2FHBq7Rda+TwJCdW1/0hl9xtDcJoGIFUiL/nz1ZRKlAvTNilPdNeFRh/Yb1BpIXSHF2TzA/r5k3sncMLRhZPxRZfKetP8UaBKfRBVZo9z06JRK9PNanK5zF6aNwbpbfTZ6OVL6b4/2/cVr7r5mPIPGj6DVyJ8KrL6E0R/QtkcRGkZ/CuFPWIMEwFnKn/n/uP+g="
     # The key used by jwt to generate communication tokens for inter-service HTTP requests.
     # Master branch only. All other branches use keys derived from the branch name.
-    # Eventually this will be secure/travis-encrypted.
-    - LIVE_SERVICE_TOKEN_SECRET: 'abc'
+    - secure: "dRf/C09F62I9wV9SA0KdD/Ivo+IM8YHdvIRIxxYuxRqONtXBUSCyMqEDVix8Gw8FfXFtfPZpd4HP8QDu6dvDgmCLZg0NOMlauOy6z931gO3DQHdfb8n09b85u4VTzcuKS7daol43+u50mq+NZ2gyAZvXYnmMzMyvgO1iqjT0CxFo3hxkX6TB5SksHnjjeOhkm3rAUk3Wt0ijxulaeg2O0Ybrcfvlw5qVpH/0x5SmMrLLj8xrbiOACpf55ieUOJfwp/6jyky2MG5J4MuX6yPahXoPrgwSucfpL+Uu/VxWEMwzIkY+z3DpqsemcYOzOjYb18Xu7surCc+504SLmklScpu9Xh0MkLtesTivdXD+DOph16zx2L30dDWJJ+8YfdowRhX7gXxUgFl1aByLwZ6R2aJz+XZL5GT7xSskn4Ybp0kGnEAXT/fCsKINN7fzppCN3rWz6YdiB+HXVzU/2DzY1qwmrWs6IKEYUbU0D9mxKU4RCGpJYEWPFxPARN4jY31PXaq9LnDkMJCmWINiMErm7fBrLtU5AH+e1ZealZ8saQHsL22cHreOMsF5xM1ODrvgwnh6BEiwf+sOrYBRWPFzfW13+L5NL3xYgxWkqMPc15HnCsgrqOtuZ8NM39AIsjkkEpgPiyZNSH6wZZbbfwPR8od2gKp9wRZCWWxa4GSroRo="
     # The key used by jwt to create refresh and access tokens
-    - LIVE_USER_TOKEN_SECRET: 'def'
+    -  secure: "pOzGdle59T7NtPWgpR4RpbI87yFrHC/j3UhXndqEwDM1SM1RZm98OIFKv87jkaf4ApS7VaZw6VSIUyZeiw6nrOZiGKWsXGsuGsdIPjDE7Xc1KWjetqI595C0daxw1pOsESXm0VqfJN/w+NYWD6LcUO0eWMkYZZ7zPpQQFf9Y6N7WeWe9CrS63ieD3sdUEKcarGq7HifqsoKKfAeJtBusKPNvn+uPmWCj65FXF6o4LDroWrpfbWsEGfsjcn9t0aJiQelPOltou98rN87S078lzj736Uoa+UC7Xvjd/GzftF5KScsoMsIAM2S/eidX1u7f01cPv8NdRCCCUYfMkhljujyCit/i50+nB5HJDqWmUFDYjSFIk0rLAf/M8rnQs35KBOwcEjfjqzPc8K5Dg/n77TC0biJUIGqeozKs0TJRtTmeJaWYCH0vX0NlFYLL6cV02DqWL74BBS3kosu60iLmQPDpki3BmgPr/kyh8Z2N8wZAJF3lD9Zz4Vr8EVud62QKv4yLD3/XkeekSr2iSKrARqBwOJPMICPmZKCFErvyBEaYLnhbI4kX6ZOOWX0SXSeaIXIi8+tF+JadS7c8aBgbFYvEZLrEp++4auCHEnEo7n7O8LMf2x2z0bFNib4+aEwcNrB6r9HQ5CuEX1j0bBt8y995QfE/dz1+YJ2p/X03XMw="
     # Stripe keys
-    - LIVE_STRIPE_KEY: 'sk_test_Bl10VC4MyzRrhd41nq4f31jD'
-    - TEST_STRIPE_KEY: 'sk_test_Bl10VC4MyzRrhd41nq4f31jD'
+    -   secure: "j9pEDvfG75CcckwqfRi3J7I+6ueqWEY83q695JorvnBRjNWgonAZKtAKUF39YbrFKE61DhCUpq4N1blFCF5IwHpH4Xr3+THWshlvwo1jYoBbqx/TqyR78S133kz+rCiZeZ3NbUDV81uQX0VkUZ2yhdOr2NPf+/ARSlD7zBE7SHMLvM9kNBy6ueXhW0VbDeYWWdELxDhCujxH7lbsFvcMhOSFgVrR36ggZ1h/IBckXdCoLxx+l3y7nZYfLPb+WAEBJKtNBmlzBqiP/q8WHvf4ancjsWcPc3zlUgYjJAsmkhIc77HHggVTQyFCcb9+HMoBg+KTfhzFPWi/w/lw0q4KPfqSTSgFrIp77IBcqQr9smkg7hFhJ66ZiCiKhuCtv0w6mDW2LuVrIYavCZYZCS34mmuF+DB0nlTtCsEp05IZHu3L+PVjWC4GWl65+H5OLF3yTTvF8wcuSCS/Nr7N5ZA95ENky093mpMfFj1iLc8TDbD7IJqUCHRbiFk5/iY1PMxzhKD4XHlIC7dYPJUD19AMUkpJJpbgvyP5BD8LEPBsL9ROf431hPQXYijEs7aWgDJGO/9hdVcZP01e3lzU2Dj3Hq2RJRpJiAmruflB5Pt2HmKrFbyOo0R9LgsLIr9TgsfVGz2miQ2g/LgPj+Th5TNiopBJvy9xRVTZhaxPFnInX8g="
+    - TEST_STRIPE_KEY: 'sk_test_qqeGkZVE30FLH76H2g2Fd4NL'
 script:
+  - if [ $TRAVIS_BRANCH = 'live' ]; export REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_live_koh6JFFsmJxYyGBok5DHRtJZ; fi
   - npm i -g yarn
   # install all dependencies first to prevent problems with cross-module dependencies
   - (cd api && yarn install)
