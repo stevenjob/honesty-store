@@ -44,23 +44,34 @@ const serviceAuthentication = (request, response, next) => {
     next();
 };
 
+const time = () => {
+    const time = process.hrtime();
+    return () => {
+        const diff = process.hrtime(time);
+        return diff[0] * 1e9 + diff[1];
+    };
+};
+
 const createEndPoint = (service, internalRouter, method: 'get' | 'post' | 'put') => <Body, Result>(path, version: number, action: BodyAction<Body, Result>) => {
     internalRouter[method](
         `/${service}/v${version}${path}`,
         serviceAuthentication,
         (request, response) => {
+            const timer = time();
             const key = extractKey(request);
             info(key, `handling ${method} ${request.url}`);
             action(key, request.params, /* maybe undefined */request.body)
                 .then(result => {
-                    info(key, `successful ${method} ${request.url}`, result);
+                    const duration = timer();
+                    info(key, `successful ${method} ${request.url}`, { result, duration });
                     response.status(HTTPStatus.OK)
                         .json({ response: result });
                 })
-                .catch((e) => {
-                    error(key, `failed ${method} ${request.url}`, e);
+                .catch((error) => {
+                    const duration = timer();
+                    error(key, `failed ${method} ${request.url}`, { error, duration });
                     response.status(200)
-                        .json({ error: { message: e.message }});
+                        .json({ error: { message: error.message }});
                 });
         });
 };
