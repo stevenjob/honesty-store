@@ -9,7 +9,8 @@ import { User, UserProfile, UserWithAccessToken, UserWithAccessAndRefreshTokens,
 import { createAccount, getAccount, TEST_DATA_EMPTY_ACCOUNT_ID } from '../../transaction/src/client';
 import { baseUrl } from '../../service/src/baseUrl';
 import serviceRouter from '../../service/src/router';
-import { info } from '../../service/src/log';
+import { info, error } from '../../service/src/log';
+import { createServiceKey } from '../../service/src/key';
 
 config.region = process.env.AWS_REGION;
 
@@ -348,8 +349,9 @@ app.get('/', (req, res) => {
         .then(() => {
             res.send(200);
         })
-        .catch(() => {
+        .catch((error) => {
             res.send(500);
+            error(createServiceKey({ name: 'user' }), 'LB probe error', error);
         });
 });
 
