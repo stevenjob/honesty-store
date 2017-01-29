@@ -2,12 +2,24 @@ import { ELBv2 } from 'aws-sdk';
 import * as winston from 'winston';
 import { describeAll } from '../describe';
 
-export const ensureListener = async ({ defaultTargetGroupArn, loadBalancerArn }) => {
+const lookupPort = (protocol) => {
+    switch (protocol) {
+        case 'HTTPS':
+            return 443;
+        case 'HTTP':
+            return 80;
+        default:
+            throw new Error(`Invalid protocol ${protocol}`);
+    }
+}
+
+
+export const ensureListener = async ({ defaultTargetGroupArn, loadBalancerArn, certificateArn, protocol }) => {
     const response = await new ELBv2({ apiVersion: '2015-12-01' })
         .createListener({
             Certificates: [
                 {
-                    CertificateArn: 'arn:aws:acm:eu-west-1:812374064424:certificate/0fd0796a-98c9-4e3c-8316-1efcf70aae77'
+                    CertificateArn: certificateArn
                 }
             ],
             DefaultActions: [
@@ -17,8 +29,8 @@ export const ensureListener = async ({ defaultTargetGroupArn, loadBalancerArn })
                 }
             ],
             LoadBalancerArn: loadBalancerArn,
-            Port: 443,
-            Protocol: 'HTTPS'
+            Port: lookupPort(protocol),
+            Protocol: protocol
         })
         .promise();
 

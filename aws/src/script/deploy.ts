@@ -94,7 +94,11 @@ const getTaskRoleArn = ({ branch, database }) => {
             'arn:aws:iam::812374064424:role/dynamo-db-role';
     }
     return undefined;
-}
+};
+
+const getCertificateArn = ({ branch }) => isLive(branch) ?
+    'arn:aws:acm:eu-west-1:812374064424:certificate/49b5410d-0c99-4de0-a222-3fe364bfbc73' :
+    'arn:aws:acm:eu-west-1:812374064424:certificate/0fd0796a-98c9-4e3c-8316-1efcf70aae77';
 
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
 export default async ({ branch, dirs }) => {
@@ -120,9 +124,17 @@ export default async ({ branch, dirs }) => {
     const defaultTargetGroup = await ensureTargetGroup({
         name: generateName({ branch, dir: defaultTargetGroupDir })
     });
+    const defaultListener = await ensureListener({
+        loadBalancerArn: loadBalancer.LoadBalancerArn,
+        defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn,
+        certificateArn: undefined,
+        protocol: 'HTTP'
+    });
     const listener = await ensureListener({
         loadBalancerArn: loadBalancer.LoadBalancerArn,
-        defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn
+        defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn,
+        certificateArn: getCertificateArn({ branch }),
+        protocol: 'HTTPS'
     });
     const services: ECS.Service[] = [];
     for (const dir of dirs) {

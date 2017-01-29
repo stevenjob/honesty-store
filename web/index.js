@@ -5,6 +5,16 @@ const logger = require('logops');
 const port = process.env.PORT || 8080;
 const app = express();
 
+// Upgrade HTTP connections to HTTPS automatically
+app.enable('trust proxy');
+app.use((req, res, next) => {
+	if (req.protocol === 'http') {
+		return res.redirect(301, `https://${req.hostname}${req.originalUrl}`);
+	} else {
+		return next();
+	}
+});
+
 app.use(expressLogging(logger));
 
 // Needs to be served with this exact url but with JSON
@@ -21,7 +31,7 @@ app.use(express.static(__dirname + '/build'));
 
 // handle every other route with index.html, which will contain
 // a script tag to your application's JavaScript file(s).
-app.get('*', function (request, response){
+app.get('*', (request, response) => {
   response.sendFile(path.resolve(__dirname, 'build', 'index.html'));
 });
 
