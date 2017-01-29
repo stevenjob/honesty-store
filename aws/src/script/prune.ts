@@ -16,8 +16,7 @@ import * as winston from 'winston';
 import ms = require('ms');
 
 export default async () => {
-    const branchNames = Array.from(await getOriginBranchNames())
-        .filter(branch => branch !== 'live');
+    const branchNames = Array.from(await getOriginBranchNames());
 
     const branchPrefixes = branchNames.map(branch => new RegExp(`${prefix}-${branch}(-|$)`));
 
