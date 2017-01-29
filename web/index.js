@@ -22,12 +22,17 @@ app.use(
   '/.well-known/apple-app-site-association',
   express.static(
     __dirname + '/build/.well-known/apple-app-site-association',
-    { setHeaders: (res) => res.type('json') }
+    { setHeaders: (res) => res.type('json'),  }
   )
 );
 
 // serve static assets normally
-app.use(express.static(__dirname + '/build'));
+app.use(
+  express.static(
+    __dirname + '/build',
+    { maxAge: '1y' }
+  )
+);
 
 // handle every other route with index.html, which will contain
 // a script tag to your application's JavaScript file(s).
