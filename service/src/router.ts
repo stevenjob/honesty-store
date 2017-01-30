@@ -67,11 +67,11 @@ const createEndPoint = (service, internalRouter, method: 'get' | 'post' | 'put')
                     response.status(HTTPStatus.OK)
                         .json({ response: result });
                 })
-                .catch((error) => {
+                .catch((e) => {
                     const duration = timer();
-                    error(key, `failed ${method} ${request.url}`, { error, duration });
+                    error(key, `failed ${method} ${request.url}`, { e, duration });
                     response.status(200)
-                        .json({ error: { message: error.message }});
+                        .json({ error: { message: e.message }});
                 });
         });
 };
