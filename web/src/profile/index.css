@@ -6,31 +6,18 @@
   display: flex;
 }
 
-.profile-badge-image {
-  height: 6rem;
-  width: 6rem;
-  margin: 0 1rem 0 2.4rem;
-  border-radius: 3rem;
-  font-size: 2.4rem;
-  line-height: 6rem;
-  text-align: center;
-  align-self: center;
-}
-
-
 .profile-badge-details {
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.profile-badge-details-name {
-  font-size: 2.4rem;
-  margin: auto auto 0 0;
+.profile-badge-details-email {
+  margin: auto auto auto 1rem;
 }
 
-.profile-badge-details-email {
-  margin: 0 auto auto 0;
+.profile-badge-details-email>h3 {
+  margin: 0;
 }
 
 .profile-badge-action {
