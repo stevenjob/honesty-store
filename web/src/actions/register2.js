@@ -78,7 +78,7 @@ export const performRegister2 = ({ itemID, topUpAmount, emailAddress, cardDetail
     const { user, store } = json.response;
     dispatch(register2Success({ user, store }));
     // ensure both the topup and purchase transactions were recorded
-    const path = user.transactions.length === 2 ? `/register/success` : `/register/${itemID}/success`;
+    const path = user.transactions.length === 2 ? `/register/${itemID}/success` : `/register/${itemID}/partial`;
     browserHistory.push(path);
   }
   catch (e) {

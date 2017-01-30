@@ -53,10 +53,10 @@ ReactDOM.render((
       <Route path="/success" component={HomeSuccess}/>
       <Route path="/error" component={Error}/>
       <Route path="/" component={({ children }) => children}>
-        <Route path="register/success" component={RegisterSuccess}/>
         <Route path="register/:itemId" component={RegisterEmail}/>
-        <Route path="register/:itemId/success" component={RegisterPartialSuccess}/>
         <Route path="register/:itemId/:emailAddress" component={RegisterCard}/>
+        <Route path="register/:itemId/success" component={RegisterSuccess}/>
+        <Route path="register/:itemId/partial" component={RegisterPartialSuccess}/>
         <Route path="signin/success" component={SignInSuccess}/>
         <Route path="store" component={Store}/>
         <Route path="item/error" component={Error} />
