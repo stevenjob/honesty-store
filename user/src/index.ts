@@ -349,9 +349,9 @@ app.get('/', (req, res) => {
         .then(() => {
             res.send(200);
         })
-        .catch((error) => {
+        .catch((e) => {
             res.send(500);
-            error(createServiceKey({ name: 'user' }), 'LB probe error', error);
+            error(createServiceKey({ name: 'user' }), 'LB probe error', e);
         });
 });
 
