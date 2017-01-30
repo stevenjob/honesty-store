@@ -15,17 +15,23 @@ Steps to transfer scottcoin funds to honesty.store
 
 4c) Paste mnemonic
 
-4d) Set wallet service url: https://scottcoin.chrisprice.io/bws/api
+4d) Click 'Advanced'
 
-4d) Click 'Send Money'
+4e) Set wallet service url: https://scottcoin.chrisprice.io/bws/api
 
-4e) Click 'Send Max'
+4f) Click 'Import'
 
-4f) Set recipient: 1111111111111111111114oLvT2
+4g) Select newly imported wallet
 
-4g) Send
+4h) Click 'Send' in tab bar
 
-5) Run script:
+4i) Set recipient: 1111111111111111111114oLvT2
+
+4j) Click '...' (more) button then 'Send Max'
+
+4k) Send
+
+5) Run script in root of `honesty-store` repo:
 
 5a) Replace `<master-service-secret>` `<scottcoins-rounded-up-to-pence>` `<userId>` and `<scottcoin-block-hash>` in the below command, and run it:
 ```
