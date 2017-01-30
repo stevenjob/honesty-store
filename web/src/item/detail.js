@@ -26,9 +26,9 @@ const ItemDetail = ({
   const formatBalance = (numItems) => {
     const balance = calculateBalanceRemaining(numItems);
     return (
-      <p>
+      <span>
         Your balance will be <Currency amount={balance} />
-      </p>
+      </span>
     );
   };
 

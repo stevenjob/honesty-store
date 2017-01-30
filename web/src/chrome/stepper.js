@@ -35,21 +35,21 @@ class Stepper extends React.Component {
 
     return (
       <div className="chrome-stepper">
-      <h2>{label}</h2>
-      <div className="chrome-stepper-amount">
-        <Button type={decrementDisabled ? 'disabled' : ''}
-          onClick={() => this.updateValue(onDecrement)}>
-          -
-        </Button>
-        <h1 style={{color: BRAND_LIGHT}}>
-          {formatValue(value)}
-        </h1>
-        <Button type={incrementDisabled ? 'disabled' : ''}
-          onClick={() => this.updateValue(onIncrement) }>
-          +
-        </Button>
-      </div>
-      <p style={{color: MUTED_TEXT}}>{formatDescription(value)}</p>
+        <h2>{label}</h2>
+        <div className="chrome-stepper-amount">
+          <Button type={decrementDisabled ? 'disabled' : ''}
+            onClick={() => this.updateValue(onDecrement)}>
+            -
+          </Button>
+          <h1 style={{color: BRAND_LIGHT}}>
+            {formatValue(value)}
+          </h1>
+          <Button type={incrementDisabled ? 'disabled' : ''}
+            onClick={() => this.updateValue(onIncrement) }>
+            +
+          </Button>
+        </div>
+        <p style={{color: MUTED_TEXT}}>{formatDescription(value)}</p>
         <p>{this.getFormattedButton()}</p>
       </div>
     );
