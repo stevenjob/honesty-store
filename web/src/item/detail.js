@@ -70,7 +70,7 @@ const ItemDetail = ({
 
   const UnregisteredPurchaseButton = <p>
       <Button onClick={() => browserHistory.push(`/register/${id}`)}>
-        Purchase 1 {name}
+        {`Purchase 1 ${name}`}
       </Button>
     </p>;
 
