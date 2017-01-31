@@ -240,7 +240,7 @@ const sendMagicLinkEmail = async ({ key, emailAddress }) => {
 Tap the button below on your phone to log in to honesty.store
 *********************************************************************
 
-Log in to honesty.store ( ${baseUrl}/${user.defaultStoreId}?code=${signAccessToken({ userId: user.id })} )
+Log in to honesty.store ( https://honesty.store/${user.defaultStoreId}?code=${signAccessToken({ userId: user.id })} )
 `;
     const response = await new SES({ apiVersion: '2010-12-01' })
         .sendEmail({

@@ -3,12 +3,7 @@ import * as winston from 'winston';
 
 const HostedZoneId = 'Z1NOZ8HJXP3L7I';
 
-export const aliasToBaseUrl = (alias) => {
-    if (alias === 'live') {
-        return 'https://honesty.store';
-    }
-    return `https://${alias}.honesty.store`;
-}
+export const aliasToBaseUrl = (alias) => `https://${alias}.honesty.store`;
 
 export const ensureAlias = async ({ name, value }) => {
     const resourceRecordSet: Route53.ResourceRecordSet = {
