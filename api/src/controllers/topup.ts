@@ -1,7 +1,7 @@
 import HTTPStatus = require('http-status');
 import { authenticateAccessToken } from '../middleware/authenticate'
 import { createTopup, TopupResponse } from '../../../topup/src/client/index'
-import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { promiseResponse } from '../../../service/src/promiseResponse';
 
 export default (router) => {
   router.post(

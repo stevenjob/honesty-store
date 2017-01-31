@@ -1,7 +1,7 @@
 import HTTPStatus = require('http-status');
 import { getSessionData, SessionData } from '../services/session';
 import { authenticateEmailToken } from '../middleware/authenticate'
-import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { promiseResponse } from '../../../service/src/promiseResponse';
 import { WithRefreshToken, sendMagicLinkEmail } from '../../../user/src/client/index';
 import { createEmailKey } from '../../../service/src/key';
 

@@ -1,6 +1,6 @@
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { purchase } from '../services/transaction';
-import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { promiseResponse } from '../../../service/src/promiseResponse';
 import { TransactionAndBalance } from '../../../transaction/src/client/index';
 
 export default (router) => {

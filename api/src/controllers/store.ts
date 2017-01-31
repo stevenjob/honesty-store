@@ -2,7 +2,7 @@ import HTTPStatus = require('http-status');
 import { authenticateAccessToken } from '../middleware/authenticate'
 import { updateUser } from '../../../user/src/client/index';
 import { getItems, storeCodeToStoreID } from '../services/store'
-import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { promiseResponse } from '../../../service/src/promiseResponse';
 
 interface Item {
     id: string;

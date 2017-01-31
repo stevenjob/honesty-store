@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import { baseUrl } from './baseUrl';
 import { Key } from './key';
-import { info, error } from './log';
+import { error, info } from './log';
 import { signServiceSecret } from './serviceSecret';
 
 interface ApiResponse<T> {
@@ -9,6 +9,7 @@ interface ApiResponse<T> {
     error?: { message: string };
 }
 
+// tslint:disable-next-line export-name
 export default (service: string) => {
     const fetchAndParse = async <Result>({ method, version, path, key, body = undefined }): Promise<Result> => {
         const url = `${baseUrl}/${service}/v${version}${path}`;
@@ -20,9 +21,9 @@ export default (service: string) => {
             headers: {
                 'content-type': body ? 'application/json' : undefined,
                 'service-secret': signServiceSecret(),
-                key: JSON.stringify(key),
+                key: JSON.stringify(key)
             },
-            body: body ? JSON.stringify(body) : undefined,
+            body: body ? JSON.stringify(body) : undefined
         };
 
         const response = await fetch(url, fetchOptions);
@@ -60,12 +61,13 @@ export default (service: string) => {
         return json.response;
     };
 
+    // tslint:disable-next-line no-reserved-keywords
     const get = async <Result>(version: number, key: Key, path: String) => {
         return await fetchAndParse<Result>({
             method: 'GET',
             version,
             path,
-            key,
+            key
         });
     };
 
@@ -75,7 +77,7 @@ export default (service: string) => {
             version,
             path,
             key,
-            body,
+            body
         });
     };
 
@@ -85,7 +87,7 @@ export default (service: string) => {
             version,
             path,
             key,
-            body,
+            body
         });
     };
 

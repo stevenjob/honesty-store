@@ -1,7 +1,7 @@
 import HTTPStatus = require('http-status');
 import { authenticateRefreshToken } from '../middleware/authenticate';
 import { getSessionData, SessionData } from '../services/session';
-import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { promiseResponse } from '../../../service/src/promiseResponse';
 
 export default (router) => {
   router.post(

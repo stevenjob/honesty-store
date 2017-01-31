@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import HTTPStatus = require('http-status');
 import { authenticateAccessToken } from '../middleware/authenticate'
-import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { promiseResponse } from '../../../service/src/promiseResponse';
 import { info } from '../../../service/src/log';
 
 const sendSlackSupportMessage = async ({ key, user, message }) => {

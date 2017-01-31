@@ -9,7 +9,7 @@ import { TransactionDetails, TransactionAndBalance } from '../../../transaction/
 import { purchase } from '../services/transaction';
 import { getSessionData, SessionData } from '../services/session';
 import { authenticateAccessToken } from '../middleware/authenticate';
-import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { promiseResponse } from '../../../service/src/promiseResponse';
 import { WithRefreshToken, WithAccessToken } from '../../../user/src/client/index';
 import { storeCodeToStoreID } from '../services/store'
 import { createTopup, CardDetails } from '../../../topup/src/client/index'

@@ -1,7 +1,7 @@
 import HTTPStatus = require('http-status');
 import { authenticateAccessToken } from '../middleware/authenticate'
 import { getTransactionHistory } from '../services/transaction'
-import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { promiseResponse } from '../../../service/src/promiseResponse';
 import { Transaction } from '../../../transaction/src/client/index';
 
 const getPagedTransactions = async ({ key, accountID, page }) => {
