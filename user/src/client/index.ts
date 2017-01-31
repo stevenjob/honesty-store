@@ -49,7 +49,7 @@ export const getUserByEmailAddress = (key, emailAddress: string) =>
     get<User>(1, key, `/emailAddress/${emailAddress}`);
 
 export const createUser = (key, userId: string, userProfile: UserProfile) =>
-    post<UserWithAccessAndRefreshTokens>(1, key, `/`, { userId, ...userProfile });
+    post<UserWithAccessAndRefreshTokens>(1, key, '/', { userId, ...userProfile });
 
 export const updateUser = (key, userId: string, userProfile: UserProfile) =>
     put<User>(1, key, `/${userId}`, userProfile);

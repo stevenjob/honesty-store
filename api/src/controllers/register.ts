@@ -3,24 +3,24 @@ import HTTPStatus = require('http-status');
 import { error } from '../../../service/src/log';
 import uuid = require('uuid/v4');
 
-import { createUserKey, createUnauthenticatedKey } from '../../../service/src/key';
-import { createUser, updateUser } from '../../../user/src/client/index';
-import { TransactionDetails, TransactionAndBalance } from '../../../transaction/src/client/index';
-import { purchase } from '../services/transaction';
-import { getSessionData, SessionData } from '../services/session';
-import { authenticateAccessToken } from '../middleware/authenticate';
+import { createUnauthenticatedKey, createUserKey } from '../../../service/src/key';
 import { promiseResponse } from '../../../service/src/promiseResponse';
-import { WithRefreshToken, WithAccessToken } from '../../../user/src/client/index';
-import { storeCodeToStoreID } from '../services/store'
-import { createTopup, CardDetails } from '../../../topup/src/client/index'
+import { CardDetails, createTopup } from '../../../topup/src/client/index';
+import { TransactionAndBalance, TransactionDetails } from '../../../transaction/src/client/index';
+import { createUser, updateUser } from '../../../user/src/client/index';
+import { WithAccessToken, WithRefreshToken } from '../../../user/src/client/index';
+import { authenticateAccessToken } from '../middleware/authenticate';
+import { getSessionData, SessionData } from '../services/session';
+import { storeCodeToStoreID } from '../services/store';
+import { purchase } from '../services/transaction';
 
 const register = async (storeCode) => {
   const userId = uuid();
   const profile = {
-    defaultStoreId: storeCodeToStoreID(storeCode),
+    defaultStoreId: storeCodeToStoreID(storeCode)
   };
   const key = createUserKey({ userId });
-  const user = await createUser(key, userId, profile)
+  const user = await createUser(key, userId, profile);
 
   return await getSessionData(key, { user });
 };
@@ -46,7 +46,7 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
         userID,
         quantity: 1,
         accountID: user.accountId,
-        storeID: user.defaultStoreId,
+        storeID: user.defaultStoreId
     });
   } catch (e) {
     /* We don't want to fail if the item could not be purchased, however the client
@@ -63,7 +63,7 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
         ...(purchaseTx != null ? [purchaseTx.transaction] : []),
         topupTx.transaction
       ],
-      cardDetails: topupTx.cardDetails,
+      cardDetails: topupTx.cardDetails
     }
   };
 };
@@ -91,8 +91,8 @@ const setupRegisterPhase2 = (router) => {
         response.status(HTTPStatus.UNAUTHORIZED)
           .json({
             error: {
-              message: 'Invalid email address provided',
-            },
+              message: 'Invalid email address provided'
+            }
           });
         return;
       }

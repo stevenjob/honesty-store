@@ -1,14 +1,14 @@
 import HTTPStatus = require('http-status');
-import { authenticateAccessToken } from '../middleware/authenticate'
-import { updateUser } from '../../../user/src/client/index';
-import { getItems, storeCodeToStoreID } from '../services/store'
 import { promiseResponse } from '../../../service/src/promiseResponse';
+import { updateUser } from '../../../user/src/client/index';
+import { authenticateAccessToken } from '../middleware/authenticate';
+import { getItems, storeCodeToStoreID } from '../services/store';
 
 interface Item {
     id: string;
     name: string;
     price: number;
-};
+}
 
 type ItemAndCount = Item & { count: number };
 

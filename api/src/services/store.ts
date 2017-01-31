@@ -1,6 +1,6 @@
+import { storeList } from '../../../service/src/storeList';
 import { getBox } from './box';
 import { getItem } from './item';
-import { storeList } from '../../../service/src/storeList';
 
 const stores = new Map();
 const defaultBox = getBox(0);
@@ -24,14 +24,12 @@ export const getStore = (storeCode) => {
 export const getItems = (storeCode) => {
   const box = getStore(storeCode);
 
-  const storeItems = box.items.map(({ itemID, count }) => {
+  return box.items.map(({ itemID, count }) => {
     const item = getItem(itemID);
     return {
       ...item,
       id: itemID,
-      count,
+      count
     };
   });
-
-  return storeItems;
 };

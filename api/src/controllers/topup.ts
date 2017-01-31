@@ -1,7 +1,7 @@
 import HTTPStatus = require('http-status');
-import { authenticateAccessToken } from '../middleware/authenticate'
-import { createTopup, TopupResponse } from '../../../topup/src/client/index'
 import { promiseResponse } from '../../../service/src/promiseResponse';
+import { createTopup, TopupResponse } from '../../../topup/src/client/index';
+import { authenticateAccessToken } from '../middleware/authenticate';
 
 export default (router) => {
   router.post(
@@ -23,5 +23,5 @@ export default (router) => {
           request,
           response,
           HTTPStatus.INTERNAL_SERVER_ERROR);
-    })
+    });
 };

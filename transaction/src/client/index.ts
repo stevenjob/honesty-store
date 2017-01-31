@@ -7,7 +7,7 @@ export interface TransactionDetails {
     amount: number;
     data: {
         [key: string]: string;
-    }
+    };
 }
 
 export interface Transaction extends TransactionDetails {
@@ -24,12 +24,12 @@ export interface Account {
 export interface TransactionAndBalance {
     transaction: Transaction;
     balance: number;
-};
+}
 
 const { get, post } = fetch('transaction');
 
 export const createAccount = (key, accountId: string) =>
-    post<Account>(1, key, `/`, { accountId });
+    post<Account>(1, key, '/', { accountId });
 
 export const getAccount = (key, accountId: string) =>
     get<Account>(1, key, `/${accountId}`);
@@ -40,7 +40,7 @@ export const createTransaction = (key, accountId: string, transaction: Transacti
 export const assertBalanceWithinLimit = async ({ key, accountId, amount }) => {
     const currentBalance = (await getAccount(key, accountId)).balance;
 
-    if (currentBalance + amount > balanceLimit) {
+    if (currentBalance + (<number>amount) > balanceLimit) {
         throw new Error(`topping up would increase balance over the limit of £${balanceLimit / 100}`);
     }
 };

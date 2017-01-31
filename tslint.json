@@ -8,6 +8,9 @@
     "no-require-imports": false,
     "no-backbone-get-set-outside-model": false,
     "no-default-export": false,
-    "import-name": false
+    "import-name": false,
+    "no-reserved-keywords": false,
+    "no-suspicious-comment": false,
+    "export-name": false
   }
 }

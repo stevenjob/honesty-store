@@ -1,5 +1,5 @@
-import { TransactionAndBalance } from '../../../transaction/src/client/index';
 import fetch from '../../../service/src/fetch';
+import { TransactionAndBalance } from '../../../transaction/src/client/index';
 
 export interface TopupAccount {
     id: string;
@@ -11,14 +11,14 @@ export interface TopupAccount {
         customer: any;
         nextChargeToken: string;
     };
-};
+}
 
 export interface TopupRequest {
     accountId: string;
     userId: string;
     amount: number;
     stripeToken: string;
-};
+}
 
 export interface CardDetails {
     brand: string;
@@ -34,7 +34,7 @@ export type TopupResponse = {
 const { get, post } = fetch('topup');
 
 export const createTopup = (key, request: TopupRequest) =>
-    post<TopupResponse>(1, key, `/`, request);
+    post<TopupResponse>(1, key, '/', request);
 
 export const getCardDetails = (key, userId: string) =>
     get<CardDetails>(1, key, `/${userId}/cardDetails`);

@@ -36,7 +36,7 @@ export default (service: string) => {
             // attempt to get body text to help debugging
             let responseText: string;
             try {
-                responseText = await response.text()
+                responseText = await response.text();
             } catch (textResponseError) {
                 responseText = '';
             }
@@ -46,7 +46,7 @@ export default (service: string) => {
                 `failed ${method} ${url}, couldn't parse json`,
                 {
                     httpStatus: response.status,
-                    responseText,
+                    responseTex,
                 });
 
             throw new Error(`${method} ${path} failed (couldn't parse json), HTTP ${response.status}`);

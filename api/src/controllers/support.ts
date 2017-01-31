@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
 import HTTPStatus = require('http-status');
-import { authenticateAccessToken } from '../middleware/authenticate'
-import { promiseResponse } from '../../../service/src/promiseResponse';
 import { info } from '../../../service/src/log';
+import { promiseResponse } from '../../../service/src/promiseResponse';
+import { authenticateAccessToken } from '../middleware/authenticate';
 
 const sendSlackSupportMessage = async ({ key, user, message }) => {
     const response = await fetch('https://hooks.slack.com/services/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', {
@@ -19,15 +19,15 @@ const sendSlackSupportMessage = async ({ key, user, message }) => {
                     fields: [
                         {
                             title: 'Message',
-                            value: message,
+                            value: message
                         },
                         {
                             title: 'User',
-                            value: user.id,
+                            value: user.id
                         },
                         {
                             title: 'Email',
-                            value: user.emailAddress,
+                            value: user.emailAddress
                         }
                     ]
                 }

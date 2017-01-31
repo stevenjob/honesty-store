@@ -3,5 +3,5 @@ export const storeList = [
     'sl-ncl',
     'sl-edn',
     'sl-brs',
-    'sl-ldn',
+    'sl-ldn'
 ];

@@ -1,21 +1,21 @@
 import HTTPStatus = require('http-status');
+import { createAuthenticationKey, createUnauthenticatedKey } from '../../../service/src/key';
+import { error } from '../../../service/src/log';
 import {
   getUserByAccessToken,
-  getUserByRefreshToken,
-  getUserByMagicLinkToken } from '../../../user/src/client/index';
-import { createAuthenticationKey, createUnauthenticatedKey } from '../../../service/src/key'
-import { error } from '../../../service/src/log';
+  getUserByMagicLinkToken,
+  getUserByRefreshToken } from '../../../user/src/client/index';
 
 const getToken = request => request.headers.authorization.split(' ')[1];
 
 const handleInvalidToken = (response, e) => {
-  error(createUnauthenticatedKey(), `couldn't authenticate token`, e);
+  error(createUnauthenticatedKey(), 'couldn\'t authenticate token', e);
   response.status(HTTPStatus.UNAUTHORIZED)
     .json({
       error: {
         message: 'Invalid token provided',
-        detail: e.message,
-      },
+        detail: e.message
+      }
     });
 };
 

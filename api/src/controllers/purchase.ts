@@ -1,7 +1,7 @@
-import { authenticateAccessToken } from '../middleware/authenticate';
-import { purchase } from '../services/transaction';
 import { promiseResponse } from '../../../service/src/promiseResponse';
 import { TransactionAndBalance } from '../../../transaction/src/client/index';
+import { authenticateAccessToken } from '../middleware/authenticate';
+import { purchase } from '../services/transaction';
 
 export default (router) => {
   router.post(
@@ -18,7 +18,7 @@ export default (router) => {
               userID: user.id,
               quantity,
               accountID: user.accountId,
-              storeID: user.defaultStoreId,
+              storeID: user.defaultStoreId
           }),
           request,
           response);
