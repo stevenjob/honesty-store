@@ -1,4 +1,3 @@
-import jwt = require('jsonwebtoken');
 import HTTPStatus = require('http-status');
 import {
   getUserByAccessToken,

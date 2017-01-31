@@ -1,6 +1,5 @@
 import HTTPStatus = require('http-status');
 import { authenticateAccessToken } from '../middleware/authenticate'
-import { getUser } from '../../../user/src/client/index';
 import { createTopup, TopupResponse } from '../../../topup/src/client/index'
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
 

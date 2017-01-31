@@ -6,14 +6,13 @@ import uuid = require('uuid/v4');
 import { createUserKey, createUnauthenticatedKey } from '../../../service/src/key';
 import { createUser, updateUser } from '../../../user/src/client/index';
 import { TransactionDetails, TransactionAndBalance } from '../../../transaction/src/client/index';
-import { getPrice } from '../services/store';
 import { purchase } from '../services/transaction';
 import { getSessionData, SessionData } from '../services/session';
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { promiseResponse } from '../../../service/src/endpoint-then-catch';
 import { WithRefreshToken, WithAccessToken } from '../../../user/src/client/index';
 import { storeCodeToStoreID } from '../services/store'
-import { createTopup, TopupResponse, CardDetails } from '../../../topup/src/client/index'
+import { createTopup, CardDetails } from '../../../topup/src/client/index'
 
 const register = async (storeCode) => {
   const userId = uuid();

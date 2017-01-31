@@ -2,7 +2,7 @@ import { Key } from './key';
 
 type Level = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
 
-const replacer = (key, value) => {
+const replacer = (value) => {
   if (value instanceof Error) {
     const { message, stack } = value;
     return { message, stack };

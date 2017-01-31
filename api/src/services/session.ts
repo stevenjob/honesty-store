@@ -1,5 +1,5 @@
 import { getUser } from '../../../user/src/client/index';
-import { getTransactionHistory, getBalance } from '../services/transaction'
+import { getTransactionHistory } from '../services/transaction'
 import { Transaction } from '../../../transaction/src/client/index';
 import { getCardDetails } from '../../../topup/src/client/index';
 import { getItems, storeIDToStoreCode } from '../services/store';

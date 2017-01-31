@@ -79,7 +79,6 @@ export const createUnauthenticatedKey = () => {
 };
 
 export const createServiceKey = ({ name }) => {
-    const correlationKey = uuid();
     return <Key>{
         toJSON() {
             return this.toString();
