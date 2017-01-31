@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "tsc",
     "ci": "npm run lint && npm run compile",
-    "lint": "tslint src",
+    "lint": "tslint --config ../tslint.json --project tsconfig.json --format stylish --type-check",
     "start": "nodemon ./lib/api/src/app.js"
   },
   "dependencies": {
@@ -31,8 +31,8 @@
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
     "request": "^2.79.0",
-    "tslint": "^4.0.0",
-    "tslint-microsoft-contrib": "^2.0.14",
+    "tslint": "^4.4.2",
+    "tslint-microsoft-contrib": "^4.0.0",
     "typescript": "2.1.5"
   }
 }

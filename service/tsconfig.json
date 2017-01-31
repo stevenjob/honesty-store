@@ -5,7 +5,9 @@
         "target": "es6",
         "noImplicitAny": false,
         "sourceMap": false,
-        "outDir": "lib"
+        "outDir": "lib",
+        "noUnusedParameters": true,
+        "noUnusedLocals": true
     },
     "include": [
         "src/**/*"
