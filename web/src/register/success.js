@@ -3,7 +3,7 @@ import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { Success } from '../chrome/modal';
 
-export const RegisterSuccess = ({ image }) =>
+export const RegisterSuccess = ({ item: { name, image } }) =>
     <Success title={`Enjoy your ${name}!`}
         subtitle="Thank you for signing up!"
         image={require(`../item/assets/${image}`)}
