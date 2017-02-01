@@ -3,9 +3,8 @@ import bodyParser = require('body-parser');
 import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
-import isInt = require('validator/lib/isInt');
-import { Account, Transaction, TransactionDetails, TransactionAndBalance, TEST_DATA_EMPTY_ACCOUNT_ID, balanceLimit } from './client';
 import serviceRouter from '../../service/src/router';
+import { Account, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, Transaction, TransactionAndBalance } from './client';
 
 config.region = process.env.AWS_REGION;
 
@@ -63,7 +62,7 @@ const createAccount = async ({ accountId }) => {
         transactions: []
     };
 
-    const response = await new DynamoDB.DocumentClient()
+    await new DynamoDB.DocumentClient()
         .put({
             TableName: process.env.TABLE_NAME,
             Item: account
@@ -103,7 +102,7 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
 
     const lastTransactionId = originalAccount.transactions.length === 0 ? null : originalAccount.transactions[0].id;
 
-    const response = await new DynamoDB.DocumentClient()
+    await new DynamoDB.DocumentClient()
         .update({
             TableName: process.env.TABLE_NAME,
             Key: {
@@ -136,26 +135,26 @@ const router = serviceRouter('transaction');
 router.get(
     '/:accountId',
     1,
-    async (key, { accountId }) => await get({ accountId })
+    async (_key, { accountId }) => await get({ accountId })
 );
 
 router.post(
     '/:accountId',
     1,
-    async (key, { accountId }, { type, amount, data }) =>
+    async (_key, { accountId }, { type, amount, data }) =>
         await createTransaction({ accountId, type, amount, data })
 );
 
 router.post(
     '/',
     1,
-    async (key, {}, { accountId }) => await createAccount({ accountId })
+    async (_key, {}, { accountId }) => await createAccount({ accountId })
 );
 
 app.use(router);
 
 // send healthy response to load balancer probes
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
     get({ accountId: TEST_DATA_EMPTY_ACCOUNT_ID })
         .then(() => {
             res.send(200);
@@ -163,6 +162,6 @@ app.get('/', (req, res) => {
         .catch(() => {
             res.send(500);
         });
-})
+});
 
 app.listen(3000);
