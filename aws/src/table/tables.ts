@@ -9,7 +9,7 @@ const template = ({
     readCapacityUnits,
     writeCapacityUnits,
     dummyData,
-    config
+    config = {}
 }: TemplateArgument) => ({
     config: {
         ...(config || {}),
