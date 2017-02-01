@@ -1,12 +1,11 @@
 import { getBox } from './box';
 import { getItem } from './item';
+import { storeList } from '../../../service/src/storeList';
 
 const stores = new Map();
 const defaultBox = getBox(0);
-stores.set('sl-ncl', defaultBox);
-stores.set('sl-edn', defaultBox);
-stores.set('sl-brs', defaultBox);
-stores.set('sl-ldn', defaultBox);
+
+storeList.forEach((store) => stores.set(store, defaultBox));
 
 export const getPrice = itemID => getItem(itemID).price;
 

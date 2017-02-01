@@ -11,6 +11,7 @@ import { baseUrl } from '../../service/src/baseUrl';
 import serviceRouter from '../../service/src/router';
 import { info, error } from '../../service/src/log';
 import { createServiceKey } from '../../service/src/key';
+import { storeList } from '../../service/src/storeList';
 
 config.region = process.env.AWS_REGION;
 
@@ -29,7 +30,12 @@ const createAssertValidUuid = (name) =>
 
 const assertValidUserId = createAssertValidUuid('userId');
 const assertValidRefreshToken = createAssertValidUuid('refreshToken');
-const assertValidDefaultStoreId = createAssertValidUuid('defaultStoreId');
+
+const assertValidDefaultStoreId = (defaultStoreId) => {
+    if (storeList.indexOf(defaultStoreId) === -1) {
+        throw new Error(`Invalid defaultStoreId ${defaultStoreId}`);
+    }
+};
 
 const assertValidEmailAddress = (emailAddress) => {
     if (emailAddress == null || !isEmail(emailAddress)) {
