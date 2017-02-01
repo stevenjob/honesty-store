@@ -48,10 +48,12 @@ const generateName = ({ branch, dir }: { branch: string, dir?: string }) => {
 };
 
 const ensureDatabase = async ({ branch, dir }) => {
+    const capacityUnits = isLive(branch) ? 10 : 1;
+
     const { config, data } = dirToTable({
         dir,
-        readCapacityUnits: 10,
-        writeCapacityUnits: 10,
+        readCapacityUnits: capacityUnits,
+        writeCapacityUnits: capacityUnits,
     });
     return await ensureTable({
         config: {
