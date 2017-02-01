@@ -4,13 +4,12 @@ import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import * as stripeFactory from 'stripe';
-import * as winston from 'winston';
 
-import { TransactionDetails, createTransaction, getAccount, assertBalanceWithinLimit } from '../../transaction/src/client/index';
-import { TopupAccount, TopupRequest, CardDetails } from './client/index';
-import serviceRouter from '../../service/src/router';
 import { Key } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
+import serviceRouter from '../../service/src/router';
+import { assertBalanceWithinLimit, createTransaction, TransactionDetails } from '../../transaction/src/client/index';
+import { CardDetails, TopupAccount, TopupRequest } from './client/index';
 
 const fixedTopupAmount = 500; // £5
 
@@ -25,7 +24,6 @@ const createAssertValidUuid = (name) =>
             throw new Error(`Invalid ${name} ${uuid}`);
         }
     };
-
 
 const assertValidAccountId = createAssertValidUuid('accountId');
 const assertValidUserId = createAssertValidUuid('userId');
@@ -47,8 +45,8 @@ const get = async ({ userId }): Promise<TopupAccount> => {
             IndexName: 'userId',
             KeyConditionExpression: 'userId = :userId',
             ExpressionAttributeValues: {
-                ':userId': userId,
-            },
+                ':userId': userId
+            }
         })
         .promise();
 
@@ -83,19 +81,19 @@ const get = async ({ userId }): Promise<TopupAccount> => {
 const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
     assertValidTopupAccount(topupAccount);
 
-    const response = await new DynamoDB.DocumentClient()
+    await new DynamoDB.DocumentClient()
         .update({
             TableName: process.env.TABLE_NAME,
             Key: {
                 id: topupAccount.id
             },
             UpdateExpression:
-                `set stripe = :stripe, accountId = :accountId, userId = :userId`,
+                'set stripe = :stripe, accountId = :accountId, userId = :userId',
             ExpressionAttributeValues: {
                 ':stripe': topupAccount.stripe || {},
                 ':accountId': topupAccount.accountId,
-                ':userId': topupAccount.userId,
-            },
+                ':userId': topupAccount.userId
+            }
         })
         .promise();
 
@@ -108,35 +106,35 @@ const getOrCreate = async ({ key, accountId, userId }): Promise<TopupAccount> =>
 
     try {
         return await get({ userId });
-    }
-    catch (e) {
+    } catch (e) {
         info(key, 'TopupAccount lookup failed, creating account', e);
         return update({
             topupAccount: {
                 id: uuid(),
                 userId,
                 accountId,
-                test: false,
+                test: false
             }
         });
     }
 };
 
-const appendTopupTransaction = async ({ key, topupAccount, amount, data }: { key: Key, topupAccount: TopupAccount, amount: number, data: any }) => {
+const appendTopupTransaction = async ({ key, topupAccount, amount, data }
+    : { key: Key, topupAccount: TopupAccount, amount: number, data: any }) => {
     const transactionDetails: TransactionDetails = {
         type: 'topup',
         amount,
         data: {
             ...data,
             topupAccountId: topupAccount.id,
-            topupCustomerId: topupAccount.stripe.customer.id,
+            topupCustomerId: topupAccount.stripe.customer.id
         }
     };
 
     try {
         return await createTransaction(key, topupAccount.accountId, transactionDetails);
     } catch (e) {
-        error(key, `couldn't createTransaction()`, e);
+        error(key, 'couldn\'t createTransaction()', e);
         // remap error message
         throw new Error(`couldn't add transaction: ${e.message}`);
     }
@@ -144,21 +142,23 @@ const appendTopupTransaction = async ({ key, topupAccount, amount, data }: { key
 
 const createStripeCharge = async ({ key, topupAccount, amount }: { key: Key, topupAccount: TopupAccount, amount: number }) => {
     try {
-        return await stripeForUser(topupAccount).charges.create({
-            amount,
-            currency: 'gbp',
-            customer: topupAccount.stripe.customer.id,
-            description: `topup for ${topupAccount.accountId}`,
-            metadata: {
-                accountId: topupAccount.accountId
+        return await stripeForUser(topupAccount).charges.create(
+            {
+                amount,
+                currency: 'gbp',
+                customer: topupAccount.stripe.customer.id,
+                description: `topup for ${topupAccount.accountId}`,
+                metadata: {
+                    accountId: topupAccount.accountId
+                },
+                expand: ['balance_transaction']
             },
-            expand: ['balance_transaction'],
-        },
-        {
-            idempotency_key: topupAccount.stripe.nextChargeToken,
-        });
+            {
+                idempotency_key: topupAccount.stripe.nextChargeToken
+            }
+        );
     } catch (e) {
-        error(key, `couldn't create stripe charge`, e);
+        error(key, 'couldn\'t create stripe charge', e);
         if (e.message === 'Must provide source or customer.') {
             /* Note to future devs: this error appears to be a bug with stripe's API.
              *
@@ -180,8 +180,20 @@ const stripeDetailsValid = (topupAccount: TopupAccount) => {
 
 const assertValidStripeDetails = (topupAccount) => {
     if (!stripeDetailsValid(topupAccount)) {
-        throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please provide stripeToken`);
+        throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please\
+        provide stripeToken`);
     }
+};
+
+const extractCardDetails = (topupAccount: TopupAccount): CardDetails => {
+    const customerData = topupAccount.stripe.customer.sources.data[0];
+    const { brand, exp_month, exp_year, last4 } = customerData;
+    return {
+        brand,
+        expMonth: exp_month,
+        expYear: exp_year,
+        last4
+    };
 };
 
 const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, topupAccount: TopupAccount, amount: number }) => {
@@ -197,7 +209,7 @@ const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, t
         topupAccount,
         data: {
             stripeFee: String(charge.balance_transaction.fee),
-            chargeId: String(charge.id),
+            chargeId: String(charge.id)
         }
     });
 
@@ -219,9 +231,9 @@ const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupA
         ...topupAccount,
         stripe: {
             customer,
-            nextChargeToken: uuid(),
+            nextChargeToken: uuid()
         }
-    }
+    };
 
     return update({ topupAccount: newAccount });
 };
@@ -259,18 +271,7 @@ const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: Top
         topupAccount = await addStripeTokenToAccount({ topupAccount, stripeToken });
     }
 
-    return topupExistingAccount({ key, topupAccount, amount })
-};
-
-const extractCardDetails = (topupAccount: TopupAccount): CardDetails => {
-    const customerData = topupAccount.stripe.customer.sources.data[0];
-    const { brand, exp_month, exp_year, last4 } = customerData;
-    return { 
-        brand, 
-        expMonth: exp_month,
-        expYear: exp_year,
-        last4
-    };
+    return topupExistingAccount({ key, topupAccount, amount });
 };
 
 const getCardDetails = async ({ userId }) => {
@@ -285,7 +286,7 @@ const assertDynamoConnectivity = async () => {
             TableName: process.env.TABLE_NAME,
             Key: {
                 id: 'non-existent-id'
-            },
+            }
         })
         .promise();
 };
@@ -293,7 +294,7 @@ const assertDynamoConnectivity = async () => {
 const assertStripeConnectivity = async ({ test }) => {
     await stripeForUser({ test })
         .balance
-        .retrieve()
+        .retrieve();
 };
 
 const assertConnectivity = async () => {
@@ -318,14 +319,14 @@ router.post(
 router.get(
     '/:userId/cardDetails',
     1,
-    async (key, { userId }) =>
+    async (_key, { userId }) =>
         getCardDetails({ userId })
 );
 
 app.use(router);
 
 // send healthy response to load balancer probes
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
     assertConnectivity()
         .then(() => res.sendStatus(200))
         .catch(() => res.sendStatus(500));
