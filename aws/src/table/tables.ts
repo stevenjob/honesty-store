@@ -1,3 +1,4 @@
+import { DynamoDB } from 'aws-sdk';
 interface TemplateArgument {
     readCapacityUnits: number;
     writeCapacityUnits: number;
@@ -5,12 +6,17 @@ interface TemplateArgument {
     config?: any;
 };
 
+interface TableTemplate {
+    config: DynamoDB.CreateTableInput;
+    data: any;
+};
+
 const template = ({
     readCapacityUnits,
     writeCapacityUnits,
     dummyData,
     config = {}
-}: TemplateArgument) => ({
+}: TemplateArgument): TableTemplate => ({
     config: {
         ...(config || {}),
         KeySchema: [
@@ -120,7 +126,7 @@ const dirToTable = {
 };
 
 export default ({ dir, readCapacityUnits, writeCapacityUnits }) => {
-  const createJSON = dirToTable[dir];
+  const createJSON: ({ readCapacityUnits, writeCapacityUnits }) => TableTemplate = dirToTable[dir];
 
   if (!createJSON) {
     throw new Error(`no container for directory '${dir}'`);
