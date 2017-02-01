@@ -161,7 +161,7 @@ export default async ({ branch, dirs }) => {
         });
         const db = config[dir].database ? await ensureDatabase({ branch, dir }) : {};
         // TODO: create bespoke roles
-        const containerDefinitions: ECS.ContainerDefinitions = containerForDir({
+        const containerDefinitions = containerForDir({
             dir,
             data: {
                 image,

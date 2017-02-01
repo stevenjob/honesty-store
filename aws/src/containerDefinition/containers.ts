@@ -1,4 +1,6 @@
-const template = ({ image, baseUrl, serviceSecret, logGroup, environment }) => [
+import { ECS } from 'aws-sdk';
+
+const template = ({ image, baseUrl, serviceSecret, logGroup, environment }): ECS.ContainerDefinitions => [
   {
     name: "container",
     image,
@@ -107,7 +109,7 @@ const dirToContainer = {
     template({ image, baseUrl, serviceSecret, logGroup, environment: [] }),
 };
 
-export default ({ dir, data }) => {
+export default ({ dir, data }): ECS.ContainerDefinitions => {
   const createJSON = dirToContainer[dir];
 
   if (!createJSON) {
