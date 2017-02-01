@@ -2,7 +2,7 @@ import { ECS } from 'aws-sdk';
 import { pruneLoadBalancers } from '../elbv2/loadbalancer';
 import { pruneTargetGroups } from '../elbv2/targetgroup';
 import { pruneRules } from '../elbv2/rule';
-import { templateJSON } from '../template';
+import dirToTable from '../table/tables';
 import { pruneTaskDefinitions } from '../ecs/taskDefinition';
 import { prefix, defaultTargetGroupDir, ecsServiceRole, cluster } from './deploy';
 import { pruneServices } from '../ecs/service';

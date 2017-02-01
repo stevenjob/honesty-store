@@ -3,7 +3,7 @@ import { ensureListener } from '../elbv2/listener';
 import { ensureLoadBalancer } from '../elbv2/loadbalancer';
 import { ensureTargetGroup } from '../elbv2/targetgroup';
 import { ensureRule } from '../elbv2/rule';
-import { templateJSON } from '../template';
+import dirToTable from '../table/tables';
 import { ensureTaskDefinition, pruneTaskDefinitions } from '../ecs/taskDefinition';
 import buildAndPushImage from '../ecr/buildAndPushImage';
 import { createHash } from 'crypto';
@@ -48,10 +48,10 @@ const generateName = ({ branch, dir }: { branch: string, dir?: string }) => {
 };
 
 const ensureDatabase = async ({ branch, dir }) => {
-    const { config, data } = await templateJSON({
-        type: 'table',
-        name: dir,
-        data: { }
+    const { config, data } = dirToTable({
+        dir,
+        readCapacityUnits: 10,
+        writeCapacityUnits: 10,
     });
     return await ensureTable({
         config: {
