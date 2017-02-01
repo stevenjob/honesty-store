@@ -5,7 +5,7 @@ import uuid = require('uuid/v4');
 
 import { createUserKey, createUnauthenticatedKey } from '../../../service/src/key';
 import { createUser, updateUser } from '../../../user/src/client/index';
-import { createAccount, TransactionDetails, TransactionAndBalance } from '../../../transaction/src/client/index';
+import { TransactionDetails, TransactionAndBalance } from '../../../transaction/src/client/index';
 import { getPrice } from '../services/store';
 import { purchase } from '../services/transaction';
 import { getSessionData, SessionData } from '../services/session';
@@ -17,14 +17,11 @@ import { createTopup, TopupResponse, CardDetails } from '../../../topup/src/clie
 
 const register = async (storeCode) => {
   const userId = uuid();
-  const accountId = uuid();
   const profile = {
-    accountId,
     defaultStoreId: storeCodeToStoreID(storeCode),
   };
   const key = createUserKey({ userId });
   const user = await createUser(key, userId, profile)
-  const account = await createAccount(key, accountId);
 
   return await getSessionData(key, { user });
 };

@@ -24,7 +24,7 @@ export interface SessionData {
 
 const getUserSessionData = async (key, user) => {
   const { id, accountId: accountID, emailAddress } = user;
-  const allTransactions = await getTransactionHistory({ key, accountID });
+  const allTransactions = accountID ? await getTransactionHistory({ key, accountID }) : [];
   const recentTransactions = allTransactions.slice(0, 10);
 
   let cardDetails;

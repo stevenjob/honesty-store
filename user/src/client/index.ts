@@ -2,7 +2,7 @@ import fetch from '../../../service/src/fetch';
 
 export interface User {
     id: string;
-    accountId: string;
+    accountId?: string;
     defaultStoreId: string;
     emailAddress: string;
 }
