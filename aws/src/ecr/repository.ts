@@ -1,6 +1,6 @@
 import { ECR } from 'aws-sdk';
-import { pruneImages } from './image';
 import * as winston from 'winston';
+import { pruneImages } from './image';
 import ms = require('ms');
 
 export const ensureRepository = async ({ name }) => {
@@ -11,11 +11,10 @@ export const ensureRepository = async ({ name }) => {
 
         const repository = response.repository;
 
-        winston.debug(`repository: createRepository`, repository);
+        winston.debug('repository: createRepository', repository);
 
         return repository;
-    }
-    catch (e) {
+    } catch (e) {
         if (e.code !== 'RepositoryAlreadyExistsException') {
             throw e;
         }
@@ -24,7 +23,7 @@ export const ensureRepository = async ({ name }) => {
 
         const repository = response.repositories[0];
 
-        winston.debug(`repository: describeRepositories`, repository);
+        winston.debug('repository: describeRepositories', repository);
 
         return repository;
     }
@@ -36,13 +35,13 @@ const untagged = (image) => image.imageTags == null || image.imageTags.length ==
 const old = (image) => Date.now() - image.imagePushedAt.getTime() > ms('3d');
 
 const pruneRepository = async ({ repositoryName, force }) => {
-    winston.debug(`pruneRepositories: pruneRepository`, { repositoryName, force });
+    winston.debug('pruneRepositories: pruneRepository', { repositoryName, force });
 
     await pruneImages({
         repositoryName,
         filter: (image) => force || (untagged(image) && old(image))
     });
-    
+
     if (force) {
         await new ECR({ apiVersion: '2015-09-21' })
             .deleteRepository({ repositoryName })
@@ -50,12 +49,12 @@ const pruneRepository = async ({ repositoryName, force }) => {
     }
 };
 
-export const pruneRepositories = async ({ filter = (repository: ECR.Repository) => false }) => {
+export const pruneRepositories = async ({ filter = (_repository: ECR.Repository) => false }) => {
     const describeResponse = await new ECR({ apiVersion: '2015-09-21' })
         .describeRepositories()
         .promise();
 
-    winston.debug(`pruneRepositories: repositories`, describeResponse.repositories);
+    winston.debug('pruneRepositories: repositories', describeResponse.repositories);
 
     const promises = describeResponse.repositories
         .map((repository) =>

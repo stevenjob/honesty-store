@@ -23,11 +23,11 @@ export const spawn = (command, ...args) =>
                 }
                 resolve();
             });
-        process.stdout.on('data', (data: Buffer) => 
+        process.stdout.on('data', (data: Buffer) =>
             // trim the trailing newline
             winston.debug(data.toString('utf8', 0, data.length - 1))
         );
-        process.stderr.on('data', (data: Buffer) => 
+        process.stderr.on('data', (data: Buffer) =>
             // trim the trailing newline
             winston.info(data.toString('utf8', 0, data.length - 1))
         );

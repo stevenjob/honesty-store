@@ -1,19 +1,13 @@
-import { ECS } from 'aws-sdk';
+import { pruneLogGroups } from '../cloudwatchlogs/loggroup';
+import { pruneTables } from '../dynamodb/table';
+import { pruneRepositories } from '../ecr/repository';
+import { pruneServices } from '../ecs/service';
+import { pruneTaskDefinitions } from '../ecs/taskDefinition';
 import { pruneLoadBalancers } from '../elbv2/loadbalancer';
 import { pruneTargetGroups } from '../elbv2/targetgroup';
-import { pruneRules } from '../elbv2/rule';
-import dirToTable from '../table/tables';
-import { pruneTaskDefinitions } from '../ecs/taskDefinition';
-import { prefix, defaultTargetGroupDir, ecsServiceRole, cluster } from './deploy';
-import { pruneServices } from '../ecs/service';
-import { pruneRepositories } from '../ecr/repository';
-import { pruneImages } from '../ecr/image';
 import { getOriginBranchNames } from '../git/branch';
-import { pruneTables } from '../dynamodb/table';
 import { pruneAliases } from '../route53/alias';
-import { pruneLogGroups } from '../cloudwatchlogs/loggroup'
-import * as winston from 'winston';
-import ms = require('ms');
+import { cluster, prefix } from './deploy';
 
 const force = process.env.FORCE;
 
@@ -28,7 +22,7 @@ export default async () => {
     const matchesBranchPrefixes = (name) =>
         branchPrefixes.some(branchPrefix => branchPrefix.test(name));
 
-    const filter = (name) => matchesGlobalPrefix(name) && !matchesBranchPrefixes(name)
+    const filter = (name) => matchesGlobalPrefix(name) && !matchesBranchPrefixes(name);
 
     await pruneLoadBalancers({
         filter: ({ LoadBalancerName }) => filter(LoadBalancerName)
@@ -44,7 +38,7 @@ export default async () => {
     });
 
     await pruneTaskDefinitions({
-        filter: ({ family, revision }) => filter(family)
+        filter: ({ family }) => filter(family)
     });
 
     // pruneListeners/pruneRules - listeners/rules belong to load balancers so are removed implicitly
@@ -64,5 +58,5 @@ export default async () => {
 
     await pruneLogGroups({
         filter: ({ name }) => filter(name)
-    })
+    });
 };

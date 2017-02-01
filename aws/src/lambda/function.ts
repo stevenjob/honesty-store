@@ -2,10 +2,10 @@ import { Lambda } from 'aws-sdk';
 import * as winston from 'winston';
 import JSZip = require('jszip');
 
-const zip = async (filename, content) => {
-    const zip = new JSZip();
-    zip.file('index.js', content);
-    return await zip.generateAsync({
+const zip = async (_filename, content) => {
+    const jszip = new JSZip();
+    jszip.file('index.js', content);
+    return await jszip.generateAsync({
         type: 'nodebuffer'
     });
 };
@@ -29,8 +29,7 @@ export const ensureFunction = async ({ name, code }) => {
         winston.debug(`function: createFunction`, response);
 
         return response;
-    }
-    catch (e) {
+    } catch (e) {
         if (e.code !== 'ResourceConflictException') {
             throw e;
         }
@@ -47,7 +46,7 @@ export const ensureFunction = async ({ name, code }) => {
     }
 };
 
-export const pruneFunctions = async (filter = (func: Lambda.FunctionConfiguration) => false) => {
+export const pruneFunctions = async (filter = (_func: Lambda.FunctionConfiguration) => false) => {
     const lambda = new Lambda({ apiVersion: '2015-03-31' });
 
     const listResponse = await lambda.listFunctions()

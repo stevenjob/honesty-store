@@ -1,14 +1,13 @@
 import { CloudWatchLogs } from 'aws-sdk';
-import { describeAll } from '../describe';
 import * as winston from 'winston';
+import { describeAll } from '../describe';
 
 export const ensureLogGroup = async ({ name, retention }) => {
     const cloudwatchlogs = new CloudWatchLogs({apiVersion: '2014-03-28'});
     try {
         await cloudwatchlogs.createLogGroup({ logGroupName: name })
             .promise();
-    }
-    catch (e) {
+    } catch (e) {
         if (e.code !== 'ResourceAlreadyExistsException') {
             throw e;
         }
@@ -17,7 +16,7 @@ export const ensureLogGroup = async ({ name, retention }) => {
         .promise();
 };
 
-export const pruneLogGroups = async ({ filter = ({ name }) => false }) => {
+export const pruneLogGroups = async ({ filter = (_: { name }) => false }) => {
     const cloudwatchlogs = new CloudWatchLogs({apiVersion: '2014-03-28'});
 
     const describeResponse = await describeAll(

@@ -23,7 +23,7 @@ export const ensureTargetGroup = async ({ name }) => {
             TargetGroupArn: targetGroup.TargetGroupArn,
             Attributes: [{
                 Key: 'deregistration_delay.timeout_seconds',
-                Value: '5',
+                Value: '5'
             }]
         })
         .promise();
@@ -33,10 +33,11 @@ export const ensureTargetGroup = async ({ name }) => {
     return targetGroup;
 };
 
-export const pruneTargetGroups = async ({ filter = (targetGroup: ELBv2.TargetGroup) => false }) => {
+export const pruneTargetGroups = async ({ filter = (_targetGroup: ELBv2.TargetGroup) => false }) => {
     const elbv2 = new ELBv2({ apiVersion: '2015-12-01' });
 
     const describeResponse = await describeAll(
+        // tslint:disable-next-line:variable-name
         (Marker) => elbv2.describeTargetGroups({ Marker }),
         (response) => response.TargetGroups
     );

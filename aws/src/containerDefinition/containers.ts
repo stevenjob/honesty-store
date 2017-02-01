@@ -2,7 +2,7 @@ import { ECS } from 'aws-sdk';
 
 const template = ({ image, baseUrl, serviceSecret, logGroup, environment, port = 3000 }): ECS.ContainerDefinitions => [
   {
-    name: "container",
+    name: 'container',
     image,
     cpu: 128,
     memory: 128,
@@ -10,26 +10,26 @@ const template = ({ image, baseUrl, serviceSecret, logGroup, environment, port =
     portMappings: [
       {
         containerPort: port,
-        protocol: "tcp"
+        protocol: 'tcp'
       }
     ],
     environment: [
       {
-        name: "BASE_URL",
+        name: 'BASE_URL',
         value: baseUrl
       },
       {
-        name: "SERVICE_TOKEN_SECRET",
+        name: 'SERVICE_TOKEN_SECRET',
         value: serviceSecret
       },
-      ...environment,
+      ...environment
     ],
     logConfiguration: {
-      logDriver: "awslogs",
+      logDriver: 'awslogs',
       options: {
-        "awslogs-group": logGroup,
-        "awslogs-region": "eu-west-1",
-        "awslogs-stream-prefix": "container"
+        'awslogs-group': logGroup,
+        'awslogs-region': 'eu-west-1',
+        'awslogs-stream-prefix': 'container'
       }
     }
   }
@@ -47,22 +47,22 @@ const dirToContainer = {
       logGroup,
       environment: [
         {
-          name: "TABLE_NAME",
+          name: 'TABLE_NAME',
           value: tableName
         },
         {
-          name: "AWS_REGION",
-          value: "eu-west-1"
+          name: 'AWS_REGION',
+          value: 'eu-west-1'
         },
         {
-          name: "LIVE_STRIPE_KEY",
+          name: 'LIVE_STRIPE_KEY',
           value: liveStripeKey
         },
         {
-          name: "TEST_STRIPE_KEY",
+          name: 'TEST_STRIPE_KEY',
           value: testStripeKey
-        },
-      ],
+        }
+      ]
     }),
 
   transaction: ({ image, baseUrl, serviceSecret, logGroup, tableName }) =>
@@ -73,13 +73,13 @@ const dirToContainer = {
       logGroup,
       environment: [
         {
-          name: "TABLE_NAME",
+          name: 'TABLE_NAME',
           value: tableName
         },
         {
-          name: "AWS_REGION",
-          value: "eu-west-1"
-        },
+          name: 'AWS_REGION',
+          value: 'eu-west-1'
+        }
       ]
     }),
 
@@ -91,22 +91,22 @@ const dirToContainer = {
       logGroup,
       environment: [
         {
-          name: "TABLE_NAME",
+          name: 'TABLE_NAME',
           value: tableName
         },
         {
-          name: "AWS_REGION",
-          value: "eu-west-1"
+          name: 'AWS_REGION',
+          value: 'eu-west-1'
         },
         {
-          name: "USER_TOKEN_SECRET",
+          name: 'USER_TOKEN_SECRET',
           value: userSecret
-        },
+        }
       ]
     }),
 
   web: ({ image, baseUrl, serviceSecret, logGroup }) =>
-    template({ image, baseUrl, serviceSecret, logGroup, environment: [], port: 8080 }),
+    template({ image, baseUrl, serviceSecret, logGroup, environment: [], port: 8080 })
 };
 
 export default ({ dir, data }): ECS.ContainerDefinitions => {

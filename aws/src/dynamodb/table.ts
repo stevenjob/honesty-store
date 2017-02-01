@@ -9,7 +9,7 @@ export const ensureTable = async ({ config, data }: { config: DynamoDB.Types.Cre
 
         winston.debug('table: createTable', response.TableDescription);
 
-        await db.waitFor("tableExists", { TableName: config.TableName })
+        await db.waitFor('tableExists', { TableName: config.TableName })
             .promise();
 
         winston.debug('table: tableExists');
@@ -28,8 +28,7 @@ export const ensureTable = async ({ config, data }: { config: DynamoDB.Types.Cre
         winston.debug('table: put');
 
         return response.TableDescription;
-    }
-    catch (e) {
+    } catch (e) {
         if (e.code !== 'ResourceInUseException') {
             throw e;
         }
@@ -42,7 +41,7 @@ export const ensureTable = async ({ config, data }: { config: DynamoDB.Types.Cre
     }
 };
 
-export const pruneTables = async ({ filter = (tableName: string) => false }) => {
+export const pruneTables = async ({ filter = (_tableName: string) => false }) => {
     const db = new DynamoDB({ apiVersion: '2012-08-10' });
 
     const listResponse = await db.listTables()
@@ -62,6 +61,3 @@ export const pruneTables = async ({ filter = (tableName: string) => false }) => 
 
     await Promise.all(promises);
 };
-
-
-

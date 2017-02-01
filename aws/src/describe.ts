@@ -7,6 +7,7 @@ interface Promiseable<T> {
 }
 
 export async function describeAll<Response extends Paged, Result>(
+    // tslint:disable-next-line:variable-name
     requestFactory: (Marker: string) => Promiseable<Response>,
     resultSelector: (response: Response) => Result[]
 ): Promise<Result[]> {

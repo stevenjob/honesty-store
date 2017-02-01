@@ -1,9 +1,7 @@
-import { ECR, IAM, config } from 'aws-sdk';
-import { spawn } from '../promise/child_process';
-import { awsCheckFailures } from '../failure';
-import { getAccountId } from '../iam/user';
-import { ensureRepository } from './repository';
+import { ECR } from 'aws-sdk';
 import * as winston from 'winston';
+import { spawn } from '../promise/child_process';
+import { ensureRepository } from './repository';
 
 const getCredentials = async () => {
   const response = await new ECR({ apiVersion: '2015-09-21' })
@@ -16,13 +14,13 @@ const getCredentials = async () => {
 };
 
 export default async ({ dir, repositoryName }) => {
-  winston.debug(`push: gather metadata`);
+  winston.debug('push: gather metadata');
   const [{ user, password }, { repositoryUri }] = await Promise.all([
     getCredentials(),
     ensureRepository({ name: repositoryName })
   ]);
   const serverUrl = `https://${repositoryUri.split('/')[0]}`;
-  winston.debug(`buildAndPushImage: build`);
+  winston.debug('buildAndPushImage: build');
   await spawn(`docker`, `build`, `-t`, `${dir}`, `-f`, `${dir}/Dockerfile`, `--rm=false`, `.`);
   winston.debug(`buildAndPushImage: login ${user} ${serverUrl}`);
   await spawn(`docker`, `login`, `-u`, `${user}`, `-p`, `${password}`, `-e`,  `none`, `${serverUrl}`);

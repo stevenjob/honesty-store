@@ -24,18 +24,18 @@ export const ensureLoadBalancer = async ({ name }) => {
     return loadBalancer;
 };
 
-export const pruneLoadBalancers = async ({ filter = (loadBalancer: ELBv2.LoadBalancer) => false }) => {
+export const pruneLoadBalancers = async ({ filter = (_loadBalancer: ELBv2.LoadBalancer) => false }) => {
     const elbv2 = new ELBv2({ apiVersion: '2015-12-01' });
 
     const describeResponse = await elbv2.describeLoadBalancers({})
         .promise();
 
-    winston.debug(`loadBalancer: loadBalancers`, describeResponse.LoadBalancers);
+    winston.debug('loadBalancer: loadBalancers', describeResponse.LoadBalancers);
 
     const loadBalancersToPrune = describeResponse.LoadBalancers
         .filter(filter);
 
-    winston.debug(`loadBalancer: loadBalancersToPrune`, loadBalancersToPrune);
+    winston.debug('loadBalancer: loadBalancersToPrune', loadBalancersToPrune);
 
     const promises = loadBalancersToPrune.map(loadBalancer =>
         elbv2.deleteLoadBalancer({ LoadBalancerArn: loadBalancer.LoadBalancerArn })

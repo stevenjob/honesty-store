@@ -35,7 +35,7 @@ export const ensureService = async (serviceRequest: ECS.CreateServiceRequest) =>
         cluster: serviceRequest.cluster,
         service: serviceRequest.serviceName,
         taskDefinition: serviceRequest.taskDefinition,
-        desiredCount: serviceRequest.desiredCount,
+        desiredCount: serviceRequest.desiredCount
       })
       .promise();
 
@@ -65,6 +65,12 @@ const parseServiceArn = (serviceArn) => {
   const [arn, aws, ecs, region, accountId, serviceName] = serviceArn.split(':');
   const [service, name] = serviceName.split('/');
   return {
+    arn,
+    aws,
+    ecs,
+    region,
+    accountId,
+    service,
     name
   };
 };
@@ -77,7 +83,7 @@ const retireService = async ({ cluster, service }) => {
     .promise();
 };
 
-export const pruneServices = async ({ cluster, filter = ({ name }) => false }) => {
+export const pruneServices = async ({ cluster, filter = (_: { name }) => false }) => {
   const ecs = new ECS({ apiVersion: '2014-11-13' });
 
   winston.debug('service: cluster', cluster);

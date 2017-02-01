@@ -2,6 +2,7 @@ import { ELBv2 } from 'aws-sdk';
 import * as winston from 'winston';
 
 export const ensureRule = async ({ listenerArn, pathPattern, priority, targetGroupArn }) => {
+    /* tslint:disable:variable-name */
     const Actions = [
         { TargetGroupArn: targetGroupArn, Type: 'forward' }
     ];
@@ -19,14 +20,14 @@ export const ensureRule = async ({ listenerArn, pathPattern, priority, targetGro
             ListenerArn: listenerArn
         })
             .promise();
+        /* tslint:enable:variable-name */
 
         const rule = response.Rules[0];
 
-        winston.debug(`rule: createRule`, rule);
+        winston.debug('rule: createRule', rule);
 
         return rule;
-    }
-    catch (e) {
+    } catch (e) {
         if (e.code !== 'PriorityInUse') {
             throw e;
         }
@@ -34,13 +35,14 @@ export const ensureRule = async ({ listenerArn, pathPattern, priority, targetGro
         const describeResponse = await elbv2.describeRules({ ListenerArn: listenerArn })
             .promise();
 
-        winston.debug(`rule: describeResponse`, describeResponse.Rules);
+        winston.debug('rule: describeResponse', describeResponse.Rules);
 
         const existingRule = describeResponse.Rules
             // using weak comparison because AWS is actually returning a number...
+            // tslint:disable-next-line: triple-equals
             .find(rule => rule.Priority == priority);
 
-        winston.debug(`rule: existingRule`, existingRule);
+        winston.debug('rule: existingRule', existingRule);
 
         const updateResonse = await elbv2.modifyRule({
             RuleArn: existingRule.RuleArn,
@@ -51,14 +53,14 @@ export const ensureRule = async ({ listenerArn, pathPattern, priority, targetGro
 
         const updatedRule = updateResonse.Rules[0];
 
-        winston.debug(`rule: modifyRule`, updatedRule);
+        winston.debug('rule: modifyRule', updatedRule);
 
         return updatedRule;
     }
 
 };
 
-export const pruneRules = async ({ listenerArn, filter = (rule: ELBv2.Rule) => false }) => {
+export const pruneRules = async ({ listenerArn, filter = (_rule: ELBv2.Rule) => false }) => {
     const elbv2 = new ELBv2({ apiVersion: '2015-12-01' });
 
     const describeResponse = await elbv2.describeRules({

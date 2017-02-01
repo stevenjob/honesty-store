@@ -1,13 +1,13 @@
-import * as program from 'commander';
 import { config } from 'aws-sdk';
-import iamSync from './iam/sync';
-import { clusterCreate } from './ecs/cluster';
+import * as program from 'commander';
+import * as winston from 'winston';
 import { ec2InstanceCreate } from './ec2/instance';
 import { securityGroupCreate } from './ec2/securitygroup';
+import { clusterCreate } from './ecs/cluster';
+import iamSync from './iam/sync';
 import deploy from './script/deploy';
-import prune from './script/prune';
 import { createLocalDatabase } from './script/local';
-import * as winston from 'winston';
+import prune from './script/prune';
 
 winston.configure({
   level: 'debug',
@@ -16,14 +16,15 @@ winston.configure({
       timestamp() {
         return Date.now();
       },
-      formatter(options) {
-        return `${new Date(options.timestamp()).toISOString()} ${options.level.toUpperCase()} ${options.message} ${JSON.stringify(options.meta)}`;
+      formatter(options: any) {
+        return `${new Date(options.timestamp()).toISOString()} ${options.level.toUpperCase()} ${options.message} \
+        ${JSON.stringify(options.meta)}`;
       }
     })
   ]
 });
 
-config.region = "eu-west-1";
+config.region = 'eu-west-1';
 
 const warnAndExit = e => {
   console.error(e);
@@ -32,7 +33,7 @@ const warnAndExit = e => {
 
 program.command('deploy <branch> [dirs...]')
   .action((branch, dirs) => {
-    deploy({ branch, dirs, })
+    deploy({ branch, dirs })
       .catch(warnAndExit);
   });
 
@@ -60,7 +61,7 @@ program.command('ec2-create-instance <cluster>')
     try {
       const securityGroupId = await securityGroupCreate({ name: 'open2world', open: true });
 
-      await ec2InstanceCreate({ cluster, securityGroupId })
+      await ec2InstanceCreate({ cluster, securityGroupId });
     } catch (e) {
       warnAndExit(e);
     }
@@ -69,6 +70,7 @@ program.command('ec2-create-instance <cluster>')
 program.command('local-db <table-name>')
   .description('use this to create a table in a local instance of dynamodb')
   .action((tableName) => {
+    // tslint:disable-next-line no-http-string
     (<any>config).endpoint = 'http://localhost:8000/';
     createLocalDatabase({ tableName })
         .then(console.log)

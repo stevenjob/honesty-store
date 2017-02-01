@@ -1,4 +1,5 @@
-import { config, Route53 } from 'aws-sdk';
+// tslint:disable:variable-name
+import { Route53 } from 'aws-sdk';
 import * as winston from 'winston';
 
 const HostedZoneId = 'Z1NOZ8HJXP3L7I';
@@ -36,13 +37,13 @@ export const ensureAlias = async ({ name, value }) => {
 
 const extractName = (name) => name.split('.')[0];
 
-export const pruneAliases = async ({ filter = (name: string) => false }) => {
+export const pruneAliases = async ({ filter = (_name: string) => false }) => {
     const route53 = new Route53({ apiVersion: '2013-04-01' });
 
     const listResponse = await route53.listResourceRecordSets({ HostedZoneId })
         .promise();
 
-    winston.debug(`alias: listResourceRecordSets`, listResponse.ResourceRecordSets);
+    winston.debug('alias: listResourceRecordSets', listResponse.ResourceRecordSets);
 
     const resourceRecordSetsToPrune = listResponse.ResourceRecordSets
         .filter(resourceRecordSet => {
@@ -56,7 +57,7 @@ export const pruneAliases = async ({ filter = (name: string) => false }) => {
             return filter(extractName(resourceRecordSet.Name));
         });
 
-    winston.debug(`alias: recordSetsToPrune`, resourceRecordSetsToPrune);
+    winston.debug('alias: recordSetsToPrune', resourceRecordSetsToPrune);
 
     const changes = resourceRecordSetsToPrune.map(resourceRecordSet => ({
         Action: 'DELETE',

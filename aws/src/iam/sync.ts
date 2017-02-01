@@ -1,6 +1,6 @@
-import { basename, extname } from 'path';
+import { IAM } from 'aws-sdk';
 import { readFileSync } from 'fs';
-import { IAM, config } from 'aws-sdk';
+import { basename, extname } from 'path';
 
 const iam = new IAM({ apiVersion: '2010-05-08' });
 
@@ -25,7 +25,7 @@ const updatePolicy = async ({ arn, versionId, document }) => {
     })
       .promise();
   }
-}
+};
 
 const deletePolicy = async ({ arn }) => {
   const policyVersionsResponse = await iam.listPolicyVersions({ PolicyArn: arn })
@@ -49,7 +49,7 @@ export default async ({ paths }) => {
     .promise();
 
   if (policiesResponse.IsTruncated) {
-    throw new Error(`Code doesn't yet support paging`);
+    throw new Error('Code doesn\'t yet support paging');
   }
 
   const policies = [
@@ -69,13 +69,13 @@ export default async ({ paths }) => {
       };
     })
   ]
-    .reduce((policies, {name, type, data}) => {
-      const policy = policies[name] || {};
+    .reduce((pols, {name, type, data}) => {
+      const policy = pols[name] || {};
       policy[type] = data;
-      policies[name] = policy;
-      return policies;
+      pols[name] = policy;
+      return pols;
+    // tslint:disable-next-line:align
     }, {});
-
 
   for (const name of Object.keys(policies)) {
     const policy = policies[name];

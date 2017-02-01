@@ -1,6 +1,6 @@
 import { ECS } from 'aws-sdk';
-import { listAll } from '../list';
 import * as winston from 'winston';
+import { listAll } from '../list';
 
 /*
 requires:
@@ -23,6 +23,12 @@ const parseTaskDefinitionArn = (taskDefinitionArn) => {
     const [arn, aws, ecs, region, accountId, taskDefinitionFamily, revision] = taskDefinitionArn.split(':');
     const [taskDefinition, family] = taskDefinitionFamily.split('/');
     return {
+        taskDefinition,
+        arn,
+        aws,
+        ecs,
+        region,
+        accountId,
         family,
         revision: Number(revision)
     };
@@ -32,7 +38,7 @@ const parseTaskDefinitionArn = (taskDefinitionArn) => {
 requires:
 "Action": "ecs:RegisterTaskDefinition", "ecs:DescribeTaskDefinition"
 */
-export const pruneTaskDefinitions = async ({ filter = ({ family, revision }) => false }) => {
+export const pruneTaskDefinitions = async ({ filter = (_: { family, revision }) => false }) => {
     const ecs = new ECS({ apiVersion: '2014-11-13' });
 
     const listResponse = await listAll(

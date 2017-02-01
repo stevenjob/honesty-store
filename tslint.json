@@ -11,6 +11,8 @@
     "import-name": false,
     "no-reserved-keywords": false,
     "no-suspicious-comment": false,
-    "export-name": false
+    "export-name": false,
+    "variable-name": [true, "check-format", "allow-leading-underscore"],
+    "max-func-body-length": false
   }
 }

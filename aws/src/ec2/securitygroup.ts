@@ -21,7 +21,7 @@ const openUp = async ({ groupId }) => {
         ToPort: -1,
         IpRanges: [
           {
-            CidrIp: '0.0.0.0/0',
+            CidrIp: '0.0.0.0/0'
           }
         ]
       }
@@ -31,7 +31,7 @@ const openUp = async ({ groupId }) => {
   await new EC2({ apiVersion: '2014-11-13' })
     .authorizeSecurityGroupIngress(ingress)
     .promise();
-}
+};
 
 const createNewGroup = async ({ name, open }) => {
   const group = {
@@ -67,4 +67,4 @@ export const securityGroupCreate = async ({ name, open }) => {
 
     return await createNewGroup({ name, open });
   }
-}
+};

@@ -9,7 +9,7 @@ export const clusterCreate = async (clusterName) => {
   await new ECS({ apiVersion: '2014-11-13' })
     .createCluster({ clusterName })
     .promise();
-}
+};
 
 /*
 requires:
@@ -18,11 +18,11 @@ requires:
 const clusterDescribe = async ({ cluster }) => {
   const response = await new ECS({ apiVersion: '2014-11-13' })
     .describeClusters({ clusters: [ cluster ] })
-    .promise()
+    .promise();
 
   awsCheckFailures(response);
 
-  return response.clusters[0]
+  return response.clusters[0];
 };
 
 /*
@@ -32,7 +32,7 @@ requires:
 export const throwUnlessClusterExists = async ({ cluster }) => {
   const clusterDesc = await clusterDescribe({ cluster });
 
-  if (clusterDesc == undefined) {
+  if (clusterDesc == null) {
     throw `cluster "${cluster}" doesn't exist`;
   }
 

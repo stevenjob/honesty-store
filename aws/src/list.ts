@@ -7,7 +7,7 @@ interface Promiseable<T> {
 }
 
 export async function listAll<Response extends Paged, Result>(
-    requestFactory: (nextToken: string) => Promiseable<Response>, 
+    requestFactory: (nextToken: string) => Promiseable<Response>,
     resultSelector: (response: Response) => Result[]
 ): Promise<Result[]> {
     const results = [];

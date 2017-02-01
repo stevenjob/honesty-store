@@ -1,25 +1,24 @@
 import { ECS } from 'aws-sdk';
+import * as winston from 'winston';
+import { ensureLogGroup } from '../cloudwatchlogs/loggroup';
+import containerForDir from '../containerDefinition/containers';
+import { ensureTable } from '../dynamodb/table';
+import buildAndPushImage from '../ecr/buildAndPushImage';
+import { ensureService, waitForServicesStable } from '../ecs/service';
+import { ensureTaskDefinition, pruneTaskDefinitions } from '../ecs/taskDefinition';
 import { ensureListener } from '../elbv2/listener';
 import { ensureLoadBalancer } from '../elbv2/loadbalancer';
-import { ensureTargetGroup } from '../elbv2/targetgroup';
 import { ensureRule } from '../elbv2/rule';
+import { ensureTargetGroup } from '../elbv2/targetgroup';
+import { aliasToBaseUrl, ensureAlias } from '../route53/alias';
 import dirToTable from '../table/tables';
-import { ensureTaskDefinition, pruneTaskDefinitions } from '../ecs/taskDefinition';
-import buildAndPushImage from '../ecr/buildAndPushImage';
-import { createHash } from 'crypto';
-import { ensureService, waitForServicesStable } from '../ecs/service';
-import { ensureTable } from '../dynamodb/table';
-import { ensureAlias, aliasToBaseUrl } from '../route53/alias';
-import { ensureLogGroup } from '../cloudwatchlogs/loggroup';
-import containerForDir from '../containerDefinition/containers'
-import * as winston from 'winston';
 
 export const prefix = 'hs';
 export const defaultTargetGroupDir = 'web';
 export const ecsServiceRole = 'arn:aws:iam::812374064424:role/ecs-service-role';
 export const cluster = 'test-cluster';
 
-const config = {
+const serviceConfig = {
     web: {
         loadBalancer: { pathPattern: '/*', priority: 10 }
     },
@@ -37,13 +36,13 @@ const config = {
     topup: {
         database: true,
         loadBalancer: { pathPattern: '/topup/*', priority: 5 }
-    },
+    }
 };
 
 const isLive = (branch) => branch === 'live';
 
 const generateName = ({ branch, dir }: { branch: string, dir?: string }) => {
-    const base = isLive(branch) ? `honesty-store` : `hs-${branch}`;
+    const base = isLive(branch) ? 'honesty-store' : `hs-${branch}`;
     return dir == null ? base : `${base}-${dir}`;
 };
 
@@ -53,7 +52,7 @@ const ensureDatabase = async ({ branch, dir }) => {
     const { config, data } = dirToTable({
         dir,
         readCapacityUnits: capacityUnits,
-        writeCapacityUnits: capacityUnits,
+        writeCapacityUnits: capacityUnits
     });
     return await ensureTable({
         config: {
@@ -64,14 +63,22 @@ const ensureDatabase = async ({ branch, dir }) => {
     });
 };
 
+const getAndAssertEnvironment = (key) => {
+    const value = process.env[key];
+    if (!value) {
+        throw new Error(`$${key} not present in environment`);
+    }
+    return value;
+};
+
 const generateStripeKey = ({ branch, type }) => {
     if (isLive(branch) && type === 'live') {
         return getAndAssertEnvironment('LIVE_STRIPE_KEY');
     }
     return getAndAssertEnvironment('TEST_STRIPE_KEY');
-}
+};
 
-const generateSecret = ({ prefix, branch, liveSecret }) => {
+const generateSecret = ({ secretPrefix, branch, liveSecret }) => {
     const bareSecret = () => {
         if (isLive(branch)) {
             return liveSecret;
@@ -79,15 +86,7 @@ const generateSecret = ({ prefix, branch, liveSecret }) => {
         return branch;
     };
 
-    return `${prefix}:${bareSecret()}`;
-};
-
-const getAndAssertEnvironment = (key) => {
-    const value = process.env[key];
-    if (!value) {
-        throw new Error(`$${key} not present in environment`);
-    }
-    return value;
+    return `${secretPrefix}:${bareSecret()}`;
 };
 
 const getTaskRoleArn = ({ branch, database }) => {
@@ -106,12 +105,12 @@ const getCertificateArn = ({ branch }) => isLive(branch) ?
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
 export default async ({ branch, dirs }) => {
     const serviceSecret = generateSecret({
-        prefix: 'service',
+        secretPrefix: 'service',
         branch,
         liveSecret: getAndAssertEnvironment('LIVE_SERVICE_TOKEN_SECRET')
     });
     const userSecret = generateSecret({
-        prefix: 'user',
+        secretPrefix: 'user',
         branch,
         liveSecret: getAndAssertEnvironment('LIVE_USER_TOKEN_SECRET')
     });
@@ -120,14 +119,14 @@ export default async ({ branch, dirs }) => {
     const loadBalancer = await ensureLoadBalancer({
         name: generateName({ branch })
     });
-    const resourceRecordSet = await ensureAlias({
+    await ensureAlias({
         name: branch,
         value: loadBalancer.DNSName
     });
     const defaultTargetGroup = await ensureTargetGroup({
         name: generateName({ branch, dir: defaultTargetGroupDir })
     });
-    const defaultListener = await ensureListener({
+    await ensureListener({
         loadBalancerArn: loadBalancer.LoadBalancerArn,
         defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn,
         certificateArn: undefined,
@@ -145,21 +144,21 @@ export default async ({ branch, dirs }) => {
         await ensureLogGroup({
             name: logGroup,
             retention: isLive(branch) ? 30 : 1
-        })
+        });
         const targetGroup = await ensureTargetGroup({
             name: generateName({ branch, dir })
         });
-        const rule = await ensureRule({
+        await ensureRule({
             listenerArn: listener.ListenerArn,
             targetGroupArn: targetGroup.TargetGroupArn,
-            pathPattern: config[dir].loadBalancer.pathPattern,
-            priority: config[dir].loadBalancer.priority
+            pathPattern: serviceConfig[dir].loadBalancer.pathPattern,
+            priority: serviceConfig[dir].loadBalancer.priority
         });
         const image = await buildAndPushImage({
             dir,
             repositoryName: generateName({ branch, dir })
         });
-        const db = config[dir].database ? await ensureDatabase({ branch, dir }) : {};
+        const db = serviceConfig[dir].database ? await ensureDatabase({ branch, dir }) : {};
         // TODO: create bespoke roles
         const containerDefinitions = containerForDir({
             dir,
@@ -171,17 +170,17 @@ export default async ({ branch, dirs }) => {
                 serviceSecret,
                 userSecret,
                 liveStripeKey: generateStripeKey({ branch, type: 'live' }),
-                testStripeKey: generateStripeKey({ branch, type: 'test' }),
+                testStripeKey: generateStripeKey({ branch, type: 'test' })
             }
         });
 
         const taskDefinition = await ensureTaskDefinition({
             family: generateName({ branch, dir }),
             containerDefinitions,
-            taskRoleArn: getTaskRoleArn({ branch, database: config[dir].database })
+            taskRoleArn: getTaskRoleArn({ branch, database: serviceConfig[dir].database })
         });
         await pruneTaskDefinitions({
-            filter: ({ family, revision }) => family === taskDefinition.family && revision !== taskDefinition.revision,
+            filter: ({ family, revision }) => family === taskDefinition.family && revision !== taskDefinition.revision
         });
         // For now assuming all tasks contain only one container with a port mapping which should be load balanced
         const service = await ensureService({
@@ -201,7 +200,7 @@ export default async ({ branch, dirs }) => {
         services.push(service);
     }
 
-    winston.info(`Waiting for stability`);
+    winston.info('Waiting for stability');
 
     await waitForServicesStable({
         cluster,
