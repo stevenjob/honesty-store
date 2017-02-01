@@ -30,8 +30,24 @@ export default (service: string) => {
         let json: ApiResponse<Result>;
         try {
             json = await response.json();
-        } catch (e) {
-            error(key, `failed ${method} ${url} couldn't parse json, HTTP ${response.status}`);
+        } catch (jsonParseError) {
+
+            // attempt to get body text to help debugging
+            let responseText: string;
+            try {
+                responseText = await response.text()
+            } catch (textResponseError) {
+                responseText = '';
+            }
+
+            error(
+                key,
+                `failed ${method} ${url}, couldn't parse json`,
+                {
+                    httpStatus: response.status,
+                    responseText,
+                });
+
             throw new Error(`${method} ${path} failed (couldn't parse json), HTTP ${response.status}`);
         }
 
