@@ -11,6 +11,7 @@ const usage = () => {
 
   console.error(`Usage: ${filename} userId amount extra-json-data`);
   console.error(`  $SERVICE_TOKEN_SECRET and $BASE_URL required in the environment`);
+  console.error(`  $BASE_URL should be https://live.honesty.store for real topups, avoiding the https://honesty.store CDN`);
   console.error(``);
   console.error(`  e.g. SERVICE_TOKEN_SECRET=service:xNxznoraYHUq+A0O33OJ23pwwfQAtK12SCt BASE_URL=https://honesty.store ${filename} 56b60280-5823-4058-9b5b-24f4c2660876 500  '{ "scottcoinTx": "<scottcoin-block-hash>" }'`);
   process.exit(2);
