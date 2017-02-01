@@ -5,6 +5,12 @@ import isEmail = require('validator/lib/isEmail');
 export interface Key {
   __IS__A__KEY__: void;
   toJSON(): string;
+
+  service: string;
+  correlationKey: string;
+  tags: {
+      // specific to the key, e.g. userId, email, etc
+  };
 }
 
 export interface AuthenticationKey extends Key {
