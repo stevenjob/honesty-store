@@ -59,20 +59,21 @@ const createEndPoint = (service, internalRouter, method: 'get' | 'post' | 'put')
       (request, response) => {
         const timer = time();
         const key = extractKey(request);
-        info(key, `handling ${method} ${request.url}`);
+        // tslint:disable-next-line:max-line-length
+        info(key, `handling ${method} ${request.url} request = { params: '${JSON.stringify(request.params)}', body: '${JSON.stringify(request.body)}' }`);
         action(key, request.params, /* maybe undefined */request.body)
-          .then(result => {
-            const duration = timer();
-            info(key, `successful ${method} ${request.url}`, { result, duration });
-            response.status(HTTPStatus.OK)
-              .json({ response: result });
-          })
-          .catch((e) => {
-            const duration = timer();
-            error(key, `failed ${method} ${request.url}`, { e, duration });
-            response.status(200)
-              .json({ error: { message: e.message } });
-          });
+        .then(result => {
+          const duration = timer();
+          info(key, `successful ${method} ${request.url}`, { result, duration });
+          response.status(HTTPStatus.OK)
+          .json({ response: result });
+        })
+        .catch((e) => {
+          const duration = timer();
+          error(key, `failed ${method} ${request.url}`, { e, duration });
+          response.status(200)
+          .json({ error: { message: e.message }});
+        });
       });
   };
 
