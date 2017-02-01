@@ -11,6 +11,7 @@ import { ensureService, waitForServicesStable } from '../ecs/service';
 import { ensureTable } from '../dynamodb/table';
 import { ensureAlias, aliasToBaseUrl } from '../route53/alias';
 import { ensureLogGroup } from '../cloudwatchlogs/loggroup';
+import containerForDir from '../containerDefinition/containers'
 import * as winston from 'winston';
 
 export const prefix = 'hs';
@@ -158,9 +159,8 @@ export default async ({ branch, dirs }) => {
         });
         const db = config[dir].database ? await ensureDatabase({ branch, dir }) : {};
         // TODO: create bespoke roles
-        const containerDefinitions: ECS.ContainerDefinitions = await templateJSON({
-            type: 'containerDefinition',
-            name: dir,
+        const containerDefinitions: ECS.ContainerDefinitions = containerForDir({
+            dir,
             data: {
                 image,
                 logGroup,
