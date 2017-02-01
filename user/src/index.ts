@@ -158,8 +158,7 @@ const scanByEmailAddress = async ({ emailAddress }) => {
 };
 
 const createUser = async ({ userId, userProfile }): Promise<UserWithAccessAndRefreshTokens> => {
-    assertNotNull("defaultStoreId", userProfile.defaultStoreId);
-    assertNotNull("accountId", userProfile.accountId);
+    assertValidUserProfile(userProfile);
 
     const user: InternalUser = {
         id: userId,
