@@ -9,20 +9,17 @@ const template = ({
     readCapacityUnits,
     writeCapacityUnits,
     dummyData,
-    config = {
-        KeySchema: [],
-        AttributeDefinitions: [],
-    }
+    config
 }: TemplateArgument) => ({
     config: {
-        ...config,
+        ...(config || {}),
         KeySchema: [
             { AttributeName: "id", KeyType: "HASH" },
-            ...config.KeySchema,
+            ...(config.KeySchema || []),
         ],
         AttributeDefinitions: [
             { AttributeName: "id", AttributeType: "S" },
-            ...config.AttributeDefinitions,
+            ...(config.AttributeDefinitions || []),
         ],
         ProvisionedThroughput: {
             ReadCapacityUnits: readCapacityUnits,
