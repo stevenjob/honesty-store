@@ -4,14 +4,13 @@ import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isEmail = require('validator/lib/isEmail');
-import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from './token';
-import { User, UserProfile, UserWithAccessToken, UserWithAccessAndRefreshTokens, TEST_DATA_USER_ID } from './client';
-import { createAccount, getAccount, TEST_DATA_EMPTY_ACCOUNT_ID } from '../../transaction/src/client';
-import { baseUrl } from '../../service/src/baseUrl';
-import serviceRouter from '../../service/src/router';
-import { info, error } from '../../service/src/log';
 import { createServiceKey } from '../../service/src/key';
+import { error, info } from '../../service/src/log';
+import serviceRouter from '../../service/src/router';
 import { storeList } from '../../service/src/storeList';
+import { createAccount } from '../../transaction/src/client';
+import { TEST_DATA_USER_ID, User, UserProfile, UserWithAccessAndRefreshTokens, UserWithAccessToken } from './client';
+import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from './token';
 
 config.region = process.env.AWS_REGION;
 
@@ -45,7 +44,7 @@ const assertValidEmailAddress = (emailAddress) => {
 
 const assertValidUserProfile = (userProfile: UserProfile) => {
     if (Object.keys(userProfile).some(key => ['defaultStoreId', 'emailAddress'].indexOf(key) === -1)) {
-        throw new Error(`Invalid user profile`);
+        throw new Error('Invalid user profile');
     }
     if ('defaultStoreId' in userProfile) {
         assertValidDefaultStoreId(userProfile.defaultStoreId);
@@ -56,20 +55,12 @@ const assertValidUserProfile = (userProfile: UserProfile) => {
     return true;
 };
 
-const assertNotNull = (name, value) => {
-    if (value == null) {
-        throw new Error(`${name} is null`);
-    }
-}
-
 const externaliseUser = (user: InternalUser): User => {
-    const {
-        created,
-        refreshToken,
-        version,
-        ...externaliseUser
-    } = user;
-    return externaliseUser;
+    const exUser = user;
+    delete exUser.created;
+    delete exUser.refreshToken;
+    delete exUser.version;
+    return exUser;
 };
 
 const externaliseUserWithAccessToken = (user: InternalUser): UserWithAccessToken => ({
@@ -94,7 +85,7 @@ const getInternal = async ({ userId }): Promise<InternalUser> => {
         })
         .promise();
 
-    const user = <InternalUser>response.Item
+    const user = <InternalUser>response.Item;
 
     if (user == null) {
         throw new Error(`User not found ${userId}`);
@@ -120,10 +111,13 @@ const getByRefreshToken = async ({ refreshToken }): Promise<UserWithAccessToken>
 
     const user = await getInternal({ userId });
 
+    /* tslint:disable possible-timing-attack - not a concern for now, due to our tokens being pretty lengthy and we should be
+    able to identify an attack by checking the logs */
     // As well as the JWT signing, we validate a stored uuid for refresh tokens
     if (token !== user.refreshToken) {
-        throw new Error(`Invalid refreshToken`);
+        throw new Error('Invalid refreshToken');
     }
+    /* tslint:enable possible-timing-attack */
 
     return externaliseUserWithAccessToken(user);
 };
@@ -143,15 +137,15 @@ const scanByEmailAddress = async ({ emailAddress }) => {
     const response = await new DynamoDB.DocumentClient()
         .scan({
             TableName: process.env.TABLE_NAME,
-            FilterExpression: "emailAddress = :emailAddress",
+            FilterExpression: 'emailAddress = :emailAddress',
             ExpressionAttributeValues: {
-                ":emailAddress": emailAddress
+                ':emailAddress': emailAddress
             }
         })
         .promise();
 
     if (response.Items.length > 1) {
-        throw new Error(`Multiple users found with the same emailAddress`);
+        throw new Error('Multiple users found with the same emailAddress');
     }
 
     const user = <InternalUser>response.Items[0];
@@ -176,7 +170,7 @@ const createUser = async ({ userId, userProfile }): Promise<UserWithAccessAndRef
         emailAddress: userProfile.emailAddress
     };
 
-    const response = await new DynamoDB.DocumentClient()
+    await new DynamoDB.DocumentClient()
         .put({
             TableName: process.env.TABLE_NAME,
             Item: user
@@ -187,21 +181,22 @@ const createUser = async ({ userId, userProfile }): Promise<UserWithAccessAndRef
 };
 
 const update = async ({ user, originalVersion }: { user: InternalUser, originalVersion: number }) => {
-    const response = await new DynamoDB.DocumentClient()
+    await new DynamoDB.DocumentClient()
         .update({
             TableName: process.env.TABLE_NAME,
             Key: {
                 id: user.id
             },
             ConditionExpression: 'version=:originalVersion',
-            UpdateExpression: 'set accountId=:accountId, defaultStoreId=:defaultStoreId, emailAddress=:emailAddress, refreshToken=:refreshToken, version=:updatedVersion',
+            UpdateExpression: 'set accountId=:accountId, defaultStoreId=:defaultStoreId, emailAddress=:emailAddress,\
+            refreshToken=:refreshToken, version=:updatedVersion',
             ExpressionAttributeValues: {
                 ':originalVersion': originalVersion,
                 ':accountId': user.accountId,
                 ':defaultStoreId': user.defaultStoreId,
                 ':emailAddress': user.emailAddress,
                 ':refreshToken': user.refreshToken,
-                ':updatedVersion': user.version,
+                ':updatedVersion': user.version
             }
         })
         .promise();
@@ -275,7 +270,7 @@ const logoutUser = async (userId) => {
     // can't clear access token, but it'll expire soon enough
     const loggedoutUser: InternalUser = {
         ...originalUser,
-        refreshToken: uuid(),
+        refreshToken: uuid()
     };
 
     await update({ user: loggedoutUser, originalVersion: originalUser.version });
@@ -292,37 +287,37 @@ const router = serviceRouter('user');
 router.get(
     '/:userId',
     1,
-    async (key, { userId }) => get({ userId })
+    async (_key, { userId }) => get({ userId })
 );
 
 router.get(
     '/accessToken/:accessToken',
     1,
-    async (key, { accessToken }) => await getByAccessToken({ accessToken })
+    async (_key, { accessToken }) => await getByAccessToken({ accessToken })
 );
 
 router.get(
     '/refreshToken/:refreshToken',
     1,
-    async (key, { refreshToken }) => await getByRefreshToken({ refreshToken })
+    async (_key, { refreshToken }) => await getByRefreshToken({ refreshToken })
 );
 
 router.get(
     '/magicLink/:magicLinkToken',
     1,
-    async (key, { magicLinkToken }) => await getByMagicLinkToken({ magicLinkToken })
+    async (_key, { magicLinkToken }) => await getByMagicLinkToken({ magicLinkToken })
 );
 
 router.get(
     '/emailAddress/:emailAddress',
     1,
-    async (key, { emailAddress }) => externaliseUser(await scanByEmailAddress({ emailAddress }))
+    async (_key, { emailAddress }) => externaliseUser(await scanByEmailAddress({ emailAddress }))
 );
 
 router.post(
     '/',
     1,
-    async (key, {}, { userId, ...userProfile}) => await createUser({ userId, userProfile })
+    async (_key, {}, { userId, ...userProfile}) => await createUser({ userId, userProfile })
 );
 
 router.put(
@@ -335,7 +330,7 @@ router.post(
     '/magicLink/:emailAddress',
     1,
     async (key, { emailAddress }, {}) => {
-        const messageId = await sendMagicLinkEmail({ key, emailAddress});
+        await sendMagicLinkEmail({ key, emailAddress});
         return {};
     }
 );
@@ -343,13 +338,13 @@ router.post(
 router.post(
     '/logout/:userId',
     1,
-    async (key, { userId }, {}) => await logoutUser(userId)
+    async (_key, { userId }, {}) => await logoutUser(userId)
 );
 
 app.use(router);
 
 // send healthy response to load balancer probes
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
     get({ userId: TEST_DATA_USER_ID })
         .then(() => {
             res.send(200);

@@ -3,7 +3,7 @@ import ms = require('ms');
 
 const secret = process.env.USER_TOKEN_SECRET;
 if (!secret) {
-    throw new Error(`no $USER_TOKEN_SECRET provided`);
+    throw new Error('no $USER_TOKEN_SECRET provided');
 }
 
 const signToken = (payload, expiresIn) => jwt.sign(payload, secret, { algorithm: 'HS256', expiresIn });
@@ -17,7 +17,7 @@ const verifyToken = (token) => jwt.verify(token, secret, { algorithms: ['HS256']
 export const verifyAccessToken = (token) => {
     const { userId, refreshToken } = verifyToken(token);
     if (refreshToken != null) {
-        throw new Error(`Refresh token used in place of access token`);
+        throw new Error('Refresh token used in place of access token');
     }
     return { userId };
 };
@@ -25,7 +25,7 @@ export const verifyAccessToken = (token) => {
 export const verifyRefreshToken = (token) => {
     const { userId, refreshToken } = verifyToken(token);
     if (refreshToken == null) {
-        throw new Error(`Access token used in place of refresh token`);
+        throw new Error('Access token used in place of refresh token');
     }
     return { userId, refreshToken };
 };

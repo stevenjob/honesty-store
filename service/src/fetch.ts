@@ -46,7 +46,7 @@ export default (service: string) => {
                 `failed ${method} ${url}, couldn't parse json`,
                 {
                     httpStatus: response.status,
-                    responseTex,
+                    responseText
                 });
 
             throw new Error(`${method} ${path} failed (couldn't parse json), HTTP ${response.status}`);
