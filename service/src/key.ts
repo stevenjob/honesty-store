@@ -11,42 +11,31 @@ export interface AuthenticationKey extends Key {
   setUserId(userId: string);
 }
 
+export const createUserKey = ({ userId, correlationKey = undefined }) => {
+  if (!isUUID(userId)) {
+    throw new Error(`Invalid userId specified ${userId}`);
+  }
+  return <Key>{
+    toJSON() {
+      return this.toString();
+    },
+    toString() {
+      return `user:${userId}:${correlationKey || uuid()}`;
+    }
+  };
+};
+
 export const createAuthenticationKey = () => {
   const correlationKey = uuid();
   return <AuthenticationKey>{
     setUserId(userId: string): Key {
-      if (!isUUID(userId)) {
-        throw new Error(`Invalid userId specified ${userId}`);
-      }
-      return <Key>{
-        toJSON() {
-          return this.toString();
-        },
-        toString() {
-          return `user:${userId}:${correlationKey}`;
-        }
-      };
+      return createUserKey({ userId, correlationKey });
     },
     toJSON() {
       return this.toString();
     },
     toString() {
       return `auth:${correlationKey}`;
-    }
-  };
-};
-
-export const createUserKey = ({ userId }) => {
-  if (!isUUID(userId)) {
-    throw new Error(`Invalid userId specified ${userId}`);
-  }
-  const correlationKey = uuid();
-  return <Key>{
-    toJSON() {
-      return this.toString();
-    },
-    toString() {
-      return `user:${userId}:${correlationKey}`;
     }
   };
 };
