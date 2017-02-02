@@ -10,7 +10,7 @@ interface Params {
 }
 
 interface BodyAction<Result, Body> {
-  (key: Key, params: Params, body: Body): Promise<Result>;
+  (key: Key, params: Params, body: Body, request: any): Promise<Result>;
 }
 
 interface Router {
@@ -64,27 +64,35 @@ const createEndPoint = (service, internalRouter, version, method: 'get' | 'post'
         const key = extractKey(request);
         // tslint:disable-next-line:max-line-length
         info(key, `handling ${method} ${request.url} request = { params: '${JSON.stringify(request.params)}', body: '${JSON.stringify(request.body)}' }`);
-        action(key, request.params, /* maybe undefined */request.body)
-        .then(result => {
-          const duration = timer();
-          info(key, `successful ${method} ${request.url}`, { result, duration });
-          response.status(HTTPStatus.OK)
-          .json({ response: result });
-        })
-        .catch((e) => {
-          const duration = timer();
-          error(key, `failed ${method} ${request.url}`, { e, duration });
-          response.status(200)
-            .json({ error: { message: e.message }});
-        });
+        action(key, request.params, /* maybe undefined */request.body, request)
+          .then(result => {
+            const duration = timer();
+            info(key, `successful ${method} ${request.url}`, { result, duration });
+            response.status(HTTPStatus.OK)
+              .json({ response: result });
+          })
+          .catch((e) => {
+            const duration = timer();
+            error(key, `failed ${method} ${request.url}`, { e, duration });
+            response.status(e.statusCode || 200)
+              .json({ error: { message: e.message }});
+          });
       });
   };
+
+export class ServiceRouterCode extends Error {
+  public statusCode: number;
+  constructor(statusCode: number, message: string) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
 
 export const serviceRouter = (service: string, version: number): Router => {
   const internalRouter = express.Router();
 
   const router: any = (request, response, next) =>
-    internalRouter(request, response, next);
+  internalRouter(request, response, next);
 
   router.get = createEndPoint(service, internalRouter, version, 'get');
   router.post = createEndPoint(service, internalRouter, version, 'post');

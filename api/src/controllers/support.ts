@@ -1,7 +1,5 @@
 import fetch from 'node-fetch';
-import HTTPStatus = require('http-status');
 import { info } from '../../../service/src/log';
-import { promiseResponse } from '../../../service/src/promiseResponse';
 import { authenticateAccessToken } from '../middleware/authenticate';
 
 const sendSlackSupportMessage = async ({ key, user, message }) => {
@@ -45,14 +43,5 @@ export default (router) => {
   router.post(
     '/support',
     authenticateAccessToken,
-    (req, res) => {
-      const { key, user } = req;
-      const { message } = req.body;
-
-      promiseResponse<{}>(
-        sendSlackSupportMessage({ key, user, message }),
-        req,
-        res,
-        HTTPStatus.OK);
-    });
+    async (key, _params, { message }, { user }) => await sendSlackSupportMessage({ key, user, message }));
 };

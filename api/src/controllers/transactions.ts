@@ -1,6 +1,5 @@
 import HTTPStatus = require('http-status');
-import { promiseResponse } from '../../../service/src/promiseResponse';
-import { Transaction } from '../../../transaction/src/client/index';
+import { ServiceRouterCode } from '../../../service/src/router';
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { getTransactionHistory } from '../services/transaction';
 
@@ -23,14 +22,13 @@ export default (router) => {
   router.get(
     '/transactions',
     authenticateAccessToken,
-    (request, response) => {
-      const page = parseInt(request.query.page, 10) || 0;
-      const { key } = request;
+    async (key, _params, _body, { query, user }) => {
+      const page = parseInt(query.page, 10) || 0;
 
-      promiseResponse<{ lastPage: number, items: Transaction[] }>(
-        getPagedTransactions({ key, accountID: request.user.accountId, page }),
-        request,
-        response,
-        HTTPStatus.INTERNAL_SERVER_ERROR);
+      try {
+        return await getPagedTransactions({ key, accountID: user.accountId, page });
+      } catch (e) {
+        throw new ServiceRouterCode(HTTPStatus.INTERNAL_SERVER_ERROR, e.message);
+      }
     });
 };

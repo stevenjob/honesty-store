@@ -3,14 +3,13 @@ import HTTPStatus = require('http-status');
 import { error } from '../../../service/src/log';
 import uuid = require('uuid/v4');
 
-import { createUnauthenticatedKey, createUserKey } from '../../../service/src/key';
-import { promiseResponse } from '../../../service/src/promiseResponse';
-import { CardDetails, createTopup } from '../../../topup/src/client/index';
-import { TransactionAndBalance, TransactionDetails } from '../../../transaction/src/client/index';
+import { createUserKey } from '../../../service/src/key';
+import { ServiceRouterCode } from '../../../service/src/router';
+import { createTopup } from '../../../topup/src/client/index';
+import { TransactionAndBalance } from '../../../transaction/src/client/index';
 import { createUser, updateUser } from '../../../user/src/client/index';
-import { WithAccessToken, WithRefreshToken } from '../../../user/src/client/index';
 import { authenticateAccessToken } from '../middleware/authenticate';
-import { getSessionData, SessionData } from '../services/session';
+import { getSessionData } from '../services/session';
 import { storeCodeToStoreID } from '../services/store';
 import { purchase } from '../services/transaction';
 
@@ -24,14 +23,6 @@ const register = async (storeCode) => {
 
   return await getSessionData(key, { user });
 };
-
-interface RegistrationSessionData {
-  user: {
-    balance: number;
-    transactions: TransactionDetails[];
-    cardDetails: CardDetails;
-  };
-}
 
 const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, stripeToken }) => {
   const user = await updateUser(key, userID, { emailAddress });
@@ -71,13 +62,12 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
 const setupRegisterPhase1 = (router) => {
   router.post(
     '/register',
-    (request, response) => {
-      const { storeCode } = request.body;
-      request.key = createUnauthenticatedKey();
-
-      type ResultType = SessionData & WithRefreshToken & WithAccessToken;
-
-      promiseResponse<ResultType>(register(storeCode), request, response, HTTPStatus.INTERNAL_SERVER_ERROR);
+    async (_key /* a new key is created instead */, _params, { storeCode }) => {
+      try {
+        return await register(storeCode);
+      } catch (e) {
+        throw new ServiceRouterCode(HTTPStatus.INTERNAL_SERVER_ERROR, e.message);
+      }
     });
 };
 
@@ -85,26 +75,18 @@ const setupRegisterPhase2 = (router) => {
   router.post(
     '/register2',
     authenticateAccessToken,
-    (request, response) => {
-      const emailAddress = request.body.emailAddress || '';
+    async (key, _params, { itemID, topUpAmount, stripeToken, emailAddress = '' }, { user: { id: userID } }) => {
       if (!isEmail(emailAddress)) {
-        response.status(HTTPStatus.UNAUTHORIZED)
-          .json({
-            error: {
-              message: 'Invalid email address provided'
-            }
-          });
-        return;
+        throw new ServiceRouterCode(
+          HTTPStatus.UNAUTHORIZED,
+          'Invalid email address provided');
       }
 
-      const { itemID, topUpAmount, stripeToken } = request.body;
-      const { user: { id: userID }, key } = request;
-
-      promiseResponse<RegistrationSessionData>(
-        register2(key, { userID, emailAddress, topUpAmount, itemID, stripeToken }),
-        request,
-        response,
-        HTTPStatus.INTERNAL_SERVER_ERROR);
+      try {
+        return await register2(key, { userID, emailAddress, topUpAmount, itemID, stripeToken });
+      } catch (e) {
+        throw new ServiceRouterCode(HTTPStatus.INTERNAL_SERVER_ERROR, e.message);
+      }
     });
 };
 

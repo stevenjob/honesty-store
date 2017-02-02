@@ -1,9 +1,9 @@
 import HTTPStatus = require('http-status');
 import { createEmailKey } from '../../../service/src/key';
-import { promiseResponse } from '../../../service/src/promiseResponse';
-import { sendMagicLinkEmail, WithRefreshToken } from '../../../user/src/client/index';
+import { ServiceRouterCode } from '../../../service/src/router';
+import { sendMagicLinkEmail } from '../../../user/src/client/index';
 import { authenticateEmailToken } from '../middleware/authenticate';
-import { getSessionData, SessionData } from '../services/session';
+import { getSessionData } from '../services/session';
 
 export const sendEmailToken = async (emailAddress) => {
   await sendMagicLinkEmail(createEmailKey({ emailAddress }), emailAddress);
@@ -13,28 +13,19 @@ export const sendEmailToken = async (emailAddress) => {
 const setupSignInPhase1 = (router) => {
   router.post(
     '/signin',
-    (request, response) => {
-      const { emailAddress } = request.body;
-      promiseResponse<{}>(
-        sendEmailToken(emailAddress),
-        request,
-        response,
-        HTTPStatus.OK);
-    });
+    async (_key, _params, { emailAddress }) => await sendEmailToken(emailAddress));
 };
 
 const setupSignInPhase2 = (router) => {
   router.post(
     '/signin2',
     authenticateEmailToken,
-    (request, response) => {
-      const { key } = request;
-
-      promiseResponse<SessionData & WithRefreshToken>(
-        getSessionData(key, { user: request.user }),
-        request,
-        response,
-        HTTPStatus.INTERNAL_SERVER_ERROR);
+    async (key, _params, _body, { user }) => {
+      try {
+        return await getSessionData(key, { user });
+      } catch (e) {
+        throw new ServiceRouterCode(HTTPStatus.INTERNAL_SERVER_ERROR, e.message);
+      }
     });
 };
 
