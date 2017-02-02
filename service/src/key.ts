@@ -4,7 +4,6 @@ import isEmail = require('validator/lib/isEmail');
 
 export interface Key {
   __IS__A__KEY__: void;
-  toJSON(): string;
 
   service: string;
   correlationKey: string;
@@ -19,16 +18,8 @@ export interface AuthenticationKey extends Key {
 
 // return a key like so: `service:correlationKey:tag1=value1:tag2=value2:...`
 const createKey = ({ service, correlationKey = uuid(), tags = {} }) => {
-  const tagString = Object.keys(tags).map((k) => `${k}=${tags[k]}`).join(':');
-
   return <Key>{
     __IS__A__KEY__: void 0,
-    toJSON() {
-      return this.toString();
-    },
-    toString() {
-      return `${service}:${correlationKey}:${tagString}`;
-    },
     service,
     correlationKey,
     tags

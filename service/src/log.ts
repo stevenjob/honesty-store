@@ -12,14 +12,9 @@ const replacer = (_key, value) => {
 
 const log = (level: Level, key: Key, message: string, ...args: any[]) => {
   const output = {
+    ...key,
     time: new Date().toISOString(),
     lvl: level,
-
-    key,
-    keyService: key.service,
-    keyUUID: key.correlationKey,
-    keyTags: key.tags,
-
     msg: message,
     args
   };
