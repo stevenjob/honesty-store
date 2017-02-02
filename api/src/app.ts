@@ -32,7 +32,7 @@ supportController(router);
 app.use('/api/v1', router);
 
 // send healthy response to load balancer probes
-app.get('/', (res) => {
+app.get('/', (_req, res) => {
   res.send(200);
 });
 
