@@ -7,7 +7,7 @@ import * as winston from 'winston';
 
 const getCredentials = async () => {
   const response = await new ECR({ apiVersion: '2015-09-21' })
-    .getAuthorizationToken()
+    .getAuthorizationToken({ })
     .promise();
   const token = response.authorizationData[0].authorizationToken;
   const decodedToken = Buffer.from(token, 'base64').toString('utf8');
@@ -17,15 +17,15 @@ const getCredentials = async () => {
 
 export default async ({ dir, repositoryName }) => {
   winston.debug(`push: gather metadata`);
-  const [accountId, { user, password }, { repositoryUri }] = await Promise.all([
-    getAccountId(),
+  const [{ user, password }, { repositoryUri }] = await Promise.all([
     getCredentials(),
     ensureRepository({ name: repositoryName })
   ]);
+  const serverUrl = `https://${repositoryUri.split('/')[0]}`;
   winston.debug(`buildAndPushImage: build`);
-  await spawn(`docker`, `build`, `-t`, `${dir}`, `-f`, `${dir}/Dockerfile`, `.`);
-  winston.debug(`buildAndPushImage: login`);
-  await spawn(`docker`, `login`, `-u`, `${user}`, `-p`, `${password}`, `-e`,  `none`, `https://${repositoryUri}`);
+  await spawn(`docker`, `build`, `-t`, `${dir}`, `-f`, `${dir}/Dockerfile`, `--rm=false`, `.`);
+  winston.debug(`buildAndPushImage: login ${user} ${serverUrl}`);
+  await spawn(`docker`, `login`, `-u`, `${user}`, `-p`, `${password}`, `-e`,  `none`, `${serverUrl}`);
   winston.debug(`buildAndPushImage: tag`);
   await spawn(`docker`, `tag`, `${dir}:latest`, `${repositoryUri}:latest`);
   winston.debug(`buildAndPushImage: push`);
