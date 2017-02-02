@@ -1,5 +1,12 @@
 {
   "extends": "tslint-microsoft-contrib",
+  "rulesDirectory": [
+    /*
+      We're sharing this config between all TypeScript projects, but the 'tslint-eslint-rules' package can't be installed at this level,
+      so we just pick the api/package.json as being the chosen one.
+    */
+    "api/node_modules/tslint-eslint-rules/dist/rules"
+  ],
   "rules": {
     "interface-name": [true, "never-prefix"],
     "missing-jsdoc": false,
@@ -14,6 +21,6 @@
     "export-name": false,
     "variable-name": [true, "check-format", "allow-leading-underscore"],
     "max-func-body-length": false,
-    "ter-indent": [true, 2]
+    "ter-indent": [true, 2, { "SwitchCase": 1 }]
   }
 }
