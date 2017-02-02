@@ -15,8 +15,10 @@ import { pruneLogGroups } from '../cloudwatchlogs/loggroup'
 import * as winston from 'winston';
 import ms = require('ms');
 
+const force = process.env.FORCE;
+
 export default async () => {
-    const branchNames = Array.from(await getOriginBranchNames());
+    const branchNames = force ? ['live', 'test'] : Array.from(await getOriginBranchNames());
 
     const branchPrefixes = branchNames.map(branch => new RegExp(`${prefix}-${branch}(-|$)`));
 
