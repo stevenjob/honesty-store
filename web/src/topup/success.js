@@ -5,12 +5,12 @@ import { Success } from '../chrome/modal';
 import Currency from '../format/Currency';
 
 export const TopupSuccess = ({ balance }) =>
-    <Success title={<span>Your balance is now <Currency amount={balance} /></span>}
-        subtitle="Thank you for your top up!"
-        onClick={() => browserHistory.replace(`/history`)}/>;
+  <Success title={<span>Your balance is now <Currency amount={balance} /></span>}
+    subtitle="Thank you for your top up!"
+    onClick={() => browserHistory.replace(`/history`)} />;
 
 const mapStateToProps = ({ user: { balance = 0 } }) => ({
-    balance
+  balance
 });
 
 export default connect(mapStateToProps)(TopupSuccess);

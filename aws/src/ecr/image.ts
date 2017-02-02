@@ -2,29 +2,29 @@ import { ECR } from 'aws-sdk';
 import * as winston from 'winston';
 
 export const pruneImages = async ({ repositoryName, filter = ({}) => false })
-    : Promise<{ repositoryName: string, filter: (image: ECR.ImageDetail) => boolean }> => {
-    const ecr = new ECR({ apiVersion: '2015-09-21' });
+  : Promise<{ repositoryName: string, filter: (image: ECR.ImageDetail) => boolean }> => {
+  const ecr = new ECR({ apiVersion: '2015-09-21' });
 
-    const describeResponse = await ecr.describeImages({
-        repositoryName
-    })
-        .promise();
+  const describeResponse = await ecr.describeImages({
+    repositoryName
+  })
+    .promise();
 
-    winston.debug('pruneImages: imageDetails', describeResponse.imageDetails);
+  winston.debug('pruneImages: imageDetails', describeResponse.imageDetails);
 
-    const imagesToPrune = describeResponse.imageDetails
-        .filter(filter)
-        .map(({ imageDigest }) => ({ imageDigest }));
+  const imagesToPrune = describeResponse.imageDetails
+    .filter(filter)
+    .map(({ imageDigest }) => ({ imageDigest }));
 
-    winston.debug('pruneImages: imagesToPrune', imagesToPrune);
+  winston.debug('pruneImages: imagesToPrune', imagesToPrune);
 
-    if (imagesToPrune.length === 0) {
-        return;
-    }
+  if (imagesToPrune.length === 0) {
+    return;
+  }
 
-    await ecr.batchDeleteImage({
-        repositoryName,
-        imageIds: imagesToPrune
-    })
-        .promise();
+  await ecr.batchDeleteImage({
+    repositoryName,
+    imageIds: imagesToPrune
+  })
+    .promise();
 };

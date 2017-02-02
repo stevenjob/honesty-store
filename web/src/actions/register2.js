@@ -2,19 +2,19 @@ import { browserHistory } from 'react-router';
 
 const createToken = (data) =>
     new Promise((resolve, reject) => {
-        const stripeResponseHandler = (status, response) => {
-            if (response.error != null) {
-                const error = Object.assign(new Error(), response.error);
-                return reject(error);
-            }
-            if (status !== 200) {
-                return reject(new Error(`Non-200 response ${status} from Stripe`));
-            }
-            resolve(response.id);
-        };
-        const Stripe = window.Stripe;
-        Stripe.setPublishableKey(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
-        Stripe.card.createToken(data, stripeResponseHandler);
+      const stripeResponseHandler = (status, response) => {
+        if (response.error != null) {
+          const error = Object.assign(new Error(), response.error);
+          return reject(error);
+        }
+        if (status !== 200) {
+          return reject(new Error(`Non-200 response ${status} from Stripe`));
+        }
+        resolve(response.id);
+      };
+      const Stripe = window.Stripe;
+      Stripe.setPublishableKey(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+      Stripe.card.createToken(data, stripeResponseHandler);
     });
 
 export const REGISTER2_REQUEST = 'REGISTER2_REQUEST';

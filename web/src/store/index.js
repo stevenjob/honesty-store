@@ -14,21 +14,21 @@ const Help = () =>
   </Link>;
 
 const Balance = ({ balance }) =>
-    <Link to={`/topup`} className="store-title-balance">
-      <small>Balance</small>
-      <h1>
-        <Currency amount={balance} />
-      </h1>
-    </Link>;
+  <Link to={`/topup`} className="store-title-balance">
+    <small>Balance</small>
+    <h1>
+      <Currency amount={balance} />
+    </h1>
+  </Link>;
 
-const itemRenderer = (item, index) => <StoreItem item={item}/>;
+const itemRenderer = (item, index) => <StoreItem item={item} />;
 
 const Store = ({ registered, storeCode, balance, loading, items }) =>
   <Page title="Store"
     subtitle={storeCode ? `@${storeCode}` : ''}
-    right={registered ? <Balance balance={balance}/> : <Help/>}
+    right={registered ? <Balance balance={balance} /> : <Help />}
     nav={registered}>
-    <List data={items} itemRenderer={itemRenderer}/>
+    <List data={items} itemRenderer={itemRenderer} />
   </Page>;
 
 const mapStateToProps = ({ user, store: { code, items } }) => ({

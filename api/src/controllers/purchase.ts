@@ -12,15 +12,15 @@ export default (router) => {
       const { user, key } = request;
 
       promiseResponse<TransactionAndBalance>(
-          purchase({
-              key,
-              itemID,
-              userID: user.id,
-              quantity,
-              accountID: user.accountId,
-              storeID: user.defaultStoreId
-          }),
-          request,
-          response);
+        purchase({
+          key,
+          itemID,
+          userID: user.id,
+          quantity,
+          accountID: user.accountId,
+          storeID: user.defaultStoreId
+        }),
+        request,
+        response);
     });
 };

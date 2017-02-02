@@ -25,27 +25,27 @@ const Page = ({
 }) =>
   <div className="chrome-page">
     <header className="chrome-page-title-bar" style={headerStyles(invert)}>
-      { (right || left) && !loading &&
+      {(right || left) && !loading &&
         <div className="chrome-page-title-bar-left">
-          { left }
+          {left}
         </div>
       }
       <div className="chrome-page-title-bar-middle">
         <h1>{title}</h1>
-        { subtitle &&
+        {subtitle &&
           <h2>{subtitle}</h2>
         }
       </div>
-      { (right || left) && !loading &&
+      {(right || left) && !loading &&
         <div className="chrome-page-title-bar-right">
-          { right }
+          {right}
         </div>
       }
     </header>
-    <section style={{color: BRAND_DARK }} className={fullscreen ? 'chrome-page-section-fullscreen chrome-page-section' : 'chrome-page-section'}>
-      { loading ? <Loading/> : children }
+    <section style={{ color: BRAND_DARK }} className={fullscreen ? 'chrome-page-section-fullscreen chrome-page-section' : 'chrome-page-section'}>
+      {loading ? <Loading /> : children}
     </section>
-    { nav && <NavBar/> }
+    {nav && <NavBar />}
   </div>;
 
 const mapStateToProps = ({ user, pending }) => ({

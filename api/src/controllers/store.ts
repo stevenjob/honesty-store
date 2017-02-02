@@ -5,9 +5,9 @@ import { authenticateAccessToken } from '../middleware/authenticate';
 import { getItems, storeCodeToStoreID } from '../services/store';
 
 interface Item {
-    id: string;
-    name: string;
-    price: number;
+  id: string;
+  name: string;
+  price: number;
 }
 
 type ItemAndCount = Item & { count: number };
@@ -17,8 +17,8 @@ const updateDefaultStoreCode = async (key, userID, storeCode) => {
 };
 
 const updateStoreAndGetItems = async (key, userId, storeCode) => {
-    await updateDefaultStoreCode(key, userId, storeCode);
-    return getItems(storeCode);
+  await updateDefaultStoreCode(key, userId, storeCode);
+  return getItems(storeCode);
 };
 
 export default (router) => {
@@ -30,9 +30,9 @@ export default (router) => {
       const { key } = req;
 
       promiseResponse<ItemAndCount[]>(
-          updateStoreAndGetItems(key, req.user.id, storeCode),
-          req,
-          res,
-          HTTPStatus.OK);
+        updateStoreAndGetItems(key, req.user.id, storeCode),
+        req,
+        res,
+        HTTPStatus.OK);
     });
 };

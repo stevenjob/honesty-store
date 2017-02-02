@@ -41,12 +41,12 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
   let purchaseTx: TransactionAndBalance = null;
   try {
     purchaseTx = await purchase({
-        key,
-        itemID,
-        userID,
-        quantity: 1,
-        accountID: user.accountId,
-        storeID: user.defaultStoreId
+      key,
+      itemID,
+      userID,
+      quantity: 1,
+      accountID: user.accountId,
+      storeID: user.defaultStoreId
     });
   } catch (e) {
     /* We don't want to fail if the item could not be purchased, however the client
@@ -101,10 +101,10 @@ const setupRegisterPhase2 = (router) => {
       const { user: { id: userID }, key } = request;
 
       promiseResponse<RegistrationSessionData>(
-          register2(key, { userID, emailAddress, topUpAmount, itemID, stripeToken }),
-          request,
-          response,
-          HTTPStatus.INTERNAL_SERVER_ERROR);
+        register2(key, { userID, emailAddress, topUpAmount, itemID, stripeToken }),
+        request,
+        response,
+        HTTPStatus.INTERNAL_SERVER_ERROR);
     });
 };
 

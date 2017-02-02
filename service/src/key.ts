@@ -3,88 +3,88 @@ import isUUID = require('validator/lib/isUUID');
 import isEmail = require('validator/lib/isEmail');
 
 export interface Key {
-    __IS__A__KEY__: void;
-    toJSON(): string;
+  __IS__A__KEY__: void;
+  toJSON(): string;
 }
 
 export interface AuthenticationKey extends Key {
-    setUserId(userId: string);
+  setUserId(userId: string);
 }
 
 export const createAuthenticationKey = () => {
-    const correlationKey = uuid();
-    return <AuthenticationKey>{
-        setUserId(userId: string): Key {
-            if (!isUUID(userId)) {
-                throw new Error(`Invalid userId specified ${userId}`);
-            }
-            return <Key>{
-                toJSON() {
-                    return toString();
-                },
-                toString() {
-                    return `user:${userId}:${correlationKey}`;
-                }
-            };
-        },
+  const correlationKey = uuid();
+  return <AuthenticationKey>{
+    setUserId(userId: string): Key {
+      if (!isUUID(userId)) {
+        throw new Error(`Invalid userId specified ${userId}`);
+      }
+      return <Key>{
         toJSON() {
-            return toString();
+          return toString();
         },
         toString() {
-            return `auth:${correlationKey}`;
+          return `user:${userId}:${correlationKey}`;
         }
-    };
+      };
+    },
+    toJSON() {
+      return toString();
+    },
+    toString() {
+      return `auth:${correlationKey}`;
+    }
+  };
 };
 
 export const createUserKey = ({ userId }) => {
-    if (!isUUID(userId)) {
-        throw new Error(`Invalid userId specified ${userId}`);
+  if (!isUUID(userId)) {
+    throw new Error(`Invalid userId specified ${userId}`);
+  }
+  const correlationKey = uuid();
+  return <Key>{
+    toJSON() {
+      return toString();
+    },
+    toString() {
+      return `user:${userId}:${correlationKey}`;
     }
-    const correlationKey = uuid();
-    return <Key>{
-        toJSON() {
-            return toString();
-        },
-        toString() {
-            return `user:${userId}:${correlationKey}`;
-        }
-    };
+  };
 };
 
 export const createEmailKey = ({ emailAddress }) => {
-    if (!isEmail(emailAddress)) {
-        throw new Error(`Invalid emailAddress specified ${emailAddress}`);
+  if (!isEmail(emailAddress)) {
+    throw new Error(`Invalid emailAddress specified ${emailAddress}`);
+  }
+  const correlationKey = uuid();
+  return <Key>{
+    toJSON() {
+      return toString();
+    },
+    toString() {
+      return `email:${emailAddress}:${correlationKey}`;
     }
-    const correlationKey = uuid();
-    return <Key>{
-        toJSON() {
-            return toString();
-        },
-        toString() {
-            return `email:${emailAddress}:${correlationKey}`;
-        }
-    };
+  };
 };
 
 export const createUnauthenticatedKey = () => {
-    const correlationKey = uuid();
-    return <Key>{
-        toJSON() {
-            return toString();
-        },
-        toString() {
-            return `unauthenticated:${correlationKey}`;
-        }
-    };
+  const correlationKey = uuid();
+  return <Key>{
+    toJSON() {
+      return toString();
+    },
+    toString() {
+      return `unauthenticated:${correlationKey}`;
+    }
+  };
 };
 
 export const createServiceKey = ({ name }) => {
-    return <Key>{
-        toJSON() {
-            return toString();
-        },
-        toString() {
-            return `service:${name}`;
-        }
-    };
+  return <Key>{
+    toJSON() {
+      return toString();
+    },
+    toString() {
+      return `service:${name}`;
+    }
+  };
 };

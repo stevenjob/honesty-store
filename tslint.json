@@ -13,6 +13,7 @@
     "no-suspicious-comment": false,
     "export-name": false,
     "variable-name": [true, "check-format", "allow-leading-underscore"],
-    "max-func-body-length": false
+    "max-func-body-length": false,
+    "ter-indent": [true, 2]
   }
 }

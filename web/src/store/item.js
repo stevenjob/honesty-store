@@ -9,7 +9,7 @@ export default ({ item: { id, name, price, image } }) =>
         className="store-item-image"
         style={{ backgroundImage: `url(${require(`../item/assets/${image}`)})` }}
         alt={name}
-      />
+        />
       <div className="store-item-description">
         <p>{name}</p>
         <p>{price}<small>p</small></p>

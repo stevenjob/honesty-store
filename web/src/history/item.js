@@ -31,10 +31,10 @@ const HistoryItem = ({ isTopUp, text, timestamp, amount, image }) => {
           className="history-item-image"
           style={{ backgroundImage: `url(${image})` }}
           alt={text}
-        />
+          />
         <div className="history-item-info">
           <h4>{text}</h4>
-          <AmountLabel amount={amount} isTopUp={isTopUp}/>
+          <AmountLabel amount={amount} isTopUp={isTopUp} />
         </div>
       </div>
     </div>
@@ -42,7 +42,7 @@ const HistoryItem = ({ isTopUp, text, timestamp, amount, image }) => {
 };
 
 const mapStateToProps = (
-  { store: { items = [] } },
+  { store: { items = []} },
   { transaction }
 ) => {
   const isTopUp = transaction.type === 'topup';

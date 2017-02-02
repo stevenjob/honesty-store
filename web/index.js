@@ -8,11 +8,11 @@ const app = express();
 // Upgrade HTTP connections to HTTPS automatically
 // (ignore non-proxied requests i.e. LB probes)
 app.use((req, res, next) => {
-	if (req.get('X-Forwarded-Proto') === 'http') {
-		return res.redirect(301, `https://${req.hostname}${req.originalUrl}`);
-	} else {
-		return next();
-	}
+  if (req.get('X-Forwarded-Proto') === 'http') {
+    return res.redirect(301, `https://${req.hostname}${req.originalUrl}`);
+  } else {
+    return next();
+  }
 });
 
 app.use(expressLogging(logger));
@@ -22,7 +22,7 @@ app.use(
   '/.well-known/apple-app-site-association',
   express.static(
     __dirname + '/build/.well-known/apple-app-site-association',
-    { setHeaders: (res) => res.type('json'),  }
+    { setHeaders: (res) => res.type('json'), }
   )
 );
 

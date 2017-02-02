@@ -6,7 +6,7 @@ import logo from '../chrome/assets/logo.svg';
 import './index.css';
 
 const extractStoreCode = (url) => {
-  const [ storeCode ] = url.match(/([^/]*)$/);
+  const [storeCode] = url.match(/([^/]*)$/);
   return storeCode === 'honesty.store' ? '' : storeCode;
 };
 
@@ -40,7 +40,7 @@ class Home extends React.Component {
     const { storeCode } = this.state;
     return <div className="home">
       <h1>
-        <img src={logo} alt="honesty.store"/>
+        <img src={logo} alt="honesty.store" />
       </h1>
       <h3>Welcome to honesty.store</h3>
       <p>We're currently alpha testing our new service at a limited number of locations.</p>
@@ -55,7 +55,7 @@ class Home extends React.Component {
             type="text"
             placeholder="https://honesty.store/your-store-code"
             onFocus={(e) => this.handleStoreCodeChange(e)}
-            onChange={(e) => this.handleStoreCodeChange(e)}/>
+            onChange={(e) => this.handleStoreCodeChange(e)} />
         </p>
         <p>
           <Button onClick={(e) => this.openStore(e)}>Browse Store</Button>

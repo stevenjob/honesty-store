@@ -37,7 +37,7 @@ export default (state = getInitialState(), action) => {
         pending: [...state.pending, 'register']
       };
     }
-    case  REGISTER_SUCESSS: {
+    case REGISTER_SUCESSS: {
       const { refreshToken } = action.response;
       localStorage.refreshToken = refreshToken;
       return {
@@ -46,7 +46,7 @@ export default (state = getInitialState(), action) => {
         pending: state.pending.filter(e => e !== 'register')
       };
     }
-    case  REGISTER_FAILURE: {
+    case REGISTER_FAILURE: {
       return {
         ...state,
         pending: state.pending.filter(e => e !== 'register')
@@ -58,11 +58,11 @@ export default (state = getInitialState(), action) => {
         pending: [...state.pending, 'signin']
       };
     }
-    case  SIGNIN_SUCCESS: {
+    case SIGNIN_SUCCESS: {
       delete localStorage.refreshToken;
       return getInitialState();
     }
-    case  SIGNIN_FAILURE: {
+    case SIGNIN_FAILURE: {
       return {
         ...state,
         pending: state.pending.filter(e => e !== 'signin')
@@ -74,7 +74,7 @@ export default (state = getInitialState(), action) => {
         pending: [...state.pending, 'signin2']
       };
     }
-    case  SIGNIN2_SUCCESS: {
+    case SIGNIN2_SUCCESS: {
       const { refreshToken } = action.response;
       localStorage.refreshToken = refreshToken;
       return {
@@ -83,7 +83,7 @@ export default (state = getInitialState(), action) => {
         pending: state.pending.filter(e => e !== 'signin2')
       };
     }
-    case  SIGNIN2_FAILURE: {
+    case SIGNIN2_FAILURE: {
       return {
         ...state,
         pending: state.pending.filter(e => e !== 'signin2')
@@ -104,7 +104,7 @@ export default (state = getInitialState(), action) => {
         pending: state.pending.filter(e => e !== 'register2')
       };
     }
-    case  REGISTER2_FAILURE: {
+    case REGISTER2_FAILURE: {
       const { error } = action;
       return {
         ...state,
@@ -131,7 +131,7 @@ export default (state = getInitialState(), action) => {
       delete localStorage.refreshToken;
       return getInitialState();
     }
-    case  SESSION_FAILURE: {
+    case SESSION_FAILURE: {
       return {
         ...state,
         pending: state.pending.filter(e => e !== 'session')
@@ -149,7 +149,7 @@ export default (state = getInitialState(), action) => {
         pending: state.pending.filter(e => e !== 'support')
       };
     }
-    case  SUPPORT_FAILURE: {
+    case SUPPORT_FAILURE: {
       return {
         ...state,
         pending: state.pending.filter(e => e !== 'support')

@@ -15,9 +15,9 @@ const NavLink = ({ path, icon, label }) => (
 
 export default () => (
   <nav className="chrome-nav-bar" style={{ background: BRAND_WHITE, borderColor: MUTED_TEXT }}>
-    <NavLink path="/store" icon="store" label="Store"/>
-    <NavLink path="/history" icon="history" label="History"/>
-    <NavLink path="/profile" icon="profile" label="Profile"/>
-    <NavLink path="/help" icon="help" label="Help"/>
+    <NavLink path="/store" icon="store" label="Store" />
+    <NavLink path="/history" icon="history" label="History" />
+    <NavLink path="/profile" icon="profile" label="Profile" />
+    <NavLink path="/help" icon="help" label="Help" />
   </nav>
 );

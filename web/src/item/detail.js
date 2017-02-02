@@ -66,27 +66,27 @@ const ItemDetail = ({
     formatButton={formatPurchaseButton}
     initialValue={1}
     onClick={onClick}
-  />;
+    />;
 
   const UnregisteredPurchaseButton = <p>
-      <Button onClick={() => browserHistory.push(`/register/${id}`)}>
-        {`Purchase 1 ${name}`}
-      </Button>
-    </p>;
+    <Button onClick={() => browserHistory.push(`/register/${id}`)}>
+      {`Purchase 1 ${name}`}
+    </Button>
+  </p>;
 
 
   return (
     <Page invert={true}
       fullscreen={true}
       nav={false}
-      left={<Back/>}>
-      { id != null &&
+      left={<Back />}>
+      {id != null &&
         <div className="item">
           <div className="item-details">
-            <h2>{name}<br/>{price}<small>p</small></h2>
+            <h2>{name}<br />{price}<small>p</small></h2>
           </div>
-          <div className="item-image" style={{ backgroundImage: `url(${require(`../item/assets/${image}`)})` }}/>
-          { registered ? PurchaseStepper : UnregisteredPurchaseButton }
+          <div className="item-image" style={{ backgroundImage: `url(${require(`../item/assets/${image}`)})` }} />
+          {registered ? PurchaseStepper : UnregisteredPurchaseButton}
         </div>
       }
     </Page>
@@ -94,7 +94,7 @@ const ItemDetail = ({
 };
 
 const mapStateToProps = (
-  { store: { items = [] }, user },
+  { store: { items = []}, user },
   { params: { itemId } }
 ) => {
   const item = items.find(el => el.id === itemId);

@@ -12,16 +12,16 @@ export default (router) => {
       const { key } = request;
 
       promiseResponse<TopupResponse>(
-          createTopup(
-              key,
-              {
-                  stripeToken,
-                  amount,
-                  userId: request.user.id,
-                  accountId: request.user.accountId
-              }),
-          request,
-          response,
-          HTTPStatus.INTERNAL_SERVER_ERROR);
+        createTopup(
+          key,
+          {
+            stripeToken,
+            amount,
+            userId: request.user.id,
+            accountId: request.user.accountId
+          }),
+        request,
+        response,
+        HTTPStatus.INTERNAL_SERVER_ERROR);
     });
 };

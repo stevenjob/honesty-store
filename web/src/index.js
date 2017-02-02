@@ -49,37 +49,37 @@ store.dispatch(performInitialise({}));
 ReactDOM.render((
   <Provider store={store}>
     <Router history={browserHistory} onUpdate={() => scrollTo(0, 0)}>
-      <Route path="/" component={Home}/>
-      <Route path="/success" component={HomeSuccess}/>
-      <Route path="/error" component={Error}/>
+      <Route path="/" component={Home} />
+      <Route path="/success" component={HomeSuccess} />
+      <Route path="/error" component={Error} />
       <Route path="/" component={({ children }) => children}>
-        <Route path="register/:itemId" component={RegisterEmail}/>
-        <Route path="register/:itemId/success" component={RegisterSuccess}/>
-        <Route path="register/:itemId/partial" component={RegisterPartialSuccess}/>
-        <Route path="register/:itemId/:emailAddress" component={RegisterCard}/>
-        <Route path="signin/success" component={SignInSuccess}/>
-        <Route path="store" component={Store}/>
+        <Route path="register/:itemId" component={RegisterEmail} />
+        <Route path="register/:itemId/success" component={RegisterSuccess} />
+        <Route path="register/:itemId/partial" component={RegisterPartialSuccess} />
+        <Route path="register/:itemId/:emailAddress" component={RegisterCard} />
+        <Route path="signin/success" component={SignInSuccess} />
+        <Route path="store" component={Store} />
         <Route path="item/error" component={Error} />
-        <Route path="item/:itemId" component={ItemDetail}/>
-        <Route path="item/:itemId/success" component={ItemPurchaseSuccess}/>
-        <Route path="topup" component={TopupAmount}/>
-        <Route path="topup/success"component={TopupSuccess}/>
-        <Route path="topup/error" component={Error}/>
-        <Route path="topup/:amount"component={TopupExistingCard}/>
-        <Route path="topup/:amount/new"component={TopupNewCard}/>
-        <Route path="history" component={History}/>
-        <Route path="profile" component={Profile}/>
-        <Route path="profile/close" component={CloseProfile}/>
-        <Route path="profile/edit" component={EditProfile}/>
-        <Route path="profile/logout" component={LogoutProfile}/>
-        <Route path="help" component={Help}/>
-        <Route path="help/success" component={HelpSuccess}/>
+        <Route path="item/:itemId" component={ItemDetail} />
+        <Route path="item/:itemId/success" component={ItemPurchaseSuccess} />
+        <Route path="topup" component={TopupAmount} />
+        <Route path="topup/success" component={TopupSuccess} />
+        <Route path="topup/error" component={Error} />
+        <Route path="topup/:amount" component={TopupExistingCard} />
+        <Route path="topup/:amount/new" component={TopupNewCard} />
+        <Route path="history" component={History} />
+        <Route path="profile" component={Profile} />
+        <Route path="profile/close" component={CloseProfile} />
+        <Route path="profile/edit" component={EditProfile} />
+        <Route path="profile/logout" component={LogoutProfile} />
+        <Route path="help" component={Help} />
+        <Route path="help/success" component={HelpSuccess} />
         <Route path=":storeCode"
           onEnter={(nextState, replace) => {
             const { params: { storeCode }, location: { query: { code: emailToken } } } = nextState;
             store.dispatch(performInitialise({ storeCode, emailToken }));
             replace('/store');
-          }}/>
+          } } />
       </Route>
     </Router>
   </Provider>
@@ -96,7 +96,7 @@ if ('serviceWorker' in navigator) {
       console.log('ServiceWorker registration successful with scope: ', registration.scope);
     }
     catch (e) {
-        console.log('ServiceWorker registration failed: ', e);
+      console.log('ServiceWorker registration failed: ', e);
     }
   });
 }

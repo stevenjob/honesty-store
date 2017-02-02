@@ -2,13 +2,13 @@ import React from 'react';
 const formatNumber = (amount) => (amount / 100).toFixed(2);
 
 const formatAny = (value) => {
-    if (value == null) {
-        throw new Error(`Null/undefined amount`);
-    }
-    if (typeof value === 'number') {
-        return formatNumber(value);
-    }
-    throw new Error(`Parsing not supported`);
+  if (value == null) {
+    throw new Error(`Null/undefined amount`);
+  }
+  if (typeof value === 'number') {
+    return formatNumber(value);
+  }
+  throw new Error(`Parsing not supported`);
 };
 
 const Currency = ({ amount }) => {
@@ -16,9 +16,9 @@ const Currency = ({ amount }) => {
 
   return (
     <span>
-      { showPence || <small>£</small> }
-      { showPence ? amount : formatAny(amount) }
-      { showPence && <small>p</small> }
+      {showPence || <small>£</small>}
+      {showPence ? amount : formatAny(amount)}
+      {showPence && <small>p</small>}
     </span>
   );
 };
