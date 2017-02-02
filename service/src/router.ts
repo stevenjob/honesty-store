@@ -1,7 +1,7 @@
 import { error, info } from './log';
 import HTTPStatus = require('http-status');
 import express = require('express');
-import { Key } from './key';
+import { createUnauthenticatedKey, Key } from './key';
 import { verifyServiceSecret } from './serviceSecret';
 import time from './time';
 
@@ -20,7 +20,13 @@ interface Router {
   put<Body, Result>(path: string, authentication: ExpressAuthentication, action: BodyAction<Body, Result>);
 }
 
-const extractKey = (request): Key => JSON.parse(request.get('key'));
+const extractKey = (request): Key => {
+  try {
+    return JSON.parse(request.get('key'));
+  } catch (e) {
+    return createUnauthenticatedKey();
+  }
+};
 
 const extractServiceSecret = (request) => request.get('service-secret');
 
