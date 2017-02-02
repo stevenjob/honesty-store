@@ -8,6 +8,16 @@ import { ServiceRouterCode } from '../../../service/src/router';
 import { createTopup } from '../../../topup/src/client/index';
 import { TransactionAndBalance } from '../../../transaction/src/client/index';
 import { createUser, updateUser } from '../../../user/src/client/index';
+import { TransactionDetails, TransactionAndBalance } from '../../../transaction/src/client/index';
+import { getPrice } from '../services/store';
+import { purchase } from '../services/transaction';
+import { getSessionData, SessionData } from '../services/session';
+import { authenticateAccessToken, noopAuthentication } from '../middleware/authenticate';
+import { promiseResponse } from '../../../service/src/endpoint-then-catch';
+import { ServiceRouterCode } from '../../../service/src/router';
+import { WithRefreshToken, WithAccessToken } from '../../../user/src/client/index';
+import { storeCodeToStoreID } from '../services/store'
+import { createTopup, TopupResponse, CardDetails } from '../../../topup/src/client/index'
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { getSessionData } from '../services/session';
 import { storeCodeToStoreID } from '../services/store';
@@ -62,6 +72,7 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
 const setupRegisterPhase1 = (router) => {
   router.post(
     '/register',
+    noopAuthentication,
     async (_key /* a new key is created instead */, _params, { storeCode }) => {
       try {
         return await register(storeCode);

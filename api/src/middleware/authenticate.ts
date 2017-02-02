@@ -43,3 +43,6 @@ export const authenticateRefreshToken = (request, response, next) =>
 
 export const authenticateEmailToken = (request, response, next) =>
   authenticateToken(request, response, next, getUserByMagicLinkToken);
+
+export const noopAuthentication = (request, response, next) =>
+  next();
