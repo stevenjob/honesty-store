@@ -3,7 +3,7 @@ import bodyParser = require('body-parser');
 import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
-import serviceRouter from '../../service/src/router';
+import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { Account, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, Transaction, TransactionAndBalance } from './client';
 
 config.region = process.env.AWS_REGION;
@@ -130,24 +130,24 @@ const app = express();
 
 app.use(bodyParser.json());
 
-const router = serviceRouter('transaction');
+const router = serviceRouter('transaction', 1);
 
 router.get(
   '/:accountId',
-  1,
+  serviceAuthentication,
   async (_key, { accountId }) => await get({ accountId })
 );
 
 router.post(
   '/:accountId',
-  1,
+  serviceAuthentication,
   async (_key, { accountId }, { type, amount, data }) =>
     await createTransaction({ accountId, type, amount, data })
 );
 
 router.post(
   '/',
-  1,
+  serviceAuthentication,
   async (_key, {}, { accountId }) => await createAccount({ accountId })
 );
 

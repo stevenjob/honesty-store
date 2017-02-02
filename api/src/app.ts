@@ -1,5 +1,6 @@
 import express = require('express');
 import bodyParser = require('body-parser');
+import { serviceRouter } from '../../service/src/router';
 import logoutController from './controllers/logout';
 import purchaseController from './controllers/purchase';
 import registerController from './controllers/register';
@@ -9,12 +10,10 @@ import storeController from './controllers/store';
 import supportController from './controllers/support';
 import topUpController from './controllers/topup';
 import transactionsController from './controllers/transactions';
-import middlewareLogging from './middleware/logging';
+import { apiVersion } from './version';
 
 const app = express();
-const router = express.Router();
-
-app.use(middlewareLogging());
+const router = serviceRouter('api', apiVersion);
 
 app.use(bodyParser.json());
 
@@ -28,7 +27,7 @@ logoutController(router);
 transactionsController(router);
 supportController(router);
 
-app.use('/api/v1', router);
+app.use(router);
 
 // send healthy response to load balancer probes
 app.get('/', (_req, res) => {

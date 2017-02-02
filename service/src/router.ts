@@ -15,16 +15,16 @@ interface BodyAction<Result, Body> {
 
 interface Router {
   (request: any, response: any, next: any): void;
-  get<Result>(path: string, version: number, action: BodyAction<undefined, Result>);
-  post<Body, Result>(path: string, version: number, action: BodyAction<Body, Result>);
-  put<Body, Result>(path: string, version: number, action: BodyAction<Body, Result>);
+  get<Result>(path: string, authentication: ExpressAuthentication, action: BodyAction<undefined, Result>);
+  post<Body, Result>(path: string, authentication: ExpressAuthentication, action: BodyAction<Body, Result>);
+  put<Body, Result>(path: string, authentication: ExpressAuthentication, action: BodyAction<Body, Result>);
 }
 
 const extractKey = (request): Key => JSON.parse(request.get('key'));
 
 const extractServiceSecret = (request) => request.get('service-secret');
 
-const serviceAuthentication = (request, response, next) => {
+export const serviceAuthentication = (request, response, next) => {
   const serviceSecret = extractServiceSecret(request);
 
   try {
@@ -44,11 +44,15 @@ const serviceAuthentication = (request, response, next) => {
   next();
 };
 
-const createEndPoint = (service, internalRouter, method: 'get' | 'post' | 'put') =>
-  <Body, Result>(path, version: number, action: BodyAction<Body, Result>) => {
+interface ExpressAuthentication {
+  (request: any, response: any, next: any): void;
+}
+
+const createEndPoint = (service, internalRouter, version, method: 'get' | 'post' | 'put') =>
+  <Body, Result>(path, authentication: ExpressAuthentication, action: BodyAction<Body, Result>) => {
     internalRouter[method](
       `/${service}/v${version}${path}`,
-      serviceAuthentication,
+      authentication,
       (request, response) => {
         const timer = time();
         const key = extractKey(request);
@@ -65,21 +69,20 @@ const createEndPoint = (service, internalRouter, method: 'get' | 'post' | 'put')
           const duration = timer();
           error(key, `failed ${method} ${request.url}`, { e, duration });
           response.status(200)
-          .json({ error: { message: e.message }});
+            .json({ error: { message: e.message }});
         });
       });
   };
 
-// tslint:disable-next-line:export-name
-export default (service: string): Router => {
+export const serviceRouter = (service: string, version: number): Router => {
   const internalRouter = express.Router();
 
   const router: any = (request, response, next) =>
     internalRouter(request, response, next);
 
-  router.get = createEndPoint(service, internalRouter, 'get');
-  router.post = createEndPoint(service, internalRouter, 'post');
-  router.put = createEndPoint(service, internalRouter, 'put');
+  router.get = createEndPoint(service, internalRouter, version, 'get');
+  router.post = createEndPoint(service, internalRouter, version, 'post');
+  router.put = createEndPoint(service, internalRouter, version, 'put');
 
   return router;
 };

@@ -7,7 +7,7 @@ import * as stripeFactory from 'stripe';
 
 import { Key } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
-import serviceRouter from '../../service/src/router';
+import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { assertBalanceWithinLimit, createTransaction, TransactionDetails } from '../../transaction/src/client/index';
 import { CardDetails, TopupAccount, TopupRequest } from './client/index';
 
@@ -307,18 +307,18 @@ const app = express();
 
 app.use(bodyParser.json());
 
-const router = serviceRouter('topup');
+const router = serviceRouter('topup', 1);
 
 router.post(
   '/',
-  1,
+  serviceAuthentication,
   async (key, {}, { accountId, userId, amount, stripeToken }) =>
     attemptTopup({ key, accountId, userId, amount, stripeToken })
 );
 
 router.get(
   '/:userId/cardDetails',
-  1,
+  serviceAuthentication,
   async (_key, { userId }) =>
     getCardDetails({ userId })
 );

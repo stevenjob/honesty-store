@@ -6,7 +6,7 @@ import isUUID = require('validator/lib/isUUID');
 import isEmail = require('validator/lib/isEmail');
 import { createServiceKey } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
-import serviceRouter from '../../service/src/router';
+import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { storeList } from '../../service/src/storeList';
 import { createAccount } from '../../transaction/src/client';
 import { TEST_DATA_USER_ID, User, UserProfile, UserWithAccessAndRefreshTokens, UserWithAccessToken } from './client';
@@ -284,53 +284,53 @@ const app = express();
 
 app.use(bodyParser.json());
 
-const router = serviceRouter('user');
+const router = serviceRouter('user', 1);
 
 router.get(
   '/:userId',
-  1,
+  serviceAuthentication,
   async (_key, { userId }) => get({ userId })
 );
 
 router.get(
   '/accessToken/:accessToken',
-  1,
+  serviceAuthentication,
   async (_key, { accessToken }) => await getByAccessToken({ accessToken })
 );
 
 router.get(
   '/refreshToken/:refreshToken',
-  1,
+  serviceAuthentication,
   async (_key, { refreshToken }) => await getByRefreshToken({ refreshToken })
 );
 
 router.get(
   '/magicLink/:magicLinkToken',
-  1,
+  serviceAuthentication,
   async (_key, { magicLinkToken }) => await getByMagicLinkToken({ magicLinkToken })
 );
 
 router.get(
   '/emailAddress/:emailAddress',
-  1,
+  serviceAuthentication,
   async (_key, { emailAddress }) => externaliseUser(await scanByEmailAddress({ emailAddress }))
 );
 
 router.post(
   '/',
-  1,
+  serviceAuthentication,
   async (_key, {}, { userId, ...userProfile}) => await createUser({ userId, userProfile })
 );
 
 router.put(
   '/:userId',
-  1,
+  serviceAuthentication,
   async (key, { userId }, userProfile) => await updateUser({ key, userId, userProfile })
 );
 
 router.post(
   '/magicLink/:emailAddress',
-  1,
+  serviceAuthentication,
   async (key, { emailAddress }, {}) => {
     await sendMagicLinkEmail({ key, emailAddress });
     return {};
@@ -339,7 +339,7 @@ router.post(
 
 router.post(
   '/logout/:userId',
-  1,
+  serviceAuthentication,
   async (_key, { userId }, {}) => await logoutUser(userId)
 );
 
