@@ -3,6 +3,7 @@ import HTTPStatus = require('http-status');
 import express = require('express');
 import { Key } from './key';
 import { verifyServiceSecret } from './serviceSecret';
+import time from './time';
 
 interface Params {
   [key: string]: string;
@@ -41,14 +42,6 @@ const serviceAuthentication = (request, response, next) => {
   }
 
   next();
-};
-
-const time = () => {
-  const hrtime = process.hrtime();
-  return () => {
-    const diff = process.hrtime(hrtime);
-    return diff[0] * 1e9 + diff[1];
-  };
 };
 
 const createEndPoint = (service, internalRouter, method: 'get' | 'post' | 'put') =>
