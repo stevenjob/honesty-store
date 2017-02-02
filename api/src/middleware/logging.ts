@@ -1,4 +1,4 @@
-import logger = require('logops');
+import { info } from '../../../service/src/log';
 import time from '../../../service/src/time';
 import onHeaders = require('on-headers');
 
@@ -20,15 +20,26 @@ const ipFromRequest = (req) => {
 
 export default () => (req, res, next) => {
   const timer = time();
+  const ip = ipFromRequest(req);
+  const { method, originalUrl, params, body } = req;
+  const uuid = uuid();
 
-  logger.info(`Request from ${ipFromRequest(req)}: ${req.method} ${req.originalUrl}`);
+  info(
+      `Request from ${ip}: ${method} ${originalUrl}`,
+      {
+          ip,
+          method,
+          originalUrl,
+          params,
+          body
+      });
 
   onHeaders(res, () => {
     const duration = timer();
     const location = res.get('location');
     const locationStr = location ? ` Location: ${location}` : '';
 
-    logger.info(`Response with status ${res.statusCode} in ${duration} ms.${locationStr}`);
+    info(`Response with status ${res.statusCode} in ${duration} ms.${locationStr}`);
   });
 
   next();
