@@ -21,17 +21,14 @@ const ipFromRequest = (req) => {
 export default () => (req, res, next) => {
   const timer = time();
 
-  logger.info('Request from %s: %s %s', ipFromRequest(req), req.method, req.originalUrl);
+  logger.info(`Request from ${ipFromRequest(req)}: ${req.method} ${req.originalUrl}`);
 
   onHeaders(res, () => {
     const duration = timer();
     const location = res.get('location');
+    const locationStr = location ? ` Location: ${location}` : '';
 
-    logger.info(
-      'Response with status %d in %d ms.%s',
-      res.statusCode,
-      duration,
-      location ? ` Location: ${location}` : '');
+    logger.info(`Response with status ${res.statusCode} in ${duration} ms.${locationStr}`);
   });
 
   next();
