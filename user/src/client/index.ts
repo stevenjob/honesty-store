@@ -4,7 +4,7 @@ export interface User {
     id: string;
     accountId?: string;
     defaultStoreId: string;
-    emailAddress: string;
+    emailAddress?: string;
 }
 
 export interface WithRefreshToken {
