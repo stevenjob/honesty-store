@@ -1,0 +1,51 @@
+machine:
+  pre:
+    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+  environment:
+    REACT_APP_STRIPE_PUBLISHABLE_KEY: $([ $CIRCLE_BRANCH = 'live' ] && echo pk_live_koh6JFFsmJxYyGBok5DHRtJZ || echo pk_test_Lp6VONbqz8TbbnD4oFThDBmT)
+    TEST_STRIPE_KEY: sk_test_qqeGkZVE30FLH76H2g2Fd4NL
+  node:
+    version: v6.1.0
+  services:
+    - docker
+dependencies:
+  cache_directories:
+    - ~/.cache/yarn
+  override:
+    - cd api && yarn install
+    - cd aws && yarn install
+    - cd transaction && yarn install
+    - cd user && yarn install
+    - cd web && yarn install
+    - cd topup && yarn install
+    - cd service && yarn install
+    - cd test && yarn install
+    - cd support && yarn install
+compile:
+  override:
+    - cd api && npm run ci
+    - cd aws && npm run ci
+    - cd transaction && npm run ci
+    - cd user && npm run ci
+    - cd web && npm run ci
+    - cd topup && npm run ci
+    - cd service && npm run ci
+    - cd test && npm run ci
+    - cd support && npm run ci
+test:
+  post:
+    - cd api && yarn install --production --ignore-scripts --prefer-offline
+    - cd aws && yarn install --production --ignore-scripts --prefer-offline
+    - cd transaction && yarn install --production --ignore-scripts --prefer-offline
+    - cd user && yarn install --production --ignore-scripts --prefer-offline
+    - cd web && yarn install --production --ignore-scripts --prefer-offline
+    - cd topup && yarn install --production --ignore-scripts --prefer-offline
+    - cd service && yarn install --production --ignore-scripts --prefer-offline
+    - cd test && yarn install --production --ignore-scripts --prefer-offline
+deployment:
+  aws:
+    branch: /.*/
+    commands:
+      # currently we don't deploy support - it contains scripts intended to be locally-run
+      - ./aws/bin/aws deploy $CIRCLE_BRANCH api transaction user web topup
+      - ./aws/bin/aws prune
