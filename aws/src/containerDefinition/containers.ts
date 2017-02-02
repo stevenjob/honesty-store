@@ -1,6 +1,6 @@
 import { ECS } from 'aws-sdk';
 
-const template = ({ image, baseUrl, serviceSecret, logGroup, environment }): ECS.ContainerDefinitions => [
+const template = ({ image, baseUrl, serviceSecret, logGroup, environment, port = 3000 }): ECS.ContainerDefinitions => [
   {
     name: "container",
     image,
@@ -9,7 +9,7 @@ const template = ({ image, baseUrl, serviceSecret, logGroup, environment }): ECS
     essential: true,
     portMappings: [
       {
-        containerPort: 3000,
+        containerPort: port,
         protocol: "tcp"
       }
     ],
@@ -106,7 +106,7 @@ const dirToContainer = {
     }),
 
   web: ({ image, baseUrl, serviceSecret, logGroup }) =>
-    template({ image, baseUrl, serviceSecret, logGroup, environment: [] }),
+    template({ image, baseUrl, serviceSecret, logGroup, environment: [], port: 8080 }),
 };
 
 export default ({ dir, data }): ECS.ContainerDefinitions => {
