@@ -52,3 +52,9 @@ deployment:
 general:
   # attempt to speed up artifact collection by specifying an empty list
   artifacts: []
+experimental:
+  notify:
+    branches:
+      only:
+        - live
+        - test
