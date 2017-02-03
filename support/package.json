@@ -5,7 +5,7 @@
   "main": "lib/support/src/index.js",
   "scripts": {
     "compile": "tsc",
-    "lint": "tslint src",
+    "lint": "tslint --config ../tslint.json --project tsconfig.json --format stylish --type-check",
     "test": "npm run lint && npm run compile",
     "ci": "npm test"
   },
@@ -20,8 +20,8 @@
     "@types/node-fetch": "^1.6.7",
     "@types/uuid": "^2.0.29",
     "@types/validator": "^5.7.35",
-    "tslint": "^4.0.0",
-    "tslint-microsoft-contrib": "^2.0.14",
+    "tslint": "^4.4.2",
+    "tslint-microsoft-contrib": "^4.0.0",
     "typescript": "2.1.5"
   }
 }
