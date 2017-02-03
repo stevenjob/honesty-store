@@ -980,11 +980,11 @@ topo@1.x.x:
   dependencies:
     hoek "2.x.x"
 
-tslint-microsoft-contrib@^2.0.14:
-  version "2.0.14"
-  resolved "https://registry.yarnpkg.com/tslint-microsoft-contrib/-/tslint-microsoft-contrib-2.0.14.tgz#a6c1acafedd4b2707d0a8719472d1ba8c0a7eb78"
+tslint-microsoft-contrib@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/tslint-microsoft-contrib/-/tslint-microsoft-contrib-4.0.0.tgz#7e00a56c1417251d3f91a880efcc43361a69fb2a"
 
-tslint@^4.0.0:
+tslint@^4.4.2:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/tslint/-/tslint-4.4.2.tgz#b14cb79ae039c72471ab4c2627226b940dda19c6"
   dependencies:
