@@ -49,3 +49,6 @@ deployment:
       # currently we don't deploy support - it contains scripts intended to be locally-run
       - ./aws/bin/aws deploy $CIRCLE_BRANCH api transaction user web topup
       - ./aws/bin/aws prune
+general:
+  # attempt to speed up artifact collection by specifying an empty list
+  artifacts: []
