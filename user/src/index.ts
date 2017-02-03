@@ -353,7 +353,7 @@ app.get('/', (_req, res) => {
     })
     .catch((e) => {
       res.send(500);
-      error(createServiceKey({ name: 'user' }), 'LB probe error', e);
+      error(createServiceKey({ service: 'user' }), 'LB probe error', e);
     });
 });
 

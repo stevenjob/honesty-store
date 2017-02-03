@@ -16,7 +16,6 @@ export interface AuthenticationKey extends Key {
   setUserId(userId: string);
 }
 
-// return a key like so: `service:correlationKey:tag1=value1:tag2=value2:...`
 const createKey = ({ service, correlationKey = uuid(), tags = {} }) => {
   return <Key>{
     __IS__A__KEY__: void 0,
@@ -32,7 +31,7 @@ export const createUserKey = ({ userId, correlationKey = undefined }) => {
   }
   return createKey({
     service: 'user',
-    correlationKey: correlationKey || uuid(),
+    correlationKey,
     tags: { userId }
   });
 };
@@ -62,10 +61,6 @@ export const createEmailKey = ({ emailAddress }) => {
   });
 };
 
-export const createUnauthenticatedKey = () => {
-  return createKey({ service: 'unauthenticated' });
-};
-
-export const createServiceKey = ({ name }) => {
-  return createKey({ service: name });
+export const createServiceKey = ({ service }) => {
+  return createKey({ service });
 };

@@ -1,7 +1,8 @@
-import { error, info } from './log';
 import HTTPStatus = require('http-status');
 import express = require('express');
-import { createUnauthenticatedKey, Key } from './key';
+
+import { createServiceKey, Key } from './key';
+import { error, info } from './log';
 import { verifyServiceSecret } from './serviceSecret';
 import time from './time';
 
@@ -20,11 +21,11 @@ interface Router {
   put<Body, Result>(path: string, authentication: ExpressAuthentication, action: BodyAction<Body, Result>);
 }
 
-const extractKey = (request): Key => {
+const extractKey = (request, service: string): Key => {
   try {
     return JSON.parse(request.get('key'));
   } catch (e) {
-    return createUnauthenticatedKey();
+    return createServiceKey({ service });
   }
 };
 
@@ -61,7 +62,7 @@ const createEndPoint = (service, internalRouter, version, method: 'get' | 'post'
       authentication,
       (request, response) => {
         const timer = time();
-        const key = extractKey(request);
+        const key = extractKey(request, service);
         // tslint:disable-next-line:max-line-length
         info(key, `handling ${method} ${request.url} request = { params: '${JSON.stringify(request.params)}', body: '${JSON.stringify(request.body)}' }`);
         action(key, request.params, /* maybe undefined */request.body, request)
@@ -69,13 +70,13 @@ const createEndPoint = (service, internalRouter, version, method: 'get' | 'post'
             const duration = timer();
             info(key, `successful ${method} ${request.url}`, { result, duration });
             response.status(HTTPStatus.OK)
-              .json({ response: result });
+            .json({ response: result });
           })
           .catch((e) => {
             const duration = timer();
             error(key, `failed ${method} ${request.url}`, { e, duration });
             response.status(e.statusCode || 200)
-              .json({ error: { message: e.message }});
+            .json({ error: { message: e.message }});
           });
       });
   };
