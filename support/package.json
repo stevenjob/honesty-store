@@ -22,6 +22,6 @@
     "@types/validator": "^5.7.35",
     "tslint": "^4.0.0",
     "tslint-microsoft-contrib": "^2.0.14",
-    "typescript": "^2.1.0"
+    "typescript": "2.1.5"
   }
 }

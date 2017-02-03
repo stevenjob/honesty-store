@@ -11,7 +11,7 @@
   "main": "lib/index.js",
   "devDependencies": {
     "@types/node-fetch": "^1.6.7",
-    "typescript": "^2.1.5"
+    "typescript": "2.1.5"
   },
   "dependencies": {
     "node-fetch": "^1.6.3",
