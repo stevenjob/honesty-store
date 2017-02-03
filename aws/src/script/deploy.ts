@@ -187,7 +187,7 @@ export default async ({ branch, dirs }) => {
         const service = await ensureService({
             serviceName: generateName({ branch, dir }),
             cluster,
-            desiredCount: 1,
+            desiredCount: isLive(branch) ? 2 : 1,
             taskDefinition: taskDefinition.taskDefinitionArn,
             loadBalancers: [
                 {
