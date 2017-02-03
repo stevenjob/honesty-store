@@ -9,7 +9,7 @@ interface ApiResponse<T> {
   error?: { message: string };
 }
 
-// tslint:disable-next-line export-name
+// tslint:disable-next-line:export-name
 export default (service: string) => {
   const fetchAndParse = async <Result>({ method, version, path, key, body = undefined }): Promise<Result> => {
     const url = `${baseUrl}/${service}/v${version}${path}`;
@@ -61,7 +61,7 @@ export default (service: string) => {
     return json.response;
   };
 
-  // tslint:disable-next-line no-reserved-keywords
+  // tslint:disable-next-line:no-reserved-keywords
   const get = async <Result>(version: number, key: Key, path: String) => {
     return await fetchAndParse<Result>({
       method: 'GET',

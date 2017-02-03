@@ -76,7 +76,7 @@ const createEndPoint = (service, internalRouter, method: 'get' | 'post' | 'put')
       });
   };
 
-// tslint:disable-next-line export-name
+// tslint:disable-next-line:export-name
 export default (service: string): Router => {
   const internalRouter = express.Router();
 

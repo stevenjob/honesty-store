@@ -39,7 +39,7 @@ export const ensureRule = async ({ listenerArn, pathPattern, priority, targetGro
 
     const existingRule = describeResponse.Rules
       // using weak comparison because AWS is actually returning a number...
-      // tslint:disable-next-line: triple-equals
+      // tslint:disable-next-line:triple-equals
       .find(rule => rule.Priority == priority);
 
     winston.debug('rule: existingRule', existingRule);

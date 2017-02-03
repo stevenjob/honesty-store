@@ -19,7 +19,7 @@ const log = (level: Level, key: Key, message: string, ...args: any[]) => {
     args
   };
   const json = JSON.stringify(output, replacer);
-  // tslint:disable-next-line no-console
+  // tslint:disable-next-line:no-console
   console.log(json);
 };
 
