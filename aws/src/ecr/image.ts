@@ -1,8 +1,7 @@
 import { ECR } from 'aws-sdk';
 import * as winston from 'winston';
 
-export const pruneImages = async ({ repositoryName, filter = ({}) => false })
-  : Promise<{ repositoryName: string, filter: (image: ECR.ImageDetail) => boolean }> => {
+export const pruneImages = async ({ repositoryName, filter = (_image: ECR.ImageDetail) => false }) => {
   const ecr = new ECR({ apiVersion: '2015-09-21' });
 
   const describeResponse = await ecr.describeImages({

@@ -20,7 +20,7 @@ export const createAuthenticationKey = () => {
       }
       return <Key>{
         toJSON() {
-          return toString();
+          return this.toString();
         },
         toString() {
           return `user:${userId}:${correlationKey}`;
@@ -28,7 +28,7 @@ export const createAuthenticationKey = () => {
       };
     },
     toJSON() {
-      return toString();
+      return this.toString();
     },
     toString() {
       return `auth:${correlationKey}`;

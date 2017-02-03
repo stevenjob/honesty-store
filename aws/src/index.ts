@@ -17,8 +17,8 @@ winston.configure({
         return Date.now();
       },
       formatter(options: any) {
-        return `${new Date(options.timestamp()).toISOString()} ${options.level.toUpperCase()} ${options.message} \
-        ${JSON.stringify(options.meta)}`;
+        // tslint:disable-next-line:max-line-length
+        return `${new Date(options.timestamp()).toISOString()} ${options.level.toUpperCase()} ${options.message} ${JSON.stringify(options.meta)}`;
       }
     })
   ]
@@ -70,7 +70,7 @@ program.command('ec2-create-instance <cluster>')
 program.command('local-db <table-name>')
   .description('use this to create a table in a local instance of dynamodb')
   .action((tableName) => {
-    // tslint:disable-next-line no-http-string
+    // tslint:disable-next-line:no-http-string
     (<any>config).endpoint = 'http://localhost:8000/';
     createLocalDatabase({ tableName })
         .then(console.log)

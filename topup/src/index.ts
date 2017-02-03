@@ -180,8 +180,8 @@ const stripeDetailsValid = (topupAccount: TopupAccount) => {
 
 const assertValidStripeDetails = (topupAccount) => {
   if (!stripeDetailsValid(topupAccount)) {
-    throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please\
-        provide stripeToken`);
+    // tslint:disable-next-line:max-line-length
+    throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please provide stripeToken`);
   }
 };
 

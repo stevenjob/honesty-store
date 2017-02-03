@@ -40,7 +40,12 @@ export const createTransaction = (key, accountId: string, transaction: Transacti
 export const assertBalanceWithinLimit = async ({ key, accountId, amount }) => {
   const currentBalance = (await getAccount(key, accountId)).balance;
 
-  if (currentBalance + (<number>amount) > balanceLimit) {
+  // The rhs of the OR expression will never be reached, but is instead used to qualify the type of 'amount'
+  if (!Number.isFinite(amount) || typeof amount !== 'number') {
+    throw new Error('amount is not a number');
+  }
+
+  if (currentBalance + amount > balanceLimit) {
     throw new Error(`topping up would increase balance over the limit of £${balanceLimit / 100}`);
   }
 };

@@ -56,11 +56,15 @@ const assertValidUserProfile = (userProfile: UserProfile) => {
 };
 
 const externaliseUser = (user: InternalUser): User => {
-  const exUser = user;
-  delete exUser.created;
-  delete exUser.refreshToken;
-  delete exUser.version;
-  return exUser;
+  /* TS cries here if we use destructuring without prefixing the variables with an underscore due to us having the 'no-unused-variables'
+  compiler option enabled. */
+  const {
+    created: _1,
+    refreshToken: _2,
+    version: _3,
+    ...externaliseUser
+  } = user;
+  return externaliseUser;
 };
 
 const externaliseUserWithAccessToken = (user: InternalUser): UserWithAccessToken => ({
