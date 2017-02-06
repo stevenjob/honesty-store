@@ -1,6 +1,5 @@
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
-import isEmail = require('validator/lib/isEmail');
 
 export interface Key {
   __IS__A__KEY__: void;
@@ -51,16 +50,16 @@ export const createAuthenticationKey = () => {
   };
 };
 
-export const createEmailKey = ({ emailAddress }) => {
-  if (!isEmail(emailAddress)) {
-    throw new Error(`Invalid emailAddress specified ${emailAddress}`);
-  }
-  return createKey({
-    service: 'email',
-    tags: { emailAddress }
-  });
-};
-
 export const createServiceKey = ({ service }) => {
   return createKey({ service });
+};
+
+export const tagKey = (key: Key, tags) => {
+  return createKey({
+    ...key,
+    tags: {
+      ...key.tags,
+      ...tags
+    }
+  });
 };

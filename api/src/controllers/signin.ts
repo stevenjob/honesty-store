@@ -1,12 +1,12 @@
 import HTTPStatus = require('http-status');
-import { createEmailKey } from '../../../service/src/key';
+import { tagKey } from '../../../service/src/key';
 import { ServiceRouterCode } from '../../../service/src/router';
 import { sendMagicLinkEmail } from '../../../user/src/client/index';
 import { authenticateEmailToken, noopAuthentication } from '../middleware/authenticate';
 import { getSessionData } from '../services/session';
 
-export const sendEmailToken = async (emailAddress) => {
-  await sendMagicLinkEmail(createEmailKey({ emailAddress }), emailAddress);
+export const sendEmailToken = async (key, emailAddress) => {
+  await sendMagicLinkEmail(tagKey(key, { emailAddress }), emailAddress);
   return {};
 };
 
@@ -14,7 +14,7 @@ const setupSignInPhase1 = (router) => {
   router.post(
     '/signin',
     noopAuthentication,
-    async (_key, _params, { emailAddress }) => await sendEmailToken(emailAddress));
+    async (key, _params, { emailAddress }) => await sendEmailToken(key, emailAddress));
 };
 
 const setupSignInPhase2 = (router) => {
