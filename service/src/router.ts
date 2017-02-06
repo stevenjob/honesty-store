@@ -70,13 +70,13 @@ const createEndPoint = (service, internalRouter, version, method: 'get' | 'post'
             const duration = timer();
             info(key, `successful ${method} ${request.url}`, { result, duration });
             response.status(HTTPStatus.OK)
-            .json({ response: result });
+              .json({ response: result });
           })
           .catch((e) => {
             const duration = timer();
             error(key, `failed ${method} ${request.url}`, { e, duration });
             response.status(e.statusCode || 200)
-            .json({ error: { message: e.message }});
+              .json({ error: { message: e.message }});
           });
       });
   };
