@@ -14,6 +14,10 @@ interface BodyAction<Result, Body> {
   (key: Key, params: Params, body: Body, request: any): Promise<Result>;
 }
 
+interface ExpressAuthentication {
+  (request: any, response: any, next: any): void;
+}
+
 interface Router {
   (request: any, response: any, next: any): void;
   get<Result>(path: string, authentication: ExpressAuthentication, action: BodyAction<undefined, Result>);
@@ -50,10 +54,6 @@ export const serviceAuthentication = (request, response, next) => {
 
   next();
 };
-
-interface ExpressAuthentication {
-  (request: any, response: any, next: any): void;
-}
 
 const createEndPoint = (service, internalRouter, version, method: 'get' | 'post' | 'put') =>
   <Body, Result>(path, authentication: ExpressAuthentication, action: BodyAction<Body, Result>) => {
