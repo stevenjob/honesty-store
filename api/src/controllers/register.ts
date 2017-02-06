@@ -3,7 +3,6 @@ import HTTPStatus = require('http-status');
 import { error } from '../../../service/src/log';
 import uuid = require('uuid/v4');
 
-import { createUserKey } from '../../../service/src/key';
 import { ServiceRouterCode } from '../../../service/src/router';
 import { createTopup } from '../../../topup/src/client/index';
 import { TransactionAndBalance } from '../../../transaction/src/client/index';
@@ -13,12 +12,11 @@ import { getSessionData } from '../services/session';
 import { storeCodeToStoreID } from '../services/store';
 import { purchase } from '../services/transaction';
 
-const register = async (storeCode) => {
+const register = async (key, storeCode) => {
   const userId = uuid();
   const profile = {
     defaultStoreId: storeCodeToStoreID(storeCode)
   };
-  const key = createUserKey({ userId });
   const user = await createUser(key, userId, profile);
 
   return await getSessionData(key, { user });
@@ -63,9 +61,9 @@ const setupRegisterPhase1 = (router) => {
   router.post(
     '/register',
     noopAuthentication,
-    async (_key /* a new key is created instead */, _params, { storeCode }) => {
+    async (key, _params, { storeCode }) => {
       try {
-        return await register(storeCode);
+        return await register(key, storeCode);
       } catch (e) {
         throw new ServiceRouterCode(HTTPStatus.INTERNAL_SERVER_ERROR, e.message);
       }
