@@ -25,6 +25,14 @@ interface Router {
   put<Body, Result>(path: string, authentication: ExpressAuthentication, action: BodyAction<Body, Result>);
 }
 
+export class ServiceRouterCode extends Error {
+  public statusCode: number;
+  constructor(statusCode: number, message: string) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+
 const extractKey = (request, service: string): Key => {
   try {
     return JSON.parse(request.get('key'));
@@ -75,19 +83,11 @@ const createEndPoint = (service, internalRouter, version, method: 'get' | 'post'
           .catch((e) => {
             const duration = timer();
             error(key, `failed ${method} ${request.url}`, { e, duration });
-            response.status(e.statusCode || 200)
+            response.status(e.statusCode || 200) // e.statusCode because 'e' may be a ServiceRouterCode
               .json({ error: { message: e.message }});
           });
       });
   };
-
-export class ServiceRouterCode extends Error {
-  public statusCode: number;
-  constructor(statusCode: number, message: string) {
-    super(message);
-    this.statusCode = statusCode;
-  }
-}
 
 export const serviceRouter = (service: string, version: number): Router => {
   const internalRouter = express.Router();
