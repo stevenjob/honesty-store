@@ -56,7 +56,10 @@ export const pruneFunctions = async (filter = (_func: Lambda.FunctionConfigurati
 
   const promises = listResponse.Functions
     .filter(filter)
-    .map((func) => lambda.deleteFunction({ FunctionName: func.FunctionName }));
+    .map((func) =>
+      lambda.deleteFunction({ FunctionName: func.FunctionName })
+        .promise()
+    );
 
   await Promise.all(promises);
 };
