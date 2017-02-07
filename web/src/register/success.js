@@ -3,19 +3,22 @@ import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { Success } from '../chrome/modal';
 
-export const RegisterSuccess = ({ item: { name, image } }) =>
+export const RegisterSuccess = ({ item: { name, image }, loading }) =>
   <Success title={`Enjoy your ${name}!`}
     subtitle="Thank you for signing up!"
-    image={require(`../item/assets/${image}`)}
-    onClick={() => browserHistory.replace(`/history`)} />;
+    image={loading ? "" : require(`../item/assets/${image}`)}
+    onClick={() => browserHistory.replace(`/history`)}
+    loading={loading}
+    />;
 
 const mapStateToProps = (
-  { store: { items = []} },
+  { store: { items = []}, pending },
   { params: { itemId } }
 ) => {
   const item = items.find(item => item.id === itemId);
   return {
-    item: item || {}
+    item: item || {},
+    loading: pending.length > 0
   };
 };
 
