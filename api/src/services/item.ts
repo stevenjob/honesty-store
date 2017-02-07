@@ -2,12 +2,12 @@ const items = new Map();
 
 const walkersCheeseAndOnion = {
   name: 'Walkers',
-  image: 'walkers-ready-salted.svg' // TODO wrong colour
+  image: 'walkers-cheese-and-onion.svg'
 };
 
 const walkersSaltAndVinegar = {
   name: 'Walkers',
-  image: 'walkers-ready-salted.svg' // TODO wrong colour
+  image: 'walkers-salt-and-vinegar.svg'
 };
 
 const natureValley = {
@@ -17,22 +17,22 @@ const natureValley = {
 
 const snickers = {
   name: 'Snickers',
-  image: 'misc-bar.svg' // TODO
+  image: 'snickers.svg'
 };
 
 const skittles = {
   name: 'Skittles',
-  image: 'misc-bar.svg' // TODO
+  image: 'skittles.svg'
 };
 
 const kitKatChunkyIndividual = {
   name: 'KitKat Chunky',
-  image: 'misc-bar.svg' // TODO
+  image: 'kit-kat-chunky.svg'
 };
 
 const kitKatChunkyMultipack = {
   name: 'KitKat Chunky',
-  image: 'misc-bar.svg' // TODO
+  image: 'kit-kat-chunky.svg'
 };
 
 items.set('46ced0c0-8815-4ed2-bfb6-40537f5bd512', walkersCheeseAndOnion);
