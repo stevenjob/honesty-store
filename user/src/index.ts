@@ -4,10 +4,10 @@ import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isEmail = require('validator/lib/isEmail');
+import { storeList } from '../../api/src/services/store'; // until we have the store service
 import { createServiceKey } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
-import { storeList } from '../../service/src/storeList';
 import { createAccount } from '../../transaction/src/client';
 import { TEST_DATA_USER_ID, User, UserProfile, UserWithAccessAndRefreshTokens, UserWithAccessToken } from './client';
 import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from './token';
@@ -31,7 +31,7 @@ const assertValidUserId = createAssertValidUuid('userId');
 const assertValidRefreshToken = createAssertValidUuid('refreshToken');
 
 const assertValidDefaultStoreId = (defaultStoreId) => {
-  if (storeList.indexOf(defaultStoreId) === -1) {
+  if (storeList().indexOf(defaultStoreId) === -1) {
     throw new Error(`Invalid defaultStoreId ${defaultStoreId}`);
   }
 };

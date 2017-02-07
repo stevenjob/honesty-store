@@ -1,11 +1,14 @@
-import { storeList } from '../../../service/src/storeList';
 import { getBox } from './box';
 import { getItem } from './item';
 
 const stores = new Map();
-const defaultBox = getBox('032503e2-6cd3-4101-92bb-49bc26a5027e');
 
-storeList.forEach((store) => stores.set(store, defaultBox));
+stores.set('sl-ncl', getBox('032503e2-6cd3-4101-92bb-49bc26a5027e'));
+stores.set('sl-edn', getBox('32e0a7e1-38b4-42ce-b29d-6c70d346089a'));
+stores.set('sl-brs', getBox('32e0a7e1-38b4-42ce-b29d-6c70d346089a'));
+stores.set('sl-ldn', getBox('32e0a7e1-38b4-42ce-b29d-6c70d346089a'));
+
+export const storeList = () => Array.from(stores.keys());
 
 export const getPrice = itemID => getItem(itemID).price;
 
