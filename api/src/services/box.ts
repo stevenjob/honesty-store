@@ -15,10 +15,10 @@ boxes.set('032503e2-6cd3-4101-92bb-49bc26a5027e', {
 boxes.set('32e0a7e1-38b4-42ce-b29d-6c70d346089a', {
   items: [
     { itemID: '28b0a802-bef3-478b-81d0-034e3ac02092', count: 15 },
-    { itemID: 'b3cad9b1-56fb-446d-987a-da79b8f75140', count: 34 },
-    { itemID: '9d75c0d8-0c37-4828-90a4-d8cdc0ba9582', count: 16 },
-    { itemID: '41ed2c85-6ef6-4079-b8a3-aeeb41ba13b3', count: 12 },
-    { itemID: '678ada89-7050-45ee-bed9-5c46da6bc053', count: 27 }
+    { itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae', count: 34 },
+    { itemID: 'b43c4a97-1112-41ce-8f91-5a8bda0dcdc8', count: 16 },
+    { itemID: '78816fba-150d-4282-b43d-900df45cea8b', count: 12 },
+    { itemID: '02bbc0fd-54c4-45bb-9b77-21b79b356aa6', count: 27 }
   ]
 });
 

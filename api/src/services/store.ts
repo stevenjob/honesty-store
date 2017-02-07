@@ -47,9 +47,9 @@ const getStore = (storeCode) => {
   return store;
 };
 
-export const getPrice = (storeCode: string, itemId: string) => {
+export const getPrice = (storeCode: string, itemID: string) => {
   const store = getStore(storeCode);
-  return store.itemPrices[itemId];
+  return store.itemPrices[itemID];
 };
 
 export interface StoreItem {
@@ -66,10 +66,10 @@ export const storeItems = (storeCode): StoreItem[] => {
   const store = getStore(storeCode);
   const box = getBox(store.boxId);
 
-  return box.items.map(({ itemId, count }) => ({
-    ...getItem(itemId),
+  return box.items.map(({ itemID, count }) => ({
+    ...getItem(itemID),
     count,
-    id: itemId,
-    price: getPrice(storeCode, itemId)
+    id: itemID,
+    price: getPrice(storeCode, itemID)
   }));
 };
