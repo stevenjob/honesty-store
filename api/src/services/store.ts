@@ -3,20 +3,43 @@ import { getItem } from './item';
 
 const stores = new Map();
 
-stores.set('sl-ncl', getBox('032503e2-6cd3-4101-92bb-49bc26a5027e'));
-stores.set('sl-edn', getBox('32e0a7e1-38b4-42ce-b29d-6c70d346089a'));
-stores.set('sl-brs', getBox('32e0a7e1-38b4-42ce-b29d-6c70d346089a'));
-stores.set('sl-ldn', getBox('32e0a7e1-38b4-42ce-b29d-6c70d346089a'));
+const ncl = {
+  boxId: '032503e2-6cd3-4101-92bb-49bc26a5027e',
+  itemPrices: {
+    ['46ced0c0-8815-4ed2-bfb6-40537f5bd512']: 50,
+    ['faeda516-bd9f-41ec-b949-7a676312b0ae']: 40,
+    ['b43c4a97-1112-41ce-8f91-5a8bda0dcdc8']: 51,
+    ['78816fba-150d-4282-b43d-900df45cea8b']: 48,
+    ['3fa0db7c-3f90-404e-b875-3792eda3e185']: 58
+  }
+};
+
+const brs = {
+  boxId: '32e0a7e1-38b4-42ce-b29d-6c70d346089a',
+  itemPrices: {
+    ['28b0a802-bef3-478b-81d0-034e3ac02092']: 55,
+    ['faeda516-bd9f-41ec-b949-7a676312b0ae']: 45,
+    ['b43c4a97-1112-41ce-8f91-5a8bda0dcdc8']: 56,
+    ['78816fba-150d-4282-b43d-900df45cea8b']: 53,
+    ['02bbc0fd-54c4-45bb-9b77-21b79b356aa6']: 65
+  }
+};
+
+const edn = brs;
+const ldn = brs;
+
+stores.set('sl-ncl', ncl);
+stores.set('sl-edn', edn);
+stores.set('sl-brs', brs);
+stores.set('sl-ldn', ldn);
 
 export const storeList = () => Array.from(stores.keys());
-
-export const getPrice = itemID => getItem(itemID).price;
 
 // currently storeCode and storeID are identical
 export const storeIDToStoreCode = (storeID) => storeID;
 export const storeCodeToStoreID = (storeCode) => storeCode;
 
-export const getStore = (storeCode) => {
+const getStore = (storeCode) => {
   const store = stores.get(storeCode);
   if (store == null) {
     throw new Error(`Store does not exist with code '${storeCode}'`);
@@ -24,15 +47,29 @@ export const getStore = (storeCode) => {
   return store;
 };
 
-export const getItems = (storeCode) => {
-  const box = getStore(storeCode);
+export const getPrice = (storeCode: string, itemId: string) => {
+  const store = getStore(storeCode);
+  return store.itemPrices[itemId];
+};
 
-  return box.items.map(({ itemID, count }) => {
-    const item = getItem(itemID);
-    return {
-      ...item,
-      id: itemID,
-      count
-    };
-  });
+export interface StoreItem {
+  name: string;
+  image: string;
+
+  count: number;
+
+  id: string;
+  price: number;
+}
+
+export const storeItems = (storeCode): StoreItem[] => {
+  const store = getStore(storeCode);
+  const box = getBox(store.boxId);
+
+  return box.items.map(({ itemId, count }) => ({
+    ...getItem(itemId),
+    count,
+    id: itemId,
+    price: getPrice(storeCode, itemId)
+  }));
 };

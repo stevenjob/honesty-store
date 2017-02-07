@@ -2,7 +2,7 @@ import { getCardDetails } from '../../../topup/src/client/index';
 import { Transaction } from '../../../transaction/src/client/index';
 import { userRegistered } from '../../../user/src/client';
 import { getUser } from '../../../user/src/client/index';
-import { getItems, storeIDToStoreCode } from '../services/store';
+import { storeIDToStoreCode, storeItems } from '../services/store';
 import { getTransactionHistory } from '../services/transaction';
 
 export interface SessionData {
@@ -45,7 +45,7 @@ const getStoreSessionData = async (key, userID) => {
   const defaultStoreCode = storeIDToStoreCode(defaultStoreId);
 
   return {
-    items: getItems(defaultStoreCode),
+    items: storeItems(defaultStoreCode),
     code: defaultStoreCode
   };
 };
