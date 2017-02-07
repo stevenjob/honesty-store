@@ -1,5 +1,5 @@
 const boxes = new Map();
-boxes.set(0, {
+boxes.set('032503e2-6cd3-4101-92bb-49bc26a5027e', {
   items: [
     { itemID: '46ced0c0-8815-4ed2-bfb6-40537f5bd512', count: 10 },
     { itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae', count: 35 },

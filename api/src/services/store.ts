@@ -3,7 +3,7 @@ import { getBox } from './box';
 import { getItem } from './item';
 
 const stores = new Map();
-const defaultBox = getBox(0);
+const defaultBox = getBox('032503e2-6cd3-4101-92bb-49bc26a5027e');
 
 storeList.forEach((store) => stores.set(store, defaultBox));
 
