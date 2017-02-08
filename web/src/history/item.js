@@ -42,7 +42,7 @@ const HistoryItem = ({ isTopUp, text, timestamp, amount, image }) => {
   );
 };
 
-const addQuantityInfo = (name, quantity) => `${name}${quantity > 1 ? ` x ${quantity}` : ''}`;
+const formatItem = (name, quantity) => `${name}${quantity > 1 ? ` x ${quantity}` : ''}`;
 
 const mapStateToProps = (
   { store: { items = []} },
@@ -68,7 +68,7 @@ const mapStateToProps = (
     timestamp: transaction.timestamp,
     amount: transaction.amount,
     image: foundItem.image,
-    text: foundItem ? addQuantityInfo(foundItem.name, quantity) : 'Unknown Item',
+    text: foundItem ? formatItem(foundItem.name, quantity) : 'Unknown Item',
   };
 };
 
