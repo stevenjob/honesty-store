@@ -12,6 +12,7 @@ export const getAppropriateImage = (imgRef) => {
 export const Image = ({ className, imageName, alt }) => <div
   className={className}
   style={{ backgroundImage: `url(${getAppropriateImage(imageName) })` }}
+  alt={alt}
   />;
 
 export default Image;
