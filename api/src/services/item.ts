@@ -2,16 +2,16 @@ const items = new Map();
 
 const walkersCheeseAndOnion = {
   name: 'Walkers',
-  image: 'walkers-cheese-and-onion.svg'
+  image: 'walkers-ready-salted.svg'
 };
 
 const walkersSaltAndVinegar = {
   name: 'Walkers',
-  image: 'walkers-salt-and-vinegar.svg'
+  image: 'walkers-ready-salted.svg'
 };
 
 const natureValley = {
-  name: 'N.V. Crunchy Oats & Honey',
+  name: 'Crunchy Oats & Honey',
   image: 'nature-valley-oats-n-honey.svg'
 };
 
@@ -30,7 +30,7 @@ const kitKatChunkyIndividual = {
   image: 'kit-kat-chunky.svg'
 };
 
-const kitKatChunkyMultipack = {
+const kitKatChunkyPMOnePound = {
   name: 'KitKat Chunky',
   image: 'kit-kat-chunky.svg'
 };
@@ -40,7 +40,7 @@ items.set('faeda516-bd9f-41ec-b949-7a676312b0ae', natureValley);
 items.set('b43c4a97-1112-41ce-8f91-5a8bda0dcdc8', snickers);
 items.set('78816fba-150d-4282-b43d-900df45cea8b', skittles);
 items.set('3fa0db7c-3f90-404e-b875-3792eda3e185', kitKatChunkyIndividual);
-items.set('02bbc0fd-54c4-45bb-9b77-21b79b356aa6', kitKatChunkyMultipack);
+items.set('02bbc0fd-54c4-45bb-9b77-21b79b356aa6', kitKatChunkyPMOnePound);
 items.set('28b0a802-bef3-478b-81d0-034e3ac02092', walkersSaltAndVinegar);
 
 export const getItem = (itemID: string) => {
