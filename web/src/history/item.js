@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { BRAND_LIGHT } from '../chrome/colors';
 import './item.css';
 import Currency from '../format/Currency';
+import Image from '../chrome/image';
 
 const AmountLabel = ({ amount, isTopUp }) => {
   if (isTopUp) {
@@ -27,9 +28,9 @@ const HistoryItem = ({ isTopUp, text, timestamp, amount, image }) => {
     <div className="history-item">
       <div className="history-item-timestamp">{moment(timestamp).fromNow()}</div>
       <div className="history-item-details">
-        <div
+        <Image
           className="history-item-image"
-          style={{ backgroundImage: `url(${image})` }}
+          imageName={image}
           alt={text}
           />
         <div className="history-item-info">
@@ -40,6 +41,8 @@ const HistoryItem = ({ isTopUp, text, timestamp, amount, image }) => {
     </div>
   );
 };
+
+const addQuantityInfo = (name, quantity) => `${name}${quantity > 1 ? ` x ${quantity}` : ''}`;
 
 const mapStateToProps = (
   { store: { items = []} },
@@ -60,23 +63,12 @@ const mapStateToProps = (
   const { itemId, quantity } = transaction.data;
   const foundItem = items.find(e => e.id === itemId);
 
-  if (foundItem) {
-    return {
-      isTopUp,
-      timestamp: transaction.timestamp,
-      amount: transaction.amount,
-      image: require(`../item/assets/${foundItem.image}`),
-      text: `${foundItem.name}${quantity > 1 ? ` x ${quantity}` : ''}`
-    };
-  }
-
-  // fallback/error case
   return {
     isTopUp,
     timestamp: transaction.timestamp,
     amount: transaction.amount,
-    image: require('../item/assets/not-found.svg'),
-    text: 'Unknown Item',
+    image: foundItem.image,
+    text: foundItem ? addQuantityInfo(foundItem.name, quantity) : 'Unknown Item',
   };
 };
 
