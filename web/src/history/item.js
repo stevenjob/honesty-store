@@ -1,10 +1,10 @@
 import React from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
+import safeLookupItemImage from '../item/safeLookupItemImage';
 import { BRAND_LIGHT } from '../chrome/colors';
 import './item.css';
 import Currency from '../format/Currency';
-import Image from '../chrome/image';
 
 const AmountLabel = ({ amount, isTopUp }) => {
   if (isTopUp) {
@@ -28,9 +28,9 @@ const HistoryItem = ({ isTopUp, text, timestamp, amount, image }) => {
     <div className="history-item">
       <div className="history-item-timestamp">{moment(timestamp).fromNow()}</div>
       <div className="history-item-details">
-        <Image
+        <div
           className="history-item-image"
-          imageName={image}
+          style={{ backgroundImage: `url(${safeLookupItemImage(image)})` }}
           alt={text}
           />
         <div className="history-item-info">

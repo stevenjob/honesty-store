@@ -8,7 +8,7 @@ import Button from '../chrome/button';
 import Currency from '../format/Currency';
 import { performPurchase } from '../actions/purchase';
 import isRegistered from '../reducers/is-registered-user';
-import Image from '../chrome/image';
+import safeLookupItemImage from './safeLookupItemImage';
 import './detail.css';
 
 const minNumItems = 1;
@@ -86,7 +86,10 @@ const ItemDetail = ({
           <div className="item-details">
             <h2>{name}<br />{price}<small>p</small></h2>
           </div>
-          <Image className="item-image" imageName={image} alt={name} />
+          <div
+            className="item-image"
+            style={{ backgroundImage: `url(${safeLookupItemImage(image)})` }}
+            />
           {registered ? PurchaseStepper : UnregisteredPurchaseButton}
         </div>
       }
