@@ -6,7 +6,7 @@ import { Success } from '../chrome/modal';
 export const RegisterSuccess = ({ item: { name, image }, loading }) =>
   <Success title={`Enjoy your ${name}!`}
     subtitle="Thank you for signing up!"
-    image={loading ? "" : image}
+    image={image}
     onClick={() => browserHistory.replace(`/history`)}
     loading={loading}
     />;

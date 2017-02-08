@@ -6,7 +6,7 @@ import { Success } from '../chrome/modal';
 export const ItemPurchaseSuccess = ({ item: { name, image }, loading }) =>
   <Success title={`Enjoy your ${name}!`}
     subtitle="Thank you for your honesty!"
-    image={loading ? "" : image }
+    image={image}
     onClick={() => browserHistory.replace(`/history`)}
     loading={loading} />;
 
