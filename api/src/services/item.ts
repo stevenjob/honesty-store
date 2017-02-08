@@ -9,7 +9,7 @@ const items = [
   {
     id: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
     name: 'Walkers',
-    image: 'walkers-ready-salted.svg',
+    image: 'walkers-cheese-onion.svg',
     weight: 32.5,
     notes: 'Cheese & Onion'
   },
@@ -47,7 +47,7 @@ const items = [
   {
     id: '28b0a802-bef3-478b-81d0-034e3ac02092',
     name: 'Walkers',
-    image: 'walkers-ready-salted.svg',
+    image: 'walkers-salt-vinegar.svg',
     weight: 32.5,
     notes: 'Salt & Vinegar'
   },
