@@ -1,7 +1,6 @@
 import { getCardDetails } from '../../../topup/src/client/index';
 import { Transaction } from '../../../transaction/src/client/index';
 import { userRegistered } from '../../../user/src/client';
-import { getUser } from '../../../user/src/client/index';
 import { storeIDToStoreCode, storeItems } from '../services/store';
 import { getTransactionHistory } from '../services/transaction';
 
@@ -39,8 +38,8 @@ const getUserSessionData = async (key, user) => {
   };
 };
 
-const getStoreSessionData = async (key, userID) => {
-  const { defaultStoreId } = await getUser(key, userID);
+const getStoreSessionData = async (user) => {
+  const { defaultStoreId } = user;
 
   const defaultStoreCode = storeIDToStoreCode(defaultStoreId);
 
@@ -51,10 +50,10 @@ const getStoreSessionData = async (key, userID) => {
 };
 
 export const getSessionData = async (key, { user }) => {
-  const { id, accessToken, refreshToken } = user;
+  const { accessToken, refreshToken } = user;
   const [userProfile, store] = await Promise.all([
     getUserSessionData(key, user),
-    getStoreSessionData(key, id)
+    getStoreSessionData(user)
   ]);
   return {
     user: userProfile,
