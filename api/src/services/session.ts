@@ -2,7 +2,7 @@ import { getCardDetails } from '../../../topup/src/client/index';
 import { Transaction } from '../../../transaction/src/client/index';
 import { userRegistered } from '../../../user/src/client';
 import { storeIDToStoreCode, storeItems } from '../services/store';
-import { getTransactionHistory } from '../services/transaction';
+import { getExpandedTransactionsAndBalance } from '../services/transaction';
 
 export interface SessionData {
   user: {
@@ -22,8 +22,9 @@ export interface SessionData {
 
 const getUserSessionData = async (key, user) => {
   const { id, accountId: accountID, emailAddress } = user;
-  const allTransactions = accountID ? await getTransactionHistory({ key, accountID }) : [];
-  const recentTransactions = allTransactions.slice(0, 10);
+  const { balance, transactions } = accountID ?
+    await getExpandedTransactionsAndBalance({ key, accountID }) :
+    { balance: 0, transactions: [] };
 
   let cardDetails;
   if (userRegistered(user)) {
@@ -32,8 +33,8 @@ const getUserSessionData = async (key, user) => {
 
   return {
     emailAddress,
-    balance: allTransactions.reduce((balance, transaction) => balance + transaction.amount, 0),
-    transactions: recentTransactions,
+    balance,
+    transactions,
     cardDetails
   };
 };

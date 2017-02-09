@@ -1,36 +1,7 @@
 import HTTPStatus = require('http-status');
 import { ServiceRouterCode } from '../../../service/src/router';
 import { authenticateAccessToken } from '../middleware/authenticate';
-import { getItem } from '../services/item';
-import { getTransactionHistory } from '../services/transaction';
-
-const expandItemDetails = (transaction) => {
-  const { itemId } = transaction.data;
-  const item = itemId != null ? getItem(itemId) : null;
-  return {
-    ...transaction,
-    data: {
-      ...transaction.data,
-      item
-    }
-  };
-};
-
-const getPagedTransactions = async ({ key, accountID, page }) => {
-  const allUserTransactions = await getTransactionHistory({ key, accountID });
-  const transactionsPerPage = 10;
-
-  const lastPage = Math.max(
-    Math.ceil(allUserTransactions.length / transactionsPerPage) - 1,
-    0);
-
-  const startIndex = transactionsPerPage * page;
-  const endIndex = Math.min(startIndex + transactionsPerPage, allUserTransactions.length);
-  const items = allUserTransactions.slice(startIndex, endIndex)
-    .map(expandItemDetails);
-
-  return { items, lastPage };
-};
+import { getExpandedTransactionsAndBalance } from '../services/transaction';
 
 export default (router) => {
   router.get(
@@ -40,7 +11,7 @@ export default (router) => {
       const page = parseInt(query.page, 10) || 0;
 
       try {
-        return await getPagedTransactions({ key, accountID: user.accountId, page });
+        return await getExpandedTransactionsAndBalance({ key, accountID: user.accountId, page });
       } catch (e) {
         throw new ServiceRouterCode(HTTPStatus.INTERNAL_SERVER_ERROR, e.message);
       }

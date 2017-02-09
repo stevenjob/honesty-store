@@ -1,5 +1,24 @@
 import { createTransaction, getAccount, TransactionDetails } from '../../../transaction/src/client/index';
+import { getItem } from '../services/item';
 import { getPrice } from './store';
+
+const expandItemDetails = (transaction) => {
+  const { itemId } = transaction.data;
+  const item = itemId != null ? getItem(itemId) : null;
+  return {
+    ...transaction,
+    data: {
+      ...transaction.data,
+      item
+    }
+  };
+};
+
+const pageItems = ({ items, page, perPage = 10 }) => {
+  const startIndex = perPage * page;
+  const endIndex = Math.min(startIndex + perPage, items.length);
+  return items.slice(startIndex, endIndex);
+};
 
 const assertValidQuantity = (quantity) => {
   if (!Number.isInteger(quantity)) {
@@ -29,16 +48,23 @@ export const purchase = async ({ key, itemID, userID, accountID, storeID, quanti
     }
   };
 
-  return await createTransaction(key, accountID, transaction);
+  const response = await createTransaction(key, accountID, transaction);
+  return {
+    balance: response.balance,
+    transaction: expandItemDetails(response.transaction)
+  };
 };
 
-export const getTransactionHistory = async ({ key, accountID }) => {
-  const { transactions } = await getAccount(key, accountID);
+export const getExpandedTransactionsAndBalance = async ({ key, accountID, page = 0 }) => {
+  const { balance, transactions: rawTransactions } = await getAccount(key, accountID);
+  const transactions = pageItems({
+      items: rawTransactions,
+      page
+    })
+    .map(expandItemDetails);
 
-  return transactions;
-};
-
-export const getBalance = async (userID) => {
-  const userTransactions = await getTransactionHistory(userID);
-  return userTransactions.reduce((balance, transaction) => balance + transaction.amount, 0);
+  return {
+    balance,
+    transactions
+  };
 };
