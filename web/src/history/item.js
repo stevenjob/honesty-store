@@ -67,7 +67,7 @@ const mapStateToProps = (
     isTopUp,
     timestamp: transaction.timestamp,
     amount: transaction.amount,
-    image: foundItem.image,
+    image: foundItem ? foundItem.image : 'misc-bar.svg',
     text: foundItem ? formatItem(foundItem.name, quantity) : 'Unknown Item',
   };
 };
