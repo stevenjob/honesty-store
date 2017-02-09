@@ -24,7 +24,7 @@ const items = [
       { itemID: 'b43c4a97-1112-41ce-8f91-5a8bda0dcdc8', count: 16 },
       { itemID: '78816fba-150d-4282-b43d-900df45cea8b', count: 12 },
       { itemID: '02bbc0fd-54c4-45bb-9b77-21b79b356aa6', count: 54 },
-      { itemID: '28b0a802-bef3-478b-81d0-034e3ac02092', count: 2 },
+      { itemID: '28b0a802-bef3-478b-81d0-034e3ac02092', count: 3 },
       { itemID: '606e12d4-6367-4fc3-aa7a-92ee17ccac2c', count: 2 },
       { itemID: 'e91e7274-fe28-405c-86c8-5768197eb6ac', count: 16 },
       { itemID: '32919485-d806-4be6-824b-170f66371306', count: 15 },
