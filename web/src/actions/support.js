@@ -22,13 +22,14 @@ const supportFailure = () => {
   };
 };
 
-export const performSupport = ({ message }) => async (dispatch, getState) => {
+export const performSupport = ({ message, emailAddress }) => async (dispatch, getState) => {
   dispatch(supportRequest());
+  const userAgent = navigator.userAgent;
   try {
     const accessToken = getState().accessToken;
     const response = await fetch('/api/v1/support', {
       method: 'POST',
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ message, emailAddress, userAgent }),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer: ${accessToken}`

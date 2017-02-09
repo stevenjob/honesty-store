@@ -1,8 +1,13 @@
 import fetch from 'node-fetch';
 import { info } from '../../../service/src/log';
 import { authenticateAccessToken } from '../middleware/authenticate';
+import isEmail = require('validator/lib/isEmail');
+import uuid = require('uuid/v4');
 
-const sendSlackSupportMessage = async ({ key, user, message }) => {
+const sendSlackSupportMessage = async ({ key, user, message, emailAddress, userAgent }) => {
+  const validatedEmailAddress = user.emailAddress || (isEmail(emailAddress) ? emailAddress : null);
+  const validatedUserAgent = userAgent.substr(0, 250);
+  const requestId = uuid();
   const response = await fetch('https://hooks.slack.com/services/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', {
     method: 'POST',
     headers: {
@@ -13,19 +18,31 @@ const sendSlackSupportMessage = async ({ key, user, message }) => {
       icon_emoji: ':ghost:',
       attachments: [
         {
-          fallback: `New support request received ${message} ${user.id} ${user.emailAddress}`,
+          fallback: `New support request (${requestId}) received ${message} ${user.id} ${validatedEmailAddress}`,
           fields: [
             {
               title: 'Message',
               value: message
             },
             {
+              title: 'Request',
+              value: requestId
+            },
+            {
               title: 'User',
               value: user.id
             },
             {
+              title: 'Store',
+              value: user.defaultStoreId
+            },
+            {
               title: 'Email',
-              value: user.emailAddress
+              value: validatedEmailAddress
+            },
+            {
+              title: 'User Agent',
+              value: validatedUserAgent
             }
           ]
         }
@@ -43,5 +60,6 @@ export default (router) => {
   router.post(
     '/support',
     authenticateAccessToken,
-    async (key, _params, { message }, { user }) => await sendSlackSupportMessage({ key, user, message }));
+    async (key, _params, { message, emailAddress, userAgent }, { user }) =>
+      await sendSlackSupportMessage({ key, user, message, emailAddress, userAgent }));
 };
