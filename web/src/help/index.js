@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import Button from '../chrome/button';
 import Page from '../chrome/page';
 import { DANGER } from '../chrome/colors';
+import Balance from '../topup/balance';
 import { performSupport } from '../actions/support';
 import isRegisteredUser from '../reducers/is-registered-user';
 import isEmail from 'validator/lib/isEmail';
@@ -53,9 +54,10 @@ const Help = class extends React.Component {
 
   render() {
     const { valid, emailAddress } = this.state;
-    const { registered } = this.props;
+    const { registered, balance } = this.props;
     return <Page title="Help"
       left={registered ? null : <Store />}
+      right={registered ? <Balance balance={balance} /> : null}
       nav={registered}>
       <form className="help" onSubmit={(e) => this.handleSubmit(e)}>
         <h2>Having problems?</h2>
@@ -88,7 +90,8 @@ const Help = class extends React.Component {
 
 const mapStateToProps = ({ user }) => ({
   emailAddress: user.emailAddress,
-  registered: isRegisteredUser(user)
+  registered: isRegisteredUser(user),
+  balance: user.balance || 0
 });
 
 const mapDispatchToProps = { performSupport };

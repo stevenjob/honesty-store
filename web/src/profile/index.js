@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { MUTED_TEXT, DANGER, LIGHT_BACKGROUND } from '../chrome/colors';
 import Page from '../chrome/page';
+import Balance from '../topup/balance';
 import './index.css';
 
-const Profile = ({ emailAddress }) => (
-  <Page title="Profile">
+const Profile = ({ emailAddress, balance }) => (
+  <Page title="Profile"
+    right={<Balance balance={balance} />}>
     <div>
       <div className="profile-badge" style={{ borderColor: MUTED_TEXT, background: LIGHT_BACKGROUND }}>
         <div className="profile-badge-details">
@@ -28,8 +30,9 @@ const Profile = ({ emailAddress }) => (
 );
 
 
-const mapStateToProps = ({ user: { emailAddress } }) => ({
-  emailAddress
+const mapStateToProps = ({ user: { emailAddress, balance } }) => ({
+  emailAddress,
+  balance: balance || 0
 });
 
 export default connect(mapStateToProps)(Profile);
