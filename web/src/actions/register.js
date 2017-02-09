@@ -24,6 +24,7 @@ const registerFailure = () => ({
 
 export const performRegister = ({ storeCode }) => async (dispatch, getState) => {
   dispatch(registerRequest());
+  browserHistory.push(`/store`);
   try {
     const response = await fetch('/api/v1/register', {
       method: 'POST',
@@ -37,7 +38,6 @@ export const performRegister = ({ storeCode }) => async (dispatch, getState) => 
       throw new Error(json.error.message);
     }
     dispatch(registerSuccess(json.response));
-    browserHistory.push(`/store`);
   }
   catch (e) {
     dispatch(registerFailure());
