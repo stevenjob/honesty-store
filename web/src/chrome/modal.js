@@ -1,7 +1,6 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
 import Page from './page';
-import safeLookupItemImage from '../item/safeLookupItemImage';
 import { MUTED_TEXT } from './colors';
 import sucess from './assets/success.svg';
 import error from './assets/error.svg';
@@ -51,7 +50,7 @@ export const Success = ({
 }) =>
   <Modal title={title}
     subtitle={subtitle}
-    image={safeLookupItemImage(image)}
+    image={image}
     {...other} />;
 
 export default Modal;
