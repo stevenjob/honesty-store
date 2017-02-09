@@ -26,11 +26,19 @@ app.use(
   )
 );
 
-// serve static assets normally
+// serve versioned static assets with 1Y cache
+app.use(
+  '/static',
+  express.static(
+    __dirname + '/build/static',
+    { maxAge: '1y' }
+  )
+);
+
+// serve unversioned static assets without cache
 app.use(
   express.static(
-    __dirname + '/build',
-    { maxAge: '1y' }
+    __dirname + '/build'
   )
 );
 
