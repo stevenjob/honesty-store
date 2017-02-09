@@ -2,10 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import NavBar from './nav-bar';
 import { BRAND_DARK, BRAND_WHITE, LIGHT_TEXT } from './colors';
+import MiscBar from '../item/misc-bar.js';
+import MiscBigBar from '../item/misc-big-bar.js';
+import MiscCrisps from '../item/misc-crisps.js';
 import './page.css';
 
 const Loading = () => <div className="chrome-page-loading">
   <h1>Loading</h1>
+  <div className="chrome-page-loading-items">
+    <MiscBar/>
+    <MiscCrisps/>
+    <MiscBigBar/>
+    <MiscBar/>
+    <MiscBigBar/>
+    <MiscCrisps/>
+  </div>
 </div>;
 
 const headerStyles = (invert) => invert ?
