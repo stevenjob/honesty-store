@@ -3,32 +3,32 @@
   "name": "honesty.store",
   "icons": [
     {
-      "src": "assets/icon@MDPI.png",
+      "src": "assets/android/icon@MDPI.png",
       "type": "image/png",
       "sizes": "48x48"
     },
     {
-      "src": "assets/icon@HDPI.png",
+      "src": "assets/android/icon@HDPI.png",
       "type": "image/png",
       "sizes": "72x72"
     },
     {
-      "src": "assets/icon@XHDPI.png",
+      "src": "assets/android/icon@XHDPI.png",
       "type": "image/png",
       "sizes": "96x96"
     },
     {
-      "src": "assets/icon@XXHDPI.png",
+      "src": "assets/android/icon@XXHDPI.png",
       "type": "image/png",
       "sizes": "144x144"
     },
     {
-      "src": "assets/icon@XXXHDPI.png",
+      "src": "assets/android/icon@XXXHDPI.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "assets/GooglePlay.png",
+      "src": "assets/android/GooglePlay.png",
       "type": "image/png",
       "sizes": "512x512"
     }
