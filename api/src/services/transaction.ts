@@ -1,5 +1,5 @@
 import { createTransaction, getAccount, TransactionDetails } from '../../../transaction/src/client/index';
-import { getPrice } from '../services/store';
+import { getPrice } from './store';
 
 const assertValidQuantity = (quantity) => {
   if (!Number.isInteger(quantity)) {
