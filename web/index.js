@@ -1,4 +1,5 @@
 const express = require('express');
+const compression = require('compression');
 const path = require('path');
 const expressLogging = require('express-logging');
 const logger = require('logops');
@@ -16,6 +17,7 @@ app.use((req, res, next) => {
 });
 
 app.use(expressLogging(logger));
+app.use(compression());
 
 // Needs to be served with this exact url but with JSON
 app.use(

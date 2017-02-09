@@ -1,5 +1,6 @@
 import express = require('express');
 import bodyParser = require('body-parser');
+import compression = require('compression');
 import { serviceRouter } from '../../service/src/router';
 import logoutController from './controllers/logout';
 import purchaseController from './controllers/purchase';
@@ -15,6 +16,7 @@ import { apiVersion } from './version';
 const app = express();
 const router = serviceRouter('api', apiVersion);
 
+app.use(compression());
 app.use(bodyParser.json());
 
 registerController(router);
