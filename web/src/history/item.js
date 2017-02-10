@@ -67,7 +67,7 @@ const mapStateToProps = (
     timestamp: transaction.timestamp,
     amount: transaction.amount,
     image: safeLookupItemImage(image),
-    text: name ? formatItem(name, quantity) : 'Unknown Item',
+    text: formatItem(name ? name : 'Unknown Item', quantity),
   };
 };
 
