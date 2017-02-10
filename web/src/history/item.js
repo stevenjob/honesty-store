@@ -48,27 +48,30 @@ const mapStateToProps = (
   { store: { items = []} },
   { transaction }
 ) => {
-  const isTopUp = transaction.type === 'topup';
-
-  if (isTopUp) {
-    return {
-      isTopUp,
-      timestamp: transaction.timestamp,
-      amount: transaction.amount,
-      image: require('./assets/top-up.svg'),
-      text: 'TOP UP',
-    };
+  const { type, timestamp, amount, data } = transaction;
+  switch (type) {
+    case 'topup':
+      return {
+        isTopUp: true,
+        timestamp: timestamp,
+        amount: amount,
+        image: require('./assets/top-up.svg'),
+        text: 'TOP UP',
+      };
+    case 'purchase':
+      const { item: { image, name }, quantity } = data;
+      return {
+        isTopUp: false,
+        timestamp: timestamp,
+        amount: amount,
+        image: safeLookupItemImage(image),
+        text: formatItem(name ? name : 'Unknown Item', quantity),
+      };
+    default:
+      return {
+        isTopUp: false,
+      };
   }
-
-  const { item: { image, name }, quantity } = transaction.data;
-
-  return {
-    isTopUp,
-    timestamp: transaction.timestamp,
-    amount: transaction.amount,
-    image: safeLookupItemImage(image),
-    text: formatItem(name ? name : 'Unknown Item', quantity),
-  };
 };
 
 export default connect(mapStateToProps)(HistoryItem);
