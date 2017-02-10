@@ -53,8 +53,8 @@ const mapStateToProps = (
     case 'topup':
       return {
         isTopUp: true,
-        timestamp: timestamp,
-        amount: amount,
+        timestamp,
+        amount,
         image: require('./assets/top-up.svg'),
         text: 'TOP UP',
       };
@@ -62,8 +62,8 @@ const mapStateToProps = (
       const { item: { image, name }, quantity } = data;
       return {
         isTopUp: false,
-        timestamp: timestamp,
-        amount: amount,
+        timestamp,
+        amount,
         image: safeLookupItemImage(image),
         text: formatItem(name ? name : 'Unknown Item', quantity),
       };
