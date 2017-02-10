@@ -41,6 +41,6 @@ export const performTopup = ({ amount }) => async (dispatch, getState) => {
 
   } catch (e) {
     dispatch(topupFailure());
-    browserHistory.push(`/topup/error`);
+    browserHistory.push(`/error`);
   }
 };

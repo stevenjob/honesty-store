@@ -41,6 +41,6 @@ export const performPurchase = ({ itemId, quantity }) => async (dispatch, getSta
     browserHistory.push(`/item/${itemId}/success`);
   } catch (e) {
     dispatch(purchaseFailure(e));
-    browserHistory.push(`/item/error`);
+    browserHistory.push(`/error`);
   }
 };
