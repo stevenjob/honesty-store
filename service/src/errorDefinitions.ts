@@ -1,4 +1,5 @@
 export type ErrorCode =
+  'TooManyPurchaseItems' |
   'UnknownError';
 
 export class UserError extends Error {

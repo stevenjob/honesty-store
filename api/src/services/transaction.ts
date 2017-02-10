@@ -1,3 +1,4 @@
+import { UserError } from '../../../service/src/errorDefinitions';
 import { createTransaction, getAccount, TransactionDetails } from '../../../transaction/src/client/index';
 import { getItem } from '../services/item';
 import { getPrice } from './store';
@@ -28,7 +29,7 @@ const assertValidQuantity = (quantity) => {
     throw new Error(`quantity ${quantity} too small`);
   }
   if (quantity > 10) {
-    throw new Error(`quantity ${quantity} too large`);
+    throw new UserError('TooManyPurchaseItems', `quantity ${quantity} too large`);
   }
 };
 
