@@ -30,7 +30,7 @@ const HistoryItem = ({ isTopUp, text, timestamp, amount, image }) => {
       <div className="history-item-details">
         <div
           className="history-item-image"
-          style={{ backgroundImage: `url(${safeLookupItemImage(image)})` }}
+          style={{ backgroundImage: `url(${image})` }}
           alt={text}
           />
         <div className="history-item-info">
@@ -60,13 +60,13 @@ const mapStateToProps = (
     };
   }
 
-  const { item, quantity } = transaction.data;
+  const { item = {}, quantity } = transaction.data;
 
   return {
     isTopUp,
     timestamp: transaction.timestamp,
     amount: transaction.amount,
-    image: item ? item.image : 'misc-bar.svg',
+    image: safeLookupItemImage(item.image),
     text: item ? formatItem(item.name, quantity) : 'Unknown Item',
   };
 };
