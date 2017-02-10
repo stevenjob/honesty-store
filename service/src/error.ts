@@ -5,7 +5,7 @@ export type ErrorCode =
   'NoCardDetailsPresent' |
   'UnknownError';
 
-export class UserError extends Error {
+export class CodedError extends Error {
   public code: ErrorCode;
 
   constructor(code: ErrorCode, message: string) {

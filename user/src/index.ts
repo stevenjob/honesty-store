@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isEmail = require('validator/lib/isEmail');
 import { storeList } from '../../api/src/services/store'; // until we have the store service
-import { UserError } from '../../service/src/error';
+import { CodedError } from '../../service/src/error';
 import { createServiceKey } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
@@ -154,7 +154,7 @@ const scanByEmailAddress = async ({ emailAddress }) => {
   const user = <InternalUser>response.Items[0];
 
   if (user == null) {
-    throw new UserError('EmailNotFound', `User not found ${emailAddress}`);
+    throw new CodedError('EmailNotFound', `User not found ${emailAddress}`);
   }
 
   return user;

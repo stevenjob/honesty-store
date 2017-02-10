@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { baseUrl } from './baseUrl';
-import { ErrorCode, UserError } from './error';
+import { CodedError, ErrorCode } from './error';
 import { Key } from './key';
 import { error, info } from './log';
 import { signServiceSecret } from './serviceSecret';
@@ -60,7 +60,7 @@ export default (service: string) => {
       error(key, `error ${method} ${url} ${json.error.message}`);
 
       if (json.error.code) {
-        throw new UserError(json.error.code, json.error.message);
+        throw new CodedError(json.error.code, json.error.message);
       }
       throw new Error(json.error.message);
     }
