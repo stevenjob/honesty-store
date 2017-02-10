@@ -1,3 +1,4 @@
+import { UserError } from '../../../service/src/errorDefinitions';
 import fetch from '../../../service/src/fetch';
 
 export const balanceLimit = 1000; // £10
@@ -46,7 +47,9 @@ export const assertBalanceWithinLimit = async ({ key, accountId, amount }) => {
   }
 
   if (currentBalance + amount > balanceLimit) {
-    throw new Error(`topping up would increase balance over the limit of £${balanceLimit / 100}`);
+    throw new UserError(
+      'TopupExceedsMaxBalance',
+      `topping up would increase balance over the limit of £${balanceLimit / 100}`);
   }
 };
 

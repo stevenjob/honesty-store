@@ -1,4 +1,5 @@
 export type ErrorCode =
+  'TopupExceedsMaxBalance' |
   'TooManyPurchaseItems' |
   'UnknownError';
 
