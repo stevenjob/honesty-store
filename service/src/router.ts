@@ -64,7 +64,8 @@ const createEndPoint = (service, internalRouter, version, method: 'get' | 'post'
         const timer = time();
         const key = extractKey(request, service);
         // tslint:disable-next-line:max-line-length
-        info(key, `handling ${method} ${request.url} request = { params: '${JSON.stringify(request.params)}', body: '${JSON.stringify(request.body)}' }`);
+        const { params, body } = request;
+        info(key, `handling ${method} ${request.url}`, { params, body });
         action(key, request.params, /* maybe undefined */request.body, request)
           .then(result => {
             const duration = timer();
