@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import * as stripeFactory from 'stripe';
 
-import { UserError } from '../../service/src/errorDefinitions';
+import { UserError } from '../../service/src/error';
 import { Key } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';

@@ -1,4 +1,4 @@
-import { UserError } from '../../../service/src/errorDefinitions';
+import { UserError } from '../../../service/src/error';
 import fetch from '../../../service/src/fetch';
 
 export const balanceLimit = 1000; // £10

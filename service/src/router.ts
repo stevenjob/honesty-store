@@ -1,7 +1,7 @@
 import HTTPStatus = require('http-status');
 import express = require('express');
 
-import { UserError } from './errorDefinitions';
+import { UserError } from './error';
 import { createServiceKey, Key } from './key';
 import { error, info } from './log';
 import { verifyServiceSecret } from './serviceSecret';

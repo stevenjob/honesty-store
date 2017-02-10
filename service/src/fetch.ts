@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { baseUrl } from './baseUrl';
-import { ErrorCode, UserError } from './errorDefinitions';
+import { ErrorCode, UserError } from './error';
 import { Key } from './key';
 import { error, info } from './log';
 import { signServiceSecret } from './serviceSecret';

@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isEmail = require('validator/lib/isEmail');
 import { storeList } from '../../api/src/services/store'; // until we have the store service
-import { UserError } from '../../service/src/errorDefinitions';
+import { UserError } from '../../service/src/error';
 import { createServiceKey } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';

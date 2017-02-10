@@ -1,4 +1,4 @@
-import { UserError } from '../../../service/src/errorDefinitions';
+import { UserError } from '../../../service/src/error';
 import { createTransaction, getAccount, TransactionDetails } from '../../../transaction/src/client/index';
 import { getItem } from '../services/item';
 import { getPrice } from './store';
