@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Button from '../chrome/button';
+import { codeIsCardProviderError, errorDefinitions, paramFromCardProviderError } from '../chrome/errors.js';
 import { DANGER } from '../chrome/colors';
 import { Back } from '../chrome/link';
 import Page from '../chrome/page';
@@ -13,6 +14,30 @@ const setCursorPosition = (element) => () => {
   requestAnimationFrame(() => {
     element.selectionStart = element.selectionEnd = element.value.length;
   });
+};
+
+const unpackCardErrors = ({ validationError, backendError }) => {
+  if (validationError) {
+    return {
+      errorMessage: validationError.message,
+      bogusParameterName: validationError.param
+    };
+
+  } else if (backendError) {
+    const errorDefinition = (codeIsCardProviderError(backendError.code)
+      && errorDefinitions[backendError.code])
+      || errorDefinitions['CardError'];
+
+    return {
+      errorMessage: errorDefinition.message,
+      bogusParameterName: paramFromCardProviderError(backendError)
+    };
+  }
+
+  return {
+    errorMessage: '',
+    bogusParameterName: ''
+  };
 };
 
 class Card extends React.Component {
@@ -61,8 +86,8 @@ class Card extends React.Component {
     performRegister2({ storeCode, itemID: itemId, topUpAmount: TOPUP_AMOUNT, emailAddress, cardDetails });
   }
 
-  style(name, error) {
-    return (error != null && error.param === name) ? { borderBottomColor: DANGER } : {};
+  style(name, badParam) {
+    return badParam === name ? { borderBottomColor: DANGER } : {};
   }
 
   getConfirmButtonText() {
@@ -72,8 +97,11 @@ class Card extends React.Component {
   }
 
   render() {
-    const { error } = this.props;
+    const { validationError, backendError } = this.props;
     const { number, exp, cvc } = this.state;
+
+    const { errorMessage, bogusParameterName } = unpackCardErrors({ validationError, backendError });
+
     return <Page left={<Back>Register</Back>}
       title={`Top Up`}
       invert={true}
@@ -81,10 +109,10 @@ class Card extends React.Component {
       fullscreen={true}>
       <form className="register-card" onSubmit={(e) => this.handleSubmit(e)}>
         {
-          error ?
+          validationError || backendError ?
             <div style={{ color: DANGER }}>
               <p>There was a problem collecting payment from your card, please check the details</p>
-              <p>{error.message}</p>
+              <p>{errorMessage}</p>
             </div>
             :
             <div>
@@ -97,7 +125,7 @@ class Card extends React.Component {
           <input name="number"
             autoComplete="cc-number"
             placeholder="1111 2222 3333 4444"
-            style={this.style('number', error)}
+            style={this.style('number', bogusParameterName)}
             value={number}
             pattern="[0-9]*"
             noValidate
@@ -110,7 +138,7 @@ class Card extends React.Component {
             pattern="[0-9]*"
             noValidate
             placeholder="Expiry (MM / YY)"
-            style={this.style('exp', error)}
+            style={this.style('exp', bogusParameterName)}
             onChange={(e) => this.handleExpChange(e)} />
           <input name="cvc"
             autoComplete="cc-csc"
@@ -118,7 +146,7 @@ class Card extends React.Component {
             pattern="[0-9]*"
             noValidate
             placeholder="CVV (3-digits)"
-            style={this.style('cvc', error)}
+            style={this.style('cvc', bogusParameterName)}
             onChange={(e) => this.handleCVCChange(e)} />
         </p>
         <p><Button onClick={(e) => this.handleSubmit(e)}>{this.getConfirmButtonText()}</Button></p>
@@ -127,10 +155,19 @@ class Card extends React.Component {
   }
 }
 
-const mapStateToProps = ({ register: { error } }, { params: { itemId, emailAddress }}) => ({
+const mapStateToProps = (
+  {
+    error: backendError,
+    register: { error: validationError }
+  },
+  {
+    params: { itemId, emailAddress }
+  }
+) => ({
   itemId,
   emailAddress,
-  error
+  validationError,
+  backendError
 });
 
 const mapDispatchToProps = { performRegister2 };
