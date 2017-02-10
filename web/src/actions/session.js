@@ -19,9 +19,10 @@ const sessionSuccess = (response) => {
   };
 };
 
-const sessionFailure = () => {
+const sessionFailure = (error) => {
   return {
-    type: SESSION_FAILURE
+    type: SESSION_FAILURE,
+    error
   };
 };
 
@@ -49,7 +50,7 @@ export const performSession = () => async (dispatch, getState) => {
       return;
     }
 
-    dispatch(sessionFailure());
+    dispatch(sessionFailure(e));
     browserHistory.push(`/error`);
   }
 };

@@ -18,9 +18,10 @@ const topupSuccess = (response) => {
   };
 };
 
-const topupFailure = () => {
+const topupFailure = (error) => {
   return {
-    type: TOPUP_FAILURE
+    type: TOPUP_FAILURE,
+    error
   };
 };
 
@@ -40,7 +41,7 @@ export const performTopup = ({ amount }) => async (dispatch, getState) => {
     browserHistory.push(`/topup/success`);
 
   } catch (e) {
-    dispatch(topupFailure());
+    dispatch(topupFailure(e));
     browserHistory.push(`/error`);
   }
 };

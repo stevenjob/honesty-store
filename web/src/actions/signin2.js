@@ -18,9 +18,10 @@ const signin2Success = (response) => {
   };
 };
 
-const signin2Failure = () => {
+const signin2Failure = (error) => {
   return {
-    type: SIGNIN2_FAILURE
+    type: SIGNIN2_FAILURE,
+    error
   };
 };
 
@@ -38,7 +39,7 @@ export const performSignin2 = ({ emailToken }) => async (dispatch, getState) => 
     browserHistory.push(`/store`);
 
   } catch (e) {
-    dispatch(signin2Failure());
+    dispatch(signin2Failure(e));
     browserHistory.push(`/error`);
   }
 };

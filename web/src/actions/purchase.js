@@ -18,9 +18,10 @@ const purchaseSuccess = (response) => {
   };
 };
 
-const purchaseFailure = () => {
+const purchaseFailure = (error) => {
   return {
-    type: PURCHASE_FAILURE
+    type: PURCHASE_FAILURE,
+    error
   };
 };
 

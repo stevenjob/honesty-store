@@ -17,9 +17,10 @@ const supportSuccess = () => {
   };
 };
 
-const supportFailure = () => {
+const supportFailure = (error) => {
   return {
-    type: SUPPORT_FAILURE
+    type: SUPPORT_FAILURE,
+    error
   };
 };
 
@@ -43,7 +44,7 @@ export const performSupport = ({ message, emailAddress }) => async (dispatch, ge
     browserHistory.push(`/help/success`);
 
   } catch (e) {
-    dispatch(supportFailure());
+    dispatch(supportFailure(e));
     browserHistory.push(`/error`);
   }
 };

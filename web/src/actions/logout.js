@@ -18,9 +18,10 @@ const logoutSuccess = (response) => {
   };
 };
 
-const logoutFailure = () => {
+const logoutFailure = (error) => {
   return {
-    type: LOGOUT_FAILURE
+    type: LOGOUT_FAILURE,
+    error
   };
 };
 
@@ -37,6 +38,6 @@ export const performLogout = () => async (dispatch, getState) => {
     browserHistory.push(`/`);
 
   } catch (e) {
-    dispatch(logoutFailure());
+    dispatch(logoutFailure(e));
   }
 };

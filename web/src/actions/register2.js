@@ -85,6 +85,6 @@ export const performRegister2 = ({ itemID, topUpAmount, emailAddress, cardDetail
     browserHistory.push(path);
 
   } catch (e) {
-    dispatch(register2Failure());
+    dispatch(register2Failure(e));
   }
 };

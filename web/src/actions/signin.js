@@ -17,9 +17,10 @@ const signinSuccess = () => {
   };
 };
 
-const signinFailure = () => {
+const signinFailure = (error) => {
   return {
-    type: SIGNIN_FAILURE
+    type: SIGNIN_FAILURE,
+    error
   };
 };
 
@@ -38,10 +39,11 @@ export const performSignin = ({ itemId, emailAddress }) => async (dispatch, getS
     browserHistory.push(`/signin/success`);
 
   } catch (e) {
-    dispatch(signinFailure());
     if (e.code === 'EmailNotFound') {
+      dispatch(signinFailure(undefined));
       browserHistory.push(`/register/${itemId}/${emailAddress}`);
     } else {
+      dispatch(signinFailure(e));
       browserHistory.push(`/error`);
     }
   }
