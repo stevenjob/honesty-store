@@ -70,6 +70,9 @@ const mapStateToProps = (
     default:
       return {
         isTopUp: false,
+        timestamp,
+        text: 'Unknown',
+        amount
       };
   }
 };
