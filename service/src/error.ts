@@ -6,6 +6,15 @@ export type ErrorCode =
   'EmailNotFound' |
   'NoCardDetailsPresent' |
   'StoreNotFound' |
+  'CardIncorrectNumber' |
+  'CardInvalidNumber' |
+  'CardInvalidExpiryMonth' |
+  'CardInvalidExpiryYear' |
+  'CardIncorrectCVC' |
+  'CardInvalidCVC' |
+  'CardExpired' |
+  'CardDeclined' |
+  'CardError' |
   'UnknownError';
 
 export class CodedError extends Error {
