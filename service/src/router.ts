@@ -1,6 +1,7 @@
 import HTTPStatus = require('http-status');
 import express = require('express');
 
+import { UserError } from './errorDefinitions';
 import { createServiceKey, Key } from './key';
 import { error, info } from './log';
 import { verifyServiceSecret } from './serviceSecret';
@@ -76,8 +77,15 @@ const createEndPoint = (service, internalRouter, version, method: 'get' | 'post'
           .catch((e) => {
             const duration = timer();
             error(key, `failed ${method} ${request.url}`, { e, duration });
+
+            const code: UserError = e.code || 'UnknownError';
             response.status(200)
-              .json({ error: { message: e.message }});
+              .json({
+                error: {
+                  message: e.message,
+                  code
+                }
+              });
           });
       });
   };
