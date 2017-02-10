@@ -28,7 +28,21 @@ const getUserSessionData = async (key, user) => {
 
   let cardDetails;
   if (userRegistered(user)) {
-    cardDetails = await getCardDetails(key, id);
+    try {
+      cardDetails = await getCardDetails(key, id);
+    } catch (e) {
+      if (e.code !== 'NoCardDetailsPresent') {
+        throw e;
+      }
+
+      /* User is registered but has no card details - this means they managed
+       * to sign up but weren't successful in their initial topup.
+       *
+       * Returning undefined cardDetails will push the frontend/web into
+       * retrying the topup.
+       */
+      cardDetails = undefined;
+    }
   }
 
   return {
