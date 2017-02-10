@@ -1,9 +1,7 @@
 import isEmail = require('validator/lib/isEmail');
-import HTTPStatus = require('http-status');
 import { error } from '../../../service/src/log';
 import uuid = require('uuid/v4');
 
-import { ServiceRouterCode } from '../../../service/src/router';
 import { createTopup } from '../../../topup/src/client/index';
 import { TransactionAndBalance } from '../../../transaction/src/client/index';
 import { createUser, updateUser } from '../../../user/src/client/index';
@@ -61,13 +59,7 @@ const setupRegisterPhase1 = (router) => {
   router.post(
     '/register',
     noopAuthentication,
-    async (key, _params, { storeCode }) => {
-      try {
-        return await register(key, storeCode);
-      } catch (e) {
-        throw new ServiceRouterCode(HTTPStatus.INTERNAL_SERVER_ERROR, e.message);
-      }
-    });
+    async (key, _params, { storeCode }) => await register(key, storeCode));
 };
 
 const setupRegisterPhase2 = (router) => {
@@ -76,16 +68,10 @@ const setupRegisterPhase2 = (router) => {
     authenticateAccessToken,
     async (key, _params, { itemID, topUpAmount, stripeToken, emailAddress = '' }, { user: { id: userID } }) => {
       if (!isEmail(emailAddress)) {
-        throw new ServiceRouterCode(
-          HTTPStatus.UNAUTHORIZED,
-          'Invalid email address provided');
+        throw new Error('Invalid email address provided');
       }
 
-      try {
-        return await register2(key, { userID, emailAddress, topUpAmount, itemID, stripeToken });
-      } catch (e) {
-        throw new ServiceRouterCode(HTTPStatus.INTERNAL_SERVER_ERROR, e.message);
-      }
+      return await register2(key, { userID, emailAddress, topUpAmount, itemID, stripeToken });
     });
 };
 
