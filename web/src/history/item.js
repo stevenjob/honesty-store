@@ -60,14 +60,14 @@ const mapStateToProps = (
     };
   }
 
-  const { item = {}, quantity } = transaction.data;
+  const { item: { image, name }, quantity } = transaction.data;
 
   return {
     isTopUp,
     timestamp: transaction.timestamp,
     amount: transaction.amount,
-    image: safeLookupItemImage(item.image),
-    text: item ? formatItem(item.name, quantity) : 'Unknown Item',
+    image: safeLookupItemImage(image),
+    text: name ? formatItem(name, quantity) : 'Unknown Item',
   };
 };
 
