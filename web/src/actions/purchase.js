@@ -1,4 +1,5 @@
 import { browserHistory } from 'react-router';
+import { apifetch, unpackJson } from './apirequest';
 
 export const PURCHASE_REQUEST = 'PURCHASE_REQUEST';
 export const PURCHASE_SUCCESS = 'PURCHASE_SUCCESS';
@@ -25,25 +26,21 @@ const purchaseFailure = () => {
 
 export const performPurchase = ({ itemId, quantity }) => async (dispatch, getState) => {
   dispatch(purchaseRequest());
+
   try {
-    const { accessToken } = getState();
-    const response = await fetch('/api/v1/purchase', {
-      method: 'POST',
-      body: JSON.stringify({ itemID: itemId, quantity }),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer: ${accessToken}`
+    const response = await apifetch({
+      url: '/api/v1/purchase',
+      token: getState().accessToken,
+      body: {
+        itemID: itemId,
+        quantity
       }
     });
-    const json = await response.json();
-    if (json.error) {
-      throw new Error(json.error.message);
-    }
-    dispatch(purchaseSuccess(json.response));
+
+    dispatch(purchaseSuccess(await unpackJson(response)));
     browserHistory.push(`/item/${itemId}/success`);
-  }
-  catch (e) {
-    dispatch(purchaseFailure());
+  } catch (e) {
+    dispatch(purchaseFailure(e));
     browserHistory.push(`/item/error`);
   }
 };

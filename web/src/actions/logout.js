@@ -1,4 +1,5 @@
 import { browserHistory } from 'react-router';
+import { apifetch, unpackJson } from './apirequest';
 
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
@@ -25,23 +26,17 @@ const logoutFailure = () => {
 
 export const performLogout = () => async (dispatch, getState) => {
   dispatch(logoutRequest());
+
   try {
-    const { accessToken } = getState();
-    const response = await fetch('/api/v1/logout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer: ${accessToken}`
-      }
+    const response = await apifetch({
+      url: '/api/v1/logout',
+      token: getState().accessToken
     });
-    const json = await response.json();
-    if (json.error) {
-      throw new Error(json.error.message);
-    }
-    dispatch(logoutSuccess(json.response));
+
+    dispatch(logoutSuccess(await unpackJson(response)));
     browserHistory.push(`/`);
-  }
-  catch (e) {
+
+  } catch (e) {
     dispatch(logoutFailure());
   }
 };

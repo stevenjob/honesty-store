@@ -1,4 +1,5 @@
 import { browserHistory } from 'react-router';
+import { apifetch, unpackJson } from './apirequest';
 
 export const TOPUP_REQUEST = 'TOPUP_REQUEST';
 export const TOPUP_SUCCESS = 'TOPUP_SUCCESS';
@@ -25,24 +26,20 @@ const topupFailure = () => {
 
 export const performTopup = ({ amount }) => async (dispatch, getState) => {
   dispatch(topupRequest());
+
   try {
-    const accessToken = getState().accessToken;
-    const response = await fetch('/api/v1/topup', {
-      method: 'POST',
-      body: JSON.stringify({ amount }),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer: ${accessToken}`
-      }
+    const response = await apifetch({
+      url: '/api/v1/topup',
+      body: {
+        amount
+      },
+      token: getState().accessToken
     });
-    const json = await response.json();
-    if (json.error) {
-      throw new Error(json.error.message);
-    }
-    dispatch(topupSuccess(json.response));
+
+    dispatch(topupSuccess(await unpackJson(response)));
     browserHistory.push(`/topup/success`);
-  }
-  catch (e) {
+
+  } catch (e) {
     dispatch(topupFailure());
     browserHistory.push(`/topup/error`);
   }

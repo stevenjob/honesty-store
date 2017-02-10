@@ -1,4 +1,5 @@
 import { browserHistory } from 'react-router';
+import { apifetch, unpackJson } from './apirequest';
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
 export const REGISTER_SUCESSS = 'REGISTER_SUCESSS';
@@ -24,22 +25,18 @@ const registerFailure = () => ({
 
 export const performRegister = ({ storeCode }) => async (dispatch, getState) => {
   dispatch(registerRequest());
-  browserHistory.push(`/store`);
+
   try {
-    const response = await fetch('/api/v1/register', {
-      method: 'POST',
-      body: JSON.stringify({ storeCode }),
-      headers: {
-        'Content-Type': 'application/json'
+    const response = await apifetch({
+      url: '/api/v1/register',
+      body: {
+        storeCode
       }
     });
-    const json = await response.json();
-    if (json.error) {
-      throw new Error(json.error.message);
-    }
-    dispatch(registerSuccess(json.response));
-  }
-  catch (e) {
+
+    dispatch(registerSuccess(await unpackJson(response)));
+    browserHistory.push(`/store`);
+  } catch (e) {
     dispatch(registerFailure());
     browserHistory.push(`/error`);
   }

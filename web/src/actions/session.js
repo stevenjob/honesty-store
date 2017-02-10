@@ -1,4 +1,5 @@
 import { browserHistory } from 'react-router';
+import { apifetch, unpackJson } from './apirequest';
 
 export const SESSION_REQUEST = 'SESSION_REQUEST';
 export const SESSION_SUCCESS = 'SESSION_SUCCESS';
@@ -32,28 +33,22 @@ const sessionUnauthorised = () => {
 
 export const performSession = () => async (dispatch, getState) => {
   dispatch(sessionRequest());
+
   try {
-    const refreshToken = getState().refreshToken;
-    const response = await fetch('/api/v1/session', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer: ${refreshToken}`
-      }
+    const response = await apifetch({
+      url: '/api/v1/session',
+      token: getState().refreshToken
     });
+
     if (response.status === 401) {
       dispatch(sessionUnauthorised());
       browserHistory.push(`/`);
       return;
     }
-    const json = await response.json();
-    if (json.error) {
-      throw new Error(json.error.message);
-    }
-    const session = json.response;
-    dispatch(sessionSuccess(session));
-  }
-  catch (e) {
+
+    dispatch(sessionSuccess(await unpackJson(response)));
+
+  } catch (e) {
     dispatch(sessionFailure());
     browserHistory.push(`/error`);
   }

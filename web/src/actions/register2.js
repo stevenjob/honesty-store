@@ -1,4 +1,5 @@
 import { browserHistory } from 'react-router';
+import { apifetch, unpackJson } from './apirequest';
 
 const createToken = (data) =>
     new Promise((resolve, reject) => {
@@ -60,28 +61,31 @@ const createStripeToken = ({ number, cvc, exp }) => {
 
 export const performRegister2 = ({ itemID, topUpAmount, emailAddress, cardDetails }) => async (dispatch, getState) => {
   dispatch(register2Request());
+
   try {
-    const stripeToken = await createStripeToken(cardDetails);
-    const accessToken = getState().accessToken;
-    const response = await fetch('/api/v1/register2', {
-      method: 'POST',
-      body: JSON.stringify({ itemID, topUpAmount, stripeToken, emailAddress }),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer: ${accessToken}`
-      }
+    const response = await apifetch({
+      url: '/api/v1/register2',
+      body: {
+        stripeToken: await createStripeToken(cardDetails),
+        itemID,
+        topUpAmount,
+        emailAddress
+      },
+      token: getState().accessToken,
     });
-    const json = await response.json();
-    if (json.error) {
-      throw new Error(json.error.message);
-    }
-    const { user, store } = json.response;
-    dispatch(register2Success({ user, store }));
+
+    const json = await unpackJson(response);
+    dispatch(register2Success(json));
+
     // ensure both the topup and purchase transactions were recorded
-    const path = user.transactions.length === 2 ? `/register/${itemID}/success` : `/register/${itemID}/partial`;
+    const { user } = json;
+    const path = user.transactions.length === 2
+      ? `/register/${itemID}/success`
+      : `/register/${itemID}/partial`;
+
     browserHistory.push(path);
-  }
-  catch (e) {
-    dispatch(register2Failure(e));
+
+  } catch (e) {
+    dispatch(register2Failure());
   }
 };

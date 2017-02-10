@@ -1,4 +1,5 @@
 import { browserHistory } from 'react-router';
+import { apifetch, unpackJson } from './apirequest';
 
 export const SUPPORT_REQUEST = 'SUPPORT_REQUEST';
 export const SUPPORT_SUCCESS = 'SUPPORT_SUCCESS';
@@ -24,25 +25,24 @@ const supportFailure = () => {
 
 export const performSupport = ({ message, emailAddress }) => async (dispatch, getState) => {
   dispatch(supportRequest());
-  const userAgent = navigator.userAgent;
+
   try {
-    const accessToken = getState().accessToken;
-    const response = await fetch('/api/v1/support', {
-      method: 'POST',
-      body: JSON.stringify({ message, emailAddress, userAgent }),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer: ${accessToken}`
-      }
+    const userAgent = navigator.userAgent;
+
+    const response = await apifetch({
+      url: '/api/v1/support',
+      body: {
+        message,
+        emailAddress,
+        userAgent
+      },
+      token: getState().accessToken
     });
-    const json = await response.json();
-    if (json.error) {
-      throw new Error(json.error.message);
-    }
-    dispatch(supportSuccess(json.response));
+
+    dispatch(supportSuccess(await unpackJson(response)));
     browserHistory.push(`/help/success`);
-  }
-  catch (e) {
+
+  } catch (e) {
     dispatch(supportFailure());
     browserHistory.push(`/error`);
   }

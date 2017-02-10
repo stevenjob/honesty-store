@@ -1,4 +1,5 @@
 import { browserHistory } from 'react-router';
+import { apifetch, unpackJson } from './apirequest';
 
 export const SIGNIN_REQUEST = 'SIGNIN_REQUEST';
 export const SIGNIN_SUCCESS = 'SIGNIN_SUCCESS';
@@ -24,25 +25,21 @@ const signinFailure = () => {
 
 export const performSignin = ({ itemId, emailAddress }) => async (dispatch, getState) => {
   dispatch(signinRequest());
+
   try {
-    const response = await fetch('/api/v1/signin', {
-      method: 'POST',
-      body: JSON.stringify({ emailAddress }),
-      headers: {
-        'Content-Type': 'application/json'
+    const response = await apifetch({
+      url: '/api/v1/signin',
+      body: {
+        emailAddress
       }
     });
-    const json = await response.json();
-    if (json.error) {
-      throw new Error(json.error.message);
-    }
-    dispatch(signinSuccess());
+
+    dispatch(signinSuccess(await unpackJson(response)));
     browserHistory.push(`/signin/success`);
-  }
-  catch (e) {
+
+  } catch (e) {
     dispatch(signinFailure());
-    if (e.message.match(/User not found/)) {
-      // Register user
+    if (e.code === 'EmailNotFound') {
       browserHistory.push(`/register/${itemId}/${emailAddress}`);
     } else {
       browserHistory.push(`/error`);
