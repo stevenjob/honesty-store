@@ -4,8 +4,8 @@ type Level = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
 
 const replacer = (_key, value) => {
   if (value instanceof Error) {
-    const { message, stack } = value;
-    return { message, stack };
+    const { message, stack, ...rest } = value;
+    return { message, stack, ...rest };
   }
   return value;
 };
