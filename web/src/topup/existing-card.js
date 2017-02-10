@@ -14,23 +14,20 @@ const zeroPadMonth = (month) => {
   return `${prefix}${month}`;
 };
 
-export const ExisitingCard = ({ amount, brand, digits, expiry, performTopup }) =>
-  <Page left={<Back>Balance</Back>}
-    title={`Top Up`}
-    invert={true}
-    nav={false}
-    fullscreen={true}>
-    <div className="topup-existing-card">
+const TopupCard = ({ cardDetails: { brand, last4, expMonth, expYear }, amount, performTopup }) => {
+  const expiry = `${zeroPadMonth(expMonth)}/${expYear % 100}`;
+
+  return <div className="topup-existing-card">
       <h4>Please check this is the card you want to top up <Currency amount={amount} /> from</h4>
       <div className="topup-existing-card-container">
         <div className="topup-existing-card-image">
           <div className="topup-existing-card-image-background" />
-          <div className={`topup-existing-card-image-${brand}`} />
+          <div className={`topup-existing-card-image-${brand.toLowerCase()}`} />
           <p className="topup-existing-card-image-number" style={{ color: MUTED_TEXT }}>
             <span>****</span>
             <span>****</span>
             <span>****</span>
-            <span style={{ color: LIGHT_TEXT }}>{digits}</span>
+            <span style={{ color: LIGHT_TEXT }}>{last4}</span>
           </p>
           <p className="topup-existing-card-image-expiry" style={{ color: LIGHT_TEXT }}>{expiry}</p>
         </div>
@@ -41,19 +38,43 @@ export const ExisitingCard = ({ amount, brand, digits, expiry, performTopup }) =
       <p className="topup-existing-card-topup">
         <Button onClick={() => performTopup({ amount })}>Confirm <Currency amount={amount} /> Top Up</Button>
       </p>
+    </div>;
+};
+
+const NewCard = ({ amount }) =>
+  <div className="topup-existing-card">
+    <h4>No card details to top up <Currency amount={amount} /> from - please add a new card</h4>
+    <div className="topup-existing-card-container">
+      <p>
+        <Link to={`/topup/${amount}/new`} style={{ color: BRAND_LIGHT }}>Add a new card</Link>
+      </p>
     </div>
+    <p className="topup-existing-card-topup">
+      <Button type="disabled">Confirm <Currency amount={amount} /> Top Up</Button>
+    </p>
+  </div>;
+
+const TopupPrompt = ({ amount, cardDetails, performTopup }) =>
+  <Page left={<Back>Balance</Back>}
+    title={`Top Up`}
+    invert={true}
+    nav={false}
+    fullscreen={true}>
+    {
+      cardDetails
+        ? <TopupCard cardDetails={cardDetails} amount={amount} performTopup={performTopup} />
+        : <NewCard amount={amount} />
+    }
   </Page>;
 
 const mapStateToProps = ({
   user: {
     balance = 0,
-    cardDetails: { brand, expMonth, expYear, last4 },
+    cardDetails // maybe undefined
   },
 }) => ({
   balance,
-  brand: brand.toLowerCase(),
-  digits: last4,
-  expiry: `${zeroPadMonth(expMonth)}/${expYear % 100}`,
+  cardDetails
 });
 
 const mapDispatchToProps = { performTopup };
@@ -64,4 +85,4 @@ const mergeProps = (stateProps, dispatchProps, { params: { amount }}) => ({
   amount: Number(amount)
 });
 
-export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(ExisitingCard);
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(TopupPrompt);
