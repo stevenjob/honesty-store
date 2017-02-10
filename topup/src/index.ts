@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import * as stripeFactory from 'stripe';
 
+import { UserError } from '../../service/src/errorDefinitions';
 import { Key } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
@@ -181,7 +182,9 @@ const stripeDetailsValid = (topupAccount: TopupAccount) => {
 const assertValidStripeDetails = (topupAccount) => {
   if (!stripeDetailsValid(topupAccount)) {
     // tslint:disable-next-line:max-line-length
-    throw new Error(`No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please provide stripeToken`);
+    throw new UserError(
+      'NoCardDetailsPresent',
+      `No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please provide stripeToken`);
   }
 };
 
