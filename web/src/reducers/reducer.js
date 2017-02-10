@@ -18,12 +18,18 @@ const getInitialState = () => {
     },
     store: {},
     register: {},
+    error: undefined,
     accessToken: null,
     refreshToken: localStorage.refreshToken
   };
 };
 
-export default (state = getInitialState(), action) => {
+export default (rawState = getInitialState(), action) => {
+  const state = { // add action.error to state automatically
+    ...rawState,
+    ...(action.error ? { error: action.error } : {})
+  };
+
   switch (action.type) {
     case INITIALISE: {
       return {
@@ -105,11 +111,11 @@ export default (state = getInitialState(), action) => {
       };
     }
     case REGISTER2_FAILURE: {
-      const { error } = action;
+      const { registerError } = action;
       return {
         ...state,
         register: {
-          error
+          error: registerError
         },
         pending: state.pending.filter(e => e !== 'register2')
       };

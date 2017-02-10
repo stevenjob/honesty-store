@@ -39,6 +39,16 @@ const register2Success = ({ user, store }) => {
 };
 
 const register2Failure = (error) => {
+  if (error.fromLocalValidation) {
+    // an error from createStripeToken()
+    // - map it to registerError for the reducer
+    return {
+      type: REGISTER2_FAILURE,
+      registerError: error
+    };
+  }
+
+  // error is from the backend/fetch
   return {
     type: REGISTER2_FAILURE,
     error
@@ -48,13 +58,13 @@ const register2Failure = (error) => {
 const createStripeToken = ({ number, cvc, exp }) => {
   const Stripe = window.Stripe;
   if (!Stripe.card.validateCardNumber(number)) {
-    throw Object.assign(new Error('Invalid card number'), { param: 'number' });
+    throw Object.assign(new Error('Invalid card number'), { param: 'number', fromLocalValidation: true });
   }
   if (!Stripe.card.validateExpiry(exp)) {
-    throw Object.assign(new Error('Invalid expiry'), { param: 'exp' });
+    throw Object.assign(new Error('Invalid expiry'), { param: 'exp', fromLocalValidation: true });
   }
   if (!Stripe.card.validateCVC(cvc)) {
-    throw Object.assign(new Error('Invalid CVC'), { param: 'cvc' });
+    throw Object.assign(new Error('Invalid CVC'), { param: 'cvc', fromLocalValidation: true });
   }
   return createToken({ number, cvc, exp });
 };
