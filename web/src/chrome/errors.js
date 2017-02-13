@@ -6,4 +6,5 @@ export const errorDefinitions = {
   EmailNotFound: { message: "Couldn't find your email", retryable: true },
   NoCardDetailsPresent: { message: 'We have no card details for you', retryable: true },
   EmailTokenInvalid: { message: 'The magic link you followed has expired', retryable: false },
+  StoreNotFound: { message: "We couldn't find that store code", retryable: true },
 };

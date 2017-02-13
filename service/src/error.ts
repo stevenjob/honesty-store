@@ -5,6 +5,7 @@ export type ErrorCode =
   'TooManyPurchaseItems' |
   'EmailNotFound' |
   'NoCardDetailsPresent' |
+  'StoreNotFound' |
   'UnknownError';
 
 export class CodedError extends Error {
