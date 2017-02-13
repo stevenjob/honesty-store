@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
-import { Error } from './chrome/modal';
+import Error from './chrome/error';
 import Home from './home/index';
 import HomeSuccess from './home/success';
 import Store from './store/index';
