@@ -1,16 +1,4 @@
-export const apifetch = ({ url, token, body }) =>
-  fetch(
-    url,
-    {
-      method: 'POST',
-      body: body && JSON.stringify(body),
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token ? { 'Authorization': `Bearer: ${token}` } : {})
-      }
-    });
-
-export const unpackJson = async (response) => {
+const unpackJson = async (response) => {
   const json = await response.json();
   if (json.error) {
     const error = new Error(json.error.message);
@@ -20,4 +8,35 @@ export const unpackJson = async (response) => {
     throw error;
   }
   return json;
+};
+
+export const apifetch = async ({ url, token, body }) => {
+  const headers = {};
+
+  if (body) {
+    headers['Content-Type'] = 'application/json';
+  }
+
+  if (token) {
+    headers['Authorization'] = `Bearer: ${token}`;
+  }
+
+  const response = await fetch(
+    url,
+    {
+      method: 'POST',
+      body: body && JSON.stringify(body),
+      headers
+    });
+
+  if (response.status !== 200) {
+    const error = new Error(`POST returned ${response.status}`);
+
+    error.code = 'NetworkError';
+    error.status = response.status;
+
+    throw error;
+  }
+
+  return await unpackJson(response);
 };

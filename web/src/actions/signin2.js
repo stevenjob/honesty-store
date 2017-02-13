@@ -1,5 +1,5 @@
 import { browserHistory } from 'react-router';
-import { apifetch, unpackJson } from './apirequest';
+import { apifetch } from './apirequest';
 
 export const SIGNIN2_REQUEST = 'SIGNIN2_REQUEST';
 export const SIGNIN2_SUCCESS = 'SIGNIN2_SUCCESS';
@@ -34,7 +34,7 @@ export const performSignin2 = ({ emailToken }) => async (dispatch, getState) => 
       body: {}
     });
 
-    dispatch(signin2Success(await unpackJson(response)));
+    dispatch(signin2Success(response));
     browserHistory.push(`/store`);
 
   } catch (e) {

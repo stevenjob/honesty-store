@@ -1,5 +1,5 @@
 import { browserHistory } from 'react-router';
-import { apifetch, unpackJson } from './apirequest';
+import { apifetch } from './apirequest';
 
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
@@ -33,7 +33,7 @@ export const performLogout = () => async (dispatch, getState) => {
       token: getState().accessToken
     });
 
-    dispatch(logoutSuccess(await unpackJson(response)));
+    dispatch(logoutSuccess(response));
     browserHistory.push(`/`);
 
   } catch (e) {

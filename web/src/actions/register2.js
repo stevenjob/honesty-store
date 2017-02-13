@@ -1,5 +1,5 @@
 import { browserHistory } from 'react-router';
-import { apifetch, unpackJson } from './apirequest';
+import { apifetch } from './apirequest';
 
 const createToken = (data) =>
     new Promise((resolve, reject) => {
@@ -74,11 +74,10 @@ export const performRegister2 = ({ itemID, topUpAmount, emailAddress, cardDetail
       token: getState().accessToken,
     });
 
-    const json = await unpackJson(response);
-    dispatch(register2Success(json));
+    dispatch(register2Success(response));
 
     // ensure both the topup and purchase transactions were recorded
-    const { user } = json;
+    const { user } = response;
     const path = user.transactions.length === 2
       ? `/register/${itemID}/success`
       : `/register/${itemID}/partial`;

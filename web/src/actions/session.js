@@ -1,5 +1,5 @@
 import { browserHistory } from 'react-router';
-import { apifetch, unpackJson } from './apirequest';
+import { apifetch } from './apirequest';
 
 export const SESSION_REQUEST = 'SESSION_REQUEST';
 export const SESSION_SUCCESS = 'SESSION_SUCCESS';
@@ -40,15 +40,15 @@ export const performSession = () => async (dispatch, getState) => {
       token: getState().refreshToken
     });
 
-    if (response.status === 401) {
+    dispatch(sessionSuccess(response));
+
+  } catch (e) {
+    if (e.code === 'NetworkError') {
       dispatch(sessionUnauthorised());
       browserHistory.push(`/`);
       return;
     }
 
-    dispatch(sessionSuccess(await unpackJson(response)));
-
-  } catch (e) {
     dispatch(sessionFailure());
     browserHistory.push(`/error`);
   }

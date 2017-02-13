@@ -1,5 +1,5 @@
 import { browserHistory } from 'react-router';
-import { apifetch, unpackJson } from './apirequest';
+import { apifetch } from './apirequest';
 
 export const TOPUP_REQUEST = 'TOPUP_REQUEST';
 export const TOPUP_SUCCESS = 'TOPUP_SUCCESS';
@@ -36,7 +36,7 @@ export const performTopup = ({ amount }) => async (dispatch, getState) => {
       token: getState().accessToken
     });
 
-    dispatch(topupSuccess(await unpackJson(response)));
+    dispatch(topupSuccess(response));
     browserHistory.push(`/topup/success`);
 
   } catch (e) {
