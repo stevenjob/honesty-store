@@ -25,7 +25,7 @@ const registerFailure = () => ({
 
 export const performRegister = ({ storeCode }) => async (dispatch, getState) => {
   dispatch(registerRequest());
-
+  browserHistory.push(`/store`);
   try {
     const response = await apifetch({
       url: '/api/v1/register',
@@ -35,7 +35,6 @@ export const performRegister = ({ storeCode }) => async (dispatch, getState) => 
     });
 
     dispatch(registerSuccess(response));
-    browserHistory.push(`/store`);
   } catch (e) {
     dispatch(registerFailure());
     browserHistory.push(`/error`);
