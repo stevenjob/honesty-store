@@ -43,7 +43,7 @@ export const performSession = () => async (dispatch, getState) => {
     dispatch(sessionSuccess(response));
 
   } catch (e) {
-    if (e.code === 'NetworkError') {
+    if (e.code === 'NetworkError' && e.status === 401) {
       dispatch(sessionUnauthorised());
       browserHistory.push(`/`);
       return;
