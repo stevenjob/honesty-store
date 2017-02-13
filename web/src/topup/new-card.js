@@ -10,7 +10,7 @@ export default ({ params: { amount } }) =>
     nav={false}
     fullscreen={true}>
     <div>
-      <h1>Want to add a different card?</h1>
+      <h1>Want to add a card?</h1>
       <p>If you want to add or change your card details please chat with customer support.</p>
       <p><Button to={`/help`}>Chat to Customer Support</Button></p>
     </div>
