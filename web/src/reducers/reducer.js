@@ -24,12 +24,7 @@ const getInitialState = () => {
   };
 };
 
-export default (rawState = getInitialState(), action) => {
-  const state = { // add action.error to state automatically
-    ...rawState,
-    ...(action.error ? { error: action.error } : {})
-  };
-
+export default (state = getInitialState(), action) => {
   switch (action.type) {
     case INITIALISE: {
       return {
@@ -55,6 +50,7 @@ export default (rawState = getInitialState(), action) => {
     case REGISTER_FAILURE: {
       return {
         ...state,
+        error: action.error,
         pending: state.pending.filter(e => e !== 'register')
       };
     }
@@ -71,6 +67,7 @@ export default (rawState = getInitialState(), action) => {
     case SIGNIN_FAILURE: {
       return {
         ...state,
+        error: action.error,
         pending: state.pending.filter(e => e !== 'signin')
       };
     }
@@ -92,6 +89,7 @@ export default (rawState = getInitialState(), action) => {
     case SIGNIN2_FAILURE: {
       return {
         ...state,
+        error: action.error,
         pending: state.pending.filter(e => e !== 'signin2')
       };
     }
@@ -111,12 +109,13 @@ export default (rawState = getInitialState(), action) => {
       };
     }
     case REGISTER2_FAILURE: {
-      const { registerError } = action;
+      const { registerError, error } = action;
       return {
         ...state,
         register: {
           error: registerError
         },
+        error,
         pending: state.pending.filter(e => e !== 'register2')
       };
     }
@@ -140,6 +139,7 @@ export default (rawState = getInitialState(), action) => {
     case SESSION_FAILURE: {
       return {
         ...state,
+        error: action.error,
         pending: state.pending.filter(e => e !== 'session')
       };
     }
@@ -158,6 +158,7 @@ export default (rawState = getInitialState(), action) => {
     case SUPPORT_FAILURE: {
       return {
         ...state,
+        error: action.error,
         pending: state.pending.filter(e => e !== 'support')
       };
     }
@@ -174,6 +175,7 @@ export default (rawState = getInitialState(), action) => {
     case LOGOUT_FAILURE: {
       return {
         ...state,
+        error: action.error,
         pending: state.pending.filter(e => e !== 'logout')
       };
     }
@@ -199,6 +201,7 @@ export default (rawState = getInitialState(), action) => {
     case TOPUP_FAILURE: {
       return {
         ...state,
+        error: action.error,
         pending: state.pending.filter(e => e !== 'topup')
       };
     }
@@ -224,6 +227,7 @@ export default (rawState = getInitialState(), action) => {
     case PURCHASE_FAILURE: {
       return {
         ...state,
+        error: action.error,
         pending: state.pending.filter(e => e !== 'purchase')
       };
     }
