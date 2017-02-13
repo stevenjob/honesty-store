@@ -6,7 +6,8 @@ const stores = new Map();
 const ncl = {
   boxIds: [
     '032503e2-6cd3-4101-92bb-49bc26a5027e',
-    '091be502-19ec-48f3-aad3-3091575d0fd4'
+    '091be502-19ec-48f3-aad3-3091575d0fd4',
+    'af02cf9f-d8b7-4d7e-a701-3addb212a7ba'
   ],
   itemPrices: {
     '46ced0c0-8815-4ed2-bfb6-40537f5bd512': 50,
@@ -19,7 +20,8 @@ const ncl = {
     'e91e7274-fe28-405c-86c8-5768197eb6ac': 41,
     '32919485-d806-4be6-824b-170f66371306': 44,
     '272c6a59-9b4c-41b6-b839-0f8be506728e': 99,
-    '8e9bb2db-9437-4733-acc1-f5e218e0a603': 39
+    '8e9bb2db-9437-4733-acc1-f5e218e0a603': 39,
+    'cf7a7886-c30d-4760-8c15-39adb2dc8649': 33
   }
 };
 

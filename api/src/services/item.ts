@@ -53,7 +53,7 @@ const items = [
   },
   {
     id: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
-    name: 'Diet Coke',
+    name: 'Diet Coke (Fridge)',
     image: 'misc-bar.svg',
     weight: 400,
     notes: 'Multipack not for individual resale. NCL trial only, Simon Watson sourcing'
