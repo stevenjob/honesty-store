@@ -22,7 +22,7 @@ const ErrorInternal = ({
     onClick={dismissError}
     {...other} />;
 
-const mapErrorStateToProps = ({ error }) => {
+const mapStateToProps = ({ error }) => {
   if (!error) {
     return {};
   }
@@ -40,4 +40,4 @@ const mapErrorStateToProps = ({ error }) => {
 
 const mapDispatchToProps = { dismissError };
 
-export default connect(mapErrorStateToProps, mapDispatchToProps)(ErrorInternal);
+export default connect(mapStateToProps, mapDispatchToProps)(ErrorInternal);
