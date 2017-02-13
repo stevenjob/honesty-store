@@ -39,7 +39,16 @@ export const performSignin2 = ({ emailToken }) => async (dispatch, getState) => 
     browserHistory.push(`/store`);
 
   } catch (e) {
-    dispatch(signin2Failure(e));
+    if (e.code === 'NetworkError' && e.status === 401) {
+      const timeoutError = new Error('email token timeout');
+
+      timeoutError.code = 'EmailTokenTimeout';
+
+      dispatch(signin2Failure(timeoutError));
+    } else {
+      dispatch(signin2Failure(e));
+    }
+
     browserHistory.push(`/error`);
   }
 };
