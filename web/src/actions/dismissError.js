@@ -1,10 +1,10 @@
 import { browserHistory } from 'react-router';
 
-export const DISMISS_SUCCESS = 'DISMISS_SUCCESS';
+export const DISMISS_ERROR = 'DISMISS_ERROR';
 
 const dismissSuccess = () => {
   return {
-    type: DISMISS_SUCCESS
+    type: DISMISS_ERROR
   };
 };
 
