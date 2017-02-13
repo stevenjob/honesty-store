@@ -22,11 +22,11 @@ export const performInitialise = ({ storeCode, emailToken }) => async (dispatch,
     if (pathname === '/') {
       browserHistory.replace('/store');
     }
-    return dispatch(performSession({ storeCode }));
+    return dispatch(performSession());
   }
   if (emailToken != null) {
     dispatch(initialise());
-    return dispatch(performSignin2({ storeCode, emailToken }));
+    return dispatch(performSignin2({ emailToken }));
   }
   if (storeCode != null) {
     dispatch(initialise());
