@@ -3,6 +3,7 @@ const compression = require('compression');
 const path = require('path');
 const expressLogging = require('express-logging');
 const logger = require('logops');
+const cors = require('cors');
 const port = process.env.PORT || 8080;
 const app = express();
 
@@ -18,6 +19,7 @@ app.use((req, res, next) => {
 
 app.use(expressLogging(logger));
 app.use(compression());
+app.use(cors());
 
 // Needs to be served with this exact url but with JSON
 app.use(

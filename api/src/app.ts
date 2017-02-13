@@ -1,6 +1,7 @@
 import express = require('express');
 import bodyParser = require('body-parser');
 import compression = require('compression');
+import cors = require('cors');
 import { serviceRouter } from '../../service/src/router';
 import logoutController from './controllers/logout';
 import purchaseController from './controllers/purchase';
@@ -18,6 +19,7 @@ const router = serviceRouter('api', apiVersion);
 
 app.use(compression());
 app.use(bodyParser.json());
+app.use(cors());
 
 registerController(router);
 sessionController(router);
