@@ -39,14 +39,13 @@ const ErrorInternal = ({
   title = retryTitle,
   subtitle = defaultSubtitle,
   image = error,
-  onClick,
   dismissError,
   ...other
 }) =>
   <Modal title={title}
     subtitle={subtitle}
     image={image}
-    onClick={onClick || dismissError}
+    onClick={dismissError}
     {...other} />;
 
 const mapErrorStateToProps = ({ error }) => {
