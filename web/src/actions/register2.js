@@ -1,5 +1,5 @@
 import { browserHistory } from 'react-router';
-import { apifetch } from './apirequest';
+import apifetch from './apirequest';
 
 const createToken = (data) =>
     new Promise((resolve, reject) => {

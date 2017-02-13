@@ -1,5 +1,5 @@
 import { browserHistory } from 'react-router';
-import { apifetch } from './apirequest';
+import apifetch from './apirequest';
 
 export const SUPPORT_REQUEST = 'SUPPORT_REQUEST';
 export const SUPPORT_SUCCESS = 'SUPPORT_SUCCESS';

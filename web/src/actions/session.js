@@ -1,5 +1,5 @@
 import { browserHistory } from 'react-router';
-import { apifetch } from './apirequest';
+import apifetch from './apirequest';
 
 export const SESSION_REQUEST = 'SESSION_REQUEST';
 export const SESSION_SUCCESS = 'SESSION_SUCCESS';

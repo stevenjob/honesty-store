@@ -1,5 +1,5 @@
 import { browserHistory } from 'react-router';
-import { apifetch } from './apirequest';
+import apifetch from './apirequest';
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
 export const REGISTER_SUCESSS = 'REGISTER_SUCESSS';

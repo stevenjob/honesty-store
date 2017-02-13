@@ -1,5 +1,5 @@
 import { browserHistory } from 'react-router';
-import { apifetch } from './apirequest';
+import apifetch from './apirequest';
 
 export const PURCHASE_REQUEST = 'PURCHASE_REQUEST';
 export const PURCHASE_SUCCESS = 'PURCHASE_SUCCESS';

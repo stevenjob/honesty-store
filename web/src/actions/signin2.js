@@ -1,5 +1,5 @@
 import { browserHistory } from 'react-router';
-import { apifetch } from './apirequest';
+import apifetch from './apirequest';
 
 export const SIGNIN2_REQUEST = 'SIGNIN2_REQUEST';
 export const SIGNIN2_SUCCESS = 'SIGNIN2_SUCCESS';

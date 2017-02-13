@@ -1,5 +1,5 @@
 import { browserHistory } from 'react-router';
-import { apifetch } from './apirequest';
+import apifetch from './apirequest';
 
 export const TOPUP_REQUEST = 'TOPUP_REQUEST';
 export const TOPUP_SUCCESS = 'TOPUP_SUCCESS';

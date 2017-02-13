@@ -1,4 +1,4 @@
-export const apifetch = async ({ url, token, body }) => {
+export default async ({ url, token, body }) => {
   const headers = {};
 
   if (body) {
