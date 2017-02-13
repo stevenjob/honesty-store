@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
+import history from '../history';
 import { Back } from '../chrome/link';
 import Page from '../chrome/page';
 import Stepper from '../chrome/stepper';
@@ -50,7 +50,7 @@ const ItemDetail = ({
   const onClick = (numItems) => {
     const balance = calculateBalanceRemaining(numItems);
     if (balance < 0) {
-      browserHistory.push(`/topup`);
+      history.push(`/topup`);
     } else {
       performPurchase({ itemId: id, quantity: numItems });
     }
@@ -70,7 +70,7 @@ const ItemDetail = ({
     />;
 
   const UnregisteredPurchaseButton = <p>
-    <Button onClick={() => browserHistory.push(`/register/${id}`)}>
+    <Button onClick={() => history.push(`/register/${id}`)}>
       {`Purchase 1 ${name}`}
     </Button>
   </p>;

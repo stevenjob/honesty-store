@@ -1,4 +1,4 @@
-import { browserHistory } from 'react-router';
+import history from '../history';
 import apifetch from './apirequest';
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
@@ -26,7 +26,7 @@ const registerFailure = (error) => ({
 
 export const performRegister = ({ storeCode }) => async (dispatch, getState) => {
   dispatch(registerRequest());
-  browserHistory.push(`/store`);
+  history.push(`/store`);
   try {
     const response = await apifetch({
       url: '/api/v1/register',
@@ -38,6 +38,6 @@ export const performRegister = ({ storeCode }) => async (dispatch, getState) => 
     dispatch(registerSuccess(response));
   } catch (e) {
     dispatch(registerFailure(e));
-    browserHistory.push(`/error`);
+    history.push(`/error`);
   }
 };

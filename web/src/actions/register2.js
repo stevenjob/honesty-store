@@ -1,5 +1,5 @@
-import { browserHistory } from 'react-router';
 import apifetch from './apirequest';
+import history from '../history';
 
 const createToken = (data) =>
   new Promise((resolve, reject) => {
@@ -99,8 +99,7 @@ export const performRegister2 = ({ itemID, topUpAmount, emailAddress, cardDetail
         : `/register/${itemID}/partial`;
     }
 
-    browserHistory.push(path);
-
+    history.push(path);
   } catch (e) {
     dispatch(register2Failure(e));
   }

@@ -1,4 +1,4 @@
-import { browserHistory } from 'react-router';
+import history from '../history';
 import apifetch from './apirequest';
 
 export const SESSION_REQUEST = 'SESSION_REQUEST';
@@ -46,11 +46,11 @@ export const performSession = () => async (dispatch, getState) => {
   } catch (e) {
     if (e.code === 'ResponseError' && e.status === 401) {
       dispatch(sessionUnauthorised());
-      browserHistory.push(`/`);
+      history.push(`/`);
       return;
     }
 
     dispatch(sessionFailure(e));
-    browserHistory.push(`/error`);
+    history.push(`/error`);
   }
 };

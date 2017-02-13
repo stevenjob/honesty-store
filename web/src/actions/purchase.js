@@ -1,5 +1,5 @@
-import { browserHistory } from 'react-router';
 import apifetch from './apirequest';
+import history from '../history';
 
 export const PURCHASE_REQUEST = 'PURCHASE_REQUEST';
 export const PURCHASE_SUCCESS = 'PURCHASE_SUCCESS';
@@ -39,9 +39,9 @@ export const performPurchase = ({ itemId, quantity }) => async (dispatch, getSta
     });
 
     dispatch(purchaseSuccess(response));
-    browserHistory.push(`/item/${itemId}/success`);
+    history.push(`/item/${itemId}/success`);
   } catch (e) {
     dispatch(purchaseFailure(e));
-    browserHistory.push(`/error`);
+    history.push(`/error`);
   }
 };

@@ -1,7 +1,7 @@
 import { performRegister } from './register';
 import { performSession } from './session';
 import { performSignin2 } from './signin2';
-import { browserHistory } from 'react-router';
+import history from '../history';
 
 export const INTIALISE = 'INTIALISE';
 
@@ -18,9 +18,9 @@ export const performInitialise = ({ storeCode, emailToken }) => async (dispatch,
   }
   if (refreshToken != null) {
     dispatch(initialise());
-    const { pathname } = browserHistory.getCurrentLocation();
+    const { pathname } = history.getCurrentLocation();
     if (pathname === '/') {
-      browserHistory.replace('/store');
+      history.replace('/store');
     }
     return dispatch(performSession());
   }

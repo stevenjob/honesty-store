@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import { BRAND_LIGHT } from '../chrome/colors';
+import history from '../history';
 
 // Doing some runtime checking here as these components are so commonly used
 
@@ -10,7 +11,7 @@ export const Back = (props) => {
   }
   return <Link className="chrome-link-back"
     style={{ color: BRAND_LIGHT }}
-    onClick={browserHistory.goBack}>
+    onClick={history.goBack}>
     {props.children || 'Back'}
   </Link>;
 };
@@ -21,7 +22,7 @@ export const NotNow = (props) => {
   }
   return <Link className="chrome-link"
     style={{ color: BRAND_LIGHT }}
-    onClick={browserHistory.goBack}>
+    onClick={history.goBack}>
     Not Now
     </Link>;
 };

@@ -1,5 +1,5 @@
-import { browserHistory } from 'react-router';
 import apifetch from './apirequest';
+import history from '../history';
 
 export const SIGNIN_REQUEST = 'SIGNIN_REQUEST';
 export const SIGNIN_SUCCESS = 'SIGNIN_SUCCESS';
@@ -36,16 +36,16 @@ export const performSignin = ({ itemId, emailAddress }) => async (dispatch, getS
     });
 
     dispatch(signinSuccess(response));
-    browserHistory.push(`/signin/success`);
+    history.push(`/signin/success`);
 
   } catch (e) {
     if (e.code === 'EmailNotFound') {
       dispatch(signinFailure(undefined));
       const itemParam = itemId || '';
-      browserHistory.push(`/register/${itemParam}/${emailAddress}`);
+      history.push(`/register/${itemParam}/${emailAddress}`);
     } else {
       dispatch(signinFailure(e));
-      browserHistory.push(`/error`);
+      history.push(`/error`);
     }
   }
 };

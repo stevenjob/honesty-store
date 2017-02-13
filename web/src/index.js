@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, browserHistory } from 'react-router';
+import { Router, Route } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -31,6 +31,7 @@ import ItemPurchaseSuccess from './item/success';
 import reducer from './reducers/reducer';
 import { performInitialise } from './actions/inititialise';
 import './chrome/style';
+import history from './history';
 
 
 const middlewares = [thunkMiddleware];
@@ -49,7 +50,7 @@ store.dispatch(performInitialise({}));
 
 ReactDOM.render((
   <Provider store={store}>
-    <Router history={browserHistory} onUpdate={() => scrollTo(0, 0)}>
+    <Router history={history} onUpdate={() => scrollTo(0, 0)}>
       <Route path="/" component={Home} />
       <Route path="/success" component={HomeSuccess} />
       <Route path="/error" component={Error} />

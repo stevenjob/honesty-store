@@ -1,4 +1,4 @@
-import { browserHistory } from 'react-router';
+import { history } from '../history';
 import { DISMISS_ERROR } from '../actions/dismissError';
 import { INITIALISE } from '../actions/inititialise';
 import { REGISTER_REQUEST, REGISTER_SUCESSS, REGISTER_FAILURE } from '../actions/register';
@@ -39,7 +39,7 @@ const save = (props) => {
     return undefined;
 
   } catch (e) {
-    browserHistory.push(`/error`);
+    history.push(`/error`);
     return Object.assign(new Error('local storage failure'), { code: 'LocalStorageBlocked' });
   }
 };

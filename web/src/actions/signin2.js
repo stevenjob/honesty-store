@@ -1,5 +1,5 @@
-import { browserHistory } from 'react-router';
 import apifetch from './apirequest';
+import history from '../history';
 
 export const SIGNIN2_REQUEST = 'SIGNIN2_REQUEST';
 export const SIGNIN2_SUCCESS = 'SIGNIN2_SUCCESS';
@@ -36,7 +36,7 @@ export const performSignin2 = ({ emailToken }) => async (dispatch, getState) => 
     });
 
     dispatch(signin2Success(response));
-    browserHistory.push(`/store`);
+    history.push(`/store`);
 
   } catch (e) {
     if (e.code === 'NetworkError' && e.status === 401) {
@@ -49,6 +49,6 @@ export const performSignin2 = ({ emailToken }) => async (dispatch, getState) => 
       dispatch(signin2Failure(e));
     }
 
-    browserHistory.push(`/error`);
+    history.push(`/error`);
   }
 };

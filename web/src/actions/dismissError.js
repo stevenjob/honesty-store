@@ -1,4 +1,4 @@
-import { browserHistory } from 'react-router';
+import { history } from '../history';
 
 export const DISMISS_ERROR = 'DISMISS_ERROR';
 
@@ -10,5 +10,5 @@ const dismissSuccess = () => {
 
 export const dismissError = () => async (dispatch) => {
   dispatch(dismissSuccess());
-  browserHistory.goBack();
+  history.goBack();
 };

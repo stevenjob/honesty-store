@@ -1,5 +1,5 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
+import history from '../history';
 import { connect } from 'react-redux';
 import { Success } from '../chrome/modal';
 import Currency from '../format/Currency';
@@ -12,7 +12,7 @@ export const RegisterPartialSuccess = ({balance, params: { itemId } }) =>
       </span>
     }
     subtitle="Thank you for signing up!"
-    onClick={() => browserHistory.replace(`/item/${itemId}`)}
+    onClick={() => history.replace(`/item/${itemId}`)}
     />;
 
 const mapStateToProps = ({ user: { balance = 0 } }) => ({

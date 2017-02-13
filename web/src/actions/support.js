@@ -1,5 +1,5 @@
-import { browserHistory } from 'react-router';
 import apifetch from './apirequest';
+import history from '../history';
 
 export const SUPPORT_REQUEST = 'SUPPORT_REQUEST';
 export const SUPPORT_SUCCESS = 'SUPPORT_SUCCESS';
@@ -41,10 +41,10 @@ export const performSupport = ({ message, emailAddress }) => async (dispatch, ge
     });
 
     dispatch(supportSuccess(response));
-    browserHistory.push(`/help/success`);
+    history.push(`/help/success`);
 
   } catch (e) {
     dispatch(supportFailure(e));
-    browserHistory.push(`/error`);
+    history.push(`/error`);
   }
 };

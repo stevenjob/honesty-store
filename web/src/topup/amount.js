@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
+import history from '../history';
 import { BRAND_LIGHT } from '../chrome/colors';
 import Page from '../chrome/page';
 import Stepper from '../chrome/stepper';
@@ -30,7 +30,7 @@ const Amount = ({ balance }) => {
           formatValue={(amount) => <Currency amount={amount} />}
           formatButton={(amount) => ({ text: 'Top Up using a Card', disabled: false })}
           initialValue={500}
-          onClick={(amount) => { browserHistory.push(`/topup/${amount}`); } }
+          onClick={(amount) => { history.push(`/topup/${amount}`); } }
           />
       </div>
     </Page>
