@@ -1,6 +1,6 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
+import { dismissError } from '../actions/dismissError';
 import Page from './page';
 import { MUTED_TEXT } from './colors';
 import sucess from './assets/success.svg';
@@ -39,13 +39,14 @@ const ErrorInternal = ({
   title = retryTitle,
   subtitle = defaultSubtitle,
   image = error,
-  onClick = () => browserHistory.goBack(),
+  onClick,
+  dismissError,
   ...other
 }) =>
   <Modal title={title}
     subtitle={subtitle}
     image={image}
-    onClick={onClick}
+    onClick={onClick || dismissError}
     {...other} />;
 
 const mapErrorStateToProps = ({ error }) => {
@@ -64,7 +65,9 @@ const mapErrorStateToProps = ({ error }) => {
   };
 };
 
-export const Error = connect(mapErrorStateToProps)(ErrorInternal);
+const mapDispatchToProps = { dismissError };
+
+export const Error = connect(mapErrorStateToProps, mapDispatchToProps)(ErrorInternal);
 
 export const Success = ({
   title = '',

@@ -1,3 +1,4 @@
+import { DISMISS_SUCCESS } from '../actions/dismissError';
 import { INITIALISE } from '../actions/inititialise';
 import { REGISTER_REQUEST, REGISTER_SUCESSS, REGISTER_FAILURE } from '../actions/register';
 import { REGISTER2_REQUEST, REGISTER2_SUCESSS, REGISTER2_FAILURE } from '../actions/register2';
@@ -30,6 +31,12 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         initialised: true
+      };
+    }
+    case DISMISS_SUCCESS: {
+      return {
+        ...state,
+        error: undefined
       };
     }
     case REGISTER_REQUEST: {
