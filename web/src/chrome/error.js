@@ -7,7 +7,7 @@ import error from './assets/error.svg';
 
 const defaultSubtitle = 'Oops! Something went wrong...';
 const retryTitle = 'Can you try that again, please?';
-const failureTitle = "I'm afraid I can't let you do that, Dave";
+const failureTitle = "I'm sorry Dave, I'm afraid I can't do that";
 
 const ErrorInternal = ({
   title = retryTitle,
