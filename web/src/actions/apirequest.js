@@ -1,15 +1,3 @@
-const unpackJson = async (response) => {
-  const json = await response.json();
-  if (json.error) {
-    const error = new Error(json.error.message);
-    if (json.error.code) {
-      throw Object.assign(error, { code: json.error.code });
-    }
-    throw error;
-  }
-  return json;
-};
-
 export const apifetch = async ({ url, token, body }) => {
   const headers = {};
 
@@ -38,5 +26,13 @@ export const apifetch = async ({ url, token, body }) => {
     throw error;
   }
 
-  return await unpackJson(response);
+  const json = await response.json();
+  if (json.error) {
+    const error = new Error(json.error.message);
+    if (json.error.code) {
+      throw Object.assign(error, { code: json.error.code });
+    }
+    throw error;
+  }
+  return json.response;
 };
