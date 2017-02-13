@@ -1,10 +1,12 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
+import { connect } from 'react-redux';
 import Page from './page';
 import { MUTED_TEXT } from './colors';
 import sucess from './assets/success.svg';
 import error from './assets/error.svg';
 import './modal.css';
+import { errorDefinitions } from './errors';
 
 const Modal = ({
   title,
@@ -29,9 +31,13 @@ const Modal = ({
     </div>
   </Page>;
 
-export const Error = ({
-  title = 'Can you try that again, please?',
-  subtitle = 'Oops! Something went wrong...',
+const defaultSubtitle = 'Oops! Something went wrong...';
+const retryTitle = 'Can you try that again, please?';
+const failureTitle = "I'm afraid I can't let you do that, Dave";
+
+const ErrorInternal = ({
+  title = retryTitle,
+  subtitle = defaultSubtitle,
   image = error,
   onClick = () => browserHistory.goBack(),
   ...other
@@ -41,6 +47,24 @@ export const Error = ({
     image={image}
     onClick={onClick}
     {...other} />;
+
+const mapErrorStateToProps = ({ error }) => {
+  if (!error) {
+    return {};
+  }
+
+  const errorDef = errorDefinitions[error.code];
+  if (!errorDef) {
+    return {};
+  }
+
+  return {
+    subtitle: errorDef.message,
+    title: errorDef.retryable ? retryTitle : failureTitle
+  };
+};
+
+export const Error = connect(mapErrorStateToProps)(ErrorInternal);
 
 export const Success = ({
   title = '',

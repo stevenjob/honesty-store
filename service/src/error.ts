@@ -1,3 +1,5 @@
+// this is duplicated in javascript @ web/src/chrome/errors.js
+
 export type ErrorCode =
   'TopupExceedsMaxBalance' |
   'TooManyPurchaseItems' |
