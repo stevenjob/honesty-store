@@ -20,7 +20,7 @@ export default async ({ url, token, body }) => {
   if (response.status !== 200) {
     const error = new Error(`POST returned ${response.status}`);
 
-    error.code = 'NetworkError';
+    error.code = 'ResponseError';
     error.status = response.status;
 
     throw error;
