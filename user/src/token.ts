@@ -12,7 +12,16 @@ export const signAccessToken = ({ userId }) => signToken({ userId }, '5m');
 
 export const signRefreshToken = ({ userId, refreshToken }) => signToken({ userId, refreshToken }, '1y');
 
-const verifyToken = (token) => jwt.verify(token, secret, { algorithms: ['HS256'], clockTolerance: ms('30s') });
+const verifyToken = (token) => {
+  try {
+    return jwt.verify(token, secret, { algorithms: ['HS256'], clockTolerance: ms('30s') });
+  } catch (e) {
+    if (e.name === 'TokenExpiredError') {
+      throw new CodedError('TokenExpired', 'token expired');
+    }
+    throw e;
+  }
+};
 
 export const verifyAccessToken = (token) => {
   const { userId, refreshToken } = verifyToken(token);

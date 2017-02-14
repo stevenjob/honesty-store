@@ -10,11 +10,13 @@ const getToken = request => request.headers.authorization.split(' ')[1];
 
 const handleInvalidToken = (key, response, e) => {
   error(key, `couldn't authenticate token`, e);
+
   response.status(HTTPStatus.UNAUTHORIZED)
     .json({
       error: {
         message: 'Invalid token provided',
-        detail: e.message
+        detail: e.message,
+        code: e.code || 'UnknownError'
       }
     });
 };
