@@ -1,3 +1,4 @@
+import { browserHistory } from 'react-router';
 import { DISMISS_ERROR } from '../actions/dismissError';
 import { INITIALISE } from '../actions/inititialise';
 import { REGISTER_REQUEST, REGISTER_SUCESSS, REGISTER_FAILURE } from '../actions/register';
@@ -47,10 +48,19 @@ export default (state = getInitialState(), action) => {
     }
     case REGISTER_SUCESSS: {
       const { refreshToken } = action.response;
-      localStorage.refreshToken = refreshToken;
+      let error = state.error;
+
+      try {
+        localStorage.refreshToken = refreshToken;
+      } catch (e) {
+        browserHistory.push(`/error`);
+        error = Object.assign(new Error('local storage failure'), { code: 'LocalStorageBlocked' });
+      }
+
       return {
         ...state,
         ...action.response,
+        error,
         pending: state.pending.filter(e => e !== 'register')
       };
     }
@@ -68,8 +78,18 @@ export default (state = getInitialState(), action) => {
       };
     }
     case SIGNIN_SUCCESS: {
-      delete localStorage.refreshToken;
-      return getInitialState();
+      let error = undefined;
+      try {
+        delete localStorage.refreshToken;
+      } catch (e) {
+        browserHistory.push(`/error`);
+        error = Object.assign(new Error('local storage failure'), { code: 'LocalStorageBlocked' });
+      }
+
+      return {
+        ...getInitialState(),
+        error
+      };
     }
     case SIGNIN_FAILURE: {
       return {
@@ -86,10 +106,19 @@ export default (state = getInitialState(), action) => {
     }
     case SIGNIN2_SUCCESS: {
       const { refreshToken } = action.response;
-      localStorage.refreshToken = refreshToken;
+      let error = state.error;
+
+      try {
+        localStorage.refreshToken = refreshToken;
+      } catch (e) {
+        browserHistory.push(`/error`);
+        error = Object.assign(new Error('local storage failure'), { code: 'LocalStorageBlocked' });
+      }
+
       return {
         ...state,
         ...action.response,
+        error,
         pending: state.pending.filter(e => e !== 'signin2')
       };
     }
@@ -140,8 +169,19 @@ export default (state = getInitialState(), action) => {
       };
     }
     case SESSION_UNAUTHORISED: {
-      delete localStorage.refreshToken;
-      return getInitialState();
+      let error = undefined;
+
+      try {
+        delete localStorage.refreshToken;
+      } catch (e) {
+        browserHistory.push(`/error`);
+        error = Object.assign(new Error('local storage failure'), { code: 'LocalStorageBlocked' });
+      }
+
+      return {
+        ...getInitialState(),
+        error
+      };
     }
     case SESSION_FAILURE: {
       return {
@@ -176,8 +216,19 @@ export default (state = getInitialState(), action) => {
       };
     }
     case LOGOUT_SUCCESS: {
-      delete localStorage.refreshToken;
-      return getInitialState();
+      let error = undefined;
+
+      try {
+        delete localStorage.refreshToken;
+      } catch (e) {
+        browserHistory.push(`/error`);
+        error = Object.assign(new Error('local storage failure'), { code: 'LocalStorageBlocked' });
+      }
+
+      return {
+        ...getInitialState(),
+        error
+      };
     }
     case LOGOUT_FAILURE: {
       return {
