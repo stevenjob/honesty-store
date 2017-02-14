@@ -20,7 +20,7 @@ const unpackCardErrors = ({ validationError, backendError }) => {
   if (validationError) {
     return {
       errorMessage: validationError.message,
-      bogusParameterName: validationError.param
+      invalidParameterName: validationError.param
     };
 
   } else if (backendError) {
@@ -30,13 +30,13 @@ const unpackCardErrors = ({ validationError, backendError }) => {
 
     return {
       errorMessage: errorDefinition.message,
-      bogusParameterName: paramFromCardProviderError(backendError)
+      invalidParameterName: paramFromCardProviderError(backendError)
     };
   }
 
   return {
     errorMessage: '',
-    bogusParameterName: ''
+    invalidParameterName: ''
   };
 };
 
@@ -100,7 +100,7 @@ class Card extends React.Component {
     const { validationError, backendError } = this.props;
     const { number, exp, cvc } = this.state;
 
-    const { errorMessage, bogusParameterName } = unpackCardErrors({ validationError, backendError });
+    const { errorMessage, invalidParameterName } = unpackCardErrors({ validationError, backendError });
 
     return <Page left={<Back>Register</Back>}
       title={`Top Up`}
@@ -125,7 +125,7 @@ class Card extends React.Component {
           <input name="number"
             autoComplete="cc-number"
             placeholder="1111 2222 3333 4444"
-            style={this.style('number', bogusParameterName)}
+            style={this.style('number', invalidParameterName)}
             value={number}
             pattern="[0-9]*"
             noValidate
@@ -138,7 +138,7 @@ class Card extends React.Component {
             pattern="[0-9]*"
             noValidate
             placeholder="Expiry (MM / YY)"
-            style={this.style('exp', bogusParameterName)}
+            style={this.style('exp', invalidParameterName)}
             onChange={(e) => this.handleExpChange(e)} />
           <input name="cvc"
             autoComplete="cc-csc"
@@ -146,7 +146,7 @@ class Card extends React.Component {
             pattern="[0-9]*"
             noValidate
             placeholder="CVV (3-digits)"
-            style={this.style('cvc', bogusParameterName)}
+            style={this.style('cvc', invalidParameterName)}
             onChange={(e) => this.handleCVCChange(e)} />
         </p>
         <p><Button onClick={(e) => this.handleSubmit(e)}>{this.getConfirmButtonText()}</Button></p>
