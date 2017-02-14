@@ -3,6 +3,6 @@
 export const errorDefinitions = {
   TopupExceedsMaxBalance: { message: 'Topping up would exceed your maximum balance', retryable: false },
   TooManyPurchaseItems: { message: "You're purchasing too many items", retryable: false },
-  EmailNotFound: { message: "Couldn't find your email", retryable: true }, // this should be handled transparently
-  NoCardDetailsPresent: { message: 'We have no card details for you', retryable: true }, // this should be handled transparently
+  EmailNotFound: { message: "Couldn't find your email", retryable: true },
+  NoCardDetailsPresent: { message: 'We have no card details for you', retryable: true },
 };
