@@ -2,13 +2,13 @@ import history from '../history';
 
 export const DISMISS_ERROR = 'DISMISS_ERROR';
 
-const dismissSuccess = () => {
+const dismiss = () => {
   return {
     type: DISMISS_ERROR
   };
 };
 
 export const dismissError = () => async (dispatch) => {
-  dispatch(dismissSuccess());
+  dispatch(dismiss());
   history.goBack();
 };
