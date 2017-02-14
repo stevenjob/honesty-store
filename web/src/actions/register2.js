@@ -2,21 +2,21 @@ import { browserHistory } from 'react-router';
 import apifetch from './apirequest';
 
 const createToken = (data) =>
-    new Promise((resolve, reject) => {
-      const stripeResponseHandler = (status, response) => {
-        if (response.error != null) {
-          const error = Object.assign(new Error(), response.error);
-          return reject(error);
-        }
-        if (status !== 200) {
-          return reject(new Error(`Non-200 response ${status} from Stripe`));
-        }
-        resolve(response.id);
-      };
-      const Stripe = window.Stripe;
-      Stripe.setPublishableKey(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
-      Stripe.card.createToken(data, stripeResponseHandler);
-    });
+  new Promise((resolve, reject) => {
+    const stripeResponseHandler = (status, response) => {
+      if (response.error != null) {
+        const error = Object.assign(new Error(), response.error);
+        return reject(error);
+      }
+      if (status !== 200) {
+        return reject(new Error(`Non-200 response ${status} from Stripe`));
+      }
+      resolve(response.id);
+    };
+    const Stripe = window.Stripe;
+    Stripe.setPublishableKey(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+    Stripe.card.createToken(data, stripeResponseHandler);
+  });
 
 export const REGISTER2_REQUEST = 'REGISTER2_REQUEST';
 export const REGISTER2_SUCESSS = 'REGISTER2_SUCESSS';
@@ -88,9 +88,16 @@ export const performRegister2 = ({ itemID, topUpAmount, emailAddress, cardDetail
 
     // ensure both the topup and purchase transactions were recorded
     const { user } = response;
-    const path = user.transactions.length === 2
-      ? `/register/${itemID}/success`
-      : `/register/${itemID}/partial`;
+
+    let path;
+    if (itemID == null) {
+      path = `/register//success`;
+    }
+    else {
+      path = user.transactions.length === 2
+        ? `/register/${itemID}/success`
+        : `/register/${itemID}/partial`;
+    }
 
     browserHistory.push(path);
 
