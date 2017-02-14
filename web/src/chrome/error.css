@@ -1,0 +1,29 @@
+.chrome-error>div {
+  perspective: 200;
+}
+
+.chrome-error>div>img {
+  transform: translateZ(1px);
+  transform-origin: 50% 50%;
+  will-change: transform;
+  animation-timing-function: cubic-bezier(.47,.52,.58,1.19);
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  animation-name: chrome-error-shake;
+  animation-duration: 3s;
+}
+
+@keyframes chrome-error-shake {
+  from {
+    transform: translateZ(1px);
+  }
+  15% {
+    transform: translateZ(1px) rotateY(-15deg);
+  }
+  30% {
+    transform: translateZ(1px) rotateY(15deg);
+  }
+  45% {
+    transform: translateZ(1px);
+  }
+}

@@ -4,6 +4,7 @@ import { dismissError } from '../actions/dismissError';
 import { errorDefinitions } from './errors';
 import Modal from './modal';
 import error from './assets/error.svg';
+import './error.css';
 
 const defaultSubtitle = 'Oops! Something went wrong...';
 const retryTitle = 'Can you try that again, please?';
@@ -20,6 +21,7 @@ const ErrorInternal = ({
     subtitle={subtitle}
     image={image}
     onClick={dismissError}
+    className="chrome-error"
     {...other} />;
 
 const mapStateToProps = ({ error }) => {

@@ -12,3 +12,41 @@
     height: 12rem;
     max-width: 80%;
 }
+
+.chrome-modal-success>div>img {
+  transform: translateZ(1px);
+  transform-origin: 50% 100%;
+  will-change: transform;
+  animation-timing-function: cubic-bezier(.47,.52,.58,1.19);
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  animation-name: chrome-modal-success-pulse;
+  animation-duration: 2s;
+}
+
+@keyframes chrome-modal-success-pulse {
+  from {
+    transform: translateZ(1px);
+  }
+  5% {
+    transform: translateZ(1px) translateY(-2%) scale(1.02);;
+  }
+  10% {
+    transform: translateZ(1px) translateY(0);
+  }
+  15% {
+    transform: translateZ(1px) rotateZ(-1deg) translateY(-1%) scale(1.01);
+  }
+  20% {
+    transform: translateZ(1px) translateY(0);
+  }
+  30% {
+    transform: translateZ(1px) rotateZ(3deg) translateY(-3%) scale(1.03);
+  }
+  40% {
+    transform: translateZ(1px) translateY(0);
+  }
+  to {
+    transform: translateZ(1px);
+  }
+}
