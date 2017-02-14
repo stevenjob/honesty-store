@@ -24,12 +24,8 @@ const unpackCardErrors = ({ validationError, backendError }) => {
     };
 
   } else if (backendError) {
-    const errorDefinition = (codeIsCardProviderError(backendError.code)
-      && errorDefinitions[backendError.code])
-      || errorDefinitions['CardError'];
-
     return {
-      errorMessage: errorDefinition.message,
+      errorMessage: errorDefinitions[backendError.code].message,
       invalidParameterName: paramFromCardProviderError(backendError)
     };
   }
