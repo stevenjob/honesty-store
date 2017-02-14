@@ -9,13 +9,20 @@ export default async ({ url, token, body }) => {
     headers['Authorization'] = `Bearer: ${token}`;
   }
 
-  const response = await fetch(
-    url,
-    {
-      method: 'POST',
-      body: body && JSON.stringify(body),
-      headers
-    });
+  let response;
+  try {
+    response = await fetch(
+      url,
+      {
+        method: 'POST',
+        body: body && JSON.stringify(body),
+        headers
+      });
+  } catch (e) {
+    throw Object.assign(
+      new Error('failed to fetch'),
+      { code: 'NetworkError' });
+  }
 
   if (response.status !== 200) {
     const error = new Error(`POST returned ${response.status}`);

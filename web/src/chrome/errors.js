@@ -8,4 +8,5 @@ export const errorDefinitions = {
   EmailTokenInvalid: { message: 'The magic link you followed has expired', retryable: false },
   StoreNotFound: { message: "We couldn't find that store code", retryable: true },
   LocalStorageBlocked: { message: "We can't hold onto your session in private browsing", retryable: false },
+  NetworkError: { message: "Sorry, we're having trouble connecting", retryable: true },
 };
