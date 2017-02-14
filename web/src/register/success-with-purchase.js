@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { Success } from '../chrome/modal';
 import safeLookupItemImage from '../item/safeLookupItemImage';
 
-export const RegisterSuccess = ({ item: { name, image }, loading }) =>
+export const RegisterSuccessWithPurchase = ({ item: { name, image }, loading }) =>
   <Success title={`Enjoy your ${name}!`}
     subtitle="Thank you for signing up!"
     image={safeLookupItemImage(image)}
     onClick={() => browserHistory.replace(`/history`)}
     loading={loading}
-    />;
+  />;
 
 const mapStateToProps = (
   { store: { items = []}, pending },
@@ -23,4 +23,4 @@ const mapStateToProps = (
   };
 };
 
-export default connect(mapStateToProps)(RegisterSuccess);
+export default connect(mapStateToProps)(RegisterSuccessWithPurchase);

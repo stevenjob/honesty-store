@@ -20,7 +20,8 @@ import TopupNewCard from './topup/new-card';
 import TopupSuccess from './topup/success';
 import RegisterEmail from './register/email';
 import RegisterCard from './register/card';
-import RegisterSuccess from './register/success';
+import RegisterSuccessWithPurchase from './register/success-with-purchase';
+import RegisterSuccessWithoutPurchase from './register/success-without-purchase';
 import RegisterPartialSuccess from './register/partial-success';
 import SignInSuccess from './signin/success';
 import Help from './help/index';
@@ -55,8 +56,8 @@ ReactDOM.render((
       <Route path="/" component={({ children }) => children}>
         <Route path="register" component={RegisterEmail} />
         <Route path="register/:itemId" component={RegisterEmail} />
-        <Route path="register//success" component={RegisterSuccess} />
-        <Route path="register/:itemId/success" component={RegisterSuccess} />
+        <Route path="register//success" component={RegisterSuccessWithoutPurchase} />
+        <Route path="register/:itemId/success" component={RegisterSuccessWithPurchase} />
         <Route path="register/:itemId/partial" component={RegisterPartialSuccess} />
         <Route path="register//:emailAddress" component={RegisterCard} />
         <Route path="register/:itemId/:emailAddress" component={RegisterCard} />

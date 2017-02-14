@@ -41,7 +41,7 @@ export const performSignin = ({ itemId, emailAddress }) => async (dispatch, getS
   } catch (e) {
     if (e.code === 'EmailNotFound') {
       dispatch(signinFailure(undefined));
-      const itemParam = itemId != null ? itemId : '';
+      const itemParam = itemId || '';
       browserHistory.push(`/register/${itemParam}/${emailAddress}`);
     } else {
       dispatch(signinFailure(e));
