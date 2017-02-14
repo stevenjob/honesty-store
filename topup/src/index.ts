@@ -166,7 +166,6 @@ const userErrorFromStripeError = (stripeError) => {
     return stripeError;
   }
 
-  // we could just marshal stripeError.message to the user, but it might not fit the tone of our app
   const errorCode = stripeCodeToErrorCode(stripeError.code);
   return new CodedError(errorCode, stripeError.message);
 };
