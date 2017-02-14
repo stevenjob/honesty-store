@@ -8,12 +8,12 @@
     margin: auto;
 }
 
-.chrome-modal>div>img {
+.chrome-modal>div>img,.chrome-modal>div>svg {
     height: 12rem;
     max-width: 80%;
 }
 
-.chrome-modal-success>div>img {
+.chrome-modal-success>div>img,.chrome-modal-success>div>svg {
   transform: translateZ(1px);
   transform-origin: 50% 100%;
   will-change: transform;

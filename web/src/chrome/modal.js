@@ -18,7 +18,11 @@ const Modal = ({
     <div onClick={onClick} className={`chrome-modal ${className}`}>
       <div>
         <h3>{subtitle}</h3>
-        <img src={image} alt="" />
+        {
+          typeof(image) === 'string'
+            ? <img src={image} alt="" />
+            : image
+        }
         <h2>{title}</h2>
         {
           onClick &&

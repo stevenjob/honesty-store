@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { dismissError } from '../actions/dismissError';
 import { errorDefinitions } from './errors';
 import Modal from './modal';
-import error from '../item/error.js';
+import Error from '../item/error.js';
 import './error.css';
 
 const defaultSubtitle = 'Oops! Something went wrong...';
@@ -13,7 +13,7 @@ const failureTitle = "I'm sorry Dave, I'm afraid I can't do that";
 const ErrorInternal = ({
   title = retryTitle,
   subtitle = defaultSubtitle,
-  image = error,
+  image = <Error />,
   dismissError,
   ...other
 }) =>

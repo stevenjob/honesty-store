@@ -2,7 +2,7 @@
   perspective: 200;
 }
 
-.chrome-error>div>img {
+.chrome-error>div>img,.chrome-error>div>svg {
   transform: translateZ(1px);
   transform-origin: 50% 50%;
   will-change: transform;
