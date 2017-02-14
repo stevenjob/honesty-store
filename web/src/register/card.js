@@ -16,26 +16,6 @@ const setCursorPosition = (element) => () => {
   });
 };
 
-const unpackCardErrors = ({ validationError, backendError }) => {
-  if (validationError) {
-    return {
-      errorMessage: validationError.message,
-      invalidParameterName: validationError.param
-    };
-
-  } else if (backendError) {
-    return {
-      errorMessage: errorDefinitions[backendError.code].message,
-      invalidParameterName: paramFromCardProviderError(backendError)
-    };
-  }
-
-  return {
-    errorMessage: '',
-    invalidParameterName: ''
-  };
-};
-
 class Card extends React.Component {
   constructor(props) {
     super(props);
@@ -93,10 +73,10 @@ class Card extends React.Component {
   }
 
   render() {
-    const { validationError, backendError } = this.props;
+    const { error } = this.props;
     const { number, exp, cvc } = this.state;
 
-    const { errorMessage, invalidParameterName } = unpackCardErrors({ validationError, backendError });
+    const invalidParameterName = error.param || paramFromCardProviderError(error);
 
     return <Page left={<Back>Register</Back>}
       title={`Top Up`}
@@ -105,10 +85,16 @@ class Card extends React.Component {
       fullscreen={true}>
       <form className="register-card" onSubmit={(e) => this.handleSubmit(e)}>
         {
-          validationError || backendError ?
+          error ?
             <div style={{ color: DANGER }}>
               <p>There was a problem collecting payment from your card, please check the details</p>
-              <p>{errorMessage}</p>
+              <p>
+              {
+                error.code
+                ? errorDefinitions[error.code].message
+                : error.message
+              }
+              </p>
             </div>
             :
             <div>
@@ -162,8 +148,7 @@ const mapStateToProps = (
 ) => ({
   itemId,
   emailAddress,
-  validationError,
-  backendError
+  error: validationError || backendError
 });
 
 const mapDispatchToProps = { performRegister2 };
