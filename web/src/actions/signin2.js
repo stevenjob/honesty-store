@@ -40,9 +40,9 @@ export const performSignin2 = ({ emailToken }) => async (dispatch, getState) => 
 
   } catch (e) {
     if (e.code === 'NetworkError' && e.status === 401) {
-      const timeoutError = new Error('email token timeout');
+      const timeoutError = new Error('Not Authorised');
 
-      timeoutError.code = 'EmailTokenTimeout';
+      timeoutError.code = 'EmailTokenInvalid';
 
       dispatch(signin2Failure(timeoutError));
     } else {

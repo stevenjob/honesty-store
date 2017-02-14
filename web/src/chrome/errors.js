@@ -5,5 +5,5 @@ export const errorDefinitions = {
   TooManyPurchaseItems: { message: "You're purchasing too many items", retryable: false },
   EmailNotFound: { message: "Couldn't find your email", retryable: true },
   NoCardDetailsPresent: { message: 'We have no card details for you', retryable: true },
-  EmailTokenTimeout: { message: 'Your e-mail token has expired', retryable: true },
+  EmailTokenInvalid: { message: 'Your e-mail link has expired', retryable: true },
 };
