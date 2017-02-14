@@ -13,12 +13,18 @@ const Help = () =>
     <h5>Help</h5>
   </Link>;
 
+const SignIn = () =>
+  <Link to={`/register`}>
+    <h5>Sign In</h5>
+  </Link>;
+
 const itemRenderer = (item, index) => <StoreItem item={item} />;
 
 const Store = ({ registered, storeCode, balance, loading, items }) =>
   <Page title="Store"
     subtitle={storeCode ? `@${storeCode}` : ''}
     right={registered ? <Balance balance={balance} /> : <Help />}
+    left={!registered && <SignIn />}
     nav={registered}>
     <List data={items} itemRenderer={itemRenderer} />
   </Page>;
