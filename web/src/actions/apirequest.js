@@ -24,22 +24,26 @@ export default async ({ url, token, body }) => {
       { code: 'NetworkError' });
   }
 
-  if (response.status !== 200) {
+  let json;
+  try {
+    json = await response.json();
+  } catch (e) {
     throw Object.assign(
-      new Error(`POST returned ${response.status}`),
+      e,
       {
-        code: 'ResponseError',
+        code: 'JsonParseError';
+        status: response.status;
+      });
+  }
+
+  if (json.error) {
+    throw Object.assign(
+      new Error(json.error.message),
+      {
+        code: json.error.code,
         status: response.status
       });
   }
 
-  const json = await response.json();
-  if (json.error) {
-    const error = new Error(json.error.message);
-    if (json.error.code) {
-      throw Object.assign(error, { code: json.error.code });
-    }
-    throw error;
-  }
   return json.response;
 };
