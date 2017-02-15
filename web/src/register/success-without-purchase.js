@@ -13,8 +13,8 @@ export const RegisterSuccessWithoutPurchase = ({ loading }) =>
 const mapStateToProps = (
   { pending },
   { params: { itemId } }
-) => {
-  return { loading: pending.length > 0 };
-};
+) => ({
+  loading: pending.length > 0
+});
 
 export default connect(mapStateToProps)(RegisterSuccessWithoutPurchase);
