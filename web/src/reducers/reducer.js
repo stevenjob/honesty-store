@@ -26,6 +26,24 @@ const getInitialState = () => {
   };
 };
 
+const save = (props) => {
+  try {
+    for (const prop in props) {
+      if (props[prop] == undefined) {
+        delete localStorage[prop];
+      } else {
+        localStorage[prop] = props[prop];
+      }
+    }
+
+    return undefined;
+
+  } catch (e) {
+    browserHistory.push(`/error`);
+    return Object.assign(new Error('local storage failure'), { code: 'LocalStorageBlocked' });
+  }
+};
+
 export default (state = getInitialState(), action) => {
   switch (action.type) {
     case INITIALISE: {
@@ -48,19 +66,12 @@ export default (state = getInitialState(), action) => {
     }
     case REGISTER_SUCESSS: {
       const { refreshToken } = action.response;
-      let error = state.error;
-
-      try {
-        localStorage.refreshToken = refreshToken;
-      } catch (e) {
-        browserHistory.push(`/error`);
-        error = Object.assign(new Error('local storage failure'), { code: 'LocalStorageBlocked' });
-      }
+      const error = save({ refreshToken });
 
       return {
         ...state,
         ...action.response,
-        error,
+        error: error || state.error,
         pending: state.pending.filter(e => e !== 'register')
       };
     }
@@ -78,13 +89,7 @@ export default (state = getInitialState(), action) => {
       };
     }
     case SIGNIN_SUCCESS: {
-      let error = undefined;
-      try {
-        delete localStorage.refreshToken;
-      } catch (e) {
-        browserHistory.push(`/error`);
-        error = Object.assign(new Error('local storage failure'), { code: 'LocalStorageBlocked' });
-      }
+      const error = save({ refreshToken: undefined });
 
       return {
         ...getInitialState(),
@@ -106,19 +111,12 @@ export default (state = getInitialState(), action) => {
     }
     case SIGNIN2_SUCCESS: {
       const { refreshToken } = action.response;
-      let error = state.error;
-
-      try {
-        localStorage.refreshToken = refreshToken;
-      } catch (e) {
-        browserHistory.push(`/error`);
-        error = Object.assign(new Error('local storage failure'), { code: 'LocalStorageBlocked' });
-      }
+      const error = save({ refreshToken });
 
       return {
         ...state,
         ...action.response,
-        error,
+        error: error || state.error,
         pending: state.pending.filter(e => e !== 'signin2')
       };
     }
@@ -169,14 +167,7 @@ export default (state = getInitialState(), action) => {
       };
     }
     case SESSION_UNAUTHORISED: {
-      let error = undefined;
-
-      try {
-        delete localStorage.refreshToken;
-      } catch (e) {
-        browserHistory.push(`/error`);
-        error = Object.assign(new Error('local storage failure'), { code: 'LocalStorageBlocked' });
-      }
+      const error = save({ refreshToken: undefined });
 
       return {
         ...getInitialState(),
@@ -216,14 +207,7 @@ export default (state = getInitialState(), action) => {
       };
     }
     case LOGOUT_SUCCESS: {
-      let error = undefined;
-
-      try {
-        delete localStorage.refreshToken;
-      } catch (e) {
-        browserHistory.push(`/error`);
-        error = Object.assign(new Error('local storage failure'), { code: 'LocalStorageBlocked' });
-      }
+      const error = save({ refreshToken: undefined });
 
       return {
         ...getInitialState(),
