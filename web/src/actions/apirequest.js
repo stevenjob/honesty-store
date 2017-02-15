@@ -12,7 +12,7 @@ export default async ({ url, token, body }) => {
   let response;
   try {
     response = await fetch(
-      url,
+      `${process.env.PUBLIC_URL}${url}`,
       {
         method: 'POST',
         body: body && JSON.stringify(body),
