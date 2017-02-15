@@ -4,6 +4,7 @@ machine:
   environment:
     REACT_APP_STRIPE_PUBLISHABLE_KEY: $([ $CIRCLE_BRANCH = 'live' ] && echo pk_live_koh6JFFsmJxYyGBok5DHRtJZ || echo pk_test_Lp6VONbqz8TbbnD4oFThDBmT)
     TEST_STRIPE_KEY: sk_test_qqeGkZVE30FLH76H2g2Fd4NL
+    PUBLIC_URL: $([ $CIRCLE_BRANCH = 'live' ] && echo 'https://honesty.store' || echo "https://$CIRCLE_BRANCH.honesty.store")
   node:
     version: v6.1.0
   services:
