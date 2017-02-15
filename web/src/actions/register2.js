@@ -69,6 +69,30 @@ const createStripeToken = ({ number, cvc, exp }) => {
   return createToken({ number, cvc, exp });
 };
 
+const codeIsCardProviderError = code => code.startsWith('Card');
+
+const paramFromCardProviderError = ({ code }) => {
+  switch (code) {
+    case 'CardIncorrectNumber':
+    case 'CardInvalidNumber':
+      return 'number';
+
+    case 'CardInvalidExpiryMonth':
+    case 'CardInvalidExpiryYear':
+    case 'CardExpired':
+      return 'exp';
+
+    case 'CardIncorrectCVC':
+    case 'CardInvalidCVC':
+      return 'cvc';
+
+    case 'CardDeclined':
+    case 'CardError':
+    default:
+      return '';
+  }
+};
+
 export const performRegister2 = ({ itemID, topUpAmount, emailAddress, cardDetails }) => async (dispatch, getState) => {
   dispatch(register2Request());
 
@@ -101,6 +125,10 @@ export const performRegister2 = ({ itemID, topUpAmount, emailAddress, cardDetail
 
     history.push(path);
   } catch (e) {
+    if (!e.param && codeIsCardProviderError(e.code)) {
+      e.param = paramFromCardProviderError(e);
+    }
+
     dispatch(register2Failure(e));
   }
 };

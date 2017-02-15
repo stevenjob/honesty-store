@@ -19,27 +19,3 @@ export const errorDefinitions = {
   CardDeclined: { message: 'Card declined', retryable: true },
   CardError: { message: 'Hit a problem with your card details', retryable: true }
 };
-
-export const codeIsCardProviderError = code => code.startsWith('Card');
-
-export const paramFromCardProviderError = ({ code }) => {
-  switch (code) {
-    case 'CardIncorrectNumber':
-    case 'CardInvalidNumber':
-      return 'number';
-
-    case 'CardInvalidExpiryMonth':
-    case 'CardInvalidExpiryYear':
-    case 'CardExpired':
-      return 'exp';
-
-    case 'CardIncorrectCVC':
-    case 'CardInvalidCVC':
-      return 'cvc';
-
-    case 'CardDeclined':
-    case 'CardError':
-    default:
-      return '';
-  }
-};

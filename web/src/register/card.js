@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Button from '../chrome/button';
-import { codeIsCardProviderError, errorDefinitions, paramFromCardProviderError } from '../chrome/errors.js';
+import { errorDefinitions } from '../chrome/errors.js';
 import { DANGER } from '../chrome/colors';
 import { Back } from '../chrome/link';
 import Page from '../chrome/page';
@@ -62,8 +62,8 @@ class Card extends React.Component {
     performRegister2({ storeCode, itemID: itemId, topUpAmount: TOPUP_AMOUNT, emailAddress, cardDetails });
   }
 
-  style(name, badParam) {
-    return badParam === name ? { borderBottomColor: DANGER } : {};
+  style(name, error) {
+    return (error != null && error.param === name) ? { borderBottomColor: DANGER } : {};
   }
 
   getConfirmButtonText() {
@@ -75,8 +75,6 @@ class Card extends React.Component {
   render() {
     const { error } = this.props;
     const { number, exp, cvc } = this.state;
-
-    const invalidParameterName = error.param || paramFromCardProviderError(error);
 
     return <Page left={<Back>Register</Back>}
       title={`Top Up`}
@@ -107,7 +105,7 @@ class Card extends React.Component {
           <input name="number"
             autoComplete="cc-number"
             placeholder="1111 2222 3333 4444"
-            style={this.style('number', invalidParameterName)}
+            style={this.style('number', error)}
             value={number}
             pattern="[0-9]*"
             noValidate
@@ -120,7 +118,7 @@ class Card extends React.Component {
             pattern="[0-9]*"
             noValidate
             placeholder="Expiry (MM / YY)"
-            style={this.style('exp', invalidParameterName)}
+            style={this.style('exp', error)}
             onChange={(e) => this.handleExpChange(e)} />
           <input name="cvc"
             autoComplete="cc-csc"
@@ -128,7 +126,7 @@ class Card extends React.Component {
             pattern="[0-9]*"
             noValidate
             placeholder="CVV (3-digits)"
-            style={this.style('cvc', invalidParameterName)}
+            style={this.style('cvc', error)}
             onChange={(e) => this.handleCVCChange(e)} />
         </p>
         <p><Button onClick={(e) => this.handleSubmit(e)}>{this.getConfirmButtonText()}</Button></p>
