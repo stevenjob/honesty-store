@@ -99,16 +99,16 @@ const getInternal = async ({ userId }): Promise<InternalUser> => {
 
 const get = async ({ userId }): Promise<User> => externaliseUser(await getInternal({ userId }));
 
-const getByAccessToken = async ({ accessToken }): Promise<User> => {
-  const { userId } = verifyAccessToken(accessToken);
+const getByAccessToken = async ({ key, accessToken }): Promise<User> => {
+  const { userId } = verifyAccessToken(key, accessToken);
   assertValidUserId(userId);
 
   // We trust the JWT signing to validate access tokens
   return await get({ userId });
 };
 
-const getByRefreshToken = async ({ refreshToken }): Promise<UserWithAccessToken> => {
-  const { userId, refreshToken: token } = verifyRefreshToken(refreshToken);
+const getByRefreshToken = async ({ key, refreshToken }): Promise<UserWithAccessToken> => {
+  const { userId, refreshToken: token } = verifyRefreshToken(key, refreshToken);
   assertValidUserId(userId);
   assertValidRefreshToken(token);
 
@@ -296,13 +296,13 @@ router.get(
 router.get(
   '/accessToken/:accessToken',
   serviceAuthentication,
-  async (_key, { accessToken }) => await getByAccessToken({ accessToken })
+  async (key, { accessToken }) => await getByAccessToken({ key, accessToken })
 );
 
 router.get(
   '/refreshToken/:refreshToken',
   serviceAuthentication,
-  async (_key, { refreshToken }) => await getByRefreshToken({ refreshToken })
+  async (key, { refreshToken }) => await getByRefreshToken({ key, refreshToken })
 );
 
 router.get(

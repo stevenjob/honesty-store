@@ -16,6 +16,7 @@ export type ErrorCode =
   'CardDeclined' |
   'CardError' |
   'TokenExpired' |
+  'TokenError' |
   'UnknownError';
 
 export class CodedError extends Error {
