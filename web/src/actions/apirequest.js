@@ -25,12 +25,12 @@ export default async ({ url, token, body }) => {
   }
 
   if (response.status !== 200) {
-    const error = new Error(`POST returned ${response.status}`);
-
-    error.code = 'ResponseError';
-    error.status = response.status;
-
-    throw error;
+    throw Object.assign(
+      new Error(`POST returned ${response.status}`),
+      {
+        code: 'ResponseError',
+        status: response.status
+      });
   }
 
   const json = await response.json();
