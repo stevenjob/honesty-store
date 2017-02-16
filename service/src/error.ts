@@ -16,6 +16,9 @@ export type ErrorCode =
   'CardDeclined' |
   'CardError' |
   'TokenExpired' |
+  'AccessTokenExpired' |
+  'RefreshTokenExpired' |
+  'MagicLinkTokenExpired' |
   'TokenError' |
   'UnknownError';
 

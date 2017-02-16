@@ -1,6 +1,6 @@
 import jwt = require('jsonwebtoken');
 import ms = require('ms');
-import { CodedError } from '../../service/src/error';
+import { ErrorCode, CodedError } from '../../service/src/error';
 import { warn } from '../../service/src/log';
 
 const secret = process.env.USER_TOKEN_SECRET;
@@ -14,14 +14,14 @@ export const signAccessToken = ({ userId }) => signToken({ userId }, '5m');
 
 export const signRefreshToken = ({ userId, refreshToken }) => signToken({ userId, refreshToken }, '1y');
 
-const verifyToken = (key, token) => {
+const verifyToken = (key, token, expiredErrorCode: ErrorCode) => {
   try {
     return jwt.verify(token, secret, { algorithms: ['HS256'], clockTolerance: ms('30s') });
   } catch (e) {
     warn(key, `token failed validation`, { e, token });
 
     if (e.name === 'TokenExpiredError') {
-      throw new CodedError('TokenExpired', 'token expired');
+      throw new CodedError(expiredErrorCode, 'token expired');
     }
 
     throw new CodedError('TokenError', 'token error');
@@ -29,7 +29,7 @@ const verifyToken = (key, token) => {
 };
 
 export const verifyAccessToken = (key, token) => {
-  const { userId, refreshToken } = verifyToken(key, token);
+  const { userId, refreshToken } = verifyToken(key, token, 'AccessTokenExpired');
   if (refreshToken != null) {
     throw new Error('Refresh token used in place of access token');
   }
@@ -37,7 +37,7 @@ export const verifyAccessToken = (key, token) => {
 };
 
 export const verifyRefreshToken = (key, token) => {
-  const { userId, refreshToken } = verifyToken(key, token);
+  const { userId, refreshToken } = verifyToken(key, token, 'RefreshTokenExpired');
   if (refreshToken == null) {
     throw new Error('Access token used in place of refresh token');
   }
@@ -45,7 +45,7 @@ export const verifyRefreshToken = (key, token) => {
 };
 
 export const verifyMagicLinkToken = (key, token) => {
-  const { userId, refreshToken } = verifyToken(key, token);
+  const { userId, refreshToken } = verifyToken(key, token, 'MagicLinkTokenExpired');
   if (refreshToken != null) {
     throw new Error('Refresh token used in place of magiclink token');
   }
