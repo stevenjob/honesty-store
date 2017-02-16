@@ -69,8 +69,6 @@ const createStripeToken = ({ number, cvc, exp }) => {
   return createToken({ number, cvc, exp });
 };
 
-const codeIsCardProviderError = code => code.startsWith('Card');
-
 const paramFromCardProviderError = ({ code }) => {
   switch (code) {
     case 'CardIncorrectNumber':
@@ -125,7 +123,7 @@ export const performRegister2 = ({ itemID, topUpAmount, emailAddress, cardDetail
 
     history.push(path);
   } catch (e) {
-    if (!e.param && codeIsCardProviderError(e.code)) {
+    if (!e.param) {
       e.param = paramFromCardProviderError(e);
     }
 
