@@ -1,4 +1,4 @@
-import { history } from '../history';
+import history from '../history';
 import { DISMISS_ERROR } from '../actions/dismissError';
 import { INITIALISE } from '../actions/inititialise';
 import { REGISTER_REQUEST, REGISTER_SUCESSS, REGISTER_FAILURE } from '../actions/register';
