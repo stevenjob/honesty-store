@@ -29,7 +29,7 @@ const getInitialState = () => {
 const save = (props) => {
   try {
     for (const prop in props) {
-      if (props[prop] == undefined) {
+      if (props[prop] === undefined) {
         delete localStorage[prop];
       } else {
         localStorage[prop] = props[prop];
