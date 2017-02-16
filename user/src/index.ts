@@ -11,7 +11,7 @@ import { error, info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { createAccount } from '../../transaction/src/client';
 import { TEST_DATA_USER_ID, User, UserProfile, UserWithAccessAndRefreshTokens, UserWithAccessToken } from './client';
-import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from './token';
+import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken, verifyMagicLinkToken } from './token';
 
 config.region = process.env.AWS_REGION;
 
@@ -125,8 +125,8 @@ const getByRefreshToken = async ({ key, refreshToken }): Promise<UserWithAccessT
   return externaliseUserWithAccessToken(user);
 };
 
-const getByMagicLinkToken = async ({ magicLinkToken }): Promise<UserWithAccessAndRefreshTokens> => {
-  const { userId } = verifyAccessToken(magicLinkToken);
+const getByMagicLinkToken = async ({ key, magicLinkToken }): Promise<UserWithAccessAndRefreshTokens> => {
+  const { userId } = verifyMagicLinkToken(key, magicLinkToken);
   assertValidUserId(userId);
 
   const user = await getInternal({ userId });
@@ -308,7 +308,7 @@ router.get(
 router.get(
   '/magicLink/:magicLinkToken',
   serviceAuthentication,
-  async (_key, { magicLinkToken }) => await getByMagicLinkToken({ magicLinkToken })
+  async (key, { magicLinkToken }) => await getByMagicLinkToken({ key, magicLinkToken })
 );
 
 router.get(

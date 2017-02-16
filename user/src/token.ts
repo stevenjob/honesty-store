@@ -43,3 +43,11 @@ export const verifyRefreshToken = (key, token) => {
   }
   return { userId, refreshToken };
 };
+
+export const verifyMagicLinkToken = (key, token) => {
+  const { userId, refreshToken } = verifyToken(key, token);
+  if (refreshToken != null) {
+    throw new Error('Refresh token used in place of magiclink token');
+  }
+  return { userId };
+};
