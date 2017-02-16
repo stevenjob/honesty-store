@@ -125,7 +125,7 @@ class Card extends React.Component {
             value={cvc}
             pattern="[0-9]*"
             noValidate
-            placeholder="CVV (3-digits)"
+            placeholder="CVC (3-digits)"
             style={this.style('cvc', error)}
             onChange={(e) => this.handleCVCChange(e)} />
         </p>
