@@ -1,5 +1,6 @@
 import { ECS } from 'aws-sdk';
 import * as winston from 'winston';
+import { ensureStack } from '../cloudformation/stack';
 import { ensureLogGroup } from '../cloudwatchlogs/loggroup';
 import containerForDir from '../containerDefinition/containers';
 import { ensureTable } from '../dynamodb/table';
@@ -16,7 +17,19 @@ import dirToTable from '../table/tables';
 export const prefix = 'hs';
 export const defaultTargetGroupDir = 'web';
 export const ecsServiceRole = 'arn:aws:iam::812374064424:role/ecs-service-role';
-export const cluster = 'test-cluster';
+
+export const ensureWebStack = async () =>
+  await ensureStack({
+    name: 'web-cluster',
+    templateName: `${__dirname}/../../cloudformation/web-cluster.json`,
+    params: {
+      AmiImageId: 'ami-a7f2acc1',
+      SubnetACidrBlock: '10.1.0.0/24',
+      SubnetBCidrBlock: '10.1.1.0/24',
+      SubnetCCidrBlock: '10.1.2.0/24',
+      VpcCidrBlock: '10.1.0.0/16'
+    }
+  });
 
 const serviceConfig = {
   web: {
@@ -116,8 +129,17 @@ export default async ({ branch, dirs }) => {
   });
 
   const baseUrl = aliasToBaseUrl(branch);
+  const stack = await ensureWebStack();
   const loadBalancer = await ensureLoadBalancer({
-    name: generateName({ branch })
+    name: generateName({ branch }),
+    securityGroups: [
+      stack.SecurityGroupAllowAll
+    ],
+    subnets: [
+      stack.SubnetA,
+      stack.SubnetB,
+      stack.SubnetC
+    ]
   });
   await ensureAlias({
     name: branch,
@@ -185,7 +207,7 @@ export default async ({ branch, dirs }) => {
     // For now assuming all tasks contain only one container with a port mapping which should be load balanced
     const service = await ensureService({
       serviceName: generateName({ branch, dir }),
-      cluster,
+      cluster: stack.Cluster,
       desiredCount: isLive(branch) ? 2 : 1,
       taskDefinition: taskDefinition.taskDefinitionArn,
       loadBalancers: [
@@ -203,7 +225,7 @@ export default async ({ branch, dirs }) => {
   winston.info('Waiting for stability');
 
   await waitForServicesStable({
-    cluster,
+    cluster: stack.Cluster,
     services: services.map(service => service.serviceName)
   });
 

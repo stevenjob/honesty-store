@@ -7,7 +7,7 @@ import { pruneLoadBalancers } from '../elbv2/loadbalancer';
 import { pruneTargetGroups } from '../elbv2/targetgroup';
 import { getOriginBranchNames } from '../git/branch';
 import { pruneAliases } from '../route53/alias';
-import { cluster, prefix } from './deploy';
+import { ensureWebStack, prefix } from './deploy';
 
 const force = process.env.FORCE;
 
@@ -32,8 +32,10 @@ export default async () => {
     filter: (name) => !branchNames.some(branchName => branchName === name)
   });
 
+  const stack = await ensureWebStack();
+
   await pruneServices({
-    cluster,
+    cluster: stack.Cluster,
     filter: ({ name }) => filter(name)
   });
 

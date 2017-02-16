@@ -1,19 +1,13 @@
 import { ELBv2 } from 'aws-sdk';
 import * as winston from 'winston';
 
-export const ensureLoadBalancer = async ({ name }) => {
+export const ensureLoadBalancer = async ({ name, securityGroups, subnets }) => {
   const loadBalancerResponse = await new ELBv2({ apiVersion: '2015-12-01' })
     .createLoadBalancer({
       Name: name,
       Scheme: 'internet-facing',
-      SecurityGroups: [
-        'sg-f4e87292'
-      ],
-      Subnets: [
-        'subnet-a9910bf1',
-        'subnet-1da0f979',
-        'subnet-05d18173'
-      ]
+      SecurityGroups: securityGroups,
+      Subnets: subnets
     })
     .promise();
 
