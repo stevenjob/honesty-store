@@ -48,13 +48,22 @@ const store = createStore(
 
 store.dispatch(performInitialise({}));
 
+
+const redirectUnauthorised = (nextState, replace) => {
+  const { refreshToken } = store.getState();
+
+  if (!refreshToken){
+    replace('/');
+  }
+};
+
 ReactDOM.render((
   <Provider store={store}>
     <Router history={history} onUpdate={() => scrollTo(0, 0)}>
       <Route path="/" component={Home} />
       <Route path="/success" component={HomeSuccess} />
       <Route path="/error" component={Error} />
-      <Route path="/" component={({ children }) => children}>
+      <Route path="/" component={({ children }) => children} onEnter={redirectUnauthorised}>
         <Route path="register" component={RegisterEmail} />
         <Route path="register/:itemId" component={RegisterEmail} />
         <Route path="register//success" component={RegisterSuccessWithoutPurchase} />
@@ -77,13 +86,13 @@ ReactDOM.render((
         <Route path="profile/logout" component={LogoutProfile} />
         <Route path="help" component={Help} />
         <Route path="help/success" component={HelpSuccess} />
-        <Route path=":storeCode"
-          onEnter={(nextState, replace) => {
-            const { params: { storeCode }, location: { query: { code: emailToken } } } = nextState;
-            store.dispatch(performInitialise({ storeCode, emailToken }));
-            replace('/store');
-          } } />
       </Route>
+      <Route path="/:storeCode"
+        onEnter={(nextState, replace) => {
+          const { params: { storeCode }, location: { query: { code: emailToken } } } = nextState;
+          store.dispatch(performInitialise({ storeCode, emailToken }));
+          replace('/store');
+        } } />
     </Router>
   </Provider>
 ), document.getElementById('root'));
