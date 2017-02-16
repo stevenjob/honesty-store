@@ -524,6 +524,11 @@
     }
   },
   "Outputs": {
+    "Vpc": {
+      "Value": {
+        "Ref": "Vpc"
+      }
+    },
     "SubnetA": {
       "Value": {
         "Ref": "SubnetA"

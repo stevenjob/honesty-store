@@ -2,7 +2,7 @@ import { ELBv2 } from 'aws-sdk';
 import * as winston from 'winston';
 import { describeAll } from '../describe';
 
-export const ensureTargetGroup = async ({ name }) => {
+export const ensureTargetGroup = async ({ name, vpc }) => {
   const elbv2 = new ELBv2({ apiVersion: '2015-12-01' });
 
   const response = await elbv2
@@ -10,7 +10,7 @@ export const ensureTargetGroup = async ({ name }) => {
       Name: name,
       Protocol: 'HTTP',
       Port: 80,
-      VpcId: 'vpc-d68ecdb2'
+      VpcId: vpc
     })
     .promise();
 

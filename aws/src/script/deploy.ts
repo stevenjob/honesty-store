@@ -146,7 +146,8 @@ export default async ({ branch, dirs }) => {
     value: loadBalancer.DNSName
   });
   const defaultTargetGroup = await ensureTargetGroup({
-    name: generateName({ branch, dir: defaultTargetGroupDir })
+    name: generateName({ branch, dir: defaultTargetGroupDir }),
+    vpc: stack.Vpc
   });
   await ensureListener({
     loadBalancerArn: loadBalancer.LoadBalancerArn,
@@ -168,7 +169,8 @@ export default async ({ branch, dirs }) => {
       retention: isLive(branch) ? 30 : 1
     });
     const targetGroup = await ensureTargetGroup({
-      name: generateName({ branch, dir })
+      name: generateName({ branch, dir }),
+      vpc: stack.Vpc
     });
     await ensureRule({
       listenerArn: listener.ListenerArn,
