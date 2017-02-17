@@ -45,6 +45,5 @@ export const performSupport = ({ message, emailAddress }) => async (dispatch, ge
 
   } catch (e) {
     dispatch(supportFailure(e));
-    history.push(`/error`);
   }
 };

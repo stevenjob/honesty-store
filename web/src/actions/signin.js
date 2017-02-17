@@ -45,7 +45,6 @@ export const performSignin = ({ itemId, emailAddress }) => async (dispatch, getS
       history.push(`/register/${itemParam}/${emailAddress}`);
     } else {
       dispatch(signinFailure(e));
-      history.push(`/error`);
     }
   }
 };

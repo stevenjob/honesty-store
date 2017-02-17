@@ -38,6 +38,5 @@ export const performRegister = ({ storeCode }) => async (dispatch, getState) => 
     dispatch(registerSuccess(response));
   } catch (e) {
     dispatch(registerFailure(e));
-    history.push(`/error`);
   }
 };

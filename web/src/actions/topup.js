@@ -42,6 +42,5 @@ export const performTopup = ({ amount }) => async (dispatch, getState) => {
 
   } catch (e) {
     dispatch(topupFailure(e));
-    history.push(`/error`);
   }
 };

@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route } from 'react-router';
+import { Router, Route, IndexRoute } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
-import Error from './chrome/error';
+import App from './app';
 import Home from './home/index';
 import HomeSuccess from './home/success';
 import Store from './store/index';
@@ -60,39 +60,38 @@ const redirectUnauthorised = (nextState, replace) => {
 ReactDOM.render((
   <Provider store={store}>
     <Router history={history} onUpdate={() => scrollTo(0, 0)}>
-      <Route path="/" component={Home} />
-      <Route path="/success" component={HomeSuccess} />
-      <Route path="/error" component={Error} />
-      <Route path="/" component={({ children }) => children} onEnter={redirectUnauthorised}>
-        <Route path="register" component={RegisterEmail} />
-        <Route path="register/:itemId" component={RegisterEmail} />
-        <Route path="register//success" component={RegisterSuccessWithoutPurchase} />
-        <Route path="register/:itemId/success" component={RegisterSuccessWithPurchase} />
-        <Route path="register/:itemId/partial" component={RegisterPartialSuccess} />
-        <Route path="register//:emailAddress" component={RegisterCard} />
-        <Route path="register/:itemId/:emailAddress" component={RegisterCard} />
-        <Route path="signin/success" component={SignInSuccess} />
-        <Route path="store" component={Store} />
-        <Route path="item/:itemId" component={ItemDetail} />
-        <Route path="item/:itemId/success" component={ItemPurchaseSuccess} />
-        <Route path="topup" component={TopupAmount} />
-        <Route path="topup/success" component={TopupSuccess} />
-        <Route path="topup/:amount" component={TopupExistingCard} />
-        <Route path="topup/:amount/new" component={TopupNewCard} />
-        <Route path="history" component={History} />
-        <Route path="profile" component={Profile} />
-        <Route path="profile/close" component={CloseProfile} />
-        <Route path="profile/edit" component={EditProfile} />
-        <Route path="profile/logout" component={LogoutProfile} />
-        <Route path="help" component={Help} />
-        <Route path="help/success" component={HelpSuccess} />
+      <Route path="/" component={App} >
+        <IndexRoute component={Home} />
+        <Route path="success" component={HomeSuccess} />
+        <Route path="register" component={RegisterEmail} onEnter={redirectUnauthorised} />
+        <Route path="register/:itemId" component={RegisterEmail} onEnter={redirectUnauthorised} />
+        <Route path="register//success" component={RegisterSuccessWithoutPurchase} onEnter={redirectUnauthorised} />
+        <Route path="register/:itemId/success" component={RegisterSuccessWithPurchase} onEnter={redirectUnauthorised} />
+        <Route path="register/:itemId/partial" component={RegisterPartialSuccess} onEnter={redirectUnauthorised} />
+        <Route path="register//:emailAddress" component={RegisterCard} onEnter={redirectUnauthorised} />
+        <Route path="register/:itemId/:emailAddress" component={RegisterCard} onEnter={redirectUnauthorised} />
+        <Route path="signin/success" component={SignInSuccess} onEnter={redirectUnauthorised} />
+        <Route path="store" component={Store} onEnter={redirectUnauthorised} />
+        <Route path="item/:itemId" component={ItemDetail} onEnter={redirectUnauthorised} />
+        <Route path="item/:itemId/success" component={ItemPurchaseSuccess} onEnter={redirectUnauthorised} />
+        <Route path="topup" component={TopupAmount} onEnter={redirectUnauthorised} />
+        <Route path="topup/success" component={TopupSuccess} onEnter={redirectUnauthorised} />
+        <Route path="topup/:amount" component={TopupExistingCard} onEnter={redirectUnauthorised} />
+        <Route path="topup/:amount/new" component={TopupNewCard} onEnter={redirectUnauthorised} />
+        <Route path="history" component={History} onEnter={redirectUnauthorised} />
+        <Route path="profile" component={Profile} onEnter={redirectUnauthorised} />
+        <Route path="profile/close" component={CloseProfile} onEnter={redirectUnauthorised} />
+        <Route path="profile/edit" component={EditProfile} onEnter={redirectUnauthorised} />
+        <Route path="profile/logout" component={LogoutProfile} onEnter={redirectUnauthorised} />
+        <Route path="help" component={Help} onEnter={redirectUnauthorised} />
+        <Route path="help/success" component={HelpSuccess} onEnter={redirectUnauthorised} />
+        <Route path=":storeCode"
+          onEnter={(nextState, replace) => {
+            const { params: { storeCode }, location: { query: { code: emailToken } } } = nextState;
+            store.dispatch(performInitialise({ storeCode, emailToken }));
+            replace('/store');
+          } } />
       </Route>
-      <Route path="/:storeCode"
-        onEnter={(nextState, replace) => {
-          const { params: { storeCode }, location: { query: { code: emailToken } } } = nextState;
-          store.dispatch(performInitialise({ storeCode, emailToken }));
-          replace('/store');
-        } } />
     </Router>
   </Provider>
 ), document.getElementById('root'));

@@ -1,4 +1,3 @@
-import history from '../history';
 import apifetch from './apirequest';
 
 export const SESSION_REQUEST = 'SESSION_REQUEST';
@@ -51,6 +50,5 @@ export const performSession = () => async (dispatch, getState) => {
     }
 
     dispatch(sessionFailure(e));
-    history.push(`/error`);
   }
 };

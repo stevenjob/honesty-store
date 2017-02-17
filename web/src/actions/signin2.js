@@ -48,7 +48,5 @@ export const performSignin2 = ({ emailToken }) => async (dispatch, getState) => 
     } else {
       dispatch(signin2Failure(e));
     }
-
-    history.push(`/error`);
   }
 };
