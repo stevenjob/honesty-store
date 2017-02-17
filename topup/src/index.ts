@@ -37,6 +37,10 @@ const stripeForUser = ({ test }) => {
   return test ? stripeTest : stripeProd;
 };
 
+const hadSuccessfulTopup = (topupAccount: TopupAccount) => {
+  return topupAccount.stripe && topupAccount.stripe.performedInitialTopup;
+};
+
 const get = async ({ userId }): Promise<TopupAccount> => {
   assertValidUserId(userId);
 
@@ -249,6 +253,7 @@ const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, t
   });
 
   topupAccount.stripe.nextChargeToken = uuid();
+  topupAccount.stripe.performedInitialTopup = true;
   await update({ topupAccount });
 
   return {
@@ -258,7 +263,7 @@ const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, t
 };
 
 const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupAccount> => {
-  if (stripeDetailsValid(topupAccount)) {
+  if (stripeDetailsValid(topupAccount) && hadSuccessfulTopup(topupAccount)) {
     throw new Error(`Already have stripe details for '${topupAccount.accountId}'`);
   }
 
@@ -266,7 +271,8 @@ const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupA
     ...topupAccount,
     stripe: {
       customer,
-      nextChargeToken: uuid()
+      nextChargeToken: uuid(),
+      performedInitialTopup: false
     }
   };
 
@@ -307,7 +313,7 @@ const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: Top
   let topupAccount = await getOrCreate({ key, accountId, userId });
 
   if (stripeToken) {
-    if (stripeDetailsValid(topupAccount)) {
+    if (stripeDetailsValid(topupAccount) && hadSuccessfulTopup(topupAccount)) {
       throw new Error(`Already have stripe details for '${accountId}'`);
     }
 

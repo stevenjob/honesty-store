@@ -10,6 +10,7 @@ export interface TopupAccount {
   stripe?: {
     customer: any;
     nextChargeToken: string;
+    performedInitialTopup: boolean;
   };
 }
 
