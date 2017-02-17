@@ -71,7 +71,7 @@ const ItemDetail = ({
 
   const UnregisteredPurchaseButton = <p>
     <Button onClick={() => history.push(`/register/${id}`)}>
-      {`Purchase 1 ${name}`}
+      {`Pay for 1 ${name}`}
     </Button>
   </p>;
 

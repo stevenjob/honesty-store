@@ -68,7 +68,7 @@ class Card extends React.Component {
   getConfirmButtonText() {
     const topUpText = 'Confirm £5 Top Up';
     const { itemId } = this.props;
-    return itemId ? `${topUpText} & Purchase` : topUpText;
+    return itemId ? `${topUpText} & Pay` : topUpText;
   }
 
   render() {
