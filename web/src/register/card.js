@@ -65,6 +65,12 @@ class Card extends React.Component {
     return (error != null && error.param === name) ? { borderBottomColor: DANGER } : {};
   }
 
+  getConfirmButtonText() {
+    const topUpText = 'Confirm £5 Top Up';
+    const { itemId } = this.props;
+    return itemId ? `${topUpText} & Purchase` : topUpText;
+  }
+
   render() {
     const { error } = this.props;
     const { number, exp, cvc } = this.state;
@@ -115,7 +121,7 @@ class Card extends React.Component {
             style={this.style('cvc', error)}
             onChange={(e) => this.handleCVCChange(e)} />
         </p>
-        <p><Button onClick={(e) => this.handleSubmit(e)}>Confirm £5 Top Up & Purchase</Button></p>
+        <p><Button onClick={(e) => this.handleSubmit(e)}>{this.getConfirmButtonText()}</Button></p>
       </form>
     </Page>;
   }
