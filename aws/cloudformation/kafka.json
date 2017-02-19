@@ -1,0 +1,470 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "",
+  "Parameters": {
+    "NetworkStackName": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "Dns": {
+      "Type": "AWS::Route53::HostedZone",
+      "Properties": {
+        "Name": "zookeeper.internal",
+        "VPCs": [
+          {
+            "VPCId": {
+              "Fn::ImportValue": {
+                "Fn::Sub": "${NetworkStackName}-Vpc"
+              }
+            },
+            "VPCRegion": {
+              "Ref": "AWS::Region"
+            }
+          }
+        ]
+      }
+    },
+    "LogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "RetentionInDays": "1"
+      }
+    },
+    "ZookeeperServiceRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2008-10-17",
+          "Statement": [
+            {
+              "Sid": "",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "changeDnsResourceRecordSet",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": "route53:ChangeResourceRecordSets",
+                  "Resource": {
+                    "Fn::Sub": "arn:aws:route53:::hostedzone/${Dns}"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "ZookeeperTaskDefinition1": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "NetworkMode": "host",
+        "ContainerDefinitions": [
+          {
+            "Name": "zookeeper1",
+            "Image": "confluentinc/cp-zookeeper",
+            "Cpu": "128",
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "LogGroup"
+                },
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                },
+                "awslogs-stream-prefix": "zookeeper1"
+              }
+            },
+            "Memory": "128",
+            "Environment": [
+              {
+                "Name": "ZOOKEEPER_SERVER_ID",
+                "Value": "1"
+              },
+              {
+                "Name": "ZOOKEEPER_CLIENT_PORT",
+                "Value": "2181"
+              },
+              {
+                "Name": "ZOOKEEPER_QUORUM_LISTEN_ON_ALL_IPS",
+                "Value": "true"
+              },
+              {
+                "Name": "ZOOKEEPER_TICK_TIME",
+                "Value": "2000"
+              },
+              {
+                "Name": "ZOOKEEPER_INIT_LIMIT",
+                "Value": "5"
+              },
+              {
+                "Name": "ZOOKEEPER_SYNC_LIMIT",
+                "Value": "2"
+              },
+              {
+                "Name": "ZOOKEEPER_SERVERS",
+                "Value": {
+                  "Fn::Join": [
+                    ";",
+                    [
+                      "1.zookeeper.internal:2888:3888",
+                      "2.zookeeper.internal:2888:3888",
+                      "3.zookeeper.internal:2888:3888"
+                    ]
+                  ]
+                }
+              }
+            ],
+            "Essential": "true"
+          },
+          {
+            "Name": "dns1",
+            "Image": "fstab/aws-cli",
+            "EntryPoint": [
+              "sh",
+              "-c",
+              {
+                "Fn::Join": [
+                  "",
+                  [
+                    "/home/aws/aws/env/bin/aws route53 change-resource-record-sets --hosted-zone-id ",
+                    {
+                      "Ref": "Dns"
+                    },
+                    " --change-batch ",
+                    "\"{\\\"Changes\\\":[{",
+                    "\\\"Action\\\":\\\"UPSERT\\\",",
+                    "\\\"ResourceRecordSet\\\":{",
+                    "\\\"Name\\\":\\\"",
+                    "1.zookeeper.internal",
+                    "\\\",",
+                    "\\\"Type\\\":\\\"A\\\",",
+                    "\\\"TTL\\\":10,",
+                    "\\\"ResourceRecords\\\":[{",
+                    "\\\"Value\\\":\\\"",
+                    "$(wget -q -O - http://169.254.169.254/latest/meta-data/local-ipv4)",
+                    "\\\"}]}}]}\""
+                  ]
+                ]
+              }
+            ],
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "LogGroup"
+                },
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                },
+                "awslogs-stream-prefix": "dns1"
+              }
+            },
+            "Memory": "128",
+            "Essential": "false"
+          }
+        ],
+        "TaskRoleArn": {
+          "Ref": "ZookeeperServiceRole"
+        }
+      }
+    },
+    "ZookeeperTaskDefinition2": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "NetworkMode": "host",
+        "ContainerDefinitions": [
+          {
+            "Name": "zookeeper2",
+            "Image": "confluentinc/cp-zookeeper",
+            "Cpu": "128",
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "LogGroup"
+                },
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                },
+                "awslogs-stream-prefix": "zookeeper2"
+              }
+            },
+            "Memory": "128",
+            "Environment": [
+              {
+                "Name": "ZOOKEEPER_SERVER_ID",
+                "Value": "2"
+              },
+              {
+                "Name": "ZOOKEEPER_CLIENT_PORT",
+                "Value": "2181"
+              },
+              {
+                "Name": "ZOOKEEPER_QUORUM_LISTEN_ON_ALL_IPS",
+                "Value": "true"
+              },
+              {
+                "Name": "ZOOKEEPER_TICK_TIME",
+                "Value": "2000"
+              },
+              {
+                "Name": "ZOOKEEPER_INIT_LIMIT",
+                "Value": "5"
+              },
+              {
+                "Name": "ZOOKEEPER_SYNC_LIMIT",
+                "Value": "2"
+              },
+              {
+                "Name": "ZOOKEEPER_SERVERS",
+                "Value": {
+                  "Fn::Join": [
+                    ";",
+                    [
+                      "1.zookeeper.internal:2888:3888",
+                      "2.zookeeper.internal:2888:3888",
+                      "3.zookeeper.internal:2888:3888"
+                    ]
+                  ]
+                }
+              }
+            ],
+            "Essential": "true"
+          },
+          {
+            "Name": "dns2",
+            "Image": "fstab/aws-cli",
+            "EntryPoint": [
+              "sh",
+              "-c",
+              {
+                "Fn::Join": [
+                  "",
+                  [
+                    "/home/aws/aws/env/bin/aws route53 change-resource-record-sets --hosted-zone-id ",
+                    {
+                      "Ref": "Dns"
+                    },
+                    " --change-batch ",
+                    "\"{\\\"Changes\\\":[{",
+                    "\\\"Action\\\":\\\"UPSERT\\\",",
+                    "\\\"ResourceRecordSet\\\":{",
+                    "\\\"Name\\\":\\\"",
+                    "2.zookeeper.internal",
+                    "\\\",",
+                    "\\\"Type\\\":\\\"A\\\",",
+                    "\\\"TTL\\\":10,",
+                    "\\\"ResourceRecords\\\":[{",
+                    "\\\"Value\\\":\\\"",
+                    "$(wget -q -O - http://169.254.169.254/latest/meta-data/local-ipv4)",
+                    "\\\"}]}}]}\""
+                  ]
+                ]
+              }
+            ],
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "LogGroup"
+                },
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                },
+                "awslogs-stream-prefix": "dns2"
+              }
+            },
+            "Memory": "128",
+            "Essential": "false"
+          }
+        ],
+        "TaskRoleArn": {
+          "Ref": "ZookeeperServiceRole"
+        }
+      }
+    },
+    "ZookeeperTaskDefinition3": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "NetworkMode": "host",
+        "ContainerDefinitions": [
+          {
+            "Name": "zookeeper3",
+            "Image": "confluentinc/cp-zookeeper",
+            "Cpu": "128",
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "LogGroup"
+                },
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                },
+                "awslogs-stream-prefix": "zookeeper3"
+              }
+            },
+            "Memory": "128",
+            "Environment": [
+              {
+                "Name": "ZOOKEEPER_SERVER_ID",
+                "Value": "3"
+              },
+              {
+                "Name": "ZOOKEEPER_CLIENT_PORT",
+                "Value": "2181"
+              },
+              {
+                "Name": "ZOOKEEPER_QUORUM_LISTEN_ON_ALL_IPS",
+                "Value": "true"
+              },
+              {
+                "Name": "ZOOKEEPER_TICK_TIME",
+                "Value": "2000"
+              },
+              {
+                "Name": "ZOOKEEPER_INIT_LIMIT",
+                "Value": "5"
+              },
+              {
+                "Name": "ZOOKEEPER_SYNC_LIMIT",
+                "Value": "2"
+              },
+              {
+                "Name": "ZOOKEEPER_SERVERS",
+                "Value": {
+                  "Fn::Join": [
+                    ";",
+                    [
+                      "1.zookeeper.internal:2888:3888",
+                      "2.zookeeper.internal:2888:3888",
+                      "3.zookeeper.internal:2888:3888"
+                    ]
+                  ]
+                }
+              }
+            ],
+            "Essential": "true"
+          },
+          {
+            "Name": "dns3",
+            "Image": "fstab/aws-cli",
+            "EntryPoint": [
+              "sh",
+              "-c",
+              {
+                "Fn::Join": [
+                  "",
+                  [
+                    "/home/aws/aws/env/bin/aws route53 change-resource-record-sets --hosted-zone-id ",
+                    {
+                      "Ref": "Dns"
+                    },
+                    " --change-batch ",
+                    "\"{\\\"Changes\\\":[{",
+                    "\\\"Action\\\":\\\"UPSERT\\\",",
+                    "\\\"ResourceRecordSet\\\":{",
+                    "\\\"Name\\\":\\\"",
+                    "3.zookeeper.internal",
+                    "\\\",",
+                    "\\\"Type\\\":\\\"A\\\",",
+                    "\\\"TTL\\\":10,",
+                    "\\\"ResourceRecords\\\":[{",
+                    "\\\"Value\\\":\\\"",
+                    "$(wget -q -O - http://169.254.169.254/latest/meta-data/local-ipv4)",
+                    "\\\"}]}}]}\""
+                  ]
+                ]
+              }
+            ],
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "LogGroup"
+                },
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                },
+                "awslogs-stream-prefix": "dns3"
+              }
+            },
+            "Memory": "128",
+            "Essential": "false"
+          }
+        ],
+        "TaskRoleArn": {
+          "Ref": "ZookeeperServiceRole"
+        }
+      }
+    },
+    "ZookeeperService1": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Fn::ImportValue": {
+            "Fn::Sub": "${NetworkStackName}-Cluster"
+          }
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": "100",
+          "MinimumHealthyPercent": "0"
+        },
+        "DesiredCount": "1",
+        "TaskDefinition": {
+          "Ref": "ZookeeperTaskDefinition1"
+        }
+      }
+    },
+    "ZookeeperService2": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Fn::ImportValue": {
+            "Fn::Sub": "${NetworkStackName}-Cluster"
+          }
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": "100",
+          "MinimumHealthyPercent": "0"
+        },
+        "DesiredCount": "1",
+        "TaskDefinition": {
+          "Ref": "ZookeeperTaskDefinition2"
+        }
+      }
+    },
+    "ZookeeperService3": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Fn::ImportValue": {
+            "Fn::Sub": "${NetworkStackName}-Cluster"
+          }
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": "100",
+          "MinimumHealthyPercent": "0"
+        },
+        "DesiredCount": "1",
+        "TaskDefinition": {
+          "Ref": "ZookeeperTaskDefinition3"
+        }
+      }
+    }
+  },
+  "Outputs": {}
+}
