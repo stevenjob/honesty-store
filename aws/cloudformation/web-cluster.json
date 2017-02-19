@@ -527,31 +527,71 @@
     "Vpc": {
       "Value": {
         "Ref": "Vpc"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-Vpc"
+        }
       }
     },
     "SubnetA": {
       "Value": {
         "Ref": "SubnetA"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-SubnetA"
+        }
       }
     },
     "SubnetB": {
       "Value": {
         "Ref": "SubnetB"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-SubnetB"
+        }
       }
     },
     "SubnetC": {
       "Value": {
         "Ref": "SubnetC"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-SubnetC"
+        }
       }
     },
     "SecurityGroupAllowAll": {
       "Value": {
         "Ref": "SecurityGroupAllowAll"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-SecurityGroupAllowAll"
+        }
+      }
+    },
+    "SecurityGroupAllowVpc": {
+      "Value": {
+        "Ref": "SecurityGroupAllowVpc"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-SecurityGroupAllowVpc"
+        }
       }
     },
     "Cluster": {
       "Value": {
         "Ref": "Cluster"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-Cluster"
+        }
       }
     }
   }
