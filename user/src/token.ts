@@ -1,6 +1,6 @@
 import jwt = require('jsonwebtoken');
 import ms = require('ms');
-import { ErrorCode, CodedError } from '../../service/src/error';
+import { CodedError, ErrorCode } from '../../service/src/error';
 import { warn } from '../../service/src/log';
 
 const secret = process.env.USER_TOKEN_SECRET;

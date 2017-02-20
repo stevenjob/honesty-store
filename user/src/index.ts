@@ -11,7 +11,7 @@ import { error, info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { createAccount } from '../../transaction/src/client';
 import { TEST_DATA_USER_ID, User, UserProfile, UserWithAccessAndRefreshTokens, UserWithAccessToken } from './client';
-import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken, verifyMagicLinkToken } from './token';
+import { signAccessToken, signRefreshToken, verifyAccessToken, verifyMagicLinkToken, verifyRefreshToken } from './token';
 
 config.region = process.env.AWS_REGION;
 
