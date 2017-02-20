@@ -91,21 +91,23 @@ export const pruneServices = async ({ cluster, filter = (_: { name }) => false }
 
   winston.debug('service: serviceArnsToPrune', serviceArnsToPrune);
 
-  const updatePromises = serviceArnsToPrune.map(service =>
-    ecs.updateService({ cluster, service, desiredCount: 0 })
-      .promise()
-  );
+  if (serviceArnsToPrune.length > 0) {
+    const updatePromises = serviceArnsToPrune.map(service =>
+      ecs.updateService({ cluster, service, desiredCount: 0 })
+        .promise()
+    );
 
-  await Promise.all(updatePromises);
+    await Promise.all(updatePromises);
 
-  await waitForServicesStable({ cluster, services: serviceArnsToPrune });
+    await waitForServicesStable({ cluster, services: serviceArnsToPrune });
 
-  winston.debug('service: services stable', listResponse);
+    winston.debug('service: services stable', listResponse);
 
-  const deletePromises = serviceArnsToPrune.map(service =>
-    ecs.deleteService({ cluster, service })
-      .promise()
-  );
+    const deletePromises = serviceArnsToPrune.map(service =>
+      ecs.deleteService({ cluster, service })
+        .promise()
+    );
 
-  await Promise.all(deletePromises);
+    await Promise.all(deletePromises);
+  }
 };
