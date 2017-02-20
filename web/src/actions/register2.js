@@ -104,7 +104,7 @@ export const performRegister2 = ({ itemID, topUpAmount, emailAddress, cardDetail
         emailAddress
       },
       token: getState().accessToken,
-    });
+    }, dispatch, getState);
 
     dispatch(register2Success(response));
 

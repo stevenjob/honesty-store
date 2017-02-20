@@ -33,7 +33,7 @@ export const performSignin2 = ({ emailToken }) => async (dispatch, getState) => 
       url: '/api/v1/signin2',
       token: emailToken,
       body: {}
-    });
+    }, dispatch, getState);
 
     dispatch(signin2Success(response));
     history.push(`/store`);

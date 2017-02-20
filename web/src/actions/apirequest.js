@@ -1,4 +1,7 @@
-export default async ({ url, token, body }) => {
+import { performSession } from './session';
+
+const apifetch = async ({ url, token, body }) => {
+
   const headers = {};
 
   if (body) {
@@ -31,8 +34,8 @@ export default async ({ url, token, body }) => {
     throw Object.assign(
       e,
       {
-        code: 'JsonParseError';
-        status: response.status;
+        code: 'JsonParseError',
+        status: response.status
       });
   }
 
@@ -46,4 +49,18 @@ export default async ({ url, token, body }) => {
   }
 
   return json.response;
+};
+
+export default async (params, dispatch, getState) => {
+  try {
+    return await apifetch(params);
+
+  } catch (error) {
+    if (error.code !== 'AccessTokenExpired') {
+      throw error;
+    }
+
+    await performSession()(dispatch, getState);
+    return await apifetch(params);
+  }
 };

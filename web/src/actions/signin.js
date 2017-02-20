@@ -33,7 +33,7 @@ export const performSignin = ({ itemId, emailAddress }) => async (dispatch, getS
       body: {
         emailAddress
       }
-    });
+    }, dispatch, getState);
 
     dispatch(signinSuccess(response));
     history.push(`/signin/success`);

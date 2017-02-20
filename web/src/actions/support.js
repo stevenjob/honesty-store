@@ -38,7 +38,7 @@ export const performSupport = ({ message, emailAddress }) => async (dispatch, ge
         userAgent
       },
       token: getState().accessToken
-    });
+    }, dispatch, getState);
 
     dispatch(supportSuccess(response));
     history.push(`/help/success`);

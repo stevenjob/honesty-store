@@ -32,7 +32,7 @@ export const performLogout = () => async (dispatch, getState) => {
     const response = await apifetch({
       url: '/api/v1/logout',
       token: getState().accessToken
-    });
+    }, dispatch, getState);
 
     dispatch(logoutSuccess(response));
     history.push(`/`);

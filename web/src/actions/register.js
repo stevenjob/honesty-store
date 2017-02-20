@@ -33,7 +33,7 @@ export const performRegister = ({ storeCode }) => async (dispatch, getState) => 
       body: {
         storeCode
       }
-    });
+    }, dispatch, getState);
 
     dispatch(registerSuccess(response));
   } catch (e) {

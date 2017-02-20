@@ -35,7 +35,7 @@ export const performTopup = ({ amount }) => async (dispatch, getState) => {
         amount
       },
       token: getState().accessToken
-    });
+    }, dispatch, getState);
 
     dispatch(topupSuccess(response));
     history.push(`/topup/success`);

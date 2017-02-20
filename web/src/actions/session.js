@@ -39,7 +39,7 @@ export const performSession = () => async (dispatch, getState) => {
     const response = await apifetch({
       url: '/api/v1/session',
       token: getState().refreshToken
-    });
+    }, dispatch, getState);
 
     dispatch(sessionSuccess(response));
 
