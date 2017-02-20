@@ -1,5 +1,4 @@
 import jwt = require('jsonwebtoken');
-import ms = require('ms');
 import { CodedError, ErrorCode } from '../../service/src/error';
 import { warn } from '../../service/src/log';
 
@@ -16,7 +15,7 @@ export const signRefreshToken = ({ userId, refreshToken }) => signToken({ userId
 
 const verifyToken = (key, token, expiredErrorCode: ErrorCode) => {
   try {
-    return jwt.verify(token, secret, { algorithms: ['HS256'], clockTolerance: ms('30s') });
+    return jwt.verify(token, secret, { algorithms: ['HS256'], clockTolerance: 5 });
   } catch (e) {
     warn(key, `token failed validation`, { e, token });
 
