@@ -9,7 +9,7 @@ import { CodedError } from '../../service/src/error';
 import { Key } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
-import { assertBalanceWithinLimit, createTransaction, getAccount, TransactionDetails } from '../../transaction/src/client/index';
+import { assertBalanceWithinLimit, createTransaction, TransactionDetails } from '../../transaction/src/client/index';
 import { CardDetails, TopupAccount, TopupRequest } from './client/index';
 
 const fixedTopupAmount = 500; // £5
@@ -35,15 +35,6 @@ const assertValidTopupAccount = (topupAccount: TopupAccount) => {
 
 const stripeForUser = ({ test }) => {
   return test ? stripeTest : stripeProd;
-};
-
-const hadSuccessfulTopup = async (key, topupAccount: TopupAccount) => {
-  if (!topupAccount.stripe) {
-    return false;
-  }
-
-  const txAccount = await getAccount(key, topupAccount.accountId);
-  return txAccount.transactions.some(tx => tx.type === 'topup');
 };
 
 const get = async ({ userId }): Promise<TopupAccount> => {
@@ -214,14 +205,10 @@ const createStripeCharge = async ({ key, topupAccount, amount }: { key: Key, top
   }
 };
 
-const stripeDetailsValid = (topupAccount: TopupAccount) => {
-  return topupAccount.stripe
-    && topupAccount.stripe.customer
-    && topupAccount.stripe.nextChargeToken;
-};
-
 const assertValidStripeDetails = (topupAccount) => {
-  if (!stripeDetailsValid(topupAccount)) {
+  if (!topupAccount.stripe
+  || !topupAccount.stripe.customer
+  || !topupAccount.stripe.nextChargeToken) {
     // tslint:disable-next-line:max-line-length
     throw new CodedError(
       'NoCardDetailsPresent',
@@ -266,11 +253,7 @@ const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, t
   };
 };
 
-const recordCustomerDetails = async ({ key, customer, topupAccount }): Promise<TopupAccount> => {
-  if (stripeDetailsValid(topupAccount) && await hadSuccessfulTopup(key, topupAccount)) {
-    throw new Error(`Already have stripe details for '${topupAccount.accountId}'`);
-  }
-
+const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupAccount> => {
   const newAccount = {
     ...topupAccount,
     stripe: {
@@ -301,7 +284,7 @@ const addStripeTokenToAccount = async ({ key, topupAccount, stripeToken }): Prom
     throw userErrorFromStripeError(e);
   }
 
-  return await recordCustomerDetails({ key, customer, topupAccount });
+  return await recordCustomerDetails({ customer, topupAccount });
 };
 
 const assertValidTopupAmount = (amount) => {
@@ -316,10 +299,6 @@ const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: Top
   let topupAccount = await getOrCreate({ key, accountId, userId });
 
   if (stripeToken) {
-    if (stripeDetailsValid(topupAccount) && await hadSuccessfulTopup(key, topupAccount)) {
-      throw new Error(`Already have stripe details for '${accountId}'`);
-    }
-
     topupAccount = await addStripeTokenToAccount({ key, topupAccount, stripeToken });
   }
 
