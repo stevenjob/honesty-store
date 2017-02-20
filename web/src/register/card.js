@@ -38,11 +38,25 @@ class Card extends React.Component {
   }
 
   handleExpChange(event) {
-    const matches = event.target.value.match(/\d/g);
+    let matches = event.target.value.match(/\d/g);
+
+    const previousExp = this.state.exp;
+    const separator = ' / ';
+    const separatorStartIndex = previousExp.indexOf(separator);
+
+    if (separatorStartIndex > -1) {
+      const separatorEndIndex = separatorStartIndex + (separator.length - 1);
+      const newExp = event.target.value;
+      const removeSeparatorAndPriorDigit = previousExp.length === separatorEndIndex + 1 && newExp.length === separatorEndIndex;
+      if (removeSeparatorAndPriorDigit) {
+        matches = matches.slice(0, matches.length - 1);
+      }
+    }
+
     const numbers = matches == null ? [] : [...matches];
     const exp = numbers.reduce((output, number, index) => {
-      const separator = (index % 2 === 0 && index > 0) ? ' / ' : '';
-      return `${output}${separator}${number}`;
+      const suffix = index === 1 ? `${separator}` : ``;
+      return `${output}${number}${suffix}`;
     }, '');
     this.setState({ exp: exp.substr(0, 7) }, setCursorPosition(event.target));
   }
