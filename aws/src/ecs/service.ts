@@ -75,14 +75,6 @@ const parseServiceArn = (serviceArn) => {
   };
 };
 
-const retireService = async ({ cluster, service }) => {
-  const ecs = new ECS({ apiVersion: '2014-11-13' });
-  await ecs.updateService({ cluster, service, desiredCount: 0 })
-    .promise();
-  await ecs.deleteService({ cluster, service })
-    .promise();
-};
-
 export const pruneServices = async ({ cluster, filter = (_: { name }) => false }) => {
   const ecs = new ECS({ apiVersion: '2014-11-13' });
 
@@ -99,7 +91,21 @@ export const pruneServices = async ({ cluster, filter = (_: { name }) => false }
 
   winston.debug('service: serviceArnsToPrune', serviceArnsToPrune);
 
-  const promises = serviceArnsToPrune.map(service => retireService({ cluster, service }));
+  const updatePromises = serviceArnsToPrune.map(service =>
+    ecs.updateService({ cluster, service, desiredCount: 0 })
+      .promise()
+  );
 
-  await Promise.all(promises);
+  await Promise.all(updatePromises);
+
+  await waitForServicesStable({ cluster, services: serviceArnsToPrune });
+
+  winston.debug('service: services stable', listResponse);
+
+  const deletePromises = serviceArnsToPrune.map(service =>
+    ecs.deleteService({ cluster, service })
+      .promise()
+  );
+
+  await Promise.all(deletePromises);
 };
