@@ -470,13 +470,13 @@
         }
       }
     },
-    "AlarmCpuReservationHigh": {
+    "AlarmMemoryReservationHigh": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ActionsEnabled": "true",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "EvaluationPeriods": "1",
-        "MetricName": "CPUReservation",
+        "MetricName": "MemoryReservation",
         "Namespace": "AWS/ECS",
         "Period": "60",
         "Statistic": "Maximum",
@@ -496,13 +496,13 @@
         ]
       }
     },
-    "AlarmCpuReservationLow": {
+    "AlarmMemoryReservationLow": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "ActionsEnabled": "true",
         "ComparisonOperator": "LessThanThreshold",
         "EvaluationPeriods": "1",
-        "MetricName": "CPUReservation",
+        "MetricName": "MemoryReservation",
         "Namespace": "AWS/ECS",
         "Period": "60",
         "Statistic": "Maximum",
