@@ -1,6 +1,6 @@
 import { performSession } from './session';
 
-const apifetch = async ({ url, token, body }) => {
+const apifetch = async ({ url, getToken, body }) => {
 
   const headers = {};
 
@@ -8,8 +8,8 @@ const apifetch = async ({ url, token, body }) => {
     headers['Content-Type'] = 'application/json';
   }
 
-  if (token) {
-    headers['Authorization'] = `Bearer: ${token}`;
+  if (getToken) {
+    headers['Authorization'] = `Bearer: ${getToken()}`;
   }
 
   let response;

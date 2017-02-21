@@ -31,7 +31,7 @@ export const performPurchase = ({ itemId, quantity }) => async (dispatch, getSta
   try {
     const response = await apifetch({
       url: '/api/v1/purchase',
-      token: getState().accessToken,
+      getToken: () => getState().accessToken,
       body: {
         itemID: itemId,
         quantity

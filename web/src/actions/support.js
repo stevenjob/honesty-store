@@ -37,7 +37,7 @@ export const performSupport = ({ message, emailAddress }) => async (dispatch, ge
         emailAddress,
         userAgent
       },
-      token: getState().accessToken
+      getToken: () => getState().accessToken
     }, dispatch, getState);
 
     dispatch(supportSuccess(response));
