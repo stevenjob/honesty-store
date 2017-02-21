@@ -3,11 +3,11 @@ import { performSession } from './session';
 import { performSignin2 } from './signin2';
 import history from '../history';
 
-export const INTIALISE = 'INTIALISE';
+export const INITIALISE = 'INITIALISE';
 
 const initialise = () => {
   return {
-    type: INTIALISE
+    type: INITIALISE
   };
 };
 
