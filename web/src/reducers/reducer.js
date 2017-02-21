@@ -279,14 +279,10 @@ export default (state = getInitialState(), action) => {
       };
     }
     case STORE_SUCCESS: {
-      console.log(state.pending);
       return {
         ...state,
         ...action.response,
-        pending: state.pending.filter(e => {
-          console.log(e);
-          return e !== 'store';
-        })
+        pending: state.pending.filter(e => e !== 'store')
       };
     }
     case STORE_FAILURE: {
