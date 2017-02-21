@@ -14,7 +14,11 @@ const Home = ({ performRegister }) =>
     <h3>Welcome to honesty.store</h3>
     <p>We're currently alpha testing our new service at a limited number of locations.</p>
     <p>If you have a store code and want to sign up, please enter it below</p>
-    <StoreBrowser onSubmit={(storeCode) => { console.log('On submit'); performRegister({ storeCode });}}/>
+    <StoreBrowser
+      onSubmit={(storeCode) => performRegister({ storeCode })}
+      buttonText="Browse Store"
+      storePlaceholder="your-store-code"
+    />
 
     <p>If you don't have a store code but would like to find out more, please enter your email address below</p>
     <form name="update"
@@ -25,7 +29,12 @@ const Home = ({ performRegister }) =>
         <input name="EMAIL" autoComplete="email" type="email" />
       </p>
       <p>
-        <Button onClick={() => document.forms.update.submit()}>Keep Me Updated</Button>
+        <Button
+          onClick={() => document.forms.update.submit()}
+
+        >
+          Keep Me Updated
+        </Button>
       </p>
     </form>
   </div>;

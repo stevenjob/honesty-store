@@ -8,7 +8,7 @@ import StoreBrowser from '../chrome/store-browser';
 import { performStoreChange } from '../actions/store';
 import './index.css';
 
-const Profile = ({ emailAddress, balance, performStoreChange }) => (
+const Profile = ({ emailAddress, balance, storeCode, performStoreChange }) => (
   <Page title="Profile"
     right={<Balance balance={balance} />}>
     <div>
@@ -24,7 +24,11 @@ const Profile = ({ emailAddress, balance, performStoreChange }) => (
         </div>
       </div>
       <div className="profile-store" style={{ borderColor: MUTED_TEXT, background: LIGHT_BACKGROUND }}>
-        <StoreBrowser onSubmit={(storeCode) => performStoreChange({ storeCode })} />
+        <StoreBrowser
+          onSubmit={(storeCode) => performStoreChange({ storeCode })}
+          buttonText="Change Store"
+          storePlaceholder={storeCode}
+        />
       </div>
       <ul className="profile-actions" style={{ borderColor: MUTED_TEXT, color: DANGER, background: LIGHT_BACKGROUND }}>
         <li style={{ borderColor: MUTED_TEXT }}><Link to={`/profile/logout`}>Log Out</Link></li>
@@ -35,9 +39,10 @@ const Profile = ({ emailAddress, balance, performStoreChange }) => (
 );
 
 
-const mapStateToProps = ({ user: { emailAddress, balance } }) => ({
+const mapStateToProps = ({ user: { emailAddress, balance }, store: { code } }) => ({
   emailAddress,
   balance: balance || 0,
+  storeCode: code
 });
 
 const mapDispatchToProps = { performStoreChange };

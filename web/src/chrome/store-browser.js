@@ -34,6 +34,7 @@ class StoreBrowser extends React.Component {
 
   render() {
     const { storeCode } = this.state;
+    const { buttonText, storePlaceholder } = this.props;
     return (
       <form onSubmit={(e) => this.openStore(e)}>
         <p className="home-store-code">
@@ -43,12 +44,12 @@ class StoreBrowser extends React.Component {
             autoCapitalize="off"
             value={storeCode}
             type="text"
-            placeholder="https://honesty.store/your-store-code"
+            placeholder={`https://honesty.store/${storePlaceholder}`}
             onFocus={(e) => this.handleStoreCodeChange(e)}
             onChange={(e) => this.handleStoreCodeChange(e)} />
         </p>
         <p>
-          <Button onClick={(e) => this.openStore(e)}>Browse Store</Button>
+          <Button onClick={(e) => this.openStore(e)}>{buttonText}</Button>
         </p>
       </form>
     );
