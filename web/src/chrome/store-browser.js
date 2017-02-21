@@ -6,6 +6,12 @@ const extractStoreCode = (url) => {
   return storeCode === 'honesty.store' ? '' : storeCode;
 };
 
+const setCursorPosition = (element) => () => {
+  requestAnimationFrame(() => {
+    element.selectionStart = element.selectionEnd = element.value.length;
+  });
+};
+
 class StoreBrowser extends React.Component {
 
   constructor(props) {
@@ -20,7 +26,7 @@ class StoreBrowser extends React.Component {
     const storeCode = extractStoreCode(value);
     this.setState({
       storeCode: `https://honesty.store/${storeCode}`
-    });
+    }, setCursorPosition(event.target));
   }
 
   openStore(e) {
