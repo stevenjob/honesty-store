@@ -18,6 +18,7 @@ export interface Transaction extends TransactionDetails {
 
 export interface Account {
   id: string;
+  created: number;
   balance: number;
   transactions: Transaction[];
 }

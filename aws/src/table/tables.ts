@@ -55,11 +55,13 @@ const dirToTable = {
     dummyData: [
       {
         id: 'b423607f-64de-441f-ac39-12d50aaedbe9',
+        created: 1487667277000,
         balance: 0,
         transactions: []
       },
       {
         id: '0b0117da-21b5-4a5e-9c18-7ad20691dd24',
+        created: 1487667277000,
         balance: 100,
         transactions: [
           {
@@ -72,6 +74,7 @@ const dirToTable = {
       },
       {
         id: '08ccf030-537a-4c81-9789-70476dad152a',
+        created: 1487667277000,
         balance: 123,
         transactions: [
           {

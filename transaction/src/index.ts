@@ -58,6 +58,7 @@ const createAccount = async ({ accountId }) => {
 
   const account: Account = {
     id: accountId,
+    created: Date.now(),
     balance: 0,
     transactions: []
   };
