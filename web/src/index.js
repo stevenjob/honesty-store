@@ -70,7 +70,7 @@ ReactDOM.render((
         <Route path="register/:itemId/partial" component={RegisterPartialSuccess} onEnter={redirectUnauthorised} />
         <Route path="register//:emailAddress" component={RegisterCard} onEnter={redirectUnauthorised} />
         <Route path="register/:itemId/:emailAddress" component={RegisterCard} onEnter={redirectUnauthorised} />
-        <Route path="signin/success" component={SignInSuccess} onEnter={redirectUnauthorised} />
+        <Route path="signin/success" component={SignInSuccess} />
         <Route path="store" component={Store} onEnter={redirectUnauthorised} />
         <Route path="item/:itemId" component={ItemDetail} onEnter={redirectUnauthorised} />
         <Route path="item/:itemId/success" component={ItemPurchaseSuccess} onEnter={redirectUnauthorised} />
