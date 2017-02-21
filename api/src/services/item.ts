@@ -54,7 +54,14 @@ const items = [
   {
     id: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
     name: 'Diet Coke (Fridge)',
-    image: 'misc-bar.svg',
+    image: 'diet-cola-can.svg',
+    weight: 400,
+    notes: 'Multipack not for individual resale. NCL trial only, Simon Watson sourcing'
+  },
+  {
+    id: 'd5d10152-3f8a-419b-9abd-6d6e916ea64a',
+    name: 'Coke Zero (Fridge)',
+    image: 'coca-cola-zero-can.svg',
     weight: 400,
     notes: 'Multipack not for individual resale. NCL trial only, Simon Watson sourcing'
   },
