@@ -3,6 +3,7 @@ import { TransactionAndBalance } from '../../../transaction/src/client/index';
 
 export interface TopupAccount {
   id: string;
+  created: number;
   accountId: string;
   userId: string;
   test: boolean;

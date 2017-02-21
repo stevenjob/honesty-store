@@ -112,6 +112,7 @@ const getOrCreate = async ({ key, accountId, userId }): Promise<TopupAccount> =>
     return update({
       topupAccount: {
         id: uuid(),
+        created: Date.now(),
         userId,
         accountId,
         test: false

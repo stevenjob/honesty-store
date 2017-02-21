@@ -102,6 +102,7 @@ const dirToTable = {
         id: 'df39d529-8f35-4e04-a91f-408c189563f1',
         accountId: 'b423607f-64de-441f-ac39-12d50aaedbe9',
         userId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649',
+        created: 1487667277000,
         test: true
       }
     ],
