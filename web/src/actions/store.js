@@ -34,6 +34,5 @@ export const performStoreChange = ({ storeCode }) => async (dispatch, getState) 
     history.push(`/store`);
   } catch (e) {
     dispatch(storeFailure(e));
-    history.push(`/error`);
   }
 };
