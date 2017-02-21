@@ -5,9 +5,10 @@ import { MUTED_TEXT, DANGER, LIGHT_BACKGROUND } from '../chrome/colors';
 import Page from '../chrome/page';
 import Balance from '../topup/balance';
 import StoreBrowser from '../chrome/store-browser';
+import { performStoreChange } from '../actions/store';
 import './index.css';
 
-const Profile = ({ emailAddress, balance }) => (
+const Profile = ({ emailAddress, balance, performStoreChange }) => (
   <Page title="Profile"
     right={<Balance balance={balance} />}>
     <div>
@@ -23,7 +24,7 @@ const Profile = ({ emailAddress, balance }) => (
         </div>
       </div>
       <div className="profile-store" style={{ borderColor: MUTED_TEXT, background: LIGHT_BACKGROUND }}>
-        <StoreBrowser onSubmit={(storeCode) => console.log(`Switch store to ${storeCode}`)} />
+        <StoreBrowser onSubmit={(storeCode) => performStoreChange({ storeCode })} />
       </div>
       <ul className="profile-actions" style={{ borderColor: MUTED_TEXT, color: DANGER, background: LIGHT_BACKGROUND }}>
         <li style={{ borderColor: MUTED_TEXT }}><Link to={`/profile/logout`}>Log Out</Link></li>
@@ -36,7 +37,9 @@ const Profile = ({ emailAddress, balance }) => (
 
 const mapStateToProps = ({ user: { emailAddress, balance } }) => ({
   emailAddress,
-  balance: balance || 0
+  balance: balance || 0,
 });
 
-export default connect(mapStateToProps)(Profile);
+const mapDispatchToProps = { performStoreChange };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
