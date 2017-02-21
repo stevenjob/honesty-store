@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { MUTED_TEXT, DANGER, LIGHT_BACKGROUND } from '../chrome/colors';
 import Page from '../chrome/page';
 import Balance from '../topup/balance';
+import StoreBrowser from '../chrome/store-browser';
 import './index.css';
 
 const Profile = ({ emailAddress, balance }) => (
@@ -20,6 +21,9 @@ const Profile = ({ emailAddress, balance }) => (
         <div className="profile-badge-action">
           <Link to={`/profile/edit`}>Edit</Link>
         </div>
+      </div>
+      <div className="profile-store" style={{ borderColor: MUTED_TEXT, background: LIGHT_BACKGROUND }}>
+        <StoreBrowser onSubmit={(storeCode) => console.log(`Switch store to ${storeCode}`)} />
       </div>
       <ul className="profile-actions" style={{ borderColor: MUTED_TEXT, color: DANGER, background: LIGHT_BACKGROUND }}>
         <li style={{ borderColor: MUTED_TEXT }}><Link to={`/profile/logout`}>Log Out</Link></li>
