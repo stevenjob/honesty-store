@@ -89,11 +89,12 @@ const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
         id: topupAccount.id
       },
       UpdateExpression:
-      'set stripe = :stripe, accountId = :accountId, userId = :userId',
+      'set stripe = :stripe, accountId = :accountId, userId = :userId, created = :created',
       ExpressionAttributeValues: {
         ':stripe': topupAccount.stripe || {},
         ':accountId': topupAccount.accountId,
-        ':userId': topupAccount.userId
+        ':userId': topupAccount.userId,
+        ':created': topupAccount.created
       }
     })
     .promise();
