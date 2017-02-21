@@ -9,6 +9,7 @@ import { LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE } from '../actions/logou
 import { SUPPORT_REQUEST, SUPPORT_SUCCESS, SUPPORT_FAILURE } from '../actions/support';
 import { SIGNIN_REQUEST, SIGNIN_SUCCESS, SIGNIN_FAILURE } from '../actions/signin';
 import { SIGNIN2_REQUEST, SIGNIN2_SUCCESS, SIGNIN2_FAILURE } from '../actions/signin2';
+import { STORE_REQUEST, STORE_SUCCESS, STORE_FAILURE } from '../actions/store';
 
 const getInitialState = () => {
   return {
@@ -269,6 +270,30 @@ export default (state = getInitialState(), action) => {
         ...state,
         error: action.error,
         pending: state.pending.filter(e => e !== 'purchase')
+      };
+    }
+    case STORE_REQUEST: {
+      return {
+        ...state,
+        pending: [...state.pending, 'store']
+      };
+    }
+    case STORE_SUCCESS: {
+      console.log(state.pending);
+      return {
+        ...state,
+        ...action.response,
+        pending: state.pending.filter(e => {
+          console.log(e);
+          return e !== 'store';
+        })
+      };
+    }
+    case STORE_FAILURE: {
+      return {
+        ...state,
+        error: action.error,
+        pending: state.pending.filter(e => e !== 'store')
       };
     }
     default:
