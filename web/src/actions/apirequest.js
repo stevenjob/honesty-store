@@ -54,7 +54,6 @@ const apifetch = async ({ url, getToken, body }) => {
 export default async (params, dispatch, getState) => {
   try {
     return await apifetch(params);
-
   } catch (error) {
     if (error.code !== 'AccessTokenExpired') {
       throw error;
