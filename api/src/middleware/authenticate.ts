@@ -4,9 +4,17 @@ import { error } from '../../../service/src/log';
 import {
   getUserByAccessToken,
   getUserByMagicLinkToken,
-  getUserByRefreshToken } from '../../../user/src/client/index';
+  getUserByRefreshToken
+} from '../../../user/src/client/index';
 
-const getToken = request => request.headers.authorization.split(' ')[1];
+const getToken = (request) => {
+  const { authorization } = request.headers;
+  const authMatch = authorization.match(/Bearer:\s*([^\s].*)/);
+  if (authMatch.length !== 2) {
+    throw new Error('No token provided');
+  }
+  return authMatch[1];
+};
 
 const handleInvalidToken = (key, response, e) => {
   error(key, `couldn't authenticate token`, e);
@@ -21,20 +29,24 @@ const handleInvalidToken = (key, response, e) => {
     });
 };
 
-const authenticateToken = (request, response, next, tokenRetrievalGetter) => {
+const authenticateTokenAsync = async (authKey, request, tokenRetrievalGetter) => {
   const token = getToken(request);
 
   // token verification is handled by the user service / tokenRetrievalGetter
-  const authKey = request.key || createAuthenticationKey();
-  tokenRetrievalGetter(authKey, token)
-    .then((user) => {
-      request.key = authKey.setUserId(user.id);
-      request.user = user;
+  const user = await tokenRetrievalGetter(authKey, token);
 
-      next(); // we assume next doesn't throw, and don't return its result here
-    })
-    .catch((error) =>
-      handleInvalidToken(authKey, response, error));
+  request.key = authKey.setUserId(user.id);
+  request.user = user;
+};
+
+const authenticateToken = (request, response, next, tokenRetrievalGetter) => {
+  const authKey = request.key || createAuthenticationKey();
+
+  authenticateTokenAsync(authKey, request, tokenRetrievalGetter)
+    .then(next)
+    .catch((error) => {
+      handleInvalidToken(authKey, response, error);
+    });
 };
 
 export const authenticateAccessToken = (request, response, next) =>
