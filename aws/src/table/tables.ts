@@ -126,6 +126,12 @@ const dirToTable = {
         }
       ]
     }
+  }),
+
+  survey: ({ readCapacityUnits, writeCapacityUnits }) => template({
+    readCapacityUnits,
+    writeCapacityUnits,
+    dummyData: []
   })
 };
 

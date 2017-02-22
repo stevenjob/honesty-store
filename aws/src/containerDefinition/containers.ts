@@ -106,7 +106,25 @@ const dirToContainer = {
     }),
 
   web: ({ image, baseUrl, serviceSecret, logGroup }) =>
-    template({ image, baseUrl, serviceSecret, logGroup, environment: [], port: 8080 })
+    template({ image, baseUrl, serviceSecret, logGroup, environment: [], port: 8080 }),
+
+  survey: ({ image, baseUrl, serviceSecret, logGroup, tableName }) =>
+    template({
+      image,
+      baseUrl,
+      serviceSecret,
+      logGroup,
+      environment: [
+        {
+          name: 'TABLE_NAME',
+          value: tableName
+        },
+        {
+          name: 'AWS_REGION',
+          value: 'eu-west-1'
+        }
+      ]
+    })
 };
 
 export default ({ dir, data }): ECS.ContainerDefinitions => {
