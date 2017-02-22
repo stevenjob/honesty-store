@@ -33,6 +33,7 @@ export const performInitialise = ({ storeCode, emailToken }) => async (dispatch,
 
     if (storeCode != null &&
         storeCode !== code &&
+        // This is a hack until #377 is implemented
         isRegisteredUser(user)) {
       history.replace(`/store/change/${storeCode}`);
     }
