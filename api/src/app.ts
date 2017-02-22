@@ -10,6 +10,7 @@ import sessionController from './controllers/session';
 import signInController from './controllers/signin';
 import storeController from './controllers/store';
 import supportController from './controllers/support';
+import surveyController from './controllers/survey';
 import topUpController from './controllers/topup';
 import transactionsController from './controllers/transactions';
 import { apiVersion } from './version';
@@ -30,6 +31,7 @@ storeController(router);
 logoutController(router);
 transactionsController(router);
 supportController(router);
+surveyController(router);
 
 app.use(router);
 
