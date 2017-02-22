@@ -5,18 +5,20 @@ import Button from '../chrome/button';
 import { performStoreChange } from '../actions/store';
 import history from '../history';
 
-const ConfirmStoreChange = ({ params: { storeCode }, performStoreChange }) =>
+const ConfirmStoreChange = ({ params: { storeCode }, defaultStoreCode, performStoreChange }) =>
   <Page title="Confirm Store Change"
     invert={true}
     nav={false}
     fullscreen={true}
   >
     <div>
-      <h1>Would you like to change stores?</h1>
-      <p>{storeCode} isn't your usual store, are you sure you want to change?</p>
-      <p><Button onClick={() => performStoreChange({ storeCode })}>Yes please</Button></p>
-      <p><Button onClick={() => history.push('/store')}>No thanks</Button></p>
+      <h1>Changing stores?</h1>
+      <p>We've detected that {storeCode} isn't your usual store. At the moment you can only be associated with a single store. Would you like us to move you over to {storeCode} (you can always change your association back on the profile screen)?</p>
+      <p><Button onClick={() => performStoreChange({ storeCode })}>Change to {storeCode}</Button></p>
+      <p><Button onClick={() => history.push('/store')}>Show {defaultStoreCode}</Button></p>
     </div>
   </Page>;
 
-export default connect(() => ({}), { performStoreChange })(ConfirmStoreChange);
+const mapStateToProps = ({ store: { code } }) => ({ defaultStoreCode: code });
+
+export default connect(mapStateToProps, { performStoreChange })(ConfirmStoreChange);
