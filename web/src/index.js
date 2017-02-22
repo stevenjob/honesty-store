@@ -28,6 +28,7 @@ import Help from './help/index';
 import HelpSuccess from './help/success';
 import ItemDetail from './item/detail';
 import ItemPurchaseSuccess from './item/success';
+import ConfirmStoreChange from './confirm-store-change/index';
 import reducer from './reducers/reducer';
 import { performInitialise } from './actions/inititialise';
 import './chrome/style';
@@ -72,6 +73,7 @@ ReactDOM.render((
         <Route path="register/:itemId/:emailAddress" component={RegisterCard} onEnter={redirectUnauthorised} />
         <Route path="signin/success" component={SignInSuccess} />
         <Route path="store" component={Store} onEnter={redirectUnauthorised} />
+        <Route path="store/change/:storeCode" component={ConfirmStoreChange} onEnter={redirectUnauthorised} />
         <Route path="item/:itemId" component={ItemDetail} onEnter={redirectUnauthorised} />
         <Route path="item/:itemId/success" component={ItemPurchaseSuccess} onEnter={redirectUnauthorised} />
         <Route path="topup" component={TopupAmount} onEnter={redirectUnauthorised} />
