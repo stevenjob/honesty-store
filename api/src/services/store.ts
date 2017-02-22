@@ -8,7 +8,8 @@ const ncl = {
     '032503e2-6cd3-4101-92bb-49bc26a5027e',
     '091be502-19ec-48f3-aad3-3091575d0fd4',
     'af02cf9f-d8b7-4d7e-a701-3addb212a7ba',
-    '680a2849-4a37-47f0-88a6-b9b1df91d5f4'
+    '680a2849-4a37-47f0-88a6-b9b1df91d5f4',
+    '340e5dba-309d-4f7d-b20d-f1f778883627'
   ],
   itemPrices: {
     '46ced0c0-8815-4ed2-bfb6-40537f5bd512': 50,
@@ -23,7 +24,8 @@ const ncl = {
     '272c6a59-9b4c-41b6-b839-0f8be506728e': 99,
     '8e9bb2db-9437-4733-acc1-f5e218e0a603': 39,
     'cf7a7886-c30d-4760-8c15-39adb2dc8649': 33,
-    'd5d10152-3f8a-419b-9abd-6d6e916ea64a': 22
+    'd5d10152-3f8a-419b-9abd-6d6e916ea64a': 22,
+    '3b7a6669-770c-4dbb-97e2-0e0aae3ca5ff': 27
   }
 };
 

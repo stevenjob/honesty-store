@@ -55,6 +55,15 @@ const items = [
     shipped: '20170221',
     recieved: '20170221'
   },
+  {
+    id: '340e5dba-309d-4f7d-b20d-f1f778883627',
+    items: [
+      { itemID: '3b7a6669-770c-4dbb-97e2-0e0aae3ca5ff', count: 42 }
+    ],
+    packed: '20170222',
+    shipped: '20170222',
+    recieved: '20170222'
+  },
 
   // brs, edn, ldn
   {
