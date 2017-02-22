@@ -57,7 +57,8 @@ const redirectUnauthorised = (nextState, replace) => {
 
 const initialiseWithParams = (nextState) => {
   const { params: { storeCode }, location: { query: { code: emailToken } } } = nextState;
-  store.dispatch(performInitialise({ storeCode, emailToken }));
+  const pathname = nextState.location.pathname;
+  store.dispatch(performInitialise({ pathname, storeCode, emailToken }));
 };
 
 ReactDOM.render((

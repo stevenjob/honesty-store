@@ -12,7 +12,7 @@ const initialise = () => {
   };
 };
 
-export const performInitialise = ({ storeCode, emailToken }) => async (dispatch, getState) => {
+export const performInitialise = ({ pathname, storeCode, emailToken }) => async (dispatch, getState) => {
   const { refreshToken, initialised } = getState();
 
   if (initialised) {
@@ -22,7 +22,6 @@ export const performInitialise = ({ storeCode, emailToken }) => async (dispatch,
   dispatch(initialise());
 
   if (refreshToken != null) {
-    const { pathname } = history.getCurrentLocation();
     if (pathname === '/' || storeCode != null) {
       history.replace('/store');
     }
