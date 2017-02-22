@@ -47,9 +47,6 @@ const store = createStore(
   applyMiddleware(...middlewares)
 );
 
-store.dispatch(performInitialise({}));
-
-
 const redirectUnauthorised = (nextState, replace) => {
   const { refreshToken } = store.getState();
 
@@ -58,10 +55,15 @@ const redirectUnauthorised = (nextState, replace) => {
   }
 };
 
+const initialiseWithParams = (nextState) => {
+  const { params: { storeCode }, location: { query: { code: emailToken } } } = nextState;
+  store.dispatch(performInitialise({ storeCode, emailToken }));
+};
+
 ReactDOM.render((
   <Provider store={store}>
-    <Router history={history} onUpdate={() => scrollTo(0, 0)}>
-      <Route path="/" component={App} >
+    <Router history={history} onUpdate={() => scrollTo(0, 0)} >
+      <Route path="/" component={App} onEnter={initialiseWithParams} >
         <IndexRoute component={Home} />
         <Route path="success" component={HomeSuccess} />
         <Route path="register" component={RegisterEmail} onEnter={redirectUnauthorised} />
@@ -87,12 +89,7 @@ ReactDOM.render((
         <Route path="profile/logout" component={LogoutProfile} onEnter={redirectUnauthorised} />
         <Route path="help" component={Help} onEnter={redirectUnauthorised} />
         <Route path="help/success" component={HelpSuccess} onEnter={redirectUnauthorised} />
-        <Route path=":storeCode"
-          onEnter={(nextState, replace) => {
-            const { params: { storeCode }, location: { query: { code: emailToken } } } = nextState;
-            store.dispatch(performInitialise({ storeCode, emailToken }));
-            replace('/store');
-          } } />
+        <Route path=":storeCode" />
       </Route>
     </Router>
   </Provider>
