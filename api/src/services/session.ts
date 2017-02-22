@@ -1,3 +1,4 @@
+import { getUserSurveys } from '../../../survey/src/client';
 import { getCardDetails } from '../../../topup/src/client/index';
 import { Transaction } from '../../../transaction/src/client/index';
 import { userRegistered } from '../../../user/src/client';
@@ -59,16 +60,23 @@ const getStoreSessionData = async (user) => {
   };
 };
 
+const getTopPrioritySurvey = async (key, user) => {
+  const surveys = await getUserSurveys(key, user.id);
+  return surveys[0];
+};
+
 export const getSessionData = async (key, { user }) => {
   const { accessToken, refreshToken } = user;
-  const [userProfile, store] = await Promise.all([
+  const [userProfile, store, survey] = await Promise.all([
     getUserSessionData(key, user),
-    getStoreSessionData(user)
+    getStoreSessionData(user),
+    getTopPrioritySurvey(key, user)
   ]);
   return {
     user: userProfile,
     store,
     refreshToken,
-    accessToken
+    accessToken,
+    survey
   };
 };
