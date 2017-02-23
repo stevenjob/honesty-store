@@ -20,7 +20,7 @@ const SignIn = () =>
 
 const itemRenderer = (item, index) => <StoreItem item={item} />;
 
-const Store = ({ registered, storeCode, balance, loading, items }) =>
+const Store = ({ registered, storeCode, balance, items }) =>
   <Page title="Store"
     subtitle={storeCode ? `@${storeCode}` : ''}
     right={registered ? <Balance balance={balance} /> : <Help />}

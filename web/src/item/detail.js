@@ -15,7 +15,6 @@ const minNumItems = 1;
 
 const ItemDetail = ({
   item: { id, name, price, image },
-  loading,
   balance,
   performPurchase,
   registered
@@ -104,7 +103,6 @@ const mapStateToProps = (
   const item = items.find(el => el.id === itemId);
   const { balance } = user;
   return {
-    loading: item == null,
     item: item || {},
     balance,
     registered: isRegistered(user)
