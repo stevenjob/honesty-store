@@ -81,8 +81,7 @@ class Card extends React.Component {
   }
 
   getConfirmButtonText() {
-    const sterlingSymbol = '\u00A3';
-    const topUpText = `Confirm ${sterlingSymbol}5 Top Up`;
+    const topUpText = 'Confirm £5 Top Up';
     const { itemId } = this.props;
     return itemId ? `${topUpText} & Pay` : topUpText;
   }
@@ -111,7 +110,7 @@ class Card extends React.Component {
             </div>
             :
             <div>
-              <p>Please enter the details of the card you want us to collect your first &#163;5 top up from</p>
+              <p>Please enter the details of the card you want us to collect your first £5 top up from</p>
               <p>Don't worry, your balance won't expire, we'll never perform a top up without your
                         permission and you can close your account at any time</p>
             </div>

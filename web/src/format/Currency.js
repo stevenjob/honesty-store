@@ -13,9 +13,10 @@ const formatAny = (value) => {
 
 const Currency = ({ amount }) => {
   const showPence = Math.abs(amount) < 100;
+
   return (
     <span>
-      {showPence || <small>&#163;</small>}
+      {showPence || <small>£</small>}
       {showPence ? amount : formatAny(amount)}
       {showPence && <small>p</small>}
     </span>
