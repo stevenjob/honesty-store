@@ -9,6 +9,9 @@ import {
 
 const getToken = (request) => {
   const { authorization } = request.headers;
+  if (authorization == null) {
+    throw new Error('No Authorization header provided');
+  }
   const authMatch = authorization.match(/Bearer:\s*([^\s].*)/);
   if (authMatch.length !== 2) {
     throw new Error('No token provided');
