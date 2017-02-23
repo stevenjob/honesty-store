@@ -22,7 +22,8 @@ const getInitialState = () => {
     register: {},
     error: undefined,
     accessToken: null,
-    refreshToken: localStorage.refreshToken
+    refreshToken: localStorage.refreshToken,
+    survey: undefined
   };
 };
 
