@@ -1,4 +1,4 @@
+import 'ace-css/css/ace.css';
 import './fonts.css';
-import './form.css';
-import './link.css';
+import './colors.css';
 import './root.css';

@@ -6,10 +6,5 @@ html.loaded {
 
 html.loaded>body {
   height: 100%;
-  background: #F8F9FA; /* BRAND_WHITE */
-  margin: 0;
-}
-
-* {
-    box-sizing: border-box;
+  background: #F8F9FA; /* .bg-silver */
 }

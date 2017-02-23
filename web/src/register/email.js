@@ -1,13 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import Button from '../chrome/button';
-import { BRAND_LIGHT, DANGER } from '../chrome/colors';
 import { NotNow } from '../chrome/link';
-import Page from '../chrome/page';
 import isEmail from 'validator/lib/isEmail';
 import { performSignin } from '../actions/signin';
-import './email.css';
+import Full from '../layout/full';
 
 class Email extends React.Component {
 
@@ -34,25 +31,16 @@ class Email extends React.Component {
     }
   }
 
-  style() {
-    const { valid } = this.state;
-    return valid === false ? { borderBottomColor: DANGER } : {};
-  }
-
   render() {
     const { valid } = this.state;
-    return <Page left={<NotNow />}
-      title={`Register`}
-      invert={true}
-      nav={false}
-      fullscreen={true}>
-      <form className="register-email" onSubmit={(e) => this.handleSubmit(e)}>
+    return <Full top={<NotNow />}>
+      <form onSubmit={(e) => this.handleSubmit(e)}>
         <h2>Want to sign up or sign in?</h2>
         {
           valid !== false ?
             <p>Please enter your email address below</p>
             :
-            <p style={{ color: DANGER }}>Please enter a valid email address</p>
+            <p className="red">Please enter a valid email address</p>
         }
         <p>
           <input type="email"
@@ -60,12 +48,12 @@ class Email extends React.Component {
             autoComplete="email"
             placeholder="honest.jo@honesty.store"
             onChange={(e) => this.handleChange(e)}
-            style={this.style()} />
+            className={valid !== false ? 'input' : 'input border-red'} />
         </p>
-        <p><Button onClick={(e) => this.handleSubmit(e)}>Continue</Button></p>
-        <p><Link to={`/help`} style={{ color: BRAND_LIGHT }}>Problems signing in?</Link></p>
+        <p><Link className="btn btn-primary" onClick={(e) => this.handleSubmit(e)}>Continue</Link></p>
+        <p><Link to={`/help`}>Problems signing in?</Link></p>
       </form>
-    </Page>;
+    </Full>;
   }
 }
 

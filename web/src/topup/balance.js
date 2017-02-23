@@ -3,9 +3,8 @@ import { Link } from 'react-router';
 import Currency from '../format/Currency';
 
 export default ({ balance }) =>
-  <Link to={`/topup`} className="store-title-balance">
+  <Link className="btn" to="/topup">
     <small>Balance</small>
-    <h1>
-      <Currency amount={balance} />
-    </h1>
+    <br/>
+    <Currency amount={balance} />
   </Link>;

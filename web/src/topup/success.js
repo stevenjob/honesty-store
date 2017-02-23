@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import history from '../history';
-import { Success } from '../chrome/modal';
+import { Success } from '../layout/alert';
 import Currency from '../format/Currency';
 
 export const TopupSuccess = ({ balance }) =>

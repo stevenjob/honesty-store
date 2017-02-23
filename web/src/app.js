@@ -1,5 +1,5 @@
 import React from 'react';
-import Error from './chrome/error';
+import Error from './error/index';
 import Loading from './chrome/loading';
 import { connect } from 'react-redux';
 

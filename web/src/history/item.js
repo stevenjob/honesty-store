@@ -2,40 +2,22 @@ import React from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import safeLookupItemImage from '../item/safeLookupItemImage';
-import { BRAND_LIGHT } from '../chrome/colors';
-import './item.css';
 import Currency from '../format/Currency';
-
-const AmountLabel = ({ amount, isTopUp }) => {
-  if (isTopUp) {
-    return (
-      <h4 style={{ color: BRAND_LIGHT }}>
-        <small>+ </small>
-        <Currency amount={amount} />
-      </h4>
-    );
-  }
-
-  return (
-    <h4>
-      <Currency amount={Math.abs(amount)} />
-    </h4>
-  );
-};
 
 const HistoryItem = ({ isTopUp, text, timestamp, amount, image }) => {
   return (
-    <div className="history-item">
-      <div className="history-item-timestamp">{moment(timestamp).fromNow()}</div>
-      <div className="history-item-details">
-        <div
-          className="history-item-image"
-          style={{ backgroundImage: `url(${image})` }}
-          alt={text}
-          />
-        <div className="history-item-info">
-          <h4>{text}</h4>
-          <AmountLabel amount={amount} isTopUp={isTopUp} />
+    <div className="btn regular navy col-12 flex">
+      <div className="col-2 bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${image})` }}>
+        {'\u00a0'}
+      </div>
+      <div className="flex-column col-8 ml2">
+        <h4 className="mt0 mb0">{text}</h4>
+        <p className="mt0 mb0 h6">{moment(timestamp).fromNow()}</p>
+      </div>
+      <div className="col-2 ml1 flex items-center justify-end">
+        <div className={isTopUp ? 'bold aqua' : ''}>
+          {isTopUp && '+'}<Currency amount={Math.abs(amount)} />
         </div>
       </div>
     </div>

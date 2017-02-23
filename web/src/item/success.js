@@ -1,7 +1,7 @@
 import React from 'react';
 import history from '../history';
 import { connect } from 'react-redux';
-import { Success } from '../chrome/modal';
+import { Success } from '../layout/alert';
 import safeLookupItemImage from './safeLookupItemImage';
 
 export const ItemPurchaseSuccess = ({ item: { name, image } }) =>

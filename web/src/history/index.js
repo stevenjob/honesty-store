@@ -1,17 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import List from '../chrome/list';
-import Page from '../chrome/page';
+import Chrome from '../layout/chrome';
 import HistoryItem from './item';
 import Balance from '../topup/balance';
 
 const itemRenderer = (transaction) => <HistoryItem transaction={transaction} />;
 
 const History = ({ transactions, balance }) => (
-  <Page title="History"
+  <Chrome title="History"
     right={<Balance balance={balance} />}>
     <List data={transactions} itemRenderer={itemRenderer} />
-  </Page>
+  </Chrome>
 );
 
 const mapStateToProps = ({ user: { transactions, balance } }) => ({

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Success } from '../chrome/modal';
+import { Success } from '../layout/alert';
 import history from '../history';
 
 export default () =>

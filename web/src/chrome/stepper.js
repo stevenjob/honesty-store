@@ -1,7 +1,5 @@
 import React from 'react';
-import Button from '../chrome/button';
-import { BRAND_LIGHT, MUTED_TEXT } from '../chrome/colors';
-import './stepper.css';
+import { Link } from 'react-router';
 
 class Stepper extends React.Component {
   constructor(props) {
@@ -34,23 +32,25 @@ class Stepper extends React.Component {
     } = this.state;
 
     return (
-      <div className="chrome-stepper">
+      <div className="mt3">
         <h2>{label}</h2>
-        <div className="chrome-stepper-amount">
-          <Button type={decrementDisabled ? 'disabled' : ''}
+        <div className="flex justify-center items-center">
+          <Link className="btn btn-primary"
+            type={decrementDisabled ? 'disabled' : ''}
             onClick={() => this.updateValue(onDecrement)}>
             -
-          </Button>
-          <h1 style={{ color: BRAND_LIGHT }}>
+          </Link>
+          <h2 className="mt0 mb0 mx3">
             {formatValue(value)}
-          </h1>
-          <Button type={incrementDisabled ? 'disabled' : ''}
+          </h2>
+          <Link className="btn btn-primary"
+            type={incrementDisabled ? 'disabled' : ''}
             onClick={() => this.updateValue(onIncrement)}>
             +
-          </Button>
+          </Link>
         </div>
-        <p style={{ color: MUTED_TEXT }}>{formatDescription(value)}</p>
-        <p>{this.getFormattedButton()}</p>
+        <p className="gray">{formatDescription(value)}</p>
+        <p className="mt3">{this.getFormattedButton()}</p>
       </div>
     );
   }
@@ -71,12 +71,13 @@ class Stepper extends React.Component {
     const { value } = this.state;
     const { disabled, text } = formatButton(value);
     return (
-      <Button
+      <Link
+        className="btn btn-primary"
         onClick={() => onClick(value)}
         type={disabled ? 'disabled' : ''}
         >
         {text}
-      </Button>
+      </Link>
     );
   }
 }

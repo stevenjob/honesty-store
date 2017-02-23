@@ -1,6 +1,6 @@
 import React from 'react';
 import history from '../history';
-import { Success } from '../chrome/modal';
+import { Success } from '../layout/alert';
 
 export default () =>
   <Success title="Please follow the link in the email to confirm your subscription"

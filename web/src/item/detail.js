@@ -1,15 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import history from '../history';
 import { Back } from '../chrome/link';
-import Page from '../chrome/page';
 import Stepper from '../chrome/stepper';
-import Button from '../chrome/button';
 import Currency from '../format/Currency';
 import { performPurchase } from '../actions/purchase';
 import isRegistered from '../reducers/is-registered-user';
 import safeLookupItemImage from './safeLookupItemImage';
-import './detail.css';
+import Full from '../layout/full';
 
 const minNumItems = 1;
 
@@ -55,7 +54,7 @@ const ItemDetail = ({
     }
   };
 
-  const PurchaseStepper = <Stepper
+  const purchaseStepper = <Stepper
     label="How many would you like to pay for?"
     onDecrement={decrementNumItems}
     incrementDisabled={() => false}
@@ -68,31 +67,29 @@ const ItemDetail = ({
     onClick={onClick}
     />;
 
-  const UnregisteredPurchaseButton = <p>
-    <Button onClick={() => history.push(`/register/${id}`)}>
+  const unregisteredPurchaseButton = <p>
+    <Link className="btn btn-primary" to={`/register/${id}`}>
       {`Pay for 1 ${name}`}
-    </Button>
+    </Link>
   </p>;
 
 
   return (
-    <Page invert={true}
-      fullscreen={true}
-      nav={false}
-      left={<Back />}>
+    <Full top={<Back />}>
       {id != null &&
-        <div className="item">
-          <div className="item-details">
-            <h2>{name}<br />{price}<small>p</small></h2>
+        <div>
+          <h1>{name}</h1>
+          <h2 className=""><Currency amount={price} /></h2>
+          <div className="col-3 sm-col-4 md-col-3 mx-auto">
+            <div className="bg-center bg-no-repeat"
+              style={{ backgroundImage: `url(${safeLookupItemImage(image)})`, paddingBottom: '100%' }}>
+              {'\u00a0'}
+            </div>
           </div>
-          <div
-            className="item-image"
-            style={{ backgroundImage: `url(${safeLookupItemImage(image)})` }}
-            />
-          {registered ? PurchaseStepper : UnregisteredPurchaseButton}
+          {registered ? purchaseStepper : unregisteredPurchaseButton}
         </div>
       }
-    </Page>
+    </Full>
   );
 };
 

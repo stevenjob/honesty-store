@@ -1,30 +1,15 @@
-.chrome-modal {
-    height: 100%;
-    display: flex;
-}
-
-.chrome-modal>div {
-    text-align: center;
-    margin: auto;
-}
-
-.chrome-modal>div>img,.chrome-modal>div>svg {
-    height: 12rem;
-    max-width: 80%;
-}
-
-.chrome-modal-success>div>img,.chrome-modal-success>div>svg {
+.layout-alert-success>img,.layout-alert-success>svg {
   transform: translateZ(1px);
   transform-origin: 50% 100%;
   will-change: transform;
   animation-timing-function: cubic-bezier(.47,.52,.58,1.19);
   animation-iteration-count: infinite;
   animation-fill-mode: both;
-  animation-name: chrome-modal-success-pulse;
+  animation-name: layout-alert-success-pulse;
   animation-duration: 2s;
 }
 
-@keyframes chrome-modal-success-pulse {
+@keyframes layout-alert-success-pulse {
   from {
     transform: translateZ(1px);
   }

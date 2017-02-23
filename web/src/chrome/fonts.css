@@ -1,56 +1,25 @@
 @font-face {
-    font-family: 'FaricyNew-Regular';
+    font-family: 'FaricyNew';
     src: url('assets/32D3D0_7_0.woff2') format('woff2'),url('assets/32D3D0_7_0.woff') format('woff');
+    font-weight: normal;
 }
 
+/* not currently used but kept to save someone typing it when the time comes
 @font-face {
     font-family: 'FaricyNew-Light';
     src: url('assets/32D3D0_2_0.woff2') format('woff2'),url('assets/32D3D0_2_0.woff') format('woff');
-}
-
+}*/
 
 @font-face {
-    font-family: 'FaricyNew-Medium';
+    font-family: 'FaricyNew';
     src: url('assets/32D3D0_3_0.woff2') format('woff2'),url('assets/32D3D0_3_0.woff') format('woff');
-}
-
-/* Allowed sizes (0.1rem is equivalent to 1px) - 10, 11, 12, 14, 16, 21, 24, 36, 72 */
-html {
-  font-size: 62.5%;
+    font-weight: bold;
 }
 
 body, input, textarea {
-  font-family: "FaricyNew-Regular","Helvetica Neue",Helvetica,Arial,sans-serif;
-  font-size: 1.4rem;
-  line-height: 1.42857143;
+  font-family: "FaricyNew","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 h1, h2, h3, h4, h5 {
-  font-weight: normal;
-  font-family: "FaricyNew-Medium";
-  margin: 1.4rem 0;
-}
-
-h1 {
-  font-size: 3.6rem;
-}
-
-h2 {
-  font-size: 2.4rem;
-}
-
-h3 {
-  font-size: 2.1rem;
-}
-
-h4 {
-  font-size: 1.6rem;
-}
-
-h5 {
-  font-size: 1.4rem;
-}
-
-small {
-  font-size: 66.66%;
+  font-family: "FaricyNew";
 }

@@ -1,13 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Button from '../chrome/button';
 import StoreBrowser from '../chrome/store-browser';
-import logo from '../chrome/assets/logo.svg';
 import { performRegister } from '../actions/register';
-import './index.css';
+import logo from '../chrome/assets/logo.svg';
+import Full from '../layout/full';
 
 const Home = ({ performRegister }) =>
-  <div className="home">
+  <Full>
     <h1>
       <img src={logo} alt="honesty.store" />
     </h1>
@@ -26,17 +25,12 @@ const Home = ({ performRegister }) =>
       method="post"
       target="_NEW">
       <p>
-        <input name="EMAIL" autoComplete="email" type="email" />
+        <input name="EMAIL" className="input" autoComplete="email" type="email" />
       </p>
       <p>
-        <Button
-          onClick={() => document.forms.update.submit()}
-
-        >
-          Keep Me Updated
-        </Button>
+        <a className="btn btn-primary" onClick={() => document.forms.update.submit()}>Keep Me Updated</a>
       </p>
     </form>
-  </div>;
+  </Full>;
 
 export default connect(() => ({}), { performRegister })(Home);

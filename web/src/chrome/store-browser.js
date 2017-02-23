@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../chrome/button';
+import { Link } from 'react-router';
 
 const extractStoreCode = (url) => {
   const [storeCode] = url.match(/([^/]*)$/);
@@ -43,8 +43,9 @@ class StoreBrowser extends React.Component {
     const { buttonText, storePlaceholder } = this.props;
     return (
       <form onSubmit={(e) => this.openStore(e)}>
-        <p className="home-store-code">
-          <input name="storeCode"
+        <p>
+          <input className="input"
+            name="storeCode"
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
@@ -55,7 +56,7 @@ class StoreBrowser extends React.Component {
             onChange={(e) => this.handleStoreCodeChange(e)} />
         </p>
         <p>
-          <Button onClick={(e) => this.openStore(e)}>{buttonText}</Button>
+          <Link className="btn btn-primary" onClick={(e) => this.openStore(e)}>{buttonText}</Link>
         </p>
       </form>
     );

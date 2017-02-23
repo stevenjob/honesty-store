@@ -1,42 +1,39 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { MUTED_TEXT, DANGER, LIGHT_BACKGROUND } from '../chrome/colors';
-import Page from '../chrome/page';
+import Chrome from '../layout/chrome';
 import Balance from '../topup/balance';
 import StoreBrowser from '../chrome/store-browser';
 import { performStoreChange } from '../actions/store';
-import './index.css';
 
-const Profile = ({ emailAddress, balance, storeCode, performStoreChange }) => (
-  <Page title="Profile"
+const Profile = ({ emailAddress, balance, storeCode, performStoreChange }) =>
+  <Chrome title="Profile"
     right={<Balance balance={balance} />}>
-    <div>
-      <div className="profile-badge" style={{ borderColor: MUTED_TEXT, background: LIGHT_BACKGROUND }}>
-        <div className="profile-badge-details">
-          <div className="profile-badge-details-email">
-            <h3>Email</h3>
-            {emailAddress}
-          </div>
-        </div>
-        <div className="profile-badge-action">
-          <Link to={`/profile/edit`}>Edit</Link>
-        </div>
+    <div className="flex px2 navy bg-white border-bottom border-gray">
+      <div className="col-9">
+        <h2 className="mt2 mb1">Email</h2>
+        <p className="mt1">{emailAddress}</p>
       </div>
-      <div className="profile-store" style={{ borderColor: MUTED_TEXT, background: LIGHT_BACKGROUND }}>
-        <StoreBrowser
-          onSubmit={(storeCode) => performStoreChange({ storeCode })}
-          buttonText="Change Store"
-          storePlaceholder={storeCode}
-        />
+      <div className="col-3 flex items-center justify-end">
+        <Link to={`/profile/edit`}>Edit</Link>
       </div>
-      <ul className="profile-actions" style={{ borderColor: MUTED_TEXT, color: DANGER, background: LIGHT_BACKGROUND }}>
-        <li style={{ borderColor: MUTED_TEXT }}><Link to={`/profile/logout`}>Log Out</Link></li>
-        <li style={{ borderColor: MUTED_TEXT }}><Link to={`/profile/close`}>Close Account</Link></li>
-      </ul>
     </div>
-  </Page>
-);
+    <div className="mt2 bg-white border-top border-bottom border-gray px1 center">
+      <StoreBrowser
+        onSubmit={(storeCode) => performStoreChange({ storeCode })}
+        buttonText="Change Store"
+        storePlaceholder={storeCode}
+      />
+    </div>
+    <ul className="list-reset bg-white border-top border-bottom border-gray px1">
+      <li className="border-bottom border-gray">
+        <Link className="h2 red btn btn-big block mxn1" to={`/profile/logout`}>Log Out</Link>
+      </li>
+      <li className="">
+        <Link className="h2 red btn btn-big block mxn1" to={`/profile/close`}>Close Account</Link>
+      </li>
+    </ul>
+  </Chrome>;
 
 
 const mapStateToProps = ({ user: { emailAddress, balance }, store: { code } }) => ({

@@ -1,12 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Button from '../chrome/button';
-import { errorDefinitions } from '../chrome/errors.js';
-import { DANGER } from '../chrome/colors';
+import { Link } from 'react-router';
+import { errorDefinitions } from '../error/errors';
 import { Back } from '../chrome/link';
-import Page from '../chrome/page';
 import { performRegister2 } from '../actions/register2';
-import './card.css';
+import Full from '../layout/full';
 
 const TOPUP_AMOUNT = 500;
 
@@ -76,10 +74,6 @@ class Card extends React.Component {
     performRegister2({ storeCode, itemID: itemId, topUpAmount: TOPUP_AMOUNT, emailAddress, cardDetails });
   }
 
-  style(name, error) {
-    return (error != null && error.param === name) ? { borderBottomColor: DANGER } : {};
-  }
-
   getConfirmButtonText() {
     const topUpText = 'Confirm £5 Top Up';
     const { itemId } = this.props;
@@ -89,63 +83,60 @@ class Card extends React.Component {
   render() {
     const { error } = this.props;
     const { number, exp, cvc } = this.state;
-
-    return <Page left={<Back>Register</Back>}
-      title={`Top Up`}
-      invert={true}
-      nav={false}
-      fullscreen={true}>
-      <form className="register-card" onSubmit={(e) => this.handleSubmit(e)}>
-        {
-          error ?
-            <div style={{ color: DANGER }}>
-              <p>There was a problem collecting payment from your card, please check the details</p>
-              <p>
-              {
-                error.code
-                ? errorDefinitions[error.code].message
-                : error.message
-              }
-              </p>
-            </div>
-            :
-            <div>
-              <p>Please enter the details of the card you want us to collect your first £5 top up from</p>
-              <p>Don't worry, your balance won't expire, we'll never perform a top up without your
-                        permission and you can close your account at any time</p>
-            </div>
-        }
-        <p>
-          <input name="number"
-            autoComplete="cc-number"
-            placeholder="1111 2222 3333 4444"
-            style={this.style('number', error)}
-            value={number}
-            pattern="[0-9]*"
-            noValidate
-            onChange={(e) => this.handleNumberChange(e)} />
-        </p>
-        <p className="register-card-tight">
-          <input name="exp"
-            autoComplete="cc-exp"
-            value={exp}
-            pattern="[0-9]*"
-            noValidate
-            placeholder="Expiry (MM / YY)"
-            style={this.style('exp', error)}
-            onChange={(e) => this.handleExpChange(e)} />
-          <input name="cvc"
-            autoComplete="cc-csc"
-            value={cvc}
-            pattern="[0-9]*"
-            noValidate
-            placeholder="CVC (3-digits)"
-            style={this.style('cvc', error)}
-            onChange={(e) => this.handleCVCChange(e)} />
-        </p>
-        <p><Button onClick={(e) => this.handleSubmit(e)}>{this.getConfirmButtonText()}</Button></p>
-      </form>
-    </Page>;
+    return (
+      <Full top={<Back>Register</Back>}>
+        <form onSubmit={(e) => this.handleSubmit(e)}>
+          {
+            error ?
+              <div className="red">
+                <p>There was a problem collecting payment from your card, please check the details</p>
+                <p>
+                {
+                  error.code
+                  ? errorDefinitions[error.code].message
+                  : error.message
+                }
+                </p>
+              </div>
+              :
+              <div>
+                <p>Please enter the details of the card you want us to collect your first £5 top up from</p>
+                <p>Don't worry, your balance won't expire, we'll never perform a top up without your
+                          permission and you can close your account at any time</p>
+              </div>
+          }
+          <p>
+            <input name="number"
+              autoComplete="cc-number"
+              placeholder="1111 2222 3333 4444"
+              className={(error != null && error.param === 'number') ? 'input border-red' : 'input'}
+              value={number}
+              pattern="[0-9]*"
+              noValidate
+              onChange={(e) => this.handleNumberChange(e)} />
+          </p>
+          <p className="register-card-tight">
+            <input name="exp"
+              autoComplete="cc-exp"
+              value={exp}
+              pattern="[0-9]*"
+              noValidate
+              placeholder="Expiry (MM / YY)"
+              className={(error != null && error.param === 'exp') ? 'input border-red' : 'input'}
+              onChange={(e) => this.handleExpChange(e)} />
+            <input name="cvc"
+              autoComplete="cc-csc"
+              value={cvc}
+              pattern="[0-9]*"
+              noValidate
+              placeholder="CVV (3-digits)"
+              className={(error != null && error.param === 'cvc') ? 'input border-red' : 'input'}
+              onChange={(e) => this.handleCVCChange(e)} />
+          </p>
+          <p><Link className="btn btn-primary" onClick={(e) => this.handleSubmit(e)}>{this.getConfirmButtonText()}</Link></p>
+        </form>
+      </Full>
+    );
   }
 }
 

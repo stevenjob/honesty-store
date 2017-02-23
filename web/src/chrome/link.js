@@ -9,9 +9,10 @@ export const Back = (props) => {
   if (props.to || props.children === 'Back') {
     throw new Error(`Don't specify to or 'Back' as children`);
   }
-  return <Link className="chrome-link-back"
+  return <Link className={`btn aqua ${props.className}`}
     style={{ color: BRAND_LIGHT }}
     onClick={history.goBack}>
+    <span className="h2">&lt;&nbsp;</span>
     {props.children || 'Back'}
   </Link>;
 };
@@ -20,7 +21,7 @@ export const NotNow = (props) => {
   if (props.to || props.children) {
     throw new Error(`Don't specify to or children`);
   }
-  return <Link className="chrome-link"
+  return <Link className={`btn aqua ${props.className}`}
     style={{ color: BRAND_LIGHT }}
     onClick={history.goBack}>
     Not Now
@@ -31,7 +32,7 @@ export const Close = (props) => {
   if (props.children) {
     throw new Error(`Don't specify children`);
   }
-  return <Link className="chrome-link"
+  return <Link className={`btn aqua ${props.className}`}
     style={{ color: BRAND_LIGHT }}
     to={props.to}>
     Close

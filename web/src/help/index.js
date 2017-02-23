@@ -1,20 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import Button from '../chrome/button';
-import Page from '../chrome/page';
-import { DANGER } from '../chrome/colors';
+import Chrome from '../layout/chrome';
 import Balance from '../topup/balance';
 import { performSupport } from '../actions/support';
 import isRegisteredUser from '../reducers/is-registered-user';
 import isEmail from 'validator/lib/isEmail';
-import './index.css';
 
 
 const Store = () =>
-  <Link to={`/store`} className="help-title-store">
-    <h5>Store</h5>
-  </Link>;
+  <Link className="btn" to={`/store`}>Store</Link>;
 
 const Help = class extends React.Component {
 
@@ -47,31 +42,27 @@ const Help = class extends React.Component {
     }
   }
 
-  style() {
-    const { valid } = this.state;
-    return valid === false ? { borderBottomColor: DANGER } : {};
-  }
-
   render() {
     const { valid, emailAddress } = this.state;
     const { registered, balance } = this.props;
-    return <Page title="Help"
+    return <Chrome title="Help"
       left={registered ? null : <Store />}
-      right={registered ? <Balance balance={balance} /> : null}
-      nav={registered}>
-      <form className="help" onSubmit={(e) => this.handleSubmit(e)}>
+      right={registered ? <Balance balance={balance} /> : null}>
+      <form className="center px2 navy" onSubmit={(e) => this.handleSubmit(e)}>
         <h2>Having problems?</h2>
+        <p>Want to share an idea or some feedback?</p>
         <p>
-          <textarea rows="8"
+          <textarea className="textarea"
+            rows="8"
             name="message"
-            placeholder="Please describe your problem here"
+            placeholder="Tell us about it here"
             onChange={(e) => this.handleMessageChange(e)}/>
         </p>
         {
           valid !== false ?
             <p>Please enter your email address below</p>
             :
-            <p style={{ color: DANGER }}>Please enter a valid email address</p>
+            <p className="red">Please enter a valid email address</p>
         }
         <p>
           <input type="email"
@@ -79,12 +70,16 @@ const Help = class extends React.Component {
             disabled={registered}
             value={emailAddress}
             placeholder="honest.jo@honesty.store"
-            style={this.style()}
+            className={valid === false ? 'input border-red' : 'input'}
             onChange={(e) => this.handleEmailChange(e)}/>
         </p>
-        <p><Button onClick={(e) => this.handleSubmit(e)}>Send to Customer Support</Button></p>
+        <p>
+          <Link className="btn btn-primary" onClick={(e) => this.handleSubmit(e)}>
+            Send to Customer Support
+          </Link>
+        </p>
       </form>
-    </Page>;
+    </Chrome>;
   }
 };
 
