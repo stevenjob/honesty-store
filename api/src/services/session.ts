@@ -2,6 +2,7 @@ import { getUserSurveys } from '../../../survey/src/client';
 import { getCardDetails } from '../../../topup/src/client/index';
 import { Transaction } from '../../../transaction/src/client/index';
 import { userRegistered } from '../../../user/src/client';
+import { getItem } from '../services/item';
 import { storeIDToStoreCode, storeItems } from '../services/store';
 import { getExpandedTransactionsAndBalance } from '../services/transaction';
 
@@ -61,8 +62,15 @@ const getStoreSessionData = async (user) => {
 };
 
 const getTopPrioritySurvey = async (key, user) => {
-  const surveys = await getUserSurveys(key, user.id);
-  return surveys[0];
+  const [ survey ] = await getUserSurveys(key, user.id);
+
+  return {
+    ...survey,
+    questions: survey.questions.map(([ id1, id2 ]) => [
+      getItem(id1),
+      getItem(id2)
+    ])
+  };
 };
 
 export const getSessionData = async (key, { user }) => {
