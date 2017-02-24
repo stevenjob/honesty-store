@@ -5,9 +5,11 @@ import Currency from '../format/Currency';
 
 export default ({ item: { id, name, price, image, notes, weight } }) =>
   <Link to={`/item/${id}`} className="btn regular flex navy">
-    <div className="flex-none col-3 bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${safeLookupItemImage(image)})` }}>
-      {'\u00a0'}
+    <div className="flex-none col-3">
+      <div className="bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${safeLookupItemImage(image)})`, paddingBottom: '100%' }}>
+        {'\u00a0'}
+      </div>
     </div>
     <div className="ml2 flex-auto flex flex-column justify-center">
       <h2 className="h2 mt1 mb0">
