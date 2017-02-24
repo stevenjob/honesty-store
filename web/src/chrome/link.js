@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { BRAND_LIGHT } from '../chrome/colors';
 import history from '../history';
 
 // Doing some runtime checking here as these components are so commonly used
@@ -10,7 +9,6 @@ export const Back = (props) => {
     throw new Error(`Don't specify to or 'Back' as children`);
   }
   return <Link className={`btn aqua ${props.className}`}
-    style={{ color: BRAND_LIGHT }}
     onClick={history.goBack}>
     <span className="h2">&lt;&nbsp;</span>
     {props.children || 'Back'}
@@ -22,7 +20,6 @@ export const NotNow = (props) => {
     throw new Error(`Don't specify to or children`);
   }
   return <Link className={`btn aqua ${props.className}`}
-    style={{ color: BRAND_LIGHT }}
     onClick={history.goBack}>
     Not Now
     </Link>;
@@ -33,7 +30,6 @@ export const Close = (props) => {
     throw new Error(`Don't specify children`);
   }
   return <Link className={`btn aqua ${props.className}`}
-    style={{ color: BRAND_LIGHT }}
     to={props.to}>
     Close
     </Link>;
