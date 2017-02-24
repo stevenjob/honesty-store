@@ -14,7 +14,7 @@
 
 .chrome-loading-items>svg {
   position: absolute;
-  height: 8rem;
+  height: 6rem;
   left: 50%;
   margin-left: -50px;
   transform: translateZ(1px);
