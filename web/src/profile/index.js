@@ -18,7 +18,8 @@ const Profile = ({ emailAddress, balance, storeCode, performStoreChange }) =>
         <Link to={`/profile/edit`}>Edit</Link>
       </div>
     </div>
-    <div className="mt2 bg-white border-top border-bottom border-gray px1 center">
+    <div className="mt2 bg-white navy border-top border-bottom border-gray px1 center">
+      <h2 className="mt2">Default Store</h2>
       <StoreBrowser
         onSubmit={(storeCode) => performStoreChange({ storeCode })}
         buttonText="Change Store"
@@ -27,10 +28,10 @@ const Profile = ({ emailAddress, balance, storeCode, performStoreChange }) =>
     </div>
     <ul className="list-reset bg-white border-top border-bottom border-gray px1">
       <li className="border-bottom border-gray">
-        <Link className="h2 red btn btn-big block mxn1" to={`/profile/logout`}>Log Out</Link>
+        <Link className="red btn block mxn1" to={`/profile/logout`}>Log Out</Link>
       </li>
       <li className="">
-        <Link className="h2 red btn btn-big block mxn1" to={`/profile/close`}>Close Account</Link>
+        <Link className="red btn block mxn1" to={`/profile/close`}>Close Account</Link>
       </li>
     </ul>
   </Chrome>;
