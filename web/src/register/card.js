@@ -133,7 +133,7 @@ class Card extends React.Component {
               className={(error != null && error.param === 'cvc') ? 'input border-red' : 'input'}
               onChange={(e) => this.handleCVCChange(e)} />
           </p>
-          <p><Link className="btn btn-primary" onClick={(e) => this.handleSubmit(e)}>{this.getConfirmButtonText()}</Link></p>
+          <p><Link className="btn btn-primary btn-big" onClick={(e) => this.handleSubmit(e)}>{this.getConfirmButtonText()}</Link></p>
         </form>
       </Full>
     );

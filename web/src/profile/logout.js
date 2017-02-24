@@ -9,7 +9,7 @@ export const Logout = ({ performLogout }) =>
   <Full top={<NotNow/>}>
     <h1>Want to log out?</h1>
     <p>You can always login again using your email address.</p>
-    <p><Link className="btn btn-primary" onClick={performLogout}>Log Out</Link></p>
+    <p><Link className="btn btn-primary btn-big" onClick={performLogout}>Log Out</Link></p>
   </Full>;
 
 const mapStateToProps = () => ({});
