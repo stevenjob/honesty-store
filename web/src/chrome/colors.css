@@ -1,3 +1,13 @@
+a {
+  color: #43BCD6;
+  text-decoration: none;
+}
+
+.btn-primary {
+  color: white;
+  background: #43BCD6;
+}
+
 .navy {
   color: #14415F;
 }
@@ -47,9 +57,4 @@
 }
 .border-red {
   border-color: #AE0000;
-}
-
-.btn-primary {
-  color: white;
-  background: #43BCD6;
 }
