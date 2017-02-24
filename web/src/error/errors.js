@@ -18,7 +18,7 @@ export const errorDefinitions = {
   CardExpired: { message: 'Card expired', retryable: true },
   CardDeclined: { message: 'Card declined', retryable: true },
   CardError: { message: 'Hit a problem with your card details', retryable: true },
-  TokenError: { message: 'Invalid token', retryable: false },
+  TokenError: { message: 'Your local session is corrupt - please sign in', retryable: true },
   AccessTokenExpired: { message: 'Your access has expired - please sign in', retryable: false },
   RefreshTokenExpired: { message: 'Your session has expired - please sign in', retryable: false },
   MagicLinkTokenExpired: { message: 'Your magic link token has expired, please try again', retryable: false },
