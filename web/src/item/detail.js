@@ -68,7 +68,7 @@ const ItemDetail = ({
     />;
 
   const unregisteredPurchaseButton = <p>
-    <Link className="btn btn-primary" to={`/register/${id}`}>
+    <Link className="btn btn-primary btn-big" to={`/register/${id}`}>
       {`Pay for 1 ${name}`}
     </Link>
   </p>;
