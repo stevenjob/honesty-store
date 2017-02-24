@@ -47,16 +47,38 @@ export const ensureService = async (serviceRequest: ECS.CreateServiceRequest) =>
   }
 };
 
+const paginate = (array, limit) => {
+  const pages = [];
+
+  const finalPage = array.reduce(
+    (page, service) => {
+      if (page.length === limit) {
+        pages.push(page);
+        return [service];
+      } else {
+        return [...page, service];
+      }
+    },
+    []);
+
+  return [...pages, finalPage];
+};
+
 export const waitForServicesStable = async ({ cluster, services }) => {
 
-  const waitResponse = await new ECS({ apiVersion: '2014-11-13' })
-    .waitFor('servicesStable', {
-      cluster,
-      services
-    })
-    .promise();
+  const servicePages = paginate(services, 10);
 
-  awsCheckFailures(waitResponse);
+  const waitPromises = servicePages.map(
+    page => new ECS({ apiVersion: '2014-11-13' })
+      .waitFor('servicesStable', {
+        cluster,
+        services: page
+      })
+      .promise());
+
+  const waitResponses = await Promise.all(waitPromises);
+
+  waitResponses.forEach(awsCheckFailures);
   // no failures - task(s) are running
 };
 
