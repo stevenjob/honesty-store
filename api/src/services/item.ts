@@ -70,40 +70,42 @@ const items = [
     name: 'Freddo',
     image: 'freddo.svg',
     weight: 19.5,
-    notes: 'Price marked 25p'
+    notes: 'Price marked 25p. Residual stock.'
   },
   {
     id: 'e91e7274-fe28-405c-86c8-5768197eb6ac',
     name: 'Smarties',
     image: 'misc-bar.svg',
-    weight: 38
+    weight: 38,
+    notes: 'Residual stock.'
   },
   {
     id: '32919485-d806-4be6-824b-170f66371306',
     name: 'Geo Bar',
     image: 'misc-bar.svg',
     weight: 35,
-    notes: 'Wild Apricot'
+    notes: 'Wild Apricot. Residual stock.'
   },
   {
     id: '272c6a59-9b4c-41b6-b839-0f8be506728e',
     name: 'Divine',
     image: 'misc-bar.svg',
     weight: 40,
-    notes: 'Caramel Milk Chocolate'
+    notes: 'Caramel Milk Chocolate. Residual stock.'
   },
   {
     id: '8e9bb2db-9437-4733-acc1-f5e218e0a603',
     name: 'Fruit Pastilles',
     image: 'misc-bar.svg',
-    weight: 52.5
+    weight: 52.5,
+    notes: 'Residual stock.'
   },
   {
     id: '96ce1162-9188-41ac-9d35-8fc6a14783ef',
     name: 'Oreo',
     image: 'misc-bar.svg',
     weight: 66,
-    notes: '6 pack'
+    notes: '6 pack. Residual stock.'
   },
   {
     id: '3b7a6669-770c-4dbb-97e2-0e0aae3ca5ff',
