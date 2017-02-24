@@ -21,6 +21,9 @@ export const performInitialise = ({ pathname, storeCode, emailToken }) => async 
 
   dispatch(initialise());
 
+  if (emailToken != null) {
+    return dispatch(performSignin2({ emailToken }));
+  }
   if (refreshToken != null) {
     if (pathname === '/' || storeCode != null) {
       history.replace('/store');
@@ -37,9 +40,6 @@ export const performInitialise = ({ pathname, storeCode, emailToken }) => async 
       history.replace(`/store/change/${storeCode}`);
     }
     return;
-  }
-  if (emailToken != null) {
-    return dispatch(performSignin2({ emailToken }));
   }
   if (storeCode != null) {
     return dispatch(performRegister({ storeCode }));
