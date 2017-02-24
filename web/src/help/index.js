@@ -49,13 +49,12 @@ const Help = class extends React.Component {
       left={registered ? null : <Store />}
       right={registered ? <Balance balance={balance} /> : null}>
       <form className="center px2 navy" onSubmit={(e) => this.handleSubmit(e)}>
-        <h2>Having problems?</h2>
-        <p>Want to share an idea or some feedback?</p>
+        <p>Having problems? Want to share an idea or some feedback?</p>
         <p>
           <textarea className="textarea"
             rows="8"
             name="message"
-            placeholder="Tell us about it here"
+            placeholder="Please tell us all about it here"
             onChange={(e) => this.handleMessageChange(e)}/>
         </p>
         {
