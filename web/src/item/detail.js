@@ -80,7 +80,7 @@ const ItemDetail = ({
         <div>
           <h1>{name}</h1>
           <h2 className=""><Currency amount={price} /></h2>
-          <div className="col-3 sm-col-4 md-col-3 mx-auto">
+          <div className="col-6 mx-auto">
             <div className="bg-center bg-no-repeat"
               style={{ backgroundImage: `url(${safeLookupItemImage(image)})`, paddingBottom: '100%' }}>
               {'\u00a0'}
