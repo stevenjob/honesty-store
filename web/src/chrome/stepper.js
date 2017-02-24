@@ -35,16 +35,14 @@ class Stepper extends React.Component {
       <div className="mt3">
         <h2>{label}</h2>
         <div className="flex justify-center items-center">
-          <Link className="btn btn-primary"
-            type={decrementDisabled ? 'disabled' : ''}
+          <Link className={`btn ${decrementDisabled ? 'rounded bg-gray white' : 'btn-primary'}`}
             onClick={() => this.updateValue(onDecrement)}>
             -
           </Link>
           <h2 className="mt0 mb0 mx3">
             {formatValue(value)}
           </h2>
-          <Link className="btn btn-primary"
-            type={incrementDisabled ? 'disabled' : ''}
+          <Link className={`btn ${incrementDisabled ? 'rounded bg-gray white' : 'btn-primary'}`}
             onClick={() => this.updateValue(onIncrement)}>
             +
           </Link>
@@ -72,9 +70,8 @@ class Stepper extends React.Component {
     const { disabled, text } = formatButton(value);
     return (
       <Link
-        className="btn btn-primary"
+        className={`btn ${disabled ? 'rounded bg-gray white' : 'btn-primary'}`}
         onClick={() => onClick(value)}
-        type={disabled ? 'disabled' : ''}
         >
         {text}
       </Link>
