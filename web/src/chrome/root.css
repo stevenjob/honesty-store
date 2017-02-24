@@ -8,3 +8,7 @@ html.loaded>body {
   height: 100%;
   background: #F8F9FA; /* .bg-silver */
 }
+
+textarea, input[type] {
+  -webkit-appearance: none;
+}
