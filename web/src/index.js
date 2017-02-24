@@ -14,6 +14,9 @@ import Profile from './profile/index';
 import CloseProfile from './profile/close';
 import EditProfile from './profile/edit';
 import LogoutProfile from './profile/logout';
+import Survey from './survey/index';
+import SurveyQuestions from './survey/questions';
+import SurveyComplete from './survey/complete';
 import TopupAmount from './topup/amount';
 import TopupExistingCard from './topup/existing-card';
 import TopupNewCard from './topup/new-card';
@@ -78,6 +81,9 @@ ReactDOM.render((
         <Route path="store/change/:storeCode" component={ConfirmStoreChange} onEnter={redirectUnauthorised} />
         <Route path="item/:itemId" component={ItemDetail} onEnter={redirectUnauthorised} />
         <Route path="item/:itemId/success" component={ItemPurchaseSuccess} onEnter={redirectUnauthorised} />
+        <Route path="survey" component={Survey} onEnter={redirectUnauthorised} />
+        <Route path="survey/questions" component={SurveyQuestions} onEnter={redirectUnauthorised} />
+        <Route path="survey/complete" component={SurveyComplete} onEnter={redirectUnauthorised} />
         <Route path="topup" component={TopupAmount} onEnter={redirectUnauthorised} />
         <Route path="topup/success" component={TopupSuccess} onEnter={redirectUnauthorised} />
         <Route path="topup/:amount" component={TopupExistingCard} onEnter={redirectUnauthorised} />

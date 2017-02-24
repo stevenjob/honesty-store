@@ -10,6 +10,7 @@ import { SUPPORT_REQUEST, SUPPORT_SUCCESS, SUPPORT_FAILURE } from '../actions/su
 import { SIGNIN_REQUEST, SIGNIN_SUCCESS, SIGNIN_FAILURE } from '../actions/signin';
 import { SIGNIN2_REQUEST, SIGNIN2_SUCCESS, SIGNIN2_FAILURE } from '../actions/signin2';
 import { STORE_REQUEST, STORE_SUCCESS, STORE_FAILURE } from '../actions/store';
+import { SURVEY_REQUEST, SURVEY_SUCCESS, SURVEY_FAILURE } from '../actions/survey';
 
 const getInitialState = () => {
   return {
@@ -291,6 +292,26 @@ export default (state = getInitialState(), action) => {
         ...state,
         error: action.error,
         pending: state.pending.filter(e => e !== 'store')
+      };
+    }
+    case SURVEY_REQUEST: {
+      return {
+        ...state,
+        pending: [...state.pending, 'survey']
+      };
+    }
+    case SURVEY_SUCCESS: {
+      return {
+        ...state,
+        survey: action.response,
+        pending: state.pending.filter(e => e !== 'survey')
+      };
+    }
+    case SURVEY_FAILURE: {
+      return {
+        ...state,
+        error: action.error,
+        pending: state.pending.filter(e => e !== 'survey')
       };
     }
     default:

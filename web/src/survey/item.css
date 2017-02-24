@@ -1,0 +1,58 @@
+.survey-item-outro-win {
+  transform: translateZ(1px);
+  transform-origin: 50% 50%;
+  will-change: opacity, transform;
+  animation-name: survey-item-outro-win;
+  animation-timing-function: cubic-bezier(.47,.52,.58,1.19);
+  animation-iteration-count: 1;
+  animation-duration: 2s;
+}
+
+@keyframes survey-item-outro-win {
+  from {
+    transform: translateZ(1px);
+  }
+  5% {
+    transform: translateZ(1px) translateY(-2%) scale(1.02);;
+  }
+  10% {
+    transform: translateZ(1px) translateY(0);
+  }
+  15% {
+    transform: translateZ(1px) rotateZ(-1deg) translateY(-1%) scale(1.01);
+  }
+  20% {
+    transform: translateZ(1px) translateY(0);
+  }
+  30% {
+    transform: translateZ(1px) rotateZ(3deg) translateY(-3%) scale(1.03);
+  }
+  40% {
+    transform: translateZ(1px) translateY(0);
+  }
+  to {
+    transform: translateZ(1px);
+  }
+}
+
+.survey-item-outro-lose {
+  transform: translateZ(1px);
+  transform-origin: 50% 50%;
+  will-change: opacity, transform;
+  animation-name: survey-item-outro-lose;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 1;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes survey-item-outro-lose {
+  from {
+    opacity: 1;
+    transform: scale(1) rotate(0) translateZ(1px);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0) rotate(+720deg) translateZ(1px);
+  }
+}
