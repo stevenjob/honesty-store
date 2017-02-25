@@ -23,4 +23,4 @@ export const getUserSurveys = (key, userId) =>
   get<Survey[]>(1, key, `/${userId}`);
 
 export const acceptUserSurvey = (key, userId: string, surveyId: string, answers: ItemPair[]) =>
-  post<{}>(1, key, `/${userId}`, { surveyId, answers });
+  post<Survey[]>(1, key, `/${userId}`, { surveyId, answers });

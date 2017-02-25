@@ -113,9 +113,12 @@ const acceptUserSurvey = async ({ userId, answers, surveyId }) => {
   };
   assertValidSurveyResponse(response);
 
-  await put(response);
+  const [surveys] = await Promise.all([
+    surveysForUser(userId),
+    put(response)
+  ]);
 
-  return {};
+  return surveys.filter(({ id }) => surveyId !== id);
 };
 
 const assertConnectivity = async () => {
