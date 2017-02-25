@@ -22,10 +22,8 @@ export default ({ item: { id, name, price, image, notes, weight } }) =>
       </p>
     </div>
     <div className="ml2 flex-none flex flex-column justify-around">
-      <h2 className="mt0 mb0">
-        <Link to={`/item/${id}`} className="block btn btn-primary btn-big btn-narrow">
-          <Currency amount={price} />
-        </Link>
+      <h2 className="mt0 mb0 btn btn-primary btn-big btn-narrow">
+        <Currency amount={price} />
       </h2>
     </div>
   </Link>;
