@@ -10,6 +10,7 @@
 
 .chrome-loading>h1 {
   margin: auto;
+  z-index: 10;
 }
 
 .chrome-loading-items>svg {
@@ -22,7 +23,7 @@
   will-change: transform;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-  z-index: -1;
+  z-index: 5;
 }
 
 .chrome-loading-items>svg:nth-child(6n+0) {
@@ -36,7 +37,7 @@
   animation-duration: 3s;
   animation-delay: -2s;
   height: 6rem;
-  z-index: -2;
+  z-index: -4;
   left: 32%;
 }
 
@@ -52,7 +53,7 @@
   animation-duration: 3s;
   animation-delay: -0.5s;
   height: 4rem;
-  z-index: -3;
+  z-index: 3;
   left: 56%;
 }
 
@@ -61,7 +62,7 @@
   animation-duration: 8s;
   animation-delay: -1s;
   height: 6rem;
-  z-index: -2;
+  z-index: 4;
   left: 68%;
 }
 
