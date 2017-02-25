@@ -47,21 +47,12 @@ export const ensureService = async (serviceRequest: ECS.CreateServiceRequest) =>
   }
 };
 
-const paginate = (array, limit) => {
+const paginate = (array, limit: number) => {
   const pages = [];
-
-  const finalPage = array.reduce(
-    (page, service) => {
-      if (page.length === limit) {
-        pages.push(page);
-        return [service];
-      } else {
-        return [...page, service];
-      }
-    },
-    []);
-
-  return [...pages, finalPage];
+  for (let i = 0; i < array.length; i = i + limit) {
+    pages.push(array.slice(i, i + limit));
+  }
+  return pages;
 };
 
 export const waitForServicesStable = async ({ cluster, services }) => {
