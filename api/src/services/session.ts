@@ -2,9 +2,9 @@ import { getUserSurveys } from '../../../survey/src/client';
 import { getCardDetails } from '../../../topup/src/client/index';
 import { Transaction } from '../../../transaction/src/client/index';
 import { userRegistered } from '../../../user/src/client';
-import { getItem } from '../services/item';
 import { storeIDToStoreCode, storeItems } from '../services/store';
 import { getExpandedTransactionsAndBalance } from '../services/transaction';
+import { expandTopPrioritySurvey } from './survey';
 
 export interface SessionData {
   user: {
@@ -61,16 +61,9 @@ const getStoreSessionData = async (user) => {
   };
 };
 
-const getTopPrioritySurvey = async (key, user) => {
-  const [ survey ] = await getUserSurveys(key, user.id);
-
-  return {
-    ...survey,
-    questions: survey.questions.map(([ id1, id2 ]) => [
-      getItem(id1),
-      getItem(id2)
-    ])
-  };
+const getSurveySessionData = async (key, user) => {
+  const surveys = await getUserSurveys(key, user.id);
+  return expandTopPrioritySurvey(surveys);
 };
 
 export const getSessionData = async (key, { user }) => {
@@ -78,7 +71,7 @@ export const getSessionData = async (key, { user }) => {
   const [userProfile, store, survey] = await Promise.all([
     getUserSessionData(key, user),
     getStoreSessionData(user),
-    getTopPrioritySurvey(key, user)
+    getSurveySessionData(key, user)
   ]);
   return {
     user: userProfile,
