@@ -63,6 +63,9 @@ const getStoreSessionData = async (user) => {
 
 const getSurveySessionData = async (key, user) => {
   const surveys = await getUserSurveys(key, user.id);
+  if (surveys.length === 0) {
+    return null;
+  }
   return expandTopPrioritySurvey(surveys);
 };
 
