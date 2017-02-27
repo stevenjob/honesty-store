@@ -120,6 +120,76 @@ const items = [
     image: 'misc-crisps.svg',
     weight: 22,
     notes: 'Multipack not for individual resale. Residual stock. Wotsits, Quavers & Monster Munch'
+  },
+  {
+    id: '8fd928e0-06c9-4958-9259-719dc451a8c2',
+    name: 'Popchips Ridges',
+    image: 'misc-crisps.svg',
+    weight: 23,
+    notes: 'Smoky Bacon'
+  },
+  {
+    id: 'edef6848-f3d5-4733-babc-bc10bc3d257c',
+    name: 'Popchips Ridges',
+    image: 'misc-crisps.svg',
+    weight: 23,
+    notes: 'Sea Salt & Vinegar'
+  },
+  {
+    id: '64e177af-6313-4d9e-b39a-8495c2f1d939',
+    name: 'Love Corn',
+    image: 'misc-crisps.svg',
+    weight: 20,
+    notes: 'Habanero'
+  },
+  {
+    id: '54e10706-284f-440f-82cb-0f8911a8424a',
+    name: 'Propercorn',
+    image: 'misc-crisps.svg',
+    weight: 20,
+    notes: 'Fiery Worcester Sauce'
+  },
+  {
+    id: '80984458-bab9-4a8f-86a7-b3e46f62139d',
+    name: 'Propercorn',
+    image: 'misc-crisps.svg',
+    weight: 20,
+    notes: 'Lightly Sea Salted'
+  },
+  {
+    id: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
+    name: 'Nakd',
+    image: 'misc-bar.svg',
+    weight: 30,
+    notes: 'Apple Crunch Bars'
+  },
+  {
+    id: 'f0167eb4-f906-48d8-8067-6e3b646d8a19',
+    name: 'Nakd',
+    image: 'misc-bar.svg',
+    weight: 40,
+    notes: 'Coconut Bliss Nibbles'
+  },
+  {
+    id: 'fc3f3a7a-64bc-4f23-9a4e-c90f2536e56b',
+    name: 'Cranberry Snack Shot',
+    image: 'misc-bar.svg',
+    weight: 40,
+    notes: 'Fruit & Nuts'
+  },
+  {
+    id: 'b78c3975-eb7f-4eda-a3ea-d54d35e6471e',
+    name: 'Good 4 U - Super Seeds',
+    image: 'misc-bar.svg',
+    weight: 25,
+    notes: 'Coconut & Berry Energy Boost'
+  },
+  {
+    id: '5298c925-9ae2-4017-a007-c1928c38ddc6',
+    name: 'Trek',
+    image: 'misc-bar.svg',
+    weight: 50,
+    notes: 'Banana Bread Flapjack'
   }
 ];
 
