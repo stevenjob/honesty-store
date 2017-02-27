@@ -132,6 +132,12 @@ const dirToTable = {
     readCapacityUnits,
     writeCapacityUnits,
     dummyData: []
+  }),
+
+  box: ({ readCapacityUnits, writeCapacityUnits }) => template({
+    readCapacityUnits,
+    writeCapacityUnits,
+    dummyData: []
   })
 };
 

@@ -124,6 +124,24 @@ const dirToContainer = {
           value: 'eu-west-1'
         }
       ]
+    }),
+
+  box: ({ image, baseUrl, serviceSecret, logGroup, tableName }) =>
+    template({
+      image,
+      baseUrl,
+      serviceSecret,
+      logGroup,
+      environment: [
+        {
+          name: 'TABLE_NAME',
+          value: tableName
+        },
+        {
+          name: 'AWS_REGION',
+          value: 'eu-west-1'
+        }
+      ]
     })
 };
 
