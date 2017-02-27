@@ -13,7 +13,8 @@ class Survey extends React.Component {
     this.state = {
       index: 0,
       answers: [],
-      outro: false
+      outro: false,
+      delta: 0
     };
   }
 

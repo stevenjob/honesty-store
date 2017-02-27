@@ -7,7 +7,7 @@ import { Back } from '../chrome/link';
 const Index = ({ surveyAvailable, count }) =>
   <Full top={<Back />}>
     <h1>It's Come To This...<sup>*</sup></h1>
-    <p>In the ages-old battle for space in your store, many fall and only the very strongest prosper.</p>
+    <p>In the age-old battle for space in your store, many have fallen and only the very strongest prosper.</p>
     <p>We're going to line up {count} pairs of items and it's up to you to <span className="underline">swipe left or right</span> to save your favourite item.</p>
     {
       surveyAvailable ?

@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import Chrome from '../layout/chrome';
 import List from '../chrome/list';
 import StoreItem from './item';
+import MiscSelection from '../item/misc-selection';
 import isRegistedUser from '../reducers/is-registered-user';
 import Balance from '../topup/balance';
 
@@ -15,19 +16,36 @@ const SignIn = () =>
 
 const itemRenderer = (item, index) => <StoreItem item={item} />;
 
-const Store = ({ registered, storeCode, balance, items }) =>
+const Store = ({ registered, storeCode, balance, items, surveyAvailable }) =>
   <Chrome title={storeCode || 'Store'}
-    right={registered ? <Balance balance={balance}/> : <Help />}
+    right={registered ? <Balance balance={balance} /> : <Help />}
     left={!registered && <SignIn />}
     nav={registered}>
+    {
+      surveyAvailable &&
+      <div className="border-gray border-bottom bg-white mb2">
+        <Link to={`/survey`} className="btn regular flex items-center justify-between navy">
+          <div>
+            <h3>
+              Think we're missing something?
+            </h3>
+            <p className="aqua">Tap here to take a quick survey</p>
+          </div>
+          <div className="" style={{ width: '5rem' }}>
+            <MiscSelection />
+          </div>
+        </Link>
+      </div>
+    }
     <List data={items} itemRenderer={itemRenderer} />
   </Chrome>;
 
-const mapStateToProps = ({ user, store: { code, items } }) => ({
+const mapStateToProps = ({ user, store: { code, items }, survey }) => ({
   registered: isRegistedUser(user),
   storeCode: code,
   balance: user.balance || 0,
-  items
+  items,
+  surveyAvailable: survey != null
 });
 
 export default connect(mapStateToProps)(Store);
