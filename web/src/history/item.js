@@ -3,10 +3,11 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import safeLookupItemImage from '../item/safeLookupItemImage';
 import Currency from '../format/Currency';
+import history from '../history';
 
-const HistoryItem = ({ isTopUp, text, timestamp, amount, image }) => {
+const HistoryItem = ({ isTopUp, text, timestamp, amount, image, href }) => {
   return (
-    <div className="btn regular navy col-12 flex">
+    <div className="btn regular navy col-12 flex" onClick={() => history.push(href)}>
       <div className="bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${image})`, width: '2.375rem' }}>
         {'\u00a0'}
@@ -39,15 +40,17 @@ const mapStateToProps = (
         amount,
         image: require('./assets/top-up.svg'),
         text: 'TOP UP',
+        href: '/topup'
       };
     case 'purchase':
-      const { item: { image, name }, quantity } = data;
+      const { item: { id, image, name }, quantity } = data;
       return {
         isTopUp: false,
         timestamp,
         amount,
         image: safeLookupItemImage(image),
         text: formatItem(name ? name : 'Unknown Item', quantity),
+        href: `/item/${id}`
       };
     default:
       return {
