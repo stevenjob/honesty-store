@@ -123,14 +123,14 @@ const items = [
   },
   {
     id: '8fd928e0-06c9-4958-9259-719dc451a8c2',
-    name: 'Popchips Ridges',
+    name: 'Popchips',
     image: 'misc-crisps.svg',
     weight: 23,
     notes: 'Smoky Bacon'
   },
   {
     id: 'edef6848-f3d5-4733-babc-bc10bc3d257c',
-    name: 'Popchips Ridges',
+    name: 'Popchips',
     image: 'misc-crisps.svg',
     weight: 23,
     notes: 'Sea Salt & Vinegar'
@@ -158,28 +158,28 @@ const items = [
   },
   {
     id: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
-    name: 'Nakd',
+    name: 'Nakd Apple',
     image: 'misc-bar.svg',
     weight: 30,
     notes: 'Apple Crunch Bars'
   },
   {
     id: 'f0167eb4-f906-48d8-8067-6e3b646d8a19',
-    name: 'Nakd',
+    name: 'Nakd Nibbles',
     image: 'misc-bar.svg',
     weight: 40,
     notes: 'Coconut Bliss Nibbles'
   },
   {
     id: 'fc3f3a7a-64bc-4f23-9a4e-c90f2536e56b',
-    name: 'Cranberry Snack Shot',
+    name: 'Snack Shot',
     image: 'misc-bar.svg',
     weight: 40,
     notes: 'Fruit & Nuts'
   },
   {
     id: 'b78c3975-eb7f-4eda-a3ea-d54d35e6471e',
-    name: 'Good 4 U - Super Seeds',
+    name: 'Super Seeds',
     image: 'misc-bar.svg',
     weight: 25,
     notes: 'Coconut & Berry Energy Boost'
