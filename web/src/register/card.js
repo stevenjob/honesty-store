@@ -63,7 +63,7 @@ class Card extends React.Component {
     const matches = event.target.value.match(/\d/g);
     const numbers = matches == null ? [] : [...matches];
     const cvc = numbers.join('');
-    this.setState({ cvc: cvc.substr(0, 3) }, setCursorPosition(event.target));
+    this.setState({ cvc }, setCursorPosition(event.target));
   }
 
   handleSubmit(e) {
@@ -129,7 +129,7 @@ class Card extends React.Component {
               value={cvc}
               pattern="[0-9]*"
               noValidate
-              placeholder="CVV (3-digits)"
+              placeholder="CVV (3 or 4-digits)"
               className={(error != null && error.param === 'cvc') ? 'input border-red' : 'input'}
               onChange={(e) => this.handleCVCChange(e)} />
           </p>
