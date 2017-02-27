@@ -59,14 +59,25 @@ const edn = {
 
 const ldn = {
   boxIds: [
-    '1a6b272d-7bbb-4cc6-a84f-653a5087dc0f'
+    '1a6b272d-7bbb-4cc6-a84f-653a5087dc0f',
+    '239d69df-2e4b-444b-ad45-14bf7b944af7'
   ],
   itemPrices: {
     '28b0a802-bef3-478b-81d0-034e3ac02092': 55,
     'faeda516-bd9f-41ec-b949-7a676312b0ae': 45,
     'b43c4a97-1112-41ce-8f91-5a8bda0dcdc8': 56,
     '78816fba-150d-4282-b43d-900df45cea8b': 53,
-    '3fa0db7c-3f90-404e-b875-3792eda3e185': 65
+    '3fa0db7c-3f90-404e-b875-3792eda3e185': 65,
+    '8fd928e0-06c9-4958-9259-719dc451a8c2': 72,
+    'edef6848-f3d5-4733-babc-bc10bc3d257c': 72,
+    '64e177af-6313-4d9e-b39a-8495c2f1d939': 60,
+    '54e10706-284f-440f-82cb-0f8911a8424a': 85,
+    '80984458-bab9-4a8f-86a7-b3e46f62139d': 85,
+    '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea': 99,
+    'f0167eb4-f906-48d8-8067-6e3b646d8a19': 85,
+    'fc3f3a7a-64bc-4f23-9a4e-c90f2536e56b': 102,
+    'b78c3975-eb7f-4eda-a3ea-d54d35e6471e': 73,
+    '5298c925-9ae2-4017-a007-c1928c38ddc6': 136
   }
 };
 
