@@ -201,6 +201,128 @@ const items = [
     expiry: '20170318',
     priceExcludingTax: '9.79',
     priceIncludingTax: '11.74'
+  },
+
+  // Epicurium 17/02/17
+  {
+    id: '9064a75f-5200-4d95-8889-da67aa6041d5',
+    purchased: '20170217',
+    quantity: 1,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-POP-S-008',
+    itemId: '8fd928e0-06c9-4958-9259-719dc451a8c2',
+    itemQuantity: 24,
+    expiry: 'UNKNOWN',
+    priceExcludingTax: '6.22',
+    priceIncludingTax: '7.77'
+  },
+  {
+    id: '6841c840-301b-4d41-b791-82135f287186',
+    purchased: '20170217',
+    quantity: 1,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-POP-S-007',
+    itemId: 'edef6848-f3d5-4733-babc-bc10bc3d257c',
+    itemQuantity: 24,
+    expiry: 'UNKNOWN',
+    priceExcludingTax: '6.22',
+    priceIncludingTax: '7.77'
+  },
+  {
+    id: '6c2c6571-3b83-490c-b69a-7462e478a5b9',
+    purchased: '20170217',
+    quantity: 1,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-LCN-I-003',
+    itemId: '64e177af-6313-4d9e-b39a-8495c2f1d939',
+    itemQuantity: 24,
+    expiry: 'UNKNOWN',
+    priceExcludingTax: '8.96',
+    priceIncludingTax: '8.96'
+  },
+  {
+    id: '6c2c6571-3b83-490c-b69a-7462e478a5b9',
+    purchased: '20170217',
+    quantity: 1,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-PRO-S-003',
+    itemId: '54e10706-284f-440f-82cb-0f8911a8424a',
+    itemQuantity: 24,
+    expiry: 'UNKNOWN',
+    priceExcludingTax: '8.52',
+    priceIncludingTax: '10.65'
+  },
+  {
+    id: 'cfb13f72-6c7b-4648-bc87-e705927f5179',
+    purchased: '20170217',
+    quantity: 1,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-PRO-S-002',
+    itemId: '80984458-bab9-4a8f-86a7-b3e46f62139d',
+    itemQuantity: 24,
+    expiry: 'UNKNOWN',
+    priceExcludingTax: '8.52',
+    priceIncludingTax: '10.65'
+  },
+  {
+    id: '06aaff31-b515-44b0-b113-6ea32193d9e7',
+    purchased: '20170217',
+    quantity: 1,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-NKD-C-001',
+    itemId: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
+    itemQuantity: 18,
+    expiry: 'UNKNOWN',
+    priceExcludingTax: '7.43',
+    priceIncludingTax: '9.29'
+  },
+  {
+    id: 'b211bc07-af4c-455a-99da-e3fa7f72b8c7',
+    purchased: '20170217',
+    quantity: 1,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-NKD-N-005',
+    itemId: 'f0167eb4-f906-48d8-8067-6e3b646d8a19',
+    itemQuantity: 18,
+    expiry: 'UNKNOWN',
+    priceExcludingTax: '7.75',
+    priceIncludingTax: '9.69'
+  },
+  {
+    id: '6811aacb-a33f-4bc1-91f9-2bd40aca0eb3',
+    purchased: '20170217',
+    quantity: 1,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-CRN-I-004',
+    itemId: 'fc3f3a7a-64bc-4f23-9a4e-c90f2536e56b',
+    itemQuantity: 24,
+    expiry: 'UNKNOWN',
+    priceExcludingTax: '10.24',
+    priceIncludingTax: '12.80'
+  },
+  {
+    id: 'd7fe0ede-4922-4ba1-b7db-a6e8c2e398aa',
+    purchased: '20170217',
+    quantity: 1,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-GFU-S-003',
+    itemId: 'b78c3975-eb7f-4eda-a3ea-d54d35e6471e',
+    itemQuantity: 24,
+    expiry: 'UNKNOWN',
+    priceExcludingTax: '9.07',
+    priceIncludingTax: '9.07'
+  },
+  {
+    id: 'e9ea65b3-7ddc-47b7-a1d7-4183ee17f189',
+    purchased: '20170217',
+    quantity: 1,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-TRK-F-001',
+    itemId: '5298c925-9ae2-4017-a007-c1928c38ddc6',
+    itemQuantity: 24,
+    expiry: 'UNKNOWN',
+    priceExcludingTax: '11.30',
+    priceIncludingTax: '11.30'
   }
 ];
 
