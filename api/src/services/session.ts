@@ -50,13 +50,13 @@ const getUserSessionData = async (key, user) => {
   };
 };
 
-const getStoreSessionData = async (user) => {
+const getStoreSessionData = async (key, user) => {
   const { defaultStoreId } = user;
 
   const defaultStoreCode = storeIDToStoreCode(defaultStoreId);
 
   return {
-    items: storeItems(defaultStoreCode),
+    items: await storeItems(key, defaultStoreCode),
     code: defaultStoreCode
   };
 };
@@ -70,7 +70,7 @@ export const getSessionData = async (key, { user }) => {
   const { accessToken, refreshToken } = user;
   const [userProfile, store, survey] = await Promise.all([
     getUserSessionData(key, user),
-    getStoreSessionData(user),
+    getStoreSessionData(key, user),
     getSurveySessionData(key, user)
   ]);
   return {

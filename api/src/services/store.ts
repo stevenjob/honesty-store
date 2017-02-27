@@ -1,4 +1,4 @@
-import { getBox } from './box';
+import { getBox } from '../../../box/src/client';
 import { getItem } from './item';
 
 const stores = new Map();
@@ -118,9 +118,9 @@ const getUniqueItemCounts = (boxes) => {
     .map(([itemID, count]) => ({ itemID, count }));
 };
 
-export const storeItems = (storeCode): StoreItem[] => {
+export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
   const store = getStore(storeCode);
-  const boxes = store.boxIds.map(getBox);
+  const boxes = await Promise.all(store.boxIds.map((boxId) => getBox(key, boxId)));
 
   return getUniqueItemCounts(boxes)
     .map(({ itemID, count }) => ({
