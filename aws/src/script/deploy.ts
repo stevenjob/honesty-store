@@ -64,7 +64,7 @@ const generateName = ({ branch, dir }: { branch: string, dir?: string }) => {
 };
 
 const ensureDatabase = async ({ branch, dir }) => {
-  const capacityUnits = isLive(branch) ? 10 : 1;
+  const capacityUnits = 1;
 
   const { config, data } = dirToTable({
     dir,
