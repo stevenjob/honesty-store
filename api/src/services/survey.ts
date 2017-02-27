@@ -1,6 +1,10 @@
 import { getItem } from '../services/item';
 
 export const expandTopPrioritySurvey = (surveys) => {
+  if (surveys.length === 0) {
+    return null;
+  }
+
   const [ survey ] = surveys;
 
   return {
