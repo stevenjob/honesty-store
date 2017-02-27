@@ -21,7 +21,10 @@ class Survey extends React.Component {
   choose(itemIndex) {
     const { survey: { questions } } = this.props;
     const { index, answers } = this.state;
-    answers[index] = questions[index][itemIndex].id;
+    this.setState({
+      answers: [...answers, questions[index][itemIndex].id],
+      outro: true
+    });
     setTimeout(() => {
       const { survey, submitSurvey } = this.props;
       const nextIndex = index + 1;
@@ -35,9 +38,6 @@ class Survey extends React.Component {
         index: nextIndex
       });
     }, 1000);
-    this.setState({
-      outro: true
-    });
   }
 
   swipedLeft() {
