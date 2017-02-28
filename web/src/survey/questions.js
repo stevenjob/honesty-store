@@ -18,6 +18,23 @@ class Survey extends React.Component {
     };
   }
 
+  next() {
+    const { survey, submitSurvey } = this.props;
+    const { index, answers } = this.state;
+    const nextIndex = index + 1;
+
+    if (nextIndex >= survey.questions.length) {
+      submitSurvey({ survey, answers });
+      return;
+    }
+
+    this.setState({
+      outro: false,
+      delta: 0,
+      index: nextIndex
+    });
+  }
+
   choose(itemIndex) {
     const { survey: { questions } } = this.props;
     const { index, answers } = this.state;
@@ -25,19 +42,7 @@ class Survey extends React.Component {
       answers: [...answers, questions[index][itemIndex].id],
       outro: true
     });
-    setTimeout(() => {
-      const { survey, submitSurvey } = this.props;
-      const nextIndex = index + 1;
-      if (nextIndex >= survey.questions.length) {
-        submitSurvey({ survey, answers: this.state.answers });
-        return;
-      }
-      this.setState({
-        outro: false,
-        delta: 0,
-        index: nextIndex
-      });
-    }, 1000);
+    setTimeout(() => this.next(), 1000);
   }
 
   swipedLeft() {
