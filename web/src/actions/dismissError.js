@@ -1,5 +1,3 @@
-import history from '../history';
-
 export const DISMISS_ERROR = 'DISMISS_ERROR';
 
 const dismiss = () => {
@@ -10,5 +8,4 @@ const dismiss = () => {
 
 export const dismissError = () => async (dispatch) => {
   dispatch(dismiss());
-  history.goBack();
 };
