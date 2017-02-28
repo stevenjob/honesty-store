@@ -16,7 +16,10 @@ export interface Box {
   closed?: yyyymmdd;
 }
 
-const { get } = fetch('box');
+const { get, post } = fetch('box');
 
 export const getBox = (key, boxId: string) =>
   get<Box>(1, key, `/${boxId}`);
+
+export const flagOutOfStock = ({ key, boxId, itemId }) =>
+  post<{}>(1, key, `/out-of-stock/${boxId}/${itemId}`, {});
