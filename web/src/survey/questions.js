@@ -29,7 +29,7 @@ class Survey extends React.Component {
       const { survey, submitSurvey } = this.props;
       const nextIndex = index + 1;
       if (nextIndex >= survey.questions.length) {
-        submitSurvey({ survey, answers });
+        submitSurvey({ survey, answers: this.state.answers });
         return;
       }
       this.setState({
