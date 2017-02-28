@@ -53,7 +53,8 @@ const items = [
     ],
     packed: '20170221',
     shipped: '20170221',
-    recieved: '20170221'
+    recieved: '20170221',
+    closed: '20170228'
   },
   {
     id: '340e5dba-309d-4f7d-b20d-f1f778883627',
