@@ -66,6 +66,13 @@ const items = [
     notes: 'Multipack not for individual resale. NCL trial only, Simon Watson sourcing'
   },
   {
+    id: 'ccad58e3-e27a-4463-9139-17a36ff7f7b8',
+    name: 'Coke (Fridge)',
+    image: 'coca-cola-can.svg',
+    weight: 400,
+    notes: 'Multipack not for individual resale. NCL trial only, Simon Watson sourcing'
+  },
+  {
     id: '606e12d4-6367-4fc3-aa7a-92ee17ccac2c',
     name: 'Freddo',
     image: 'freddo.svg',
