@@ -3,6 +3,7 @@ import bodyParser = require('body-parser');
 import compression = require('compression');
 import cors = require('cors');
 import { serviceRouter } from '../../service/src/router';
+import boxController from './controllers/box';
 import logoutController from './controllers/logout';
 import purchaseController from './controllers/purchase';
 import registerController from './controllers/register';
@@ -32,6 +33,7 @@ logoutController(router);
 transactionsController(router);
 supportController(router);
 surveyController(router);
+boxController(router);
 
 app.use(router);
 

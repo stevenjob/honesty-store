@@ -101,6 +101,11 @@ const getStore = (storeCode) => {
   return store;
 };
 
+export const storeBoxIds = (storeCode) => {
+  const store = getStore(storeCode);
+  return store.boxIds;
+};
+
 export const getPrice = (storeCode: string, itemID: string) => {
   const store = getStore(storeCode);
   return store.itemPrices[itemID];
