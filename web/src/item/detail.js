@@ -9,11 +9,12 @@ import { performPurchase } from '../actions/purchase';
 import isRegistered from '../reducers/is-registered-user';
 import safeLookupItemImage from './safeLookupItemImage';
 import Full from '../layout/full';
+import FlagOutOfStock from './out-of-stock';
 
 const minNumItems = 1;
 
 const ItemDetail = ({
-  item: { id, name, price, image },
+  item: { id, name, price, image, depleted },
   balance,
   performPurchase,
   registered
@@ -73,6 +74,15 @@ const ItemDetail = ({
     </Link>
   </p>;
 
+  const depletedDOM = (() => {
+    if (depleted) {
+      return <div>This item has been reported out of stock - please contact support if we've made a mistake!</div>;
+    }
+    if (registered) {
+      return <FlagOutOfStock itemId={id} />;
+    }
+    return null;
+  })();
 
   return (
     <Full top={<Back />}>
@@ -87,6 +97,7 @@ const ItemDetail = ({
             </div>
           </div>
           {registered ? purchaseStepper : unregisteredPurchaseButton}
+          {depletedDOM}
         </div>
       }
     </Full>

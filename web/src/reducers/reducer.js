@@ -11,6 +11,7 @@ import { SIGNIN_REQUEST, SIGNIN_SUCCESS, SIGNIN_FAILURE } from '../actions/signi
 import { SIGNIN2_REQUEST, SIGNIN2_SUCCESS, SIGNIN2_FAILURE } from '../actions/signin2';
 import { STORE_REQUEST, STORE_SUCCESS, STORE_FAILURE } from '../actions/store';
 import { SURVEY_REQUEST, SURVEY_SUCCESS, SURVEY_FAILURE } from '../actions/survey';
+import { OUT_OF_STOCK_REQUEST, OUT_OF_STOCK_SUCCESS, OUT_OF_STOCK_FAILURE } from '../actions/out-of-stock';
 
 const getInitialState = () => {
   return {
@@ -180,6 +181,31 @@ export default (state = getInitialState(), action) => {
         ...state,
         error: action.error,
         pending: state.pending.filter(e => e !== 'session')
+      };
+    }
+    case OUT_OF_STOCK_REQUEST: {
+      return {
+        ...state,
+        pending: [...state.pending, 'outofstock']
+      };
+    }
+    case OUT_OF_STOCK_SUCCESS: {
+      const { itemId } = action;
+      const tagItemAsDepleted = item => item.id === itemId ? { ...item, depleted: true } : item;
+      return {
+        ...state,
+        store: {
+          ...state.store,
+          items: state.store.items.map(tagItemAsDepleted),
+        },
+        pending: state.pending.filter(e => e !== 'outofstock')
+      };
+    }
+    case OUT_OF_STOCK_FAILURE: {
+      return {
+        ...state,
+        pending: state.pending.filter(e => e !== 'outofstock'),
+        error: action.error
       };
     }
     case SUPPORT_REQUEST: {

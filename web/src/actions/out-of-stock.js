@@ -1,0 +1,42 @@
+import apifetch from './apirequest';
+
+export const OUT_OF_STOCK_REQUEST = 'OUT_OF_STOCK_REQUEST';
+export const OUT_OF_STOCK_SUCCESS = 'OUT_OF_STOCK_SUCCESS';
+export const OUT_OF_STOCK_FAILURE = 'OUT_OF_STOCK_FAILURE';
+
+const outOfStockRequest = () => {
+  return {
+    type: OUT_OF_STOCK_REQUEST
+  };
+};
+
+const outOfStockSuccess = (response, itemId) => {
+  return {
+    type: OUT_OF_STOCK_SUCCESS,
+    itemId,
+    response
+  };
+};
+
+const outOfStockFailure = (error) => {
+  return {
+    type: OUT_OF_STOCK_FAILURE,
+    error
+  };
+};
+
+export const performOutOfStock = ({ itemId }) => async (dispatch, getState) => {
+  dispatch(outOfStockRequest());
+
+  try {
+    const response = await apifetch({
+      url: '/api/v1/out-of-stock',
+      getToken: () => getState().accessToken,
+      body: { itemId }
+    }, dispatch, getState);
+
+    dispatch(outOfStockSuccess(response, itemId));
+  } catch (e) {
+    dispatch(outOfStockFailure(e));
+  }
+};
