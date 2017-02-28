@@ -8,7 +8,6 @@ import './index.css';
 
 const defaultSubtitle = 'Oops! Something went wrong...';
 const retryTitle = 'Can you try that again, please?';
-const failureTitle = "I'm sorry Dave, I'm afraid I can't do that";
 
 const ErrorInternal = ({
   title = retryTitle,
@@ -34,9 +33,11 @@ const mapStateToProps = ({ error }) => {
     return {};
   }
 
+  const { message, actionDescription } = errorDef;
+
   return {
-    subtitle: errorDef.message,
-    title: errorDef.retryable ? retryTitle : failureTitle
+    subtitle: message,
+    title: actionDescription != null ? actionDescription : retryTitle
   };
 };
 
