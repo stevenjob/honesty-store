@@ -1,6 +1,6 @@
-import { getItem } from './item';
+import { getItem } from '../../api/src/services/item';
 
-interface Stock {
+interface Batch {
   id: string;
   purchased: string;
   quantity: number;
@@ -13,7 +13,7 @@ interface Stock {
   priceIncludingTax: string;
 }
 
-const items = [
+const batchesInternal: Batch[] = [
   // Residual from bulky
   {
     id: '782f0776-ccf3-43a8-9ba6-386e80b12dd3',
@@ -326,12 +326,12 @@ const items = [
   }
 ];
 
-const stock = new Map<string, Stock>();
-for (const item of items) {
-  if (stock.has(item.id)) {
-    throw new Error(`Duplicate ID ${item.id}`);
+export const batches = new Map<string, Batch>();
+for (const batch of batchesInternal) {
+  if (batches.has(batch.id)) {
+    throw new Error(`Duplicate ID ${batch.id}`);
   }
   // ensure the itemId is valid
-  getItem(item.itemId);
-  stock.set(item.id, item);
+  getItem(batch.itemId);
+  batches.set(batch.id, batch);
 }
