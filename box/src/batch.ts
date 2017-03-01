@@ -4,7 +4,7 @@ interface Batch {
   id: string;
   purchased?: number;
   quantity: number;
-  supplier: string;
+  supplier?: string;
   supplierCode?: string;
   itemId: string;
   itemQuantity: number;
@@ -19,8 +19,8 @@ const batchesInternal: Batch[] = [
     id: '782f0776-ccf3-43a8-9ba6-386e80b12dd3',
     purchased: null,
     quantity: 1,
-    supplier: 'UNKNOWN',
-    supplierCode: 'UNKNOWN',
+    supplier: null,
+    supplierCode: null,
     itemId: '8e9bb2db-9437-4733-acc1-f5e218e0a603',
     itemQuantity: 1,
     expiry: null,
@@ -31,8 +31,8 @@ const batchesInternal: Batch[] = [
     id: 'ae3c4d05-fb9c-48d7-b22f-6f8761636b88',
     purchased: null,
     quantity: 1,
-    supplier: 'UNKNOWN',
-    supplierCode: 'UNKNOWN',
+    supplier: null,
+    supplierCode: null,
     itemId: '272c6a59-9b4c-41b6-b839-0f8be506728e',
     itemQuantity: 20,
     expiry: null,
@@ -43,8 +43,8 @@ const batchesInternal: Batch[] = [
     id: '9d1c7e32-bcf5-4a98-b9b9-72e21965118d',
     purchased: null,
     quantity: 1,
-    supplier: 'UNKNOWN',
-    supplierCode: 'UNKNOWN',
+    supplier: null,
+    supplierCode: null,
     itemId: '606e12d4-6367-4fc3-aa7a-92ee17ccac2c',
     itemQuantity: 2,
     expiry: null,
@@ -55,8 +55,8 @@ const batchesInternal: Batch[] = [
     id: '20a721b8-78be-4e5f-ad85-21284d560ddc',
     purchased: null,
     quantity: 1,
-    supplier: 'UNKNOWN',
-    supplierCode: 'UNKNOWN',
+    supplier: null,
+    supplierCode: null,
     itemId: '32919485-d806-4be6-824b-170f66371306',
     itemQuantity: 15,
     expiry: null,
@@ -67,8 +67,8 @@ const batchesInternal: Batch[] = [
     id: '284a7cf7-16c9-428f-8d95-8af82b0a1bd1',
     purchased: null,
     quantity: 1,
-    supplier: 'UNKNOWN',
-    supplierCode: 'UNKNOWN',
+    supplier: null,
+    supplierCode: null,
     itemId: 'e91e7274-fe28-405c-86c8-5768197eb6ac',
     itemQuantity: 16,
     expiry: null,
@@ -79,8 +79,8 @@ const batchesInternal: Batch[] = [
     id: 'c57f77b2-35b2-4283-a2e0-9f9c91afd71e',
     purchased: null,
     quantity: 1,
-    supplier: 'UNKNOWN',
-    supplierCode: 'UNKNOWN',
+    supplier: null,
+    supplierCode: null,
     itemId: '96ce1162-9188-41ac-9d35-8fc6a14783ef',
     itemQuantity: 20,
     expiry: 1483660800,
@@ -94,7 +94,7 @@ const batchesInternal: Batch[] = [
     purchased: 1484179200,
     quantity: 1,
     supplier: 'Costco',
-    supplierCode: 'UNKNOWN',
+    supplierCode: null,
     itemId: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
     itemQuantity: 32,
     expiry: null,
