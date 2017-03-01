@@ -2,7 +2,7 @@ import { getItem } from '../../api/src/services/item';
 
 interface Batch {
   id: string;
-  purchased: string;
+  purchased?: number;
   quantity: number;
   supplier: string;
   supplierCode?: string;
@@ -17,7 +17,7 @@ const batchesInternal: Batch[] = [
   // Residual from bulky
   {
     id: '782f0776-ccf3-43a8-9ba6-386e80b12dd3',
-    purchased: 'UNKNOWN',
+    purchased: null,
     quantity: 1,
     supplier: 'UNKNOWN',
     supplierCode: 'UNKNOWN',
@@ -29,7 +29,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: 'ae3c4d05-fb9c-48d7-b22f-6f8761636b88',
-    purchased: 'UNKNOWN',
+    purchased: null,
     quantity: 1,
     supplier: 'UNKNOWN',
     supplierCode: 'UNKNOWN',
@@ -41,7 +41,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '9d1c7e32-bcf5-4a98-b9b9-72e21965118d',
-    purchased: 'UNKNOWN',
+    purchased: null,
     quantity: 1,
     supplier: 'UNKNOWN',
     supplierCode: 'UNKNOWN',
@@ -53,7 +53,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '20a721b8-78be-4e5f-ad85-21284d560ddc',
-    purchased: 'UNKNOWN',
+    purchased: null,
     quantity: 1,
     supplier: 'UNKNOWN',
     supplierCode: 'UNKNOWN',
@@ -65,7 +65,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '284a7cf7-16c9-428f-8d95-8af82b0a1bd1',
-    purchased: 'UNKNOWN',
+    purchased: null,
     quantity: 1,
     supplier: 'UNKNOWN',
     supplierCode: 'UNKNOWN',
@@ -77,7 +77,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: 'c57f77b2-35b2-4283-a2e0-9f9c91afd71e',
-    purchased: 'UNKNOWN',
+    purchased: null,
     quantity: 1,
     supplier: 'UNKNOWN',
     supplierCode: 'UNKNOWN',
@@ -91,7 +91,7 @@ const batchesInternal: Batch[] = [
   // Chris initial costco purchase
   {
     id: '1bea7790-5c53-4bdc-91dd-21b004310ac1',
-    purchased: '20170112',
+    purchased: 1484179200,
     quantity: 1,
     supplier: 'Costco',
     supplierCode: 'UNKNOWN',
@@ -103,7 +103,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '03e918c6-8868-4682-9c40-43caebdfc5b7',
-    purchased: '20170112',
+    purchased: 1484179200,
     quantity: 2,
     supplier: 'Costco',
     supplierCode: '163126',
@@ -115,7 +115,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '664c275f-1f61-4a10-be53-7cb3cdeffa68',
-    purchased: '20170112',
+    purchased: 1484179200,
     quantity: 2,
     supplier: 'Costco',
     supplierCode: '68',
@@ -127,7 +127,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '5001ac6a-d026-49b4-9c7c-72a299245edc',
-    purchased: '20170112',
+    purchased: 1484179200,
     quantity: 2,
     supplier: 'Costco',
     supplierCode: '84',
@@ -139,7 +139,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '47a13720-bbb4-4139-bd58-238b5b876fa1',
-    purchased: '20170112',
+    purchased: 1484179200,
     quantity: 2,
     supplier: 'Costco',
     supplierCode: '186578',
@@ -153,7 +153,7 @@ const batchesInternal: Batch[] = [
   // Receipt: https://goo.gl/photos/tPtxxtSYaqFpj4oo7, paid: no
   {
     id: '3af2571d-abe2-49f3-849e-9f180a1a8f8f',
-    purchased: '20170206',
+    purchased: 1486339200,
     quantity: 3,
     supplier: 'Poundstretcher',
     supplierCode: '263178',
@@ -168,7 +168,7 @@ const batchesInternal: Batch[] = [
   // Receipt: https://goo.gl/photos/iLP7HjdR5mucKcCb8, paid: no
   {
     id: 'cfb47dd9-78f0-4b50-9448-8e8916c0afb6',
-    purchased: '20170206',
+    purchased: 1486339200,
     quantity: 3,
     supplier: 'Costco',
     supplierCode: '186384',
@@ -180,7 +180,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: 'e506d540-4d6c-4199-a4c9-32418baa6191',
-    purchased: '20170206',
+    purchased: 1486339200,
     quantity: 3,
     supplier: 'Costco',
     supplierCode: '163126',
@@ -192,7 +192,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: 'e5e1ac40-1835-4d80-b1b2-af07d34860fd',
-    purchased: '20170206',
+    purchased: 1486339200,
     quantity: 2,
     supplier: 'Costco',
     supplierCode: '208528',
