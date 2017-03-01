@@ -40,11 +40,21 @@ const Store = ({ registered, storeCode, balance, items, surveyAvailable }) =>
     <List data={items} itemRenderer={itemRenderer} />
   </Chrome>;
 
+const storeOrdering = (items) => {
+  const inStock = items.filter(item => item.count > 0);
+  const depleted = items.filter(item => item.count === 0);
+
+  return [
+    ...inStock,
+    ...depleted
+  ];
+};
+
 const mapStateToProps = ({ user, store: { code, items }, survey }) => ({
   registered: isRegistedUser(user),
   storeCode: code,
   balance: user.balance || 0,
-  items,
+  items: storeOrdering(items),
   surveyAvailable: survey != null
 });
 
