@@ -8,7 +8,7 @@ interface Batch {
   supplierCode?: string;
   itemId: string;
   itemQuantity: number;
-  expiry: string;
+  expiry?: number;
   priceExcludingTax?: number;
   priceIncludingTax?: number;
 }
@@ -23,7 +23,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'UNKNOWN',
     itemId: '8e9bb2db-9437-4733-acc1-f5e218e0a603',
     itemQuantity: 1,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: null,
     priceIncludingTax: null
   },
@@ -35,7 +35,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'UNKNOWN',
     itemId: '272c6a59-9b4c-41b6-b839-0f8be506728e',
     itemQuantity: 20,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: null,
     priceIncludingTax: null
   },
@@ -47,7 +47,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'UNKNOWN',
     itemId: '606e12d4-6367-4fc3-aa7a-92ee17ccac2c',
     itemQuantity: 2,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: null,
     priceIncludingTax: null
   },
@@ -59,7 +59,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'UNKNOWN',
     itemId: '32919485-d806-4be6-824b-170f66371306',
     itemQuantity: 15,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: null,
     priceIncludingTax: null
   },
@@ -71,7 +71,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'UNKNOWN',
     itemId: 'e91e7274-fe28-405c-86c8-5768197eb6ac',
     itemQuantity: 16,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: null,
     priceIncludingTax: null
   },
@@ -83,7 +83,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'UNKNOWN',
     itemId: '96ce1162-9188-41ac-9d35-8fc6a14783ef',
     itemQuantity: 20,
-    expiry: '20170601',
+    expiry: 1483660800,
     priceExcludingTax: 699,
     priceIncludingTax: 699
   },
@@ -97,7 +97,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'UNKNOWN',
     itemId: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
     itemQuantity: 32,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 979,
     priceIncludingTax: 1174
   },
@@ -109,7 +109,7 @@ const batchesInternal: Batch[] = [
     supplierCode: '163126',
     itemId: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
     itemQuantity: 40,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 999,
     priceIncludingTax: 1198
   },
@@ -121,7 +121,7 @@ const batchesInternal: Batch[] = [
     supplierCode: '68',
     itemId: 'b43c4a97-1112-41ce-8f91-5a8bda0dcdc8',
     itemQuantity: 48,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 1499,
     priceIncludingTax: 1798
   },
@@ -133,7 +133,7 @@ const batchesInternal: Batch[] = [
     supplierCode: '84',
     itemId: '78816fba-150d-4282-b43d-900df45cea8b',
     itemQuantity: 36,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 1069,
     priceIncludingTax: 1282
   },
@@ -145,7 +145,7 @@ const batchesInternal: Batch[] = [
     supplierCode: '186578',
     itemId: '02bbc0fd-54c4-45bb-9b77-21b79b356aa6',
     itemQuantity: 96,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 1899,
     priceIncludingTax: 2278
   },
@@ -159,7 +159,7 @@ const batchesInternal: Batch[] = [
     supplierCode: '263178',
     itemId: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
     itemQuantity: 10,
-    expiry: '20170801',
+    expiry: 1483833600,
     priceExcludingTax: 249,
     priceIncludingTax: 299
   },
@@ -174,7 +174,7 @@ const batchesInternal: Batch[] = [
     supplierCode: '186384',
     itemId: '3fa0db7c-3f90-404e-b875-3792eda3e185',
     itemQuantity: 48,
-    expiry: '20170801',
+    expiry: 1483833600,
     priceExcludingTax: 1579,
     priceIncludingTax: 1894
   },
@@ -186,7 +186,7 @@ const batchesInternal: Batch[] = [
     supplierCode: '163126',
     itemId: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
     itemQuantity: 40,
-    expiry: '20170919',
+    expiry: 1505779200,
     priceExcludingTax: 649,
     priceIncludingTax: 778
   },
@@ -198,7 +198,7 @@ const batchesInternal: Batch[] = [
     supplierCode: '208528',
     itemId: '28b0a802-bef3-478b-81d0-034e3ac02092',
     itemQuantity: 32,
-    expiry: '20170318',
+    expiry: 1489795200,
     priceExcludingTax: 979,
     priceIncludingTax: 1174
   },
