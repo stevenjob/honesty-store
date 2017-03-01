@@ -4,6 +4,7 @@ import express = require('express');
 import isUUID = require('validator/lib/isUUID');
 import { info } from '../../service/src/log';
 
+import { CodedError } from '../../service/src/error';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { Box } from './client';
 
@@ -61,7 +62,7 @@ const flagOutOfStock = async ({ key, boxId, itemId }) => {
 
   const entry = box.items.find(item => item.itemId === itemId);
   if (!entry) {
-    throw new Error(`item ${itemId} not found in box ${boxId}`);
+    throw new CodedError('ItemNotInBox', `item ${itemId} not found in box ${boxId}`);
   }
 
   if (!entry.depleted) {
