@@ -83,7 +83,7 @@ const batchesInternal: Batch[] = [
     supplierCode: null,
     itemId: '96ce1162-9188-41ac-9d35-8fc6a14783ef',
     itemQuantity: 20,
-    expiry: 1452081600,
+    expiry: 1483660800,
     priceExcludingTax: 699,
     priceIncludingTax: 699
   },
@@ -91,7 +91,7 @@ const batchesInternal: Batch[] = [
   // Chris initial costco purchase
   {
     id: '1bea7790-5c53-4bdc-91dd-21b004310ac1',
-    purchased: 1512129600,
+    purchased: 1484179200,
     quantity: 1,
     supplier: 'Costco',
     supplierCode: null,
@@ -103,7 +103,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '03e918c6-8868-4682-9c40-43caebdfc5b7',
-    purchased: 1484222400,
+    purchased: 1484179200,
     quantity: 2,
     supplier: 'Costco',
     supplierCode: '163126',
@@ -115,7 +115,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '664c275f-1f61-4a10-be53-7cb3cdeffa68',
-    purchased: 1484222400,
+    purchased: 1484179200,
     quantity: 2,
     supplier: 'Costco',
     supplierCode: '68',
@@ -127,7 +127,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '5001ac6a-d026-49b4-9c7c-72a299245edc',
-    purchased: 1484222400,
+    purchased: 1484179200,
     quantity: 2,
     supplier: 'Costco',
     supplierCode: '84',
@@ -139,7 +139,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '47a13720-bbb4-4139-bd58-238b5b876fa1',
-    purchased: 1484222400,
+    purchased: 1484179200,
     quantity: 2,
     supplier: 'Costco',
     supplierCode: '186578',
@@ -153,13 +153,13 @@ const batchesInternal: Batch[] = [
   // Receipt: https://goo.gl/photos/tPtxxtSYaqFpj4oo7, paid: no
   {
     id: '3af2571d-abe2-49f3-849e-9f180a1a8f8f',
-    purchased: 1486382400,
+    purchased: 1486339200,
     quantity: 3,
     supplier: 'Poundstretcher',
     supplierCode: '263178',
     itemId: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
     itemQuantity: 10,
-    expiry: 1483876800,
+    expiry: 1483833600,
     priceExcludingTax: 249,
     priceIncludingTax: 299
   },
@@ -168,37 +168,37 @@ const batchesInternal: Batch[] = [
   // Receipt: https://goo.gl/photos/iLP7HjdR5mucKcCb8, paid: no
   {
     id: 'cfb47dd9-78f0-4b50-9448-8e8916c0afb6',
-    purchased: 1486382400,
+    purchased: 1486339200,
     quantity: 3,
     supplier: 'Costco',
     supplierCode: '186384',
     itemId: '3fa0db7c-3f90-404e-b875-3792eda3e185',
     itemQuantity: 48,
-    expiry: 1483876800,
+    expiry: 1483833600,
     priceExcludingTax: 1579,
     priceIncludingTax: 1894
   },
   {
     id: 'e506d540-4d6c-4199-a4c9-32418baa6191',
-    purchased: 1486382400,
+    purchased: 1486339200,
     quantity: 3,
     supplier: 'Costco',
     supplierCode: '163126',
     itemId: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
     itemQuantity: 40,
-    expiry: 1505818800,
+    expiry: 1505779200,
     priceExcludingTax: 649,
     priceIncludingTax: 778
   },
   {
     id: 'e5e1ac40-1835-4d80-b1b2-af07d34860fd',
-    purchased: 1486382400,
+    purchased: 1486339200,
     quantity: 2,
     supplier: 'Costco',
     supplierCode: '208528',
     itemId: '28b0a802-bef3-478b-81d0-034e3ac02092',
     itemQuantity: 32,
-    expiry: 1489838400,
+    expiry: 1489795200,
     priceExcludingTax: 979,
     priceIncludingTax: 1174
   },
@@ -206,7 +206,7 @@ const batchesInternal: Batch[] = [
   // Epicurium 17/02/17
   {
     id: '9064a75f-5200-4d95-8889-da67aa6041d5',
-    purchased: '20170217',
+    purchased: 1487332800,
     quantity: 1,
     supplier: 'Epicurium',
     supplierCode: 'EP-POP-S-008',
@@ -218,7 +218,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '6841c840-301b-4d41-b791-82135f287186',
-    purchased: '20170217',
+    purchased: 1487332800,
     quantity: 1,
     supplier: 'Epicurium',
     supplierCode: 'EP-POP-S-007',
@@ -230,7 +230,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '6c2c6571-3b83-490c-b69a-7462e478a5b9',
-    purchased: '20170217',
+    purchased: 1487332800,
     quantity: 1,
     supplier: 'Epicurium',
     supplierCode: 'EP-LCN-I-003',
@@ -242,7 +242,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '6c2c6571-3b83-490c-b69a-7462e478a5b9',
-    purchased: '20170217',
+    purchased: 1487332800,
     quantity: 1,
     supplier: 'Epicurium',
     supplierCode: 'EP-PRO-S-003',
@@ -254,7 +254,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: 'cfb13f72-6c7b-4648-bc87-e705927f5179',
-    purchased: '20170217',
+    purchased: 1487332800,
     quantity: 1,
     supplier: 'Epicurium',
     supplierCode: 'EP-PRO-S-002',
@@ -266,7 +266,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '06aaff31-b515-44b0-b113-6ea32193d9e7',
-    purchased: '20170217',
+    purchased: 1487332800,
     quantity: 1,
     supplier: 'Epicurium',
     supplierCode: 'EP-NKD-C-001',
@@ -278,7 +278,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: 'b211bc07-af4c-455a-99da-e3fa7f72b8c7',
-    purchased: '20170217',
+    purchased: 1487332800,
     quantity: 1,
     supplier: 'Epicurium',
     supplierCode: 'EP-NKD-N-005',
@@ -290,7 +290,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: '6811aacb-a33f-4bc1-91f9-2bd40aca0eb3',
-    purchased: '20170217',
+    purchased: 1487332800,
     quantity: 1,
     supplier: 'Epicurium',
     supplierCode: 'EP-CRN-I-004',
@@ -302,7 +302,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: 'd7fe0ede-4922-4ba1-b7db-a6e8c2e398aa',
-    purchased: '20170217',
+    purchased: 1487332800,
     quantity: 1,
     supplier: 'Epicurium',
     supplierCode: 'EP-GFU-S-003',
@@ -314,7 +314,7 @@ const batchesInternal: Batch[] = [
   },
   {
     id: 'e9ea65b3-7ddc-47b7-a1d7-4183ee17f189',
-    purchased: '20170217',
+    purchased: 1487332800,
     quantity: 1,
     supplier: 'Epicurium',
     supplierCode: 'EP-TRK-F-001',
