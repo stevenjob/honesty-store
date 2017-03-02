@@ -121,36 +121,29 @@ export interface StoreItem {
   price: number;
 }
 
-const getUniqueItems = (boxes) => {
-  const map = new Map<string, { count: number, depleted: boolean }>();
+const getUniqueItemCounts = (boxes) => {
+  const map = new Map<string, number>();
   for (const box of boxes) {
     if (box.closed != null) {
       continue;
     }
     for (const { itemID, count, depleted } of box.items) {
-      const existingItem = map.has(itemID)
-        ? map.get(itemID)
-        : { count: 0, depleted: true };
-
-      map.set(itemID, {
-        count: existingItem.count + <number>count,
-        depleted: existingItem.depleted && depleted
-      });
+      const existingCount = map.has(itemID) ? map.get(itemID) : 0;
+      map.set(itemID, existingCount + (depleted ? 0 : <number>count));
     }
   }
   return Array.from(map.entries())
-    .map(([itemID, { count, depleted }]) => ({ itemID, count, depleted }));
+    .map(([itemID, count]) => ({ itemID, count }));
 };
 
 export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
   const store = getStore(storeCode);
   const boxes = await Promise.all(store.boxIds.map((boxId) => getBox(key, boxId)));
 
-  return getUniqueItems(boxes)
-    .map(({ itemID, count, depleted }) => ({
+  return getUniqueItemCounts(boxes)
+    .map(({ itemID, count }) => ({
       ...getItem(itemID),
       count,
-      depleted,
       id: itemID,
       price: getPrice(storeCode, itemID)
     }));
