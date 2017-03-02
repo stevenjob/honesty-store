@@ -1,4 +1,4 @@
-import { getBox } from '../../../box/src/client';
+import { Box, getBox } from '../../../box/src/client';
 import { getItem } from './item';
 
 interface Store {
@@ -126,13 +126,13 @@ export interface StoreItem {
   price: number;
 }
 
-const getUniqueItemCounts = (boxes) => {
+const getUniqueItemCounts = (boxes: Box[]) => {
   const map = new Map<string, number>();
   for (const box of boxes) {
     if (box.closed != null) {
       continue;
     }
-    for (const { itemID, count, depleted } of box.items) {
+    for (const { itemID, count, depleted } of box.boxItems) {
       const existingCount = map.has(itemID) ? map.get(itemID) : 0;
       map.set(itemID, existingCount + (depleted ? 0 : <number>count));
     }
