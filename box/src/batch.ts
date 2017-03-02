@@ -212,7 +212,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'EP-POP-S-008',
     itemId: '8fd928e0-06c9-4958-9259-719dc451a8c2',
     itemQuantity: 24,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 622,
     priceIncludingTax: 777
   },
@@ -224,7 +224,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'EP-POP-S-007',
     itemId: 'edef6848-f3d5-4733-babc-bc10bc3d257c',
     itemQuantity: 24,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 622,
     priceIncludingTax: 777
   },
@@ -236,7 +236,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'EP-LCN-I-003',
     itemId: '64e177af-6313-4d9e-b39a-8495c2f1d939',
     itemQuantity: 24,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 896,
     priceIncludingTax: 896
   },
@@ -248,7 +248,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'EP-PRO-S-003',
     itemId: '54e10706-284f-440f-82cb-0f8911a8424a',
     itemQuantity: 24,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 852,
     priceIncludingTax: 1065
   },
@@ -260,7 +260,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'EP-PRO-S-002',
     itemId: '80984458-bab9-4a8f-86a7-b3e46f62139d',
     itemQuantity: 24,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 852,
     priceIncludingTax: 1065
   },
@@ -272,7 +272,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'EP-NKD-C-001',
     itemId: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
     itemQuantity: 18,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 743,
     priceIncludingTax: 929
   },
@@ -284,7 +284,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'EP-NKD-N-005',
     itemId: 'f0167eb4-f906-48d8-8067-6e3b646d8a19',
     itemQuantity: 18,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 775,
     priceIncludingTax: 969
   },
@@ -296,7 +296,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'EP-CRN-I-004',
     itemId: 'fc3f3a7a-64bc-4f23-9a4e-c90f2536e56b',
     itemQuantity: 24,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 1024,
     priceIncludingTax: 1280
   },
@@ -308,7 +308,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'EP-GFU-S-003',
     itemId: 'b78c3975-eb7f-4eda-a3ea-d54d35e6471e',
     itemQuantity: 24,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 907,
     priceIncludingTax: 907
   },
@@ -320,7 +320,7 @@ const batchesInternal: Batch[] = [
     supplierCode: 'EP-TRK-F-001',
     itemId: '5298c925-9ae2-4017-a007-c1928c38ddc6',
     itemQuantity: 24,
-    expiry: 'UNKNOWN',
+    expiry: null,
     priceExcludingTax: 1130,
     priceIncludingTax: 1130
   }
