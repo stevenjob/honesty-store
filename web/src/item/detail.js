@@ -15,10 +15,10 @@ const minNumItems = 1;
 
 const Depleted = ({ registered, itemId }) => (
   <div>
-    This item has been reported out of stock - please contact support if we've made a mistake!
+    This item has been reported out of stock
     <br />
-    <Link className="btn btn-primary m1" to={`/help/itemOutOfStock/${itemId}`}>
-      Contact Us
+    <Link className="btn btn-primary m1" to={`/help/item/${itemId}`}>
+      Report a Problem
     </Link>
   </div>
 );

@@ -27,7 +27,8 @@ import RegisterSuccessWithPurchase from './register/success-with-purchase';
 import RegisterSuccessWithoutPurchase from './register/success-without-purchase';
 import RegisterPartialSuccess from './register/partial-success';
 import SignInSuccess from './signin/success';
-import { default as Help, HelpOutOfStock } from './help/index';
+import Help from './help/index';
+import HelpItem from './help/item';
 import HelpSuccess from './help/success';
 import ItemDetail from './item/detail';
 import ItemPurchaseSuccess from './item/success';
@@ -94,7 +95,7 @@ ReactDOM.render((
         <Route path="profile/edit" component={EditProfile} onEnter={redirectUnauthorised} />
         <Route path="profile/logout" component={LogoutProfile} onEnter={redirectUnauthorised} />
         <Route path="help" component={Help} onEnter={redirectUnauthorised} />
-        <Route path="help/itemOutOfStock/:itemId" component={HelpOutOfStock} onEnter={redirectUnauthorised} />
+        <Route path="help/item/:itemId" component={HelpItem} onEnter={redirectUnauthorised} />
         <Route path="help/success" component={HelpSuccess} onEnter={redirectUnauthorised} />
         <Route path=":storeCode" />
       </Route>
