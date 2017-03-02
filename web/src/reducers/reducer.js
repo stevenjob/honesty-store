@@ -191,7 +191,7 @@ export default (state = getInitialState(), action) => {
     }
     case OUT_OF_STOCK_SUCCESS: {
       const { itemId } = action;
-      const tagItemAsDepleted = item => item.id === itemId ? { ...item, depleted: true } : item;
+      const tagItemAsDepleted = item => item.id === itemId ? { ...item, count: 0 } : item;
       return {
         ...state,
         store: {

@@ -13,26 +13,18 @@ import FlagOutOfStock from './out-of-stock';
 
 const minNumItems = 1;
 
-const Depleted = ({ depleted, registered, itemId }) => {
-  if (depleted) {
-    return (
-      <div>
-        This item has been reported out of stock - please contact support if we've made a mistake!
-        <br />
-        <Link className="btn btn-primary m1" to={`/help/itemOutOfStock/${itemId}`}>
-          Contact Us
-        </Link>
-      </div>
-    );
-  }
-  if (registered) {
-    return <FlagOutOfStock itemId={itemId} />;
-  }
-  return null;
-};
+const Depleted = ({ registered, itemId }) => (
+  <div>
+    This item has been reported out of stock - please contact support if we've made a mistake!
+    <br />
+    <Link className="btn btn-primary m1" to={`/help/itemOutOfStock/${itemId}`}>
+      Contact Us
+    </Link>
+  </div>
+);
 
 const ItemDetail = ({
-  item: { id, name, price, image, depleted },
+  item: { id, name, price, image, count },
   balance,
   performPurchase,
   registered
@@ -105,7 +97,13 @@ const ItemDetail = ({
             </div>
           </div>
           {registered ? purchaseStepper : unregisteredPurchaseButton}
-          <Depleted depleted={depleted} registered={registered} itemId={id} />
+          {
+            count === 0 ?
+            <Depleted registered={registered} itemId={id} /> :
+            registered ?
+            <FlagOutOfStock itemId={id} /> :
+            null
+          }
         </div>
       }
     </Full>
