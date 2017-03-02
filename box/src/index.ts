@@ -37,7 +37,7 @@ const getBox = async (boxId) => {
   return box;
 };
 
-const updateItems = async (box: Box) => {
+const updateItems = async ({ box, originalVersion }: { box: Box, originalVersion: number }) => {
   assertValidBoxId(box.id);
 
   await new DynamoDB.DocumentClient()
@@ -47,8 +47,11 @@ const updateItems = async (box: Box) => {
         id: box.id
       },
       UpdateExpression:
-        'set items = :items',
+        'set items = :items, version = :updatedVersion',
+      ConditionExpression: 'version=:originalVersion',
       ExpressionAttributeValues: {
+        ':originalVersion': originalVersion,
+        ':updatedVersion': box.version,
         ':items': box.items
       }
     })
@@ -67,7 +70,13 @@ const flagOutOfStock = async ({ key, boxId, itemId }) => {
 
   if (!entry.depleted) {
     entry.depleted = true;
-    await updateItems(box);
+    await updateItems({
+      box: {
+        ...box,
+        version: box.version + 1
+      },
+      originalVersion: box.version
+    });
   }
 
   return {};

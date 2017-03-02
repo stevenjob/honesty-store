@@ -10,6 +10,7 @@ type yyyymmdd = string;
 
 export interface Box {
   id: string;
+  version: number;
   items: BoxItem[];
   packed: yyyymmdd;
   shipped: yyyymmdd;
