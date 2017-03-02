@@ -1,4 +1,4 @@
-import { flagOutOfStock } from  '../../../box/src/client';
+import { Box, flagOutOfStock, getBox } from  '../../../box/src/client';
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { storeBoxIds } from '../services/store';
 
@@ -13,15 +13,22 @@ const flagBoxItemOutOfStock = async (key, boxId, itemId) => {
   }
 };
 
+const itemInBox = (itemId) => ({ items }) => items.some(item => item.itemId === itemId);
+
 // tslint:disable-next-line:export-name
 export default (router) => {
   router.post(
     '/out-of-stock',
     authenticateAccessToken,
     async (key, _params, { itemId }, { user }) => {
-      await Promise.all(
-        storeBoxIds(user.defaultStoreId)
-          .map(boxId => flagBoxItemOutOfStock(key, boxId, itemId)));
+      const boxes = await Promise.all<Box>(
+        storeBoxIds(user.defaultStoreId).map(getBox));
+
+      const flagPromises = boxes
+        .filter(itemInBox(itemId))
+        .map(box => flagBoxItemOutOfStock(key, box.id, itemId));
+
+      await Promise.all(flagPromises);
 
       return {};
     });
