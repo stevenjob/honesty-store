@@ -44,7 +44,7 @@ const Help = class extends React.Component {
 
   render() {
     const { valid, emailAddress } = this.state;
-    const { registered, balance } = this.props;
+    const { registered, balance, prefill } = this.props;
     return <Chrome title="Help"
       left={registered ? null : <Store />}
       right={registered ? <Balance balance={balance} /> : null}>
@@ -55,7 +55,8 @@ const Help = class extends React.Component {
             rows="8"
             name="message"
             placeholder="Please tell us all about it here"
-            onChange={(e) => this.handleMessageChange(e)}/>
+            onChange={(e) => this.handleMessageChange(e)}
+            value={prefill} />
         </p>
         {
           valid !== false ?
@@ -82,7 +83,7 @@ const Help = class extends React.Component {
   }
 };
 
-const mapStateToProps = ({ user }) => ({
+const mapStateToPropsForHelp = ({ user }) => ({
   emailAddress: user.emailAddress,
   registered: isRegisteredUser(user),
   balance: user.balance || 0
@@ -90,4 +91,18 @@ const mapStateToProps = ({ user }) => ({
 
 const mapDispatchToProps = { performSupport };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Help);
+export default connect(mapStateToPropsForHelp, mapDispatchToProps)(Help);
+
+const HelpOutOfStockInternal = ({ params: { itemId }, items }) => {
+  const item = items.find(item => item.id === itemId);
+
+  return (
+    <Help prefill={`The item ${item.name} is in stock!`} />
+  );
+};
+
+const mapStateToPropsForStockHelp = ({ store: { items } }) => ({
+  items
+});
+
+export const HelpOutOfStock = connect(mapStateToPropsForStockHelp)(HelpOutOfStockInternal);
