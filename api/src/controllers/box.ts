@@ -2,7 +2,7 @@ import { Box, flagOutOfStock, getBox } from  '../../../box/src/client';
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { storeBoxIds } from '../services/store';
 
-const itemInBox = (itemId) => ({ items }: Box) => items.some(item => item.itemID === itemId);
+const itemInBox = (itemId) => ({ boxItems }: Box) => boxItems.some(item => item.itemID === itemId);
 
 // tslint:disable-next-line:export-name
 export default (router) => {

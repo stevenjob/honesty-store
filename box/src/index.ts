@@ -47,12 +47,12 @@ const updateItems = async ({ box, originalVersion }: { box: Box, originalVersion
         id: box.id
       },
       UpdateExpression:
-        'set items = :items, version = :updatedVersion',
+        'set boxItems = :boxItems, version = :updatedVersion',
       ConditionExpression: 'version=:originalVersion',
       ExpressionAttributeValues: {
         ':originalVersion': originalVersion,
         ':updatedVersion': box.version,
-        ':items': box.items
+        ':boxItems': box.boxItems
       }
     })
     .promise();
@@ -63,7 +63,7 @@ const flagOutOfStock = async ({ key, boxId, itemId }) => {
 
   const box = await getBox(boxId);
 
-  const entry = box.items.find(item => item.itemID === itemId);
+  const entry = box.boxItems.find(item => item.itemID === itemId);
   if (!entry) {
     throw new CodedError('ItemNotInBox', `item ${itemId} not found in box ${boxId}`);
   }
