@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { performOutOfStock } from '../actions/out-of-stock';
 
 const OutOfStock = ({ itemId, performOutOfStock }) => (
-  <p
+  <Link
     className="btn white bg-red"
     onClick={() => performOutOfStock({ itemId })}
   >
-    {`Report Out of Stock`}
-  </p>
+    Report Out of Stock
+  </Link>
 );
 
 const mapStateToProps = () => ({});
