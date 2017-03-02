@@ -15,7 +15,15 @@ const minNumItems = 1;
 
 const Depleted = ({ depleted, registered, itemId }) => {
   if (depleted) {
-    return <div>This item has been reported out of stock - please contact support if we've made a mistake!</div>;
+    return (
+      <div>
+        This item has been reported out of stock - please contact support if we've made a mistake!
+        <br />
+        <Link className="btn btn-primary m1" to={`/help/itemOutOfStock/${itemId}`}>
+          Contact Us
+        </Link>
+      </div>
+    );
   }
   if (registered) {
     return <FlagOutOfStock itemId={itemId} />;
