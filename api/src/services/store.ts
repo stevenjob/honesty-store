@@ -1,7 +1,12 @@
 import { getBox } from '../../../box/src/client';
 import { getItem } from './item';
 
-const stores = new Map();
+interface Store {
+  boxIds: string[];
+  itemPrices: { [id: string]: number };
+}
+
+const stores = new Map<string, Store>();
 
 const ncl = {
   boxIds: [

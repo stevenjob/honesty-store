@@ -1,4 +1,4 @@
-import { Box, flagOutOfStock, getBox } from  '../../../box/src/client';
+import { flagOutOfStock, getBox } from  '../../../box/src/client';
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { storeBoxIds } from '../services/store';
 
@@ -21,8 +21,9 @@ export default (router) => {
     '/out-of-stock',
     authenticateAccessToken,
     async (key, _params, { itemId }, { user }) => {
-      const boxes = await Promise.all<Box>(
-        storeBoxIds(user.defaultStoreId).map(getBox));
+      const boxes = await Promise.all(
+        storeBoxIds(user.defaultStoreId)
+          .map((boxId) => getBox(key, boxId)));
 
       const flagPromises = boxes
         .filter(itemInBox(itemId))
