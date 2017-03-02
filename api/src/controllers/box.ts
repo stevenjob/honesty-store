@@ -1,19 +1,8 @@
-import { flagOutOfStock, getBox } from  '../../../box/src/client';
+import { Box, flagOutOfStock, getBox } from  '../../../box/src/client';
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { storeBoxIds } from '../services/store';
 
-const flagBoxItemOutOfStock = async (key, boxId, itemId) => {
-  try {
-    await flagOutOfStock({ key, boxId, itemId });
-  } catch (e) {
-    if (e.code !== 'ItemNotInBox') {
-      throw e;
-    }
-    // ignore item-not-found
-  }
-};
-
-const itemInBox = (itemId) => ({ items }) => items.some(item => item.itemId === itemId);
+const itemInBox = (itemId) => ({ items }: Box) => items.some(item => item.itemID === itemId);
 
 // tslint:disable-next-line:export-name
 export default (router) => {
@@ -27,7 +16,7 @@ export default (router) => {
 
       const flagPromises = boxes
         .filter(itemInBox(itemId))
-        .map(box => flagBoxItemOutOfStock(key, box.id, itemId));
+        .map(box => flagOutOfStock({ key, boxId: box.id, itemId }));
 
       await Promise.all(flagPromises);
 

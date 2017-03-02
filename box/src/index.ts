@@ -63,7 +63,7 @@ const flagOutOfStock = async ({ key, boxId, itemId }) => {
 
   const box = await getBox(boxId);
 
-  const entry = box.items.find(item => item.itemId === itemId);
+  const entry = box.items.find(item => item.itemID === itemId);
   if (!entry) {
     throw new CodedError('ItemNotInBox', `item ${itemId} not found in box ${boxId}`);
   }

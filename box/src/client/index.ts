@@ -1,7 +1,7 @@
 import fetch from '../../../service/src/fetch';
 
 interface BoxItem {
-  itemId: string;
+  itemID: string;
   count: number;
   depleted: boolean;
 }
