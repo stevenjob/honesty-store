@@ -11,7 +11,7 @@ const Chrome = ({
   nav
 }) =>
   <div className="sm-col-10 md-col-8 lg-col-6 mx-auto">
-    <header className="fixed top-0 right-0 left-0 bg-navy border-silver border-bottom white">
+    <header className="fixed top-0 right-0 left-0 bg-navy border-silver border-bottom white z1">
       <div className="sm-col-10 md-col-8 lg-col-6 mx-auto flex items-center ">
         <div className="col-4 left-align">
           {left || '\u00a0'}
