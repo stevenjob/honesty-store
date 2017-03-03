@@ -11,6 +11,20 @@ interface TableTemplate {
   data: any;
 }
 
+interface BoxData { // this is duplicated in box/src/client/index.ts
+  id: string;
+  version: number;
+  boxItems: {
+    itemID: string;
+    count: number;
+    depleted: boolean;
+  }[];
+  packed: string;
+  shipped: string;
+  received: string;
+  closed?: string;
+}
+
 const template = ({
   readCapacityUnits,
   writeCapacityUnits,
@@ -34,6 +48,46 @@ const template = ({
   },
   data: dummyData
 });
+
+const dummyBoxData: BoxData[] = [
+  {
+    id: '06439c6c-57c9-4a17-b218-2018ea8dae55',
+    version: 0,
+    boxItems: [
+      { itemID: '46ced0c0-8815-4ed2-bfb6-40537f5bd512', count: 3, depleted: false },
+      { itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae', count: 7, depleted: true },
+      { itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649', count: 7, depleted: false }
+    ],
+    packed: '20170127',
+    shipped: '20170128',
+    received: '20170130'
+  },
+  {
+    id: 'a7a863c6-9974-475d-96e9-4b4078a2e1c2',
+    version: 0,
+    boxItems: [
+      { itemID: '46ced0c0-8815-4ed2-bfb6-40537f5bd512', count: 4, depleted: false },
+      { itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae', count: 6, depleted: true },
+      { itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649', count: 8, depleted: true }
+    ],
+    packed: '20170129',
+    shipped: '20170130',
+    received: '20170131'
+  },
+  {
+    id: '5b3b4683-918e-49b1-bc68-9c33a5bbdf33',
+    version: 0,
+    boxItems: [
+      { itemID: '46ced0c0-8815-4ed2-bfb6-40537f5bd512', count: 10, depleted: true },
+      { itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae', count: 12, depleted: true },
+      { itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649', count: 15, depleted: true }
+    ],
+    packed: '20170130',
+    shipped: '20170130',
+    received: '20170130',
+    closed: '20170131'
+  }
+];
 
 const dirToTable = {
   user: ({ readCapacityUnits, writeCapacityUnits }) => template({
@@ -137,7 +191,7 @@ const dirToTable = {
   box: ({ readCapacityUnits, writeCapacityUnits }) => template({
     readCapacityUnits,
     writeCapacityUnits,
-    dummyData: []
+    dummyData: dummyBoxData
   })
 };
 

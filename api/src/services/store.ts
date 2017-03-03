@@ -87,10 +87,24 @@ const ldn = {
   }
 };
 
+const test = {
+  boxIds: [
+    '06439c6c-57c9-4a17-b218-2018ea8dae55',
+    'a7a863c6-9974-475d-96e9-4b4078a2e1c2',
+    '5b3b4683-918e-49b1-bc68-9c33a5bbdf33'
+  ],
+  itemPrices: {
+    '46ced0c0-8815-4ed2-bfb6-40537f5bd512': 30,
+    'faeda516-bd9f-41ec-b949-7a676312b0ae': 51,
+    'cf7a7886-c30d-4760-8c15-39adb2dc8649': 130
+  }
+};
+
 stores.set('sl-ncl', ncl);
 stores.set('sl-edn', edn);
 stores.set('sl-brs', brs);
 stores.set('sl-ldn', ldn);
+stores.set('dev-test', test);
 
 export const storeList = () => Array.from(stores.keys());
 

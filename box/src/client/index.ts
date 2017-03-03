@@ -8,7 +8,7 @@ interface BoxItem {
 
 type yyyymmdd = string;
 
-export interface Box {
+export interface Box { // this is duplicated in aws/src/table/table.ts
   id: string;
   version: number;
   boxItems: BoxItem[];
