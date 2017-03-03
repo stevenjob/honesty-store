@@ -241,7 +241,7 @@ const batchesInternal: Batch[] = [
     VATRate: 0
   },
   {
-    id: '6c2c6571-3b83-490c-b69a-7462e478a5b9',
+    id: 'bfd9b46a-9ca6-48e2-89c1-ad4b4ba1b747',
     purchased: 1487332800,
     quantity: 1,
     supplier: 'Epicurium',
