@@ -31,6 +31,7 @@ import Help from './help/index';
 import HelpItem from './help/item';
 import HelpSuccess from './help/success';
 import ItemDetail from './item/detail';
+import ItemStockReport from './item/stockreport';
 import ItemPurchaseSuccess from './item/success';
 import ConfirmStoreChange from './confirm-store-change/index';
 import reducer from './reducers/reducer';
@@ -81,6 +82,7 @@ ReactDOM.render((
         <Route path="store" component={Store} onEnter={redirectUnauthorised} />
         <Route path="store/change/:storeCode" component={ConfirmStoreChange} onEnter={redirectUnauthorised} />
         <Route path="item/:itemId" component={ItemDetail} onEnter={redirectUnauthorised} />
+        <Route path="item/:itemId/out-of-stock" component={ItemStockReport} onEnter={redirectUnauthorised} />
         <Route path="item/:itemId/success" component={ItemPurchaseSuccess} onEnter={redirectUnauthorised} />
         <Route path="survey" component={Survey} onEnter={redirectUnauthorised} />
         <Route path="survey/questions" component={SurveyQuestions} onEnter={redirectUnauthorised} />

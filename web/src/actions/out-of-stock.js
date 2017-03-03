@@ -1,4 +1,5 @@
 import apifetch from './apirequest';
+import history from '../history';
 
 export const OUT_OF_STOCK_REQUEST = 'OUT_OF_STOCK_REQUEST';
 export const OUT_OF_STOCK_SUCCESS = 'OUT_OF_STOCK_SUCCESS';
@@ -36,6 +37,9 @@ export const performOutOfStock = ({ itemId }) => async (dispatch, getState) => {
     }, dispatch, getState);
 
     dispatch(outOfStockSuccess(response, itemId));
+
+    history.push(`/item/${itemId}/out-of-stock`);
+
   } catch (e) {
     dispatch(outOfStockFailure(e));
   }
