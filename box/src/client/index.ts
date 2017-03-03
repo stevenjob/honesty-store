@@ -49,3 +49,6 @@ export const getBox = (key, boxId: string) =>
 
 export const flagOutOfStock = ({ key, boxId, itemId }) =>
   post<{}>(1, key, `/out-of-stock/${boxId}/${itemId}`, {});
+
+export const createBox = (key, boxSubmission: BoxSubmission) =>
+  post<Box>(1, key, `/`, boxSubmission);
