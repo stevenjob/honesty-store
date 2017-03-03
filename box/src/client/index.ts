@@ -14,7 +14,7 @@ export interface Box {
   boxItems: BoxItem[];
   packed: yyyymmdd;
   shipped: yyyymmdd;
-  recieved: yyyymmdd;
+  received: yyyymmdd;
   closed?: yyyymmdd;
 }
 
