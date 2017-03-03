@@ -96,8 +96,9 @@ ReactDOM.render((
         <Route path="profile/close" component={CloseProfile} onEnter={redirectUnauthorised} />
         <Route path="profile/edit" component={EditProfile} onEnter={redirectUnauthorised} />
         <Route path="profile/logout" component={LogoutProfile} onEnter={redirectUnauthorised} />
-        <Route path="help" component={Help} onEnter={redirectUnauthorised} />
-        <Route path="help/item/:itemId" component={HelpItem} onEnter={redirectUnauthorised} />
+        <Route path="help" component={Help} onEnter={redirectUnauthorised}>
+          <Route path="item/:itemId" component={HelpItem} />
+        </Route>
         <Route path="help/success" component={HelpSuccess} onEnter={redirectUnauthorised} />
         <Route path=":storeCode" />
       </Route>
