@@ -1,5 +1,10 @@
 import fetch from '../../../service/src/fetch';
 
+export interface BatchReference {
+  id: string;
+  count: number;
+}
+
 interface Counted {
   count: number;
   depleted?: number;
@@ -10,19 +15,18 @@ interface Versioned {
 interface Identified {
   id: string;
 }
-interface BoxItemWithBatchReference {
+export interface BoxItemWithBatchReference {
   itemID: string;
-  batches: {
-    id: string;
-    count: number;
-  }[];
+  batches: BatchReference[]
 }
-interface BoxItemOverheads {
+export interface FixedBoxItemOverheads {
   shippingCost: number;
   warehousingCost: number;
   packagingCost: number;
   packingCost: number;
   serviceFee: number;
+}
+interface VariableBoxItemOverheads {
   creditCardFee: number;
 }
 interface BoxShippingDetails {
@@ -33,14 +37,14 @@ interface BoxShippingDetails {
   closed?: yyyymmdd;
 }
 
-type BoxItem = BoxItemWithBatchReference & Counted & BoxItemOverheads;
+export type BoxItem = BoxItemWithBatchReference & Counted & FixedBoxItemOverheads & VariableBoxItemOverheads;
 
 type yyyymmdd = string;
 
 export type BoxSubmission = BoxShippingDetails & { boxItems: BoxItemWithBatchReference[]; };
 
 // this is duplicated in aws/src/table/table.ts
-export type Box = BoxShippingDetails & Versioned & Identified & { boxItems: BoxItem[]; };
+export type Box = BoxShippingDetails & Versioned & Identified & { boxItems: BoxItem[]; } & { count: number; };
 
 const { get, post } = fetch('box');
 
