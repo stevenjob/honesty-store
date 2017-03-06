@@ -63,7 +63,7 @@ const createEndPoint = (service, internalRouter, version, method: 'get' | 'post'
       authentication,
       (request, response) => {
         const timer = time();
-        const key = extractKey(request, service);
+        const key = request.key || extractKey(request, service);
         // tslint:disable-next-line:max-line-length
         const { params, body } = request;
         info(key, `handling ${method} ${request.url}`, { params, body });
