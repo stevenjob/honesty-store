@@ -24,7 +24,7 @@ const createKey = ({ service, correlationKey = uuid(), tags = {} }) => {
   };
 };
 
-export const createUserKey = ({ userId, correlationKey = undefined }) => {
+export const createUserKey = ({ userId, correlationKey }: { userId: string, correlationKey?: string }) => {
   if (!isUUID(userId)) {
     throw new Error(`Invalid userId specified ${userId}`);
   }
@@ -36,7 +36,6 @@ export const createUserKey = ({ userId, correlationKey = undefined }) => {
 };
 
 export const createAuthenticationKey = () => {
-  const correlationKey = uuid();
   const key = createKey({
     service: 'auth'
   });
@@ -45,6 +44,7 @@ export const createAuthenticationKey = () => {
     ...key,
 
     setUserId(userId: string): Key {
+      const { correlationKey } = key;
       return createUserKey({ userId, correlationKey });
     }
   };
