@@ -17,7 +17,7 @@ const Depleted = ({ registered, itemId }) => (
   <div>
     This item has been reported out of stock
     <br />
-    <Link className="btn btn-primary m1" to={`/help/item/${itemId}`}>
+    <Link className="m1" to={`/help/item/${itemId}`}>
       Report a Problem
     </Link>
   </div>
