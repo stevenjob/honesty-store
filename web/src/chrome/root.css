@@ -12,3 +12,7 @@ html.loaded>body, #root {
 textarea, input[type] {
   -webkit-appearance: none;
 }
+
+.btn {
+  -webkit-tap-highlight-color: transparent;
+}
