@@ -10,7 +10,7 @@ interface Batch {
   itemQuantity: number;
   expiry?: number;
   priceExcludingTax?: number;
-  priceIncludingTax?: number;
+  VATRate?: number;
 }
 
 const batchesInternal: Batch[] = [
@@ -25,7 +25,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 1,
     expiry: null,
     priceExcludingTax: null,
-    priceIncludingTax: null
+    VATRate: null
   },
   {
     id: 'ae3c4d05-fb9c-48d7-b22f-6f8761636b88',
@@ -37,7 +37,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 20,
     expiry: null,
     priceExcludingTax: null,
-    priceIncludingTax: null
+    VATRate: null
   },
   {
     id: '9d1c7e32-bcf5-4a98-b9b9-72e21965118d',
@@ -49,7 +49,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 2,
     expiry: null,
     priceExcludingTax: null,
-    priceIncludingTax: null
+    VATRate: null
   },
   {
     id: '20a721b8-78be-4e5f-ad85-21284d560ddc',
@@ -61,7 +61,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 15,
     expiry: null,
     priceExcludingTax: null,
-    priceIncludingTax: null
+    VATRate: null
   },
   {
     id: '284a7cf7-16c9-428f-8d95-8af82b0a1bd1',
@@ -73,7 +73,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 16,
     expiry: null,
     priceExcludingTax: null,
-    priceIncludingTax: null
+    VATRate: null
   },
   {
     id: 'c57f77b2-35b2-4283-a2e0-9f9c91afd71e',
@@ -85,7 +85,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 20,
     expiry: 1483660800,
     priceExcludingTax: 699,
-    priceIncludingTax: 699
+    VATRate: null
   },
 
   // Chris initial costco purchase
@@ -99,7 +99,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 32,
     expiry: null,
     priceExcludingTax: 979,
-    priceIncludingTax: 1174
+    VATRate: 0.2
   },
   {
     id: '03e918c6-8868-4682-9c40-43caebdfc5b7',
@@ -111,7 +111,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 40,
     expiry: null,
     priceExcludingTax: 999,
-    priceIncludingTax: 1198
+    VATRate: 0.2
   },
   {
     id: '664c275f-1f61-4a10-be53-7cb3cdeffa68',
@@ -123,7 +123,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 48,
     expiry: null,
     priceExcludingTax: 1499,
-    priceIncludingTax: 1798
+    VATRate: 0.2
   },
   {
     id: '5001ac6a-d026-49b4-9c7c-72a299245edc',
@@ -135,7 +135,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 36,
     expiry: null,
     priceExcludingTax: 1069,
-    priceIncludingTax: 1282
+    VATRate: 0.2
   },
   {
     id: '47a13720-bbb4-4139-bd58-238b5b876fa1',
@@ -147,7 +147,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 96,
     expiry: null,
     priceExcludingTax: 1899,
-    priceIncludingTax: 2278
+    VATRate: 0.2
   },
 
   // Receipt: https://goo.gl/photos/tPtxxtSYaqFpj4oo7, paid: no
@@ -161,7 +161,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 10,
     expiry: 1483833600,
     priceExcludingTax: 249,
-    priceIncludingTax: 299
+    VATRate: 0.2
   },
 
   // Chris Costco purchase
@@ -176,7 +176,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 48,
     expiry: 1483833600,
     priceExcludingTax: 1579,
-    priceIncludingTax: 1894
+    VATRate: 0.2
   },
   {
     id: 'e506d540-4d6c-4199-a4c9-32418baa6191',
@@ -188,7 +188,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 40,
     expiry: 1505779200,
     priceExcludingTax: 649,
-    priceIncludingTax: 778
+    VATRate: 0.2
   },
   {
     id: 'e5e1ac40-1835-4d80-b1b2-af07d34860fd',
@@ -200,7 +200,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 32,
     expiry: 1489795200,
     priceExcludingTax: 979,
-    priceIncludingTax: 1174
+    VATRate: 0.2
   },
 
   // Epicurium 17/02/17
@@ -214,7 +214,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 24,
     expiry: null,
     priceExcludingTax: 622,
-    priceIncludingTax: 777
+    VATRate: 0.2
   },
   {
     id: '6841c840-301b-4d41-b791-82135f287186',
@@ -225,8 +225,8 @@ const batchesInternal: Batch[] = [
     itemId: 'edef6848-f3d5-4733-babc-bc10bc3d257c',
     itemQuantity: 24,
     expiry: null,
-    priceIncludingTax: 777
     priceExcludingTax: 777,
+    VATRate: 0.2
   },
   {
     id: '6c2c6571-3b83-490c-b69a-7462e478a5b9',
@@ -238,7 +238,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 24,
     expiry: null,
     priceExcludingTax: 896,
-    priceIncludingTax: 896
+    VATRate: 0
   },
   {
     id: '6c2c6571-3b83-490c-b69a-7462e478a5b9',
@@ -249,8 +249,8 @@ const batchesInternal: Batch[] = [
     itemId: '54e10706-284f-440f-82cb-0f8911a8424a',
     itemQuantity: 24,
     expiry: null,
-    priceIncludingTax: 1065
     priceExcludingTax: 1065,
+    VATRate: 0.2
   },
   {
     id: 'cfb13f72-6c7b-4648-bc87-e705927f5179',
@@ -261,8 +261,8 @@ const batchesInternal: Batch[] = [
     itemId: '80984458-bab9-4a8f-86a7-b3e46f62139d',
     itemQuantity: 24,
     expiry: null,
-    priceIncludingTax: 1065
     priceExcludingTax: 1065,
+    VATRate: 0.2
   },
   {
     id: '06aaff31-b515-44b0-b113-6ea32193d9e7',
@@ -273,8 +273,8 @@ const batchesInternal: Batch[] = [
     itemId: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
     itemQuantity: 18,
     expiry: null,
-    priceIncludingTax: 929
     priceExcludingTax: 798,
+    VATRate: 0.2
   },
   {
     id: 'b211bc07-af4c-455a-99da-e3fa7f72b8c7',
@@ -285,8 +285,8 @@ const batchesInternal: Batch[] = [
     itemId: 'f0167eb4-f906-48d8-8067-6e3b646d8a19',
     itemQuantity: 18,
     expiry: null,
-    priceIncludingTax: 969
     priceExcludingTax: 969,
+    VATRate: 0.2
   },
   {
     id: '6811aacb-a33f-4bc1-91f9-2bd40aca0eb3',
@@ -297,8 +297,8 @@ const batchesInternal: Batch[] = [
     itemId: 'fc3f3a7a-64bc-4f23-9a4e-c90f2536e56b',
     itemQuantity: 24,
     expiry: null,
-    priceIncludingTax: 1280
     priceExcludingTax: 1280,
+    VATRate: 0.2
   },
   {
     id: 'd7fe0ede-4922-4ba1-b7db-a6e8c2e398aa',
@@ -310,7 +310,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 24,
     expiry: null,
     priceExcludingTax: 907,
-    priceIncludingTax: 907
+    VATRate: 0
   },
   {
     id: 'e9ea65b3-7ddc-47b7-a1d7-4183ee17f189',
@@ -321,8 +321,8 @@ const batchesInternal: Batch[] = [
     itemId: '5298c925-9ae2-4017-a007-c1928c38ddc6',
     itemQuantity: 24,
     expiry: null,
-    priceIncludingTax: 1130
     priceExcludingTax: 958,
+    VATRate: 0
   }
 ];
 
