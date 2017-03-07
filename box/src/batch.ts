@@ -347,7 +347,7 @@ const getBatch = (batchId: string) => {
 export const getItemCostInBatchExcludingVAT = (batchId: string): number => {
   const { priceExcludingTax, itemQuantity } = getBatch(batchId);
   // What's the best way to do this rounding ceil/round?
-  return Math.ceil(priceExcludingTax / itemQuantity);
+  return priceExcludingTax / itemQuantity;
 };
 
 export const getVAT = (batchId: string): number => {

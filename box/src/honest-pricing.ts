@@ -26,8 +26,8 @@ export const sumBoxItems = (boxItems: BoxItemWithBatchReference[]) =>
 // Probably want to average these out based on quantities in batch
 export const getWholesaleItemCostExcludingVAT = (batches: BatchReference[]) => {
   const totalPrice = batches.map((el) => getItemCostInBatchExcludingVAT(el.id))
-    .reduce((runningTotal, price) => runningTotal + price);
-  return Math.ceil(totalPrice / batches.length);
+    .reduce(((runningTotal, price) => runningTotal + price), 0);
+  return totalPrice / batches.length;
 };
 
 const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedOverheads: FixedBoxItemOverheads): BoxItem => {
@@ -78,7 +78,7 @@ export const getHonestPricing = (boxSubmission: BoxSubmission): Box => {
   const convertBoxCostToPerItem = (cost: number) => cost / expectedBoxQuantity;
 
   const averageItemCost = getAverageItemCost(boxItems);
-  const shrinkagePerBox = Math.ceil(averageItemCost * expectedLossQuantity);
+  const shrinkagePerBox = averageItemCost * expectedLossQuantity;
 
   const fixedOverheads: FixedBoxItemOverheads = {
     shippingCost: convertBoxCostToPerItem(shippingCost),
