@@ -335,3 +335,22 @@ for (const batch of batchesInternal) {
   getItem(batch.itemId);
   batches.set(batch.id, batch);
 }
+
+const getBatch = (batchId: string) => {
+  const batch = batches.get(batchId);
+  if (batch == null) {
+    throw new Error(`No batch found with id ${batchId}`);
+  }
+  return batch;
+}
+
+export const getItemCostInBatchExcludingVAT = (batchId: string): number => {
+  const { priceExcludingTax, itemQuantity } = getBatch(batchId);
+  // What's the best way to do this rounding ceil/round?
+  return Math.ceil(priceExcludingTax / itemQuantity);
+};
+
+export const getVAT = (batchId: string): number => {
+  const { VATRate } = getBatch(batchId);
+  return VATRate;
+}
