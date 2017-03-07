@@ -163,8 +163,7 @@ const items: (Item & { id: string })[] = [
     name: 'Oreo',
     image: 'misc-bar.svg',
     weight: 66,
-    notes: 'Residual stock.',
-    qualifier: '6 pack',
+    notes: '6 pack, residual stock.',
     unit: 'Pack',
     unitPlural: 'Packs',
     genericName: 'Biscuit'
