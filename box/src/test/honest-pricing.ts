@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { BoxItemWithBatchReference } from '../client';
-import { getAverageItemCost, getWholesaleItemCostExcludingVAT } from '../honest-pricing';
+import { BoxItemWithBatchReference, BoxSubmission, FixedBoxItemOverheads } from '../client';
+import { getAverageItemCost, getHonestPricing, getWholesaleItemCostExcludingVAT } from '../honest-pricing';
 
 const boxItems: BoxItemWithBatchReference[] = [
   {
@@ -37,5 +37,29 @@ describe('Wholesale item cost', () => {
   });
 });
 
+describe('Box Submission', () => {
+  const boxSubmission: BoxSubmission = {
+    shippingCost: 300,
+    boxItems: boxItems
+  };
+  const box = getHonestPricing(boxSubmission);
+
+  it('should calculate fixed-costs for the submitted box', () => {
+    const boxItem = box.boxItems[0];
+
+    const {
+      warehousingCost,
+      packagingCost,
+      packingCost,
+      shippingCost,
+      serviceFee
+    }: FixedBoxItemOverheads = boxItem;
+
+    expect(Math.round(warehousingCost)).to.equal(7, 'Incorrect warehousing cost');
+    expect(Math.round(packagingCost)).to.equal(43, 'Incorrect packaging cost');
+    expect(Math.round(packingCost)).to.equal(29, 'Incorrect packing cost');
+    expect(Math.round(shippingCost)).to.equal(43, 'Incorrect shipping cost');
+    expect(Math.round(serviceFee)).to.equal(5, 'Incorrect service fee');
   });
+
 });
