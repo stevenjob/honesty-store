@@ -2,12 +2,12 @@ import { config, DynamoDB } from 'aws-sdk';
 import bodyParser = require('body-parser');
 import express = require('express');
 import isUUID = require('validator/lib/isUUID');
-import { v4 as uuid } from 'uuid';
 import { info } from '../../service/src/log';
 
 import { CodedError } from '../../service/src/error';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { Box } from './client';
+import { getHonestPricing } from './honest-pricing';
 
 config.region = process.env.AWS_REGION;
 
@@ -141,18 +141,11 @@ const flagOutOfStock = async ({ key, boxId, itemId }) => {
 };
 
 const createBox = async ({ key, boxSubmission }): Promise<Box> => {
-  info(key, `Creating new box`, { id: boxSubmission.id });
+  info(key, `New box submission received`, { boxSubmission });
 
   assertValidBoxSubmission(boxSubmission);
 
-  // TODO: Calculate per-item costs using batch data
-
-  const box: Box = {
-    id: uuid(),
-    version: 0,
-    ...boxSubmission
-  };
-
+  const box = getHonestPricing(boxSubmission);
   await put(box);
 
   return box;
