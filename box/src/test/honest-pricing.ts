@@ -55,8 +55,9 @@ describe('Box Submission', () => {
       shippingCost,
       serviceFee,
       creditCardFee,
-      itemPrice,
-      itemVAT
+      subtotal,
+      VAT,
+      finalTotal
     } = boxItems[0];
 
     expect(Math.round(warehousingCost)).to.equal(7, 'Incorrect warehousing cost');
@@ -65,8 +66,9 @@ describe('Box Submission', () => {
     expect(Math.round(shippingCost)).to.equal(43, 'Incorrect shipping cost');
     expect(Math.round(serviceFee)).to.equal(5, 'Incorrect service fee');
 
+    expect(Math.round(subtotal)).to.equal(159, 'Incorrect subtotal');
     expect(Math.round(creditCardFee)).to.equal(12, 'Incorrect credit card fee');
-    expect(Math.round(itemPrice)).to.equal(213, 'Incorrect item price');
-    expect(Math.round(itemVAT)).to.equal(43, 'Incorrect item VAT');
+    expect(Math.round(VAT)).to.equal(43, 'Incorrect item VAT');
+    expect(Math.round(finalTotal)).to.equal(213, 'Incorrect item price');
   });
 });

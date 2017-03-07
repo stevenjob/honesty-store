@@ -6,7 +6,7 @@ import {
 } from './client';
 
 // Constants
-const creditCardFee = 0.054;
+const creditCardFeeRate = 0.054;
 const expectedLossPerBox = 0.05;
 
 const warehousingCostPerBox = 50;
@@ -39,20 +39,21 @@ const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedO
   }
 
   const { shippingCost, warehousingCost, packagingCost, packingCost, serviceFee } = fixedOverheads;
-  const itemVATRate = getVAT(batches[0].id); // TODO: this may not be safe if VAT rate changes between batches... how likely though?
-  const itemSubtotal = getWholesaleItemCostExcludingVAT(batches) + shippingCost + warehousingCost + packagingCost + packingCost
+  const subtotal = getWholesaleItemCostExcludingVAT(batches) + shippingCost + warehousingCost + packagingCost + packingCost
     + serviceFee;
-  const itemPrice = itemSubtotal / (1 - creditCardFee - itemVATRate);
-  const itemVAT = itemPrice * itemVATRate;
 
-  const itemCreditCardFee = itemPrice * creditCardFee;
+  const rateOfVAT = getVAT(batches[0].id);
+  const finalTotal = subtotal / (1 - creditCardFeeRate - rateOfVAT);
+  const VAT = finalTotal * rateOfVAT;
+  const creditCardFee = finalTotal * creditCardFeeRate;
 
   return {
     count: sumBatches(batches),
     depleted: false,
-    itemPrice,
-    creditCardFee: itemCreditCardFee,
-    itemVAT,
+    subtotal,
+    creditCardFee,
+    VAT,
+    finalTotal,
     ...fixedOverheads,
     ...boxItemWithBatchRef
   };
@@ -82,6 +83,7 @@ export const getHonestPricing = (boxSubmission: BoxSubmission): Box => {
   const averageItemCost = getAverageItemCost(boxItems);
   const shrinkagePerBox = averageItemCost * expectedLossQuantity;
 
+  /* tslint:disable:no-console */
   const fixedOverheads: FixedBoxItemOverheads = {
     shippingCost: convertBoxCostToPerItem(shippingCost),
     packingCost: convertBoxCostToPerItem(packingCostPerBox),
