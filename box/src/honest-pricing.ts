@@ -43,6 +43,7 @@ const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedO
   const itemSubtotal = getWholesaleItemCostExcludingVAT(batches) + shippingCost + warehousingCost + packagingCost + packingCost
     + serviceFee;
   const itemPrice = itemSubtotal / (1 - creditCardFee - itemVATRate);
+  const itemVAT = itemPrice * itemVATRate;
 
   const itemCreditCardFee = itemPrice * creditCardFee;
 
@@ -51,6 +52,7 @@ const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedO
     depleted: false,
     itemPrice,
     creditCardFee: itemCreditCardFee,
+    itemVAT,
     ...fixedOverheads,
     ...boxItemWithBatchRef
   };
