@@ -213,7 +213,7 @@ const batchesInternal: Batch[] = [
     itemId: '8fd928e0-06c9-4958-9259-719dc451a8c2',
     itemQuantity: 24,
     expiry: null,
-    priceExcludingTax: 622,
+    priceExcludingTax: 777,
     VATRate: 0.2
   },
   {
