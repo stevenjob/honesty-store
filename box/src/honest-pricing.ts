@@ -5,7 +5,6 @@ import {
   BoxItemWithBatchReference, BoxSubmission, FixedBoxItemOverheads
 } from './client';
 
-// Constants
 const creditCardFeeRate = 0.054;
 const expectedLossPerBox = 0.05;
 
@@ -13,7 +12,6 @@ const warehousingCostPerBox = 50;
 const packagingCostPerBox = 300;
 const packingCostPerBox = 200;
 const feePerBox = 0;
-// shippingCost comes from box, as can vary
 
 export const sumBatches = (batches: BatchReference[]) =>
   batches.map(({ count }) => count)
@@ -31,7 +29,6 @@ export const getWholesaleItemCostExcludingVAT = (batches: BatchReference[]) => {
 };
 
 const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedOverheads: FixedBoxItemOverheads): BoxItem => {
-  // Calculate item VAT here
   const { batches } = boxItemWithBatchRef;
 
   if (batches.length > 1) {
@@ -83,7 +80,6 @@ export const getHonestPricing = (boxSubmission: BoxSubmission): Box => {
   const averageItemCost = getAverageItemCost(boxItems);
   const shrinkagePerBox = averageItemCost * expectedLossQuantity;
 
-  /* tslint:disable:no-console */
   const fixedOverheads: FixedBoxItemOverheads = {
     shippingCost: convertBoxCostToPerItem(shippingCost),
     packingCost: convertBoxCostToPerItem(packingCostPerBox),
