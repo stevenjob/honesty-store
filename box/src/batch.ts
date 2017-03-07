@@ -11,7 +11,7 @@ interface Batch {
   expiry?: number;
   priceExcludingTax?: number;
   VATRate?: number;
-}
+};
 
 const batchesInternal: Batch[] = [
   // Residual from bulky
