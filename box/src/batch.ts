@@ -11,7 +11,7 @@ interface Batch {
   expiry?: number;
   priceExcludingTax?: number;
   VATRate?: number;
-};
+}
 
 const batchesInternal: Batch[] = [
   // Residual from bulky
@@ -342,7 +342,7 @@ const getBatch = (batchId: string) => {
     throw new Error(`No batch found with id ${batchId}`);
   }
   return batch;
-}
+};
 
 export const getItemCostInBatchExcludingVAT = (batchId: string): number => {
   const { priceExcludingTax, itemQuantity } = getBatch(batchId);
@@ -353,4 +353,4 @@ export const getItemCostInBatchExcludingVAT = (batchId: string): number => {
 export const getVAT = (batchId: string): number => {
   const { VATRate } = getBatch(batchId);
   return VATRate;
-}
+};

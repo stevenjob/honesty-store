@@ -17,7 +17,7 @@ interface Identified {
 }
 export interface BoxItemWithBatchReference {
   itemID: string;
-  batches: BatchReference[]
+  batches: BatchReference[];
 }
 export interface FixedBoxItemOverheads {
   shippingCost: number;
