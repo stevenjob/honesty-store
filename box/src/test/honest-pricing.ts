@@ -71,4 +71,17 @@ describe('Box Submission', () => {
     expect(Math.round(VAT)).to.equal(43, 'Incorrect item VAT');
     expect(Math.round(finalTotal)).to.equal(213, 'Incorrect item price');
   });
+
+  it('should calculate total items in box', () => {
+    const { count } = getHonestPricing(boxSubmission);
+    expect(count).to.equal(8);
+  });
+
+  it('should calculate total of individual box items', () => {
+    const { boxItems } = getHonestPricing(boxSubmission);
+    const { count: boxItem0Count } = boxItems[0];
+    const { count: boxItem1Count } = boxItems[1];
+    expect(boxItem0Count).to.equal(3);
+    expect(boxItem1Count).to.equal(5);
+  });
 });
