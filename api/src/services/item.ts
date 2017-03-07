@@ -3,7 +3,7 @@ interface Item {
   qualifier?: string;
   unit: 'Pack' | 'Tube' | 'Bar';
   unitPlural: 'Packs' | 'Tubes' | 'Bars';
-  genericName: 'Crisps' | 'Sweets' | 'Chocolate' | 'Flapjack' | 'Can' | 'Biscuit' | 'Nuts';
+  genericName: 'Crisps' | 'Sweets' | 'Chocolate' | 'Flapjack' | 'Can' | 'Biscuit' | 'Nuts' | 'Cereal bar';
   image: string;
   weight: number;
   notes?: string;
@@ -27,7 +27,7 @@ const items: (Item & { id: string })[] = [
     weight: 42,
     unit: 'Bar',
     unitPlural: 'Bars',
-    genericName: 'Chocolate'
+    genericName: 'Cereal bar'
   },
   {
     id: 'b43c4a97-1112-41ce-8f91-5a8bda0dcdc8',
