@@ -10,17 +10,32 @@ const boxItems: BoxItemWithBatchReference[] = [
     ]
   },
   {
-    itemID: '8fd928e0-06c9-4958-9259-719dc451a8c2', // popchips s&v
+    itemID: '64e177af-6313-4d9e-b39a-8495c2f1d939', // love corn
     batches: [
-      { id: '9064a75f-5200-4d95-8889-da67aa6041d5', count: 3 }
+      { id: '6c2c6571-3b83-490c-b69a-7462e478a5b9', count: 5 }
     ]
   }
-]
+];
+
+describe('Average Cost', () => {
+  it('should calcualate the average item cost in the two batches', () => {
+    const averageItemCost = getAverageItemCost(boxItems);
+    expect(Math.round(averageItemCost)).to.equal(35);
+  });
+});
 
 describe('Wholesale item cost', () => {
-  it('should determine the wholesale value of the item', () => {
+  it('should determine the wholesale value of Popchips', () => {
     const batches = boxItems[0].batches;
     const wholesaleItemCost = getWholesaleItemCostExcludingVAT(batches);
-    expect(wholesaleItemCost).to.equal(33);
+    expect(Math.round(wholesaleItemCost)).to.equal(32);
+  });
+  it('should determine the wholesale value of Love Corn', () => {
+    const batches = boxItems[1].batches;
+    const wholesaleItemCost = getWholesaleItemCostExcludingVAT(batches);
+    expect(Math.round(wholesaleItemCost)).to.equal(37);
+  });
+});
+
   });
 });
