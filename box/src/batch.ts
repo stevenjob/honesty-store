@@ -225,8 +225,8 @@ const batchesInternal: Batch[] = [
     itemId: 'edef6848-f3d5-4733-babc-bc10bc3d257c',
     itemQuantity: 24,
     expiry: null,
-    priceExcludingTax: 622,
     priceIncludingTax: 777
+    priceExcludingTax: 777,
   },
   {
     id: '6c2c6571-3b83-490c-b69a-7462e478a5b9',
@@ -249,8 +249,8 @@ const batchesInternal: Batch[] = [
     itemId: '54e10706-284f-440f-82cb-0f8911a8424a',
     itemQuantity: 24,
     expiry: null,
-    priceExcludingTax: 852,
     priceIncludingTax: 1065
+    priceExcludingTax: 1065,
   },
   {
     id: 'cfb13f72-6c7b-4648-bc87-e705927f5179',
@@ -261,8 +261,8 @@ const batchesInternal: Batch[] = [
     itemId: '80984458-bab9-4a8f-86a7-b3e46f62139d',
     itemQuantity: 24,
     expiry: null,
-    priceExcludingTax: 852,
     priceIncludingTax: 1065
+    priceExcludingTax: 1065,
   },
   {
     id: '06aaff31-b515-44b0-b113-6ea32193d9e7',
@@ -273,8 +273,8 @@ const batchesInternal: Batch[] = [
     itemId: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
     itemQuantity: 18,
     expiry: null,
-    priceExcludingTax: 743,
     priceIncludingTax: 929
+    priceExcludingTax: 798,
   },
   {
     id: 'b211bc07-af4c-455a-99da-e3fa7f72b8c7',
@@ -285,8 +285,8 @@ const batchesInternal: Batch[] = [
     itemId: 'f0167eb4-f906-48d8-8067-6e3b646d8a19',
     itemQuantity: 18,
     expiry: null,
-    priceExcludingTax: 775,
     priceIncludingTax: 969
+    priceExcludingTax: 969,
   },
   {
     id: '6811aacb-a33f-4bc1-91f9-2bd40aca0eb3',
@@ -297,8 +297,8 @@ const batchesInternal: Batch[] = [
     itemId: 'fc3f3a7a-64bc-4f23-9a4e-c90f2536e56b',
     itemQuantity: 24,
     expiry: null,
-    priceExcludingTax: 1024,
     priceIncludingTax: 1280
+    priceExcludingTax: 1280,
   },
   {
     id: 'd7fe0ede-4922-4ba1-b7db-a6e8c2e398aa',
@@ -321,8 +321,8 @@ const batchesInternal: Batch[] = [
     itemId: '5298c925-9ae2-4017-a007-c1928c38ddc6',
     itemQuantity: 24,
     expiry: null,
-    priceExcludingTax: 1130,
     priceIncludingTax: 1130
+    priceExcludingTax: 958,
   }
 ];
 
