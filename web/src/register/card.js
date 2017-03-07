@@ -106,6 +106,7 @@ class Card extends React.Component {
           }
           <p>
             <input name="number"
+              type="text"
               autoComplete="cc-number"
               placeholder="1111 2222 3333 4444"
               className={(error != null && error.param === 'number') ? 'input border-red' : 'input'}
@@ -116,6 +117,7 @@ class Card extends React.Component {
           </p>
           <p className="register-card-tight">
             <input name="exp"
+              type="text"
               autoComplete="cc-exp"
               value={exp}
               pattern="[0-9]*"
@@ -124,6 +126,7 @@ class Card extends React.Component {
               className={(error != null && error.param === 'exp') ? 'input border-red' : 'input'}
               onChange={(e) => this.handleExpChange(e)} />
             <input name="cvc"
+              type="text"
               autoComplete="cc-csc"
               value={cvc}
               pattern="[0-9]*"
