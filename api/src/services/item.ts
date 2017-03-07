@@ -139,11 +139,11 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: '272c6a59-9b4c-41b6-b839-0f8be506728e',
-    name: 'Divine',
+    name: 'Caramel Milk Chocolate',
     image: 'misc-bar.svg',
     weight: 40,
     notes: 'Residual stock.',
-    qualifier: 'Caramel Milk Chocolate',
+    qualifier: 'Divine',
     unit: 'Bar',
     unitPlural: 'Bars',
     genericName: 'Chocolate'
