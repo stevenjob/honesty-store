@@ -4,6 +4,7 @@ interface Item {
   unit: 'Pack' | 'Tube' | 'Bar';
   unitPlural: 'Packs' | 'Tubes' | 'Bars';
   genericName: 'Crisps' | 'Sweets' | 'Chocolate' | 'Flapjack' | 'Can' | 'Biscuit' | 'Nuts' | 'Cereal bar';
+  location?: string;
   image: string;
   weight: number;
   notes?: string;
@@ -78,7 +79,8 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
-    name: 'Diet Coke (Fridge)',
+    name: 'Diet Coke',
+    location: 'Fridge',
     image: 'diet-cola-can.svg',
     weight: 400,
     notes: 'Multipack not for individual resale. NCL trial only, Simon Watson sourcing',
@@ -88,7 +90,8 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: 'd5d10152-3f8a-419b-9abd-6d6e916ea64a',
-    name: 'Coke Zero (Fridge)',
+    name: 'Coke Zero',
+    location: 'Fridge',
     image: 'coca-cola-zero-can.svg',
     weight: 400,
     notes: 'Multipack not for individual resale. NCL trial only, Simon Watson sourcing',
@@ -98,7 +101,8 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: 'ccad58e3-e27a-4463-9139-17a36ff7f7b8',
-    name: 'Coke (Fridge)',
+    name: 'Coke',
+    location: 'Fridge',
     image: 'coca-cola-can.svg',
     weight: 400,
     notes: 'Multipack not for individual resale. NCL trial only, Simon Watson sourcing',
