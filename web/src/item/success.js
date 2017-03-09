@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Success } from '../layout/alert';
 import safeLookupItemImage from './safeLookupItemImage';
 
-export const ItemPurchaseSuccess = ({ item: { name, image } }) =>
-  <Success title={`Enjoy your ${name}!`}
+export const ItemPurchaseSuccess = ({ item: { image, genericName } }) =>
+  <Success title={`Enjoy your ${genericName}!`}
     subtitle="Thank you for your honesty!"
     image={safeLookupItemImage(image)}
     onClick={() => history.replace(`/history`)}
