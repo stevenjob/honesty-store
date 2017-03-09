@@ -24,7 +24,7 @@ const Depleted = ({ registered, itemId }) => (
 );
 
 const ItemDetail = ({
-  item: { id, name, price, image, count },
+  item: { id, name, price, image, count, unit, unitPlural },
   balance,
   performPurchase,
   registered
@@ -42,7 +42,10 @@ const ItemDetail = ({
     );
   };
 
-  const payForText = (count) => `Pay for ${count} ${name}`;
+  const payForText = (count) =>
+    count > 1
+    ? `Pay for ${count} ${unitPlural}`
+    : `Pay for one ${unit}`;
 
   const formatPurchaseButton = (numItems) => {
     const balance = calculateBalanceRemaining(numItems);
@@ -68,7 +71,7 @@ const ItemDetail = ({
   };
 
   const purchaseStepper = <Stepper
-    label="How many would you like to pay for?"
+    label=`How many ${unitPlural} would you like to pay for?`
     onDecrement={decrementNumItems}
     incrementDisabled={() => false}
     onIncrement={(numItems) => numItems + 1}
