@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import safeLookupItemImage from '../item/safeLookupItemImage';
 import Currency from '../format/Currency';
 
-export default ({ item: { id, name, price, image, notes, weight, count } }) =>
+export default ({ item: { id, name, price, image, weight, count } }) =>
   <Link to={`/item/${id}`} className="btn regular flex navy" style={{ filter: count === 0 ? 'grayscale()' : undefined }}>
     <div className="flex-none col-3">
       <div className="bg-center bg-no-repeat"
@@ -17,8 +17,6 @@ export default ({ item: { id, name, price, image, notes, weight, count } }) =>
       </h2>
       <p className="mt0 mb1 aqua">
         {weight}g
-        {'\u00a0'}
-        {notes}
       </p>
     </div>
     <div className="ml2 flex-none flex flex-column justify-around">
