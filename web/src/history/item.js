@@ -5,7 +5,7 @@ import safeLookupItemImage from '../item/safeLookupItemImage';
 import Currency from '../format/Currency';
 import history from '../history';
 
-const HistoryItem = ({ isTopUp, text, timestamp, amount, image, href }) => {
+const HistoryItem = ({ isTopUp, title, subtitle, timestamp, amount, image, href }) => {
   return (
     <div className="btn regular navy col-12 flex" onClick={() => history.push(href)}>
       <div className="bg-center bg-no-repeat"
@@ -13,7 +13,11 @@ const HistoryItem = ({ isTopUp, text, timestamp, amount, image, href }) => {
         {'\u00a0'}
       </div>
       <div className="flex-column flex-auto ml2">
-        <h4 className="mt0 mb0">{text}</h4>
+        <h4 className="mt0 mb0">{title}</h4>
+        {
+          subtitle &&
+          <p className="mt0 mb0 h6">{subtitle}</p>
+        }
         <p className="mt0 mb0 h6 gray">{moment(timestamp).fromNow()}</p>
       </div>
       <div className="col-2 ml1 flex flex-none items-center justify-end">
@@ -39,17 +43,18 @@ const mapStateToProps = (
         timestamp,
         amount,
         image: require('./assets/top-up.svg'),
-        text: 'TOP UP',
+        title: 'TOP UP',
         href: '/topup'
       };
     case 'purchase':
-      const { item: { id, image, name }, quantity } = data;
+      const { item: { id, image, name, qualifier }, quantity } = data;
       return {
         isTopUp: false,
         timestamp,
         amount,
         image: safeLookupItemImage(image),
-        text: formatItem(name ? name : 'Unknown Item', quantity),
+        title: formatItem(name || 'Unknown Item', quantity),
+        subtitle: qualifier,
         href: `/item/${id}`
       };
     default:
