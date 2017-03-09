@@ -24,7 +24,7 @@ const Depleted = ({ registered, itemId }) => (
 );
 
 const ItemDetail = ({
-  item: { id, name, price, image, count, unit, unitPlural },
+  item: { id, name, price, image, count, unit, unitPlural, qualifier, notes, weight, location },
   balance,
   performPurchase,
   registered
@@ -43,9 +43,9 @@ const ItemDetail = ({
   };
 
   const payForText = (count) =>
-    count > 1
+    count !== 1
     ? `Pay for ${count} ${unitPlural}`
-    : `Pay for one ${unit}`;
+    : `Pay for 1 ${unit}`;
 
   const formatPurchaseButton = (numItems) => {
     const balance = calculateBalanceRemaining(numItems);
@@ -71,7 +71,7 @@ const ItemDetail = ({
   };
 
   const purchaseStepper = <Stepper
-    label=`How many ${unitPlural} would you like to pay for?`
+    label={`How many ${unitPlural} would you like to pay for?`}
     onDecrement={decrementNumItems}
     incrementDisabled={() => false}
     onIncrement={(numItems) => numItems + 1}
@@ -101,6 +101,22 @@ const ItemDetail = ({
               {'\u00a0'}
             </div>
           </div>
+          <table className="table mx-auto">
+            <tbody>
+              {
+                location &&
+                <tr>
+                  <th>Location</th>
+                  <td>{location}</td>
+                </tr>
+              }
+              <tr>
+                  <th>Weight</th>
+                  <td>{`${weight}g`}</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>{notes}</p>
           {registered ? purchaseStepper : unregisteredPurchaseButton}
           {
             count === 0 ?
