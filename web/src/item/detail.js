@@ -42,6 +42,8 @@ const ItemDetail = ({
     );
   };
 
+  const payForText = (count) => `Pay for ${count} ${name}`;
+
   const formatPurchaseButton = (numItems) => {
     const balance = calculateBalanceRemaining(numItems);
     if (balance < 0) {
@@ -52,7 +54,7 @@ const ItemDetail = ({
     }
     return {
       disabled: false,
-      text: `Pay for ${numItems} ${name}`
+      text: payForText(numItems)
     };
   };
 
@@ -80,7 +82,7 @@ const ItemDetail = ({
 
   const unregisteredPurchaseButton = <p>
     <Link className="btn btn-primary btn-big" to={`/register/${id}`}>
-      {`Pay for 1 ${name}`}
+      {payForText(1)}
     </Link>
   </p>;
 
