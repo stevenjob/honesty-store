@@ -1,4 +1,5 @@
-import { performSession } from './session';
+import { performSession, sessionReset } from './session';
+import history from '../history';
 
 const apifetch = async ({ url, getToken, body }) => {
 
@@ -55,11 +56,19 @@ export default async (params, dispatch, getState) => {
   try {
     return await apifetch(params);
   } catch (error) {
-    if (error.code !== 'AccessTokenExpired') {
-      throw error;
+    if (error.code === 'AccessTokenExpired') {
+      await performSession()(dispatch, getState);
+      return await apifetch(params);
+    }
+    if (error.code === 'TokenError') {
+      // Our refresh token hasn't expired (that's RefreshTokenExpired),
+      // it's just totally mangled (for example, a non-live token used on live).
+
+      dispatch(sessionReset(error));
+      history.push(`/`);
+      // fall through
     }
 
-    await performSession()(dispatch, getState);
-    return await apifetch(params);
+    throw error;
   }
 };
