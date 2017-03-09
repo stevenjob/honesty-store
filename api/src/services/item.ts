@@ -119,7 +119,7 @@ const items = [
     name: 'Walkers (Box)',
     image: 'misc-crisps.svg',
     weight: 22,
-    notes: 'Multipack not for individual resale. Residual stock. Wotsits, Quavers & Monster Munch'
+    notes: 'Multipack not for individual resale. Residual stock.'
   },
   {
     id: '8fd928e0-06c9-4958-9259-719dc451a8c2',
