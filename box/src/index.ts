@@ -7,7 +7,7 @@ import { info } from '../../service/src/log';
 import { CodedError } from '../../service/src/error';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { Box } from './client';
-import { getHonestPricing } from './honest-pricing';
+import calculatePricing from './honest-pricing';
 import { getBatch } from './batch';
 
 config.region = process.env.AWS_REGION;
@@ -150,7 +150,7 @@ const createBox = async ({ key, boxSubmission }): Promise<Box> => {
 
   assertValidBoxSubmission(boxSubmission);
 
-  const box = getHonestPricing(boxSubmission);
+  const box = calculatePricing(boxSubmission);
   await put(box);
 
   return box;

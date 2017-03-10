@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { getItemCostInBatchExcludingVAT, getVAT } from './batch';
+import { getItemCost as getBatchItemCost, getVATRate } from './batch';
 import {
   BatchReference, Box, BoxItem,
   BoxItemWithBatchReference, BoxSubmission, FixedBoxItemOverheads
@@ -41,11 +41,11 @@ export const sumBatches = (batches: BatchReference[]) =>
 export const sumBoxItems = (boxItems: BoxItemWithBatchReference[]) =>
   sum(boxItems, ({ batches }) => sumBatches(batches));
 
-export const getWholesaleItemCostExcludingVAT = (batches: BatchReference[]) =>
+export const getItemCost = (batches: BatchReference[]) =>
   avg(
     batches,
     ({ id, count }) => ({
-      value: getItemCostInBatchExcludingVAT(id),
+      value: getBatchItemCost(id),
       count
     })
   );
@@ -54,7 +54,7 @@ export const getAverageItemCost = (boxItems): number =>
   avg(
     boxItems,
     ({ batches }) => ({
-      value: getWholesaleItemCostExcludingVAT(batches),
+      value: getItemCost(batches),
       count: sumBatches(batches)
     })
   );
@@ -63,13 +63,13 @@ const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedO
   const { batches } = boxItemWithBatchRef;
 
   const { shippingCost, warehousingCost, packagingCost, packingCost, serviceFee } = fixedOverheads;
-  const subtotal = getWholesaleItemCostExcludingVAT(batches) + shippingCost + warehousingCost + packagingCost + packingCost
+  const subtotal = getItemCost(batches) + shippingCost + warehousingCost + packagingCost + packingCost
     + serviceFee;
 
-  const rateOfVAT = getVAT(batches[0].id);
-  const finalTotal = subtotal / (1 - creditCardFeeRate - rateOfVAT);
-  const VAT = finalTotal * rateOfVAT;
-  const creditCardFee = finalTotal * creditCardFeeRate;
+  const rate = getVATRate(batches[0].id);
+  const total = subtotal / (1 - creditCardFeeRate - rate);
+  const VAT = total * rate;
+  const creditCardFee = total * creditCardFeeRate;
 
   return {
     count: sumBatches(batches),
@@ -77,13 +77,13 @@ const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedO
     subtotal,
     creditCardFee,
     VAT,
-    finalTotal,
+    total,
     ...fixedOverheads,
     ...boxItemWithBatchRef
   };
 };
 
-export const getHonestPricing = (boxSubmission: BoxSubmission): Box => {
+export default (boxSubmission: BoxSubmission): Box => {
   const { boxItems, ...rest } = boxSubmission;
   const { shippingCost } = rest;
 

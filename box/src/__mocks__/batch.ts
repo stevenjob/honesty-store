@@ -1,8 +1,8 @@
 
-export const getItemCostInBatchExcludingVAT = (batchId: string): number => {
+export const getItemCost = (batchId: string): number => {
   return Number(batchId);
 };
 
-export const getVAT = (_batchId: string): number => {
+export const getVATRate = (_batchId: string): number => {
   return 0.2;
 };

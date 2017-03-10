@@ -30,7 +30,7 @@ interface VariableBoxItemOverheads {
   creditCardFee: number;
   subtotal: number;
   VAT: number;
-  finalTotal: number;
+  total: number;
 }
 interface BoxShippingDetails {
   shippingCost: number;

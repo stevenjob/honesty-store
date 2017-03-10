@@ -2,7 +2,7 @@ jest.mock('./batch');
 
 import { expect } from 'chai';
 import { BoxSubmission } from './client';
-import { getAverageItemCost, getHonestPricing, getWholesaleItemCostExcludingVAT } from './honest-pricing';
+import calculatePricing, { getAverageItemCost, getItemCost } from './honest-pricing';
 
 const precision = 0.5;
 
@@ -37,21 +37,21 @@ describe('Wholesale item cost', () => {
   it('should determine the wholesale value of item-a', () => {
     const { boxItems } = boxSubmission;
     const batches = boxItems[0].batches;
-    const wholesaleItemCost = getWholesaleItemCostExcludingVAT(batches);
+    const wholesaleItemCost = getItemCost(batches);
     expect(wholesaleItemCost).to.be.approximately(32, precision);
   });
 
   it('should determine the wholesale value of item b', () => {
     const { boxItems } = boxSubmission;
     const batches = boxItems[1].batches;
-    const wholesaleItemCost = getWholesaleItemCostExcludingVAT(batches);
+    const wholesaleItemCost = getItemCost(batches);
     expect(wholesaleItemCost).to.be.approximately(37, precision);
   });
 });
 
 describe('Box Submission', () => {
   it('should calculate box item costs', () => {
-    const { boxItems } = getHonestPricing(boxSubmission);
+    const { boxItems } = calculatePricing(boxSubmission);
 
     const {
       warehousingCost,
@@ -62,7 +62,7 @@ describe('Box Submission', () => {
       creditCardFee,
       subtotal,
       VAT,
-      finalTotal
+      total
     } = boxItems[0];
 
     expect(warehousingCost).to.be.approximately(7, precision, 'Incorrect warehousing cost');
@@ -74,16 +74,16 @@ describe('Box Submission', () => {
     expect(subtotal).to.be.approximately(159, precision, 'Incorrect subtotal');
     expect(creditCardFee).to.be.approximately(12, precision, 'Incorrect credit card fee');
     expect(VAT).to.be.approximately(43, precision, 'Incorrect item VAT');
-    expect(finalTotal).to.be.approximately(213, precision, 'Incorrect item price');
+    expect(total).to.be.approximately(213, precision, 'Incorrect item price');
   });
 
   it('should calculate total items in box', () => {
-    const { count } = getHonestPricing(boxSubmission);
+    const { count } = calculatePricing(boxSubmission);
     expect(count).to.equal(8);
   });
 
   it('should calculate total of individual box items', () => {
-    const { boxItems } = getHonestPricing(boxSubmission);
+    const { boxItems } = calculatePricing(boxSubmission);
     const { count: boxItem0Count } = boxItems[0];
     const { count: boxItem1Count } = boxItems[1];
     expect(boxItem0Count).to.equal(3);

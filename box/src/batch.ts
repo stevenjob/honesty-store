@@ -9,7 +9,7 @@ interface Batch {
   itemId: string;
   itemQuantity: number;
   expiry?: number;
-  priceExcludingTax?: number;
+  priceExcludingVAT?: number;
   VATRate?: number;
 }
 
@@ -24,7 +24,7 @@ const batchesInternal: Batch[] = [
     itemId: '8e9bb2db-9437-4733-acc1-f5e218e0a603',
     itemQuantity: 1,
     expiry: null,
-    priceExcludingTax: null,
+    priceExcludingVAT: null,
     VATRate: null
   },
   {
@@ -36,7 +36,7 @@ const batchesInternal: Batch[] = [
     itemId: '272c6a59-9b4c-41b6-b839-0f8be506728e',
     itemQuantity: 20,
     expiry: null,
-    priceExcludingTax: null,
+    priceExcludingVAT: null,
     VATRate: null
   },
   {
@@ -48,7 +48,7 @@ const batchesInternal: Batch[] = [
     itemId: '606e12d4-6367-4fc3-aa7a-92ee17ccac2c',
     itemQuantity: 2,
     expiry: null,
-    priceExcludingTax: null,
+    priceExcludingVAT: null,
     VATRate: null
   },
   {
@@ -60,7 +60,7 @@ const batchesInternal: Batch[] = [
     itemId: '32919485-d806-4be6-824b-170f66371306',
     itemQuantity: 15,
     expiry: null,
-    priceExcludingTax: null,
+    priceExcludingVAT: null,
     VATRate: null
   },
   {
@@ -72,7 +72,7 @@ const batchesInternal: Batch[] = [
     itemId: 'e91e7274-fe28-405c-86c8-5768197eb6ac',
     itemQuantity: 16,
     expiry: null,
-    priceExcludingTax: null,
+    priceExcludingVAT: null,
     VATRate: null
   },
   {
@@ -84,7 +84,7 @@ const batchesInternal: Batch[] = [
     itemId: '96ce1162-9188-41ac-9d35-8fc6a14783ef',
     itemQuantity: 20,
     expiry: 1483660800,
-    priceExcludingTax: 699,
+    priceExcludingVAT: 699,
     VATRate: null
   },
 
@@ -98,7 +98,7 @@ const batchesInternal: Batch[] = [
     itemId: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
     itemQuantity: 32,
     expiry: null,
-    priceExcludingTax: 979,
+    priceExcludingVAT: 979,
     VATRate: 0.2
   },
   {
@@ -110,7 +110,7 @@ const batchesInternal: Batch[] = [
     itemId: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
     itemQuantity: 40,
     expiry: null,
-    priceExcludingTax: 999,
+    priceExcludingVAT: 999,
     VATRate: 0.2
   },
   {
@@ -122,7 +122,7 @@ const batchesInternal: Batch[] = [
     itemId: 'b43c4a97-1112-41ce-8f91-5a8bda0dcdc8',
     itemQuantity: 48,
     expiry: null,
-    priceExcludingTax: 1499,
+    priceExcludingVAT: 1499,
     VATRate: 0.2
   },
   {
@@ -134,7 +134,7 @@ const batchesInternal: Batch[] = [
     itemId: '78816fba-150d-4282-b43d-900df45cea8b',
     itemQuantity: 36,
     expiry: null,
-    priceExcludingTax: 1069,
+    priceExcludingVAT: 1069,
     VATRate: 0.2
   },
   {
@@ -146,7 +146,7 @@ const batchesInternal: Batch[] = [
     itemId: '02bbc0fd-54c4-45bb-9b77-21b79b356aa6',
     itemQuantity: 96,
     expiry: null,
-    priceExcludingTax: 1899,
+    priceExcludingVAT: 1899,
     VATRate: 0.2
   },
 
@@ -160,7 +160,7 @@ const batchesInternal: Batch[] = [
     itemId: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
     itemQuantity: 10,
     expiry: 1483833600,
-    priceExcludingTax: 249,
+    priceExcludingVAT: 249,
     VATRate: 0.2
   },
 
@@ -175,7 +175,7 @@ const batchesInternal: Batch[] = [
     itemId: '3fa0db7c-3f90-404e-b875-3792eda3e185',
     itemQuantity: 48,
     expiry: 1483833600,
-    priceExcludingTax: 1579,
+    priceExcludingVAT: 1579,
     VATRate: 0.2
   },
   {
@@ -187,7 +187,7 @@ const batchesInternal: Batch[] = [
     itemId: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
     itemQuantity: 40,
     expiry: 1505779200,
-    priceExcludingTax: 649,
+    priceExcludingVAT: 649,
     VATRate: 0.2
   },
   {
@@ -199,7 +199,7 @@ const batchesInternal: Batch[] = [
     itemId: '28b0a802-bef3-478b-81d0-034e3ac02092',
     itemQuantity: 32,
     expiry: 1489795200,
-    priceExcludingTax: 979,
+    priceExcludingVAT: 979,
     VATRate: 0.2
   },
 
@@ -213,7 +213,7 @@ const batchesInternal: Batch[] = [
     itemId: '8fd928e0-06c9-4958-9259-719dc451a8c2',
     itemQuantity: 24,
     expiry: null,
-    priceExcludingTax: 777,
+    priceExcludingVAT: 777,
     VATRate: 0.2
   },
   {
@@ -225,7 +225,7 @@ const batchesInternal: Batch[] = [
     itemId: 'edef6848-f3d5-4733-babc-bc10bc3d257c',
     itemQuantity: 24,
     expiry: null,
-    priceExcludingTax: 777,
+    priceExcludingVAT: 777,
     VATRate: 0.2
   },
   {
@@ -237,7 +237,7 @@ const batchesInternal: Batch[] = [
     itemId: '64e177af-6313-4d9e-b39a-8495c2f1d939',
     itemQuantity: 24,
     expiry: null,
-    priceExcludingTax: 896,
+    priceExcludingVAT: 896,
     VATRate: 0
   },
   {
@@ -249,7 +249,7 @@ const batchesInternal: Batch[] = [
     itemId: '54e10706-284f-440f-82cb-0f8911a8424a',
     itemQuantity: 24,
     expiry: null,
-    priceExcludingTax: 1065,
+    priceExcludingVAT: 1065,
     VATRate: 0.2
   },
   {
@@ -261,7 +261,7 @@ const batchesInternal: Batch[] = [
     itemId: '80984458-bab9-4a8f-86a7-b3e46f62139d',
     itemQuantity: 24,
     expiry: null,
-    priceExcludingTax: 1065,
+    priceExcludingVAT: 1065,
     VATRate: 0.2
   },
   {
@@ -273,7 +273,7 @@ const batchesInternal: Batch[] = [
     itemId: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
     itemQuantity: 18,
     expiry: null,
-    priceExcludingTax: 798,
+    priceExcludingVAT: 798,
     VATRate: 0.2
   },
   {
@@ -285,7 +285,7 @@ const batchesInternal: Batch[] = [
     itemId: 'f0167eb4-f906-48d8-8067-6e3b646d8a19',
     itemQuantity: 18,
     expiry: null,
-    priceExcludingTax: 969,
+    priceExcludingVAT: 969,
     VATRate: 0.2
   },
   {
@@ -297,7 +297,7 @@ const batchesInternal: Batch[] = [
     itemId: 'fc3f3a7a-64bc-4f23-9a4e-c90f2536e56b',
     itemQuantity: 24,
     expiry: null,
-    priceExcludingTax: 1280,
+    priceExcludingVAT: 1280,
     VATRate: 0.2
   },
   {
@@ -309,7 +309,7 @@ const batchesInternal: Batch[] = [
     itemId: 'b78c3975-eb7f-4eda-a3ea-d54d35e6471e',
     itemQuantity: 24,
     expiry: null,
-    priceExcludingTax: 907,
+    priceExcludingVAT: 907,
     VATRate: 0
   },
   {
@@ -321,7 +321,7 @@ const batchesInternal: Batch[] = [
     itemId: '5298c925-9ae2-4017-a007-c1928c38ddc6',
     itemQuantity: 24,
     expiry: null,
-    priceExcludingTax: 958,
+    priceExcludingVAT: 958,
     VATRate: 0
   }
 ];
@@ -344,13 +344,13 @@ export const getBatch = (batchId: string) => {
   return batch;
 };
 
-export const getItemCostInBatchExcludingVAT = (batchId: string): number => {
-  const { priceExcludingTax, itemQuantity } = getBatch(batchId);
+export const getItemCost = (batchId: string): number => {
+  const { priceExcludingVAT, itemQuantity } = getBatch(batchId);
   // What's the best way to do this rounding ceil/round?
-  return priceExcludingTax / itemQuantity;
+  return priceExcludingVAT / itemQuantity;
 };
 
-export const getVAT = (batchId: string): number => {
+export const getVATRate = (batchId: string): number => {
   const { VATRate } = getBatch(batchId);
   return VATRate;
 };
