@@ -326,7 +326,7 @@ const batchesInternal: Batch[] = [
   }
 ];
 
-export const batches = new Map<string, Batch>();
+const batches = new Map<string, Batch>();
 for (const batch of batchesInternal) {
   if (batches.has(batch.id)) {
     throw new Error(`Duplicate ID ${batch.id}`);
@@ -336,7 +336,7 @@ for (const batch of batchesInternal) {
   batches.set(batch.id, batch);
 }
 
-const getBatch = (batchId: string) => {
+export const getBatch = (batchId: string) => {
   const batch = batches.get(batchId);
   if (batch == null) {
     throw new Error(`No batch found with id ${batchId}`);

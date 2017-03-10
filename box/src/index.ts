@@ -8,6 +8,7 @@ import { CodedError } from '../../service/src/error';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { Box } from './client';
 import { getHonestPricing } from './honest-pricing';
+import { getBatch } from './batch';
 
 config.region = process.env.AWS_REGION;
 
@@ -35,6 +36,10 @@ const assertValidBoxItemWithBatchReference = ({ itemID, batches }) => {
   }
   for (const batchRef of batches) {
     assertValidBatchReference(batchRef);
+    const batch = getBatch(batchRef.id);
+    if (batch.itemId !== itemID) {
+      throw new Error(`Batch ${batchRef.id} does not contain item ${itemID} (${batch.itemId})`);
+    }
   }
 };
 
