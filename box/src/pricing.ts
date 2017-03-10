@@ -70,7 +70,6 @@ const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedO
 
   return {
     count: sumBatches(batches),
-    depleted: false,
     subtotal,
     creditCardFee,
     VAT,
