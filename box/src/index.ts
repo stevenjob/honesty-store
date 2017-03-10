@@ -7,7 +7,7 @@ import { info } from '../../service/src/log';
 import { CodedError } from '../../service/src/error';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { Box } from './client';
-import calculatePricing from './honest-pricing';
+import calculatePricing from './pricing';
 import { getBatch } from './batch';
 
 config.region = process.env.AWS_REGION;

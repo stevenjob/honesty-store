@@ -2,7 +2,7 @@ jest.mock('./batch');
 
 import { expect } from 'chai';
 import { BoxSubmission } from './client';
-import calculatePricing, { getAverageItemCost, getItemCost } from './honest-pricing';
+import calculatePricing, { getAverageItemCost, getItemCost } from './pricing';
 
 const precision = 0.5;
 
