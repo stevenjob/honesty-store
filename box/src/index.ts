@@ -145,13 +145,16 @@ const flagOutOfStock = async ({ key, boxId, itemId }) => {
   return {};
 };
 
-const createBox = async ({ key, boxSubmission }): Promise<Box> => {
+const createBox = async ({ key, boxSubmission, dryRun }): Promise<Box> => {
   info(key, `New box submission received`, { boxSubmission });
 
   assertValidBoxSubmission(boxSubmission);
 
   const box = calculatePricing(boxSubmission);
-  await put(box);
+
+  if (!dryRun) {
+    await put(box);
+  }
 
   return box;
 };
@@ -188,8 +191,8 @@ router.post(
 router.post(
   '/',
   serviceAuthentication,
-  async (key, {}, boxSubmission) =>
-    createBox({ key, boxSubmission })
+  async (key, {}, boxSubmission, { query: { dryRun } }) =>
+    createBox({ key, boxSubmission, dryRun: dryRun !== 'false' })
 );
 
 app.use(router);
