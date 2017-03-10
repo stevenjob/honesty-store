@@ -69,7 +69,7 @@ const flagOutOfStock = async ({ key, boxId, itemId }) => {
   }
 
   if (!entry.depleted) {
-    entry.depleted = true;
+    entry.depleted = Date.now();
     await updateItems({
       box: {
         ...box,

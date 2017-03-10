@@ -3,7 +3,7 @@ import fetch from '../../../service/src/fetch';
 interface BoxItem {
   itemID: string;
   count: number;
-  depleted: boolean;
+  depleted?: number;
 }
 
 type yyyymmdd = string;
