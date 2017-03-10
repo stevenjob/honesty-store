@@ -2,13 +2,12 @@ import { config, DynamoDB } from 'aws-sdk';
 import bodyParser = require('body-parser');
 import express = require('express');
 import isUUID = require('validator/lib/isUUID');
-import { info } from '../../service/src/log';
-
 import { CodedError } from '../../service/src/error';
+import { info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
+import { getBatch } from './batch';
 import { Box } from './client';
 import calculatePricing from './pricing';
-import { getBatch } from './batch';
 
 config.region = process.env.AWS_REGION;
 

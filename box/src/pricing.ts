@@ -18,7 +18,7 @@ const sum = <T>(items: T[], projection: (item: T) => number) =>
     .reduce((a, b) => a + b, 0);
 
 const avg = <T>(items: T[], projection: (item: T) => { count: number, value: number }) => {
-  const { totalValue, totalCount } = items.map(projection)
+  const totals = items.map(projection)
     .reduce(
       (
         { totalCount, totalValue },
@@ -27,12 +27,9 @@ const avg = <T>(items: T[], projection: (item: T) => { count: number, value: num
         totalCount: totalCount + count,
         totalValue: totalValue + value * count
       }),
-      {
-        totalValue: 0,
-        totalCount: 0
-      }
+      { totalValue: 0, totalCount: 0 }
     );
-  return totalValue / totalCount;
+  return totals.totalValue / totals.totalCount;
 };
 
 export const sumBatches = (batches: BatchReference[]) =>
