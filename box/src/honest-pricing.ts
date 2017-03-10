@@ -21,19 +21,27 @@ export const sumBoxItems = (boxItems: BoxItemWithBatchReference[]) =>
   boxItems.map(({ batches }) => sumBatches(batches))
     .reduce(((totalItems, itemCount) => totalItems + itemCount), 0);
 
-// Probably want to average these out based on quantities in batch
 export const getWholesaleItemCostExcludingVAT = (batches: BatchReference[]) => {
-  const totalPrice = batches.map((el) => getItemCostInBatchExcludingVAT(el.id))
-    .reduce(((runningTotal, price) => runningTotal + price), 0);
-  return totalPrice / batches.length;
+  const { totalPrice, totalCount } = batches.map(
+      ({ id, count }) =>
+        ({
+          price: getItemCostInBatchExcludingVAT(id),
+          count
+        })
+    )
+    .reduce(
+      ({ totalPrice, totalCount }, { price, count }) =>
+        ({
+          totalCount: totalCount + count,
+          totalPrice: totalPrice + count * price
+        }),
+      { totalPrice: 0, totalCount: 0 }
+    );
+  return totalPrice / totalCount;
 };
 
 const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedOverheads: FixedBoxItemOverheads): BoxItem => {
   const { batches } = boxItemWithBatchRef;
-
-  if (batches.length > 1) {
-    console.warn('We don\'t deal with multiple batches of different prices very well at the moment!');
-  }
 
   const { shippingCost, warehousingCost, packagingCost, packingCost, serviceFee } = fixedOverheads;
   const subtotal = getWholesaleItemCostExcludingVAT(batches) + shippingCost + warehousingCost + packagingCost + packingCost

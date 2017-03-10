@@ -12,7 +12,8 @@ const boxSubmission: BoxSubmission = {
     {
       itemID: 'item-a',
       batches: [
-        { id: '32.375', count: 3 }
+        { id: '30', count: 2 },
+        { id: '37.125', count: 1 }
       ]
     },
     {
