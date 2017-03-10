@@ -3,8 +3,8 @@ interface Item {
   qualifier?: string;
   genericName: string;
   genericNamePlural: string;
-  unit: 'pack' | 'tube' | 'bar' | 'can';
-  unitPlural: 'packs' | 'tubes' | 'bars' | 'cans';
+  unit: string;
+  unitPlural: string;
   location?: string;
   image: string;
   weight: number;
