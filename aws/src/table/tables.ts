@@ -19,10 +19,10 @@ interface BoxData { // this is duplicated in box/src/client/index.ts
     count: number;
     depleted?: number;
   }[];
-  packed: string;
-  shipped: string;
-  received: string;
-  closed?: string;
+  packed: number;
+  shipped: number;
+  received: number;
+  closed?: number;
 }
 
 const template = ({
@@ -58,9 +58,9 @@ const dummyBoxData: BoxData[] = [
       { itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae', count: 7, depleted: 1489157268215 },
       { itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649', count: 7 }
     ],
-    packed: '20170127',
-    shipped: '20170128',
-    received: '20170130'
+    packed: 1485475200,
+    shipped: 1485561600,
+    received: 1485734400
   },
   {
     id: 'a7a863c6-9974-475d-96e9-4b4078a2e1c2',
@@ -70,9 +70,9 @@ const dummyBoxData: BoxData[] = [
       { itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae', count: 6, depleted: 1489157268215 },
       { itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649', count: 8, depleted: 1489157268215 }
     ],
-    packed: '20170129',
-    shipped: '20170130',
-    received: '20170131'
+    packed: 1485648000,
+    shipped: 1485734400,
+    received: 1485820800
   },
   {
     id: '5b3b4683-918e-49b1-bc68-9c33a5bbdf33',
@@ -82,10 +82,10 @@ const dummyBoxData: BoxData[] = [
       { itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae', count: 12, depleted: 1489157268215 },
       { itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649', count: 15, depleted: 1489157268215 }
     ],
-    packed: '20170130',
-    shipped: '20170130',
-    received: '20170130',
-    closed: '20170131'
+    packed: 1485734400,
+    shipped: 1485734400,
+    received: 1485734400,
+    closed: 1485820800
   }
 ];
 
