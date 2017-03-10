@@ -13,32 +13,51 @@ const packagingCostPerBox = 300;
 const packingCostPerBox = 200;
 const feePerBox = 0;
 
+const sum = <T>(items: T[], projection: (item: T) => number) =>
+  items.map(projection)
+    .reduce((a, b) => a + b, 0);
+
+const avg = <T>(items: T[], projection: (item: T) => { count: number, value: number }) => {
+  const { totalValue, totalCount } = items.map(projection)
+    .reduce(
+      (
+        { totalCount, totalValue },
+        { count, value }
+      ) => ({
+        totalCount: totalCount + count,
+        totalValue: totalValue + value * count
+      }),
+      {
+        totalValue: 0,
+        totalCount: 0
+      }
+    );
+  return totalValue / totalCount;
+};
+
 export const sumBatches = (batches: BatchReference[]) =>
-  batches.map(({ count }) => count)
-    .reduce(((itemCount, batchCount) => batchCount + itemCount), 0);
+  sum(batches, ({ count }) => count);
 
 export const sumBoxItems = (boxItems: BoxItemWithBatchReference[]) =>
-  boxItems.map(({ batches }) => sumBatches(batches))
-    .reduce(((totalItems, itemCount) => totalItems + itemCount), 0);
+  sum(boxItems, ({ batches }) => sumBatches(batches));
 
-export const getWholesaleItemCostExcludingVAT = (batches: BatchReference[]) => {
-  const { totalPrice, totalCount } = batches.map(
-      ({ id, count }) =>
-        ({
-          price: getItemCostInBatchExcludingVAT(id),
-          count
-        })
-    )
-    .reduce(
-      ({ totalPrice, totalCount }, { price, count }) =>
-        ({
-          totalCount: totalCount + count,
-          totalPrice: totalPrice + count * price
-        }),
-      { totalPrice: 0, totalCount: 0 }
-    );
-  return totalPrice / totalCount;
-};
+export const getWholesaleItemCostExcludingVAT = (batches: BatchReference[]) =>
+  avg(
+    batches,
+    ({ id, count }) => ({
+      value: getItemCostInBatchExcludingVAT(id),
+      count
+    })
+  );
+
+export const getAverageItemCost = (boxItems): number =>
+  avg(
+    boxItems,
+    ({ batches }) => ({
+      value: getWholesaleItemCostExcludingVAT(batches),
+      count: sumBatches(batches)
+    })
+  );
 
 const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedOverheads: FixedBoxItemOverheads): BoxItem => {
   const { batches } = boxItemWithBatchRef;
@@ -62,17 +81,6 @@ const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedO
     ...fixedOverheads,
     ...boxItemWithBatchRef
   };
-};
-
-export const getAverageItemCost = (boxItems): number => {
-  let totalItemCost = 0;
-  for (const boxItem of boxItems) {
-    const { batches } = boxItem;
-    const boxQty = sumBatches(batches);
-    const boxCostExcVAT = getWholesaleItemCostExcludingVAT(batches);
-    totalItemCost += (boxQty * boxCostExcVAT);
-  }
-  return totalItemCost / sumBoxItems(boxItems);
 };
 
 export const getHonestPricing = (boxSubmission: BoxSubmission): Box => {
