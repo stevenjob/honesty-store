@@ -1,4 +1,5 @@
-import { Box, getBox } from '../../../box/src/client';
+import { Box, BoxItem, getBox } from '../../../box/src/client';
+import { avg } from '../../../box/src/math';
 import { getItem } from './item';
 
 interface Store {
@@ -14,6 +15,19 @@ export interface StoreItem {
 
   id: string;
   price: number;
+
+  priceBreakdown: PriceBreakdown;
+}
+
+interface PriceBreakdown {
+  creditCardFee: number;
+  VAT: number;
+
+  shippingCost: number;
+  warehousingCost: number;
+  packagingCost: number;
+  packingCost: number;
+  serviceFee: number;
 }
 
 const stores = new Map<string, Store>();
@@ -160,11 +174,34 @@ const getUniqueItemCounts = (boxes: Box[]) => {
     }
     for (const { itemID, count, depleted } of box.boxItems) {
       const existingCount = map.has(itemID) ? map.get(itemID) : 0;
-      map.set(itemID, existingCount + (depleted ? 0 : <number>count));
+      map.set(itemID, existingCount + (depleted ? 0 : count));
     }
   }
   return Array.from(map.entries())
     .map(([itemID, count]) => ({ itemID, count }));
+};
+
+const boxesContainingItem = (boxes, itemID) =>
+  boxes.filter(({ boxItems }) => boxItems.some( ({ itemId }) => itemId === itemID));
+
+const itemAvg = (boxItems: BoxItem[], extractValue) =>
+  avg(boxItems, item => ({ count: item.count, value: extractValue(item) }));
+
+const priceBreakdown = (boxes, itemID): PriceBreakdown => {
+  const items = boxesContainingItem(boxes, itemID)
+    .map(({ boxItems }) => boxItems)
+    .reduce((acc, ar) => [...acc, ...ar], [])
+    .filter(({ itemID: id }) => id === itemID);
+
+  return {
+    creditCardFee: itemAvg(items, item => item.creditCardFee),
+    VAT: itemAvg(items, item => item.VAT),
+    shippingCost: itemAvg(items, item => item.shippingCost),
+    warehousingCost: itemAvg(items, item => item.warehousingCost),
+    packagingCost: itemAvg(items, item => item.packagingCost),
+    packingCost: itemAvg(items, item => item.packingCost),
+    serviceFee: itemAvg(items, item => item.serviceFee)
+  };
 };
 
 export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
@@ -176,6 +213,7 @@ export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
       ...getItem(itemID),
       count,
       id: itemID,
-      price: getPrice(storeCode, itemID)
+      price: getPrice(storeCode, itemID),
+      priceBreakdown: priceBreakdown(boxes, itemID)
     }));
 };
