@@ -6,6 +6,16 @@ interface Store {
   itemPrices: { [id: string]: number };
 }
 
+export interface StoreItem {
+  name: string;
+  image: string;
+
+  count: number;
+
+  id: string;
+  price: number;
+}
+
 const stores = new Map<string, Store>();
 
 const ncl = {
@@ -141,16 +151,6 @@ export const getPrice = (storeCode: string, itemID: string) => {
   const store = getStore(storeCode);
   return store.itemPrices[itemID];
 };
-
-export interface StoreItem {
-  name: string;
-  image: string;
-
-  count: number;
-
-  id: string;
-  price: number;
-}
 
 const getUniqueItemCounts = (boxes: Box[]) => {
   const map = new Map<string, number>();
