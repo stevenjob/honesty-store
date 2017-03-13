@@ -4,6 +4,7 @@ import {
   BatchReference, Box, BoxItem,
   BoxItemWithBatchReference, BoxSubmission, FixedBoxItemOverheads
 } from './client';
+import { avg, sum } from './math';
 
 const creditCardFeeRate = 0.054;
 const expectedLossPerBox = 0.05;
@@ -12,25 +13,6 @@ const warehousingCostPerBox = 50;
 const packagingCostPerBox = 300;
 const packingCostPerBox = 200;
 const feePerBox = 0;
-
-const sum = <T>(items: T[], projection: (item: T) => number) =>
-  items.map(projection)
-    .reduce((a, b) => a + b, 0);
-
-const avg = <T>(items: T[], projection: (item: T) => { count: number, value: number }) => {
-  const totals = items.map(projection)
-    .reduce(
-      (
-        { totalCount, totalValue },
-        { count, value }
-      ) => ({
-        totalCount: totalCount + count,
-        totalValue: totalValue + value * count
-      }),
-      { totalValue: 0, totalCount: 0 }
-    );
-  return totals.totalValue / totals.totalCount;
-};
 
 export const sumBatches = (batches: BatchReference[]) =>
   sum(batches, ({ count }) => count);
