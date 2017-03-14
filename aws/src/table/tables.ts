@@ -16,13 +16,28 @@ interface BoxData { // this is duplicated in box/src/client/index.ts
   version: number;
   boxItems: {
     itemID: string;
+    batches: {
+      id: string;
+      count: number;
+    }[];
     count: number;
     depleted?: number;
+    shippingCost: number;
+    warehousingCost: number;
+    packagingCost: number;
+    packingCost: number;
+    serviceFee: number;
+    creditCardFee: number;
+    subtotal: number;
+    VAT: number;
+    total: number;
   }[];
-  packed: number;
-  shipped: number;
-  received: number;
+  shippingCost: number;
+  packed?: number;
+  shipped?: number;
+  received?: number;
   closed?: number;
+  count: number;
 }
 
 const template = ({
@@ -54,38 +69,213 @@ const dummyBoxData: BoxData[] = [
     id: '06439c6c-57c9-4a17-b218-2018ea8dae55',
     version: 0,
     boxItems: [
-      { itemID: '46ced0c0-8815-4ed2-bfb6-40537f5bd512', count: 3 },
-      { itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae', count: 7, depleted: 1489157268215 },
-      { itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649', count: 7 }
+      {
+        itemID: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
+        count: 3,
+        batches: [
+          {
+            // these batch ids are entirely fabricated and don't refer to anything
+            id: '67a144ae-57bd-4887-ad4d-be579a1255a7',
+            count: 3
+          }
+        ],
+        shippingCost: 300,
+        warehousingCost: 0,
+        packagingCost: 10,
+        packingCost: 50,
+        serviceFee: 200,
+        creditCardFee: 0.05,
+        subtotal: 560.05,
+        VAT: 0,
+        total: 560.05
+      },
+      {
+        itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
+        count: 7,
+        depleted: 1489157268215,
+        batches: [
+          {
+            id: '85b9c287-7df8-4f84-b43c-0d04e24f6f18',
+            count: 7
+          }
+        ],
+        shippingCost: 300,
+        warehousingCost: 0,
+        packagingCost: 10,
+        packingCost: 50,
+        serviceFee: 200,
+        creditCardFee: 0.05,
+        subtotal: 560.05,
+        VAT: 0,
+        total: 560.05
+      },
+      {
+        itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
+        count: 7,
+        batches: [
+          {
+            id: '8811ffd0-d2d6-4d6c-bd75-f2fd40d0e113',
+            count: 7
+          }
+        ],
+        shippingCost: 300,
+        warehousingCost: 0,
+        packagingCost: 10,
+        packingCost: 50,
+        serviceFee: 200,
+        creditCardFee: 0.05,
+        subtotal: 560.05,
+        VAT: 0,
+        total: 560.05
+      }
     ],
+    shippingCost: 300,
     packed: 1485475200,
     shipped: 1485561600,
-    received: 1485734400
+    received: 1485734400,
+    count: 17
   },
   {
     id: 'a7a863c6-9974-475d-96e9-4b4078a2e1c2',
     version: 0,
     boxItems: [
-      { itemID: '46ced0c0-8815-4ed2-bfb6-40537f5bd512', count: 4 },
-      { itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae', count: 6, depleted: 1489157268215 },
-      { itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649', count: 8, depleted: 1489157268215 }
+      {
+        itemID: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
+        count: 4,
+        batches: [
+          {
+            id: '99eb764f-76b5-488f-b797-e463db39fd39',
+            count: 4
+          }
+        ],
+        shippingCost: 300,
+        warehousingCost: 0,
+        packagingCost: 10,
+        packingCost: 50,
+        serviceFee: 200,
+        creditCardFee: 0.05,
+        subtotal: 560.05,
+        VAT: 0,
+        total: 560.05
+      },
+      {
+        itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
+        count: 6,
+        depleted: 1489157268215,
+        batches: [
+          {
+            id: 'af6ecd4c-5b08-4ee8-ae6f-9ba13036f749',
+            count: 6
+          }
+        ],
+        shippingCost: 300,
+        warehousingCost: 0,
+        packagingCost: 10,
+        packingCost: 50,
+        serviceFee: 200,
+        creditCardFee: 0.05,
+        subtotal: 560.05,
+        VAT: 0,
+        total: 560.05
+      },
+      {
+        itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
+        count: 8,
+        depleted: 1489157268215,
+        batches: [
+          {
+            id: 'baff2a00-0ae7-4d9b-b35c-59b5133f3709',
+            count: 8
+          }
+        ],
+        shippingCost: 300,
+        warehousingCost: 0,
+        packagingCost: 10,
+        packingCost: 50,
+        serviceFee: 200,
+        creditCardFee: 0.05,
+        subtotal: 560.05,
+        VAT: 0,
+        total: 560.05
+      }
     ],
+    shippingCost: 300,
     packed: 1485648000,
     shipped: 1485734400,
-    received: 1485820800
+    received: 1485820800,
+    count: 18
   },
   {
     id: '5b3b4683-918e-49b1-bc68-9c33a5bbdf33',
     version: 0,
     boxItems: [
-      { itemID: '46ced0c0-8815-4ed2-bfb6-40537f5bd512', count: 10, depleted: 1489157268215 },
-      { itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae', count: 12, depleted: 1489157268215 },
-      { itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649', count: 15, depleted: 1489157268215 }
+      {
+        itemID: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
+        count: 10,
+        depleted: 1489157268215,
+        batches: [
+          {
+            id: '4e8aae2f-cc53-4b5f-bd1c-7fb0e35b2283',
+            count: 10
+          }
+        ],
+        shippingCost: 300,
+        warehousingCost: 0,
+        packagingCost: 10,
+        packingCost: 50,
+        serviceFee: 200,
+        creditCardFee: 0.05,
+        subtotal: 560.05,
+        VAT: 0,
+        total: 560.05
+      },
+      {
+        itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
+        count: 12,
+        depleted: 1489157268215,
+        batches: [
+          {
+            id: '5d9d658d-0c36-4373-bebf-8742d0e8c59a',
+            count: 12
+          }
+        ],
+        shippingCost: 300,
+        warehousingCost: 0,
+        packagingCost: 10,
+        packingCost: 50,
+        serviceFee: 200,
+        creditCardFee: 0.05,
+        subtotal: 560.05,
+        VAT: 0,
+        total: 560.05
+      },
+      {
+        itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
+        count: 15,
+        depleted: 1489157268215,
+        batches: [
+          {
+            id: '002984a8-9030-4b0a-9fca-d2769de73356',
+            count: 15
+          }
+        ],
+        shippingCost: 300,
+        warehousingCost: 0,
+        packagingCost: 10,
+        packingCost: 50,
+        serviceFee: 200,
+        creditCardFee: 0.05,
+        subtotal: 560.05,
+        VAT: 0,
+        total: 560.05
+      }
     ],
+    shippingCost: 300,
     packed: 1485734400,
     shipped: 1485734400,
     received: 1485734400,
-    closed: 1485820800
+    closed: 1485820800,
+    count: 37
   }
 ];
 
