@@ -181,13 +181,13 @@ const getUniqueItemCounts = (boxes: Box[]) => {
     .map(([itemID, count]) => ({ itemID, count }));
 };
 
-const boxesContainingItem = (boxes, itemID) =>
+const boxesContainingItem = (boxes: Box[], itemId) =>
   boxes.filter(({ boxItems }) => boxItems.some( ({ itemID }) => itemId === itemID));
 
-const itemAvg = (boxItems: BoxItem[], extractValue) =>
+const itemAvg = (boxItems: BoxItem[], extractValue: (_: BoxItem) => number): number =>
   avg(boxItems, item => ({ count: item.count, value: extractValue(item) }));
 
-const priceBreakdown = (boxes, itemID): PriceBreakdown => {
+const priceBreakdown = (boxes: Box[], itemID): PriceBreakdown => {
   const items = boxesContainingItem(boxes, itemID)
     .map(({ boxItems }) => boxItems)
     .reduce((acc, ar) => [...acc, ...ar], [])
