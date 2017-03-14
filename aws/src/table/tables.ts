@@ -64,6 +64,12 @@ const template = ({
   data: dummyData
 });
 
+const shipping = {
+  shippingCost: 300,
+  packed: 1485475200,
+  shipped: 1485561600,
+  received: 1485734400
+};
 const costs = {
   shippingCost: 300,
   warehousingCost: 0,
@@ -117,11 +123,8 @@ const dummyBoxData: BoxData[] = [
         ...costs
       }
     ],
-    shippingCost: 300,
-    packed: 1485475200,
-    shipped: 1485561600,
-    received: 1485734400,
-    count: 17
+    count: 17,
+    ...shipping
   },
   {
     id: 'a7a863c6-9974-475d-96e9-4b4078a2e1c2',
@@ -163,10 +166,7 @@ const dummyBoxData: BoxData[] = [
         ...costs
       }
     ],
-    shippingCost: 300,
-    packed: 1485648000,
-    shipped: 1485734400,
-    received: 1485820800,
+    ...shipping,
     count: 18
   },
   {
@@ -210,10 +210,7 @@ const dummyBoxData: BoxData[] = [
         ...costs
       }
     ],
-    shippingCost: 300,
-    packed: 1485734400,
-    shipped: 1485734400,
-    received: 1485734400,
+    ...shipping,
     closed: 1485820800,
     count: 37
   }
