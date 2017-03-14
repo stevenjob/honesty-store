@@ -34,15 +34,13 @@ interface VariableBoxItemOverheads {
 }
 interface BoxShippingDetails {
   shippingCost: number;
-  packed?: yyyymmdd;
-  shipped?: yyyymmdd;
-  received?: yyyymmdd;
-  closed?: yyyymmdd;
+  packed?: number;
+  shipped?: number;
+  received?: number;
+  closed?: number;
 }
 
 export type BoxItem = BoxItemWithBatchReference & Counted & FixedBoxItemOverheads & VariableBoxItemOverheads;
-
-type yyyymmdd = string;
 
 export type BoxSubmission = BoxShippingDetails & { boxItems: BoxItemWithBatchReference[]; };
 
