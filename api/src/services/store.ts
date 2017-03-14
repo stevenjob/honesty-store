@@ -182,7 +182,7 @@ const getUniqueItemCounts = (boxes: Box[]) => {
 };
 
 const boxesContainingItem = (boxes, itemID) =>
-  boxes.filter(({ boxItems }) => boxItems.some( ({ itemId }) => itemId === itemID));
+  boxes.filter(({ boxItems }) => boxItems.some( ({ itemID }) => itemId === itemID));
 
 const itemAvg = (boxItems: BoxItem[], extractValue) =>
   avg(boxItems, item => ({ count: item.count, value: extractValue(item) }));
