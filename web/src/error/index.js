@@ -14,12 +14,13 @@ const ErrorInternal = ({
   subtitle = defaultSubtitle,
   image = <Error />,
   dismissError,
+  errorCode,
   ...other
 }) =>
   <Alert title={title}
     subtitle={subtitle}
     image={image}
-    onClick={dismissError}
+    onClick={() => dismissError(errorCode)}
     className="error"
     {...other} />;
 
@@ -37,7 +38,8 @@ const mapStateToProps = ({ error }) => {
 
   return {
     subtitle: message,
-    title: actionDescription != null ? actionDescription : retryTitle
+    title: actionDescription != null ? actionDescription : retryTitle,
+    errorCode: error.code
   };
 };
 
