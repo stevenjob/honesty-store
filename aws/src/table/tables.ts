@@ -64,6 +64,18 @@ const template = ({
   data: dummyData
 });
 
+const costs = {
+  shippingCost: 300,
+  warehousingCost: 0,
+  packagingCost: 10,
+  packingCost: 50,
+  serviceFee: 200,
+  creditCardFee: 0.05,
+  subtotal: 560.05,
+  VAT: 0,
+  total: 560.05
+};
+
 const dummyBoxData: BoxData[] = [
   {
     id: '06439c6c-57c9-4a17-b218-2018ea8dae55',
@@ -79,15 +91,7 @@ const dummyBoxData: BoxData[] = [
             count: 3
           }
         ],
-        shippingCost: 300,
-        warehousingCost: 0,
-        packagingCost: 10,
-        packingCost: 50,
-        serviceFee: 200,
-        creditCardFee: 0.05,
-        subtotal: 560.05,
-        VAT: 0,
-        total: 560.05
+        ...costs
       },
       {
         itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
@@ -99,15 +103,7 @@ const dummyBoxData: BoxData[] = [
             count: 7
           }
         ],
-        shippingCost: 300,
-        warehousingCost: 0,
-        packagingCost: 10,
-        packingCost: 50,
-        serviceFee: 200,
-        creditCardFee: 0.05,
-        subtotal: 560.05,
-        VAT: 0,
-        total: 560.05
+        ...costs
       },
       {
         itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
@@ -118,15 +114,7 @@ const dummyBoxData: BoxData[] = [
             count: 7
           }
         ],
-        shippingCost: 300,
-        warehousingCost: 0,
-        packagingCost: 10,
-        packingCost: 50,
-        serviceFee: 200,
-        creditCardFee: 0.05,
-        subtotal: 560.05,
-        VAT: 0,
-        total: 560.05
+        ...costs
       }
     ],
     shippingCost: 300,
@@ -148,15 +136,7 @@ const dummyBoxData: BoxData[] = [
             count: 4
           }
         ],
-        shippingCost: 300,
-        warehousingCost: 0,
-        packagingCost: 10,
-        packingCost: 50,
-        serviceFee: 200,
-        creditCardFee: 0.05,
-        subtotal: 560.05,
-        VAT: 0,
-        total: 560.05
+        ...costs
       },
       {
         itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
@@ -168,15 +148,7 @@ const dummyBoxData: BoxData[] = [
             count: 6
           }
         ],
-        shippingCost: 300,
-        warehousingCost: 0,
-        packagingCost: 10,
-        packingCost: 50,
-        serviceFee: 200,
-        creditCardFee: 0.05,
-        subtotal: 560.05,
-        VAT: 0,
-        total: 560.05
+        ...costs
       },
       {
         itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
@@ -188,15 +160,7 @@ const dummyBoxData: BoxData[] = [
             count: 8
           }
         ],
-        shippingCost: 300,
-        warehousingCost: 0,
-        packagingCost: 10,
-        packingCost: 50,
-        serviceFee: 200,
-        creditCardFee: 0.05,
-        subtotal: 560.05,
-        VAT: 0,
-        total: 560.05
+        ...costs
       }
     ],
     shippingCost: 300,
@@ -219,15 +183,7 @@ const dummyBoxData: BoxData[] = [
             count: 10
           }
         ],
-        shippingCost: 300,
-        warehousingCost: 0,
-        packagingCost: 10,
-        packingCost: 50,
-        serviceFee: 200,
-        creditCardFee: 0.05,
-        subtotal: 560.05,
-        VAT: 0,
-        total: 560.05
+        ...costs
       },
       {
         itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
@@ -239,15 +195,7 @@ const dummyBoxData: BoxData[] = [
             count: 12
           }
         ],
-        shippingCost: 300,
-        warehousingCost: 0,
-        packagingCost: 10,
-        packingCost: 50,
-        serviceFee: 200,
-        creditCardFee: 0.05,
-        subtotal: 560.05,
-        VAT: 0,
-        total: 560.05
+        ...costs
       },
       {
         itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
@@ -259,15 +207,7 @@ const dummyBoxData: BoxData[] = [
             count: 15
           }
         ],
-        shippingCost: 300,
-        warehousingCost: 0,
-        packagingCost: 10,
-        packingCost: 50,
-        serviceFee: 200,
-        creditCardFee: 0.05,
-        subtotal: 560.05,
-        VAT: 0,
-        total: 560.05
+        ...costs
       }
     ],
     shippingCost: 300,
