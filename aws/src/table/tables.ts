@@ -72,14 +72,14 @@ const shipping = {
 };
 const costs = {
   shippingCost: 300,
-  warehousingCost: 0,
-  packagingCost: 10,
+  warehousingCost: 50,
+  packagingCost: 50,
   packingCost: 50,
   serviceFee: 200,
-  creditCardFee: 0.05,
-  subtotal: 560.05,
+  creditCardFee: 5,
+  subtotal: 655,
   VAT: 0,
-  total: 560.05
+  total: 655
 };
 
 const dummyBoxData: BoxData[] = [
