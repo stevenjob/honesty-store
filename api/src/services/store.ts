@@ -14,9 +14,10 @@ export interface StoreItem {
   count: number;
 
   id: string;
-  price: number;
-
-  priceBreakdown: PriceBreakdown;
+  price: {
+    total: number;
+    breakdown: PriceBreakdown;
+  };
 }
 
 interface PriceBreakdown {
@@ -213,7 +214,9 @@ export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
       ...getItem(itemID),
       count,
       id: itemID,
-      price: getPrice(storeCode, itemID),
-      priceBreakdown: priceBreakdown(boxes, itemID)
+      price: {
+        total: getPrice(storeCode, itemID),
+        breakdown: priceBreakdown(boxes, itemID)
+      }
     }));
 };
