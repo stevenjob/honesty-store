@@ -34,12 +34,13 @@ const mapStateToProps = ({ error }) => {
     return {};
   }
 
-  const { message, actionDescription } = errorDef;
+  const { message, actionDescription, dismissalText } = errorDef;
 
   return {
     subtitle: message,
     title: actionDescription != null ? actionDescription : retryTitle,
-    errorCode: error.code
+    errorCode: error.code,
+    dismissalText
   };
 };
 

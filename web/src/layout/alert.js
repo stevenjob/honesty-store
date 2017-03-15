@@ -7,7 +7,8 @@ const Alert = ({
   subtitle,
   image,
   onClick,
-  className
+  className,
+  dismissalText = 'Tap to dismiss'
 }) =>
   <div className="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center" onClick={onClick}>
     <div className="px2 center navy sm-col-10 md-col-8 lg-col-6 mx-auto">
@@ -22,7 +23,7 @@ const Alert = ({
       <h2>{title}</h2>
       {
         onClick &&
-        <p className="gray">Tap to dismiss</p>
+        <p className="gray">{dismissalText}</p>
       }
     </div>
   </div>;

@@ -11,13 +11,15 @@ export const errorDefinitions = {
   NoCardDetailsPresent: {
     message: 'We have no card details for you',
     actionDescription: 'Please get in touch with us',
-    redirectionURL: '/help/card/no-details'
+    redirectionURL: '/help/card/no-details',
+    dismissalText: 'Tap to get in touch'
   },
   EmailTokenInvalid: { message: 'The magic link you followed has expired' },
   StoreNotFound: {
     message: 'We couldn\'t find that store code',
     actionDescription: 'Could you double check it and try again?',
-    redirectionURL: '/'
+    redirectionURL: '/',
+    dismissalText: 'Tap to try again'
   },
   LocalStorageBlocked: { message: 'We can\'t hold onto your session in private browsing' },
   NetworkError: { message: 'Sorry, we\'re having trouble connecting' },
@@ -30,7 +32,8 @@ export const errorDefinitions = {
   CardExpired: {
     message: 'Card expired',
     actionDescription: 'Please get in touch with us to add a new card',
-    redirectionURL: '/help/card/expired'
+    redirectionURL: '/help/card/expired',
+    dismissalText: 'Tap to get in touch'
   },
   CardDeclined: {
     message: 'Card declined',
@@ -55,6 +58,7 @@ export const errorDefinitions = {
   MagicLinkTokenExpired: {
     message: 'Your magic link token has expired',
     actionDescription: retrySignInText,
-    redirectionURL: '/register'
+    redirectionURL: '/register',
+    dismissalText: 'Tap to try again'
   }
 };
