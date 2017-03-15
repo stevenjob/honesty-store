@@ -14,7 +14,7 @@ export const dismissError = (code) => async (dispatch) => {
   if (code != null) {
     const { redirectionURL } = errorDefinitions[code];
     if (redirectionURL != null) {
-      history.replace(redirectionURL);
+      history.push(redirectionURL);
     }
   }
 
