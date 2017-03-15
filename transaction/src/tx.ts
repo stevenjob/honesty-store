@@ -20,7 +20,7 @@ export const assertValidTransaction = ({ type, amount, data }: Transaction) => {
     throw new Error(`Non-integral transaction amount ${amount}`);
   }
   if ((type === 'topup' && amount <= 0) || (type === 'purchase' && amount >= 0)) {
-    throw new Error(`Invalid transaction amount for type ${amount} ${type}`);
+    throw new Error(`Invalid transaction amount for type '${type}': ${amount}`);
   }
   if (data == null || typeof data !== 'object') {
     throw new Error(`Invalid transaction data ${JSON.stringify(data)}`);

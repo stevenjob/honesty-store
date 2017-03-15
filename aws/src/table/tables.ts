@@ -303,7 +303,7 @@ const dirToTable = {
       {
         id: 'bcbf62c2-defd-4049-b3bb-4cfb87b2c15d',
         type: 'purchase',
-        amount: 77,
+        amount: -77,
         data: {},
         next: 'd2b51e9e-c776-4b96-bf71-3cb70cd53aad'
       },
