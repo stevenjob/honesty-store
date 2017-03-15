@@ -4,9 +4,13 @@ const retrySignInText = 'Please try signing in again';
 
 export const errorDefinitions = {
   TopupExceedsMaxBalance: {
-    message: 'Topping up would exceed your maximum balance'
+    message: 'Topping up would exceed your maximum balance',
+    actionDescription: ''
   },
-  TooManyPurchaseItems: { message: 'You\'re purchasing too many items' },
+  TooManyPurchaseItems: {
+    message: 'You\'re purchasing too many items',
+    actionDescription: ''
+  },
   EmailNotFound: { message: 'Couldn\'t find your email' },
   NoCardDetailsPresent: {
     message: 'We have no card details for you',
