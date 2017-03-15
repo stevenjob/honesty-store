@@ -18,7 +18,6 @@ export const errorDefinitions = {
     redirectionURL: '/help/card/no-details',
     dismissalText: 'Tap to get in touch'
   },
-  EmailTokenInvalid: { message: 'The magic link you followed has expired' },
   StoreNotFound: {
     message: 'We couldn\'t find that store code',
     actionDescription: 'Could you double check it and try again?',
@@ -62,6 +61,7 @@ export const errorDefinitions = {
     actionDescription: retrySignInText,
     redirectionURL: '/register'
   },
+  MagicLinkTokenInvalid: { message: 'The magic link you followed has expired' },
   MagicLinkTokenExpired: {
     message: 'Your magic link token has expired',
     actionDescription: retrySignInText,

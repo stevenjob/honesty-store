@@ -42,7 +42,7 @@ export const performSignin2 = ({ emailToken }) => async (dispatch, getState) => 
     if (e.code === 'NetworkError' && e.status === 401) {
       const emailTokenError = new Error('Not Authorised');
 
-      emailTokenError.code = 'EmailTokenInvalid';
+      emailTokenError.code = 'MagicLinkTokenInvalid';
 
       dispatch(signin2Failure(emailTokenError));
     } else {
