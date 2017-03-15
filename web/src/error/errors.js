@@ -11,7 +11,7 @@ export const errorDefinitions = {
   NoCardDetailsPresent: {
     message: 'We have no card details for you',
     actionDescription: 'Please contact support',
-    redirectionURL: '/help'
+    redirectionURL: '/help/card/no-details'
   },
   EmailTokenInvalid: { message: 'The magic link you followed has expired' },
   StoreNotFound: {
@@ -30,7 +30,7 @@ export const errorDefinitions = {
   CardExpired: {
     message: 'Card expired',
     actionDescription: 'Please contact support to add a new card',
-    redirectionURL: '/help'
+    redirectionURL: '/help/card/expired'
   },
   CardDeclined: {
     message: 'Card declined',

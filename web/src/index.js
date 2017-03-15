@@ -29,6 +29,7 @@ import RegisterPartialSuccess from './register/partial-success';
 import SignInSuccess from './signin/success';
 import Help from './help/index';
 import HelpItem from './help/item';
+import { HelpCardExpired, HelpCardNoDetails } from './help/card';
 import HelpSuccess from './help/success';
 import ItemDetail from './item/detail';
 import ItemStockReport from './item/stockreport';
@@ -99,6 +100,8 @@ ReactDOM.render((
         <Route path="help" onEnter={redirectUnauthorised}>
           <IndexRoute component={Help} />
           <Route path="item/:itemId" component={HelpItem} />
+          <Route path="card/expired" component={HelpCardExpired} />
+          <Route path="card/no-details" component={HelpCardNoDetails} />
         </Route>
         <Route path="help/success" component={HelpSuccess} onEnter={redirectUnauthorised} />
         <Route path=":storeCode" />
