@@ -25,7 +25,10 @@ export const errorDefinitions = {
     redirectionURL: '/',
     dismissalText: 'Tap to try again'
   },
-  LocalStorageBlocked: { message: 'We can\'t hold onto your session in private browsing' },
+  LocalStorageBlocked: {
+    message: 'We can\'t hold onto your session in private browsing',
+    actionDescription: 'Please disable it and try again'
+  },
   NetworkError: { message: 'Sorry, we\'re having trouble connecting' },
   CardIncorrectNumber: { message: 'Incorrect card number' },
   CardInvalidNumber: { message: 'Invalid card number'},
