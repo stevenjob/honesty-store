@@ -20,8 +20,11 @@ export interface Account {
   id: string;
   created: number;
   balance: number;
-  transactions: Transaction[];
 }
+
+export type TransactionList = Transaction[];
+
+export type AccountAndTxs = Account & { transactions: TransactionList };
 
 export interface TransactionAndBalance {
   transaction: Transaction;
@@ -31,10 +34,10 @@ export interface TransactionAndBalance {
 const { get, post } = fetch('transaction');
 
 export const createAccount = (key, accountId: string) =>
-  post<Account>(1, key, '/', { accountId });
+  post<AccountAndTxs>(1, key, '/', { accountId });
 
 export const getAccount = (key, accountId: string) =>
-  get<Account>(1, key, `/${accountId}`);
+  get<AccountAndTxs>(1, key, `/${accountId}`);
 
 export const createTransaction = (key, accountId: string, transaction: TransactionDetails) =>
   post<TransactionAndBalance>(1, key, `/${accountId}`, transaction);
