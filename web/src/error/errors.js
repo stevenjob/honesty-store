@@ -17,7 +17,7 @@ export const errorDefinitions = {
     redirectionURL: '/help/card/no-details',
     dismissalText: 'Tap to get in touch'
   },
-  CardError: { message: 'Hit a problem with your card details' },
+  CardError: { message: 'Something unexpected happened' },
   CardExpired: {
     message: 'Card expired',
     actionDescription: 'Please get in touch with us to add a new card',
