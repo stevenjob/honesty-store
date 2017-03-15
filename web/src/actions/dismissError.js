@@ -9,19 +9,14 @@ const dismiss = () => {
   };
 };
 
-const redirectUserIfNecessary = (errorCode) => {
-  const errorDef = errorDefinitions[errorCode];
-  switch (errorDef) {
-    case errorDefinitions.StoreNotFound:
-      history.replace('/');
-      break;
-    default:
-      break;
-  }
-};
+export const dismissError = (code) => async (dispatch) => {
 
-export const dismissError = ({ code }) => async (dispatch) => {
-  redirectUserIfNecessary(code);
+  if (code != null) {
+    const { redirectionURL } = errorDefinitions[code];
+    if (redirectionURL != null) {
+      history.replace(redirectionURL);
+    }
+  }
 
   dispatch(dismiss());
 };
