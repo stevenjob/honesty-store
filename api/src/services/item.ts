@@ -20,8 +20,8 @@ const items: (Item & { id: string })[] = [
     qualifier: 'Cheese & Onion',
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'crisps',
-    genericName: 'crisps'
+    genericName: 'crisps',
+    genericNamePlural: 'crisps'
   },
   {
     id: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
@@ -31,8 +31,8 @@ const items: (Item & { id: string })[] = [
     weight: 42,
     unit: 'bar',
     unitPlural: 'bars',
-    genericNamePlural: 'cereal bars',
-    genericName: 'cereal bar'
+    genericName: 'cereal bar',
+    genericNamePlural: 'cereal bars'
   },
   {
     id: 'b43c4a97-1112-41ce-8f91-5a8bda0dcdc8',
@@ -41,8 +41,8 @@ const items: (Item & { id: string })[] = [
     weight: 48,
     unit: 'bar',
     unitPlural: 'bars',
-    genericNamePlural: 'chocolate',
-    genericName: 'chocolate bar'
+    genericName: 'chocolate bar',
+    genericNamePlural: 'chocolate'
   },
   {
     id: '78816fba-150d-4282-b43d-900df45cea8b',
@@ -51,8 +51,8 @@ const items: (Item & { id: string })[] = [
     weight: 55,
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'sweets',
-    genericName: 'sweets'
+    genericName: 'sweets',
+    genericNamePlural: 'sweets'
   },
   {
     id: '3fa0db7c-3f90-404e-b875-3792eda3e185',
@@ -61,8 +61,8 @@ const items: (Item & { id: string })[] = [
     weight: 40,
     unit: 'bar',
     unitPlural: 'bars',
-    genericNamePlural: 'chocolate',
-    genericName: 'chocolate bar'
+    genericName: 'chocolate bar',
+    genericNamePlural: 'chocolate'
   },
   {
     id: '02bbc0fd-54c4-45bb-9b77-21b79b356aa6',
@@ -72,8 +72,8 @@ const items: (Item & { id: string })[] = [
     notes: 'Multipack not for individual resale',
     unit: 'bar',
     unitPlural: 'bars',
-    genericNamePlural: 'chocolate',
-    genericName: 'chocolate bar'
+    genericName: 'chocolate bar',
+    genericNamePlural: 'chocolate'
   },
   {
     id: '28b0a802-bef3-478b-81d0-034e3ac02092',
@@ -83,8 +83,8 @@ const items: (Item & { id: string })[] = [
     qualifier: 'Salt & Vinegar',
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'crisps',
-    genericName: 'crisps'
+    genericName: 'crisps',
+    genericNamePlural: 'crisps'
   },
   {
     id: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
@@ -95,8 +95,8 @@ const items: (Item & { id: string })[] = [
     notes: 'Multipack not for individual resale. NCL trial only, Simon Watson sourcing',
     unit: 'can',
     unitPlural: 'cans',
-    genericNamePlural: 'drinks',
-    genericName: 'drink'
+    genericName: 'drink',
+    genericNamePlural: 'drinks'
   },
   {
     id: 'd5d10152-3f8a-419b-9abd-6d6e916ea64a',
@@ -107,8 +107,8 @@ const items: (Item & { id: string })[] = [
     notes: 'Multipack not for individual resale. NCL trial only, Simon Watson sourcing',
     unit: 'can',
     unitPlural: 'cans',
-    genericNamePlural: 'drinks',
-    genericName: 'drink'
+    genericName: 'drink',
+    genericNamePlural: 'drinks'
   },
   {
     id: 'ccad58e3-e27a-4463-9139-17a36ff7f7b8',
@@ -119,8 +119,8 @@ const items: (Item & { id: string })[] = [
     notes: 'Multipack not for individual resale. NCL trial only, Simon Watson sourcing',
     unit: 'can',
     unitPlural: 'cans',
-    genericNamePlural: 'drinks',
-    genericName: 'drink'
+    genericName: 'drink',
+    genericNamePlural: 'drinks'
   },
   {
     id: '606e12d4-6367-4fc3-aa7a-92ee17ccac2c',
@@ -130,8 +130,8 @@ const items: (Item & { id: string })[] = [
     notes: 'Price marked 25p. Residual stock.',
     unit: 'bar',
     unitPlural: 'bars',
-    genericNamePlural: 'chocolate',
-    genericName: 'chocolate bar'
+    genericName: 'chocolate bar',
+    genericNamePlural: 'chocolate'
   },
   {
     id: 'e91e7274-fe28-405c-86c8-5768197eb6ac',
@@ -141,8 +141,8 @@ const items: (Item & { id: string })[] = [
     notes: 'Residual stock.',
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'sweets',
-    genericName: 'sweets'
+    genericName: 'sweets',
+    genericNamePlural: 'sweets'
   },
   {
     id: '32919485-d806-4be6-824b-170f66371306',
@@ -153,8 +153,8 @@ const items: (Item & { id: string })[] = [
     qualifier: 'Wild Apricot',
     unit: 'bar',
     unitPlural: 'bars',
-    genericNamePlural: 'cereal bars',
-    genericName: 'cereal bar'
+    genericName: 'cereal bar',
+    genericNamePlural: 'cereal bars'
   },
   {
     id: '272c6a59-9b4c-41b6-b839-0f8be506728e',
@@ -165,8 +165,8 @@ const items: (Item & { id: string })[] = [
     qualifier: 'Caramel Milk Chocolate',
     unit: 'bar',
     unitPlural: 'bars',
-    genericNamePlural: 'chocolate',
-    genericName: 'chocolate bar'
+    genericName: 'chocolate bar',
+    genericNamePlural: 'chocolate'
   },
   {
     id: '8e9bb2db-9437-4733-acc1-f5e218e0a603',
@@ -176,8 +176,8 @@ const items: (Item & { id: string })[] = [
     notes: 'Residual stock.',
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'sweets',
-    genericName: 'sweets'
+    genericName: 'sweets',
+    genericNamePlural: 'sweets'
   },
   {
     id: '96ce1162-9188-41ac-9d35-8fc6a14783ef',
@@ -187,8 +187,8 @@ const items: (Item & { id: string })[] = [
     notes: '6 pack, residual stock.',
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'biscuits',
-    genericName: 'biscuits'
+    genericName: 'biscuits',
+    genericNamePlural: 'biscuits'
   },
   {
     id: '3b7a6669-770c-4dbb-97e2-0e0aae3ca5ff',
@@ -198,8 +198,8 @@ const items: (Item & { id: string })[] = [
     notes: 'Multipack not for individual resale. Residual stock.',
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'crisps',
-    genericName: 'crisps'
+    genericName: 'crisps',
+    genericNamePlural: 'crisps'
   },
   {
     id: '8fd928e0-06c9-4958-9259-719dc451a8c2',
@@ -209,8 +209,8 @@ const items: (Item & { id: string })[] = [
     weight: 23,
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'crisps',
-    genericName: 'crisps'
+    genericName: 'crisps',
+    genericNamePlural: 'crisps'
   },
   {
     id: 'edef6848-f3d5-4733-babc-bc10bc3d257c',
@@ -220,8 +220,8 @@ const items: (Item & { id: string })[] = [
     weight: 23,
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'crisps',
-    genericName: 'crisps'
+    genericName: 'crisps',
+    genericNamePlural: 'crisps'
   },
   {
     id: '64e177af-6313-4d9e-b39a-8495c2f1d939',
@@ -231,8 +231,8 @@ const items: (Item & { id: string })[] = [
     qualifier: 'Habanero',
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'snacks',
-    genericName: 'snack'
+    genericName: 'snack',
+    genericNamePlural: 'snacks'
   },
   {
     id: '54e10706-284f-440f-82cb-0f8911a8424a',
@@ -242,8 +242,8 @@ const items: (Item & { id: string })[] = [
     weight: 20,
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'crisps',
-    genericName: 'crisps'
+    genericName: 'crisps',
+    genericNamePlural: 'crisps'
   },
   {
     id: '80984458-bab9-4a8f-86a7-b3e46f62139d',
@@ -253,8 +253,8 @@ const items: (Item & { id: string })[] = [
     weight: 20,
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'crisps',
-    genericName: 'crisps'
+    genericName: 'crisps',
+    genericNamePlural: 'crisps'
   },
   {
     id: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
@@ -264,8 +264,8 @@ const items: (Item & { id: string })[] = [
     weight: 30,
     unit: 'bar',
     unitPlural: 'bars',
-    genericNamePlural: 'cereal bars',
-    genericName: 'cereal bar'
+    genericName: 'cereal bar',
+    genericNamePlural: 'cereal bars'
   },
   {
     id: 'f0167eb4-f906-48d8-8067-6e3b646d8a19',
@@ -275,8 +275,8 @@ const items: (Item & { id: string })[] = [
     weight: 40,
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'snacks',
-    genericName: 'snack'
+    genericName: 'snack',
+    genericNamePlural: 'snacks'
   },
   {
     id: 'fc3f3a7a-64bc-4f23-9a4e-c90f2536e56b',
@@ -286,8 +286,8 @@ const items: (Item & { id: string })[] = [
     weight: 40,
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'snacks',
-    genericName: 'snack'
+    genericName: 'snack',
+    genericNamePlural: 'snacks'
   },
   {
     id: 'b78c3975-eb7f-4eda-a3ea-d54d35e6471e',
@@ -297,8 +297,8 @@ const items: (Item & { id: string })[] = [
     weight: 25,
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'snacks',
-    genericName: 'snack'
+    genericName: 'snack',
+    genericNamePlural: 'snacks'
   },
   {
     id: '5298c925-9ae2-4017-a007-c1928c38ddc6',
@@ -308,8 +308,8 @@ const items: (Item & { id: string })[] = [
     weight: 50,
     unit: 'pack',
     unitPlural: 'packs',
-    genericNamePlural: 'protein bars',
-    genericName: 'protein bar'
+    genericName: 'protein bar',
+    genericNamePlural: 'protein bars'
   }
 ];
 
