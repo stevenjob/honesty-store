@@ -24,7 +24,7 @@ const Depleted = ({ registered, itemId }) => (
 );
 
 const ItemDetail = ({
-  item: { id, name, price, image, count, unit, unitPlural, qualifier, notes, weight, location },
+  item: { id, name, price: { total: price }, image, count, unit, unitPlural, qualifier, notes, weight, location },
   balance,
   performPurchase,
   registered
