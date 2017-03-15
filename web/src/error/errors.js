@@ -10,7 +10,7 @@ export const errorDefinitions = {
   EmailNotFound: { message: 'Couldn\'t find your email' },
   NoCardDetailsPresent: {
     message: 'We have no card details for you',
-    actionDescription: 'Please contact support',
+    actionDescription: 'Please get in touch with us',
     redirectionURL: '/help/card/no-details'
   },
   EmailTokenInvalid: { message: 'The magic link you followed has expired' },
@@ -29,12 +29,12 @@ export const errorDefinitions = {
   CardInvalidCVC: { message: 'Invalid CVC' },
   CardExpired: {
     message: 'Card expired',
-    actionDescription: 'Please contact support to add a new card',
+    actionDescription: 'Please get in touch with us to add a new card',
     redirectionURL: '/help/card/expired'
   },
   CardDeclined: {
     message: 'Card declined',
-    actionDescription: 'Please contact support if the problem persists'
+    actionDescription: 'Please get in touch with us if the problem persists'
   },
   CardError: { message: 'Hit a problem with your card details' },
   TokenError: {
