@@ -2,9 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import getErrorDefinition from '../error/errors';
-import { Back } from './link';
-import { performRegister2 } from '../actions/register2';
-import Full from '../layout/full';
 
 const TOPUP_AMOUNT = 500;
 
@@ -68,23 +65,18 @@ class Card extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const { storeCode, itemId, emailAddress, performRegister2 } = this.props;
     const { number, cvc, exp } = this.state;
     const cardDetails = { number, cvc, exp };
-    performRegister2({ storeCode, itemID: itemId, topUpAmount: TOPUP_AMOUNT, emailAddress, cardDetails });
-  }
-
-  getConfirmButtonText() {
-    const topUpText = 'Confirm £5 Top Up';
-    const { itemId } = this.props;
-    return itemId ? `${topUpText} & Pay` : topUpText;
+    this.props.onSubmit({ topUpAmount: TOPUP_AMOUNT, cardDetails });
   }
 
   render() {
-    const { error } = this.props;
+    const { error, isInitialTopUp, confirmButtonText } = this.props;
     const { number, exp, cvc } = this.state;
+    const topUpHeaderText = isInitialTopUp ?
+      'To get you started we need to take a £5 top up' :
+      'Let\'s update your card and top up £5';
     return (
-      <Full top={<Back>Register</Back>}>
         <form onSubmit={(e) => this.handleSubmit(e)}>
           {
             error ?
@@ -100,7 +92,7 @@ class Card extends React.Component {
               </div>
               :
               <div>
-                <h2>To get you started we need to take a £5 top up<sup>*</sup></h2>
+                <h2>{topUpHeaderText}<sup>*</sup></h2>
                 <p className="h6"><sup>*</sup>Our card processor charges us a fixed fee + a variable fee for every transaction. By grouping your transactions together in to a single top up, we end up paying less and we pass that saving on to you.</p>
               </div>
           }
@@ -135,27 +127,18 @@ class Card extends React.Component {
               className={(error != null && error.param === 'cvc') ? 'input border-red' : 'input'}
               onChange={(e) => this.handleCVCChange(e)} />
           </p>
-          <p><Link className="btn btn-primary btn-big" onClick={(e) => this.handleSubmit(e)}>{this.getConfirmButtonText()}</Link></p>
+          <p><Link className="btn btn-primary btn-big" onClick={(e) => this.handleSubmit(e)}>{confirmButtonText}</Link></p>
         </form>
-      </Full>
     );
   }
 }
 
-const mapStateToProps = (
-  {
-    error: { inline },
-  },
-  {
-    params: { itemId, emailAddress }
-  }
-) => ({
-  itemId,
-  emailAddress,
-  error: inline
-});
+Card.propTypes = {
+  isInitialTopUp: React.PropTypes.bool.isRequired,
+  confirmButtonText: React.PropTypes.string.isRequired,
+  onSubmit: React.PropTypes.func.isRequired
+};
 
-const mapDispatchToProps = { performRegister2 };
+const mapStateToProps = ({ error: { inline } }) => ({ error: inline });
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(Card);
+export default connect(mapStateToProps)(Card);
