@@ -22,7 +22,7 @@ import TopupExistingCard from './topup/existing-card';
 import TopupNewCard from './topup/new-card';
 import TopupSuccess from './topup/success';
 import RegisterEmail from './register/email';
-import RegisterCard from './register/card';
+import RegisterCard from './chrome/card';
 import RegisterSuccessWithPurchase from './register/success-with-purchase';
 import RegisterSuccessWithoutPurchase from './register/success-without-purchase';
 import RegisterPartialSuccess from './register/partial-success';

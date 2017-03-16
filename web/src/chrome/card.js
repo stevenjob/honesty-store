@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import getErrorDefinition from '../error/errors';
-import { Back } from '../chrome/link';
+import { Back } from './link';
 import { performRegister2 } from '../actions/register2';
 import Full from '../layout/full';
 
