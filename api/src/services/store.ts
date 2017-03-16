@@ -43,7 +43,8 @@ const ncl = {
     '67bd2798-87d0-4208-9845-4f35da29f144',
     'f6cbf4c2-ead1-430a-afa6-dcf1d10f3e66',
     '7dda507a-b909-4b28-afc0-4e3dd972196a',
-    '0b7d4fd1-91d8-4f9e-af8a-e62129bf7d64'
+    '0b7d4fd1-91d8-4f9e-af8a-e62129bf7d64',
+    'f9f4c9d7-97a3-428b-b960-cb27d4054964'
   ],
   itemPrices: {
     '46ced0c0-8815-4ed2-bfb6-40537f5bd512': 50,
