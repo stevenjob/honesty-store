@@ -66,9 +66,9 @@ const template = ({
 
 const shipping = {
   shippingCost: 300,
-  packed: 1485475200,
-  shipped: 1485561600,
-  received: 1485734400
+  packed: 1485475200000,
+  shipped: 1485561600000,
+  received: 1485734400000
 };
 const costs = {
   shippingCost: 300,
@@ -211,7 +211,7 @@ const dummyBoxData: BoxData[] = [
       }
     ],
     ...shipping,
-    closed: 1485820800,
+    closed: 1485820800000,
     count: 37
   }
 ];
