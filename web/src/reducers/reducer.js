@@ -323,11 +323,12 @@ export default (state = getInitialState(), action) => {
       };
     }
     case TOPUP_FAILURE: {
+      const { error, cardError } = action;
       return {
         ...state,
         error: {
-          ...state.error,
-          fullPage: action.error
+          inline: cardError,
+          fullPage: error
         },
         pending: state.pending.filter(e => e !== 'topup')
       };

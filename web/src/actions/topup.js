@@ -20,27 +20,29 @@ const topupSuccess = (response) => {
 };
 
 const topupFailure = (error) => {
+  if (error.fromLocalValidation) {
+    // an error from createStripeToken()
+    return {
+      type: TOPUP_FAILURE,
+      cardError: error
+    };
+  }
+
+  // error is from the backend/fetch
   return {
     type: TOPUP_FAILURE,
     error
   };
 };
 
-export const performTopupWithNewCard = ({ amount, cardDetails }) => async (dispatch, getState) => {
-  // Generate stripe token
-  const stripeToken = await createStripeToken(cardDetails);
-
-  // TODO: figure out how to handle card details validation - similar to register2
-  performTopup({ amount, stripeToken })(dispatch, getState);
-};
-
-export const performTopup = ({ amount, stripeToken }) => async (dispatch, getState) => {
+export const performTopup = ({ amount, cardDetails }) => async (dispatch, getState) => {
   dispatch(topupRequest());
 
   try {
     const response = await apifetch({
       url: '/api/v1/topup',
       body: {
+        stripeToken: cardDetails ? await createStripeToken(cardDetails) : undefined,
         amount
       },
       getToken: () => getState().accessToken
@@ -50,6 +52,10 @@ export const performTopup = ({ amount, stripeToken }) => async (dispatch, getSta
     history.push(`/topup/success`);
 
   } catch (e) {
+    if (!e.param) {
+      e.param = paramFromCardProviderError(e);
+    }
+
     dispatch(topupFailure(e));
   }
 };
