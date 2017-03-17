@@ -59,6 +59,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         error: {
+          ...state.error,
           fullPage: undefined
         }
       };
@@ -77,6 +78,7 @@ export default (state = getInitialState(), action) => {
         ...state,
         ...action.response,
         error: {
+          ...state.error,
           fullPage: error || state.error.fullPage
         },
         pending: state.pending.filter(e => e !== 'register')
@@ -86,6 +88,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         error: {
+          ...state.error,
           fullPage: action.error
         },
         pending: state.pending.filter(e => e !== 'register')
@@ -103,6 +106,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...getInitialState(),
         error: {
+          ...state.error,
           fullPage: error
         }
       };
@@ -111,6 +115,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         error: {
+          ...state.error,
           fullPage: action.error
         },
         pending: state.pending.filter(e => e !== 'signin')
@@ -130,6 +135,7 @@ export default (state = getInitialState(), action) => {
         ...state,
         ...action.response,
         error: {
+          ...state.error,
           fullPage: error || state.error.fullPage
         },
         pending: state.pending.filter(e => e !== 'signin2')
@@ -139,6 +145,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         error: {
+          ...state.error,
           fullPage: action.error
         },
         pending: state.pending.filter(e => e !== 'signin2')
@@ -150,6 +157,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...getInitialState(),
         error: {
+          ...state.error,
           fullPage: error
         }
       };
@@ -203,6 +211,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...getInitialState(),
         error: {
+          ...state.error,
           fullPage: action.error || error
         }
       };
@@ -211,6 +220,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         error: {
+          ...state.error,
           fullPage: action.error
         },
         pending: state.pending.filter(e => e !== 'session')
@@ -239,6 +249,7 @@ export default (state = getInitialState(), action) => {
         ...state,
         pending: state.pending.filter(e => e !== 'outofstock'),
         error: {
+          ...state.error,
           fullPage: action.error
         }
       };
@@ -259,6 +270,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         error: {
+          ...state.error,
           fullPage: action.error
         },
         pending: state.pending.filter(e => e !== 'support')
@@ -276,6 +288,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...getInitialState(),
         error: {
+          ...state.error,
           fullPage: error
         }
       };
@@ -284,6 +297,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         error: {
+          ...state.error,
           fullPage: action.error
         },
         pending: state.pending.filter(e => e !== 'logout')
@@ -312,6 +326,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         error: {
+          ...state.error,
           fullPage: action.error
         },
         pending: state.pending.filter(e => e !== 'topup')
@@ -340,6 +355,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         error: {
+          ...state.error,
           fullPage: action.error
         },
         pending: state.pending.filter(e => e !== 'purchase')
@@ -362,6 +378,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         error: {
+          ...state.error,
           fullPage: action.error
         },
         pending: state.pending.filter(e => e !== 'store')
@@ -384,6 +401,7 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         error: {
+          ...state.error,
           fullPage: action.error
         },
         pending: state.pending.filter(e => e !== 'survey')
