@@ -21,7 +21,7 @@ const ErrorInternal = ({
     className="error"
     {...other} />;
 
-const mapStateToProps = ({ error }) => {
+const mapStateToProps = ({ error: { fullPage: error } }) => {
   if (!error) {
     return {};
   }
