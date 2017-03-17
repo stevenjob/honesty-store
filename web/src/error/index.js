@@ -6,12 +6,9 @@ import Alert from '../layout/alert';
 import Error from '../item/error.js';
 import './index.css';
 
-const defaultSubtitle = 'Oops! Something went wrong...';
-const retryTitle = 'Can you try that again, please?';
-
 const ErrorInternal = ({
-  title = retryTitle,
-  subtitle = defaultSubtitle,
+  title,
+  subtitle,
   image = <Error />,
   dismissError,
   errorCode,
@@ -31,14 +28,19 @@ const mapStateToProps = ({ error }) => {
 
   const errorDef = errorDefinitions[error.code];
   if (!errorDef) {
-    return {};
+    // TODO: Move to error definitions
+    return {
+      subtitle: 'Oops! Something went wrong...',
+      retryTitle: 'Can you try that again, please?',
+      dismissalText: 'Tap to dimiss'
+    };
   }
 
   const { message, actionDescription, dismissalText } = errorDef;
 
   return {
     subtitle: message,
-    title: actionDescription != null ? actionDescription : retryTitle,
+    title: actionDescription ? actionDescription : '',
     errorCode: error.code,
     dismissalText
   };

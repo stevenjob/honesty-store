@@ -1,50 +1,68 @@
 // this is duplicated in typescript @ service/src/error.ts
 
-const retrySignInText = 'Please try signing in again';
+const dismissalText = {
+  GET_IN_TOUCH: 'Tap to get in touch',
+  DISMISS: 'Tap to dismiss',
+  TRY_AGAIN: 'Tap to try again'
+};
 
 export const errorDefinitions = {
   TopupExceedsMaxBalance: {
     message: 'Topping up would exceed your maximum balance',
-    actionDescription: ''
+    dismissalText: dismissalText.DISMISS
   },
   TooManyPurchaseItems: {
     message: 'You\'re purchasing too many items',
-    actionDescription: ''
+    dismissalText: dismissalText.DISMISS
   },
   NoCardDetailsPresent: {
     message: 'We have no card details for you',
     actionDescription: 'Please get in touch with us',
     redirectionURL: '/help/card/no-details',
-    dismissalText: 'Tap to get in touch'
+    dismissalText: dismissalText.GET_IN_TOUCH
   },
-  CardError: { message: 'Something unexpected happened' },
+  CardError: {
+    message: 'Something unexpected happened',
+    dismissalText: dismissalText.DISMISS
+  },
   CardExpired: {
     message: 'Card expired',
     actionDescription: 'Please get in touch with us to add a new card',
     redirectionURL: '/help/card/expired',
-    dismissalText: 'Tap to get in touch'
+    dismissalText: dismissalText.GET_IN_TOUCH
   },
   CardDeclined: {
     message: 'Card declined',
-    actionDescription: 'Please get in touch with us if the problem persists'
+    actionDescription: 'Please get in touch with us if the problem persists',
+    dismissalText: dismissalText.DISMISS
   },
   StoreNotFound: {
     message: 'We couldn\'t find that store code',
     actionDescription: 'Could you double check it and try again?',
     redirectionURL: '/',
-    dismissalText: 'Tap to try again'
+    dismissalText: dismissalText.DISMISS
   },
   LocalStorageBlocked: {
     message: 'We can\'t hold onto your session in private browsing',
-    actionDescription: 'Please disable it and try again'
+    actionDescription: 'Please disable it and try again',
+    dismissalText: dismissalText.DISMISS
   },
-  NetworkError: { message: 'Sorry, we\'re having trouble connecting' },
-  MagicLinkTokenInvalid: { message: 'The magic link you followed has expired' },
+  NetworkError: {
+    message: 'Sorry, we\'re having trouble connecting',
+    actionDescription: 'Could you double check you\'re online and try again?',
+    dismissalText: dismissalText.DISMISS
+  },
+  MagicLinkTokenInvalid: {
+    message: 'The magic link you followed has expired',
+    actionDescription: 'Please try signing in again',
+    redirectionURL: '/register',
+    dismissalText: dismissalText.TRY_AGAIN
+  },
   MagicLinkTokenExpired: {
     message: 'Your magic link token has expired',
-    actionDescription: retrySignInText,
+    actionDescription: 'Please try signing in again',
     redirectionURL: '/register',
-    dismissalText: 'Tap to try again'
+    dismissalText: dismissalText.TRY_AGAIN
   },
   // The following error codes are handled internally and never presented to the user
   EmailNotFound: { message: 'Couldn\'t find your email' },
