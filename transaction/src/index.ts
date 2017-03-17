@@ -42,7 +42,7 @@ const getAccountAndTxs = async ({ accountId }): Promise<AccountAndTxs> => {
   assertValidAccountId(accountId);
 
   const { latestTx, ...account } = await getAccountInternal({ accountId });
-  const txChain = await getTransactions({ account, limit: CACHED_TX_COUNT })
+  const txChain = await getTransactions({ account, limit: CACHED_TX_COUNT });
 
   return {
     ...account,
