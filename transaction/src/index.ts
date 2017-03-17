@@ -8,6 +8,8 @@ import { assertValidAccountId, createAccount, DBAccount, getAccountInternal, upd
 import { AccountAndTxs, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance } from './client';
 import { assertValidTransaction, createTransactionId, DBTransaction, getTransactionChain, putTransaction } from './tx';
 
+const CACHED_TX_COUNT = 10;
+
 config.region = process.env.AWS_REGION;
 
 const txChainToArray = (chain) => {
@@ -60,7 +62,8 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
   const updatedAccount: DBAccount = {
     ...originalAccount,
     balance: updatedBalance,
-    latestTx: transaction.id
+    latestTx: transaction.id,
+    cachedTransactions: [transaction, ...originalAccount.cachedTransactions.slice(0, CACHED_TX_COUNT - 1)]
   };
 
   await updateAccount({ updatedAccount, originalAccount });
