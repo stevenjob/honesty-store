@@ -22,7 +22,8 @@ export const errorDefinitions = {
     dismissalText: dismissalText.GET_IN_TOUCH
   },
   CardError: {
-    message: 'Something unexpected happened',
+    message: 'Something unexpected happened when charging your card',
+    actionDescription: 'Please get in touch with us if the problem persists',
     dismissalText: dismissalText.DISMISS
   },
   CardExpired: {
