@@ -35,7 +35,7 @@ const mapStateToProps = ({ error }) => {
 
   return {
     subtitle: message,
-    title: actionDescription ? actionDescription : '',
+    title: actionDescription || '',
     errorCode: error.code,
     dismissalText
   };
