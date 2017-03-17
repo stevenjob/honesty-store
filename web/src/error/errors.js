@@ -2,8 +2,7 @@
 
 const dismissalText = {
   GET_IN_TOUCH: `Tap to get in touch`,
-  DISMISS: `Tap to dismiss`,
-  TRY_AGAIN: `Tap to try again`
+  DISMISS: `Tap to dismiss`
 };
 
 export const errorDefinitions = {
@@ -57,13 +56,13 @@ export const errorDefinitions = {
     message: `The magic link you followed has expired`,
     actionDescription: `Please try signing in again`,
     redirectionURL: `/register`,
-    dismissalText: dismissalText.TRY_AGAIN
+    dismissalText: dismissalText.DISMISS
   },
   MagicLinkTokenExpired: {
     message: `Your magic link token has expired`,
     actionDescription: `Please try signing in again`,
     redirectionURL: `/register`,
-    dismissalText: dismissalText.TRY_AGAIN
+    dismissalText: dismissalText.DISMISS
   },
   Undefined: {
     message: `Oops! Something went wrong...`,
