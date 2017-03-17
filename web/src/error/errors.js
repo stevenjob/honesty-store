@@ -44,7 +44,7 @@ export const errorDefinitions = {
   },
   LocalStorageBlocked: {
     message: `We can't hold onto your session in private browsing`,
-    actionDescription: `Please disable it and try again`,
+    actionDescription: `Could you please disable it and try again?`,
     dismissalText: dismissalText.DISMISS
   },
   NetworkError: {
@@ -54,13 +54,13 @@ export const errorDefinitions = {
   },
   MagicLinkTokenInvalid: {
     message: `The magic link you followed has expired`,
-    actionDescription: `Please try signing in again`,
+    actionDescription: `Could you please try signing in again?`,
     redirectionURL: `/register`,
     dismissalText: dismissalText.DISMISS
   },
   MagicLinkTokenExpired: {
     message: `Your magic link token has expired`,
-    actionDescription: `Please try signing in again`,
+    actionDescription: `Could you please try signing in again?`,
     redirectionURL: `/register`,
     dismissalText: dismissalText.DISMISS
   },
