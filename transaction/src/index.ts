@@ -20,11 +20,30 @@ const txChainToArray = (chain) => {
   return txs;
 };
 
+const getTransactions = ({ account, limit = Infinity }) => {
+  const txs = account.cachedTransactions;
+
+  if (txs.length >= limit) {
+    return txs.slice(0, limit);
+  }
+
+  const chain = getTransactionChain({
+    accountId: account.id,
+    txId: txs.length > 0 ? txs[txs.length - 1].latestTx : account.latestTx,
+    limit: limit - txs.length
+  });
+
+  return [
+    ...txs,
+    ...txChainToArray(chain)
+  ];
+};
+
 const getAccountAndTxs = async ({ accountId }): Promise<AccountAndTxs> => {
   assertValidAccountId(accountId);
 
   const { latestTx, ...account } = await getAccountInternal({ accountId });
-  const txChain = await getTransactionChain({ accountId, txId: latestTx });
+  const txChain = await getTransactions({ account, limit: CACHED_TX_COUNT })
 
   return {
     ...account,
