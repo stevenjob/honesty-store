@@ -28,7 +28,7 @@ const mapStateToProps = ({ error: { fullPage: error } }) => {
 
   let errorDef = errorDefinitions[error.code];
   if (!errorDef) {
-    errorDef = errorDefinitions['Undefined'];
+    errorDef = errorDefinitions['UnknownError'];
   }
 
   const { message, actionDescription, dismissalText } = errorDef;

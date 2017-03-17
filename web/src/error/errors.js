@@ -64,7 +64,7 @@ export const errorDefinitions = {
     redirectionURL: `/register`,
     dismissalText: dismissalText.DISMISS
   },
-  Undefined: {
+  UnknownError: {
     message: `Oops! Something went wrong...`,
     actionDescription: `Can you try that again, please?`,
     dismissalText: dismissalText.DISMISS
