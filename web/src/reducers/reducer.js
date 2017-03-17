@@ -165,6 +165,10 @@ export default (state = getInitialState(), action) => {
       const { user } = action.response;
       return {
         ...state,
+        error: {
+          ...state.error,
+          inline: undefined
+        },
         user: user,
         pending: state.pending.filter(e => e !== 'register2')
       };
