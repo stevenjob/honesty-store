@@ -174,12 +174,11 @@ export default (state = getInitialState(), action) => {
       };
     }
     case REGISTER2_FAILURE: {
-      //TODO: Tidy up action error naming
-      const { registerError, error } = action;
+      const { cardError, error } = action;
       return {
         ...state,
         error: {
-          inline: registerError,
+          inline: cardError,
           fullPage: error
         },
         pending: state.pending.filter(e => e !== 'register2')

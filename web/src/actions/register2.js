@@ -41,10 +41,9 @@ const register2Success = ({ user, store }) => {
 const register2Failure = (error) => {
   if (error.fromLocalValidation) {
     // an error from createStripeToken()
-    // - map it to registerError for the reducer
     return {
       type: REGISTER2_FAILURE,
-      registerError: error
+      cardError: error
     };
   }
 
