@@ -1,82 +1,82 @@
 // this is duplicated in typescript @ service/src/error.ts
 
 const dismissalText = {
-  GET_IN_TOUCH: 'Tap to get in touch',
-  DISMISS: 'Tap to dismiss',
-  TRY_AGAIN: 'Tap to try again'
+  GET_IN_TOUCH: `Tap to get in touch`,
+  DISMISS: `Tap to dismiss`,
+  TRY_AGAIN: `Tap to try again`
 };
 
 export const errorDefinitions = {
   TopupExceedsMaxBalance: {
-    message: 'Topping up would exceed your maximum balance',
+    message: `Topping up would exceed your maximum balance`,
     dismissalText: dismissalText.DISMISS
   },
   TooManyPurchaseItems: {
-    message: 'You\'re purchasing too many items',
+    message: `You're purchasing too many items`,
     dismissalText: dismissalText.DISMISS
   },
   NoCardDetailsPresent: {
-    message: 'We have no card details for you',
-    actionDescription: 'Please get in touch with us',
-    redirectionURL: '/help/card/no-details',
+    message: `We have no card details for you`,
+    actionDescription: `Please get in touch with us`,
+    redirectionURL: `/help/card/no-details`,
     dismissalText: dismissalText.GET_IN_TOUCH
   },
   CardError: {
-    message: 'Something unexpected happened when charging your card',
-    actionDescription: 'Please get in touch with us if the problem persists',
+    message: `Something unexpected happened when charging your card`,
+    actionDescription: `Please get in touch with us if the problem persists`,
     dismissalText: dismissalText.DISMISS
   },
   CardExpired: {
-    message: 'Card expired',
-    actionDescription: 'Please get in touch with us to add a new card',
-    redirectionURL: '/help/card/expired',
+    message: `Card expired`,
+    actionDescription: `Please get in touch with us to add a new card`,
+    redirectionURL: `/help/card/expired`,
     dismissalText: dismissalText.GET_IN_TOUCH
   },
   CardDeclined: {
-    message: 'Card declined',
-    actionDescription: 'Please get in touch with us if the problem persists',
+    message: `Card declined`,
+    actionDescription: `Please get in touch with us if the problem persists`,
     dismissalText: dismissalText.DISMISS
   },
   StoreNotFound: {
-    message: 'We couldn\'t find that store code',
-    actionDescription: 'Could you double check it and try again?',
-    redirectionURL: '/',
+    message: `We couldn't find that store code`,
+    actionDescription: `Could you double check it and try again?`,
+    redirectionURL: `/`,
     dismissalText: dismissalText.DISMISS
   },
   LocalStorageBlocked: {
-    message: 'We can\'t hold onto your session in private browsing',
-    actionDescription: 'Please disable it and try again',
+    message: `We can't hold onto your session in private browsing`,
+    actionDescription: `Please disable it and try again`,
     dismissalText: dismissalText.DISMISS
   },
   NetworkError: {
-    message: 'Sorry, we\'re having trouble connecting',
-    actionDescription: 'Could you double check you\'re online and try again?',
+    message: `Sorry, we're having trouble connecting`,
+    actionDescription: `Could you double check you're online and try again?`,
     dismissalText: dismissalText.DISMISS
   },
   MagicLinkTokenInvalid: {
-    message: 'The magic link you followed has expired',
-    actionDescription: 'Please try signing in again',
-    redirectionURL: '/register',
+    message: `The magic link you followed has expired`,
+    actionDescription: `Please try signing in again`,
+    redirectionURL: `/register`,
     dismissalText: dismissalText.TRY_AGAIN
   },
   MagicLinkTokenExpired: {
-    message: 'Your magic link token has expired',
-    actionDescription: 'Please try signing in again',
-    redirectionURL: '/register',
+    message: `Your magic link token has expired`,
+    actionDescription: `Please try signing in again`,
+    redirectionURL: `/register`,
     dismissalText: dismissalText.TRY_AGAIN
   },
   Undefined: {
-    message: 'Oops! Something went wrong...',
-    actionDescription: 'Can you try that again, please?',
+    message: `Oops! Something went wrong...`,
+    actionDescription: `Can you try that again, please?`,
     dismissalText: dismissalText.DISMISS
   },
   // The following error codes are handled internally and never presented to the user
-  EmailNotFound: { message: 'Couldn\'t find your email' },
-  RefreshTokenExpired: { message: 'Your session has expired' },
-  CardIncorrectNumber: { message: 'Incorrect card number' },
-  CardInvalidNumber: { message: 'Invalid card number'},
-  CardInvalidExpiryMonth: { message: 'Invalid expiry month' },
-  CardInvalidExpiryYear: { message: 'Invalid expiry year' },
-  CardIncorrectCVC: { message: 'Incorrect CVC' },
-  CardInvalidCVC: { message: 'Invalid CVC' },
+  EmailNotFound: { message: `Couldn't find your email` },
+  RefreshTokenExpired: { message: `Your session has expired` },
+  CardIncorrectNumber: { message: `Incorrect card number` },
+  CardInvalidNumber: { message: `Invalid card number`},
+  CardInvalidExpiryMonth: { message: `Invalid expiry month` },
+  CardInvalidExpiryYear: { message: `Invalid expiry year` },
+  CardIncorrectCVC: { message: `Incorrect CVC` },
+  CardInvalidCVC: { message: `Invalid CVC` },
 };
