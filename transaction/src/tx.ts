@@ -8,10 +8,6 @@ import { Transaction, TransactionBody } from './client';
 type LinkedTransaction = Transaction & { next?: LinkedTransaction };
 export type DBTransaction = Transaction & { next?: string };
 
-const assertValidTransactionId = (_txId) => {
-  // TODO
-};
-
 export const assertValidTransaction = ({ type, amount, data }: Transaction) => {
   if (type == null || (type !== 'topup' && type !== 'purchase')) {
     throw new Error(`Invalid transaction type ${type}`);
@@ -44,7 +40,6 @@ export const createTransactionId = ({ accountId, txId }) => `${accountId}:${txId
 
 const getTransaction = async ({ accountId, txId }) => {
   assertValidAccountId(accountId);
-  assertValidTransactionId(txId);
 
   const id = createTransactionId({ accountId, txId });
 
