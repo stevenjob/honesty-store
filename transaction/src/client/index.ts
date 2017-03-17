@@ -9,6 +9,7 @@ export interface TransactionDetails {
   data: {
     [key: string]: string;
   };
+  legacyId?: string;
 }
 
 export interface TransactionBody extends TransactionDetails {
