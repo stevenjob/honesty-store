@@ -17,7 +17,7 @@ export const errorDefinitions = {
   },
   NoCardDetailsPresent: {
     message: `We have no card details for you`,
-    actionDescription: `Please get in touch with us`,
+    actionDescription: `Please get in touch with us to add a card`,
     redirectionURL: `/help/card/no-details`,
     dismissalText: dismissalText.GET_IN_TOUCH
   },
