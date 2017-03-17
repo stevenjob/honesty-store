@@ -4,7 +4,7 @@ import Loading from './chrome/loading';
 import { connect } from 'react-redux';
 
 const App = ({ error, children, loading }) => {
-  if (error) {
+  if (error.fullPage) {
     return <Error />;
   }
   if (loading) {
