@@ -1,17 +1,15 @@
+import { createHash } from 'crypto';
 import { DynamoDB } from 'aws-sdk';
-import isUUID = require('validator/lib/isUUID');
-import { v4 as uuid } from 'uuid';
+import stringify = require('json-stable-stringify');
 
 import { assertValidAccountId } from './account';
-import { Transaction } from './client';
+import { Transaction, TransactionBody } from './client';
 
 type LinkedTransaction = Transaction & { next?: LinkedTransaction };
 export type DBTransaction = Transaction & { next?: string };
 
-const assertValidTransactionId = (txId) => {
-  if (txId == null || !isUUID(txId, 4)) {
-    throw new Error(`Invalid transactionId ${txId}`);
-  }
+const assertValidTransactionId = (_txId) => {
+  // TODO
 };
 
 export const assertValidTransaction = ({ type, amount, data }: Transaction) => {
@@ -34,7 +32,15 @@ export const assertValidTransaction = ({ type, amount, data }: Transaction) => {
   }
 };
 
-export const createTransactionId = ({ accountId, txId = uuid() }) => `${accountId}:${txId}`;
+export const hashTransaction = (tx: TransactionBody & { next?: string }) => {
+  const hash = createHash('sha256');
+
+  hash.update(stringify(tx));
+
+  return hash.digest('hex');
+};
+
+export const createTransactionId = ({ accountId, txId }) => `${accountId}:${txId}`;
 
 const getTransaction = async ({ accountId, txId }) => {
   assertValidAccountId(accountId);

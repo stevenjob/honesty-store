@@ -11,9 +11,12 @@ export interface TransactionDetails {
   };
 }
 
-export interface Transaction extends TransactionDetails {
-  id: string;
+export interface TransactionBody extends TransactionDetails {
   timestamp: number;
+}
+
+export interface Transaction extends TransactionBody {
+  id: string;
 }
 
 export interface Account {
