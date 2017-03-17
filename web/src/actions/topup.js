@@ -1,5 +1,6 @@
 import apifetch from './apirequest';
 import history from '../history';
+import { createStripeToken, paramFromCardProviderError } from './stripe-token';
 
 export const TOPUP_REQUEST = 'TOPUP_REQUEST';
 export const TOPUP_SUCCESS = 'TOPUP_SUCCESS';
@@ -25,7 +26,15 @@ const topupFailure = (error) => {
   };
 };
 
-export const performTopup = ({ amount }) => async (dispatch, getState) => {
+export const performTopupWithNewCard = ({ amount, cardDetails }) => async (dispatch, getState) => {
+  // Generate stripe token
+  const stripeToken = await createStripeToken(cardDetails);
+
+  // TODO: figure out how to handle card details validation - similar to register2
+  performTopup({ amount, stripeToken })(dispatch, getState);
+};
+
+export const performTopup = ({ amount, stripeToken }) => async (dispatch, getState) => {
   dispatch(topupRequest());
 
   try {

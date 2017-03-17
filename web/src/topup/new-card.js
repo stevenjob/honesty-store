@@ -1,11 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import Card from '../chrome/card';
 import { Back } from '../chrome/link';
 import Full from '../layout/full';
+import { performTopupWithNewCard } from '../actions/topup';
 
-export default ({ params: { amount } }) =>
-  <Full top={<Back>Card</Back>}>
-    <h1>Want to add a card?</h1>
-    <p>If you want to add or change your card details please chat with customer support.</p>
-    <p><Link className="btn btn-primary" to={`/help`}>Chat to Customer Support</Link></p>
-  </Full>;
+const NewCard = ({ performTopupWithNewCard, ...rest }) => {
+  return (
+    <Full top={<Back></Back>}>
+    <Card
+      isInitialTopUp={false}
+      confirmButtonText="Update Card & Top Up £5"
+      onSubmit={({ topUpAmount, cardDetails }) => performTopupWithNewCard({ topUpAmount, cardDetails })}
+      {...rest}
+    />
+    </Full>
+  );
+};
+
+export default connect(() => ({}), ({ performTopupWithNewCard }))(NewCard);
