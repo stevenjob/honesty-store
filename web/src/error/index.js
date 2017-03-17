@@ -26,14 +26,9 @@ const mapStateToProps = ({ error }) => {
     return {};
   }
 
-  const errorDef = errorDefinitions[error.code];
+  let errorDef = errorDefinitions[error.code];
   if (!errorDef) {
-    // TODO: Move to error definitions
-    return {
-      subtitle: 'Oops! Something went wrong...',
-      retryTitle: 'Can you try that again, please?',
-      dismissalText: 'Tap to dimiss'
-    };
+    errorDef = errorDefinitions['Undefined'];
   }
 
   const { message, actionDescription, dismissalText } = errorDef;

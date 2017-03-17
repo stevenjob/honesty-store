@@ -64,6 +64,11 @@ export const errorDefinitions = {
     redirectionURL: '/register',
     dismissalText: dismissalText.TRY_AGAIN
   },
+  Undefined: {
+    message: 'Oops! Something went wrong...',
+    actionDescription: 'Can you try that again, please?',
+    dismissalText: dismissalText.DISMISS
+  },
   // The following error codes are handled internally and never presented to the user
   EmailNotFound: { message: 'Couldn\'t find your email' },
   RefreshTokenExpired: { message: 'Your session has expired' },
