@@ -144,8 +144,7 @@ class Card extends React.Component {
 
 const mapStateToProps = (
   {
-    error: backendError,
-    register: { error: validationError }
+    error: { fullPage, inline },
   },
   {
     params: { itemId, emailAddress }
@@ -153,7 +152,7 @@ const mapStateToProps = (
 ) => ({
   itemId,
   emailAddress,
-  error: validationError || backendError
+  error: inline || fullPage
 });
 
 const mapDispatchToProps = { performRegister2 };
