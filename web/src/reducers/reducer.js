@@ -77,7 +77,7 @@ export default (state = getInitialState(), action) => {
         ...state,
         ...action.response,
         error: {
-          fullPage: error || state.error
+          fullPage: error || state.error.fullPage
         },
         pending: state.pending.filter(e => e !== 'register')
       };
@@ -130,7 +130,7 @@ export default (state = getInitialState(), action) => {
         ...state,
         ...action.response,
         error: {
-          fullPage: error || state.error
+          fullPage: error || state.error.fullPage
         },
         pending: state.pending.filter(e => e !== 'signin2')
       };
