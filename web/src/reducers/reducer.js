@@ -23,7 +23,7 @@ const getInitialState = () => {
     },
     store: {},
     register: {},
-    error: undefined,
+    error: {},
     accessToken: null,
     refreshToken: localStorage.refreshToken,
     survey: undefined
@@ -58,7 +58,9 @@ export default (state = getInitialState(), action) => {
     case DISMISS_ERROR: {
       return {
         ...state,
-        error: undefined
+        error: {
+          fullPage: undefined
+        }
       };
     }
     case REGISTER_REQUEST: {
@@ -74,14 +76,18 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         ...action.response,
-        error: error || state.error,
+        error: {
+          fullPage: error || state.error
+        },
         pending: state.pending.filter(e => e !== 'register')
       };
     }
     case REGISTER_FAILURE: {
       return {
         ...state,
-        error: action.error,
+        error: {
+          fullPage: action.error
+        },
         pending: state.pending.filter(e => e !== 'register')
       };
     }
@@ -96,13 +102,17 @@ export default (state = getInitialState(), action) => {
 
       return {
         ...getInitialState(),
-        error
+        error: {
+          fullPage: error
+        }
       };
     }
     case SIGNIN_FAILURE: {
       return {
         ...state,
-        error: action.error,
+        error: {
+          fullPage: action.error
+        },
         pending: state.pending.filter(e => e !== 'signin')
       };
     }
@@ -119,14 +129,18 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         ...action.response,
-        error: error || state.error,
+        error: {
+          fullPage: error || state.error
+        },
         pending: state.pending.filter(e => e !== 'signin2')
       };
     }
     case SIGNIN2_FAILURE: {
       return {
         ...state,
-        error: action.error,
+        error: {
+          fullPage: action.error
+        },
         pending: state.pending.filter(e => e !== 'signin2')
       };
     }
@@ -135,7 +149,9 @@ export default (state = getInitialState(), action) => {
 
       return {
         ...getInitialState(),
-        error
+        error: {
+          fullPage: error
+        }
       };
     }
     case REGISTER2_REQUEST: {
@@ -154,13 +170,14 @@ export default (state = getInitialState(), action) => {
       };
     }
     case REGISTER2_FAILURE: {
+      //TODO: Tidy up action error naming
       const { registerError, error } = action;
       return {
         ...state,
-        register: {
-          error: registerError
+        error: {
+          inline: registerError,
+          fullPage: error
         },
-        error,
         pending: state.pending.filter(e => e !== 'register2')
       };
     }
@@ -182,13 +199,17 @@ export default (state = getInitialState(), action) => {
 
       return {
         ...getInitialState(),
-        error: action.error || error
+        error: {
+          fullPage: action.error || error
+        }
       };
     }
     case SESSION_FAILURE: {
       return {
         ...state,
-        error: action.error,
+        error: {
+          fullPage: action.error
+        },
         pending: state.pending.filter(e => e !== 'session')
       };
     }
@@ -214,7 +235,9 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         pending: state.pending.filter(e => e !== 'outofstock'),
-        error: action.error
+        error: {
+          fullPage: action.error
+        }
       };
     }
     case SUPPORT_REQUEST: {
@@ -232,7 +255,9 @@ export default (state = getInitialState(), action) => {
     case SUPPORT_FAILURE: {
       return {
         ...state,
-        error: action.error,
+        error: {
+          fullPage: action.error
+        },
         pending: state.pending.filter(e => e !== 'support')
       };
     }
@@ -247,13 +272,17 @@ export default (state = getInitialState(), action) => {
 
       return {
         ...getInitialState(),
-        error
+        error: {
+          fullPage: error
+        }
       };
     }
     case LOGOUT_FAILURE: {
       return {
         ...state,
-        error: action.error,
+        error: {
+          fullPage: action.error
+        },
         pending: state.pending.filter(e => e !== 'logout')
       };
     }
@@ -279,7 +308,9 @@ export default (state = getInitialState(), action) => {
     case TOPUP_FAILURE: {
       return {
         ...state,
-        error: action.error,
+        error: {
+          fullPage: action.error
+        },
         pending: state.pending.filter(e => e !== 'topup')
       };
     }
@@ -305,7 +336,9 @@ export default (state = getInitialState(), action) => {
     case PURCHASE_FAILURE: {
       return {
         ...state,
-        error: action.error,
+        error: {
+          fullPage: action.error
+        },
         pending: state.pending.filter(e => e !== 'purchase')
       };
     }
@@ -325,7 +358,9 @@ export default (state = getInitialState(), action) => {
     case STORE_FAILURE: {
       return {
         ...state,
-        error: action.error,
+        error: {
+          fullPage: action.error
+        },
         pending: state.pending.filter(e => e !== 'store')
       };
     }
@@ -345,7 +380,9 @@ export default (state = getInitialState(), action) => {
     case SURVEY_FAILURE: {
       return {
         ...state,
-        error: action.error,
+        error: {
+          fullPage: action.error
+        },
         pending: state.pending.filter(e => e !== 'survey')
       };
     }
