@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { dismissError } from '../actions/dismissError';
-import { errorDefinitions } from './errors';
+import getErrorDefinition from './errors';
 import Alert from '../layout/alert';
 import Error from '../item/error.js';
 import './index.css';
@@ -26,10 +26,7 @@ const mapStateToProps = ({ error: { fullPage: error } }) => {
     return {};
   }
 
-  let errorDef = errorDefinitions[error.code];
-  if (!errorDef) {
-    errorDef = errorDefinitions['UnknownError'];
-  }
+  let errorDef = getErrorDefinition(error.code);
 
   const { message, actionDescription, dismissalText } = errorDef;
 

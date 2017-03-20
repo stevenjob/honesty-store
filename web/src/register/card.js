@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { errorDefinitions } from '../error/errors';
+import getErrorDefinition from '../error/errors';
 import { Back } from '../chrome/link';
 import { performRegister2 } from '../actions/register2';
 import Full from '../layout/full';
@@ -93,7 +93,7 @@ class Card extends React.Component {
                 <p>
                 {
                   error.code
-                  ? errorDefinitions[error.code].message
+                  ? getErrorDefinition(error.code).message
                   : error.message
                 }
                 </p>

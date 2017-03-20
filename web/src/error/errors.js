@@ -5,7 +5,7 @@ const dismissalText = {
   DISMISS: `Tap to dismiss`
 };
 
-export const errorDefinitions = {
+const errorDefinitions = {
   TopupExceedsMaxBalance: {
     message: `Topping up would exceed your maximum balance`,
     dismissalText: dismissalText.DISMISS
@@ -83,4 +83,8 @@ export const errorDefinitions = {
   CardInvalidExpiryYear: { message: `Invalid expiry year` },
   CardIncorrectCVC: { message: `Incorrect CVC` },
   CardInvalidCVC: { message: `Invalid CVC` },
+};
+
+export default (code) => {
+  return errorDefinitions[code] || errorDefinitions['UnknownError'];
 };
