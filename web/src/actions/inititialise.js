@@ -34,10 +34,13 @@ export const performInitialise = ({ pathname, storeCode, emailToken }) => async 
     const { user, store: { code } } = getState();
 
     if (storeCode != null &&
-        storeCode !== code &&
-        // This is a hack until #377 is implemented
-        isRegisteredUser(user)) {
-      history.replace(`/store/change/${storeCode}`);
+        storeCode !== code) {
+      if (isRegisteredUser(user)) {
+        history.replace(`/store/change/${storeCode}`);
+      }
+      else {
+        dispatch(performRegister({ storeCode }));
+      }
     }
     return;
   }
