@@ -143,6 +143,8 @@ stores.set('sl-edn', edn);
 stores.set('sl-brs', brs);
 stores.set('sl-ldn', ldn);
 stores.set('dev-test', test);
+// Second test box to allow testing of store switching in test environment
+stores.set('dev-test-2', test);
 
 export const storeList = () => Array.from(stores.keys());
 
