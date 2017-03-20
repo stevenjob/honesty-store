@@ -64,6 +64,11 @@ export const errorDefinitions = {
     redirectionURL: `/register`,
     dismissalText: dismissalText.DISMISS
   },
+  TokenError: {
+    message: `Your local session is corrupt`,
+    actionDescription: `We've reset your session`,
+    dismissalText: dismissalText.DISMISS
+  },
   UnknownError: {
     message: `Oops! Something went wrong...`,
     actionDescription: `Can you try that again, please?`,
