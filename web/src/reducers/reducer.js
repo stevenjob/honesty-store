@@ -5,7 +5,7 @@ import { REGISTER2_REQUEST, REGISTER2_SUCESSS, REGISTER2_FAILURE } from '../acti
 import { SESSION_REQUEST, SESSION_SUCCESS, SESSION_RESET, SESSION_FAILURE } from '../actions/session';
 import { TOPUP_REQUEST, TOPUP_SUCCESS, TOPUP_FAILURE } from '../actions/topup';
 import { PURCHASE_REQUEST, PURCHASE_SUCCESS, PURCHASE_FAILURE } from '../actions/purchase';
-import { GO_HOME } from '../actions/gohome';
+import { DESTROY_SESSION } from '../actions/destroy-session';
 import { LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE } from '../actions/logout';
 import { SUPPORT_REQUEST, SUPPORT_SUCCESS, SUPPORT_FAILURE } from '../actions/support';
 import { SIGNIN_REQUEST, SIGNIN_SUCCESS, SIGNIN_FAILURE } from '../actions/signin';
@@ -151,7 +151,7 @@ export default (state = getInitialState(), action) => {
         pending: state.pending.filter(e => e !== 'signin2')
       };
     }
-    case GO_HOME: {
+    case DESTROY_SESSION: {
       const error = save({ refreshToken: undefined });
 
       return {

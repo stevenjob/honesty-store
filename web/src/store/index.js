@@ -7,19 +7,19 @@ import StoreItem from './item';
 import MiscSelection from '../item/misc-selection';
 import isRegistedUser from '../reducers/is-registered-user';
 import Balance from '../topup/balance';
-import { performGoHome } from '../actions/gohome';
+import { performDestroySession } from '../actions/destroy-session';
 
-const GoHome = ({ performGoHome }) =>
-  <Link className="btn" onClick={performGoHome}>Home</Link>;
+const GoHome = ({ onClick }) =>
+  <Link className="btn" onClick={onClick}>Home</Link>;
 
 const SignIn = () =>
   <Link className="btn" to="/register">Sign In</Link>;
 
 const itemRenderer = (item, index) => <StoreItem item={item} />;
 
-const Store = ({ registered, storeCode, balance, items, surveyAvailable, performGoHome }) =>
+const Store = ({ registered, storeCode, balance, items, surveyAvailable, performDestroySession }) =>
   <Chrome title={storeCode || 'Store'}
-    left={!registered && <GoHome performGoHome={performGoHome} />}
+    left={!registered && <GoHome onClick={performDestroySession} />}
     right={registered ? <Balance balance={balance} /> : <SignIn />}
     nav={registered}>
     {
@@ -59,4 +59,4 @@ const mapStateToProps = ({ user, store: { code, items }, survey }) => ({
   surveyAvailable: survey != null
 });
 
-export default connect(mapStateToProps, { performGoHome })(Store);
+export default connect(mapStateToProps, { performDestroySession })(Store);
