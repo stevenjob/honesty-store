@@ -9,7 +9,7 @@ import isRegisteredUser from '../reducers/is-registered-user';
 import Balance from '../topup/balance';
 import { performDestroySession } from '../actions/destroy-session';
 
-const GoHome = ({ onClick }) =>
+const Home = ({ onClick }) =>
   <Link className="btn" onClick={onClick}>Home</Link>;
 
 const SignIn = () =>
@@ -19,7 +19,7 @@ const itemRenderer = (item, index) => <StoreItem item={item} />;
 
 const Store = ({ registered, storeCode, balance, items, surveyAvailable, performDestroySession }) =>
   <Chrome title={storeCode || 'Store'}
-    left={!registered && <GoHome onClick={performDestroySession} />}
+    left={!registered && <Home onClick={performDestroySession} />}
     right={registered ? <Balance balance={balance} /> : <SignIn />}
     nav={registered}>
     {
