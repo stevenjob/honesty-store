@@ -5,7 +5,7 @@ import Chrome from '../layout/chrome';
 import List from '../chrome/list';
 import StoreItem from './item';
 import MiscSelection from '../item/misc-selection';
-import isRegistedUser from '../reducers/is-registered-user';
+import isRegisteredUser from '../reducers/is-registered-user';
 import Balance from '../topup/balance';
 import { performDestroySession } from '../actions/destroy-session';
 
@@ -52,7 +52,7 @@ const storeOrdering = (items) => {
 };
 
 const mapStateToProps = ({ user, store: { code, items }, survey }) => ({
-  registered: isRegistedUser(user),
+  registered: isRegisteredUser(user),
   storeCode: code,
   balance: user.balance || 0,
   items: storeOrdering(items),
