@@ -310,13 +310,14 @@ export default (state = getInitialState(), action) => {
       };
     }
     case TOPUP_SUCCESS: {
-      const { balance, transaction } = action.response;
+      const { balance, transaction, cardDetails } = action.response;
       const { user } = state;
       return {
         ...state,
         user: {
           ...state.user,
           balance,
+          cardDetails,
           transactions: [transaction, ...user.transactions]
         },
         pending: state.pending.filter(e => e !== 'topup')
