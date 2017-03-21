@@ -268,7 +268,7 @@ const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupA
   return update({ topupAccount: newAccount });
 };
 
-const addStripeTokenToAccount = async ({ key, topupAccount, stripeToken }): Promise<TopupAccount> => {
+const createAndRecordCustomerDetails = async ({ key, topupAccount, stripeToken, description }): Promise<TopupAccount> => {
   let customer;
 
   try {
@@ -276,7 +276,7 @@ const addStripeTokenToAccount = async ({ key, topupAccount, stripeToken }): Prom
       .customers
       .create({
         source: stripeToken,
-        description: `registration for ${topupAccount.accountId}`,
+        description,
         metadata: {
           accountId: topupAccount.accountId
         }
@@ -290,9 +290,12 @@ const addStripeTokenToAccount = async ({ key, topupAccount, stripeToken }): Prom
   return await recordCustomerDetails({ customer, topupAccount });
 };
 
-const updateStripeTokenForAccount = async ({ key, topupAccount, stripeToken }): Promise<TopupAccount> => {
-  let customer;
+const addStripeTokenToAccount = async ({ key, topupAccount, stripeToken }): Promise<TopupAccount> => {
+  const description = `registration for ${topupAccount.accountId}`;
+  return await createAndRecordCustomerDetails({ key, topupAccount, stripeToken, description });
+};
 
+const updateStripeTokenForAccount = async ({ key, topupAccount, stripeToken }): Promise<TopupAccount> => {
   const previousStripeDetails = topupAccount.stripe;
   const stripeHistory = topupAccount.stripeHistory || [];
   const updatedTopupAccount: TopupAccount = {
@@ -300,23 +303,8 @@ const updateStripeTokenForAccount = async ({ key, topupAccount, stripeToken }): 
     stripeHistory: [...stripeHistory, previousStripeDetails]
   };
 
-  try {
-    customer = await stripeForUser(updatedTopupAccount)
-      .customers
-      .create({
-        source: stripeToken,
-        description: `adding new card for ${updatedTopupAccount.accountId}`,
-        metadata: {
-          accountId: updatedTopupAccount.accountId
-        }
-      });
-  } catch (e) {
-    error(key, `couldn\'t create stripe customer`, { e, updatedTopupAccount });
-
-    throw userErrorFromStripeError(e);
-  }
-
-  return await recordCustomerDetails({ customer, topupAccount: updatedTopupAccount });
+  const description = `adding new card for ${updatedTopupAccount.accountId}`;
+  return await createAndRecordCustomerDetails({ key, topupAccount, stripeToken, description });
 };
 
 const assertValidTopupAmount = (amount) => {
