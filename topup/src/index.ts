@@ -89,12 +89,13 @@ const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
         id: topupAccount.id
       },
       UpdateExpression:
-      'set stripe = :stripe, accountId = :accountId, userId = :userId, created = :created',
+      'set stripe = :stripe, accountId = :accountId, userId = :userId, created = :created, stripeHistory = :stripeHistory',
       ExpressionAttributeValues: {
         ':stripe': topupAccount.stripe || {},
         ':accountId': topupAccount.accountId,
         ':userId': topupAccount.userId,
-        ':created': topupAccount.created
+        ':created': topupAccount.created,
+        ':stripeHistory': topupAccount.stripeHistory || []
       }
     })
     .promise();
@@ -289,6 +290,35 @@ const addStripeTokenToAccount = async ({ key, topupAccount, stripeToken }): Prom
   return await recordCustomerDetails({ customer, topupAccount });
 };
 
+const updateStripeTokenForAccount = async ({ key, topupAccount, stripeToken }): Promise<TopupAccount> => {
+  let customer;
+
+  const previousStripeDetails = topupAccount.stripe;
+  const stripeHistory = topupAccount.stripeHistory || [];
+  const updatedTopupAccount: TopupAccount = {
+    ...topupAccount,
+    stripeHistory: [...stripeHistory, previousStripeDetails]
+  };
+
+  try {
+    customer = await stripeForUser(updatedTopupAccount)
+      .customers
+      .create({
+        source: stripeToken,
+        description: `adding new card for ${updatedTopupAccount.accountId}`,
+        metadata: {
+          accountId: updatedTopupAccount.accountId
+        }
+      });
+  } catch (e) {
+    error(key, `couldn\'t create stripe customer`, { e, updatedTopupAccount });
+
+    throw userErrorFromStripeError(e);
+  }
+
+  return await recordCustomerDetails({ customer, topupAccount: updatedTopupAccount });
+};
+
 const assertValidTopupAmount = (amount) => {
   if (amount !== fixedTopupAmount) {
     throw new Error(`topup amount must be £${fixedTopupAmount / 100}`);
@@ -300,8 +330,12 @@ const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: Top
 
   let topupAccount = await getOrCreate({ key, accountId, userId });
 
+  const topupDetails = { key, topupAccount, stripeToken };
+
   if (stripeToken) {
-    topupAccount = await addStripeTokenToAccount({ key, topupAccount, stripeToken });
+    topupAccount = topupAccount.stripe ?
+      await updateStripeTokenForAccount(topupDetails) :
+      await addStripeTokenToAccount(topupDetails);
   }
 
   return topupExistingAccount({ key, topupAccount, amount });

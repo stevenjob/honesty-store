@@ -1,6 +1,11 @@
 import fetch from '../../../service/src/fetch';
 import { TransactionAndBalance } from '../../../transaction/src/client/index';
 
+interface Stripe {
+  customer: any;
+  nextChargeToken: string;
+}
+
 export interface TopupAccount {
   id: string;
   created: number;
@@ -8,10 +13,8 @@ export interface TopupAccount {
   userId: string;
   test: boolean;
 
-  stripe?: {
-    customer: any;
-    nextChargeToken: string;
-  };
+  stripe?: Stripe;
+  stripeHistory?: Stripe[];
 }
 
 export interface TopupRequest {
