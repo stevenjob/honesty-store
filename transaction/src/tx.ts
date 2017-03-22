@@ -3,7 +3,6 @@ import { createHash } from 'crypto';
 import { DynamoDB } from 'aws-sdk';
 import stringify = require('json-stable-stringify');
 
-import { assertValidAccountId } from './account';
 import { Transaction, TransactionBody } from './client';
 
 type LinkedTransaction = Transaction & { next?: LinkedTransaction };
@@ -39,11 +38,7 @@ export const hashTransaction = (tx: TransactionBody & { next?: string }) => {
 
 export const createTransactionId = ({ accountId, txId }) => `${accountId}:${txId}`;
 
-const getTransaction = async ({ accountId, txId }) => {
-  assertValidAccountId(accountId);
-
-  const id = createTransactionId({ accountId, txId });
-
+const getTransaction = async (id) => {
   const response = await new DynamoDB.DocumentClient()
     .get({
       TableName: process.env.TABLE_NAME,
@@ -59,7 +54,7 @@ const getTransaction = async ({ accountId, txId }) => {
   return <DBTransaction>item;
 };
 
-export const getTransactionChain = async ({ accountId, txId, limit = Infinity }): Promise<LinkedTransaction> => {
+export const getTransactionChain = async ({ txId, limit = Infinity }): Promise<LinkedTransaction> => {
   if (!txId) {
     return undefined;
   }
@@ -67,11 +62,11 @@ export const getTransactionChain = async ({ accountId, txId, limit = Infinity })
     return undefined;
   }
 
-  const tx = await getTransaction({ accountId, txId });
+  const tx = await getTransaction(txId);
 
   return {
     ...tx,
-    next: await getTransactionChain({ accountId, txId: tx.next, limit: limit - 1 })
+    next: await getTransactionChain({ txId: tx.next, limit: limit - 1 })
   };
 };
 
