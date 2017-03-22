@@ -15,6 +15,9 @@ interface Versioned {
 interface Identified {
   id: string;
 }
+interface StoreAssociated {
+  storeId: string;
+}
 export interface BoxItemWithBatchReference {
   itemID: string;
   batches: BatchReference[];
@@ -33,6 +36,7 @@ interface VariableBoxItemOverheads {
   total: number;
 }
 interface BoxShippingDetails {
+  storeId: string;
   shippingCost: number;
   packed?: number;
   shipped?: number;
@@ -42,10 +46,10 @@ interface BoxShippingDetails {
 
 export type BoxItem = BoxItemWithBatchReference & Counted & FixedBoxItemOverheads & VariableBoxItemOverheads;
 
-export type BoxSubmission = BoxShippingDetails & { boxItems: BoxItemWithBatchReference[]; };
+export type BoxSubmission = BoxShippingDetails & { boxItems: BoxItemWithBatchReference[]; } & StoreAssociated;
 
 // this is duplicated in aws/src/table/table.ts
-export type Box = BoxShippingDetails & Versioned & Identified & { boxItems: BoxItem[]; } & { count: number; };
+export type Box = BoxShippingDetails & Versioned & Identified & { boxItems: BoxItem[]; } & { count: number; } & StoreAssociated;
 
 const { get, post } = fetch('box');
 

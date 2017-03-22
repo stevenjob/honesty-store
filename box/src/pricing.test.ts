@@ -7,6 +7,7 @@ import calculatePricing, { getAverageItemCost, getItemCost } from './pricing';
 const precision = 0.5;
 
 const boxSubmission: BoxSubmission = {
+  storeId: 'test',
   shippingCost: 300,
   boxItems: [
     {

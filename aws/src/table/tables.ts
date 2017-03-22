@@ -13,6 +13,7 @@ interface TableTemplate {
 
 interface BoxData { // this is duplicated in box/src/client/index.ts
   id: string;
+  storeId: string;
   version: number;
   boxItems: {
     itemID: string;
@@ -85,6 +86,7 @@ const costs = {
 const dummyBoxData: BoxData[] = [
   {
     id: '06439c6c-57c9-4a17-b218-2018ea8dae55',
+    storeId: 'dev-test',
     version: 0,
     boxItems: [
       {
@@ -128,6 +130,7 @@ const dummyBoxData: BoxData[] = [
   },
   {
     id: 'a7a863c6-9974-475d-96e9-4b4078a2e1c2',
+    storeId: 'dev-test',
     version: 0,
     boxItems: [
       {
@@ -171,6 +174,7 @@ const dummyBoxData: BoxData[] = [
   },
   {
     id: '5b3b4683-918e-49b1-bc68-9c33a5bbdf33',
+    storeId: 'dev-test',
     version: 0,
     boxItems: [
       {
