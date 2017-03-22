@@ -304,7 +304,7 @@ const updateStripeTokenForAccount = async ({ key, topupAccount, stripeToken }): 
   };
 
   const description = `adding new card for ${updatedTopupAccount.accountId}`;
-  return await createAndRecordCustomerDetails({ key, topupAccount, stripeToken, description });
+  return await createAndRecordCustomerDetails({ key, topupAccount: updatedTopupAccount, stripeToken, description });
 };
 
 const assertValidTopupAmount = (amount) => {
