@@ -88,6 +88,20 @@ const getBox = async (boxId) => {
   return box;
 };
 
+const getBoxesInStore = async (storeId) => {
+  const response = await new DynamoDB.DocumentClient()
+    .scan({
+      TableName: process.env.TABLE_NAME,
+      FilterExpression: 'storeId = :storeId',
+      ExpressionAttributeValues: {
+        ':storeId': storeId
+      }
+    })
+    .promise();
+
+  return <Box[]>response.Items;
+};
+
 const updateItems = async ({ box, originalVersion }: { box: Box, originalVersion: number }) => {
   assertValidBoxId(box.id);
 
@@ -179,6 +193,12 @@ router.get(
   '/:boxId',
   serviceAuthentication,
   async (_key, { boxId }) => getBox(boxId)
+);
+
+router.get(
+  '/store/:storeId',
+  serviceAuthentication,
+  async (_key, { storeId }) => getBoxesInStore(storeId)
 );
 
 router.post(
