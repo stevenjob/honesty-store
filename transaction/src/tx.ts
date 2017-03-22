@@ -5,8 +5,8 @@ import stringify = require('json-stable-stringify');
 
 import { Transaction, TransactionBody } from './client';
 
-type LinkedTransaction = Transaction & { next?: LinkedTransaction };
-export type DBTransaction = Transaction & { next?: string };
+type TransactionChain = Transaction & { next?: TransactionChain };
+type DBTransaction = Transaction & { next?: string };
 
 export const assertValidTransaction = ({ type, amount, data }: Transaction) => {
   if (type == null || (type !== 'topup' && type !== 'purchase')) {
@@ -54,11 +54,11 @@ const getTransaction = async (id) => {
   return <DBTransaction>item;
 };
 
-export const getTransactionChain = async ({ txId, limit = Infinity }): Promise<LinkedTransaction> => {
+const getTransactionChain = async ({ txId, limit = Infinity }): Promise<TransactionChain> => {
   if (!txId) {
     return undefined;
   }
-  if (limit === 0) {
+  if (limit <= 0) {
     return undefined;
   }
 
@@ -70,7 +70,24 @@ export const getTransactionChain = async ({ txId, limit = Infinity }): Promise<L
   };
 };
 
+const txChainToArray = (chain) => {
+  const txs = [];
+  for (let tx = chain; tx; tx = tx.next) {
+    // tslint:disable-next-line:no-unused-variable
+    const { next, ...externalisedTx } = tx;
+    txs.push(externalisedTx);
+  }
+  return txs;
+};
+
+export const getTransactions = async ({ txId, limit = Infinity }) => {
+  const chain = await getTransactionChain({ txId, limit });
+  return txChainToArray(chain);
+};
+
 export const putTransaction = async (tx: DBTransaction) => {
+  assertValidTransaction(tx);
+
   await new DynamoDB.DocumentClient()
     .put({
       TableName: process.env.TABLE_NAME,
