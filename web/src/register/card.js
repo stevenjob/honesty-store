@@ -27,6 +27,4 @@ const RegisterCard = (
   );
 };
 
-const mapDispatchToProps = { performRegister2 };
-
-export default connect(() => ({}), mapDispatchToProps)(RegisterCard);
+export default connect(() => ({}), { performRegister2 })(RegisterCard);
