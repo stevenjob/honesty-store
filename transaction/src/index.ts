@@ -4,48 +4,30 @@ import express = require('express');
 
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { assertValidAccountId, createAccount, DBAccount, getAccountInternal, updateAccount } from './account';
-import { AccountAndTxs, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance, TransactionDetails } from './client';
-import { assertValidTransaction, createTransactionId, DBTransaction, getTransactionChain, hashTransaction, putTransaction } from './tx';
+import { AccountAndTxs, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance, TransactionBody } from './client';
+import { assertValidTransaction, createTransactionId, getTransactions, hashTransaction, putTransaction } from './tx';
 
 const CACHED_TX_COUNT = 10;
 
 config.region = process.env.AWS_REGION;
 
-const txChainToArray = (chain) => {
-  const txs = [];
-  for (let tx = chain; tx; tx = tx.next) {
-    txs.push({ ...tx, next: undefined });
-  }
-  return txs;
-};
-
-const getTransactions = async ({ account, limit = Infinity }) => {
-  const txs = account.cachedTransactions;
-
-  if (txs.length >= limit) {
-    return txs.slice(0, limit);
-  }
-
-  const chain = await getTransactionChain({
-    txId: account.latestTx,
-    limit: limit - txs.length
-  });
-
-  return [
-    ...txs,
-    ...txChainToArray(chain)
-  ];
-};
-
 const getAccountAndTxs = async ({ accountId }): Promise<AccountAndTxs> => {
   assertValidAccountId(accountId);
 
-  const account = await getAccountInternal({ accountId });
-  const txChain = await getTransactions({ account, limit: CACHED_TX_COUNT });
+  const internalAccount = await getAccountInternal({ accountId });
+  const { latestTx, cachedTransactions, ...externalAccount } = internalAccount;
+
+  const transactions = await getTransactions({
+    txId: latestTx,
+    limit: CACHED_TX_COUNT - cachedTransactions.length
+  });
 
   return {
-    ...account,
-    transactions: txChainToArray(txChain)
+    ...externalAccount,
+    transactions: [
+      ...cachedTransactions,
+      ...transactions
+    ]
   };
 };
 
@@ -54,7 +36,7 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
 
   const originalAccount = await getAccountInternal({ accountId });
 
-  const transactionDetails: TransactionDetails & { timestamp: number; next: string } = {
+  const transactionDetails: TransactionBody & { next: string } = {
     timestamp: Date.now(),
     type,
     amount,
@@ -62,7 +44,7 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
     next: originalAccount.latestTx
   };
 
-  const transaction: DBTransaction = {
+  const transaction = {
     id: createTransactionId({ accountId, txId: hashTransaction(transactionDetails) }),
     ...transactionDetails
   };
@@ -117,7 +99,11 @@ router.post(
 router.post(
   '/',
   serviceAuthentication,
-  async (_key, {}, { accountId }) => await createAccount({ accountId })
+  async (_key, {}, { accountId }) => {
+    const internalAccount = await createAccount({ accountId });
+    const { latestTx, cachedTransactions, ...externalAccount } = internalAccount;
+    return externalAccount;
+  }
 );
 
 app.use(router);
