@@ -318,9 +318,8 @@ const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: Top
 
   let topupAccount = await getOrCreate({ key, accountId, userId });
 
-  const topupDetails = { key, topupAccount, stripeToken };
-
   if (stripeToken) {
+    const topupDetails = { key, topupAccount, stripeToken };
     topupAccount = topupAccount.stripe ?
       await updateStripeTokenForAccount(topupDetails) :
       await addStripeTokenToAccount(topupDetails);
