@@ -22,7 +22,7 @@ const getAccountAndTransactions = async ({ accountId, limit = GET_TRANSACTION_LI
     : transactionHead;
 
   const transactions = await getTransactions({
-    transactionId: idToFetch,
+    transactionId: createTransactionId({ accountId, transactionId: idToFetch }),
     limit: limit - cachedTransactions.length
   });
 
