@@ -153,9 +153,7 @@ const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
 
   const updatedUser: InternalUser = {
     ...originalUser,
-    ...userProfile,
-    id: userId,
-    refreshToken: originalUser.refreshToken
+    ...userProfile
   };
 
   if (originalUser.emailAddress == null && updatedUser.emailAddress != null) {
