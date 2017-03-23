@@ -1,5 +1,4 @@
-import { Box, BoxItem, getBoxesForStore } from '../../../box/src/client';
-import { avg } from '../../../box/src/math';
+import { Box, getBoxesForStore } from '../../../box/src/client';
 import { getItem } from './item';
 
 export interface StoreItem {
@@ -38,7 +37,7 @@ const assertValidStoreCode = (storeCode) => {
   }
 };
 
-const getItemPriceFromBoxes = (boxes: Box[], itemID: string) => {
+const getOldestBoxContainingItem = (boxes: Box[], itemID: string) => {
   const boxesWithItem = boxesContainingItem(boxes, itemID);
 
   if (boxesWithItem.length === 0) {
@@ -54,8 +53,13 @@ const getItemPriceFromBoxes = (boxes: Box[], itemID: string) => {
     }
   }
 
-  const boxItem = oldestBox.boxItems.find((el) => el.itemID === itemID);
-  return boxItem.total;
+  return oldestBox;
+}
+
+const getItemPriceFromBoxes = (boxes: Box[], itemID: string) => {
+  const oldestBox = getOldestBoxContainingItem(boxes, itemID);
+  const { total } = extractBoxItem(oldestBox, itemID);
+  return total;
 }
 
 export const getItemPriceFromStore = async (key, storeCode: string, itemIDToFind: string) => {
@@ -67,9 +71,6 @@ export const getItemPriceFromStore = async (key, storeCode: string, itemIDToFind
 const getUniqueItemCounts = (boxes: Box[]) => {
   const map = new Map<string, number>();
   for (const box of boxes) {
-    if (box.closed != null) {
-      continue;
-    }
     for (const { itemID, count, depleted } of box.boxItems) {
       const existingCount = map.has(itemID) ? map.get(itemID) : 0;
       map.set(itemID, existingCount + (depleted ? 0 : count));
@@ -82,39 +83,36 @@ const getUniqueItemCounts = (boxes: Box[]) => {
 const boxesContainingItem = (boxes: Box[], itemId) =>
   boxes.filter(({ boxItems }) => boxItems.some( ({ itemID }) => itemId === itemID));
 
-const itemAvg = (boxItems: BoxItem[], extractValue: (_: BoxItem) => number): number =>
-  avg(boxItems, item => ({ count: item.count, value: extractValue(item) }));
+const extractBoxItem = (box: Box, itemID: string) => box.boxItems.find((el) => el.itemID === itemID);
 
 const priceBreakdown = (boxes: Box[], itemID): PriceBreakdown => {
-  const items = boxesContainingItem(boxes, itemID)
-    .map(({ boxItems }) => boxItems)
-    .reduce((acc, ar) => [...acc, ...ar], [])
-    .filter(({ itemID: id }) => id === itemID);
+  const oldestBox = getOldestBoxContainingItem(boxes, itemID);
+  const { creditCardFee, VAT, shippingCost, warehousingCost, packagingCost, packingCost, serviceFee } = extractBoxItem(oldestBox, itemID);
 
   return {
-    creditCardFee: itemAvg(items, item => item.creditCardFee),
-    VAT: itemAvg(items, item => item.VAT),
-    shippingCost: itemAvg(items, item => item.shippingCost),
-    warehousingCost: itemAvg(items, item => item.warehousingCost),
-    packagingCost: itemAvg(items, item => item.packagingCost),
-    packingCost: itemAvg(items, item => item.packingCost),
-    serviceFee: itemAvg(items, item => item.serviceFee)
+    creditCardFee,
+    VAT,
+    shippingCost,
+    warehousingCost,
+    packagingCost,
+    packingCost,
+    serviceFee
   };
 };
 
 export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
-  const boxes = await getBoxesForStore(key, storeCode)
-  const openBoxes = boxes.filter(({ closed }) => closed == null);
+  const openBoxes = (await getBoxesForStore(key, storeCode))
+    .filter(({ closed }) => closed == null)
 
   return Promise.all(
-    getUniqueItemCounts(boxes)
+    getUniqueItemCounts(openBoxes)
       .map(async ({ itemID, count }) => ({
         ...getItem(itemID),
         count,
         id: itemID,
         price: {
           total: getItemPriceFromBoxes(openBoxes, itemID),
-          breakdown: priceBreakdown(boxes, itemID)
+          breakdown: priceBreakdown(openBoxes, itemID)
         }
       }))
   );
