@@ -16,7 +16,9 @@ import { signAccessToken, signRefreshToken, verifyAccessToken, verifyMagicLinkTo
 
 config.region = process.env.AWS_REGION;
 
-const cruft = cruftDDB<InternalUser>({ tableName: 'user' });
+const cruft = cruftDDB<InternalUser>({
+  tableName: process.env.TABLE_NAME
+});
 
 interface InternalUser extends User {
   version: number;
