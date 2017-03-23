@@ -36,7 +36,7 @@ const assertValidUserId = createAssertValidUuid('userId');
 const assertValidRefreshToken = createAssertValidUuid('refreshToken');
 
 const assertValidDefaultStoreId = (defaultStoreId) => {
-  if (storeList().indexOf(defaultStoreId) === -1) {
+  if (storeList.indexOf(defaultStoreId) === -1) {
     throw new CodedError('StoreNotFound', `Invalid defaultStoreId ${defaultStoreId}`);
   }
 };

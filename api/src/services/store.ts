@@ -25,14 +25,14 @@ interface PriceBreakdown {
   serviceFee: number;
 }
 
-const stores = ['sl-ncl', 'sl-edn', 'sl-brs', 'sl-ldn', 'dev-test', 'dev-test-2'];
+export const storeList = ['sl-ncl', 'sl-edn', 'sl-brs', 'sl-ldn', 'dev-test', 'dev-test-2'];
 
 // currently storeCode and storeID are identical
 export const storeIDToStoreCode = (storeID) => storeID;
 export const storeCodeToStoreID = (storeCode) => storeCode;
 
 const assertValidStoreCode = (storeCode) => {
-  if (!stores.some(el => el === storeCode)) {
+  if (!storeList.some(el => el === storeCode)) {
     throw new Error(`Store does not exist with code '${storeCode}'`);
   }
 };
