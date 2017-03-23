@@ -1,7 +1,7 @@
 import { CodedError } from '../../../service/src/error';
 import { createTransaction, getAccount, TransactionDetails } from '../../../transaction/src/client/index';
 import { getItem } from '../services/item';
-import { getPrice } from './store';
+import { getItemPriceFromStore } from './store';
 
 const expandItemDetails = (transaction) => {
   const { itemId } = transaction.data;
@@ -36,7 +36,7 @@ const assertValidQuantity = (quantity) => {
 export const purchase = async ({ key, itemID, userID, accountID, storeID, quantity }) => {
   assertValidQuantity(quantity);
 
-  const price = quantity * await getPrice(key, storeID, itemID);
+  const price = quantity * await getItemPriceFromStore(key, storeID, itemID);
 
   const transaction: TransactionDetails = {
     type: 'purchase',
