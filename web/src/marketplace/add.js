@@ -5,6 +5,8 @@ import { performMarketplace } from '../actions/marketplace';
 import { Back } from '../chrome/link';
 import Full from '../layout/full';
 
+const ourFees = 0.1;
+
 class MarketplaceAdd extends React.Component {
   constructor(props) {
     super(props);
@@ -153,6 +155,16 @@ class MarketplaceAdd extends React.Component {
               className="input"
               noValidate
               type="date"
+              />
+          </p>
+          <p>
+            <label htmlFor="pricingBreakdown">Pricing Breakdown (per item cost)</label>
+            <input
+              id="pricingBreakdown"
+              value={(this.state.price / this.state.quantity) * (1 + ourFees)}
+              onChange={(e) => e.preventDefault()}
+              className="input"
+              noValidate
               />
           </p>
           <Link className="btn btn-primary" onClick={(e) => this.handleSubmit(e)}>
