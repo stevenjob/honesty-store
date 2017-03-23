@@ -49,6 +49,13 @@ const Store = ({ registered, storeCode, balance, items, surveyAvailable, perform
         />
     }
     <List data={items} itemRenderer={itemRenderer} />
+    {
+      <SpecialEntry
+        to={`/marketplace`}
+        title="Want to add your own items?"
+        message="Tap here for our marketplace"
+        />
+    }
   </Chrome>;
 
 const storeOrdering = (items) => {
