@@ -23,6 +23,7 @@ interface BoxData { // this is duplicated in box/src/client/index.ts
     }[];
     count: number;
     depleted?: number;
+    wholesaleCost: number;
     shippingCost: number;
     warehousingCost: number;
     packagingCost: number;
@@ -73,7 +74,7 @@ const shipping = {
 };
 
 const walkersCosts = {
-  // wholesale cost: 15
+  wholesaleCost: 15,
   shippingCost: 3,
   warehousingCost: 2,
   packagingCost: 3,
@@ -83,10 +84,10 @@ const walkersCosts = {
   subtotal: 30,
   VAT: 0,
   total: 30
-}
+};
 
 const natureValleyCosts = {
-  // wholesale cost: 20
+  wholesaleCost: 20,
   shippingCost: 5,
   warehousingCost: 5,
   packagingCost: 3,
@@ -96,10 +97,10 @@ const natureValleyCosts = {
   subtotal: 45,
   VAT: 6,
   total: 51
-}
+};
 
 const dietCokeCosts = {
-  // wholesale cost: 50
+  wholesaleCost: 50,
   shippingCost: 10,
   warehousingCost: 5,
   packagingCost: 5,
@@ -109,7 +110,7 @@ const dietCokeCosts = {
   subtotal: 100,
   VAT: 30,
   total: 130
-}
+};
 
 const dummyBoxData: BoxData[] = [
   {

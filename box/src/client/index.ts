@@ -31,6 +31,7 @@ export interface FixedBoxItemOverheads {
 }
 interface VariableBoxItemOverheads {
   creditCardFee: number;
+  wholesaleCost: number;
   subtotal: number;
   VAT: number;
   total: number;

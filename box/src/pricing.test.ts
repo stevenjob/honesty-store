@@ -55,6 +55,7 @@ describe('Box Submission', () => {
     const { boxItems } = calculatePricing(boxSubmission);
 
     const {
+      wholesaleCost,
       warehousingCost,
       packagingCost,
       packingCost,
@@ -66,6 +67,7 @@ describe('Box Submission', () => {
       total
     } = boxItems[0];
 
+    expect(wholesaleCost).to.be.approximately(35, precision, 'Incorrect warehousing cost');
     expect(warehousingCost).to.be.approximately(7, precision, 'Incorrect warehousing cost');
     expect(packagingCost).to.be.approximately(43, precision, 'Incorrect packaging cost');
     expect(packingCost).to.be.approximately(29, precision, 'Incorrect packing cost');
