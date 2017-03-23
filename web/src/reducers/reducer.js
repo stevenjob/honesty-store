@@ -12,6 +12,7 @@ import { SIGNIN_REQUEST, SIGNIN_SUCCESS, SIGNIN_FAILURE } from '../actions/signi
 import { SIGNIN2_REQUEST, SIGNIN2_SUCCESS, SIGNIN2_FAILURE } from '../actions/signin2';
 import { STORE_REQUEST, STORE_SUCCESS, STORE_FAILURE } from '../actions/store';
 import { SURVEY_REQUEST, SURVEY_SUCCESS, SURVEY_FAILURE } from '../actions/survey';
+import { MARKETPLACE_REQUEST, MARKETPLACE_SUCCESS, MARKETPLACE_FAILURE } from '../actions/marketplace';
 import { OUT_OF_STOCK_REQUEST, OUT_OF_STOCK_SUCCESS, OUT_OF_STOCK_FAILURE } from '../actions/out-of-stock';
 
 const getInitialState = () => {
@@ -407,6 +408,28 @@ export default (state = getInitialState(), action) => {
           fullPage: action.error
         },
         pending: state.pending.filter(e => e !== 'survey')
+      };
+    }
+    case MARKETPLACE_REQUEST: {
+      return {
+        ...state,
+        pending: [...state.pending, 'marketplace']
+      };
+    }
+    case MARKETPLACE_SUCCESS: {
+      return {
+        ...state,
+        pending: state.pending.filter(e => e !== 'marketplace')
+      };
+    }
+    case MARKETPLACE_FAILURE: {
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          fullPage: action.error
+        },
+        pending: state.pending.filter(e => e !== 'marketplace')
       };
     }
     default:
