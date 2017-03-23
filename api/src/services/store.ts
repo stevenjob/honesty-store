@@ -42,22 +42,14 @@ const boxesContainingItem = (boxes: Box[], itemId) =>
 
 const extractBoxItem = (box: Box, itemID: string) => box.boxItems.find((el) => el.itemID === itemID);
 
-const getOldestBoxContainingItem = (boxes: Box[], itemID: string) => {
+const getOldestBoxContainingItem = (boxes: Box[], itemID: string): Box => {
   const boxesWithItem = boxesContainingItem(boxes, itemID);
 
   if (boxesWithItem.length === 0) {
     throw new Error(`No boxes found containing item ${itemID}`);
   }
 
-  let oldestBox: Box;
-
-  for (const box of boxesWithItem) {
-    if (oldestBox == null || box.received < oldestBox.received) {
-      oldestBox = box;
-    }
-  }
-
-  return oldestBox;
+  return boxesWithItem.sort((a, b) => a.received - b.received)[0];
 };
 
 const getItemPriceFromBoxes = (boxes: Box[], itemID: string) => {
