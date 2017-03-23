@@ -3,7 +3,7 @@ import bodyParser = require('body-parser');
 import express = require('express');
 
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
-import { assertValidAccountId, createAccount, DBAccount, getAccountInternal, updateAccount } from './account';
+import { assertValidAccountId, createAccount, InternalAccount, getAccountInternal, updateAccount } from './account';
 import { AccountAndTransactions, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance, TransactionDetails } from './client';
 import { assertValidTransaction, createTransactionId, getTransactions, hashTransaction, putTransaction } from './transaction';
 
@@ -62,7 +62,7 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
 
   await putTransaction(transaction);
 
-  const updatedAccount: DBAccount = {
+  const updatedAccount: InternalAccount = {
     ...originalAccount,
     version: originalAccount.version + 1,
     balance: updatedBalance,
