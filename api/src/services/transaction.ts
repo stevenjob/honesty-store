@@ -1,5 +1,5 @@
 import { CodedError } from '../../../service/src/error';
-import { createTransaction, getAccount, TransactionDetails } from '../../../transaction/src/client/index';
+import { createTransaction, getAccount, TransactionBody } from '../../../transaction/src/client/index';
 import { getItem } from '../services/item';
 import { getItemPriceFromStore } from './store';
 
@@ -38,7 +38,7 @@ export const purchase = async ({ key, itemID, userID, accountID, storeID, quanti
 
   const price = quantity * await getItemPriceFromStore(key, storeID, itemID);
 
-  const transaction: TransactionDetails = {
+  const transaction: TransactionBody = {
     type: 'purchase',
     amount: -price,
     data: {

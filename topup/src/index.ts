@@ -9,7 +9,7 @@ import { CodedError } from '../../service/src/error';
 import { Key } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
-import { assertBalanceWithinLimit, createTransaction, TransactionDetails } from '../../transaction/src/client/index';
+import { assertBalanceWithinLimit, createTransaction, TransactionBody } from '../../transaction/src/client/index';
 import { CardDetails, TopupAccount, TopupRequest } from './client/index';
 
 const fixedTopupAmount = 500; // £5
@@ -125,7 +125,7 @@ const getOrCreate = async ({ key, accountId, userId }): Promise<TopupAccount> =>
 
 const appendTopupTransaction = async ({ key, topupAccount, amount, data }
   : { key: Key, topupAccount: TopupAccount, amount: number, data: any }) => {
-  const transactionDetails: TransactionDetails = {
+  const transactionBody: TransactionBody = {
     type: 'topup',
     amount,
     data: {
@@ -136,7 +136,7 @@ const appendTopupTransaction = async ({ key, topupAccount, amount, data }
   };
 
   try {
-    return await createTransaction(key, topupAccount.accountId, transactionDetails);
+    return await createTransaction(key, topupAccount.accountId, transactionBody);
   } catch (e) {
     error(key, 'couldn\'t createTransaction()', e);
     // remap error message
@@ -237,7 +237,7 @@ const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, t
 
   const charge = await createStripeCharge({ key, topupAccount, amount });
 
-  const transactionDetails = await appendTopupTransaction({
+  const transactionBody = await appendTopupTransaction({
     key,
     amount,
     topupAccount,
@@ -251,7 +251,7 @@ const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, t
   await update({ topupAccount });
 
   return {
-    ...transactionDetails,
+    ...transactionBody,
     cardDetails: extractCardDetails(topupAccount)
   };
 };
