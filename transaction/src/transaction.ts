@@ -2,12 +2,42 @@ import { createHash } from 'crypto';
 
 import { DynamoDB } from 'aws-sdk';
 import stringify = require('json-stable-stringify');
+import isUUID = require('validator/lib/isUUID');
 
 import { Transaction, TransactionBody } from './client';
 
 type DBTransaction = Transaction & { next?: string };
 
-export const assertValidTransaction = ({ type, amount, data }: Transaction) => {
+const isSHA256 = (hash) => /^[a-f0-9]{64}$/.test(hash);
+
+const assertValidTransactionId = (id) => {
+  const [, accountId, transactionId, ...rest] = /(.*):(.*)/.exec(id);
+
+  if (rest.length) {
+    throw new Error(`Transaction id isn't <accountId>:<transactionHash> (${id})`);
+  }
+
+  if (!isUUID(accountId)) {
+    throw new Error(`Transaction id's accountId isn't a uuid (${accountId})`);
+  }
+
+  if (!isSHA256(transactionId)) {
+    throw new Error(`Transaction hash isn't a SHA256 hash (${transactionId})`);
+  }
+};
+
+export const createTransactionId = ({ accountId, transactionId }) => `${accountId}:${transactionId}`;
+
+export const hashTransaction = (transaction: TransactionBody & { next?: string }) => {
+  const hash = createHash('sha256');
+
+  hash.update(stringify(transaction));
+
+  return hash.digest('hex');
+};
+
+export const assertValidTransaction = ({ type, amount, data, id }: Transaction) => {
+  assertValidTransactionId(id);
   if (type == null || (type !== 'topup' && type !== 'purchase')) {
     throw new Error(`Invalid transaction type ${type}`);
   }
@@ -26,16 +56,6 @@ export const assertValidTransaction = ({ type, amount, data }: Transaction) => {
     }
   }
 };
-
-export const hashTransaction = (transaction: TransactionBody & { next?: string }) => {
-  const hash = createHash('sha256');
-
-  hash.update(stringify(transaction));
-
-  return hash.digest('hex');
-};
-
-export const createTransactionId = ({ accountId, transactionId }) => `${accountId}:${transactionId}`;
 
 const getTransaction = async (id) => {
   const response = await new DynamoDB.DocumentClient()
