@@ -4,7 +4,7 @@ import express = require('express');
 
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { assertValidAccountId, createAccount, DBAccount, getAccountInternal, updateAccount } from './account';
-import { AccountAndTransactions, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance, TransactionBody } from './client';
+import { AccountAndTransactions, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance, TransactionDetails } from './client';
 import { assertValidTransaction, createTransactionId, getTransactions, hashTransaction, putTransaction } from './transaction';
 
 const ACCOUNT_TRANSACTION_CACHE_SIZE = 10;
@@ -37,7 +37,7 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
 
   const originalAccount = await getAccountInternal({ accountId });
 
-  const transactionDetails: TransactionBody & { next: string } = {
+  const transactionDetails: TransactionDetails = {
     timestamp: Date.now(),
     type,
     amount,
