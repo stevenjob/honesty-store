@@ -37,6 +37,11 @@ const assertValidStoreCode = (storeCode) => {
   }
 };
 
+const boxesContainingItem = (boxes: Box[], itemId) =>
+  boxes.filter(({ boxItems }) => boxItems.some( ({ itemID }) => itemId === itemID));
+
+const extractBoxItem = (box: Box, itemID: string) => box.boxItems.find((el) => el.itemID === itemID);
+
 const getOldestBoxContainingItem = (boxes: Box[], itemID: string) => {
   const boxesWithItem = boxesContainingItem(boxes, itemID);
 
@@ -47,20 +52,19 @@ const getOldestBoxContainingItem = (boxes: Box[], itemID: string) => {
   let oldestBox: Box;
 
   for (const box of boxesWithItem) {
-    console.log(box);
     if (oldestBox == null || box.received < oldestBox.received) {
       oldestBox = box;
     }
   }
 
   return oldestBox;
-}
+};
 
 const getItemPriceFromBoxes = (boxes: Box[], itemID: string) => {
   const oldestBox = getOldestBoxContainingItem(boxes, itemID);
   const { total } = extractBoxItem(oldestBox, itemID);
   return total;
-}
+};
 
 export const getItemPriceFromStore = async (key, storeCode: string, itemIDToFind: string) => {
   assertValidStoreCode(storeCode);
@@ -80,11 +84,6 @@ const getUniqueItemCounts = (boxes: Box[]) => {
     .map(([itemID, count]) => ({ itemID, count }));
 };
 
-const boxesContainingItem = (boxes: Box[], itemId) =>
-  boxes.filter(({ boxItems }) => boxItems.some( ({ itemID }) => itemId === itemID));
-
-const extractBoxItem = (box: Box, itemID: string) => box.boxItems.find((el) => el.itemID === itemID);
-
 const priceBreakdown = (boxes: Box[], itemID): PriceBreakdown => {
   const oldestBox = getOldestBoxContainingItem(boxes, itemID);
   const { creditCardFee, VAT, shippingCost, warehousingCost, packagingCost, packingCost, serviceFee } = extractBoxItem(oldestBox, itemID);
@@ -102,7 +101,7 @@ const priceBreakdown = (boxes: Box[], itemID): PriceBreakdown => {
 
 export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
   const openBoxes = (await getBoxesForStore(key, storeCode))
-    .filter(({ closed }) => closed == null)
+    .filter(({ closed }) => closed == null);
 
   return Promise.all(
     getUniqueItemCounts(openBoxes)
