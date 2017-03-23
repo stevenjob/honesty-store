@@ -38,30 +38,30 @@ const assertValidStoreCode = (storeCode) => {
   }
 };
 
-export const getPrice = async (key, storeCode: string, itemIDToFind: string) => {
-  assertValidStoreCode(storeCode);
-  const boxes = await getBoxesForStore(key, storeCode);
+const getItemPriceFromBoxes = (boxes: Box[], itemID: string) => {
+  const boxesWithItem = boxesContainingItem(boxes, itemID);
 
-  const openBoxesContainingItem = boxes.filter(({ closed, boxItems }) =>
-    closed != null &&
-    boxItems.some(({ itemID }) => itemID === itemIDToFind)
-  );
-
-  if (openBoxesContainingItem.length === 0) {
-    throw new Error(`Store ${storeCode} does not contain item ${itemIDToFind}`);
+  if (boxesWithItem.length === 0) {
+    throw new Error(`No boxes found containing item ${itemID}`);
   }
 
   let oldestBox: Box;
 
-  for (const box of openBoxesContainingItem) {
+  for (const box of boxesWithItem) {
     console.log(box);
     if (oldestBox == null || box.received < oldestBox.received) {
       oldestBox = box;
     }
   }
 
-  const boxItem = oldestBox.boxItems.find(({ itemID }) => itemID === itemIDToFind);
+  const boxItem = oldestBox.boxItems.find((el) => el.itemID === itemID);
   return boxItem.total;
+}
+
+export const getItemPriceFromStore = async (key, storeCode: string, itemIDToFind: string) => {
+  assertValidStoreCode(storeCode);
+  const boxes = await getBoxesForStore(key, storeCode);
+  return getItemPriceFromBoxes(boxes, itemIDToFind);
 };
 
 const getUniqueItemCounts = (boxes: Box[]) => {
@@ -103,7 +103,8 @@ const priceBreakdown = (boxes: Box[], itemID): PriceBreakdown => {
 };
 
 export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
-  const boxes =  await getBoxesForStore(key, storeCode);
+  const boxes = await getBoxesForStore(key, storeCode)
+  const openBoxes = boxes.filter(({ closed }) => closed == null);
 
   return Promise.all(
     getUniqueItemCounts(boxes)
@@ -112,7 +113,7 @@ export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
         count,
         id: itemID,
         price: {
-          total: await getPrice(key, storeCode, itemID),
+          total: getItemPriceFromBoxes(openBoxes, itemID),
           breakdown: priceBreakdown(boxes, itemID)
         }
       }))
