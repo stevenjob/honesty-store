@@ -17,6 +17,24 @@ const SignIn = () =>
 
 const itemRenderer = (item, index) => <StoreItem item={item} />;
 
+const SpecialEntry = ({ to, title, message }) => (
+  <div className="border-gray border-bottom bg-white mb2">
+    <Link to={to} className="btn regular flex items-center justify-between navy">
+      <div>
+        <h3>
+          {title}
+        </h3>
+        <p className="aqua">
+          {message}
+        </p>
+      </div>
+      <div className="" style={{ width: '5rem' }}>
+        <MiscSelection />
+      </div>
+    </Link>
+  </div>
+);
+
 const Store = ({ registered, storeCode, balance, items, surveyAvailable, performDestroySession }) =>
   <Chrome title={storeCode || 'Store'}
     left={!registered && <Home onClick={performDestroySession} />}
@@ -24,19 +42,11 @@ const Store = ({ registered, storeCode, balance, items, surveyAvailable, perform
     nav={registered}>
     {
       surveyAvailable &&
-      <div className="border-gray border-bottom bg-white mb2">
-        <Link to={`/survey`} className="btn regular flex items-center justify-between navy">
-          <div>
-            <h3>
-              Think we're missing something?
-            </h3>
-            <p className="aqua">Tap here to take a quick survey</p>
-          </div>
-          <div className="" style={{ width: '5rem' }}>
-            <MiscSelection />
-          </div>
-        </Link>
-      </div>
+      <SpecialEntry
+        to={`/survey`}
+        title="Think we're missing something?"
+        message="Tap here to take a quick survey"
+        />
     }
     <List data={items} itemRenderer={itemRenderer} />
   </Chrome>;
