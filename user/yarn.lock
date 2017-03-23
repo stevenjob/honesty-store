@@ -87,6 +87,20 @@ async@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/async/-/async-1.0.0.tgz#f8fc04ca3a13784ade9e1641af98578cfbd647a9"
 
+aws-sdk@^2.28.0:
+  version "2.31.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.31.0.tgz#e17480610ebddad57732918a4849f9e5f4ade44d"
+  dependencies:
+    buffer "4.9.1"
+    crypto-browserify "1.0.9"
+    jmespath "0.15.0"
+    querystring "0.2.0"
+    sax "1.1.5"
+    url "0.10.3"
+    uuid "3.0.0"
+    xml2js "0.4.15"
+    xmlbuilder "2.6.2"
+
 aws-sdk@^2.7.10:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.9.0.tgz#f258dcc295b1e7eca49d3624abfbf5f7d644172c"
@@ -254,6 +268,12 @@ create-error-class@^3.0.1:
   resolved "https://registry.yarnpkg.com/create-error-class/-/create-error-class-3.0.2.tgz#06be7abef947a3f14a30fd610671d401bca8b7b6"
   dependencies:
     capture-stack-trace "^1.0.0"
+
+cruft-ddb@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/cruft-ddb/-/cruft-ddb-1.0.0.tgz#d2b769cb4de2ac8eae0195fd7bc834b7d33c6b56"
+  dependencies:
+    aws-sdk "^2.28.0"
 
 crypto-browserify@1.0.9:
   version "1.0.9"

@@ -1,4 +1,5 @@
-import { config, DynamoDB, SES } from 'aws-sdk';
+import { config, SES } from 'aws-sdk';
+import cruftDDB from 'cruft-ddb';
 import bodyParser = require('body-parser');
 import express = require('express');
 import { v4 as uuid } from 'uuid';
@@ -15,10 +16,11 @@ import { signAccessToken, signRefreshToken, verifyAccessToken, verifyMagicLinkTo
 
 config.region = process.env.AWS_REGION;
 
+const cruft = cruftDDB<InternalUser>({ tableName: 'user' });
+
 interface InternalUser extends User {
-  created: number;
-  refreshToken: string;
   version: number;
+  refreshToken: string;
 }
 
 const createAssertValidUuid = (name) =>
@@ -58,9 +60,7 @@ const assertValidUserProfile = (userProfile: UserProfile) => {
 
 const externaliseUser = (user: InternalUser): User => {
   const {
-    created,
     refreshToken,
-    version,
     ...remainingProps
   } = user;
   return remainingProps;
@@ -76,25 +76,10 @@ const externaliseUserWithAccessTokenAndRefreshToken = (user: InternalUser): User
   refreshToken: signRefreshToken({ userId: user.id, refreshToken: user.refreshToken })
 });
 
-const getInternal = async ({ userId }): Promise<InternalUser> => {
+const getInternal = async ({ userId }) => {
   assertValidUserId(userId);
 
-  const response = await new DynamoDB.DocumentClient()
-    .get({
-      TableName: process.env.TABLE_NAME,
-      Key: {
-        id: userId
-      }
-    })
-    .promise();
-
-  const user = <InternalUser>response.Item;
-
-  if (user == null) {
-    throw new Error(`User not found ${userId}`);
-  }
-
-  return user;
+  return await cruft.read({ id: userId });
 };
 
 const get = async ({ userId }): Promise<User> => externaliseUser(await getInternal({ userId }));
@@ -137,74 +122,22 @@ const getByMagicLinkToken = async ({ key, magicLinkToken }): Promise<UserWithAcc
 const scanByEmailAddress = async ({ emailAddress }) => {
   assertValidEmailAddress(emailAddress);
 
-  const response = await new DynamoDB.DocumentClient()
-    .scan({
-      TableName: process.env.TABLE_NAME,
-      FilterExpression: 'emailAddress = :emailAddress',
-      ExpressionAttributeValues: {
-        ':emailAddress': emailAddress
-      }
-    })
-    .promise();
-
-  if (response.Items.length > 1) {
-    throw new Error('Multiple users found with the same emailAddress');
-  }
-
-  const user = <InternalUser>response.Items[0];
-
-  if (user == null) {
-    throw new CodedError('EmailNotFound', `User not found ${emailAddress}`);
-  }
-
-  return user;
+  return await cruft.find({ emailAddress });
 };
 
 const createUser = async ({ userId, userProfile }): Promise<UserWithAccessAndRefreshTokens> => {
   assertValidUserProfile(userProfile);
 
-  const user: InternalUser = {
+  const user: InternalUser = await cruft.create({
     id: userId,
-    created: Date.now(),
-    refreshToken: uuid(),
     version: 0,
+    refreshToken: uuid(),
     accountId: userProfile.accountId,
     defaultStoreId: userProfile.defaultStoreId,
     emailAddress: userProfile.emailAddress
-  };
-
-  await new DynamoDB.DocumentClient()
-    .put({
-      TableName: process.env.TABLE_NAME,
-      Item: user
-    })
-    .promise();
+  });
 
   return externaliseUserWithAccessTokenAndRefreshToken(user);
-};
-
-const update = async ({ user, originalVersion }: { user: InternalUser, originalVersion: number }) => {
-  await new DynamoDB.DocumentClient()
-    .update({
-      TableName: process.env.TABLE_NAME,
-      Key: {
-        id: user.id
-      },
-      ConditionExpression: 'version=:originalVersion',
-      UpdateExpression: 'set accountId=:accountId, defaultStoreId=:defaultStoreId, emailAddress=:emailAddress,\
-            refreshToken=:refreshToken, version=:updatedVersion',
-      ExpressionAttributeValues: {
-        ':originalVersion': originalVersion,
-        ':accountId': user.accountId,
-        ':defaultStoreId': user.defaultStoreId,
-        ':emailAddress': user.emailAddress,
-        ':refreshToken': user.refreshToken,
-        ':updatedVersion': user.version
-      }
-    })
-    .promise();
-
-  return user;
 };
 
 const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
@@ -222,8 +155,7 @@ const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
     ...originalUser,
     ...userProfile,
     id: userId,
-    refreshToken: originalUser.refreshToken,
-    version: originalUser.version + 1
+    refreshToken: originalUser.refreshToken
   };
 
   if (originalUser.emailAddress == null && updatedUser.emailAddress != null) {
@@ -231,7 +163,7 @@ const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
     updatedUser.accountId = account.id;
   }
 
-  return externaliseUser(await update({ user: updatedUser, originalVersion: originalUser.version }));
+  return externaliseUser(await cruft.update(updatedUser));
 };
 
 const sendMagicLinkEmail = async ({ key, emailAddress }) => {
@@ -276,7 +208,7 @@ const logoutUser = async (userId) => {
     refreshToken: uuid()
   };
 
-  await update({ user: loggedoutUser, originalVersion: originalUser.version });
+  await cruft.update(loggedoutUser);
 
   return {};
 };
@@ -320,7 +252,7 @@ router.get(
 router.post(
   '/',
   serviceAuthentication,
-  async (_key, {}, { userId, ...userProfile}) => await createUser({ userId, userProfile })
+  async (_key, { }, { userId, ...userProfile }) => await createUser({ userId, userProfile })
 );
 
 router.put(
@@ -332,7 +264,7 @@ router.put(
 router.post(
   '/magicLink/:emailAddress',
   serviceAuthentication,
-  async (key, { emailAddress }, {}) => {
+  async (key, { emailAddress }, { }) => {
     await sendMagicLinkEmail({ key, emailAddress });
     return {};
   }
@@ -341,7 +273,7 @@ router.post(
 router.post(
   '/logout/:userId',
   serviceAuthentication,
-  async (_key, { userId }, {}) => await logoutUser(userId)
+  async (_key, { userId }, { }) => await logoutUser(userId)
 );
 
 app.use(router);
