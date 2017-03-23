@@ -36,7 +36,7 @@ const assertValidQuantity = (quantity) => {
 export const purchase = async ({ key, itemID, userID, accountID, storeID, quantity }) => {
   assertValidQuantity(quantity);
 
-  const price = quantity * getPrice(storeID, itemID);
+  const price = quantity * await getPrice(key, storeID, itemID);
 
   const transaction: TransactionDetails = {
     type: 'purchase',
