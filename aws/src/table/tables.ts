@@ -71,17 +71,45 @@ const shipping = {
   shipped: 1485561600000,
   received: 1485734400000
 };
-const costs = {
-  shippingCost: 300,
-  warehousingCost: 50,
-  packagingCost: 50,
-  packingCost: 50,
-  serviceFee: 200,
-  creditCardFee: 5,
-  subtotal: 655,
+
+const walkersCosts = {
+  // wholesale cost: 15
+  shippingCost: 3,
+  warehousingCost: 2,
+  packagingCost: 3,
+  packingCost: 2,
+  serviceFee: 2,
+  creditCardFee: 3,
+  subtotal: 30,
   VAT: 0,
-  total: 655
-};
+  total: 30
+}
+
+const natureValleyCosts = {
+  // wholesale cost: 20
+  shippingCost: 5,
+  warehousingCost: 5,
+  packagingCost: 3,
+  packingCost: 2,
+  serviceFee: 5,
+  creditCardFee: 5,
+  subtotal: 45,
+  VAT: 6,
+  total: 51
+}
+
+const dietCokeCosts = {
+  // wholesale cost: 50
+  shippingCost: 10,
+  warehousingCost: 5,
+  packagingCost: 5,
+  packingCost: 10,
+  serviceFee: 10,
+  creditCardFee: 10,
+  subtotal: 100,
+  VAT: 30,
+  total: 130
+}
 
 const dummyBoxData: BoxData[] = [
   {
@@ -99,7 +127,7 @@ const dummyBoxData: BoxData[] = [
             count: 3
           }
         ],
-        ...costs
+        ...walkersCosts
       },
       {
         itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
@@ -111,7 +139,7 @@ const dummyBoxData: BoxData[] = [
             count: 7
           }
         ],
-        ...costs
+        ...natureValleyCosts
       },
       {
         itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
@@ -122,7 +150,7 @@ const dummyBoxData: BoxData[] = [
             count: 7
           }
         ],
-        ...costs
+        ...dietCokeCosts
       }
     ],
     count: 17,
@@ -142,7 +170,7 @@ const dummyBoxData: BoxData[] = [
             count: 4
           }
         ],
-        ...costs
+        ...walkersCosts
       },
       {
         itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
@@ -154,7 +182,7 @@ const dummyBoxData: BoxData[] = [
             count: 6
           }
         ],
-        ...costs
+        ...natureValleyCosts
       },
       {
         itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
@@ -166,7 +194,7 @@ const dummyBoxData: BoxData[] = [
             count: 8
           }
         ],
-        ...costs
+        ...dietCokeCosts
       }
     ],
     ...shipping,
@@ -187,7 +215,7 @@ const dummyBoxData: BoxData[] = [
             count: 10
           }
         ],
-        ...costs
+        ...walkersCosts
       },
       {
         itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
@@ -199,7 +227,7 @@ const dummyBoxData: BoxData[] = [
             count: 12
           }
         ],
-        ...costs
+        ...natureValleyCosts
       },
       {
         itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
@@ -211,7 +239,7 @@ const dummyBoxData: BoxData[] = [
             count: 15
           }
         ],
-        ...costs
+        ...dietCokeCosts
       }
     ],
     ...shipping,
