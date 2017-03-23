@@ -3,7 +3,7 @@ import bodyParser = require('body-parser');
 import express = require('express');
 
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
-import { assertValidAccountId, createAccount, InternalAccount, getAccountInternal, updateAccount } from './account';
+import { assertValidAccountId, createAccount, getAccountInternal, InternalAccount, updateAccount } from './account';
 import { AccountAndTransactions, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance, TransactionDetails } from './client';
 import { assertValidTransaction, createTransactionId, getTransactions, hashTransaction, putTransaction } from './transaction';
 
