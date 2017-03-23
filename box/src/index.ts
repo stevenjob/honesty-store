@@ -88,7 +88,7 @@ const getBox = async (boxId) => {
   return box;
 };
 
-const getBoxesInStore = async (storeId) => {
+const getBoxesForStore = async (storeId) => {
   const response = await new DynamoDB.DocumentClient()
     .scan({
       TableName: process.env.TABLE_NAME,
@@ -198,7 +198,7 @@ router.get(
 router.get(
   '/store/:storeId',
   serviceAuthentication,
-  async (_key, { storeId }) => getBoxesInStore(storeId)
+  async (_key, { storeId }) => getBoxesForStore(storeId)
 );
 
 router.post(
