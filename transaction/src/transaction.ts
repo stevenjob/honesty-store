@@ -28,15 +28,15 @@ export const assertValidTransaction = ({ type, amount, data }: Transaction) => {
   }
 };
 
-export const hashTransaction = (tx: TransactionBody & { next?: string }) => {
+export const hashTransaction = (transaction: TransactionBody & { next?: string }) => {
   const hash = createHash('sha256');
 
-  hash.update(stringify(tx));
+  hash.update(stringify(transaction));
 
   return hash.digest('hex');
 };
 
-export const createTransactionId = ({ accountId, txId }) => `${accountId}:${txId}`;
+export const createTransactionId = ({ accountId, transactionId }) => `${accountId}:${transactionId}`;
 
 const getTransaction = async (id) => {
   const response = await new DynamoDB.DocumentClient()
@@ -54,44 +54,44 @@ const getTransaction = async (id) => {
   return <DBTransaction>item;
 };
 
-const getTransactionChain = async ({ txId, limit = Infinity }): Promise<TransactionChain> => {
-  if (!txId) {
+const getTransactionChain = async ({ transactionId, limit = Infinity }): Promise<TransactionChain> => {
+  if (!transactionId) {
     return undefined;
   }
   if (limit <= 0) {
     return undefined;
   }
 
-  const tx = await getTransaction(txId);
+  const transaction = await getTransaction(transactionId);
 
   return {
-    ...tx,
-    next: await getTransactionChain({ txId: tx.next, limit: limit - 1 })
+    ...transaction,
+    next: await getTransactionChain({ transactionId: transaction.next, limit: limit - 1 })
   };
 };
 
-const txChainToArray = (chain) => {
-  const txs = [];
-  for (let tx = chain; tx; tx = tx.next) {
+const transactionChainToArray = (chain) => {
+  const transactions = [];
+  for (let transaction = chain; transaction; transaction = transaction.next) {
     // tslint:disable-next-line:no-unused-variable
-    const { next, ...externalisedTx } = tx;
-    txs.push(externalisedTx);
+    const { next, ...externalisedTransaction } = transaction;
+    transactions.push(externalisedTransaction);
   }
-  return txs;
+  return transactions;
 };
 
-export const getTransactions = async ({ txId, limit = Infinity }) => {
-  const chain = await getTransactionChain({ txId, limit });
-  return txChainToArray(chain);
+export const getTransactions = async ({ transactionId, limit = Infinity }) => {
+  const chain = await getTransactionChain({ transactionId, limit });
+  return transactionChainToArray(chain);
 };
 
-export const putTransaction = async (tx: DBTransaction) => {
-  assertValidTransaction(tx);
+export const putTransaction = async (transaction: DBTransaction) => {
+  assertValidTransaction(transaction);
 
   await new DynamoDB.DocumentClient()
     .put({
       TableName: process.env.TABLE_NAME,
-      Item: tx
+      Item: transaction
     })
     .promise();
 };

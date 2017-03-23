@@ -4,22 +4,22 @@ import express = require('express');
 
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { assertValidAccountId, createAccount, DBAccount, getAccountInternal, updateAccount } from './account';
-import { AccountAndTxs, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance, TransactionBody } from './client';
-import { assertValidTransaction, createTransactionId, getTransactions, hashTransaction, putTransaction } from './tx';
+import { AccountAndTransactions, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance, TransactionBody } from './client';
+import { assertValidTransaction, createTransactionId, getTransactions, hashTransaction, putTransaction } from './transaction';
 
-const CACHED_TX_COUNT = 10;
+const CACHED_TRANSACTION_COUNT = 10;
 
 config.region = process.env.AWS_REGION;
 
-const getAccountAndTxs = async ({ accountId }): Promise<AccountAndTxs> => {
+const getAccountAndTransactions = async ({ accountId }): Promise<AccountAndTransactions> => {
   assertValidAccountId(accountId);
 
   const internalAccount = await getAccountInternal({ accountId });
-  const { latestTx, cachedTransactions, ...externalAccount } = internalAccount;
+  const { transactionHead, cachedTransactions, ...externalAccount } = internalAccount;
 
   const transactions = await getTransactions({
-    txId: latestTx,
-    limit: CACHED_TX_COUNT - cachedTransactions.length
+    transactionId: transactionHead,
+    limit: CACHED_TRANSACTION_COUNT - cachedTransactions.length
   });
 
   return {
@@ -41,11 +41,11 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
     type,
     amount,
     data,
-    next: originalAccount.latestTx
+    next: originalAccount.transactionHead
   };
 
   const transaction = {
-    id: createTransactionId({ accountId, txId: hashTransaction(transactionDetails) }),
+    id: createTransactionId({ accountId, transactionId: hashTransaction(transactionDetails) }),
     ...transactionDetails
   };
 
@@ -65,8 +65,8 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
   const updatedAccount: DBAccount = {
     ...originalAccount,
     balance: updatedBalance,
-    latestTx: transaction.id,
-    cachedTransactions: [transaction, ...originalAccount.cachedTransactions.slice(0, CACHED_TX_COUNT - 1)]
+    latestTransaction: transaction.id,
+    cachedTransactions: [transaction, ...originalAccount.cachedTransactions.slice(0, CACHED_TRANSACTION_COUNT - 1)]
   };
 
   await updateAccount({ updatedAccount, originalAccount });
@@ -86,7 +86,7 @@ const router = serviceRouter('transaction', 1);
 router.get(
   '/:accountId',
   serviceAuthentication,
-  async (_key, { accountId }) => await getAccountAndTxs({ accountId })
+  async (_key, { accountId }) => await getAccountAndTransactions({ accountId })
 );
 
 router.post(
@@ -101,7 +101,7 @@ router.post(
   serviceAuthentication,
   async (_key, {}, { accountId }) => {
     const internalAccount = await createAccount({ accountId });
-    const { latestTx, cachedTransactions, ...externalAccount } = internalAccount;
+    const { transactionHead, cachedTransactions, ...externalAccount } = internalAccount;
     return externalAccount;
   }
 );
@@ -110,7 +110,7 @@ app.use(router);
 
 // send healthy response to load balancer probes
 app.get('/', (_req, res) => {
-  getAccountAndTxs({ accountId: TEST_DATA_EMPTY_ACCOUNT_ID })
+  getAccountAndTransactions({ accountId: TEST_DATA_EMPTY_ACCOUNT_ID })
     .then(() => {
       res.send(200);
     })
