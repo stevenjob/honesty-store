@@ -3,7 +3,7 @@ import isUUID = require('validator/lib/isUUID');
 
 import { Account, TransactionList } from './client';
 
-export type DBAccount = Account & { latestTx?: string } & { cachedTransactions: TransactionList; };
+export type DBAccount = Account & { transactionHead?: string } & { cachedTransactions: TransactionList; };
 
 export const assertValidAccountId = (accountId) => {
   if (accountId == null || !isUUID(accountId, 4)) {
@@ -74,7 +74,7 @@ export const updateAccount = async ({ updatedAccount, originalAccount }: { updat
       ,
       UpdateExpression:
         'set balance=:updatedBalance,' +
-        'latestTx=:updatedTx,' +
+        'transactionHead=:updatedTransaction,' +
         'version=:updatedVersion'
       ,
       ExpressionAttributeValues: {
@@ -82,7 +82,7 @@ export const updateAccount = async ({ updatedAccount, originalAccount }: { updat
         ':updatedVersion': updatedAccount.version,
         ':originalBalance': originalAccount.balance,
         ':updatedBalance': updatedAccount.balance,
-        ':updatedTx': updatedAccount.latestTx
+        ':updatedTransaction': updatedAccount.transactionHead
       }
     })
     .promise();

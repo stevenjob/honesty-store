@@ -287,14 +287,14 @@ const dirToTable = {
         id: '0b0117da-21b5-4a5e-9c18-7ad20691dd24',
         created: 1487667277000,
         balance: 100,
-        latestTx: 'c2e1ba91-ba1d-497b-b2a2-4f7ed1d91685',
+        transactionHead: 'c2e1ba91-ba1d-497b-b2a2-4f7ed1d91685',
         cachedTransactions: []
       },
       {
         id: '08ccf030-537a-4c81-9789-70476dad152a',
         created: 1487667277000,
         balance: 123,
-        latestTx: 'bcbf62c2-defd-4049-b3bb-4cfb87b2c15d',
+        transactionHead: 'bcbf62c2-defd-4049-b3bb-4cfb87b2c15d',
         cachedTransactions: [
           {
             id: 'bcbf62c2-defd-4049-b3bb-4cfb87b2c15d',
