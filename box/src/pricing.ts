@@ -69,7 +69,11 @@ const roundItemCosts = (costs: CombinedCosts): CombinedCosts => {
   };
 };
 
-const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedOverheads: FixedBoxItemOverheads): BoxItem => {
+const getPricedBoxItem = (
+  boxItemWithBatchRef: BoxItemWithBatchReference,
+  fixedOverheads: FixedBoxItemOverheads,
+  donationRate: number
+): BoxItem => {
   const { batches } = boxItemWithBatchRef;
 
   const { shippingCost, warehousingCost, packagingCost, packingCost, serviceFee } = fixedOverheads;
@@ -78,15 +82,19 @@ const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedO
     + serviceFee;
 
   const rate = getVATRate(batches[0].id);
-  const total = subtotal / (1 - creditCardFeeRate - rate);
-  const VAT = total * rate;
-  const creditCardFee = total * creditCardFeeRate;
+  const totalExclDonation = subtotal / (1 - creditCardFeeRate - rate);
+  const VAT = totalExclDonation * rate;
+  const creditCardFee = totalExclDonation * creditCardFeeRate;
+
+  const donation = totalExclDonation * donationRate;
+  const total = totalExclDonation + donation;
 
   const variableCosts: VariableBoxItemOverheads = {
     wholesaleCost,
     subtotal,
     creditCardFee,
     VAT,
+    donation,
     total
   };
 
@@ -101,7 +109,7 @@ const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedO
 
 export default (storeId: string, boxSubmission: BoxSubmission): Box => {
   const { boxItems, ...rest } = boxSubmission;
-  const { shippingCost } = rest;
+  const { shippingCost, donationRate } = rest;
 
   const totalItems = sumBoxItems(boxItems);
   const expectedLossQuantity = Math.ceil(totalItems * expectedLossPerBox);
@@ -120,7 +128,7 @@ export default (storeId: string, boxSubmission: BoxSubmission): Box => {
     serviceFee: convertBoxCostToPerItem(feePerBox) + convertBoxCostToPerItem(shrinkagePerBox)
   };
 
-  const pricedBoxItems = boxItems.map((el) => getPricedBoxItem(el, fixedOverheads));
+  const pricedBoxItems = boxItems.map((el) => getPricedBoxItem(el, fixedOverheads, donationRate));
 
   return {
     id: uuid(),

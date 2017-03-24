@@ -10,6 +10,7 @@ const storeId = 'test';
 
 const boxSubmission: BoxSubmission = {
   shippingCost: 300,
+  donationRate: 0.1,
   boxItems: [
     {
       itemID: 'item-a',
@@ -65,6 +66,7 @@ describe('Box Submission', () => {
       creditCardFee,
       subtotal,
       VAT,
+      donation,
       total
     } = boxItems[0];
 
@@ -78,7 +80,8 @@ describe('Box Submission', () => {
     expect(subtotal).to.equal(159, 'Incorrect subtotal');
     expect(creditCardFee).to.equal(12, 'Incorrect credit card fee');
     expect(VAT).to.equal(43, 'Incorrect item VAT');
-    expect(total).to.equal(213, 'Incorrect item price');
+    expect(donation).to.equal(21, 'Incorrect donation');
+    expect(total).to.equal(234, 'Incorrect item price');
   });
 
   it('should calculate total items in box', () => {
