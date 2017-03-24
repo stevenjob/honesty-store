@@ -17,13 +17,13 @@ export interface StoreItem {
 interface PriceBreakdown {
   creditCardFee: number;
   VAT: number;
-
   shippingCost: number;
   warehousingCost: number;
   packagingCost: number;
   packingCost: number;
   serviceFee: number;
   wholesaleCost: number;
+  donation: number;
 }
 
 export const storeList = ['sl-ncl', 'sl-edn', 'sl-brs', 'sl-ldn', 'dev-test', 'dev-test-2'];
@@ -94,7 +94,8 @@ const getPriceBreakdown = (boxItem: BoxItem): PriceBreakdown => {
     packagingCost,
     packingCost,
     serviceFee,
-    wholesaleCost
+    wholesaleCost,
+    donation
   } = boxItem;
 
   return {
@@ -105,7 +106,8 @@ const getPriceBreakdown = (boxItem: BoxItem): PriceBreakdown => {
     packagingCost,
     packingCost,
     serviceFee,
-    wholesaleCost
+    wholesaleCost,
+    donation
   };
 };
 
