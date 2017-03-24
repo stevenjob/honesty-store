@@ -8,7 +8,7 @@ export default (router) => {
     async (
       key,
       _params,
-      { item: { description, total, quantity, location, expiry } },
+      { item: { description, totalPrice, quantity, location, expiry } },
       { user }
     ) => {
       const message = 'Marketplace request';
@@ -24,7 +24,7 @@ export default (router) => {
           },
           {
             title: 'Item-Total',
-            value: total
+            value: totalPrice
           },
           {
             title: 'Item-Quantity',

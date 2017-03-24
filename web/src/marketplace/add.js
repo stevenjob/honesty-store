@@ -11,7 +11,7 @@ class MarketplaceAdd extends React.Component {
 
     this.state = {
       description: '',
-      price: '',
+      totalPrice: '',
       quantity: '',
       location: '',
       expiry: '',
@@ -27,7 +27,7 @@ class MarketplaceAdd extends React.Component {
 
   handlePriceChange(event) {
     this.setState({
-      price: event.target.value
+      totalPrice: event.target.value
     });;
   }
 
@@ -55,7 +55,7 @@ class MarketplaceAdd extends React.Component {
     const { performMarketplace } = this.props;
     const {
       description,
-      price,
+      totalPrice,
       quantity,
       location,
       expiry
@@ -63,7 +63,7 @@ class MarketplaceAdd extends React.Component {
 
     const validity = (
       description.length &&
-      price.length &&
+      totalPrice.length &&
       quantity.length &&
       location.length &&
       expiry.length
@@ -74,7 +74,7 @@ class MarketplaceAdd extends React.Component {
     if (validity === 'valid') {
       performMarketplace({
         description,
-        price,
+        totalPrice,
         quantity,
         location,
         expiry

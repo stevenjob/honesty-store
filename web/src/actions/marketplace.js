@@ -26,7 +26,7 @@ const marketplaceFailure = (error) => {
 
 export const performMarketplace = ({
   description,
-  price,
+  totalPrice,
   quantity,
   location,
   expiry
@@ -39,7 +39,7 @@ export const performMarketplace = ({
       body: {
         item: {
           description,
-          price,
+          totalPrice,
           quantity,
           location,
           expiry
