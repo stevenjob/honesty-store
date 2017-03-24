@@ -23,7 +23,7 @@ export default (router) => {
             value: description
           },
           {
-            title: 'Item-Total',
+            title: 'Item-Total (£)',
             value: totalPrice
           },
           {
