@@ -10,6 +10,8 @@
     "ci": "npm test"
   },
   "dependencies": {
+    "cruft-ddb": "^1.0.3",
+    "csv": "^1.1.1",
     "jsonwebtoken": "^7.2.1",
     "node-fetch": "^1.6.3",
     "uuid": "^3.0.1",
