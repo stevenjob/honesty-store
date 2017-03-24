@@ -4,12 +4,6 @@ export interface BatchReference {
   id: string;
   count: number;
 }
-
-interface Counted {
-  count: number;
-  depleted?: number;
-}
-
 export interface BoxItemWithBatchReference {
   itemID: string;
   batches: BatchReference[];
@@ -26,24 +20,27 @@ export interface VariableBoxItemOverheads {
   wholesaleCost: number;
   subtotal: number;
   VAT: number;
+  donation: number;
   total: number;
 }
-interface BoxShippingDetails {
+interface SharedBoxDetails {
   shippingCost: number;
   packed?: number;
   shipped?: number;
   received?: number;
   closed?: number;
+  donationRate: number;
 }
 
-export type BoxItem = BoxItemWithBatchReference & Counted & FixedBoxItemOverheads & VariableBoxItemOverheads;
-
-export type BoxSubmission = BoxShippingDetails & {
+export type BoxItem = BoxItemWithBatchReference & FixedBoxItemOverheads & VariableBoxItemOverheads & {
+  count: number;
+  depleted?: number;
+};
+export type BoxSubmission = SharedBoxDetails & {
   boxItems: BoxItemWithBatchReference[];
 };
-
 // this is duplicated in aws/src/table/table.ts
-export type Box = BoxShippingDetails & {
+export type Box = SharedBoxDetails & {
   boxItems: BoxItem[];
   count: number;
   storeId: string;

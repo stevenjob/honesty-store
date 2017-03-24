@@ -1,4 +1,5 @@
 import { DynamoDB } from 'aws-sdk';
+
 interface TemplateArgument {
   readCapacityUnits: number;
   writeCapacityUnits: number;
@@ -32,6 +33,7 @@ interface BoxData { // this is duplicated in box/src/client/index.ts
     creditCardFee: number;
     subtotal: number;
     VAT: number;
+    donation: number;
     total: number;
   }[];
   shippingCost: number;
@@ -40,6 +42,7 @@ interface BoxData { // this is duplicated in box/src/client/index.ts
   received?: number;
   closed?: number;
   count: number;
+  donationRate: number;
 }
 
 const template = ({
@@ -80,9 +83,10 @@ const walkersCosts = {
   packagingCost: 3,
   packingCost: 2,
   serviceFee: 2,
-  creditCardFee: 3,
-  subtotal: 30,
+  creditCardFee: 2,
+  subtotal: 29,
   VAT: 0,
+  donation: 1,
   total: 30
 };
 
@@ -95,7 +99,8 @@ const natureValleyCosts = {
   serviceFee: 5,
   creditCardFee: 5,
   subtotal: 45,
-  VAT: 6,
+  VAT: 5,
+  donation: 1,
   total: 51
 };
 
@@ -109,6 +114,7 @@ const dietCokeCosts = {
   creditCardFee: 10,
   subtotal: 100,
   VAT: 30,
+  donation: 10,
   total: 130
 };
 
@@ -117,6 +123,7 @@ const dummyBoxData: BoxData[] = [
     id: '06439c6c-57c9-4a17-b218-2018ea8dae55',
     storeId: 'dev-test',
     version: 0,
+    donationRate: 0.1,
     boxItems: [
       {
         itemID: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
@@ -161,6 +168,7 @@ const dummyBoxData: BoxData[] = [
     id: 'a7a863c6-9974-475d-96e9-4b4078a2e1c2',
     storeId: 'dev-test',
     version: 0,
+    donationRate: 0.1,
     boxItems: [
       {
         itemID: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
@@ -205,6 +213,7 @@ const dummyBoxData: BoxData[] = [
     id: '5b3b4683-918e-49b1-bc68-9c33a5bbdf33',
     storeId: 'dev-test',
     version: 0,
+    donationRate: 0.1,
     boxItems: [
       {
         itemID: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
