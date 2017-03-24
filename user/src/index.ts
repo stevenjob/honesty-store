@@ -124,7 +124,14 @@ const getByMagicLinkToken = async ({ key, magicLinkToken }): Promise<UserWithAcc
 const scanByEmailAddress = async ({ emailAddress }) => {
   assertValidEmailAddress(emailAddress);
 
-  return await cruft.find({ emailAddress });
+  try {
+    return await cruft.find({ emailAddress });
+  } catch (e) {
+    if (e.message !== 'No value found') {
+      throw e;
+    }
+    throw new CodedError('EmailNotFound', `User not found ${emailAddress}`);
+  }
 };
 
 const createUser = async ({ userId, userProfile }): Promise<UserWithAccessAndRefreshTokens> => {
