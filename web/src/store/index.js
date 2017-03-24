@@ -48,7 +48,6 @@ const Store = ({ registered, storeCode, balance, items, surveyAvailable, perform
         message="Tap here to take a quick survey"
         />
     }
-    <List data={items} itemRenderer={itemRenderer} />
     {
       <SpecialEntry
         to={`/marketplace`}
@@ -56,6 +55,7 @@ const Store = ({ registered, storeCode, balance, items, surveyAvailable, perform
         message="Tap here for our marketplace"
         />
     }
+    <List data={items} itemRenderer={itemRenderer} />
   </Chrome>;
 
 const storeOrdering = (items) => {
