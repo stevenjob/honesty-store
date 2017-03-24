@@ -91,82 +91,70 @@ class MarketplaceAdd extends React.Component {
           <p>Please fill in the details for your marketplace items</p>
           {
             validity === 'invalid' &&
-              <p className="red">Please fill out every field</p>
+            <p className="red">Please fill out every field</p>
           }
-          <table><tbody>
-            <tr>
-              <td>Description</td>
-              <td>
-                <textarea
-                  name="description"
-                  placeholder="Diet coke 330ml can"
-                  onChange={(e) => this.handleDescriptionChange(e)}
-                  value={this.state.description}
-                  className="textarea input"
-                  noValidate
-                  rows="1"
-                  />
-              </td>
-            </tr>
-            <tr>
-              <td>Total Price Paid (£)</td>
-              <td>
-                <input
-                  name="price"
-                  placeholder="3"
-                  onChange={(e) => this.handlePriceChange(e)}
-                  value={this.state.price}
-                  className="input"
-                  noValidate
-                  type="number"
-                  min="1"
-                  step="any"
-                  />
-              </td>
-            </tr>
-            <tr>
-              <td>Item Quantity</td>
-              <td>
-                <input
-                  name="quantity"
-                  placeholder="10"
-                  onChange={(e) => this.handleQuantityChange(e)}
-                  value={this.state.quantity}
-                  className="input"
-                  noValidate
-                  type="number"
-                  min="1"
-                  step="1"
-                  />
-              </td>
-            </tr>
-            <tr>
-              <td>Location</td>
-              <td>
-                <input
-                  name="location"
-                  placeholder="Fridge"
-                  onChange={(e) => this.handleLocationChange(e)}
-                  value={this.state.location}
-                  className="input"
-                  noValidate
-                  />
-              </td>
-            </tr>
-            <tr>
-              <td>Expiry Date</td>
-              <td>
-                <input
-                  name="expiry"
-                  onChange={(e) => this.handleExpiryChange(e)}
-                  value={this.state.expiry}
-                  className="input"
-                  noValidate
-                  type="date"
-                  />
-              </td>
-            </tr>
-          </tbody></table>
+          <p>
+            <label htmlFor="description">Description</label>
+            <textarea
+              id="description"
+              placeholder="Diet coke 330ml can"
+              onChange={(e) => this.handleDescriptionChange(e)}
+              value={this.state.description}
+              className="textarea input"
+              noValidate
+              rows="1"
+              />
+          </p>
+          <p>
+            <label htmlFor="price">Total Price Paid (£)</label>
+            <input
+              id="price"
+              placeholder="3"
+              onChange={(e) => this.handlePriceChange(e)}
+              value={this.state.price}
+              className="input"
+              noValidate
+              type="number"
+              min="1"
+              step="any"
+              />
+          </p>
+          <p>
+            <label htmlFor="quantity">Item Quantity</label>
+            <input
+              id="quantity"
+              placeholder="10"
+              onChange={(e) => this.handleQuantityChange(e)}
+              value={this.state.quantity}
+              className="input"
+              noValidate
+              type="number"
+              min="1"
+              step="1"
+              />
+          </p>
+          <p>
+            <label htmlFor="location">Location</label>
+            <input
+              id="location"
+              placeholder="Fridge"
+              onChange={(e) => this.handleLocationChange(e)}
+              value={this.state.location}
+              className="input"
+              noValidate
+              />
+          </p>
+          <p>
+            <label htmlFor="expiry">Expiry Date</label>
+            <input
+              id="expiry"
+              onChange={(e) => this.handleExpiryChange(e)}
+              value={this.state.expiry}
+              className="input"
+              noValidate
+              type="date"
+              />
+          </p>
           <Link className="btn btn-primary" onClick={(e) => this.handleSubmit(e)}>
             Submit marketplace item
           </Link>
