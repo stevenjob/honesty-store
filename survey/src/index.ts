@@ -79,12 +79,12 @@ const scanForSurveyResponsess = async (ids) => {
 
 const permitSurveyForUser = (userId) => {
   const allowed = [
-    'f9c8b541-0a30-4adc-8e0d-887e6db9f301', // price.c@gmail.com
-    '77fcd8c1-63df-48fa-900a-0c0bb57687b3', // price.c+100@gmail.com
-    'c71733c4-dc05-42f9-848e-fb53bf08a2d7', // sam.burnstone@gmail.com
-    'a8960624-7558-468c-9791-984ca0c620ba', // robpilling@gmail.com
-    '42dfedaa-ca40-4c86-8fa6-fabe71ac209e', // gascott@gmail.com
-    'defabb87-e084-4334-91da-18778e3f2e78'  // colin.eberhardt@gmail.com
+    //'f9c8b541-0a30-4adc-8e0d-887e6db9f301', // price.c@gmail.com
+    //'77fcd8c1-63df-48fa-900a-0c0bb57687b3', // price.c+100@gmail.com
+    //'c71733c4-dc05-42f9-848e-fb53bf08a2d7', // sam.burnstone@gmail.com
+    //'a8960624-7558-468c-9791-984ca0c620ba', // robpilling@gmail.com
+    //'42dfedaa-ca40-4c86-8fa6-fabe71ac209e', // gascott@gmail.com
+    //'defabb87-e084-4334-91da-18778e3f2e78'  // colin.eberhardt@gmail.com
   ];
 
   return allowed.indexOf(userId) !== -1;
