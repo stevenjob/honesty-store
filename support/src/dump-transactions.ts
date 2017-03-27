@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
 import cruftDDB from 'cruft-ddb';
+import { stringify } from 'csv';
+
+import { getItem } from '../../api/src/services/item';
 import { Account } from '../../transaction/src/client/index';
 import { User } from '../../user/src/client/index';
-import { getItem } from '../../api/src/services/item';
-import { stringify } from 'csv';
 
 const cruftAccount = cruftDDB<Account>({ tableName: 'honesty-store-transaction' });
 const cruftUser = cruftDDB<User>({ tableName: 'honesty-store-user' });
@@ -26,9 +27,9 @@ const main = async (args) => {
   const registeredUsers = (await cruftUser.__findAll({}))
     .filter(user => user.emailAddress != null);
 
-  const transactions = (await cruftAccount.__findAll({}))
+  const allTransactions = (await cruftAccount.__findAll({}))
     .map((account) => {
-      const user = registeredUsers.find((user) => user.accountId === account.id);
+      const user = registeredUsers.find(({ accountId }) => accountId === account.id);
       if (user == null) {
         return [];
       }
@@ -48,18 +49,18 @@ const main = async (args) => {
           ...itemDetails
         };
       }
-      )
+      );
     })
     .reduce((a, b) => a.concat(b))
     .map((item) => {
-      const excelDate = (timestamp) => (timestamp + 2209161600000) / (24 * 60 * 60 * 1000);
+      const excelDate = (timestamp) => (Number(timestamp) + 2209161600000) / (24 * 60 * 60 * 1000);
       item.timestamp = excelDate(item.timestamp);
-      item.created = excelDate(item.timestamp)
+      item.created = excelDate(item.timestamp);
       return item;
     });
 
   // tslint:disable-next-line:no-console
-  stringify(transactions, { header: true })
+  stringify(allTransactions, { header: true })
     .pipe(process.stdout);
 };
 
