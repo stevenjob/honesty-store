@@ -6,8 +6,9 @@ import calculatePricing, { getAverageItemCost, getItemCost } from './pricing';
 
 const precision = 0.5;
 
+const storeId = 'test';
+
 const boxSubmission: BoxSubmission = {
-  storeId: 'test',
   shippingCost: 300,
   boxItems: [
     {
@@ -52,7 +53,7 @@ describe('Wholesale item cost', () => {
 
 describe('Box Submission', () => {
   it('should calculate box item costs', () => {
-    const { boxItems } = calculatePricing(boxSubmission);
+    const { boxItems } = calculatePricing(storeId, boxSubmission);
 
     const {
       wholesaleCost,
@@ -81,15 +82,20 @@ describe('Box Submission', () => {
   });
 
   it('should calculate total items in box', () => {
-    const { count } = calculatePricing(boxSubmission);
+    const { count } = calculatePricing(storeId, boxSubmission);
     expect(count).to.equal(8);
   });
 
   it('should calculate total of individual box items', () => {
-    const { boxItems } = calculatePricing(boxSubmission);
+    const { boxItems } = calculatePricing(storeId, boxSubmission);
     const { count: boxItem0Count } = boxItems[0];
     const { count: boxItem1Count } = boxItems[1];
     expect(boxItem0Count).to.equal(3);
     expect(boxItem1Count).to.equal(5);
+  });
+
+  it('should assign storeId to box', () => {
+    const { storeId: boxStoreId } = calculatePricing(storeId, boxSubmission);
+    expect(boxStoreId).to.equal(storeId);
   });
 });

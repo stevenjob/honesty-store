@@ -63,7 +63,7 @@ const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedO
   };
 };
 
-export default (boxSubmission: BoxSubmission): Box => {
+export default (storeId: string, boxSubmission: BoxSubmission): Box => {
   const { boxItems, ...rest } = boxSubmission;
   const { shippingCost } = rest;
 
@@ -88,6 +88,7 @@ export default (boxSubmission: BoxSubmission): Box => {
 
   return {
     id: uuid(),
+    storeId,
     count: totalItems,
     version: 0,
     boxItems: pricedBoxItems,

@@ -7,9 +7,16 @@ import { info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { getBatch } from './batch';
 import { Box } from './client';
+import { storeList } from '../../api/src/services/store';
 import calculatePricing from './pricing';
 
 config.region = process.env.AWS_REGION;
+
+const assertValidStoreId = (storeId) => {
+  if (!storeList.some((el) => el === storeId)) {
+    throw new Error(`No store found with id '${storeId}'`);
+  }
+};
 
 const assertValidBoxId = (boxId) => {
   if (boxId == null || !isUUID(boxId, 4)) {
@@ -158,12 +165,13 @@ const flagOutOfStock = async ({ key, boxId, itemId }) => {
   return {};
 };
 
-const createBox = async ({ key, boxSubmission, dryRun }): Promise<Box> => {
-  info(key, `New box submission received`, { boxSubmission });
+const createBox = async ({ key, storeId, boxSubmission, dryRun }): Promise<Box> => {
+  info(key, `New box submission received for store ${storeId}`, { boxSubmission });
 
+  assertValidStoreId(storeId);
   assertValidBoxSubmission(boxSubmission);
 
-  const box = calculatePricing(boxSubmission);
+  const box = calculatePricing(storeId, boxSubmission);
 
   if (!dryRun) {
     await put(box);
@@ -202,16 +210,16 @@ router.get(
 );
 
 router.post(
-  '/out-of-stock/:boxId/:itemId',
+  '/store/:storeId',
   serviceAuthentication,
-  async (key, { boxId, itemId }) => flagOutOfStock({ key, boxId, itemId })
+  async (key, { storeId }, boxSubmission, { query: { dryRun } }) =>
+    createBox({ key, storeId, boxSubmission, dryRun: dryRun !== 'false' })
 );
 
 router.post(
-  '/',
+  '/out-of-stock/:boxId/:itemId',
   serviceAuthentication,
-  async (key, {}, boxSubmission, { query: { dryRun } }) =>
-    createBox({ key, boxSubmission, dryRun: dryRun !== 'false' })
+  async (key, { boxId, itemId }) => flagOutOfStock({ key, boxId, itemId })
 );
 
 app.use(router);
