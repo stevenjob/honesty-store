@@ -310,6 +310,94 @@ const items: (Item & { id: string })[] = [
     unitPlural: 'packs',
     genericName: 'protein bar',
     genericNamePlural: 'protein bars'
+  },
+  {
+    id: 'd8c73ee1-a9b1-4090-a6ad-ee4d778a852a',
+    name: 'getbuzzing Flapjack',
+    qualifier: 'Mixed Berries',
+    image: 'misc-big-bar.svg',
+    weight: 62,
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'flapjack',
+    genericNamePlural: 'flapjacks'
+  },
+  {
+    id: '96262a5f-8646-4644-aacc-36a3c5e4443d',
+    name: 'getbuzzing Flapjack',
+    qualifier: 'Mint Chocolate',
+    image: 'misc-big-bar.svg',
+    weight: 55,
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'protein bar',
+    genericNamePlural: 'protein bars'
+  },
+  {
+    id: '249409b8-c7cc-4e2c-9a8b-e960c6b50029',
+    name: 'Nakd',
+    qualifier: 'Berry Delight',
+    image: 'nakd-apple-crunch.svg',
+    weight: 30,
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'cereal bar',
+    genericNamePlural: 'cereal bars'
+  },
+  {
+    id: 'fac94d27-732e-4f2f-8f03-75c193093dbd',
+    name: 'Nakd',
+    qualifier: 'Cashew Cookie',
+    image: 'nakd-apple-crunch.svg',
+    weight: 30,
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'cereal bar',
+    genericNamePlural: 'cereal bars'
+  },
+  {
+    id: '8bd6f737-6f64-4c18-a8b8-15c7eb1f4a77',
+    name: 'Nakd',
+    qualifier: 'Cocoa Orange',
+    image: 'nakd-apple-crunch.svg',
+    weight: 30,
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'cereal bar',
+    genericNamePlural: 'cereal bars'
+  },
+  {
+    id: '8268e7f5-0b53-48e7-b288-2251cd375e97',
+    name: 'Trek',
+    qualifier: 'Peanut Power',
+    image: 'trek-banana-bread-flapjack.svg',
+    weight: 50,
+    unit: 'pack',
+    unitPlural: 'packs',
+    genericName: 'protein bar',
+    genericNamePlural: 'protein bars'
+  },
+  {
+    id: 'a97f26bd-b03e-4cdb-8105-1353b00c728a',
+    name: 'Nature Valley',
+    qualifier: 'Crunchy Canadian Maple Syrup',
+    image: 'nature-valley-oats-n-honey.svg',
+    weight: 42,
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'cereal bar',
+    genericNamePlural: 'cereal bars'
+  },
+  {
+    id: '63e7f62e-e2a7-45e1-8e45-17cb42f08f80',
+    name: 'Nature Valley',
+    qualifier: 'Crunchy Oats & Dark Chocolate',
+    image: 'nature-valley-oats-n-honey.svg',
+    weight: 42,
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'cereal bar',
+    genericNamePlural: 'cereal bars'
   }
 ];
 
