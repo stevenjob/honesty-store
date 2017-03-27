@@ -52,8 +52,9 @@ const main = async (args) => {
     })
     .reduce((a, b) => a.concat(b))
     .map((item) => {
-      item.timestamp = (item.timestamp/86400000)+25569;
-      item.created = (item.timestamp/86400000)+25569
+      const excelDate = (timestamp) => (timestamp + 2209161600000) / (24 * 60 * 60 * 1000);
+      item.timestamp = excelDate(item.timestamp);
+      item.created = excelDate(item.timestamp)
       return item;
     });
 
