@@ -97,7 +97,7 @@ class MarketplaceAdd extends React.Component {
             <label htmlFor="description">Description</label>
             <textarea
               id="description"
-              placeholder="Diet coke 330ml can"
+              placeholder="Diet Coke 330ml can"
               onChange={(e) => this.handleDescriptionChange(e)}
               value={this.state.description}
               className="textarea input"
