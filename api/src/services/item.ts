@@ -123,6 +123,18 @@ const items: (Item & { id: string })[] = [
     genericNamePlural: 'drinks'
   },
   {
+    id: 'e615de4e-ce10-451b-80ad-9717662a904a',
+    name: 'Pepsi Max',
+    location: 'Fridge',
+    image: 'misc-can.svg',
+    weight: 400,
+    notes: 'Multipack not for individual resale. NCL trial only, Simon Watson sourcing',
+    unit: 'can',
+    unitPlural: 'cans',
+    genericName: 'drink',
+    genericNamePlural: 'drinks'
+  },
+  {
     id: '606e12d4-6367-4fc3-aa7a-92ee17ccac2c',
     name: 'Freddo',
     image: 'freddo.svg',
