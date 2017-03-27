@@ -35,7 +35,7 @@ const SpecialEntry = ({ to, title, message }) => (
   </div>
 );
 
-const Store = ({ registered, storeCode, balance, items, surveyAvailable, performDestroySession }) =>
+const Store = ({ registered, showMarketplace, storeCode, balance, items, surveyAvailable, performDestroySession }) =>
   <Chrome title={storeCode || 'Store'}
     left={!registered && <Home onClick={performDestroySession} />}
     right={registered ? <Balance balance={balance} /> : <SignIn />}
@@ -50,6 +50,7 @@ const Store = ({ registered, storeCode, balance, items, surveyAvailable, perform
     }
     {
       registered &&
+      showMarketplace &&
       <SpecialEntry
         to={`/marketplace`}
         title="Want to add your own items?"
@@ -71,6 +72,7 @@ const storeOrdering = (items) => {
 
 const mapStateToProps = ({ user, store: { code, items }, survey }) => ({
   registered: isRegisteredUser(user),
+  showMarketplace: user.features.marketplace,
   storeCode: code,
   balance: user.balance || 0,
   items: storeOrdering(items),
