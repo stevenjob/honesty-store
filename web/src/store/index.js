@@ -49,6 +49,7 @@ const Store = ({ registered, storeCode, balance, items, surveyAvailable, perform
         />
     }
     {
+      registered &&
       <SpecialEntry
         to={`/marketplace`}
         title="Want to add your own items?"
