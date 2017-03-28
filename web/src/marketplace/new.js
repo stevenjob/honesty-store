@@ -7,7 +7,7 @@ import Full from '../layout/full';
 
 const ourFees = 0.1;
 
-class MarketplaceAdd extends React.Component {
+class MarketplaceItemAdd extends React.Component {
   constructor(props) {
     super(props);
 
@@ -176,4 +176,4 @@ class MarketplaceAdd extends React.Component {
   }
 };
 
-export default connect(() => ({}), { performMarketplace })(MarketplaceAdd);
+export default connect(() => ({}), { performMarketplace })(MarketplaceItemAdd);
