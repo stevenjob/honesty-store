@@ -69,7 +69,7 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
   const updatedAccount: InternalAccount = {
     ...originalAccount,
     balance: updatedBalance,
-    latestTransaction: transaction.id,
+    transactionHead: transaction.id,
     cachedTransactions: [transaction, ...originalAccount.cachedTransactions.slice(0, ACCOUNT_TRANSACTION_CACHE_SIZE - 1)]
   };
 
