@@ -54,9 +54,10 @@ const getOldestBoxItem = (boxes: Box[], itemID: string): BoxItem => {
   const inStockBoxItems = extractBoxItems(boxesByDateReceived, itemID, (({ depleted }) => depleted == null ));
 
   if (inStockBoxItems.length === 0) {
-    // Item has been marked as depleted in all open boxes, so pick the most recent one
-    const boxesContainingItem = extractBoxItems(boxesByDateReceived, itemID);
-    return boxesContainingItem[boxesContainingItem.length - 1];
+    const itemsByDateMarkedDepleted = extractBoxItems(boxesByDateReceived, itemID)
+      .sort((a, b) => b.depleted - a.depleted);
+
+    return itemsByDateMarkedDepleted[0];
   }
 
   return inStockBoxItems[0];
