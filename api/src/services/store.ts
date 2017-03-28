@@ -62,15 +62,11 @@ const getOldestBoxItem = (boxes: Box[], itemID: string): BoxItem => {
   return inStockBoxItems[0];
 };
 
-const getItemPriceFromBoxes = (boxes: Box[], itemID: string) => {
-  const { total } = getOldestBoxItem(boxes, itemID);
-  return total;
-};
-
-export const getItemPriceFromStore = async (key, storeCode: string, itemIDToFind: string) => {
+export const getItemPriceFromStore = async (key, storeCode: string, itemID: string) => {
   assertValidStoreCode(storeCode);
   const boxes = await getBoxesForStore(key, storeCode);
-  return getItemPriceFromBoxes(boxes, itemIDToFind);
+  const { total } = getOldestBoxItem(boxes, itemID);
+  return total;
 };
 
 const getUniqueItemCounts = (boxes: Box[]) => {
@@ -85,7 +81,7 @@ const getUniqueItemCounts = (boxes: Box[]) => {
     .map(([itemID, count]) => ({ itemID, count }));
 };
 
-const priceBreakdown = (boxes: Box[], itemID): PriceBreakdown => {
+const getPriceBreakdown = (boxItem: BoxItem): PriceBreakdown => {
   const {
     creditCardFee,
     VAT,
@@ -94,7 +90,7 @@ const priceBreakdown = (boxes: Box[], itemID): PriceBreakdown => {
     packagingCost,
     packingCost,
     serviceFee
-  } = getOldestBoxItem(boxes, itemID);
+  } = boxItem;
 
   return {
     creditCardFee,
@@ -111,17 +107,22 @@ export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
   const openBoxes = (await getBoxesForStore(key, storeCode))
     .filter(({ closed }) => closed == null);
 
-  // TODO: Move 'getOldestBoxItem' call to here to avoid multiple calls
   return Promise.all(
     getUniqueItemCounts(openBoxes)
-      .map(async ({ itemID, count }) => ({
-        ...getItem(itemID),
-        count,
-        id: itemID,
-        price: {
-          total: getItemPriceFromBoxes(openBoxes, itemID),
-          breakdown: priceBreakdown(openBoxes, itemID)
-        }
-      }))
+      .map(async ({ itemID, count }) => {
+        const boxItem = getOldestBoxItem(openBoxes, itemID);
+        const { total } = boxItem;
+        const breakdown = getPriceBreakdown(boxItem);
+
+        return ({
+          ...getItem(itemID),
+          count,
+          id: itemID,
+          price: {
+            total,
+            breakdown
+          }
+        });
+      })
   );
 };
