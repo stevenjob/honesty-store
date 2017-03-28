@@ -31,7 +31,7 @@ const marketplaceFeature = ({ id }) => {
     'c03dfffc-832a-426f-8a89-efbc4b9d23f6', // Simon W
     '45dd50e5-04c5-4390-b760-75f141b28901', // Simon K
     'c71733c4-dc05-42f9-848e-fb53bf08a2d7', // Sam
-    'a8960624-7558-468c-9791-984ca0c620ba', // Rob
+    'a8960624-7558-468c-9791-984ca0c620ba'  // Rob
   ];
 
   return allowedUsers.indexOf(id) !== -1;
