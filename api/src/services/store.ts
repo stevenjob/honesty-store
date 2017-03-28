@@ -1,4 +1,4 @@
-import { Box, getBoxesForStore } from '../../../box/src/client';
+import { Box, BoxItem, getBoxesForStore } from '../../../box/src/client';
 import { getItem } from './item';
 
 export interface StoreItem {
@@ -37,24 +37,33 @@ const assertValidStoreCode = (storeCode) => {
   }
 };
 
-const boxesContainingItem = (boxes: Box[], itemId) =>
-  boxes.filter(({ boxItems }) => boxItems.some( ({ itemID }) => itemId === itemID));
+const extractBoxItems = (boxes: Box[], itemId: string, matchingCondition = (_boxItem: BoxItem) => true) => {
+  const extractBoxItem = (box: Box, itemID: string) => box.boxItems.find((el) => el.itemID === itemID);
+  return boxes.filter(({ boxItems }) => boxItems.some((e) => e.itemID === itemId && matchingCondition(e)))
+    .reduce(
+      (existing, current) => {
+        const boxItem = extractBoxItem(current, itemId);
+        return [...existing, boxItem];
+      },
+      [] as BoxItem[]
+    );
+};
 
-const extractBoxItem = (box: Box, itemID: string) => box.boxItems.find((el) => el.itemID === itemID);
+const getOldestBoxItem = (boxes: Box[], itemID: string): BoxItem => {
+  const boxesByDateReceived = boxes.sort((a, b) => a.received - b.received);
+  const inStockBoxItems = extractBoxItems(boxesByDateReceived, itemID, (({ depleted }) => depleted == null ));
 
-const getOldestBoxContainingItem = (boxes: Box[], itemID: string): Box => {
-  const boxesWithItem = boxesContainingItem(boxes, itemID);
-
-  if (boxesWithItem.length === 0) {
-    throw new Error(`No boxes found containing item ${itemID}`);
+  if (inStockBoxItems.length === 0) {
+    // Item has been marked as depleted in all open boxes, so pick the most recent one
+    const boxesContainingItem = extractBoxItems(boxesByDateReceived, itemID);
+    return boxesContainingItem[boxesContainingItem.length - 1];
   }
 
-  return boxesWithItem.sort((a, b) => a.received - b.received)[0];
+  return inStockBoxItems[0];
 };
 
 const getItemPriceFromBoxes = (boxes: Box[], itemID: string) => {
-  const oldestBox = getOldestBoxContainingItem(boxes, itemID);
-  const { total } = extractBoxItem(oldestBox, itemID);
+  const { total } = getOldestBoxItem(boxes, itemID);
   return total;
 };
 
@@ -77,8 +86,15 @@ const getUniqueItemCounts = (boxes: Box[]) => {
 };
 
 const priceBreakdown = (boxes: Box[], itemID): PriceBreakdown => {
-  const oldestBox = getOldestBoxContainingItem(boxes, itemID);
-  const { creditCardFee, VAT, shippingCost, warehousingCost, packagingCost, packingCost, serviceFee } = extractBoxItem(oldestBox, itemID);
+  const {
+    creditCardFee,
+    VAT,
+    shippingCost,
+    warehousingCost,
+    packagingCost,
+    packingCost,
+    serviceFee
+  } = getOldestBoxItem(boxes, itemID);
 
   return {
     creditCardFee,
@@ -95,6 +111,7 @@ export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
   const openBoxes = (await getBoxesForStore(key, storeCode))
     .filter(({ closed }) => closed == null);
 
+  // TODO: Move 'getOldestBoxItem' call to here to avoid multiple calls
   return Promise.all(
     getUniqueItemCounts(openBoxes)
       .map(async ({ itemID, count }) => ({
