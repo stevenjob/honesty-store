@@ -54,12 +54,14 @@ const getOldestBoxItem = (boxes: Box[], itemID: string): BoxItem => {
   const inStockBoxItems = extractBoxItems(boxesByDateReceived, itemID, (({ depleted }) => depleted == null ));
 
   if (inStockBoxItems.length === 0) {
-    const itemsByDateMarkedDepleted = extractBoxItems(boxesByDateReceived, itemID)
-      .sort((a, b) => b.depleted - a.depleted);
+    const itemsByDateReceived = extractBoxItems(boxesByDateReceived, itemID);
+    const itemsByDateMarkedDepleted = itemsByDateReceived.sort((a, b) => b.depleted - a.depleted);
 
-    return itemsByDateMarkedDepleted[0];
+    const mostRecentDepletion = itemsByDateMarkedDepleted[0].depleted;
+    const itemsMarkedDepletedOnDate = itemsByDateMarkedDepleted.filter(({ depleted }) => depleted === mostRecentDepletion );
+
+    return itemsMarkedDepletedOnDate.length > 1 ? itemsByDateReceived[0] : itemsByDateMarkedDepleted[0];
   }
-
   return inStockBoxItems[0];
 };
 
