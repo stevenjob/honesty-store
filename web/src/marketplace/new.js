@@ -30,7 +30,7 @@ class MarketplaceAdd extends React.Component {
   handlePriceChange(event) {
     this.setState({
       totalPrice: event.target.value
-    });;
+    });
   }
 
   handleQuantityChange(event) {
