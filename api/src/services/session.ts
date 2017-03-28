@@ -37,11 +37,9 @@ const marketplaceFeature = ({ id }) => {
   return allowedUsers.indexOf(id) !== -1;
 };
 
-const getUserFeatures = (user) => {
-  return {
-    marketplace: marketplaceFeature(user)
-  };
-};
+const getUserFeatures = (user) => ({
+  marketplace: marketplaceFeature(user)
+});
 
 const getUserSessionData = async (key, user) => {
   const { id, accountId: accountID, emailAddress } = user;
