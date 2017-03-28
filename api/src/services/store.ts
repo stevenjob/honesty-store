@@ -49,7 +49,7 @@ const extractBoxItems = (boxes: Box[], itemId: string, matchingCondition = (_box
     );
 };
 
-const getOldestBoxItem = (boxes: Box[], itemID: string): BoxItem => {
+export const getBoxItem = (boxes: Box[], itemID: string): BoxItem => {
   const boxesByDateReceived = boxes.sort((a, b) => a.received - b.received);
   const inStockBoxItems = extractBoxItems(boxesByDateReceived, itemID, (({ depleted }) => depleted == null ));
 
@@ -68,7 +68,7 @@ const getOldestBoxItem = (boxes: Box[], itemID: string): BoxItem => {
 export const getItemPriceFromStore = async (key, storeCode: string, itemID: string) => {
   assertValidStoreCode(storeCode);
   const boxes = await getBoxesForStore(key, storeCode);
-  const { total } = getOldestBoxItem(boxes, itemID);
+  const { total } = getBoxItem(boxes, itemID);
   return total;
 };
 
@@ -113,7 +113,7 @@ export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
   return Promise.all(
     getUniqueItemCounts(openBoxes)
       .map(async ({ itemID, count }) => {
-        const boxItem = getOldestBoxItem(openBoxes, itemID);
+        const boxItem = getBoxItem(openBoxes, itemID);
         const { total } = boxItem;
         const breakdown = getPriceBreakdown(boxItem);
 
