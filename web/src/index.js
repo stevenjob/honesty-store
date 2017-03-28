@@ -11,7 +11,7 @@ import HomeSuccess from './home/success';
 import Store from './store/index';
 import History from './history/index';
 import Marketplace from './marketplace';
-import MarketplaceAdd from './marketplace/add';
+import MarketplaceNew from './marketplace/new';
 import MarketplaceComplete from './marketplace/complete';
 import Profile from './profile/index';
 import CloseProfile from './profile/close';
@@ -97,7 +97,7 @@ ReactDOM.render((
         <Route path="topup/:amount/new" component={TopupNewCard} onEnter={redirectUnauthorised} />
         <Route path="history" component={History} onEnter={redirectUnauthorised} />
         <Route path="marketplace" component={Marketplace} onEnter={redirectUnauthorised} />
-        <Route path="marketplace/add" component={MarketplaceAdd} onEnter={redirectUnauthorised} />
+        <Route path="marketplace/new" component={MarketplaceNew} onEnter={redirectUnauthorised} />
         <Route path="marketplace/success" component={MarketplaceComplete} onEnter={redirectUnauthorised} />
         <Route path="profile" component={Profile} onEnter={redirectUnauthorised} />
         <Route path="profile/close" component={CloseProfile} onEnter={redirectUnauthorised} />
