@@ -1,11 +1,12 @@
 import { config } from 'aws-sdk';
 import bodyParser = require('body-parser');
 import express = require('express');
+import { v4 as uuid } from 'uuid';
 
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { assertValidAccountId, createAccount, DBAccount, getAccountInternal, updateAccount } from './account';
-import { AccountAndTxs, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance, TransactionDetails } from './client';
-import { assertValidTransaction, createTransactionId, DBTransaction, getTransactionChain, hashTransaction, putTransaction } from './tx';
+import { AccountAndTxs, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance } from './client';
+import { assertValidTransaction, createTransactionId, DBTransaction, getTransactionChain, putTransaction } from './tx';
 
 const CACHED_TX_COUNT = 10;
 
@@ -55,17 +56,13 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
 
   const originalAccount = await getAccountInternal({ accountId });
 
-  const transactionDetails: TransactionDetails & { timestamp: number; next: string } = {
+  const transaction: DBTransaction = {
+    id: createTransactionId({ accountId, txId: uuid() }),
     timestamp: Date.now(),
     type,
     amount,
     data,
     next: originalAccount.latestTx
-  };
-
-  const transaction: DBTransaction = {
-    id: createTransactionId({ accountId, txId: hashTransaction(transactionDetails) }),
-    ...transactionDetails
   };
 
   assertValidTransaction(transaction);
