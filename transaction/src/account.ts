@@ -11,6 +11,13 @@ export const assertValidAccountId = (accountId) => {
   }
 };
 
+const assertValidDBAccount = (account) => {
+  if (account.balance === undefined
+  || account.created === undefined) {
+    throw new Error(`ID ${account.id} references a transaction, not a [tx]account`);
+  }
+};
+
 export const getAccountInternal = async ({ accountId }): Promise<DBAccount> => {
   assertValidAccountId(accountId);
 
@@ -28,6 +35,7 @@ export const getAccountInternal = async ({ accountId }): Promise<DBAccount> => {
   if (item == null) {
     throw new Error(`Account not found ${accountId}`);
   }
+  assertValidDBAccount(item);
 
   return <DBAccount>item;
 };

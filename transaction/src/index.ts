@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { assertValidAccountId, createAccount, DBAccount, getAccountInternal, updateAccount } from './account';
 import { AccountAndTxs, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance } from './client';
-import { assertValidTransaction, createTransactionId, DBTransaction, getTransactionChain, putTransaction } from './tx';
+import { assertValidTransaction, DBTransaction, getTransactionChain, putTransaction } from './tx';
 
 config.region = process.env.AWS_REGION;
 
@@ -22,7 +22,7 @@ const getAccountAndTxs = async ({ accountId }): Promise<AccountAndTxs> => {
   assertValidAccountId(accountId);
 
   const { latestTx, ...account } = await getAccountInternal({ accountId });
-  const txChain = await getTransactionChain({ accountId, txId: latestTx });
+  const txChain = await getTransactionChain(latestTx);
 
   return {
     ...account,
@@ -36,7 +36,7 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
   const originalAccount = await getAccountInternal({ accountId });
 
   const transaction: DBTransaction = {
-    id: createTransactionId({ accountId, txId: uuid() }),
+    id: uuid(),
     timestamp: Date.now(),
     type,
     amount,

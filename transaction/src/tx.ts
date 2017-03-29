@@ -1,8 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
 import isUUID = require('validator/lib/isUUID');
-import { v4 as uuid } from 'uuid';
 
-import { assertValidAccountId } from './account';
 import { Transaction } from './client';
 
 type LinkedTransaction = Transaction & { next?: LinkedTransaction };
@@ -34,13 +32,8 @@ export const assertValidTransaction = ({ type, amount, data }: Transaction) => {
   }
 };
 
-export const createTransactionId = ({ accountId, txId = uuid() }) => `${accountId}:${txId}`;
-
-const getTransaction = async ({ accountId, txId }) => {
-  assertValidAccountId(accountId);
-  assertValidTransactionId(txId);
-
-  const id = createTransactionId({ accountId, txId });
+const getTransaction = async (id) => {
+  assertValidTransactionId(id);
 
   const response = await new DynamoDB.DocumentClient()
     .get({
@@ -53,20 +46,25 @@ const getTransaction = async ({ accountId, txId }) => {
   if (item == null) {
     throw new Error(`Transaction not found ${id}`);
   }
+  try {
+    assertValidTransaction(<Transaction>item);
+  } catch (_) {
+    throw new Error(`ID ${id} references an account, not a transaction`);
+  }
 
   return <DBTransaction>item;
 };
 
-export const getTransactionChain = async ({ accountId, txId }): Promise<LinkedTransaction> => {
+export const getTransactionChain = async (txId): Promise<LinkedTransaction> => {
   if (!txId) {
     return undefined;
   }
 
-  const tx = await getTransaction({ accountId, txId });
+  const tx = await getTransaction(txId);
 
   return {
     ...tx,
-    next: await getTransactionChain({ accountId, txId: tx.next })
+    next: await getTransactionChain(tx.next)
   };
 };
 
