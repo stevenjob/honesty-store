@@ -17,12 +17,8 @@ const getAccountAndTransactions = async ({ accountId, limit = GET_TRANSACTION_LI
 
   const { transactionHead, cachedTransactions, ...externalAccount } = await getAccountInternal({ accountId });
 
-  const idToFetch = cachedTransactions.length > 0
-    ? cachedTransactions[cachedTransactions.length - 1].next
-    : transactionHead;
-
   const transactions = await getTransactions({
-    transactionId: idToFetch,
+    transactionId: transactionHead,
     limit: limit - cachedTransactions.length
   });
 
