@@ -30,6 +30,8 @@ export interface Account {
 
 export type InternalAccount = Account & { transactionHead?: string } & { cachedTransactions: TransactionList; };
 
+export type InternalTransaction = Transaction & { next?: string };
+
 export type TransactionList = Transaction[];
 
 export type AccountAndTransactions = Account & { transactions: TransactionList };

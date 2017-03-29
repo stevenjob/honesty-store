@@ -4,9 +4,7 @@ import { DynamoDB } from 'aws-sdk';
 import stringify = require('json-stable-stringify');
 import isUUID = require('validator/lib/isUUID');
 
-import { Transaction, TransactionDetails } from './client';
-
-type DBTransaction = Transaction & { next?: string };
+import { InternalTransaction, Transaction, TransactionDetails } from './client';
 
 const isSHA256 = (hash) => /^[a-f0-9]{64}$/.test(hash);
 
@@ -70,7 +68,7 @@ const getTransaction = async (id) => {
     throw new Error(`Transaction not found ${id}`);
   }
 
-  return <DBTransaction>item;
+  return <InternalTransaction>item;
 };
 
 export const getTransactions = async ({ transactionId, limit = Infinity }): Promise<Transaction[]> => {
@@ -86,7 +84,7 @@ export const getTransactions = async ({ transactionId, limit = Infinity }): Prom
   ];
 };
 
-export const putTransaction = async (transaction: DBTransaction) => {
+export const putTransaction = async (transaction: InternalTransaction) => {
   assertValidTransaction(transaction);
 
   await new DynamoDB.DocumentClient()
