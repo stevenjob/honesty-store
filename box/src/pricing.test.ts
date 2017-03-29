@@ -68,17 +68,17 @@ describe('Box Submission', () => {
       total
     } = boxItems[0];
 
-    expect(wholesaleCost).to.be.approximately(32.375, precision, 'Incorrect wholesale cost');
-    expect(warehousingCost).to.be.approximately(7, precision, 'Incorrect warehousing cost');
-    expect(packagingCost).to.be.approximately(43, precision, 'Incorrect packaging cost');
-    expect(packingCost).to.be.approximately(29, precision, 'Incorrect packing cost');
-    expect(shippingCost).to.be.approximately(43, precision, 'Incorrect shipping cost');
-    expect(serviceFee).to.be.approximately(5, precision, 'Incorrect service fee');
+    expect(wholesaleCost).to.equal(32, 'Incorrect wholesale cost');
+    expect(warehousingCost).to.equal(7, 'Incorrect warehousing cost');
+    expect(packagingCost).to.equal(43, 'Incorrect packaging cost');
+    expect(packingCost).to.equal(29, 'Incorrect packing cost');
+    expect(shippingCost).to.equal(43, 'Incorrect shipping cost');
+    expect(serviceFee).to.equal(4, 'Incorrect service fee');
 
-    expect(subtotal).to.be.approximately(159, precision, 'Incorrect subtotal');
-    expect(creditCardFee).to.be.approximately(12, precision, 'Incorrect credit card fee');
-    expect(VAT).to.be.approximately(43, precision, 'Incorrect item VAT');
-    expect(total).to.be.approximately(213, precision, 'Incorrect item price');
+    expect(subtotal).to.equal(159, 'Incorrect subtotal');
+    expect(creditCardFee).to.equal(12, 'Incorrect credit card fee');
+    expect(VAT).to.equal(43, 'Incorrect item VAT');
+    expect(total).to.equal(213, 'Incorrect item price');
   });
 
   it('should calculate total items in box', () => {

@@ -2,9 +2,12 @@ import { v4 as uuid } from 'uuid';
 import { getItemCost as getBatchItemCost, getVATRate } from './batch';
 import {
   BatchReference, Box, BoxItem,
-  BoxItemWithBatchReference, BoxSubmission, FixedBoxItemOverheads
+  BoxItemWithBatchReference, BoxSubmission, FixedBoxItemOverheads,
+  VariableBoxItemOverheads
 } from './client';
 import { avg, sum } from './math';
+
+type CombinedCosts = VariableBoxItemOverheads & FixedBoxItemOverheads;
 
 const creditCardFeeRate = 0.054;
 const expectedLossPerBox = 0.05;
@@ -38,6 +41,34 @@ export const getAverageItemCost = (boxItems): number =>
     })
   );
 
+const roundItemCosts = (costs: CombinedCosts): CombinedCosts => {
+  const roundedCosts: CombinedCosts = Object.assign({}, ...Object.keys(costs).map((key) => {
+    const cost = costs[key];
+    return { [key]: Math.round(cost) };
+  }));
+
+  const { total, serviceFee, subtotal, ...nonTotalCosts } = roundedCosts;
+
+  const sumOfCosts = ([
+    ...Object.keys(nonTotalCosts).map(key => nonTotalCosts[key]),
+    serviceFee
+  ] as number[])
+  .reduce((accumulated, current) => accumulated + current, 0);
+
+  const diff = total - sumOfCosts;
+
+  const adjustedServiceFee = serviceFee + diff;
+
+  if (adjustedServiceFee < 0) {
+    throw new Error(`Service fee would be less than 0`);
+  }
+
+  return {
+    ...roundedCosts,
+    serviceFee: adjustedServiceFee
+  };
+};
+
 const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedOverheads: FixedBoxItemOverheads): BoxItem => {
   const { batches } = boxItemWithBatchRef;
 
@@ -51,14 +82,19 @@ const getPricedBoxItem = (boxItemWithBatchRef: BoxItemWithBatchReference, fixedO
   const VAT = total * rate;
   const creditCardFee = total * creditCardFeeRate;
 
-  return {
+  const variableCosts: VariableBoxItemOverheads = {
     wholesaleCost,
-    count: sumBatches(batches),
     subtotal,
     creditCardFee,
     VAT,
-    total,
-    ...fixedOverheads,
+    total
+  };
+
+  const roundedCosts = roundItemCosts({ ...fixedOverheads, ...variableCosts });
+
+  return {
+    count: sumBatches(batches),
+    ...roundedCosts,
     ...boxItemWithBatchRef
   };
 };

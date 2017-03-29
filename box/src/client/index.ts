@@ -21,7 +21,7 @@ export interface FixedBoxItemOverheads {
   packingCost: number;
   serviceFee: number;
 }
-interface VariableBoxItemOverheads {
+export interface VariableBoxItemOverheads {
   creditCardFee: number;
   wholesaleCost: number;
   subtotal: number;
