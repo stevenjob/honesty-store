@@ -1,9 +1,9 @@
 import { DynamoDB } from 'aws-sdk';
 import isUUID = require('validator/lib/isUUID');
 
-import { Account, TransactionList } from './client';
+import { Account } from './client';
 
-export type DBAccount = Account & { latestTx?: string } & { cachedTransactions: TransactionList; };
+export type DBAccount = Account & { latestTx?: string };
 
 export const assertValidAccountId = (accountId) => {
   if (accountId == null || !isUUID(accountId, 4)) {
@@ -38,8 +38,7 @@ export const createAccount = async ({ accountId }) => {
   const account: Account = {
     id: accountId,
     created: Date.now(),
-    balance: 0,
-    cachedTransactions: []
+    balance: 0
   };
 
   await new DynamoDB.DocumentClient()
