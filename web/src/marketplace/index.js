@@ -22,7 +22,7 @@ const Index = () =>
     <p>
       To list the items we need to take a few details (description, cost and location e.g. your desk, a fridge, etc.). We'll review the submission, add the listing then notify you and the agent. Normally this process takes a couple of hours but feel free to put the items out straight away and allow people to record their purchases later.
     </p>
-    <Link to="marketplace/add" className="btn btn-primary btn-big">List my marketplace item</Link>
+    <Link to="/marketplace/new" className="btn btn-primary btn-big">List my marketplace item</Link>
   </Full>;
 
 export default Index;
