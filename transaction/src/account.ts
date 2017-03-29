@@ -1,9 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
 import isUUID = require('validator/lib/isUUID');
 
-import { Account, TransactionList } from './client';
-
-export type InternalAccount = Account & { transactionHead?: string } & { cachedTransactions: TransactionList; };
+import { InternalAccount } from './client';
 
 export const assertValidAccountId = (accountId) => {
   if (accountId == null || !isUUID(accountId, 4)) {

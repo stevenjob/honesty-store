@@ -3,8 +3,11 @@ import bodyParser = require('body-parser');
 import express = require('express');
 
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
-import { assertValidAccountId, createAccount, getAccountInternal, InternalAccount, updateAccount } from './account';
-import { AccountAndTransactions, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance, TransactionDetails } from './client';
+import { assertValidAccountId, createAccount, getAccountInternal, updateAccount } from './account';
+import {
+  AccountAndTransactions, balanceLimit, InternalAccount,
+  TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance, TransactionDetails
+} from './client';
 import { assertValidTransaction, createTransactionId, getTransactions, hashTransaction, putTransaction } from './transaction';
 
 const ACCOUNT_TRANSACTION_CACHE_SIZE = 10;
