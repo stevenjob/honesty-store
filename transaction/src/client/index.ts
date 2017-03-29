@@ -24,6 +24,7 @@ export interface Account {
   id: string;
   created: number;
   balance: number;
+  cachedTransactions: TransactionList;
 }
 
 export type TransactionList = Transaction[];

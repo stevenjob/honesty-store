@@ -32,10 +32,10 @@ export const getAccountInternal = async ({ accountId }): Promise<DBAccount> => {
   return <DBAccount>item;
 };
 
-export const createAccount = async ({ accountId }): Promise<DBAccount> => {
+export const createAccount = async ({ accountId }) => {
   assertValidAccountId(accountId);
 
-  const account: DBAccount = {
+  const account: Account = {
     id: accountId,
     created: Date.now(),
     balance: 0,
