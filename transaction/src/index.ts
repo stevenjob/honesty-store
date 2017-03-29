@@ -103,8 +103,6 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
     throw new Error(`Balance would be greater than ${balanceLimit} (${updatedAccount.balance})`);
   }
 
-  const lastTransactionId = originalAccount.transactions.length === 0 ? null : originalAccount.transactions[0].id;
-
   await new DynamoDB.DocumentClient()
     .update({
       TableName: process.env.TABLE_NAME,
@@ -113,7 +111,6 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
       },
       ConditionExpression:
         'balance=:originalBalance and ' +
-        '(size(transactions) = :zero or transactions[0].id = :lastTransactionId) and ' +
         'version = :originalVersion'
       ,
       UpdateExpression:
@@ -125,8 +122,6 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
         ':originalBalance': originalAccount.balance,
         ':updatedBalance': updatedAccount.balance,
         ':transactions': updatedAccount.transactions,
-        ':zero': 0,
-        ':lastTransactionId': lastTransactionId,
         ':originalVersion': updatedAccount.version - 1,
         ':updatedVersion': updatedAccount.version
       }
