@@ -15,7 +15,8 @@ config.region = process.env.AWS_REGION;
 const getAccountAndTransactions = async ({ accountId, limit = GET_TRANSACTION_LIMIT }): Promise<AccountAndTransactions> => {
   assertValidAccountId(accountId);
 
-  const { transactionHead, cachedTransactions, ...externalAccount } = await getAccountInternal({ accountId });
+  const internalAccount = await getAccountInternal({ accountId });
+  const { transactionHead, cachedTransactions, ...externalAccount } = internalAccount;
 
   const transactions = await getTransactions({
     transactionId: transactionHead,
