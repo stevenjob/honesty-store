@@ -52,9 +52,7 @@ export const createAccount = async ({ accountId }): Promise<InternalAccount> => 
   return account;
 };
 
-export const updateAccount = async (
-  { updatedAccount, originalAccount }: { updatedAccount: InternalAccount, originalAccount: InternalAccount }
-) => {
+export const updateAccount = async ({ updatedAccount, originalAccount }: { updatedAccount: InternalAccount, originalAccount: InternalAccount }) => {
   assertValidAccountId(updatedAccount.id);
   if (updatedAccount.id !== originalAccount.id) {
     throw new Error(`mismatching account ids for update (${updatedAccount.id} vs ${originalAccount.id})`);
