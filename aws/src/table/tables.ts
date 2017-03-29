@@ -277,58 +277,70 @@ const dirToTable = {
     writeCapacityUnits,
     dummyData: [
       {
-        id: 'b423607f-64de-441f-ac39-12d50aaedbe9',
-        created: 1487667277000,
-        balance: 0,
-        cachedTransactions: []
-        // no tx
-      },
-      {
-        id: '0b0117da-21b5-4a5e-9c18-7ad20691dd24',
-        created: 1487667277000,
         balance: 100,
-        transactionHead: 'c2e1ba91-ba1d-497b-b2a2-4f7ed1d91685',
-        cachedTransactions: []
-      },
-      {
-        id: '08ccf030-537a-4c81-9789-70476dad152a',
-        created: 1487667277000,
-        balance: 123,
-        transactionHead: 'bcbf62c2-defd-4049-b3bb-4cfb87b2c15d',
         cachedTransactions: [
           {
-            id: 'bcbf62c2-defd-4049-b3bb-4cfb87b2c15d',
-            type: 'purchase',
+            amount: 100,
+            data: {},
+            id: '0b0117da-21b5-4a5e-9c18-7ad20691dd24:abd853b75d730ce035dfb04e99f195703dd3c705ce58272d852154e3c23b7c99',
+            legacyId: 'c2e1ba91-ba1d-497b-b2a2-4f7ed1d91685',
+            type: 'topup'
+          }
+        ],
+        created: 1487667277000,
+        id: '0b0117da-21b5-4a5e-9c18-7ad20691dd24',
+        transactionHead: '0b0117da-21b5-4a5e-9c18-7ad20691dd24:abd853b75d730ce035dfb04e99f195703dd3c705ce58272d852154e3c23b7c99'
+      },
+      {
+        balance: 123,
+        cachedTransactions: [
+          {
             amount: -77,
             data: {},
-            next: 'd2b51e9e-c776-4b96-bf71-3cb70cd53aad'
+            id: '08ccf030-537a-4c81-9789-70476dad152a:282cb208113826eb54568759f56eb386d835174436d7da5591eb9f27bd80341a',
+            legacyId: 'bcbf62c2-defd-4049-b3bb-4cfb87b2c15d',
+            next: '08ccf030-537a-4c81-9789-70476dad152a:764f266ec07e9374983152894168b91ae3237bce4f11d3654d9278892e777d1c',
+            type: 'purchase'
           },
           {
-            id: 'd2b51e9e-c776-4b96-bf71-3cb70cd53aad',
-            type: 'topup',
             amount: 200,
-            data: {}
+            data: {},
+            id: '08ccf030-537a-4c81-9789-70476dad152a:764f266ec07e9374983152894168b91ae3237bce4f11d3654d9278892e777d1c',
+            legacyId: 'd2b51e9e-c776-4b96-bf71-3cb70cd53aad',
+            type: 'topup'
           }
-        ]
+        ],
+        created: 1487667277000,
+        id: '08ccf030-537a-4c81-9789-70476dad152a',
+        transactionHead: '08ccf030-537a-4c81-9789-70476dad152a:282cb208113826eb54568759f56eb386d835174436d7da5591eb9f27bd80341a'
       },
       {
-        id: 'c2e1ba91-ba1d-497b-b2a2-4f7ed1d91685',
-        type: 'topup',
         amount: 100,
-        data: {}
+        data: {},
+        id: '0b0117da-21b5-4a5e-9c18-7ad20691dd24:abd853b75d730ce035dfb04e99f195703dd3c705ce58272d852154e3c23b7c99',
+        legacyId: 'c2e1ba91-ba1d-497b-b2a2-4f7ed1d91685',
+        type: 'topup'
       },
       {
-        id: 'bcbf62c2-defd-4049-b3bb-4cfb87b2c15d',
-        type: 'purchase',
         amount: -77,
         data: {},
-        next: 'd2b51e9e-c776-4b96-bf71-3cb70cd53aad'
+        id: '08ccf030-537a-4c81-9789-70476dad152a:282cb208113826eb54568759f56eb386d835174436d7da5591eb9f27bd80341a',
+        legacyId: 'bcbf62c2-defd-4049-b3bb-4cfb87b2c15d',
+        next: '08ccf030-537a-4c81-9789-70476dad152a:764f266ec07e9374983152894168b91ae3237bce4f11d3654d9278892e777d1c',
+        type: 'purchase'
       },
       {
-        id: 'd2b51e9e-c776-4b96-bf71-3cb70cd53aad',
-        type: 'topup',
         amount: 200,
-        data: {}
+        data: {},
+        id: '08ccf030-537a-4c81-9789-70476dad152a:764f266ec07e9374983152894168b91ae3237bce4f11d3654d9278892e777d1c',
+        legacyId: 'd2b51e9e-c776-4b96-bf71-3cb70cd53aad',
+        type: 'topup'
+      },
+      {
+        balance: 0,
+        cachedTransactions: [],
+        created: 1487667277000,
+        id: 'b423607f-64de-441f-ac39-12d50aaedbe9'
       }
     ]
   }),
