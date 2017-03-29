@@ -1,5 +1,4 @@
 import { createHash } from 'crypto';
-
 import { DynamoDB } from 'aws-sdk';
 import stringify = require('json-stable-stringify');
 
