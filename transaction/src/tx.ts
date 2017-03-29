@@ -57,11 +57,8 @@ const getTransaction = async ({ accountId, txId }) => {
   return <DBTransaction>item;
 };
 
-export const getTransactionChain = async ({ accountId, txId, limit = Infinity }): Promise<LinkedTransaction> => {
+export const getTransactionChain = async ({ accountId, txId }): Promise<LinkedTransaction> => {
   if (!txId) {
-    return undefined;
-  }
-  if (limit === 0) {
     return undefined;
   }
 
@@ -69,7 +66,7 @@ export const getTransactionChain = async ({ accountId, txId, limit = Infinity })
 
   return {
     ...tx,
-    next: await getTransactionChain({ accountId, txId: tx.next, limit: limit - 1 })
+    next: await getTransactionChain({ accountId, txId: tx.next })
   };
 };
 
