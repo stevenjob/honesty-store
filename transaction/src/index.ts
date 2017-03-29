@@ -7,12 +7,11 @@ import { assertValidAccountId, createAccount, DBAccount, getAccountInternal, upd
 import { AccountAndTransactions, balanceLimit, TEST_DATA_EMPTY_ACCOUNT_ID, TransactionAndBalance, TransactionBody } from './client';
 import { assertValidTransaction, createTransactionId, getTransactions, hashTransaction, putTransaction } from './transaction';
 
-const ACCOUNT_TRANSACTION_CACHE_SIZE = 10;
-const GET_TRANSACTION_LIMIT = 10;
+const CACHED_TRANSACTION_COUNT = 10;
 
 config.region = process.env.AWS_REGION;
 
-const getAccountAndTransactions = async ({ accountId, limit = GET_TRANSACTION_LIMIT }): Promise<AccountAndTransactions> => {
+const getAccountAndTransactions = async ({ accountId }): Promise<AccountAndTransactions> => {
   assertValidAccountId(accountId);
 
   const internalAccount = await getAccountInternal({ accountId });
@@ -20,7 +19,7 @@ const getAccountAndTransactions = async ({ accountId, limit = GET_TRANSACTION_LI
 
   const transactions = await getTransactions({
     transactionId: transactionHead,
-    limit: limit - cachedTransactions.length
+    limit: CACHED_TRANSACTION_COUNT - cachedTransactions.length
   });
 
   return {
@@ -67,7 +66,7 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
     ...originalAccount,
     balance: updatedBalance,
     latestTransaction: transaction.id,
-    cachedTransactions: [transaction, ...originalAccount.cachedTransactions.slice(0, ACCOUNT_TRANSACTION_CACHE_SIZE - 1)]
+    cachedTransactions: [transaction, ...originalAccount.cachedTransactions.slice(0, CACHED_TRANSACTION_COUNT - 1)]
   };
 
   await updateAccount({ updatedAccount, originalAccount });
