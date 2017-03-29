@@ -24,6 +24,7 @@ dependencies:
     - cd support && yarn install
     - cd survey && yarn install
     - cd box && yarn install
+    - cd scripts && yarn install
 compile:
   override:
     - cd api && npm run ci
@@ -37,6 +38,7 @@ compile:
     - cd support && npm run ci
     - cd survey && npm run ci
     - cd box && npm run ci
+    - cd scripts && npm run ci
 test:
   post:
     - cd api && yarn install --production --ignore-scripts --prefer-offline
@@ -49,6 +51,7 @@ test:
     - cd test && yarn install --production --ignore-scripts --prefer-offline
     - cd survey && yarn install --production --ignore-scripts --prefer-offline
     - cd box && yarn install --production --ignore-scripts --prefer-offline
+    - cd scripts && yarn install --production --ignore-scripts --prefer-offline
 deployment:
   aws:
     branch: /.*/
