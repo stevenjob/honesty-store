@@ -84,6 +84,14 @@ class MarketplaceItemAdd extends React.Component {
     }
   }
 
+  calculatePerItemCost() {
+    const price = Number(this.state.totalPrice);
+    const quantity = Number(this.state.quantity);
+    const result = (price / quantity) * (1 + ourFees);
+
+    return !Number.isFinite(result) ? `` : `£${result.toFixed(2)}`;
+  }
+
   render() {
     const { validity } = this.state;
 
@@ -161,15 +169,19 @@ class MarketplaceItemAdd extends React.Component {
             <label htmlFor="pricingBreakdown">Pricing Breakdown (per item cost)</label>
             <input
               id="pricingBreakdown"
-              value={(this.state.price / this.state.quantity) * (1 + ourFees)}
+              placeholder="£0.33"
+              value={this.calculatePerItemCost()}
+              disabled={true}
               onChange={(e) => e.preventDefault()}
               className="input"
               noValidate
               />
           </p>
-          <Link className="btn btn-primary" onClick={(e) => this.handleSubmit(e)}>
-            Submit marketplace item
-          </Link>
+          <p className="my3">
+            <Link className="btn btn-primary" onClick={(e) => this.handleSubmit(e)}>
+              Submit marketplace item
+            </Link>
+          </p>
         </form>
       </Full>
     );
