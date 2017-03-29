@@ -4,10 +4,12 @@ import cruftDDB from 'cruft-ddb';
 import { stringify } from 'csv';
 
 import { getItem } from '../../api/src/services/item';
-import { Account } from '../../transaction/src/client/index';
+import { InternalAccount, InternalTransaction } from '../../transaction/src/client/index';
 import { User } from '../../user/src/client/index';
 
-const cruftAccount = cruftDDB<Account>({ tableName: 'honesty-store-transaction' });
+type TransactionRecord = InternalAccount | InternalTransaction;
+
+const cruftAccount = cruftDDB<TransactionRecord>({ tableName: 'honesty-store-transaction' });
 const cruftUser = cruftDDB<User>({ tableName: 'honesty-store-user' });
 
 const usage = () => {
@@ -27,16 +29,45 @@ const main = async (args) => {
   const registeredUsers = (await cruftUser.__findAll({}))
     .filter(user => user.emailAddress != null);
 
-  const allTransactions = (await cruftAccount.__findAll({}))
-    .map((account) => {
+  const allAccountsAndTransactions = await cruftAccount.__findAll({});
+
+  const allTransactions = allAccountsAndTransactions
+    // tslint:disable-next-line:triple-equals
+    .filter(account => (account as InternalAccount).balance == undefined) as InternalTransaction[];
+
+  const allAccounts = allAccountsAndTransactions
+    // tslint:disable-next-line:triple-equals
+    .filter(account => (account as InternalAccount).balance != undefined) as InternalAccount[];
+
+  const getLinkedTransactions = (transactionHead) => {
+    if (!transactionHead) {
+      return [];
+    }
+
+    const head = allTransactions.find(({ id }) => id === transactionHead);
+    if (!head) {
+      throw new Error(`Couldn't find transaction '${transactionHead}'`);
+    }
+
+    return [
+      head,
+      ...getLinkedTransactions(head.next)
+    ];
+  };
+
+  const userTransactions = allAccounts
+    .map(account => {
       const user = registeredUsers.find(({ accountId }) => accountId === account.id);
       if (user == null) {
         return [];
       }
       const { id: userId, ...userDetails } = user;
-      const { id: accountId, transactions, ...accountDetails } = account;
+      const { id: accountId, transactionHead, cachedTransactions, ...accountDetails } = account;
+
+      const transactions = getLinkedTransactions(transactionHead);
+
       return transactions.map((transaction) => {
-        const { id: transactionId, data, ...transactionDetails } = transaction;
+        const { id: transactionId, data, next, ...transactionDetails } = transaction;
         const itemDetails = data.itemId ? getItem(data.itemId) : {};
         return {
           userId,
@@ -60,7 +91,7 @@ const main = async (args) => {
     });
 
   // tslint:disable-next-line:no-console
-  stringify(allTransactions, { header: true })
+  stringify(userTransactions, { header: true })
     .pipe(process.stdout);
 };
 
