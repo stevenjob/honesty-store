@@ -3,7 +3,7 @@ import isUUID = require('validator/lib/isUUID');
 
 import { Account, TransactionList } from './client';
 
-export type InternalAccount = Account & { transactionHead?: string } & { cachedTransactions: TransactionList; };
+export type DBAccount = Account & { transactionHead?: string } & { cachedTransactions: TransactionList; };
 
 export const assertValidAccountId = (accountId) => {
   if (accountId == null || !isUUID(accountId, 4)) {
@@ -11,7 +11,7 @@ export const assertValidAccountId = (accountId) => {
   }
 };
 
-export const getAccountInternal = async ({ accountId }): Promise<InternalAccount> => {
+export const getAccountInternal = async ({ accountId }): Promise<DBAccount> => {
   assertValidAccountId(accountId);
 
   const accountResponse = await new DynamoDB.DocumentClient()
@@ -29,13 +29,13 @@ export const getAccountInternal = async ({ accountId }): Promise<InternalAccount
     throw new Error(`Account not found ${accountId}`);
   }
 
-  return <InternalAccount>item;
+  return <DBAccount>item;
 };
 
-export const createAccount = async ({ accountId }): Promise<InternalAccount> => {
+export const createAccount = async ({ accountId }): Promise<DBAccount> => {
   assertValidAccountId(accountId);
 
-  const account: InternalAccount = {
+  const account: DBAccount = {
     id: accountId,
     created: Date.now(),
     balance: 0,
@@ -52,7 +52,7 @@ export const createAccount = async ({ accountId }): Promise<InternalAccount> => 
   return account;
 };
 
-export const updateAccount = async ({ updatedAccount, originalAccount }: { updatedAccount: InternalAccount, originalAccount: InternalAccount }) => {
+export const updateAccount = async ({ updatedAccount, originalAccount }: { updatedAccount: DBAccount, originalAccount: DBAccount }) => {
   assertValidAccountId(updatedAccount.id);
   if (updatedAccount.id !== originalAccount.id) {
     throw new Error(`mismatching account ids for update (${updatedAccount.id} vs ${originalAccount.id})`);
