@@ -9,12 +9,15 @@ export interface TransactionDetails {
   data: {
     [key: string]: string;
   };
-  timestamp: number;
   next?: string;
   legacyId?: string;
 }
 
-export interface Transaction extends TransactionDetails {
+export interface TransactionBody extends TransactionDetails {
+  timestamp: number;
+}
+
+export interface Transaction extends TransactionBody {
   id: string;
 }
 

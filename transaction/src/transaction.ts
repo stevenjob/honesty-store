@@ -4,7 +4,7 @@ import { DynamoDB } from 'aws-sdk';
 import stringify = require('json-stable-stringify');
 import isUUID = require('validator/lib/isUUID');
 
-import { Transaction, TransactionDetails } from './client';
+import { Transaction, TransactionBody } from './client';
 
 type DBTransaction = Transaction & { next?: string };
 
@@ -28,7 +28,7 @@ const assertValidTransactionId = (id) => {
 
 export const createTransactionId = ({ accountId, transactionId }) => `${accountId}:${transactionId}`;
 
-export const hashTransaction = (transaction: TransactionDetails) => {
+export const hashTransaction = (transaction: TransactionBody & { next?: string }) => {
   const hash = createHash('sha256');
 
   hash.update(stringify(transaction));
