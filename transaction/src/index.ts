@@ -60,6 +60,7 @@ const createAccount = async ({ accountId }) => {
     id: accountId,
     created: Date.now(),
     balance: 0,
+    version: 0,
     transactions: []
   };
 
@@ -90,6 +91,7 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
 
   const updatedAccount: Account = {
     ...originalAccount,
+    version: originalAccount.version + 1,
     balance: originalAccount.balance + transaction.amount,
     transactions: [transaction, ...originalAccount.transactions]
   };
@@ -109,14 +111,24 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
       Key: {
         id: accountId
       },
-      ConditionExpression: 'balance=:originalBalance and (size(transactions) = :zero or transactions[0].id = :lastTransactionId)',
-      UpdateExpression: 'set balance=:updatedBalance, transactions=:transactions',
+      ConditionExpression:
+        'balance=:originalBalance and ' +
+        '(size(transactions) = :zero or transactions[0].id = :lastTransactionId) and ' +
+        'version = :originalVersion'
+      ,
+      UpdateExpression:
+        'set balance=:updatedBalance,' +
+        'transactions=:transactions,' +
+        'version=:updatedVersion'
+      ,
       ExpressionAttributeValues: {
         ':originalBalance': originalAccount.balance,
         ':updatedBalance': updatedAccount.balance,
         ':transactions': updatedAccount.transactions,
         ':zero': 0,
-        ':lastTransactionId': lastTransactionId
+        ':lastTransactionId': lastTransactionId,
+        ':originalVersion': updatedAccount.version - 1,
+        ':updatedVersion': updatedAccount.version
       }
     })
     .promise();

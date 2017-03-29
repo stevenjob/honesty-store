@@ -20,6 +20,7 @@ export interface Account {
   id: string;
   created: number;
   balance: number;
+  version: number;
   transactions: Transaction[];
 }
 
