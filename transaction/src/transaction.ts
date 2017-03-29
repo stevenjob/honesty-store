@@ -5,6 +5,7 @@ import stringify = require('json-stable-stringify');
 
 import { Transaction, TransactionBody } from './client';
 
+type TransactionChain = Transaction & { next?: TransactionChain };
 type DBTransaction = Transaction & { next?: string };
 
 export const assertValidTransaction = ({ type, amount, data }: Transaction) => {
@@ -53,17 +54,35 @@ const getTransaction = async (id) => {
   return <DBTransaction>item;
 };
 
-export const getTransactions = async ({ transactionId, limit = Infinity }): Promise<Transaction[]> => {
+const getTransactionChain = async ({ transactionId, limit = Infinity }): Promise<TransactionChain> => {
+  if (!transactionId) {
+    return undefined;
+  }
   if (limit <= 0) {
-    return [];
+    return undefined;
   }
 
   const transaction = await getTransaction(transactionId);
 
-  return [
-    transaction,
-    ...await getTransactions({ transactionId: transaction.next, limit: limit - 1 })
-  ];
+  return {
+    ...transaction,
+    next: await getTransactionChain({ transactionId: transaction.next, limit: limit - 1 })
+  };
+};
+
+const transactionChainToArray = (chain) => {
+  const transactions = [];
+  for (let transaction = chain; transaction; transaction = transaction.next) {
+    // tslint:disable-next-line:no-unused-variable
+    const { next, ...externalisedTransaction } = transaction;
+    transactions.push(externalisedTransaction);
+  }
+  return transactions;
+};
+
+export const getTransactions = async ({ transactionId, limit = Infinity }) => {
+  const chain = await getTransactionChain({ transactionId, limit });
+  return transactionChainToArray(chain);
 };
 
 export const putTransaction = async (transaction: DBTransaction) => {

@@ -9,7 +9,6 @@ export interface TransactionDetails {
   data: {
     [key: string]: string;
   };
-  next?: string;
   legacyId?: string;
 }
 
