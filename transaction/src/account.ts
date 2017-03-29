@@ -64,14 +64,13 @@ export const updateAccount = async ({ updatedAccount, originalAccount }: { updat
       Key: {
         id: updatedAccount.id
       },
-      ConditionExpression: 'balance=:originalBalance and (transactionHead = :originalHead or not attribute_exists(transactionHead))',
-      UpdateExpression: 'set balance=:updatedBalance, transactionHead=:updatedHead, cachedTransactions=:cachedTransactions',
+      ConditionExpression: 'balance=:originalBalance and (transactionHead = :originalTransaction or not attribute_exists(transactionHead))',
+      UpdateExpression: 'set balance=:updatedBalance, transactionHead=:updatedTransaction',
       ExpressionAttributeValues: {
         ':originalBalance': originalAccount.balance,
         ':updatedBalance': updatedAccount.balance,
-        ':originalHead': originalAccount.transactionHead || null,
-        ':updatedHead': updatedAccount.transactionHead || null,
-        ':cachedTransactions': updatedAccount.cachedTransactions
+        ':originalTransaction': originalAccount.transactionHead || null,
+        ':updatedTransaction': updatedAccount.transactionHead
       }
     })
     .promise();
