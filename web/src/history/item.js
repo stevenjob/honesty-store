@@ -48,6 +48,7 @@ const mapStateToProps = (
       };
     case 'purchase':
       const { item: { id, image, name, qualifier }, quantity } = data;
+      const itemExistsInStore = items.some(item => item.id === id);
       return {
         isTopUp: false,
         timestamp,
@@ -55,7 +56,7 @@ const mapStateToProps = (
         image: safeLookupItemImage(image),
         title: formatItem(name || 'Unknown Item', quantity),
         subtitle: qualifier,
-        href: `/item/${id}`
+        href: itemExistsInStore ? `/item/${id}` : `/history`
       };
     default:
       return {
