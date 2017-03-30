@@ -62,11 +62,13 @@ const main = async (args) => {
         return [];
       }
       const { id: userId, ...userDetails } = user;
+      // tslint:disable-next-line:no-unused-variable
       const { id: accountId, transactionHead, cachedTransactions, ...accountDetails } = account;
 
       const transactions = getLinkedTransactions(transactionHead);
 
       return transactions.map((transaction) => {
+        // tslint:disable-next-line:no-unused-variable
         const { id: transactionId, data, next, ...transactionDetails } = transaction;
         const itemDetails = data.itemId ? getItem(data.itemId) : {};
         return {
