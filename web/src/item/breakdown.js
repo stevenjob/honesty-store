@@ -8,7 +8,7 @@ const row = ({ name, label, amount, subtotal }) =>
     <td className="col-3 right-align">{subtotal}</td>
   </tr>;
 
-export default ({breakdown}) => {
+export default ({ breakdown }) => {
   const fields = [
     { name: 'wholesaleCost', label: 'Wholesale' },
     { name: 'warehousingCost', label: 'Storage' },
@@ -24,23 +24,28 @@ export default ({breakdown}) => {
   const data = [];
   for (const { name, label } of fields) {
     const amount = breakdown[name];
+    if (amount <= 0) {
+      continue;
+    }
     subtotal += amount;
     data.push({
       name,
       label,
-      amount: <Currency amount={amount}/>,
-      subtotal: <Currency amount={subtotal}/>
+      amount: <Currency amount={amount} />,
+      subtotal: <Currency amount={subtotal} />
     });
   }
 
-  return <table className="table mx-auto col-10">
-    <tbody>
-       <tr key={name}>
-        <th className="col-6"></th>
-        <th className="col-3">Cost</th>
-        <th className="col-3 right-align">Total</th>
-      </tr>
-      {data.map(row)}
-    </tbody>
-  </table>;
+  return subtotal === 0 ?
+    <p>No breakdown available.</p> :
+    <table className="table mx-auto col-10">
+      <tbody>
+        <tr key={name}>
+          <th className="col-6"></th>
+          <th className="col-3">Cost</th>
+          <th className="col-3 right-align">Total</th>
+        </tr>
+        {data.map(row)}
+      </tbody>
+    </table>;
 };
