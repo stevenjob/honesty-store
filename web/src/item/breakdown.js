@@ -17,7 +17,8 @@ export default ({ breakdown }) => {
     { name: 'shippingCost', label: 'Postage' },
     { name: 'serviceFee', label: 'Service Fee' },
     { name: 'creditCardFee', label: 'Card Fee' },
-    { name: 'VAT', label: 'VAT' }
+    { name: 'VAT', label: 'VAT' },
+    { name: 'donation', label: 'Charitable Donation' }
   ];
 
   let subtotal = 0;
