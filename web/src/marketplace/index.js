@@ -5,7 +5,7 @@ import { BackToPage } from '../chrome/link';
 
 const Index = () =>
   <Full top={<BackToPage title="Store" path="/store"/>}>
-    <h1>Marketplace</h1>
+    <h1>honesty.store And More</h1>
     <p>We want to make sure your store has as much variety as possible.</p>
     <p>
       Unfortunately, there are certain items that just aren't feasible for us to ship (e.g. drinks, ice cream or those
@@ -32,7 +32,7 @@ const Index = () =>
        purchases later.
     </p>
     <p className="my3">
-      <Link to="/marketplace/new" className="btn btn-primary btn-big">List My Items</Link>
+      <Link to="/more/new" className="btn btn-primary btn-big">List My Items</Link>
     </p>
   </Full>;
 

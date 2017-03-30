@@ -49,7 +49,7 @@ export const performMarketplace = ({
     }, dispatch, getState);
 
     dispatch(marketplaceSuccess(response));
-    history.push(`/marketplace/success`);
+    history.push(`/more/success`);
 
   } catch (e) {
     dispatch(marketplaceFailure(e));

@@ -96,9 +96,9 @@ ReactDOM.render((
         <Route path="topup/:amount" component={TopupExistingCard} onEnter={redirectUnauthorised} />
         <Route path="topup/:amount/new" component={TopupNewCard} onEnter={redirectUnauthorised} />
         <Route path="history" component={History} onEnter={redirectUnauthorised} />
-        <Route path="marketplace" component={Marketplace} onEnter={redirectUnauthorised} />
-        <Route path="marketplace/new" component={MarketplaceNew} onEnter={redirectUnauthorised} />
-        <Route path="marketplace/success" component={MarketplaceComplete} onEnter={redirectUnauthorised} />
+        <Route path="more" component={Marketplace} onEnter={redirectUnauthorised} />
+        <Route path="more/new" component={MarketplaceNew} onEnter={redirectUnauthorised} />
+        <Route path="more/success" component={MarketplaceComplete} onEnter={redirectUnauthorised} />
         <Route path="profile" component={Profile} onEnter={redirectUnauthorised} />
         <Route path="profile/close" component={CloseProfile} onEnter={redirectUnauthorised} />
         <Route path="profile/edit" component={EditProfile} onEnter={redirectUnauthorised} />

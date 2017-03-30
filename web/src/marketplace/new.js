@@ -98,7 +98,7 @@ class MarketplaceItemAdd extends React.Component {
     return (
       <Full top={<Back />}>
         <form className="center px2 navy" onSubmit={(e) => this.handleSubmit(e)}>
-          <p>Please fill in the details for your marketplace items</p>
+          <p>Please fill in the details for your items</p>
           {
             validity === 'invalid' &&
             <p className="red">Please fill out every field</p>
@@ -166,7 +166,7 @@ class MarketplaceItemAdd extends React.Component {
               />
           </p>
           <p>
-            <label htmlFor="pricingBreakdown">Pricing Breakdown (per item cost)</label>
+            <label htmlFor="pricingBreakdown">Per Item Cost (inc. Service Fee)</label>
             <input
               id="pricingBreakdown"
               placeholder="£0.33"
@@ -179,7 +179,7 @@ class MarketplaceItemAdd extends React.Component {
           </p>
           <p className="my3">
             <Link className="btn btn-primary" onClick={(e) => this.handleSubmit(e)}>
-              Submit marketplace item
+              Submit item
             </Link>
           </p>
         </form>
