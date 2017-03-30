@@ -15,6 +15,14 @@ export const Back = (props) => {
   </Link>;
 };
 
+export const BackToPage = ({ title, path }) => {
+  return <Link className={`btn aqua`}
+    onClick={() => history.replace(path)}>
+    <span className="h2">&lt;&nbsp;</span>
+    {title}
+  </Link>;
+};
+
 export const NotNow = (props) => {
   if (props.to || props.children) {
     throw new Error(`Don't specify to or children`);

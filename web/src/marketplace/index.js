@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Full from '../layout/full';
-import { Back } from '../chrome/link';
+import { BackToPage } from '../chrome/link';
 
 const Index = () =>
-  <Full top={<Back />}>
+  <Full top={<BackToPage title="Store" path="/store"/>}>
     <h1>Marketplace</h1>
     <p>
       Unfortunately, there are certain items that we just can't ship to you in a cost-effective manner e.g. drinks, ice cream, etc.. However, so we don't restrict your choice, you're welcome to list your own items in the store.
