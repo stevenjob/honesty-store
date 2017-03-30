@@ -53,8 +53,8 @@ const Store = ({ registered, showMarketplace, storeCode, balance, items, surveyA
       showMarketplace &&
       <SpecialEntry
         to={`/more`}
-        title="Want to improve the variety?"
-        message="Tap here to list your own items"
+        title="Want to see more?"
+        message="Find out how to list your own items"
         />
     }
     <List data={items} itemRenderer={itemRenderer} />

@@ -5,22 +5,23 @@ import { BackToPage } from '../chrome/link';
 
 const Index = () =>
   <Full top={<BackToPage title="Store" path="/store"/>}>
-    <h1>honesty.store And More</h1>
+    <h1>honesty.store & more!</h1>
     <p>We want to make sure your store has as much variety as possible.</p>
     <p>
-      Unfortunately, there are certain items that just aren't feasible for us to ship (e.g. drinks, ice cream or those
-      nice flapjacks from the bakery around the corner).
+      However, there are certain items that just aren't feasible for us to send out: cold drinks, ice cream or those
+      really tasty flapjacks from the bakery around the corner!
     </p>
     <p>
-      To get around this, we're giving you the ability to list your own items. Please note that we're not auditioning for the next Apprentice star, so remember to list items at the price you purchased them!
+      To get around this, we're rolling out the ability for you to list items that aren't already available in your store.
     </p>
     <h2 className="mt3">How It Works</h2>
     <ul className="pl2 left-align">
       <li className="pb1">You buy the items, tell us the details and we add our service fee of 10%.</li>
       <li className="pb1">We list the item in the store and allow users to record their purchases through the app.</li>
-      <li className="pb1">You can see a full list of sales and access analytics through the app (coming soon!).</li>
+      <li className="pb1">We give you access to analytics on your items including a full breakdown of sales through the app (coming soon!).</li>
       <li className="pb1">Every week, we send you the money from the last week's sales, minus our service fees.</li>
       <li className="pb1">Once everything has sold, you'll have received the amount you paid for the items.</li>
+      <li className="pb1">You don't pay any service fees when you purchase your own items (for now this will be retrospectively refunded).</li>
     </ul>
     <h2 className="mt3">What Next?</h2>
     <p>
