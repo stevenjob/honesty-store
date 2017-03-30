@@ -49,10 +49,12 @@ const assertValidBoxItemWithBatchReference = ({ itemID, batches }) => {
   }
 };
 
-const assertValidBoxSubmission = ({ shippingCost, boxItems, packed, shipped, received, closed }
-  : { shippingCost: any, boxItems: any, packed?: any, shipped?: any, received?: any, closed?: any }) => {
+const assertValidBoxSubmission = ({ shippingCost, boxItems, packed, shipped, received, closed, donationRate }) => {
   if (!Number.isInteger(shippingCost)) {
     throw new Error(`Non-integral shipping cost ${shippingCost}`);
+  }
+  if (!Number.isFinite(donationRate) || donationRate < 0) {
+    throw new Error(`Donation rate '${donationRate}' should be a number >= 0`);
   }
   if (packed != null && !Number.isInteger(packed)) {
     throw new Error(`Invalid timestamp for packed ${packed}`);
