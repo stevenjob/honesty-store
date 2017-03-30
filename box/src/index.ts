@@ -141,8 +141,8 @@ const put = async (box: Box) => {
     .promise();
 };
 
-const flagOutOfStock = async ({ key, boxId, itemId }) => {
-  info(key, `Flagging item out of stock`, { boxId, itemId });
+const flagOutOfStock = async ({ key, boxId, itemId, depleted }) => {
+  info(key, `Flagging item out of stock`, { boxId, itemId, depleted });
 
   const box = await getBox(boxId);
 
@@ -152,7 +152,7 @@ const flagOutOfStock = async ({ key, boxId, itemId }) => {
   }
 
   if (!entry.depleted) {
-    entry.depleted = Date.now();
+    entry.depleted = depleted;
     await updateItems({
       box: {
         ...box,
@@ -217,9 +217,9 @@ router.post(
 );
 
 router.post(
-  '/out-of-stock/:boxId/:itemId',
+  '/out-of-stock/:boxId/:itemId/:depleted',
   serviceAuthentication,
-  async (key, { boxId, itemId }) => flagOutOfStock({ key, boxId, itemId })
+  async (key, { boxId, itemId, depleted }) => flagOutOfStock({ key, boxId, itemId, depleted })
 );
 
 app.use(router);

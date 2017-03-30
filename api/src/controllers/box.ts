@@ -10,10 +10,11 @@ export default (router) => {
     authenticateAccessToken,
     async (key, _params, { itemId }, { user }) => {
       const boxes = await getBoxesForStore(key, user.defaultStoreId);
+      const depleted = Date.now();
 
       const flagPromises = boxes
         .filter(itemInBox(itemId))
-        .map(box => flagOutOfStock({ key, boxId: box.id, itemId }));
+        .map(box => flagOutOfStock({ key, boxId: box.id, itemId, depleted }));
 
       await Promise.all(flagPromises);
 

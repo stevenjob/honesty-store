@@ -53,8 +53,8 @@ export type Box = BoxShippingDetails & {
 
 const { get, post } = fetch('box');
 
-export const flagOutOfStock = ({ key, boxId, itemId }) =>
-  post<{}>(1, key, `/out-of-stock/${boxId}/${itemId}`, {});
+export const flagOutOfStock = ({ key, boxId, itemId, depleted }) =>
+  post<{}>(1, key, `/out-of-stock/${boxId}/${itemId}/${depleted}`, {});
 
 export const createBox = (key, storeId: string, boxSubmission: BoxSubmission) =>
   post<Box>(1, key, `/store/${storeId}`, boxSubmission);
