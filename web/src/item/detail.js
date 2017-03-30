@@ -3,15 +3,13 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import history from '../history';
 import { Back } from '../chrome/link';
-import Stepper from '../chrome/stepper';
 import Currency from '../format/Currency';
 import { performPurchase } from '../actions/purchase';
 import isRegistered from '../reducers/is-registered-user';
 import safeLookupItemImage from './safeLookupItemImage';
 import Full from '../layout/full';
+import Breakdown from './breakdown';
 import FlagOutOfStock from './out-of-stock';
-
-const minNumItems = 1;
 
 const Depleted = ({ registered, itemId }) => (
   <div>
@@ -24,42 +22,17 @@ const Depleted = ({ registered, itemId }) => (
 );
 
 const ItemDetail = ({
-  item: { id, name, price: { total: price }, image, count, unit, unitPlural, qualifier, notes, weight, location },
+  item: { id, name, price: { breakdown, total }, image, count, unit, unitPlural, qualifier, notes, weight, location },
   balance,
   performPurchase,
   registered
 }) => {
-  const calculateBalanceRemaining = (numItems) => balance - (price * numItems);
-
-  const decrementNumItems = (numItems) => Math.max(minNumItems, numItems - 1);
-
-  const formatBalance = (numItems) => {
-    const balance = calculateBalanceRemaining(numItems);
-    return (
-      <span>
-        Your balance will be <Currency amount={balance} />
-      </span>
-    );
-  };
+  const calculateBalanceRemaining = (numItems) => balance - (total * numItems);
 
   const payForText = (count) =>
     count !== 1
     ? `Pay for ${count} ${unitPlural}`
-    : `Pay for 1 ${unit}`;
-
-  const formatPurchaseButton = (numItems) => {
-    const balance = calculateBalanceRemaining(numItems);
-    if (balance < 0) {
-      return {
-        disabled: true,
-        text: `Insufficient funds`
-      };
-    }
-    return {
-      disabled: false,
-      text: payForText(numItems)
-    };
-  };
+    : <span>Pay <Currency amount={total} /> for 1 {unit}</span>;
 
   const onClick = (numItems) => {
     const balance = calculateBalanceRemaining(numItems);
@@ -70,18 +43,11 @@ const ItemDetail = ({
     }
   };
 
-  const purchaseStepper = <Stepper
-    label={`How many ${unitPlural} would you like to pay for?`}
-    onDecrement={decrementNumItems}
-    incrementDisabled={() => false}
-    onIncrement={(numItems) => numItems + 1}
-    decrementDisabled={(numItems) => numItems <= 1}
-    formatDescription={formatBalance}
-    formatValue={(numItems) => numItems}
-    formatButton={formatPurchaseButton}
-    initialValue={1}
-    onClick={onClick}
-    />;
+  const registeredPurchaseButton = <p>
+    <Link className="btn btn-primary btn-big" onClick={() => onClick(1)}>
+      {payForText(1)}
+    </Link>
+  </p>;
 
   const unregisteredPurchaseButton = <p>
     <Link className="btn btn-primary btn-big" to={`/register/${id}`}>
@@ -93,38 +59,53 @@ const ItemDetail = ({
     <Full top={<Back />}>
       {id != null &&
         <div>
-          <h1>{name}</h1>
-          <h2 className=""><Currency amount={price} /></h2>
-          <div className="col-6 mx-auto">
+
+          <div className="col-4 mt3 mx-auto">
             <div className="bg-center bg-no-repeat"
-              style={{ backgroundImage: `url(${safeLookupItemImage(image)})`, paddingBottom: '100%' }}>
+              style={{ backgroundImage: `url(${safeLookupItemImage(image)})`, paddingBottom: '100%', lineHeight: 0 }}>
               {'\u00a0'}
             </div>
           </div>
+          <h1 className="mt1 mb0">{name}</h1>
+          {
+            qualifier &&
+            <h3 className="mt0 mb2 aqua regular">
+              {qualifier}
+            </h3>
+          }
+          {registered ? registeredPurchaseButton : unregisteredPurchaseButton}
+          <p>
+            {
+              count === 0 ?
+              <Depleted registered={registered} itemId={id} /> :
+              registered ?
+              <FlagOutOfStock itemId={id} /> :
+              null
+            }
+          </p>
+          <h3>Item Details</h3>
+          {
+            notes &&
+            <p>{notes}</p>
+          }
           <table className="table mx-auto">
             <tbody>
               {
                 location &&
                 <tr>
-                  <th>Location</th>
+                  <th className="col-6 right-align">Location</th>
                   <td>{location}</td>
                 </tr>
               }
               <tr>
-                  <th>Weight</th>
+                  <th className="col-6 right-align">Weight</th>
                   <td>{`${weight}g`}</td>
               </tr>
             </tbody>
           </table>
-          <p>{notes}</p>
-          {registered ? purchaseStepper : unregisteredPurchaseButton}
-          {
-            count === 0 ?
-            <Depleted registered={registered} itemId={id} /> :
-            registered ?
-            <FlagOutOfStock itemId={id} /> :
-            null
-          }
+          <h3>Price Breakdown</h3>
+          <p>Storage, packaging, packing, postage and the service fee are shared equally across all items in a box.</p>
+          <Breakdown breakdown={breakdown}/>
         </div>
       }
     </Full>
