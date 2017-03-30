@@ -23,6 +23,7 @@ interface PriceBreakdown {
   packagingCost: number;
   packingCost: number;
   serviceFee: number;
+  wholesaleCost: number;
 }
 
 export const storeList = ['sl-ncl', 'sl-edn', 'sl-brs', 'sl-ldn', 'dev-test', 'dev-test-2'];
@@ -92,7 +93,8 @@ const getPriceBreakdown = (boxItem: BoxItem): PriceBreakdown => {
     warehousingCost,
     packagingCost,
     packingCost,
-    serviceFee
+    serviceFee,
+    wholesaleCost
   } = boxItem;
 
   return {
@@ -102,7 +104,8 @@ const getPriceBreakdown = (boxItem: BoxItem): PriceBreakdown => {
     warehousingCost,
     packagingCost,
     packingCost,
-    serviceFee
+    serviceFee,
+    wholesaleCost
   };
 };
 
