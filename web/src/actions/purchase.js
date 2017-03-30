@@ -39,7 +39,7 @@ export const performPurchase = ({ itemId, quantity }) => async (dispatch, getSta
     }, dispatch, getState);
 
     dispatch(purchaseSuccess(response));
-    history.push(`/item/${itemId}/success`);
+    history.push(`/item/${itemId}/${quantity}/success`);
   } catch (e) {
     dispatch(purchaseFailure(e));
   }
