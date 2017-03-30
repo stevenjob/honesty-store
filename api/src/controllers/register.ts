@@ -6,7 +6,7 @@ import { createTopup } from '../../../topup/src/client/index';
 import { TransactionAndBalance } from '../../../transaction/src/client/index';
 import { createUser, updateUser } from '../../../user/src/client/index';
 import { authenticateAccessToken, noopAuthentication } from '../middleware/authenticate';
-import { getSessionData } from '../services/session';
+import { getSessionData, getUserFeatures, UserSessionData } from '../services/session';
 import { storeCodeToStoreID } from '../services/store';
 import { purchase } from '../services/transaction';
 
@@ -52,8 +52,9 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
         ...(purchaseTx != null ? [purchaseTx.transaction] : []),
         topupTx.transaction
       ],
-      cardDetails: topupTx.cardDetails
-    }
+      cardDetails: topupTx.cardDetails,
+      features: getUserFeatures(user)
+    } as UserSessionData
   };
 };
 
