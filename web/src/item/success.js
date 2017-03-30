@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { Success } from '../layout/alert';
 import safeLookupItemImage from './safeLookupItemImage';
 
-export const ItemPurchaseSuccess = ({ item: { image, genericName, genericNamePlural }, quantity }) =>
+export const ItemPurchaseSuccess = ({ item: { id, image, genericName, genericNamePlural }, quantity }) =>
   <Success title={`Enjoy your ${Number(quantity) === 1 ? genericName : genericNamePlural}!`}
     subtitle="Thank you for your honesty!"
     image={safeLookupItemImage(image)}
-    onClick={() => history.replace(`/history`)}
+    onClick={() => history.replace(`/item/${id}`)}
   />;
 
 const mapStateToProps = (
