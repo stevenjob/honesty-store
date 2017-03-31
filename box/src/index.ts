@@ -1,4 +1,5 @@
-import { config, DynamoDB } from 'aws-sdk';
+import { config } from 'aws-sdk';
+import cruftDDB from 'cruft-ddb';
 import bodyParser = require('body-parser');
 import express = require('express');
 import isUUID = require('validator/lib/isUUID');
@@ -11,6 +12,10 @@ import { Box } from './client';
 import calculatePricing from './pricing';
 
 config.region = process.env.AWS_REGION;
+
+const cruft = cruftDDB<Box>({
+  tableName: process.env.TABLE_NAME
+});
 
 const assertValidStoreId = (storeId) => {
   if (!storeList.some((el) => el === storeId)) {
@@ -79,68 +84,13 @@ const assertValidBoxSubmission = ({ shippingCost, boxItems, packed, shipped, rec
 const getBox = async (boxId) => {
   assertValidBoxId(boxId);
 
-  const response = await new DynamoDB.DocumentClient()
-    .get({
-      TableName: process.env.TABLE_NAME,
-      Key: {
-        id: boxId
-      }
-    })
-    .promise();
-
-  const box = <Box>response.Item;
-
-  if (box == null) {
-    throw new Error(`No box for ${boxId}`);
-  }
-
-  return box;
+  return await cruft.read({ id: boxId });
 };
 
 const getBoxesForStore = async (storeId) => {
-  const response = await new DynamoDB.DocumentClient()
-    .scan({
-      TableName: process.env.TABLE_NAME,
-      FilterExpression: 'storeId = :storeId',
-      ExpressionAttributeValues: {
-        ':storeId': storeId
-      }
-    })
-    .promise();
+  assertValidStoreId(storeId);
 
-  return <Box[]>response.Items;
-};
-
-const updateItems = async ({ box, originalVersion }: { box: Box, originalVersion: number }) => {
-  assertValidBoxId(box.id);
-
-  await new DynamoDB.DocumentClient()
-    .update({
-      TableName: process.env.TABLE_NAME,
-      Key: {
-        id: box.id
-      },
-      UpdateExpression:
-        'set boxItems = :boxItems, version = :updatedVersion',
-      ConditionExpression: 'version=:originalVersion',
-      ExpressionAttributeValues: {
-        ':originalVersion': originalVersion,
-        ':updatedVersion': box.version,
-        ':boxItems': box.boxItems
-      }
-    })
-    .promise();
-};
-
-const put = async (box: Box) => {
-  assertValidBoxId(box.id);
-
-  await new DynamoDB.DocumentClient()
-    .put({
-      TableName: process.env.TABLE_NAME,
-      Item: box
-    })
-    .promise();
+  return await cruft.__findAll({ storeId });
 };
 
 const flagOutOfStock = async ({ key, boxId, itemId, depleted }) => {
@@ -155,13 +105,7 @@ const flagOutOfStock = async ({ key, boxId, itemId, depleted }) => {
 
   if (!entry.depleted) {
     entry.depleted = depleted;
-    await updateItems({
-      box: {
-        ...box,
-        version: box.version + 1
-      },
-      originalVersion: box.version
-    });
+    await cruft.update(box);
   }
 
   return {};
@@ -176,21 +120,14 @@ const createBox = async ({ key, storeId, boxSubmission, dryRun }): Promise<Box> 
   const box = calculatePricing(storeId, boxSubmission);
 
   if (!dryRun) {
-    await put(box);
+    await cruft.create(box);
   }
 
   return box;
 };
 
 const assertConnectivity = async () => {
-  await new DynamoDB.DocumentClient()
-    .get({
-      TableName: process.env.TABLE_NAME,
-      Key: {
-        id: 'non-existent-id'
-      }
-    })
-    .promise();
+  await cruft.read({ id: '06439c6c-57c9-4a17-b218-2018ea8dae55' });
 };
 
 const app = express();
