@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid';
 import { getItemCost as getBatchItemCost, getVATRate } from './batch';
 import {
   BatchReference, Box, BoxItem,
-  BoxItemWithBatchReference, BoxSubmission, FixedBoxItemOverheads,
+  BoxItemWithBatchReference, ShippedBoxSubmission, FixedBoxItemOverheads,
   VariableBoxItemOverheads
 } from './client';
 import { avg, sum } from './math';
@@ -107,7 +107,7 @@ const getPricedBoxItem = (
   };
 };
 
-export default (storeId: string, boxSubmission: BoxSubmission): Box & { version: 0 } => {
+export default (storeId: string, boxSubmission: ShippedBoxSubmission): Box & { version: 0 } => {
   const { boxItems, ...rest } = boxSubmission;
   const { shippingCost, donationRate } = rest;
 

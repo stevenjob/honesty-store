@@ -23,24 +23,26 @@ export interface VariableBoxItemOverheads {
   donation: number;
   total: number;
 }
-interface SharedBoxDetails {
+interface Donatable {
+  donationRate: number;
+}
+type ShippingDetails = {
   shippingCost: number;
   packed?: number;
   shipped?: number;
   received?: number;
   closed?: number;
-  donationRate: number;
 }
-
 export type BoxItem = BoxItemWithBatchReference & FixedBoxItemOverheads & VariableBoxItemOverheads & {
   count: number;
   depleted?: number;
 };
-export type BoxSubmission = SharedBoxDetails & {
+
+export type ShippedBoxSubmission = ShippingDetails & Donatable & {
   boxItems: BoxItemWithBatchReference[];
 };
 // this is duplicated in aws/src/table/table.ts
-export type Box = SharedBoxDetails & {
+export type Box = ShippingDetails & Donatable & {
   boxItems: BoxItem[];
   count: number;
   storeId: string;
@@ -53,8 +55,8 @@ const { get, post } = fetch('box');
 export const flagOutOfStock = ({ key, boxId, itemId, depleted }) =>
   post<{}>(1, key, `/out-of-stock/${boxId}/${itemId}/${depleted}`, {});
 
-export const createBox = (key, storeId: string, boxSubmission: BoxSubmission) =>
-  post<Box>(1, key, `/store/${storeId}`, boxSubmission);
+export const createShippedBox = (key, storeId: string, ShippedboxSubmission: ShippedBoxSubmission, dryRun) =>
+  post<Box>(1, key, `/store/${storeId}/shipped?dryRun=${dryRun}`, ShippedboxSubmission);
 
 export const getBoxesForStore = (key, storeId) =>
   get<Box[]>(1, key, `/store/${storeId}`);

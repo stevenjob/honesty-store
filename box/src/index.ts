@@ -54,12 +54,15 @@ const assertValidBoxItemWithBatchReference = ({ itemID, batches }) => {
   }
 };
 
-const assertValidBoxSubmission = ({ shippingCost, boxItems, packed, shipped, received, closed, donationRate }) => {
-  if (!Number.isInteger(shippingCost)) {
-    throw new Error(`Non-integral shipping cost ${shippingCost}`);
-  }
+const assertValidDonationRate = (donationRate) => {
   if (!Number.isFinite(donationRate) || donationRate < 0) {
     throw new Error(`Donation rate '${donationRate}' should be a number >= 0`);
+  }
+};
+
+const assertValidBoxSubmission = async ({ shippingCost, boxItems, packed, shipped, received, closed, donationRate }) => {
+  if (!Number.isInteger(shippingCost)) {
+    throw new Error(`Non-integral shipping cost ${shippingCost}`);
   }
   if (packed != null && !Number.isInteger(packed)) {
     throw new Error(`Invalid timestamp for packed ${packed}`);
@@ -79,6 +82,7 @@ const assertValidBoxSubmission = ({ shippingCost, boxItems, packed, shipped, rec
   for (const boxItem of boxItems) {
     assertValidBoxItemWithBatchReference(boxItem);
   }
+  assertValidDonationRate(donationRate);
 };
 
 const getBox = async (boxId) => {
@@ -111,13 +115,14 @@ const flagOutOfStock = async ({ key, boxId, itemId, depleted }) => {
   return {};
 };
 
-const createBox = async ({ key, storeId, boxSubmission, dryRun }): Promise<Box> => {
   info(key, `New box submission received for store ${storeId}`, { boxSubmission });
+const createShippedBox = async ({ key, storeId, submission, dryRun }): Promise<Box> => {
+  info(key, `New box submission received for store ${storeId}`, { submission });
 
   assertValidStoreId(storeId);
-  assertValidBoxSubmission(boxSubmission);
+  assertValidBoxSubmission(submission);
 
-  const box = calculatePricing(storeId, boxSubmission);
+  const box = calculatePricing(storeId, submission);
 
   if (!dryRun) {
     await cruft.create(box);
@@ -149,10 +154,12 @@ router.get(
 );
 
 router.post(
-  '/store/:storeId',
+  '/store/:storeId/shipped',
   serviceAuthentication,
-  async (key, { storeId }, boxSubmission, { query: { dryRun } }) =>
-    createBox({ key, storeId, boxSubmission, dryRun: dryRun !== 'false' })
+  async (key, { storeId }, submission, { query: { dryRun } }) =>
+    createShippedBox({ key, storeId, submission, dryRun: dryRun !== 'false' })
+);
+  serviceAuthentication,
 );
 
 router.post(
