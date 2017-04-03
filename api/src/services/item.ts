@@ -183,7 +183,7 @@ const items: (Item & { id: string })[] = [
   {
     id: '8e9bb2db-9437-4733-acc1-f5e218e0a603',
     name: 'Fruit Pastilles',
-    image: 'misc-bar.svg',
+    image: 'fruit-pastilles-roll.svg',
     weight: 52.5,
     notes: 'Residual stock.',
     unit: 'pack',
