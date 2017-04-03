@@ -2,13 +2,14 @@ import { config } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 import bodyParser = require('body-parser');
 import express = require('express');
+import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import { storeList } from '../../api/src/services/store';
 import { CodedError } from '../../service/src/error';
 import { info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
-import { getBatch } from './batch';
-import { Box } from './client';
+import { getBatch, getItemCost } from './batch';
+import { Box, BoxItem, MarketplaceBoxSubmission } from './client';
 import calculatePricing from './pricing';
 
 config.region = process.env.AWS_REGION;
@@ -85,6 +86,17 @@ const assertValidBoxSubmission = async ({ shippingCost, boxItems, packed, shippe
   assertValidDonationRate(donationRate);
 };
 
+const assertValidMarketplaceSubmission = ({ boxItem, donationRate }) => {
+   assertValidDonationRate(donationRate);
+   const { batches } = boxItem;
+   console.log(JSON.stringify(boxItem));
+   if (batches.length !== 1) {
+     throw new Error(`Marketplace box can only contain a single batch reference`);
+   }
+   const batch = batches[0];
+   assertValidBatchReference(batch);
+}
+
 const getBox = async (boxId) => {
   assertValidBoxId(boxId);
 
@@ -115,7 +127,56 @@ const flagOutOfStock = async ({ key, boxId, itemId, depleted }) => {
   return {};
 };
 
-  info(key, `New box submission received for store ${storeId}`, { boxSubmission });
+const createMarketplaceBox = async ({ key, storeId, submission, dryRun}): Promise<Box> => {
+  info(key, `New marketplace submission received for store ${storeId}`, { submission });
+
+  assertValidStoreId(storeId);
+  assertValidMarketplaceSubmission(submission);
+
+  const { donationRate, boxItem: batchReference } = submission as MarketplaceBoxSubmission;
+  const { batches } = batchReference;
+
+  const { id, count } = batches[0];
+
+  const wholesaleCost = getItemCost(id);
+  const serviceFee = wholesaleCost * 0.1;
+  const subtotal = wholesaleCost + serviceFee;
+  const donation = subtotal * donationRate;
+  const total = subtotal + donation;
+
+  const boxItem: BoxItem = {
+    ...batchReference,
+    count,
+    shippingCost: 0,
+    warehousingCost: 0,
+    packagingCost: 0,
+    packingCost: 0,
+    VAT: 0,
+    creditCardFee: 0,
+    wholesaleCost,
+    serviceFee,
+    subtotal,
+    donation,
+    total
+  };
+
+  const box: Box & { version: 0 } = {
+    shippingCost: 0,
+    donationRate,
+    boxItems: [boxItem],
+    storeId,
+    count: count,
+    version: 0,
+    id: uuid()
+  };
+
+  if (!dryRun) {
+    await cruft.create(box);
+  }
+
+  return box;
+};
+
 const createShippedBox = async ({ key, storeId, submission, dryRun }): Promise<Box> => {
   info(key, `New box submission received for store ${storeId}`, { submission });
 
@@ -159,7 +220,12 @@ router.post(
   async (key, { storeId }, submission, { query: { dryRun } }) =>
     createShippedBox({ key, storeId, submission, dryRun: dryRun !== 'false' })
 );
+
+router.post(
+  '/store/:storeId/marketplace',
   serviceAuthentication,
+  async (key, { storeId }, submission, { query: { dryRun } }) =>
+    createMarketplaceBox({ key, storeId, submission, dryRun: dryRun !== 'false' })
 );
 
 router.post(
