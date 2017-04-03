@@ -13,6 +13,8 @@ interface Batch {
   VATRate?: number;
 }
 
+const MARKETPLACE_ID = 'HS_MARKETPLACE';
+
 const batchesInternal: Batch[] = [
   // Residual from bulky
   {
@@ -492,11 +494,15 @@ export const getBatch = (batchId: string) => {
 
 export const getItemCost = (batchId: string): number => {
   const { priceExcludingVAT, itemQuantity } = getBatch(batchId);
-  // What's the best way to do this rounding ceil/round?
   return priceExcludingVAT / itemQuantity;
 };
 
 export const getVATRate = (batchId: string): number => {
   const { VATRate } = getBatch(batchId);
   return VATRate;
+};
+
+export const isMarketplaceBatch = (batchId: string): boolean => {
+  const { supplier } = getBatch(batchId);
+  return supplier === MARKETPLACE_ID;
 };
