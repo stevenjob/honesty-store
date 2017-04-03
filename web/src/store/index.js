@@ -61,8 +61,15 @@ const Store = ({ registered, showMarketplace, storeCode, balance, items, surveyA
   </Chrome>;
 
 const storeOrdering = (items) => {
-  const inStock = items.filter(item => item.count > 0);
-  const depleted = items.filter(item => item.count === 0);
+  const orderedItems = items.sort((a, b) => {
+    const itemA = a.name.toLowerCase();
+    const itemB = b.name.toLowerCase();
+    if (itemA < itemB) return -1;
+    if (itemA > itemB) return 1;
+    return 0;
+  });
+  const inStock = orderedItems.filter(item => item.count > 0);
+  const depleted = orderedItems.filter(item => item.count === 0);
 
   return [
     ...inStock,
