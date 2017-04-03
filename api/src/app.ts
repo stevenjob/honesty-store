@@ -41,7 +41,7 @@ app.use(router);
 
 // send healthy response to load balancer probes
 app.get('/', (_req, res) => {
-  res.send(200);
+  res.sendStatus(200);
 });
 
 app.listen(3000);

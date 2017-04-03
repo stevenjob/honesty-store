@@ -289,10 +289,10 @@ app.use(router);
 app.get('/', (_req, res) => {
   get({ userId: TEST_DATA_USER_ID })
     .then(() => {
-      res.send(200);
+      res.sendStatus(200);
     })
     .catch((e) => {
-      res.send(500);
+      res.sendStatus(500);
       error(createServiceKey({ service: 'user' }), 'LB probe error', e);
     });
 });

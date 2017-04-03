@@ -165,10 +165,10 @@ app.use(router);
 app.get('/', (_req, res) => {
   get({ accountId: TEST_DATA_EMPTY_ACCOUNT_ID })
     .then(() => {
-      res.send(200);
+      res.sendStatus(200);
     })
     .catch(() => {
-      res.send(500);
+      res.sendStatus(500);
     });
 });
 
