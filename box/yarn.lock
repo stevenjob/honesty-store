@@ -691,9 +691,9 @@ cross-spawn-async@^2.1.1:
     lru-cache "^4.0.0"
     which "^1.2.8"
 
-cruft-ddb@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/cruft-ddb/-/cruft-ddb-1.0.3.tgz#07f8837083f36a94549ba1f81b688bf27e02f138"
+cruft-ddb@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/cruft-ddb/-/cruft-ddb-1.0.5.tgz#77b66456c50f8184194ea659663b0aece097389e"
   dependencies:
     aws-sdk "^2.28.0"
 
