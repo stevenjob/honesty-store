@@ -1,0 +1,90 @@
+.item-misc-selection {
+  position: relative;
+  transform: translateX(10%);
+}
+
+.item-misc-selection>svg {
+  position: absolute;
+  will-change: transform;
+  animation-timing-function: cubic-bezier(.47,.52,.58,1.19);
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  animation-duration: 10s;
+}
+
+.item-misc-selection-center {
+  transform: scale(0.6);
+  animation-name: item-misc-selection-center;
+}
+
+.item-misc-selection-left {
+  transform: scale(0.5) rotate(-35deg) translate(-20%, -20%);
+  animation-name: item-misc-selection-left;
+}
+
+.item-misc-selection-right {
+  transform: scale(0.5) rotate(+45deg) translate(+20%, -30%);
+  animation-name: item-misc-selection-right;
+}
+
+
+@keyframes item-misc-selection-center {
+  from {
+    transform: scale(0.6);
+  }
+  89% {
+    transform: scale(0.6);
+  }
+  90% {
+    transform: scale(0.6) translate(0, -3%) rotateY(8deg) rotateX(5deg);
+  }
+  92% {
+    transform: scale(0.6);
+  }
+  to {
+    transform: scale(0.6);
+  }
+}
+
+@keyframes item-misc-selection-left {
+  from {
+    transform: scale(0.3);
+  }
+  45% {
+    transform: scale(0.3);
+  }
+  60% {
+    transform: scale(0.5) rotate(-35deg) translate(-20%, -25%);
+  }
+  91% {
+    transform: scale(0.5) rotate(-35deg) translate(-20%, -25%);
+  }
+  93% {
+    transform: scale(0.3);
+  }
+  to {
+    transform: scale(0.3);
+  }
+}
+
+@keyframes item-misc-selection-right {
+  from {
+    transform: scale(0.3);
+  }
+  70% {
+    transform: scale(0.3);
+  }
+  80% {
+    transform: scale(0.5) rotate(+45deg) translate(+20%, -35%);
+  }
+  91% {
+    transform: scale(0.5) rotate(+45deg) translate(+20%, -35%);
+  }
+  93% {
+    transform: scale(0.3);
+  }
+  to {
+    transform: scale(0.3);
+  }
+}
+

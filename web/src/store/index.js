@@ -28,9 +28,7 @@ const SpecialEntry = ({ to, title, message }) => (
           {message}
         </p>
       </div>
-      <div className="" style={{ width: '5rem' }}>
-        <MiscSelection />
-      </div>
+      <MiscSelection style={{ width: '5rem', height: '5rem' }}/>
     </Link>
   </div>
 );
