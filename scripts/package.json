@@ -9,8 +9,9 @@
     "ci": "npm test"
   },
   "dependencies": {
-    "aws-sdk": "^2.7.10"
-	},
+    "aws-sdk": "^2.7.10",
+    "jsonwebtoken": "^7.3.0"
+  },
   "devDependencies": {
     "@types/node": "0.0.2",
     "tslint": "^4.4.2",
