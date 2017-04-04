@@ -75,15 +75,18 @@ export const getItemPriceFromStore = async (key, storeCode: string, itemID: stri
 };
 
 const getUniqueItemCounts = (boxes: Box[]) => {
-  const map = new Map<string, number>();
-  for (const box of boxes) {
-    for (const { itemID, count, depleted } of box.boxItems) {
-      const existingCount = map.has(itemID) ? map.get(itemID) : 0;
-      map.set(itemID, existingCount + (depleted ? 0 : count));
+  const map = new Map<string, { count: number, isMarketplace: boolean }>();
+  for (const { boxItems } of boxes) {
+    for (const { itemID, count, depleted, batches } of boxItems) {
+      const existingCount = map.has(itemID) ? map.get(itemID).count : 0;
+      const updatedCount = existingCount + (depleted ? 0 : count);
+
+      const isMarketplace = batches.length === 1 && isMarketplaceBatch(batches[0].id);
+      map.set(itemID, { count: updatedCount, isMarketplace });
     }
   }
   return Array.from(map.entries())
-    .map(([itemID, count]) => ({ itemID, count }));
+    .map(([itemID, { count, isMarketplace }]) => ({ itemID, count, isMarketplace }));
 };
 
 const getPriceBreakdown = (boxItem: BoxItem): PriceBreakdown => {
@@ -118,7 +121,7 @@ export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
 
   return Promise.all(
     getUniqueItemCounts(openBoxes)
-      .map(async ({ itemID, count }) => {
+      .map(async ({ itemID, count, isMarketplace }) => {
         const boxItem = getBoxItem(openBoxes, itemID);
         const { total } = boxItem;
         const breakdown = getPriceBreakdown(boxItem);
@@ -126,6 +129,7 @@ export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
         return ({
           ...getItem(itemID),
           count,
+          isMarketplace,
           id: itemID,
           price: {
             total,
