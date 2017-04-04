@@ -2,7 +2,7 @@ jest.mock('./batch');
 
 import { expect } from 'chai';
 import { ShippedBoxSubmission } from './client';
-import calculatePricing, { getAverageItemCost, getItemCost } from './pricing';
+import calculateShippedBoxPricing, { getAverageItemCost, getItemCost } from './shipped-box';
 
 const precision = 0.5;
 
@@ -54,7 +54,7 @@ describe('Wholesale item cost', () => {
 
 describe('Box Submission', () => {
   it('should calculate box item costs', () => {
-    const { boxItems } = calculatePricing(storeId, boxSubmission);
+    const { boxItems } = calculateShippedBoxPricing(storeId, boxSubmission);
 
     const {
       wholesaleCost,
@@ -85,12 +85,12 @@ describe('Box Submission', () => {
   });
 
   it('should calculate total items in box', () => {
-    const { count } = calculatePricing(storeId, boxSubmission);
+    const { count } = calculateShippedBoxPricing(storeId, boxSubmission);
     expect(count).to.equal(8);
   });
 
   it('should calculate total of individual box items', () => {
-    const { boxItems } = calculatePricing(storeId, boxSubmission);
+    const { boxItems } = calculateShippedBoxPricing(storeId, boxSubmission);
     const { count: boxItem0Count } = boxItems[0];
     const { count: boxItem1Count } = boxItems[1];
     expect(boxItem0Count).to.equal(3);
@@ -98,7 +98,7 @@ describe('Box Submission', () => {
   });
 
   it('should assign storeId to box', () => {
-    const { storeId: boxStoreId } = calculatePricing(storeId, boxSubmission);
+    const { storeId: boxStoreId } = calculateShippedBoxPricing(storeId, boxSubmission);
     expect(boxStoreId).to.equal(storeId);
   });
 });

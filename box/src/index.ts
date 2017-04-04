@@ -10,7 +10,7 @@ import { info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { getBatch, getItemCost } from './batch';
 import { Box, BoxItem, MarketplaceBoxSubmission } from './client';
-import calculatePricing from './pricing';
+import calculateShippedBoxPricing from './shipped-box';
 
 config.region = process.env.AWS_REGION;
 
@@ -183,7 +183,7 @@ const createShippedBox = async ({ key, storeId, submission, dryRun }): Promise<B
   assertValidStoreId(storeId);
   assertValidBoxSubmission(submission);
 
-  const box = calculatePricing(storeId, submission);
+  const box = calculateShippedBoxPricing(storeId, submission);
 
   if (!dryRun) {
     await cruft.create(box);
