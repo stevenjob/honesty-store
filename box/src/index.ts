@@ -2,15 +2,15 @@ import { config } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 import bodyParser = require('body-parser');
 import express = require('express');
-import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import { storeList } from '../../api/src/services/store';
 import { CodedError } from '../../service/src/error';
 import { info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
-import { getBatch, getItemCost } from './batch';
-import { Box, BoxItem, MarketplaceBoxSubmission } from './client';
+import { getBatch } from './batch';
+import { Box } from './client';
 import calculateShippedBoxPricing from './shipped-box';
+import calculateMarketplaceBoxPricing from './marketplace-box';
 
 config.region = process.env.AWS_REGION;
 
@@ -133,42 +133,7 @@ const createMarketplaceBox = async ({ key, storeId, submission, dryRun}): Promis
   assertValidStoreId(storeId);
   assertValidMarketplaceSubmission(submission);
 
-  const { donationRate, boxItem: batchReference } = submission as MarketplaceBoxSubmission;
-  const { batches } = batchReference;
-
-  const { id, count } = batches[0];
-
-  const wholesaleCost = getItemCost(id);
-  const serviceFee = wholesaleCost * 0.1;
-  const subtotal = wholesaleCost + serviceFee;
-  const donation = subtotal * donationRate;
-  const total = subtotal + donation;
-
-  const boxItem: BoxItem = {
-    ...batchReference,
-    count,
-    shippingCost: 0,
-    warehousingCost: 0,
-    packagingCost: 0,
-    packingCost: 0,
-    VAT: 0,
-    creditCardFee: 0,
-    wholesaleCost,
-    serviceFee,
-    subtotal,
-    donation,
-    total
-  };
-
-  const box: Box & { version: 0 } = {
-    shippingCost: 0,
-    donationRate,
-    boxItems: [boxItem],
-    storeId,
-    count: count,
-    version: 0,
-    id: uuid()
-  };
+  const box = calculateMarketplaceBoxPricing(storeId, submission);
 
   if (!dryRun) {
     await cruft.create(box);
