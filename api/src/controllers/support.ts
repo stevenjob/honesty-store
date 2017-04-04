@@ -4,11 +4,12 @@ import uuid = require('uuid/v4');
 
 import { Key } from '../../../service/src/key';
 import { info } from '../../../service/src/log';
+import { User, userRegistered } from '../../../user/src/client';
 import { authenticateAccessToken } from '../middleware/authenticate';
 
 interface SlackMessageParams {
   key: Key;
-  user: any;
+  user: User;
   message: string;
   emailAddress?: string;
   fields: {
@@ -19,6 +20,7 @@ interface SlackMessageParams {
 
 export const sendSlackMessage = async ({ key, user, message, emailAddress, fields }: SlackMessageParams) => {
   const validatedEmailAddress = user.emailAddress || (emailAddress && isEmail(emailAddress) ? emailAddress : null);
+  const prefixedEmailAddress = `${userRegistered(user) ? '' : '(unregistered) '}${validatedEmailAddress}`;
   const requestId = uuid();
 
   const response = await fetch('https://hooks.slack.com/services/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', {
@@ -31,7 +33,7 @@ export const sendSlackMessage = async ({ key, user, message, emailAddress, field
       icon_emoji: ':ghost:',
       attachments: [
         {
-          fallback: `New support request (${requestId}) received ${message} ${user.id} ${validatedEmailAddress}`,
+          fallback: `New support request (${requestId}) received ${message} ${user.id} ${prefixedEmailAddress}`,
           fields: [
             {
               title: 'Message',
@@ -51,7 +53,7 @@ export const sendSlackMessage = async ({ key, user, message, emailAddress, field
             },
             {
               title: 'Email',
-              value: validatedEmailAddress
+              value: prefixedEmailAddress
             },
             ...fields
           ]
