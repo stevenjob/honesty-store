@@ -13,7 +13,7 @@ interface Batch {
   VATRate?: number;
 }
 
-const MARKETPLACE_ID = 'HS_MARKETPLACE';
+export const MARKETPLACE_ID = 'HS_MARKETPLACE';
 
 const batchesInternal: Batch[] = [
   // Residual from bulky

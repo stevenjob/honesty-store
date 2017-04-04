@@ -7,7 +7,8 @@ import { storeList } from '../../api/src/services/store';
 import { CodedError } from '../../service/src/error';
 import { info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
-import { getBatch } from './batch';
+import { getUser } from '../../user/src/client';
+import { getBatch, MARKETPLACE_ID } from './batch';
 import { Box } from './client';
 import calculateMarketplaceBoxPricing from './marketplace-box';
 import calculateShippedBoxPricing from './shipped-box';
@@ -86,14 +87,23 @@ const assertValidBoxSubmission = async ({ shippingCost, boxItems, packed, shippe
   assertValidDonationRate(donationRate);
 };
 
-const assertValidMarketplaceSubmission = ({ boxItem, donationRate }) => {
+const assertValidMarketplaceSubmission = async (key, { boxItem, donationRate }) => {
   assertValidDonationRate(donationRate);
   const { batches } = boxItem;
+  assertValidBoxItemWithBatchReference(boxItem);
   if (batches.length !== 1) {
     throw new Error(`Marketplace box can only contain a single batch reference`);
   }
-  const batch = batches[0];
-  assertValidBatchReference(batch);
+  const { id: batchId } = batches[0];
+  const { supplier, supplierCode } = getBatch(batchId);
+  if (supplier !== MARKETPLACE_ID) {
+    throw new Error(`Referenced batch '${batchId}' must have supplier value '${MARKETPLACE_ID}', but found '${supplier}'`);
+  }
+  try {
+    await getUser(key, supplierCode);
+  } catch (e) {
+    throw new Error(`Referenced batch '${batchId}' must have a valid userId assigned to supplierCode, ${e.message}`);
+  }
 };
 
 const getBox = async (boxId) => {
@@ -130,7 +140,7 @@ const createMarketplaceBox = async ({ key, storeId, submission, dryRun}): Promis
   info(key, `New marketplace submission received for store ${storeId}`, { submission });
 
   assertValidStoreId(storeId);
-  assertValidMarketplaceSubmission(submission);
+  await assertValidMarketplaceSubmission(key, submission);
 
   const box = calculateMarketplaceBoxPricing(storeId, submission);
 
