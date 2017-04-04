@@ -130,8 +130,7 @@ const dummyBoxData: BoxData[] = [
         count: 3,
         batches: [
           {
-            // these batch ids are entirely fabricated and don't refer to anything
-            id: '67a144ae-57bd-4887-ad4d-be579a1255a7',
+            id: '1bea7790-5c53-4bdc-91dd-21b004310ac1',
             count: 3
           }
         ],
@@ -143,7 +142,7 @@ const dummyBoxData: BoxData[] = [
         depleted: 1489157268215,
         batches: [
           {
-            id: '85b9c287-7df8-4f84-b43c-0d04e24f6f18',
+            id: '03e918c6-8868-4682-9c40-43caebdfc5b7',
             count: 7
           }
         ],
@@ -154,7 +153,7 @@ const dummyBoxData: BoxData[] = [
         count: 7,
         batches: [
           {
-            id: '8811ffd0-d2d6-4d6c-bd75-f2fd40d0e113',
+            id: '3af2571d-abe2-49f3-849e-9f180a1a8f8f',
             count: 7
           }
         ],
@@ -175,7 +174,7 @@ const dummyBoxData: BoxData[] = [
         count: 4,
         batches: [
           {
-            id: '99eb764f-76b5-488f-b797-e463db39fd39',
+            id: '1bea7790-5c53-4bdc-91dd-21b004310ac1',
             count: 4
           }
         ],
@@ -187,7 +186,7 @@ const dummyBoxData: BoxData[] = [
         depleted: 1489157268215,
         batches: [
           {
-            id: 'af6ecd4c-5b08-4ee8-ae6f-9ba13036f749',
+            id: '03e918c6-8868-4682-9c40-43caebdfc5b7',
             count: 6
           }
         ],
@@ -199,7 +198,7 @@ const dummyBoxData: BoxData[] = [
         depleted: 1489157268215,
         batches: [
           {
-            id: 'baff2a00-0ae7-4d9b-b35c-59b5133f3709',
+            id: '3af2571d-abe2-49f3-849e-9f180a1a8f8f',
             count: 8
           }
         ],
@@ -221,7 +220,7 @@ const dummyBoxData: BoxData[] = [
         depleted: 1489157268215,
         batches: [
           {
-            id: '4e8aae2f-cc53-4b5f-bd1c-7fb0e35b2283',
+            id: '1bea7790-5c53-4bdc-91dd-21b004310ac1',
             count: 10
           }
         ],
@@ -233,7 +232,7 @@ const dummyBoxData: BoxData[] = [
         depleted: 1489157268215,
         batches: [
           {
-            id: '5d9d658d-0c36-4373-bebf-8742d0e8c59a',
+            id: '03e918c6-8868-4682-9c40-43caebdfc5b7',
             count: 12
           }
         ],
@@ -245,7 +244,7 @@ const dummyBoxData: BoxData[] = [
         depleted: 1489157268215,
         batches: [
           {
-            id: '002984a8-9030-4b0a-9fca-d2769de73356',
+            id: '3af2571d-abe2-49f3-849e-9f180a1a8f8f',
             count: 15
           }
         ],
