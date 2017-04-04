@@ -5,9 +5,7 @@ import {
   BoxItemWithBatchReference, ShippedBoxSubmission, FixedBoxItemOverheads,
   VariableBoxItemOverheads
 } from './client';
-import { avg, sum } from './math';
-
-type CombinedCosts = VariableBoxItemOverheads & FixedBoxItemOverheads;
+import { avg, sum, roundItemCosts } from './math';
 
 const creditCardFeeRate = 0.054;
 const expectedLossPerBox = 0.05;
@@ -40,34 +38,6 @@ export const getAverageItemCost = (boxItems): number =>
       count: sumBatches(batches)
     })
   );
-
-const roundItemCosts = (costs: CombinedCosts): CombinedCosts => {
-  const roundedCosts: CombinedCosts = Object.assign({}, ...Object.keys(costs).map((key) => {
-    const cost = costs[key];
-    return { [key]: Math.round(cost) };
-  }));
-
-  const { total, serviceFee, subtotal, ...nonTotalCosts } = roundedCosts;
-
-  const sumOfCosts = ([
-    ...Object.keys(nonTotalCosts).map(key => nonTotalCosts[key]),
-    serviceFee
-  ] as number[])
-  .reduce((accumulated, current) => accumulated + current, 0);
-
-  const diff = total - sumOfCosts;
-
-  const adjustedServiceFee = serviceFee + diff;
-
-  if (adjustedServiceFee < 0) {
-    throw new Error(`Service fee would be less than 0`);
-  }
-
-  return {
-    ...roundedCosts,
-    serviceFee: adjustedServiceFee
-  };
-};
 
 const getPricedBoxItem = (
   boxItemWithBatchRef: BoxItemWithBatchReference,
