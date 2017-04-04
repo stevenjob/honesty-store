@@ -23,7 +23,7 @@ interface SessionData {
 }
 
 const marketplaceFeature = ({ defaultStoreId }) => {
-  const allowedStoreIds = ['sl-ncl', 'sl-edn'];
+  const allowedStoreIds = ['sl-ncl', 'sl-edn', 'dev-test'];
   return allowedStoreIds.indexOf(defaultStoreId) !== -1;
 };
 
