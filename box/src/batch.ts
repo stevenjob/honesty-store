@@ -471,6 +471,19 @@ const batchesInternal: Batch[] = [
     expiry: 1506812400000,
     priceExcludingVAT: 249,
     VATRate: 0.2
+  },
+  // For test purposes
+  {
+    id: '989721c5-b0db-43b0-8c49-0db83a1b3276',
+    purchased: 1484179200000,
+    quantity: 1,
+    supplier: MARKETPLACE_ID,
+    supplierCode: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649',
+    itemId: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
+    itemQuantity: 20,
+    expiry: 1506812400000,
+    priceExcludingVAT: 1000,
+    VATRate: 0
   }
 ];
 

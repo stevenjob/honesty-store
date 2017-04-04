@@ -120,6 +120,40 @@ const dietCokeCosts = {
 
 const dummyBoxData: BoxData[] = [
   {
+    id: 'f46228cc-a138-495d-b28e-c5f7f0973f56',
+    storeId: 'dev-test',
+    version: 0,
+    shippingCost: 0,
+    packed: 1491300007664,
+    shipped: 1491300007664,
+    received: 1491300007664,
+    count: 20,
+    donationRate: 0.1,
+    boxItems: [
+      {
+        itemID: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
+        batches: [
+          {
+            id: '989721c5-b0db-43b0-8c49-0db83a1b3276',
+            count: 20
+          }
+        ],
+        count: 20,
+        wholesaleCost: 30,
+        serviceFee: 3,
+        subtotal: 33,
+        donation: 3,
+        total: 36,
+        VAT: 0,
+        shippingCost: 0,
+        warehousingCost: 0,
+        packagingCost: 0,
+        packingCost: 0,
+        creditCardFee: 0
+      }
+    ]
+  },
+  {
     id: '06439c6c-57c9-4a17-b218-2018ea8dae55',
     storeId: 'dev-test',
     version: 0,
