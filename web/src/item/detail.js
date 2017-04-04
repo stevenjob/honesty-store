@@ -22,7 +22,7 @@ const Depleted = ({ registered, itemId }) => (
 );
 
 const ItemDetail = ({
-  item: { id, name, price: { breakdown, total }, image, count, unit, unitPlural, qualifier, notes, weight, location },
+  item: { id, name, price: { breakdown, total }, image, count, unit, unitPlural, qualifier, notes, weight, location, isMarketplace },
   balance,
   performPurchase,
   registered
@@ -44,13 +44,13 @@ const ItemDetail = ({
   };
 
   const registeredPurchaseButton = <p>
-    <Link className="btn btn-primary btn-big" onClick={() => onClick(1)}>
+    <Link className={`btn btn-primary btn-big ${isMarketplace && 'btn-more'}`} onClick={() => onClick(1)}>
       {payForText(1)}
     </Link>
   </p>;
 
   const unregisteredPurchaseButton = <p>
-    <Link className="btn btn-primary btn-big" to={`/register/${id}`}>
+    <Link className={`btn btn-primary btn-big ${isMarketplace && 'btn-more'}`} to={`/register/${id}`}>
       {payForText(1)}
     </Link>
   </p>;
@@ -69,7 +69,7 @@ const ItemDetail = ({
           <h1 className="mt1 mb0">{name}</h1>
           {
             qualifier &&
-            <h3 className="mt0 mb2 aqua regular">
+            <h3 className="mt0 mb3 aqua regular">
               {qualifier}
             </h3>
           }
@@ -83,7 +83,7 @@ const ItemDetail = ({
               null
             }
           </p>
-          <h3>Item Details</h3>
+          <h3 className="mt3">Item Details</h3>
           {
             notes &&
             <p>{notes}</p>
