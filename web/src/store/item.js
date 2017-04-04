@@ -23,7 +23,7 @@ export default ({ item: { id, name, price: { total: price }, image, qualifier, c
       }
     </div>
     <div className="ml2 flex-none flex flex-column justify-around">
-      <h2 className={`mt0 mb0 btn btn-primary ${isMarketplace && 'btn-more'}`}>
+      <h2 className={`mt0 mb0 btn btn-primary ${isMarketplace ? 'btn-more' : ''}`}>
         <Currency amount={price} />
       </h2>
     </div>

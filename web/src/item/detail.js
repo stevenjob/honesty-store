@@ -43,14 +43,16 @@ const ItemDetail = ({
     }
   };
 
+  const buttonClasses = `btn btn-primary btn-big ${isMarketplace ? 'btn-more' : ''}`;
+
   const registeredPurchaseButton = <p>
-    <Link className={`btn btn-primary btn-big ${isMarketplace && 'btn-more'}`} onClick={() => onClick(1)}>
+    <Link className={buttonClasses} onClick={() => onClick(1)}>
       {payForText(1)}
     </Link>
   </p>;
 
   const unregisteredPurchaseButton = <p>
-    <Link className={`btn btn-primary btn-big ${isMarketplace && 'btn-more'}`} to={`/register/${id}`}>
+    <Link className={buttonClasses} to={`/register/${id}`}>
       {payForText(1)}
     </Link>
   </p>;
