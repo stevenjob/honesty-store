@@ -29,7 +29,7 @@ const boxSubmission: ShippedBoxSubmission = {
 };
 
 describe('Average Cost', () => {
-  it('should calcualate the average item cost across the batches', () => {
+  it('should calculate the average item cost across the batches', () => {
     const { boxItems } = boxSubmission;
     const averageItemCost = getAverageItemCost(boxItems);
     expect(averageItemCost).to.be.approximately(35, precision);
