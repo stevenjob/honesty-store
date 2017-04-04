@@ -32,7 +32,7 @@ type ShippingDetails = {
   shipped?: number;
   received?: number;
   closed?: number;
-}
+};
 export type BoxItem = BoxItemWithBatchReference & FixedBoxItemOverheads & VariableBoxItemOverheads & {
   count: number;
   depleted?: number;
@@ -43,7 +43,7 @@ export type ShippedBoxSubmission = ShippingDetails & Donatable & {
 };
 export type MarketplaceBoxSubmission = Donatable & {
   boxItem: BoxItemWithBatchReference;
-}
+};
 // this is duplicated in aws/src/table/table.ts
 export type Box = ShippingDetails & Donatable & {
   boxItems: BoxItem[];
@@ -58,8 +58,8 @@ const { get, post } = fetch('box');
 export const flagOutOfStock = ({ key, boxId, itemId, depleted }) =>
   post<{}>(1, key, `/out-of-stock/${boxId}/${itemId}/${depleted}`, {});
 
-export const createShippedBox = (key, storeId: string, ShippedboxSubmission: ShippedBoxSubmission, dryRun) =>
-  post<Box>(1, key, `/store/${storeId}/shipped?dryRun=${dryRun}`, ShippedboxSubmission);
+export const createShippedBox = (key, storeId: string, submission: ShippedBoxSubmission, dryRun) =>
+  post<Box>(1, key, `/store/${storeId}/shipped?dryRun=${dryRun}`, submission);
 
 export const createMarketplaceBox = (key, storeId: string, submission: MarketplaceBoxSubmission, dryRun: boolean) =>
   post<Box>(1, key, `/store/${storeId}/marketplace?dryRun=${dryRun}`, submission);

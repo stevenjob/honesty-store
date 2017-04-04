@@ -9,8 +9,8 @@ import { info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { getBatch } from './batch';
 import { Box } from './client';
-import calculateShippedBoxPricing from './shipped-box';
 import calculateMarketplaceBoxPricing from './marketplace-box';
+import calculateShippedBoxPricing from './shipped-box';
 
 config.region = process.env.AWS_REGION;
 
@@ -87,15 +87,14 @@ const assertValidBoxSubmission = async ({ shippingCost, boxItems, packed, shippe
 };
 
 const assertValidMarketplaceSubmission = ({ boxItem, donationRate }) => {
-   assertValidDonationRate(donationRate);
-   const { batches } = boxItem;
-   console.log(JSON.stringify(boxItem));
-   if (batches.length !== 1) {
-     throw new Error(`Marketplace box can only contain a single batch reference`);
-   }
-   const batch = batches[0];
-   assertValidBatchReference(batch);
-}
+  assertValidDonationRate(donationRate);
+  const { batches } = boxItem;
+  if (batches.length !== 1) {
+    throw new Error(`Marketplace box can only contain a single batch reference`);
+  }
+  const batch = batches[0];
+  assertValidBatchReference(batch);
+};
 
 const getBox = async (boxId) => {
   assertValidBoxId(boxId);

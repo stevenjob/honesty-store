@@ -1,4 +1,4 @@
-import { VariableBoxItemOverheads, FixedBoxItemOverheads } from './client';
+import { FixedBoxItemOverheads, VariableBoxItemOverheads } from './client';
 
 type CombinedCosts = VariableBoxItemOverheads & FixedBoxItemOverheads;
 
@@ -27,6 +27,7 @@ export const roundItemCosts = (costs: CombinedCosts): CombinedCosts => {
     return { [key]: Math.round(cost) };
   }));
 
+  // tslint:disable-next-line:no-unused-variable
   const { total, serviceFee, subtotal, ...nonTotalCosts } = roundedCosts;
 
   const sumOfCosts = ([

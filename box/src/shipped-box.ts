@@ -2,10 +2,10 @@ import { v4 as uuid } from 'uuid';
 import { getItemCost as getBatchItemCost, getVATRate } from './batch';
 import {
   BatchReference, Box, BoxItem,
-  BoxItemWithBatchReference, ShippedBoxSubmission, FixedBoxItemOverheads,
+  BoxItemWithBatchReference, FixedBoxItemOverheads, ShippedBoxSubmission,
   VariableBoxItemOverheads
 } from './client';
-import { avg, sum, roundItemCosts } from './math';
+import { avg, roundItemCosts, sum } from './math';
 
 const creditCardFeeRate = 0.054;
 const expectedLossPerBox = 0.05;

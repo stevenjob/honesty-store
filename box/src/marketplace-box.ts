@@ -22,7 +22,7 @@ export default (storeId: string, submission: MarketplaceBoxSubmission): Box & { 
     total,
     creditCardFee: 0,
     VAT: 0
-  }
+  };
 
   const fixedOverheads: FixedBoxItemOverheads = {
     shippingCost: 0,
@@ -30,7 +30,7 @@ export default (storeId: string, submission: MarketplaceBoxSubmission): Box & { 
     packagingCost: 0,
     packingCost: 0,
     serviceFee
-  }
+  };
 
   const roundedCosts = roundItemCosts({ ...fixedOverheads, ...variableCosts });
 
@@ -38,7 +38,7 @@ export default (storeId: string, submission: MarketplaceBoxSubmission): Box & { 
     ...batchReference,
     ...roundedCosts,
     count
-  }
+  };
 
   return {
     id: uuid(),
@@ -49,4 +49,4 @@ export default (storeId: string, submission: MarketplaceBoxSubmission): Box & { 
     version: 0,
     shippingCost: 0
   };
-}
+};
