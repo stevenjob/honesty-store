@@ -1,6 +1,6 @@
 import { getItem } from '../../api/src/services/item';
 
-interface Batch {
+export interface Batch {
   id: string;
   purchased?: number;
   quantity: number;

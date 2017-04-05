@@ -8,7 +8,7 @@ import { CodedError } from '../../service/src/error';
 import { info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { getUser } from '../../user/src/client';
-import { getBatch, MARKETPLACE_ID } from './batch';
+import { Batch, getBatch, MARKETPLACE_ID } from './batch';
 import { Box } from './client';
 import calculateMarketplaceBoxPricing from './marketplace-box';
 import calculateShippedBoxPricing from './shipped-box';
@@ -31,6 +31,27 @@ const assertValidBoxId = (boxId) => {
   }
 };
 
+const assertValidShippedBatch = (batch: Batch) => {
+  const { id: batchId, supplier } = batch;
+  if (supplier === MARKETPLACE_ID) {
+    throw new Error(`Referenced batch '${batchId}' cannot have supplier value '${MARKETPLACE_ID} for a shipped box`);
+  }
+};
+
+const assertValidMarketplaceBatch = async (key, batch: Batch) => {
+  const { id: batchId, supplier, supplierCode } = batch;
+  if (supplier !== MARKETPLACE_ID) {
+    throw new Error(
+      `Referenced batch '${batchId}' must have supplier value '${MARKETPLACE_ID}' for a marketplace box, but found '${supplier}'`
+    );
+  }
+  try {
+    await getUser(key, supplierCode);
+  } catch (e) {
+    throw new Error(`Referenced batch '${batchId}' must have a valid userId assigned to supplierCode, ${e.message}`);
+  }
+};
+
 const assertValidBatchReference = ({ id, count }) => {
   if (id == null || !isUUID(id, 4)) {
     throw new Error(`Invalid id ${id}`);
@@ -40,7 +61,11 @@ const assertValidBatchReference = ({ id, count }) => {
   }
 };
 
-const assertValidBoxItemWithBatchReference = ({ itemID, batches }) => {
+const assertValidBoxItemWithBatchReference = async (key, boxItem, isMarketplaceSubmission: boolean) => {
+  if (!boxItem) {
+    throw new Error('Box item cannot be undefined');
+  }
+  const { itemID, batches } = boxItem;
   if (itemID == null || !isUUID(itemID, 4)) {
     throw new Error(`Invalid itemID ${itemID}`);
   }
@@ -50,9 +75,12 @@ const assertValidBoxItemWithBatchReference = ({ itemID, batches }) => {
   for (const batchRef of batches) {
     assertValidBatchReference(batchRef);
     const batch = getBatch(batchRef.id);
-    if (batch.itemId !== itemID) {
-      throw new Error(`Batch ${batchRef.id} does not contain item ${itemID} (${batch.itemId})`);
+    const { itemId: batchItemId } = batch;
+    if (batchItemId !== itemID) {
+      throw new Error(`Batch ${batchRef.id} does not contain item ${itemID}`);
     }
+
+    isMarketplaceSubmission ? await assertValidMarketplaceBatch(key, batch) : assertValidShippedBatch(batch);
   }
 };
 
@@ -62,7 +90,7 @@ const assertValidDonationRate = (donationRate) => {
   }
 };
 
-const assertValidBoxSubmission = async ({ shippingCost, boxItems, packed, shipped, received, closed, donationRate }) => {
+const assertValidShippedBoxSubmission = async ({ shippingCost, boxItems, packed, shipped, received, closed, donationRate }) => {
   if (!Number.isInteger(shippingCost)) {
     throw new Error(`Non-integral shipping cost ${shippingCost}`);
   }
@@ -82,27 +110,23 @@ const assertValidBoxSubmission = async ({ shippingCost, boxItems, packed, shippe
     throw new Error(`Invalid boxItems ${boxItems}`);
   }
   for (const boxItem of boxItems) {
-    assertValidBoxItemWithBatchReference(boxItem);
+    await assertValidBoxItemWithBatchReference(null, boxItem, false);
   }
   assertValidDonationRate(donationRate);
 };
 
-const assertValidMarketplaceSubmission = async (key, { boxItem, donationRate }) => {
+const assertValidMarketplaceBoxSubmission = async (key, submission) => {
+  if (!submission) {
+    throw new Error('Submission cannot be undefined');
+  }
+
+  const  { boxItem, donationRate } = submission;
   assertValidDonationRate(donationRate);
+  await assertValidBoxItemWithBatchReference(key, boxItem, true);
+
   const { batches } = boxItem;
-  assertValidBoxItemWithBatchReference(boxItem);
   if (batches.length !== 1) {
     throw new Error(`Marketplace box can only contain a single batch reference`);
-  }
-  const { id: batchId } = batches[0];
-  const { supplier, supplierCode } = getBatch(batchId);
-  if (supplier !== MARKETPLACE_ID) {
-    throw new Error(`Referenced batch '${batchId}' must have supplier value '${MARKETPLACE_ID}', but found '${supplier}'`);
-  }
-  try {
-    await getUser(key, supplierCode);
-  } catch (e) {
-    throw new Error(`Referenced batch '${batchId}' must have a valid userId assigned to supplierCode, ${e.message}`);
   }
 };
 
@@ -140,7 +164,7 @@ const createMarketplaceBox = async ({ key, storeId, submission, dryRun}): Promis
   info(key, `New marketplace submission received for store ${storeId}`, { submission });
 
   assertValidStoreId(storeId);
-  await assertValidMarketplaceSubmission(key, submission);
+  await assertValidMarketplaceBoxSubmission(key, submission);
 
   const box = calculateMarketplaceBoxPricing(storeId, submission);
 
@@ -155,7 +179,7 @@ const createShippedBox = async ({ key, storeId, submission, dryRun }): Promise<B
   info(key, `New box submission received for store ${storeId}`, { submission });
 
   assertValidStoreId(storeId);
-  assertValidBoxSubmission(submission);
+  await assertValidShippedBoxSubmission(submission);
 
   const box = calculateShippedBoxPricing(storeId, submission);
 
