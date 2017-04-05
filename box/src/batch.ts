@@ -484,6 +484,79 @@ const batchesInternal: Batch[] = [
     expiry: 1506812400000,
     priceExcludingVAT: 1000,
     VATRate: 0
+  },
+  // batches generated from old marketplace boxes
+  {
+    id: '41736dae-e0bc-4fa3-82f9-44550e73fe52',
+    quantity: 1,
+    itemQuantity: 40,
+    itemId: '3b7a6669-770c-4dbb-97e2-0e0aae3ca5ff',
+    supplier: 'HS_MARKETPLACE',
+    supplierCode: null
+  },
+  {
+    id: 'b9cd14df-658e-4a58-96d9-3255e06381d1',
+    quantity: 1,
+    itemQuantity: 80,
+    itemId: '3b7a6669-770c-4dbb-97e2-0e0aae3ca5ff',
+    supplier: 'HS_MARKETPLACE',
+    supplierCode: null
+  },
+  {
+    id: '8d1c81cc-31e6-40ce-ab84-2749fb8b84a2',
+    quantity: 1,
+    itemQuantity: 36,
+    itemId: 'ccad58e3-e27a-4463-9139-17a36ff7f7b8',
+    supplier: 'HS_MARKETPLACE',
+    supplierCode: '77a68b8a-97bb-4c04-a823-31e6fd8d7df5'
+  },
+  {
+    id: '24ecf25b-feb2-4121-ae14-3da9a1f1aa74',
+    quantity: 1,
+    itemQuantity: 54,
+    itemId: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
+    supplier: 'HS_MARKETPLACE',
+    supplierCode: '77a68b8a-97bb-4c04-a823-31e6fd8d7df5'
+  },
+  {
+    id: 'aae5f080-a851-4a92-a5fb-7339b2cfd879',
+    quantity: 1,
+    itemQuantity: 90,
+    itemId: 'd5d10152-3f8a-419b-9abd-6d6e916ea64a',
+    supplier: 'HS_MARKETPLACE',
+    supplierCode: '77a68b8a-97bb-4c04-a823-31e6fd8d7df5'
+  },
+  {
+    id: '6045cfe6-d76b-4329-b200-8882b1f7d9e3',
+    quantity: 1,
+    itemQuantity: 24,
+    itemId: 'e615de4e-ce10-451b-80ad-9717662a904a',
+    supplier: 'HS_MARKETPLACE',
+    supplierCode: '77a68b8a-97bb-4c04-a823-31e6fd8d7df5'
+  },
+  {
+    id: 'bcffd319-247d-40a1-aa91-9c0d7f6e9378',
+    quantity: 1,
+    itemQuantity: 60,
+    itemId: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
+    supplier: 'HS_MARKETPLACE',
+    supplierCode: null
+  },
+  {
+    id: '74f33be4-259c-4a7f-bcb6-f68e0392bbbb',
+    quantity: 1,
+    itemQuantity: 60,
+    itemId: 'd5d10152-3f8a-419b-9abd-6d6e916ea64a',
+    supplier: 'HS_MARKETPLACE',
+    supplierCode: null
+  },
+  {
+    id: '1f69d93f-2a99-4c85-9b8d-7dc20b1fdc79',
+    quantity: 1,
+    itemQuantity: 30,
+    itemId: 'ccad58e3-e27a-4463-9139-17a36ff7f7b8',
+    supplier: 'HS_MARKETPLACE',
+    supplierCode: null
   }
 ];
 
