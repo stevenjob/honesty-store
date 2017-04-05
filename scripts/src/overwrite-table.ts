@@ -1,4 +1,5 @@
 import { config, DynamoDB } from 'aws-sdk';
+import cruftDDB from 'cruft-ddb';
 import { readFileSync } from 'fs';
 
 if (!process.env.AWS_REGION) {
@@ -6,15 +7,6 @@ if (!process.env.AWS_REGION) {
   process.exit(1);
 }
 config.region = process.env.AWS_REGION;
-
-const put = async (table, item) => {
-  await new DynamoDB.DocumentClient()
-    .put({
-      TableName: table,
-      Item: item
-    })
-    .promise();
-};
 
 const main = async (args) => {
   if (args.length !== 1) {
@@ -33,7 +25,9 @@ const main = async (args) => {
     throw new Error('expected array');
   }
 
-  await Promise.all(items.map(item => put(table, item)));
+  const cruft = cruftDDB<any>({ tableName: table });
+
+  await Promise.all(items.map(item => cruft.update(item)));
 };
 
 main(process.argv.slice(2))

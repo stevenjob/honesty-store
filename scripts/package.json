@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.7.10",
+    "cruft-ddb": "^1.0.5",
     "jsonwebtoken": "^7.3.0"
   },
   "devDependencies": {
