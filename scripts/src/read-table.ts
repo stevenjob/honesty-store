@@ -1,30 +1,11 @@
 import { config, DynamoDB } from 'aws-sdk';
+import cruftDDB from 'cruft-ddb';
 
 if (!process.env.AWS_REGION) {
   console.error(`no $AWS_REGION given`);
   process.exit(1);
 }
 config.region = process.env.AWS_REGION;
-
-const scan = async (table) => {
-  const items = [];
-  let nextKey = undefined;
-
-  do {
-    const response = await new DynamoDB.DocumentClient()
-      .scan({
-        TableName: table,
-        ExclusiveStartKey: nextKey
-      })
-      .promise();
-
-    items.push(...response.Items);
-
-    nextKey = response.LastEvaluatedKey;
-  } while (nextKey);
-
-  return items;
-};
 
 const main = async (args) => {
   if (args.length !== 1) {
@@ -36,8 +17,10 @@ const main = async (args) => {
   }
 
   const table = args[0];
+  const cruft = cruftDDB<any>({ tableName: table });
+
   // tslint:disable-next-line:no-console
-  console.log(JSON.stringify(await scan(table)));
+  console.log(JSON.stringify(await cruft.__findAll({})));
 };
 
 main(process.argv.slice(2))
