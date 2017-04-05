@@ -79,8 +79,11 @@ const assertValidBoxItemWithBatchReference = async (key, boxItem, isMarketplaceS
     if (batchItemId !== itemID) {
       throw new Error(`Batch ${batchRef.id} does not contain item ${itemID}`);
     }
-
-    isMarketplaceSubmission ? await assertValidMarketplaceBatch(key, batch) : assertValidShippedBatch(batch);
+    if (isMarketplaceSubmission) {
+      await assertValidMarketplaceBatch(key, batch);
+    } else {
+      assertValidShippedBatch(batch);
+    }
   }
 };
 
