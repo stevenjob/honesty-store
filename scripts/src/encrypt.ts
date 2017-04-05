@@ -22,7 +22,7 @@ if (args[0] === '--expires-in') {
   expiresIn = args.shift();
 }
 
-if(args.length !== 2){
+if (args.length !== 2) {
   usage();
 }
 
@@ -30,4 +30,5 @@ const secret = args.shift();
 const jsonStr = args.shift();
 const json = JSON.parse(jsonStr);
 
+// tslint:disable-next-line:no-console
 console.log(jwt.sign(json, secret, { algorithm: 'HS256', expiresIn }));

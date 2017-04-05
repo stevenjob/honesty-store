@@ -10,7 +10,7 @@ const usage = () => {
   process.exit(2);
 };
 
-if(args.length !== 3){
+if (args.length !== 3) {
   usage();
 }
 
@@ -19,4 +19,5 @@ const refreshToken = args.shift();
 const userSecret = args.shift();
 const expiresIn = '5 minutes';
 
+// tslint:disable-next-line:no-console
 console.log(jwt.sign({ userId, refreshToken }, userSecret, { algorithm: 'HS256', expiresIn }));

@@ -1,4 +1,4 @@
-import { config, DynamoDB } from 'aws-sdk';
+import { config } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 
 if (!process.env.AWS_REGION) {
