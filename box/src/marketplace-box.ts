@@ -40,6 +40,8 @@ export default (storeId: string, submission: MarketplaceBoxSubmission): Box & { 
     count
   };
 
+  const itemDeploymentDate = new Date().getTime();
+
   return {
     id: uuid(),
     donationRate,
@@ -47,6 +49,9 @@ export default (storeId: string, submission: MarketplaceBoxSubmission): Box & { 
     count: count,
     boxItems: [boxItem],
     version: 0,
-    shippingCost: 0
+    shippingCost: 0,
+    shipped: itemDeploymentDate,
+    packed: itemDeploymentDate,
+    received: itemDeploymentDate
   };
 };
