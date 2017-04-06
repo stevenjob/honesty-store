@@ -99,10 +99,13 @@ const ItemDetail = ({
                   <td>{location}</td>
                 </tr>
               }
-              <tr>
-                  <th className="col-6 right-align">Weight</th>
-                  <td>{`${weight}g`}</td>
-              </tr>
+              {
+                weight &&
+                <tr>
+                    <th className="col-6 right-align">Weight</th>
+                    <td>{`${weight}g`}</td>
+                </tr>
+              }
             </tbody>
           </table>
           <h3>Price Breakdown</h3>

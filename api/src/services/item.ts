@@ -7,7 +7,7 @@ interface Item {
   unitPlural: string;
   location?: string;
   image: string;
-  weight: number;
+  weight?: number;
   notes?: string;
 }
 
