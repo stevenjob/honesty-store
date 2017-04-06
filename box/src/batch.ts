@@ -575,6 +575,26 @@ const batchesInternal: Batch[] = [
     supplier: 'HS_MARKETPLACE',
     supplierCode: 'a3d9667e-a947-441a-8efd-b71e51beca02',
     priceExcludingVAT: 480
+  },
+  {
+    id: '8b9f81c9-afda-4cf7-a1d4-df8b75f7f70b',
+    quantity: 1,
+    itemQuantity: 4,
+    expiry: 1509840000000,
+    itemId: '88efb45b-2d7a-4b75-9a57-7c2ef3b784a8',
+    supplier: 'HS_MARKETPLACE',
+    supplierCode: 'a3d9667e-a947-441a-8efd-b71e51beca02',
+    priceExcludingVAT: 100
+  },
+  {
+    id: '9b211b3d-249a-4e30-be51-06248ae61da7',
+    quantity: 1,
+    itemQuantity: 4,
+    expiry: 1519689600000,
+    itemId: 'f01f533f-8bf6-4291-8fb8-a76c3bedc276',
+    supplier: 'HS_MARKETPLACE',
+    supplierCode: 'a3d9667e-a947-441a-8efd-b71e51beca02',
+    priceExcludingVAT: 100
   }
 ];
 

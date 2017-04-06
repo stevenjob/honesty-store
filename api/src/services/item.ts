@@ -411,6 +411,28 @@ const items: (Item & { id: string })[] = [
     unitPlural: 'cans',
     genericName: 'drink',
     genericNamePlural: 'drinks'
+  },
+  {
+    id: '88efb45b-2d7a-4b75-9a57-7c2ef3b784a8',
+    name: 'Double Decker',
+    location: 'honesty.store box',
+    image: 'misc-bar.svg',
+    weight: 54.5,
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'chocolate bar',
+    genericNamePlural: 'chocolate'
+  },
+  {
+    id: 'f01f533f-8bf6-4291-8fb8-a76c3bedc276',
+    name: 'Twirl twin bar',
+    location: 'honesty.store box',
+    image: 'misc-bar.svg',
+    weight: 21.5,
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'chocolate bar',
+    genericNamePlural: 'chocolate'
   }
 ];
 
