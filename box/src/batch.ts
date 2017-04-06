@@ -557,6 +557,14 @@ const batchesInternal: Batch[] = [
     itemId: 'ccad58e3-e27a-4463-9139-17a36ff7f7b8',
     supplier: 'HS_MARKETPLACE',
     supplierCode: null
+  },
+  {
+    id: '75eab145-df7d-4b51-a1d3-2e5f09468807',
+    quantity: 1,
+    itemQuantity: 96,
+    itemId: '02bbc0fd-54c4-45bb-9b77-21b79b356aa6',
+    supplier: 'HS_MARKETPLACE',
+    supplierCode: 'f9c8b541-0a30-4adc-8e0d-887e6db9f301'
   }
 ];
 
