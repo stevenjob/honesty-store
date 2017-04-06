@@ -400,6 +400,17 @@ const items: (Item & { id: string })[] = [
     unitPlural: 'bars',
     genericName: 'cereal bar',
     genericNamePlural: 'cereal bars'
+  },
+  {
+    id: '190ee06f-455f-4778-b3db-1dfc74c3e966',
+    name: 'Diet Coke',
+    location: 'Fridge',
+    image: 'diet-cola-can.svg',
+    weight: 400,
+    unit: 'can',
+    unitPlural: 'cans',
+    genericName: 'drink',
+    genericNamePlural: 'drinks'
   }
 ];
 
