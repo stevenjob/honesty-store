@@ -244,8 +244,8 @@ const items: (Item & { id: string })[] = [
     weight: 20,
     unit: 'pack',
     unitPlural: 'packs',
-    genericName: 'crisps',
-    genericNamePlural: 'crisps'
+    genericName: 'popcorn',
+    genericNamePlural: 'popcorn'
   },
   {
     id: '80984458-bab9-4a8f-86a7-b3e46f62139d',
@@ -255,8 +255,8 @@ const items: (Item & { id: string })[] = [
     weight: 20,
     unit: 'pack',
     unitPlural: 'packs',
-    genericName: 'crisps',
-    genericNamePlural: 'crisps'
+    genericName: 'popcorn',
+    genericNamePlural: 'popcorn'
   },
   {
     id: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
