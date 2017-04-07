@@ -4,7 +4,7 @@ import Full from '../layout/full';
 import { BackToPage } from '../chrome/link';
 
 const Index = () =>
-  <Full top={<BackToPage title="Store" path="/store"/>}>
+  <Full left={<BackToPage title="Store" path="/store"/>}>
     <h1>honesty.store & more!</h1>
     <p>We want to make sure your store has as much variety as possible.</p>
     <p>

@@ -33,7 +33,7 @@ class Email extends React.Component {
 
   render() {
     const { valid } = this.state;
-    return <Full top={<NotNow />}>
+    return <Full left={<NotNow />}>
       <form onSubmit={(e) => this.handleSubmit(e)}>
         <h2>Want to sign up or sign in?</h2>
         {

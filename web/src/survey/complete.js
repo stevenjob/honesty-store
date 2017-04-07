@@ -4,7 +4,7 @@ import Full from '../layout/full';
 import { Back } from '../chrome/link';
 
 export default () =>
-  <Full top={<Back />}>
+  <Full left={<Back />}>
     <h1>Victory!</h1>
     <p>You've fought valiantly on behalf of your favourite snacks and they are all humbled to have earnt your respect.</p>
     <p>Your decisiveness in this battle will go down in history<sup>*</sup>.</p>

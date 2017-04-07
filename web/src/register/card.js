@@ -16,7 +16,7 @@ const RegisterCard = (
 
   const topUpText = 'Confirm £5 Top Up';
   return (
-    <Full top={<Back>Register</Back>}>
+    <Full left={<Back>Register</Back>}>
       <Card
         isInitialTopUp={true}
         confirmButtonText={itemId ? `${topUpText} & Pay` : topUpText}

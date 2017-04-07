@@ -7,7 +7,7 @@ import { performTopup } from '../actions/topup';
 
 const NewCard = ({ performTopup, ...rest }) => {
   return (
-    <Full top={<Back></Back>}>
+    <Full left={<Back></Back>}>
     <Card
       isInitialTopUp={false}
       confirmButtonText="Update Card & Top Up £5"

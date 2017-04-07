@@ -100,7 +100,7 @@ class Survey extends React.Component {
         onSwipingLeft={(e, delta) => this.swipingLeft(delta)}
         onSwipingRight={(e, delta) => this.swipingRight(delta)}
       >
-        <Full top={<Back />}>
+        <Full left={<Back />}>
           <h2>
             Question {this.state.index + 1} of {questions.length}
           </h2>

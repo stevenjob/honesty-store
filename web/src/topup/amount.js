@@ -8,7 +8,7 @@ import Full from '../layout/full';
 
 const Amount = ({ balance }) => {
   return (
-    <Full top={<Close to={`/store`} />}>
+    <Full left={<Close to={`/store`} />}>
       <h1>Your balance is currently</h1>
       <h1 className="aqua"><Currency amount={balance} /></h1>
       <Stepper
