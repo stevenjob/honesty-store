@@ -9,6 +9,7 @@ import isRegistered from '../reducers/is-registered-user';
 import safeLookupItemImage from './safeLookupItemImage';
 import Full from '../layout/full';
 import Breakdown from './breakdown';
+import Like from './like';
 import FlagOutOfStock from './out-of-stock';
 
 const Depleted = ({ registered, itemId }) => (
@@ -25,7 +26,8 @@ const ItemDetail = ({
   item: { id, name, price: { breakdown, total }, image, count, unit, unitPlural, qualifier, notes, weight, location, isMarketplace },
   balance,
   performPurchase,
-  registered
+  registered,
+  isLiked
 }) => {
   const calculateBalanceRemaining = (numItems) => balance - (total * numItems);
 
@@ -57,11 +59,12 @@ const ItemDetail = ({
     </Link>
   </p>;
 
+
+
   return (
-    <Full top={<Back />}>
+    <Full left={<Back />} right={<Like isLiked={isLiked}/>}>
       {id != null &&
         <div>
-
           <div className="col-4 mt3 mx-auto">
             <div className="bg-center bg-no-repeat"
               style={{ backgroundImage: `url(${safeLookupItemImage(image)})`, paddingBottom: '100%', lineHeight: 0 }}>
@@ -122,11 +125,13 @@ const mapStateToProps = (
   { params: { itemId } }
 ) => {
   const item = items.find(el => el.id === itemId);
+  const isLiked = false;
   const { balance } = user;
   return {
     item: item || {},
     balance,
-    registered: isRegistered(user)
+    registered: isRegistered(user),
+    isLiked
   };
 };
 

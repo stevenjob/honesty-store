@@ -8,6 +8,11 @@ a {
   background: #43BCD6;
 }
 
+.btn-primary-inverted {
+  background: white;
+  color: #43BCD6;
+}
+
 .navy {
   color: #14415F;
 }
