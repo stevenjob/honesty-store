@@ -45,6 +45,10 @@ const ItemDetail = ({
     }
   };
 
+  const handleLikeClick = () => {
+    console.log('LIKE CLICKED!');
+  };
+
   const buttonClasses = `btn btn-primary btn-big ${isMarketplace ? 'btn-more' : ''}`;
 
   const registeredPurchaseButton = <p>
@@ -59,10 +63,11 @@ const ItemDetail = ({
     </Link>
   </p>;
 
-
-
   return (
-    <Full left={<Back />} right={<Like isLiked={isLiked}/>}>
+    <Full
+      left={<Back />}
+      right={<Like isLiked={isLiked} onClick={handleLikeClick}/>}
+      >
       {id != null &&
         <div>
           <div className="col-4 mt3 mx-auto">
