@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Halo from '../chrome/halo';
 import safeLookupItemImage from '../item/safeLookupItemImage';
 import Currency from '../format/Currency';
 
@@ -30,12 +31,7 @@ export default ({ item: { id, name, price: { total: price }, image, qualifier, c
       <div className="relative">
         {
           isLiked &&
-          <img
-            src={require('./assets/halo.svg')}
-            alt="Liked"
-            className="absolute"
-            style={{ left: '-0.7rem', top: '-0.3rem', width: '1.5rem', transform: 'rotate(-10deg)' }}
-          />
+          <Halo />
         }
         <h2 className="mt0 mb0 btn btn-primary">
           <Currency amount={price} />
