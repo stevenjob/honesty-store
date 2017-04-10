@@ -6,6 +6,7 @@ import List from '../chrome/list';
 import StoreItem from './item';
 import MiscSelection from '../item/misc-selection';
 import isRegisteredUser from '../reducers/is-registered-user';
+import isLikedItem from '../reducers/is-liked-item';
 import Balance from '../topup/balance';
 import { performDestroySession } from '../actions/destroy-session';
 
@@ -89,13 +90,11 @@ const storeOrdering = (items) => {
 };
 
 const mapStateToProps = ({ user, store: { code, items }, survey, likedItemIds }) => {
-  const itemsWithLikeProp = items.map((item) => {
-    const isLiked = likedItemIds.indexOf(item.id) > -1;
-    return {
-      ...item,
-      isLiked
-    };
-  });
+  const itemsWithLikeProp = items.map((item) => ({
+    ...item,
+    isLiked: isLikedItem(item, likedItemIds)
+  }));
+
   return {
     registered: isRegisteredUser(user),
     showMarketplace: user.features.marketplace,

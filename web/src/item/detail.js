@@ -7,6 +7,7 @@ import Currency from '../format/Currency';
 import { performPurchase } from '../actions/purchase';
 import { performLikeItem } from '../actions/like-item';
 import isRegistered from '../reducers/is-registered-user';
+import isLikedItem from '../reducers/is-liked-item';
 import safeLookupItemImage from './safeLookupItemImage';
 import Full from '../layout/full';
 import Breakdown from './breakdown';
@@ -24,9 +25,8 @@ const Depleted = ({ registered, itemId }) => (
 );
 
 const ItemDetail = ({
-  item: { id, name, price: { breakdown, total }, image, count, unit, unitPlural, qualifier, notes, weight, location, isMarketplace },
+  item: { id, name, price: { breakdown, total }, image, count, unit, unitPlural, qualifier, notes, weight, location, isMarketplace, isLiked },
   balance,
-  isLiked,
   performLikeItem,
   performPurchase,
   registered
@@ -128,17 +128,21 @@ const ItemDetail = ({
 };
 
 const mapStateToProps = (
-  { store: { items = []}, user },
+  { store: { items = []}, user, likedItemIds },
   { params: { itemId } }
 ) => {
-  const item = items.find(el => el.id === itemId);
-  const isLiked = false;
+  const item = (() => {
+    const i = items.find(el => el.id === itemId);
+    return {
+      ...i,
+      isLiked: isLikedItem(i, likedItemIds)
+    };
+  })();
   const { balance } = user;
   return {
-    item: item || {},
+    item: item,
     balance,
     registered: isRegistered(user),
-    isLiked
   };
 };
 
