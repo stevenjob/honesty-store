@@ -15,13 +15,13 @@ import Like from './like';
 import FlagOutOfStock from './out-of-stock';
 
 const Depleted = ({ registered, itemId }) => (
-  <div>
+  <p>
     This item has been reported out of stock
     <br />
     <Link className="m1" to={`/help/item/${itemId}`}>
       Report a Problem
     </Link>
-  </div>
+  </p>
 );
 
 const ItemDetail = ({
@@ -91,7 +91,6 @@ const ItemDetail = ({
             </h3>
           }
           {registered ? registeredPurchaseButton : unregisteredPurchaseButton}
-          <p>
             {
               count === 0 ?
               <Depleted registered={registered} itemId={id} /> :
@@ -99,7 +98,6 @@ const ItemDetail = ({
               <FlagOutOfStock itemId={id} /> :
               null
             }
-          </p>
           <h3 className="mt3">Item Details</h3>
           {
             notes &&
