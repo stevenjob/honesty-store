@@ -5,6 +5,7 @@ import history from '../history';
 import { Back } from '../chrome/link';
 import Currency from '../format/Currency';
 import { performPurchase } from '../actions/purchase';
+import { performLikeItem } from '../actions/like-item';
 import isRegistered from '../reducers/is-registered-user';
 import safeLookupItemImage from './safeLookupItemImage';
 import Full from '../layout/full';
@@ -25,9 +26,10 @@ const Depleted = ({ registered, itemId }) => (
 const ItemDetail = ({
   item: { id, name, price: { breakdown, total }, image, count, unit, unitPlural, qualifier, notes, weight, location, isMarketplace },
   balance,
+  isLiked,
+  performLikeItem,
   performPurchase,
-  registered,
-  isLiked
+  registered
 }) => {
   const calculateBalanceRemaining = (numItems) => balance - (total * numItems);
 
@@ -47,6 +49,7 @@ const ItemDetail = ({
 
   const handleLikeClick = () => {
     console.log('LIKE CLICKED!');
+    performLikeItem(id);
   };
 
   const buttonClasses = `btn btn-primary btn-big ${isMarketplace ? 'btn-more' : ''}`;
@@ -140,6 +143,6 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = { performPurchase };
+const mapDispatchToProps = { performPurchase, performLikeItem };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemDetail);

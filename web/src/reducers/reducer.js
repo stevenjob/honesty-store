@@ -14,6 +14,17 @@ import { STORE_REQUEST, STORE_SUCCESS, STORE_FAILURE } from '../actions/store';
 import { SURVEY_REQUEST, SURVEY_SUCCESS, SURVEY_FAILURE } from '../actions/survey';
 import { MARKETPLACE_REQUEST, MARKETPLACE_SUCCESS, MARKETPLACE_FAILURE } from '../actions/marketplace';
 import { OUT_OF_STOCK_REQUEST, OUT_OF_STOCK_SUCCESS, OUT_OF_STOCK_FAILURE } from '../actions/out-of-stock';
+import { LIKE_ITEM } from '../actions/like-item';
+
+const util = require('util');
+
+const getLikedItemsFromStorage = () => {
+  try {
+    return JSON.parse(localStorage.getItem('likedItemIds'));
+  } catch (e) {
+    return [];
+  }
+};
 
 const getInitialState = () => {
   return {
@@ -27,7 +38,8 @@ const getInitialState = () => {
     error: {},
     accessToken: null,
     refreshToken: localStorage.refreshToken,
-    survey: undefined
+    survey: undefined,
+    likedItemIds: getLikedItemsFromStorage()
   };
 };
 
@@ -430,6 +442,20 @@ export default (state = getInitialState(), action) => {
           fullPage: action.error
         },
         pending: state.pending.filter(e => e !== 'marketplace')
+      };
+    }
+    case LIKE_ITEM: {
+      const { itemId } = action;
+      const { likedItemIds } = state;
+      const updatedItemIds = [...new Set(likedItemIds.concat(itemId))];
+      const error = save({ likedItemIds: JSON.stringify(updatedItemIds) });
+
+      return {
+        ...state,
+        likedItemIds: updatedItemIds,
+        error: {
+          fullPage: error
+        }
       };
     }
     default:
