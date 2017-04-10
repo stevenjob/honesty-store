@@ -459,17 +459,10 @@ export default (state = getInitialState(), action) => {
     case UNLIKE_ITEM: {
       const { itemId } = action;
       const { likedItemIds } = state;
-      const updatedLikedItemIds = [...new Set(likedItemIds)];
-      const indexToRemove = updatedLikedItemIds.indexOf(itemId);
+      const updatedLikedItemIds = [...new Set(likedItemIds)]
+        .filter((el) => el !== itemId);
 
-      if (indexToRemove < 0) {
-        return {
-          ...state
-        };
-      }
-
-      updatedLikedItemIds.splice(indexToRemove, 1);
-      const error = save({ updatedLikedItemIds: JSON.stringify(updatedLikedItemIds) });
+      const error = save({ likedItemIds: JSON.stringify(updatedLikedItemIds) });
 
       return {
         ...state,
