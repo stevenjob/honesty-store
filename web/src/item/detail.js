@@ -48,7 +48,6 @@ const ItemDetail = ({
   };
 
   const handleLikeClick = () => {
-    console.log('LIKE CLICKED!');
     performLikeItem(id);
   };
 

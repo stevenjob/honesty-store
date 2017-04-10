@@ -16,8 +16,6 @@ import { MARKETPLACE_REQUEST, MARKETPLACE_SUCCESS, MARKETPLACE_FAILURE } from '.
 import { OUT_OF_STOCK_REQUEST, OUT_OF_STOCK_SUCCESS, OUT_OF_STOCK_FAILURE } from '../actions/out-of-stock';
 import { LIKE_ITEM } from '../actions/like-item';
 
-const util = require('util');
-
 const getLikedItemsFromStorage = () => {
   try {
     return JSON.parse(localStorage.getItem('likedItemIds'));
