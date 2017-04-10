@@ -5,7 +5,7 @@ import history from '../history';
 import { Back } from '../chrome/link';
 import Currency from '../format/Currency';
 import { performPurchase } from '../actions/purchase';
-import { performLikeItem } from '../actions/like-item';
+import { performUnlikeItem, performLikeItem } from '../actions/like-item';
 import isRegistered from '../reducers/is-registered-user';
 import isLikedItem from '../reducers/is-liked-item';
 import safeLookupItemImage from './safeLookupItemImage';
@@ -28,6 +28,7 @@ const ItemDetail = ({
   item: { id, name, price: { breakdown, total }, image, count, unit, unitPlural, qualifier, notes, weight, location, isMarketplace, isLiked },
   balance,
   performLikeItem,
+  performUnlikeItem,
   performPurchase,
   registered
 }) => {
@@ -47,8 +48,12 @@ const ItemDetail = ({
     }
   };
 
-  const handleLikeClick = () => {
-    performLikeItem(id);
+  const handleLikeOrUnlikeClick = () => {
+    if (isLiked) {
+      performUnlikeItem(id);
+    } else {
+      performLikeItem(id);
+    }
   };
 
   const buttonClasses = `btn btn-primary btn-big ${isMarketplace ? 'btn-more' : ''}`;
@@ -68,7 +73,7 @@ const ItemDetail = ({
   return (
     <Full
       left={<Back />}
-      right={<Like isLiked={isLiked} onClick={handleLikeClick}/>}
+      right={<Like isLiked={isLiked} onClick={handleLikeOrUnlikeClick}/>}
       >
       {id != null &&
         <div>
@@ -146,6 +151,6 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = { performPurchase, performLikeItem };
+const mapDispatchToProps = { performPurchase, performLikeItem, performUnlikeItem };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemDetail);

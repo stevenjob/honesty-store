@@ -14,7 +14,7 @@ import { STORE_REQUEST, STORE_SUCCESS, STORE_FAILURE } from '../actions/store';
 import { SURVEY_REQUEST, SURVEY_SUCCESS, SURVEY_FAILURE } from '../actions/survey';
 import { MARKETPLACE_REQUEST, MARKETPLACE_SUCCESS, MARKETPLACE_FAILURE } from '../actions/marketplace';
 import { OUT_OF_STOCK_REQUEST, OUT_OF_STOCK_SUCCESS, OUT_OF_STOCK_FAILURE } from '../actions/out-of-stock';
-import { LIKE_ITEM } from '../actions/like-item';
+import { UNLIKE_ITEM, LIKE_ITEM } from '../actions/like-item';
 
 const getLikedItemsFromStorage = () => {
   try {
@@ -451,6 +451,29 @@ export default (state = getInitialState(), action) => {
       return {
         ...state,
         likedItemIds: updatedItemIds,
+        error: {
+          fullPage: error
+        }
+      };
+    }
+    case UNLIKE_ITEM: {
+      const { itemId } = action;
+      const { likedItemIds } = state;
+      const updatedLikedItemIds = [...new Set(likedItemIds)];
+      const indexToRemove = updatedLikedItemIds.indexOf(itemId);
+
+      if (indexToRemove < 0) {
+        return {
+          ...state
+        };
+      }
+
+      updatedLikedItemIds.splice(indexToRemove, 1);
+      const error = save({ updatedLikedItemIds: JSON.stringify(updatedLikedItemIds) });
+
+      return {
+        ...state,
+        likedItemIds: updatedLikedItemIds,
         error: {
           fullPage: error
         }
