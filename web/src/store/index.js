@@ -60,7 +60,6 @@ const Store = ({ registered, showMarketplace, storeCode, balance, items, surveyA
   </Chrome>;
 
 const storeOrdering = (items) => {
-
   const nameComparison = (a, b) => {
     const itemAName = a.name.toLowerCase();
     const itemBName = b.name.toLowerCase();
@@ -70,23 +69,14 @@ const storeOrdering = (items) => {
 
     return 0;
   };
+  const likedItemsComparison = (a, b) => b.isLiked - a.isLiked;
+  const depletionComparison = (a, b) => !!b.count - !!a.count;
 
-  const orderedItems = items.sort(nameComparison);
-  const inStock = orderedItems.filter(item => item.count > 0);
-  const depleted = orderedItems.filter(item => item.count === 0);
-
-  const sortByLikedItems = (a, b) => {
-    const result = b.isLiked - a.isLiked;
-    if (result !== 0) {
-      return result;
-    }
+  return items.sort((a, b) => {
+    if (depletionComparison(a, b)) return depletionComparison(a, b);
+    if (likedItemsComparison(a, b)) return likedItemsComparison(a, b);
     return nameComparison(a, b);
-  };
-
-  return [
-    ...inStock.sort(sortByLikedItems),
-    ...depleted.sort(sortByLikedItems)
-  ];
+  });
 };
 
 const mapStateToProps = ({ user, store: { code, items }, survey, likedItemIds }) => {
