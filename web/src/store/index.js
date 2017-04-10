@@ -59,29 +59,51 @@ const Store = ({ registered, showMarketplace, storeCode, balance, items, surveyA
   </Chrome>;
 
 const storeOrdering = (items) => {
-  const orderedItems = items.sort((a, b) => {
-    const itemA = a.name.toLowerCase();
-    const itemB = b.name.toLowerCase();
-    if (itemA < itemB) return -1;
-    if (itemA > itemB) return 1;
+
+  const nameComparison = (a, b) => {
+    const itemAName = a.name.toLowerCase();
+    const itemBName = b.name.toLowerCase();
+
+    if (itemAName < itemBName) return -1;
+    if (itemAName > itemBName) return 1;
+
     return 0;
-  });
+  };
+
+  const orderedItems = items.sort(nameComparison);
   const inStock = orderedItems.filter(item => item.count > 0);
   const depleted = orderedItems.filter(item => item.count === 0);
 
+  const sortByLikedItems = (a, b) => {
+    const result = b.isLiked - a.isLiked;
+    if (result !== 0) {
+      return result;
+    }
+    return nameComparison(a, b);
+  };
+
   return [
-    ...inStock,
-    ...depleted
+    ...inStock.sort(sortByLikedItems),
+    ...depleted.sort(sortByLikedItems)
   ];
 };
 
-const mapStateToProps = ({ user, store: { code, items }, survey }) => ({
-  registered: isRegisteredUser(user),
-  showMarketplace: user.features.marketplace,
-  storeCode: code,
-  balance: user.balance || 0,
-  items: storeOrdering(items),
-  surveyAvailable: survey != null
-});
+const mapStateToProps = ({ user, store: { code, items }, survey, likedItemIds }) => {
+  const itemsWithLikeProp = items.map((item) => {
+    const isLiked = likedItemIds.indexOf(item.id) > -1;
+    return {
+      ...item,
+      isLiked
+    };
+  });
+  return {
+    registered: isRegisteredUser(user),
+    showMarketplace: user.features.marketplace,
+    storeCode: code,
+    balance: user.balance || 0,
+    items: storeOrdering(itemsWithLikeProp),
+    surveyAvailable: survey != null
+  };
+};
 
 export default connect(mapStateToProps, { performDestroySession })(Store);
