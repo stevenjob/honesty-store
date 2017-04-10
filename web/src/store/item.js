@@ -27,8 +27,19 @@ export default ({ item: { id, name, price: { total: price }, image, qualifier, c
         isMarketplace &&
         <h6 className="my0 mr0 ml-auto"><span className="aqua">&</span> more</h6>
       }
-      <h2 className="mt0 mb0 btn btn-primary">
-        <Currency amount={price} />
-      </h2>
+      <div className="relative">
+        {
+          isLiked &&
+          <img
+            src={require('./assets/halo.svg')}
+            alt="Liked"
+            className="absolute"
+            style={{ left: '-0.7rem', top: '-0.3rem', width: '1.5rem', transform: 'rotate(-10deg)' }}
+          />
+        }
+        <h2 className="mt0 mb0 btn btn-primary">
+          <Currency amount={price} />
+        </h2>
+      </div>
     </div>
   </Link>;
