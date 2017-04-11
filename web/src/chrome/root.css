@@ -15,6 +15,7 @@ textarea, input[type] {
 
 .btn {
   -webkit-tap-highlight-color: transparent;
+  border-radius: 5px;
 }
 
 .btn:focus {
