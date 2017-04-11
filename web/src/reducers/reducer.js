@@ -18,7 +18,7 @@ import { UNLIKE_ITEM, LIKE_ITEM } from '../actions/like-item';
 
 const getLikedItemsFromStorage = () => {
   try {
-    return JSON.parse(localStorage.getItem('likedItemIds'));
+    return JSON.parse(localStorage.getItem('likedItemIds')) || [];
   } catch (e) {
     return [];
   }
