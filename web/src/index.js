@@ -42,7 +42,7 @@ import reducer from './reducers/reducer';
 import { performInitialise } from './actions/inititialise';
 import './chrome/style';
 import history from './history';
-
+import { loadState, saveState } from './localstorage';
 
 const middlewares = [thunkMiddleware];
 
@@ -53,8 +53,17 @@ if (process.env.NODE_ENV === `development`) {
 
 const store = createStore(
   reducer,
+  loadState(),
   applyMiddleware(...middlewares)
 );
+
+store.subscribe(() => {
+  const { refreshToken, likedItemIds } = store.getState();
+  saveState({
+    refreshToken,
+    likedItemIds
+  });
+});
 
 const redirectUnauthorised = (nextState, replace) => {
   const { refreshToken } = store.getState();
