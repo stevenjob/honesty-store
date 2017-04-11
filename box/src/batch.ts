@@ -15,6 +15,12 @@ export interface Batch {
 
 export const MARKETPLACE_ID = 'HS_MARKETPLACE';
 
+const userIds = {
+  heather: '77a68b8a-97bb-4c04-a823-31e6fd8d7df5',
+  godds: 'a3d9667e-a947-441a-8efd-b71e51beca02',
+  chris: 'f9c8b541-0a30-4adc-8e0d-887e6db9f301'
+};
+
 const batchesInternal: Batch[] = [
   // Residual from bulky
   {
@@ -508,7 +514,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 36,
     itemId: 'ccad58e3-e27a-4463-9139-17a36ff7f7b8',
     supplier: 'HS_MARKETPLACE',
-    supplierCode: '77a68b8a-97bb-4c04-a823-31e6fd8d7df5'
+    supplierCode: userIds.heather
   },
   {
     id: '24ecf25b-feb2-4121-ae14-3da9a1f1aa74',
@@ -516,7 +522,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 54,
     itemId: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
     supplier: 'HS_MARKETPLACE',
-    supplierCode: '77a68b8a-97bb-4c04-a823-31e6fd8d7df5'
+    supplierCode: userIds.heather
   },
   {
     id: 'aae5f080-a851-4a92-a5fb-7339b2cfd879',
@@ -524,7 +530,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 90,
     itemId: 'd5d10152-3f8a-419b-9abd-6d6e916ea64a',
     supplier: 'HS_MARKETPLACE',
-    supplierCode: '77a68b8a-97bb-4c04-a823-31e6fd8d7df5'
+    supplierCode: userIds.heather
   },
   {
     id: '6045cfe6-d76b-4329-b200-8882b1f7d9e3',
@@ -532,7 +538,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 24,
     itemId: 'e615de4e-ce10-451b-80ad-9717662a904a',
     supplier: 'HS_MARKETPLACE',
-    supplierCode: '77a68b8a-97bb-4c04-a823-31e6fd8d7df5'
+    supplierCode: userIds.heather
   },
   {
     id: 'bcffd319-247d-40a1-aa91-9c0d7f6e9378',
@@ -564,7 +570,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 96,
     itemId: '02bbc0fd-54c4-45bb-9b77-21b79b356aa6',
     supplier: 'HS_MARKETPLACE',
-    supplierCode: 'f9c8b541-0a30-4adc-8e0d-887e6db9f301'
+    supplierCode: userIds.chris
   },
   {
     id: '7ddba287-a297-4d7e-bbe7-53529be5dd79',
@@ -573,7 +579,7 @@ const batchesInternal: Batch[] = [
     expiry: 1554505200000,
     itemId: '190ee06f-455f-4778-b3db-1dfc74c3e966',
     supplier: 'HS_MARKETPLACE',
-    supplierCode: 'a3d9667e-a947-441a-8efd-b71e51beca02',
+    supplierCode: userIds.godds,
     priceExcludingVAT: 480
   },
   {
@@ -583,7 +589,7 @@ const batchesInternal: Batch[] = [
     expiry: 1509840000000,
     itemId: '88efb45b-2d7a-4b75-9a57-7c2ef3b784a8',
     supplier: 'HS_MARKETPLACE',
-    supplierCode: 'a3d9667e-a947-441a-8efd-b71e51beca02',
+    supplierCode: userIds.godds,
     priceExcludingVAT: 100
   },
   {
@@ -593,7 +599,7 @@ const batchesInternal: Batch[] = [
     expiry: 1519689600000,
     itemId: 'f01f533f-8bf6-4291-8fb8-a76c3bedc276',
     supplier: 'HS_MARKETPLACE',
-    supplierCode: 'a3d9667e-a947-441a-8efd-b71e51beca02',
+    supplierCode: userIds.godds,
     priceExcludingVAT: 100
   }
 ];
