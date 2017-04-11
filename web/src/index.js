@@ -42,7 +42,7 @@ import reducer from './reducers/reducer';
 import { performInitialise } from './actions/inititialise';
 import './chrome/style';
 import history from './history';
-import { loadState, saveState } from './localstorage';
+import { loadState, saveState } from './state';
 
 const middlewares = [thunkMiddleware];
 
@@ -62,7 +62,7 @@ store.subscribe(() => {
   saveState({
     refreshToken,
     likedItemIds
-  });
+  }, store.dispatch);
 });
 
 const redirectUnauthorised = (nextState, replace) => {

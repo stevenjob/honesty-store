@@ -15,23 +15,8 @@ import { SURVEY_REQUEST, SURVEY_SUCCESS, SURVEY_FAILURE } from '../actions/surve
 import { MARKETPLACE_REQUEST, MARKETPLACE_SUCCESS, MARKETPLACE_FAILURE } from '../actions/marketplace';
 import { OUT_OF_STOCK_REQUEST, OUT_OF_STOCK_SUCCESS, OUT_OF_STOCK_FAILURE } from '../actions/out-of-stock';
 import { UNLIKE_ITEM, LIKE_ITEM } from '../actions/like-item';
-
-const getInitialState = () => {
-  return {
-    initialised: false,
-    pending: [],
-    user: {
-      cardDetails: {}
-    },
-    store: {},
-    register: {},
-    error: {},
-    accessToken: null,
-    refreshToken: null,
-    survey: undefined,
-    likedItemIds: []
-  };
-};
+import { LOCAL_STORAGE_SAVE_ERROR } from '../actions/save-error';
+import { getInitialState } from '../state';
 
 export default (state, action) => {
   switch (action.type) {
@@ -403,11 +388,16 @@ export default (state, action) => {
         likedItemIds: updatedLikedItemIds
       };
     }
-    default: {
+    case LOCAL_STORAGE_SAVE_ERROR: {
       return {
-        ...getInitialState(),
-        ...state
+        ...state,
+        error: {
+          fullpage: action.error
+        }
       };
+    }
+    default: {
+      return state;
     }
   }
 };
