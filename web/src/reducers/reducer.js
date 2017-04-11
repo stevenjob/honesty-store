@@ -16,14 +16,6 @@ import { MARKETPLACE_REQUEST, MARKETPLACE_SUCCESS, MARKETPLACE_FAILURE } from '.
 import { OUT_OF_STOCK_REQUEST, OUT_OF_STOCK_SUCCESS, OUT_OF_STOCK_FAILURE } from '../actions/out-of-stock';
 import { UNLIKE_ITEM, LIKE_ITEM } from '../actions/like-item';
 
-const getLikedItemsFromStorage = () => {
-  try {
-    return JSON.parse(localStorage.getItem('likedItemIds')) || [];
-  } catch (e) {
-    return [];
-  }
-};
-
 const getInitialState = () => {
   return {
     initialised: false,
@@ -35,30 +27,13 @@ const getInitialState = () => {
     register: {},
     error: {},
     accessToken: null,
-    refreshToken: localStorage.refreshToken,
+    refreshToken: null,
     survey: undefined,
-    likedItemIds: getLikedItemsFromStorage()
+    likedItemIds: []
   };
 };
 
-const save = (props) => {
-  try {
-    for (const prop in props) {
-      if (props[prop] === undefined) {
-        delete localStorage[prop];
-      } else {
-        localStorage[prop] = props[prop];
-      }
-    }
-
-    return undefined;
-
-  } catch (e) {
-    return Object.assign(new Error('local storage failure'), { code: 'LocalStorageBlocked' });
-  }
-};
-
-export default (state = getInitialState(), action) => {
+export default (state, action) => {
   switch (action.type) {
     case INITIALISE: {
       return {
@@ -82,16 +57,9 @@ export default (state = getInitialState(), action) => {
       };
     }
     case REGISTER_SUCESSS: {
-      const { refreshToken } = action.response;
-      const error = save({ refreshToken });
-
       return {
         ...state,
         ...action.response,
-        error: {
-          ...state.error,
-          fullPage: error || state.error.fullPage
-        },
         pending: state.pending.filter(e => e !== 'register')
       };
     }
@@ -112,14 +80,8 @@ export default (state = getInitialState(), action) => {
       };
     }
     case SIGNIN_SUCCESS: {
-      const error = save({ refreshToken: undefined });
-
       return {
-        ...getInitialState(),
-        error: {
-          ...state.error,
-          fullPage: error
-        }
+        ...getInitialState()
       };
     }
     case SIGNIN_FAILURE: {
@@ -139,16 +101,9 @@ export default (state = getInitialState(), action) => {
       };
     }
     case SIGNIN2_SUCCESS: {
-      const { refreshToken } = action.response;
-      const error = save({ refreshToken });
-
       return {
         ...state,
         ...action.response,
-        error: {
-          ...state.error,
-          fullPage: error || state.error.fullPage
-        },
         pending: state.pending.filter(e => e !== 'signin2')
       };
     }
@@ -163,14 +118,9 @@ export default (state = getInitialState(), action) => {
       };
     }
     case DESTROY_SESSION: {
-      const error = save({ refreshToken: undefined });
-
       return {
         ...getInitialState(),
-        error: {
-          ...state.error,
-          fullPage: error
-        }
+        error: state.error
       };
     }
     case REGISTER2_REQUEST: {
@@ -217,14 +167,9 @@ export default (state = getInitialState(), action) => {
       };
     }
     case SESSION_RESET: {
-      const error = save({ refreshToken: undefined });
-
       return {
         ...getInitialState(),
-        error: {
-          ...state.error,
-          fullPage: action.error || error
-        }
+        error: state.error
       };
     }
     case SESSION_FAILURE: {
@@ -294,14 +239,9 @@ export default (state = getInitialState(), action) => {
       };
     }
     case LOGOUT_SUCCESS: {
-      const error = save({ refreshToken: undefined });
-
       return {
         ...getInitialState(),
-        error: {
-          ...state.error,
-          fullPage: error
-        }
+        error: state.error
       };
     }
     case LOGOUT_FAILURE: {
@@ -446,14 +386,10 @@ export default (state = getInitialState(), action) => {
       const { itemId } = action;
       const { likedItemIds } = state;
       const updatedItemIds = [...new Set(likedItemIds.concat(itemId))];
-      const error = save({ likedItemIds: JSON.stringify(updatedItemIds) });
 
       return {
         ...state,
-        likedItemIds: updatedItemIds,
-        error: {
-          fullPage: error
-        }
+        likedItemIds: updatedItemIds
       };
     }
     case UNLIKE_ITEM: {
@@ -462,17 +398,16 @@ export default (state = getInitialState(), action) => {
       const updatedLikedItemIds = [...new Set(likedItemIds)]
         .filter((el) => el !== itemId);
 
-      const error = save({ likedItemIds: JSON.stringify(updatedLikedItemIds) });
-
       return {
         ...state,
-        likedItemIds: updatedLikedItemIds,
-        error: {
-          fullPage: error
-        }
+        likedItemIds: updatedLikedItemIds
       };
     }
-    default:
-      return state;
+    default: {
+      return {
+        ...getInitialState(),
+        ...state
+      };
+    }
   }
 };
