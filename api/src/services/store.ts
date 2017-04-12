@@ -52,12 +52,12 @@ const extractBoxItems = (boxes: Box[], itemId: string, matchingCondition = (_box
 };
 
 const getBoxItem = (boxes: Box[], itemID: string): BoxItem => {
-  const boxesByDateReceived = boxes.sort((a, b) => a.received - b.received);
+  const boxesByDateReceived = boxes.slice().sort((a, b) => a.received - b.received);
   const inStockBoxItems = extractBoxItems(boxesByDateReceived, itemID, (({ depleted }) => depleted == null ));
 
   if (inStockBoxItems.length === 0) {
     const itemsByDateReceived = extractBoxItems(boxesByDateReceived, itemID);
-    const itemsByDateMarkedDepleted = itemsByDateReceived.sort((a, b) => b.depleted - a.depleted);
+    const itemsByDateMarkedDepleted = itemsByDateReceived.slice().sort((a, b) => b.depleted - a.depleted);
 
     const mostRecentDepletion = itemsByDateMarkedDepleted[0].depleted;
     const itemsMarkedDepletedOnDate = itemsByDateMarkedDepleted.filter(({ depleted }) => depleted === mostRecentDepletion );
