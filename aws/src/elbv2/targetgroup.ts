@@ -5,16 +5,37 @@ import { describeAll } from '../describe';
 export const ensureTargetGroup = async ({ name, vpc }) => {
   const elbv2 = new ELBv2({ apiVersion: '2015-12-01' });
 
-  const response = await elbv2
-    .createTargetGroup({
-      Name: name,
-      Protocol: 'HTTP',
-      Port: 80,
-      VpcId: vpc
-    })
-    .promise();
+  let targetGroup: ELBv2.TargetGroup;
+  try {
+    const response = await elbv2
+      .createTargetGroup({
+        Name: name,
+        Protocol: 'HTTP',
+        Port: 80,
+        VpcId: vpc
+      })
+      .promise();
 
-  const targetGroup = response.TargetGroups[0];
+    targetGroup = response.TargetGroups[0];
+  } catch (e) {
+    if (e.code !== 'DuplicateTargetGroupName') {
+      throw e;
+    }
+
+    // tslint:disable-next-line:no-console
+    console.log(`targetGroup: '${name}' exists, describing...`, e);
+
+    const response = await elbv2
+      .describeTargetGroups({
+        Names: [ name ]
+      })
+      .promise();
+
+    targetGroup = response.TargetGroups[0];
+
+    // tslint:disable-next-line:no-console
+    console.log(`targetGroup: acquired`, targetGroup);
+  }
 
   winston.debug('targetGroup: ensureTargetGroup', targetGroup);
 
