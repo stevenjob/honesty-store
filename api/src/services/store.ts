@@ -51,7 +51,7 @@ const extractBoxItems = (boxes: Box[], itemId: string, matchingCondition = (_box
     );
 };
 
-export const getBoxItem = (boxes: Box[], itemID: string): BoxItem => {
+const getBoxItem = (boxes: Box[], itemID: string): BoxItem => {
   const boxesByDateReceived = boxes.sort((a, b) => a.received - b.received);
   const inStockBoxItems = extractBoxItems(boxesByDateReceived, itemID, (({ depleted }) => depleted == null ));
 
