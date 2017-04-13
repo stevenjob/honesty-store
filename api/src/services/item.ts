@@ -433,6 +433,17 @@ const items: (Item & { id: string })[] = [
     unitPlural: 'bars',
     genericName: 'chocolate bar',
     genericNamePlural: 'chocolate'
+  },
+  {
+    id: '364677fc-f0d0-427a-976f-962be7345a6a',
+    name: 'Walkers (mix)',
+    location: 'Next to the HS-box',
+    image: 'misc-crisps.svg',
+    weight: 25,
+    unit: 'pack',
+    unitPlural: 'packs',
+    genericName: 'crisps',
+    genericNamePlural: 'crisps'
   }
 ];
 
