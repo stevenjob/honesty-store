@@ -479,7 +479,7 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: '0e9401fb-e5b0-4ee1-8904-1e98ec46a244',
-    name: "McCoy's crisps",
+    name: 'McCoy\'s crisps',
     location: 'honesty.store box',
     image: 'misc-crisps.svg',
     weight: 50,
@@ -512,7 +512,7 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: '200880b9-b4a2-4d08-95b6-4fc1280ad743',
-    name: "Hobnob's Snack Bar Milk Chocolate & Golden Syrup",
+    name: 'Hobnob\'s Snack Bar Milk Chocolate & Golden Syrup',
     location: 'honesty.store box',
     image: 'misc-bar.svg',
     weight: 30,
@@ -523,7 +523,7 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: '3c7b3f8d-ba8e-4d5e-a550-81fb9ccef11c',
-    name: "Hobnob's Snack Bar Milk Chocolate & Salted Caramel",
+    name: 'Hobnob\'s Snack Bar Milk Chocolate & Salted Caramel',
     location: 'honesty.store box',
     image: 'misc-bar.svg',
     weight: 30,
@@ -531,7 +531,7 @@ const items: (Item & { id: string })[] = [
     unitPlural: 'packs',
     genericName: 'biscuits',
     genericNamePlural: 'biscuits'
-  },
+  }
 ];
 
 const stockItems = new Map<string, Item>();

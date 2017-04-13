@@ -670,7 +670,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     priceExcludingVAT: 150,
     itemQuantity: 4,
-    expiry:1519516800000,
+    expiry: 1519516800000,
     itemId: '5b96e539-a33c-40b1-8c2d-3ab388d03ba1'
   },
   {
@@ -680,7 +680,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     priceExcludingVAT: 150,
     itemQuantity: 4,
-    expiry:1517356800000,
+    expiry: 1517356800000,
     itemId: '4c2697cc-f84e-4b0b-9547-05cff5ea41fc'
   },
   {
@@ -690,7 +690,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     priceExcludingVAT: 100,
     itemQuantity: 4,
-    expiry:1515542400000,
+    expiry: 1515542400000,
     itemId: 'e7d57402-6f60-4fb3-a585-7651cebbd4fa'
   },
   {
@@ -700,7 +700,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     priceExcludingVAT: 250,
     itemQuantity: 12,
-    expiry:1498867200000,
+    expiry: 1498867200000,
     itemId: '0e9401fb-e5b0-4ee1-8904-1e98ec46a244'
   },
   {
@@ -710,7 +710,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     priceExcludingVAT: 100,
     itemQuantity: 5,
-    expiry:1516406400000,
+    expiry: 1516406400000,
     itemId: '50878e68-08b1-4ef0-8ea0-f26c3d00259a'
   },
   {
@@ -720,7 +720,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     priceExcludingVAT: 100,
     itemQuantity: 5,
-    expiry:1516406400000,
+    expiry: 1516406400000,
     itemId: '36e8008f-b077-4498-848d-c69568c13b5a'
   },
   {
@@ -730,7 +730,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     priceExcludingVAT: 100,
     itemQuantity: 6,
-    expiry:1512172800000,
+    expiry: 1512172800000,
     itemId: '200880b9-b4a2-4d08-95b6-4fc1280ad743'
   },
   {
@@ -740,7 +740,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     priceExcludingVAT: 100,
     itemQuantity: 6,
-    expiry:1512172800000,
+    expiry: 1512172800000,
     itemId: '3c7b3f8d-ba8e-4d5e-a550-81fb9ccef11c'
   }
 ];
