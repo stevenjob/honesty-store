@@ -494,10 +494,10 @@ const items: (Item & { id: string })[] = [
     location: 'honesty.store box',
     image: 'misc-bar.svg',
     weight: 35,
-    unit: 'yoghurt',
-    unitPlural: 'yoghurts',
-    genericName: 'yoghurt',
-    genericNamePlural: 'yoghurts'
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'bar',
+    genericNamePlural: 'bars'
   },
   {
     id: '36e8008f-b077-4498-848d-c69568c13b5a',
@@ -505,10 +505,10 @@ const items: (Item & { id: string })[] = [
     location: 'honesty.store box',
     image: 'misc-bar.svg',
     weight: 35,
-    unit: 'yoghurt',
-    unitPlural: 'yoghurts',
-    genericName: 'yoghurt',
-    genericNamePlural: 'yoghurts'
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'bar',
+    genericNamePlural: 'bars'
   },
   {
     id: '200880b9-b4a2-4d08-95b6-4fc1280ad743',
