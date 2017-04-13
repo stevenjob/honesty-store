@@ -444,7 +444,94 @@ const items: (Item & { id: string })[] = [
     unitPlural: 'packs',
     genericName: 'crisps',
     genericNamePlural: 'crisps'
-  }
+  },
+  {
+    id: '5b96e539-a33c-40b1-8c2d-3ab388d03ba1',
+    name: 'Mars bar',
+    location: 'honesty.store box',
+    image: 'misc-bar.svg',
+    weight: 51,
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'chocolate bar',
+    genericNamePlural: 'chocolate'
+  },
+  {
+    id: '4c2697cc-f84e-4b0b-9547-05cff5ea41fc',
+    name: 'Rolo',
+    location: 'honesty.store box',
+    image: 'misc-bar.svg',
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'chocolate',
+    genericNamePlural: 'chocolate'
+  },
+  {
+    id: 'e7d57402-6f60-4fb3-a585-7651cebbd4fa',
+    name: 'Wispa bar',
+    location: 'honesty.store box',
+    image: 'misc-bar.svg',
+    weight: 39,
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'chocolate bar',
+    genericNamePlural: 'chocolate'
+  },
+  {
+    id: '0e9401fb-e5b0-4ee1-8904-1e98ec46a244',
+    name: "McCoy's crisps",
+    location: 'honesty.store box',
+    image: 'misc-crisps.svg',
+    weight: 50,
+    unit: 'pack',
+    unitPlural: 'packs',
+    genericName: 'crisps',
+    genericNamePlural: 'crisps'
+  },
+  {
+    id: '50878e68-08b1-4ef0-8ea0-f26c3d00259a',
+    name: 'Go Ahead Yogurt Breaks Strawberry',
+    location: 'honesty.store box',
+    image: 'misc-bar.svg',
+    weight: 35,
+    unit: 'yoghurt',
+    unitPlural: 'yoghurts',
+    genericName: 'yoghurt',
+    genericNamePlural: 'yoghurts'
+  },
+  {
+    id: '36e8008f-b077-4498-848d-c69568c13b5a',
+    name: 'Go Ahead Yogurt Breaks Forest Fruit',
+    location: 'honesty.store box',
+    image: 'misc-bar.svg',
+    weight: 35,
+    unit: 'yoghurt',
+    unitPlural: 'yoghurts',
+    genericName: 'yoghurt',
+    genericNamePlural: 'yoghurts'
+  },
+  {
+    id: '200880b9-b4a2-4d08-95b6-4fc1280ad743',
+    name: "Hobnob's Snack Bar Milk Chocolate & Golden Syrup",
+    location: 'honesty.store box',
+    image: 'misc-bar.svg',
+    weight: 30,
+    unit: 'pack',
+    unitPlural: 'packs',
+    genericName: 'biscuits',
+    genericNamePlural: 'biscuits'
+  },
+  {
+    id: '3c7b3f8d-ba8e-4d5e-a550-81fb9ccef11c',
+    name: "Hobnob's Snack Bar Milk Chocolate & Salted Caramel",
+    location: 'honesty.store box',
+    image: 'misc-bar.svg',
+    weight: 30,
+    unit: 'pack',
+    unitPlural: 'packs',
+    genericName: 'biscuits',
+    genericNamePlural: 'biscuits'
+  },
 ];
 
 const stockItems = new Map<string, Item>();

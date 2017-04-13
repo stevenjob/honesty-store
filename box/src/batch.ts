@@ -19,7 +19,8 @@ const userIds = {
   heather: '77a68b8a-97bb-4c04-a823-31e6fd8d7df5',
   godds: 'a3d9667e-a947-441a-8efd-b71e51beca02',
   chris: 'f9c8b541-0a30-4adc-8e0d-887e6db9f301',
-  rob: 'a8960624-7558-468c-9791-984ca0c620ba'
+  rob: 'a8960624-7558-468c-9791-984ca0c620ba',
+  graham: 'a3d9667e-a947-441a-8efd-b71e51beca02'
 };
 
 const batchesInternal: Batch[] = [
@@ -659,6 +660,88 @@ const batchesInternal: Batch[] = [
     supplier: MARKETPLACE_ID,
     supplierCode: userIds.rob,
     priceExcludingVAT: 200
+  },
+
+  // graham's edn marketplace
+  {
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.graham,
+    id: '0f948624-3d06-40a7-abde-39a40c7fb846',
+    quantity: 1,
+    priceExcludingVAT: 150,
+    itemQuantity: 4,
+    expiry:1519516800000,
+    itemId: '5b96e539-a33c-40b1-8c2d-3ab388d03ba1'
+  },
+  {
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.graham,
+    id: 'e4914d81-4f22-4c83-a432-3f29bf224f5b',
+    quantity: 1,
+    priceExcludingVAT: 150,
+    itemQuantity: 4,
+    expiry:1517356800000,
+    itemId: '4c2697cc-f84e-4b0b-9547-05cff5ea41fc'
+  },
+  {
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.graham,
+    id: '3f694636-4d98-4791-bbd2-a61fdc8c9f7c',
+    quantity: 1,
+    priceExcludingVAT: 100,
+    itemQuantity: 4,
+    expiry:1515542400000,
+    itemId: 'e7d57402-6f60-4fb3-a585-7651cebbd4fa'
+  },
+  {
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.graham,
+    id: 'acc7834b-0940-42fd-b040-037953c99538',
+    quantity: 1,
+    priceExcludingVAT: 250,
+    itemQuantity: 12,
+    expiry:1498867200000,
+    itemId: '0e9401fb-e5b0-4ee1-8904-1e98ec46a244'
+  },
+  {
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.graham,
+    id: '41607902-435e-4081-9cf4-67455cc82f81',
+    quantity: 1,
+    priceExcludingVAT: 100,
+    itemQuantity: 5,
+    expiry:1516406400000,
+    itemId: '50878e68-08b1-4ef0-8ea0-f26c3d00259a'
+  },
+  {
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.graham,
+    id: '6c43d562-f30a-40ff-8c32-3a1d971a8b3c',
+    quantity: 1,
+    priceExcludingVAT: 100,
+    itemQuantity: 5,
+    expiry:1516406400000,
+    itemId: '36e8008f-b077-4498-848d-c69568c13b5a'
+  },
+  {
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.graham,
+    id: '0cbccd6b-8fc6-41a3-bb44-3f6a97b22abf',
+    quantity: 1,
+    priceExcludingVAT: 100,
+    itemQuantity: 6,
+    expiry:1512172800000,
+    itemId: '200880b9-b4a2-4d08-95b6-4fc1280ad743'
+  },
+  {
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.graham,
+    id: '6788772f-ddda-448a-82b9-fd05033a6f82',
+    quantity: 1,
+    priceExcludingVAT: 100,
+    itemQuantity: 6,
+    expiry:1512172800000,
+    itemId: '3c7b3f8d-ba8e-4d5e-a550-81fb9ccef11c'
   }
 ];
 
