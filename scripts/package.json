@@ -11,7 +11,9 @@
   "dependencies": {
     "aws-sdk": "^2.7.10",
     "cruft-ddb": "^1.0.5",
-    "jsonwebtoken": "^7.3.0"
+    "jsonwebtoken": "^7.3.0",
+    "node-fetch": "^1.6.3",
+    "validator": "^6.2.0"
   },
   "devDependencies": {
     "@types/node": "0.0.2",
