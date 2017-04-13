@@ -498,7 +498,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     itemQuantity: 40,
     itemId: '3b7a6669-770c-4dbb-97e2-0e0aae3ca5ff',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: null
   },
   {
@@ -506,7 +506,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     itemQuantity: 80,
     itemId: '3b7a6669-770c-4dbb-97e2-0e0aae3ca5ff',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: null
   },
   {
@@ -514,7 +514,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     itemQuantity: 36,
     itemId: 'ccad58e3-e27a-4463-9139-17a36ff7f7b8',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: userIds.heather
   },
   {
@@ -522,7 +522,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     itemQuantity: 54,
     itemId: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: userIds.heather
   },
   {
@@ -530,7 +530,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     itemQuantity: 90,
     itemId: 'd5d10152-3f8a-419b-9abd-6d6e916ea64a',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: userIds.heather
   },
   {
@@ -538,7 +538,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     itemQuantity: 24,
     itemId: 'e615de4e-ce10-451b-80ad-9717662a904a',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: userIds.heather
   },
   {
@@ -546,7 +546,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     itemQuantity: 60,
     itemId: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: null
   },
   {
@@ -554,7 +554,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     itemQuantity: 60,
     itemId: 'd5d10152-3f8a-419b-9abd-6d6e916ea64a',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: null
   },
   {
@@ -562,7 +562,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     itemQuantity: 30,
     itemId: 'ccad58e3-e27a-4463-9139-17a36ff7f7b8',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: null
   },
   {
@@ -570,7 +570,7 @@ const batchesInternal: Batch[] = [
     quantity: 1,
     itemQuantity: 96,
     itemId: '02bbc0fd-54c4-45bb-9b77-21b79b356aa6',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: userIds.chris
   },
   {
@@ -579,7 +579,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 10,
     expiry: 1554505200000,
     itemId: '190ee06f-455f-4778-b3db-1dfc74c3e966',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: userIds.godds,
     priceExcludingVAT: 480
   },
@@ -589,7 +589,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 4,
     expiry: 1509840000000,
     itemId: '88efb45b-2d7a-4b75-9a57-7c2ef3b784a8',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: userIds.godds,
     priceExcludingVAT: 100
   },
@@ -599,7 +599,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 4,
     expiry: 1519689600000,
     itemId: 'f01f533f-8bf6-4291-8fb8-a76c3bedc276',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: userIds.godds,
     priceExcludingVAT: 100
   },
@@ -612,7 +612,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 90,
     expiry: 1506726000000,
     itemId: 'd5d10152-3f8a-419b-9abd-6d6e916ea64a',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: userIds.heather,
     priceExcludingVAT: 2100 + 25 // delivery
   },
@@ -623,7 +623,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 60,
     expiry: 1509494400000,
     itemId: 'e615de4e-ce10-451b-80ad-9717662a904a',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: userIds.heather,
     priceExcludingVAT: 2000 + 25 // delivery
   },
@@ -634,7 +634,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 30,
     expiry: 1506726000000,
     itemId: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: userIds.heather,
     priceExcludingVAT: 700 + 25 // delivery
   },
@@ -645,7 +645,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 30,
     expiry: 1522450800000,
     itemId: 'ccad58e3-e27a-4463-9139-17a36ff7f7b8',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: userIds.heather,
     priceExcludingVAT: 700 + 25 // delivery
   },
@@ -656,7 +656,7 @@ const batchesInternal: Batch[] = [
     itemQuantity: 14,
     expiry: 1497052800000,
     itemId: '364677fc-f0d0-427a-976f-962be7345a6a',
-    supplier: 'HS_MARKETPLACE',
+    supplier: MARKETPLACE_ID,
     supplierCode: userIds.rob,
     priceExcludingVAT: 200
   }
