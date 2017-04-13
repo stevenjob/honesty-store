@@ -1,8 +1,11 @@
-import { createShippedBox, ShippedBoxSubmission } from '../../box/src/client';
+import { BoxItemWithBatchReference, createShippedBox, ShippedBoxSubmission } from '../../box/src/client';
 import { createServiceKey } from '../../service/src/key';
+import { readFileSync } from 'fs';
 
 const usage = (help): never => {
-  console.error('Usage: path/to/script count-from-batch shipping-cost store-id item-id batch-id dry-run');
+  console.error('Usage: path/to/script shipping-cost store-id dry-run');
+  console.error('reads (from standard input) lines consisting of:');
+  console.error('  count item-id batch-id');
   console.error(help);
   // tslint:disable-next-line:no-constant-condition
   while (true) {
@@ -31,30 +34,57 @@ const maybeParseInt = (str, name) => {
 };
 
 const main = async (argv) => {
-  if (argv.length !== 5) { usage('wrong number of arguments'); }
+  if (argv.length !== 3) { usage('wrong number of arguments'); }
 
-  const count = maybeParseInt(argv[0], 'count');
-  const shippingCost = maybeParseInt(argv[1], 'shipping-cost');
-  const storeId = argv[2];
-  const itemId = argv[3];
-  const batchId = argv[4];
-  const isDryRun = maybeParseBool(argv[5], 'dryrun');
+  const shippingCost = maybeParseInt(argv[0], 'shipping-cost');
+  const storeId = argv[1];
+  const isDryRun = maybeParseBool(argv[2], 'dryrun');
+
+  const boxItems = readFileSync('/dev/stdin')
+    .toString()
+    .split('\n')
+    .filter(line => line.length)
+    .map((line, index) => {
+      const parts = line.split(' ');
+      if (parts.length !== 3) {
+        throw new Error(`line ${index + 1} has ${parts.length} field(s) - 3 expected`);
+      }
+
+      const count = maybeParseInt(parts[0], 'count');
+      const itemId = parts[1];
+      const batchId = parts[2];
+
+      return {
+        count,
+        itemId,
+        batchId
+      };
+    })
+    .reduce((itemIdToBatches, { count, itemId, batchId }) => {
+      const existing = itemIdToBatches.get(itemId) || { itemID: itemId, batches: [] };
+
+      itemIdToBatches.set(
+        itemId,
+        {
+          ...existing,
+          batches: [
+            ...existing.batches,
+            {
+              id: batchId,
+              count
+            }
+          ]
+        });
+
+      return itemIdToBatches;
+    }, new Map<string, BoxItemWithBatchReference>())
+    .values();
 
   const key = createServiceKey({ service: 'marketplace-script' });
 
   const submission: ShippedBoxSubmission = {
     donationRate: 0,
-    boxItems: [
-      {
-        itemID: itemId,
-        batches: [
-          {
-            id: batchId,
-            count
-          }
-        ]
-      }
-    ],
+    boxItems: Array.from(boxItems),
     shippingCost,
     packed: null,
     shipped: null
