@@ -1,6 +1,7 @@
+import { readFileSync } from 'fs';
+
 import { BoxItemWithBatchReference, createShippedBox, ShippedBoxSubmission } from '../../box/src/client';
 import { createServiceKey } from '../../service/src/key';
-import { readFileSync } from 'fs';
 
 const usage = (help): never => {
   console.error('Usage: path/to/script shipping-cost store-id dry-run');
@@ -77,6 +78,7 @@ const main = async (argv) => {
         });
 
       return itemIdToBatches;
+      // tslint:disable-next-line:align
     }, new Map<string, BoxItemWithBatchReference>())
     .values();
 
