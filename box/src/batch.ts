@@ -18,7 +18,8 @@ export const MARKETPLACE_ID = 'HS_MARKETPLACE';
 const userIds = {
   heather: '77a68b8a-97bb-4c04-a823-31e6fd8d7df5',
   godds: 'a3d9667e-a947-441a-8efd-b71e51beca02',
-  chris: 'f9c8b541-0a30-4adc-8e0d-887e6db9f301'
+  chris: 'f9c8b541-0a30-4adc-8e0d-887e6db9f301',
+  rob: 'a8960624-7558-468c-9791-984ca0c620ba'
 };
 
 const batchesInternal: Batch[] = [
@@ -647,6 +648,17 @@ const batchesInternal: Batch[] = [
     supplier: 'HS_MARKETPLACE',
     supplierCode: userIds.heather,
     priceExcludingVAT: 700 + 25 // delivery
+  },
+  {
+    // 14 pk walkers
+    id: 'f8e31950-2181-4ce4-aabe-957d4248e259',
+    quantity: 1,
+    itemQuantity: 14,
+    expiry: 1497052800000,
+    itemId: '364677fc-f0d0-427a-976f-962be7345a6a',
+    supplier: 'HS_MARKETPLACE',
+    supplierCode: userIds.rob,
+    priceExcludingVAT: 200
   }
 ];
 
