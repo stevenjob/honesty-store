@@ -458,7 +458,7 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: '4c2697cc-f84e-4b0b-9547-05cff5ea41fc',
-    name: 'Rolo',
+    name: 'Rolos',
     location: 'honesty.store box',
     image: 'misc-bar.svg',
     unit: 'bar',
@@ -468,7 +468,7 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: 'e7d57402-6f60-4fb3-a585-7651cebbd4fa',
-    name: 'Wispa bar',
+    name: 'Wispa',
     location: 'honesty.store box',
     image: 'misc-bar.svg',
     weight: 39,
@@ -479,7 +479,7 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: '0e9401fb-e5b0-4ee1-8904-1e98ec46a244',
-    name: 'McCoy\'s crisps',
+    name: 'McCoy\'s',
     location: 'honesty.store box',
     image: 'misc-crisps.svg',
     weight: 50,
@@ -490,7 +490,8 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: '50878e68-08b1-4ef0-8ea0-f26c3d00259a',
-    name: 'Go Ahead Yogurt Breaks Strawberry',
+    name: 'Go Ahead',
+    qualifier: 'Strawberry Yoghurt Break',
     location: 'honesty.store box',
     image: 'misc-bar.svg',
     weight: 35,
@@ -501,7 +502,8 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: '36e8008f-b077-4498-848d-c69568c13b5a',
-    name: 'Go Ahead Yogurt Breaks Forest Fruit',
+    name: 'Go Ahead',
+    qualifier: 'Forest Fruit Yogurt Breaks',
     location: 'honesty.store box',
     image: 'misc-bar.svg',
     weight: 35,
@@ -512,7 +514,8 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: '200880b9-b4a2-4d08-95b6-4fc1280ad743',
-    name: 'Hobnob\'s Snack Bar Milk Chocolate & Golden Syrup',
+    name: 'Hobnobs',
+    qualifier: 'Milk Chocolate & Golden Syrup',
     location: 'honesty.store box',
     image: 'misc-bar.svg',
     weight: 30,
@@ -523,7 +526,8 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: '3c7b3f8d-ba8e-4d5e-a550-81fb9ccef11c',
-    name: 'Hobnob\'s Snack Bar Milk Chocolate & Salted Caramel',
+    name: 'Hobnobs',
+    qualifier: 'Milk Chocolate & Salted Caramel',
     location: 'honesty.store box',
     image: 'misc-bar.svg',
     weight: 30,
