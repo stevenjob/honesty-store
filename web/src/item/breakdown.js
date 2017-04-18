@@ -29,10 +29,10 @@ export default ({ breakdown }) => {
   const fields = [
     { name: 'wholesaleCost', title: 'Wholesale', description: 'We buy it from our supplier' },
     { name: 'handlingFee', title: 'Handling fee', description: 'We store, pack, package and post it' },
-    { name: 'serviceFee', title: 'Service Fee', description: 'We take a bit to keep the store going' },
-    { name: 'creditCardFee', title: 'Card Fee', description: 'We pay the card processor' },
-    { name: 'VAT', title: 'VAT', description: `We pay 'Value-Added Tax' to the government` },
-    { name: 'donation', title: 'Charitable Donation', description: `We give a bit to charity` }
+    { name: 'serviceFee', title: 'Service fee', description: 'We take a bit to keep the store going' },
+    { name: 'creditCardFee', title: 'Card fee', description: 'We pay the card processor' },
+    { name: 'VAT', title: 'VAT', description: `We pay VAT on it` },
+    { name: 'donation', title: 'Charity', description: `We give a bit to charity` }
   ];
 
   let subtotal = 0;
