@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { baseUrl } from './baseUrl';
+import { baseUrl as defaultBaseUrl } from './baseUrl';
 import { CodedError, ErrorCode } from './error';
 import { Key } from './key';
 import { error, info } from './log';
@@ -14,7 +14,7 @@ interface ApiResponse<T> {
 }
 
 // tslint:disable-next-line:export-name
-export default (service: string) => {
+export default (service: string, baseUrl = defaultBaseUrl) => {
   const fetchAndParse = async <Result>({ method, version, path, key, body = undefined }): Promise<Result> => {
     const url = `${baseUrl}/${service}/v${version}${path}`;
 
