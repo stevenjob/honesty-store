@@ -17,7 +17,7 @@ const row = ({ name, title, description, amount, subtotal }, index, array) => {
         <div className="circle"></div>
         <div className="pl3">
           <p className="my0">{title}</p>
-          <p className="my0 regular" style={{ fontSize: '0.78rem', color: '#5D7E91' }}>{description}</p>
+          <p className="my0 regular" style={{ fontSize: '0.8rem', color: '#5D7E91' }}>{description}</p>
         </div>
       </th>
       <td className="col-3 right-align py1 align-bottom">{amount}</td>
