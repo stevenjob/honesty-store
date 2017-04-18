@@ -16,15 +16,18 @@ export interface StoreItem {
 }
 
 interface PriceBreakdown {
+  wholesaleCost: number;
+  handlingFee: number;
+  serviceFee: number;
   creditCardFee: number;
   VAT: number;
+  donation: number;
+
+  // Deprecated
   shippingCost: number;
   warehousingCost: number;
   packagingCost: number;
   packingCost: number;
-  serviceFee: number;
-  wholesaleCost: number;
-  donation: number;
 }
 
 export const storeList = ['sl-ncl', 'sl-edn', 'sl-brs', 'sl-ldn', 'dev-test', 'dev-test-2'];
@@ -102,6 +105,8 @@ const getPriceBreakdown = (boxItem: BoxItem): PriceBreakdown => {
     donation
   } = boxItem;
 
+  const handlingFee = warehousingCost + packagingCost + packingCost + shippingCost;
+
   return {
     creditCardFee,
     VAT,
@@ -111,7 +116,8 @@ const getPriceBreakdown = (boxItem: BoxItem): PriceBreakdown => {
     packingCost,
     serviceFee,
     wholesaleCost,
-    donation
+    donation,
+    handlingFee
   };
 };
 

@@ -27,11 +27,8 @@ const row = ({ name, title, description, amount, subtotal }, index, array) => {
 
 export default ({ breakdown }) => {
   const fields = [
-    { name: 'wholesaleCost', title: 'Wholesale', description: 'We buy the product' },
-    { name: 'warehousingCost', title: 'Storage', description: 'We store it until the time comes to ship the box' },
-    { name: 'packagingCost', title: 'Packaging', description: 'We purchase the box the item is shipped in' },
-    { name: 'packingCost', title: 'Packing', description: 'We lovingly place the item into the box by hand' },
-    { name: 'shippingCost', title: 'Postage', description: 'We post the item' },
+    { name: 'wholesaleCost', title: 'Wholesale', description: 'We buy it from our supplier' },
+    { name: 'handlingFee', title: 'Handling fee', description: 'We store, pack, package and post it' },
     { name: 'serviceFee', title: 'Service Fee', description: 'We take a bit to keep the store going' },
     { name: 'creditCardFee', title: 'Card Fee', description: 'We pay the card processor' },
     { name: 'VAT', title: 'VAT', description: `We pay 'Value-Added Tax' to the government` },
