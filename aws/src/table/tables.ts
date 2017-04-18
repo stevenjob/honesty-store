@@ -35,6 +35,7 @@ interface BoxData { // this is duplicated in box/src/client/index.ts
     VAT: number;
     donation: number;
     total: number;
+    expiry: number;
   }[];
   shippingCost: number;
   packed?: number;
@@ -69,6 +70,8 @@ const template = ({
   data: dummyData
 });
 
+const expiry = 1492513200000;
+
 const shipping = {
   shippingCost: 300,
   packed: 1485475200000,
@@ -76,7 +79,7 @@ const shipping = {
   received: 1485734400000
 };
 
-const walkersCosts = {
+const walkersBoxItem = {
   wholesaleCost: 15,
   shippingCost: 3,
   warehousingCost: 2,
@@ -87,10 +90,11 @@ const walkersCosts = {
   subtotal: 29,
   VAT: 0,
   donation: 1,
-  total: 30
+  total: 30,
+  expiry
 };
 
-const natureValleyCosts = {
+const natureValleyBoxItem = {
   wholesaleCost: 20,
   shippingCost: 5,
   warehousingCost: 5,
@@ -101,10 +105,11 @@ const natureValleyCosts = {
   subtotal: 45,
   VAT: 5,
   donation: 1,
-  total: 51
+  total: 51,
+  expiry
 };
 
-const dietCokeCosts = {
+const dietCokeBoxItem = {
   wholesaleCost: 50,
   shippingCost: 10,
   warehousingCost: 5,
@@ -115,7 +120,8 @@ const dietCokeCosts = {
   subtotal: 100,
   VAT: 30,
   donation: 10,
-  total: 130
+  total: 130,
+  expiry
 };
 
 const dummyBoxData: BoxData[] = [
@@ -149,7 +155,8 @@ const dummyBoxData: BoxData[] = [
         warehousingCost: 0,
         packagingCost: 0,
         packingCost: 0,
-        creditCardFee: 0
+        creditCardFee: 0,
+        expiry
       }
     ]
   },
@@ -168,7 +175,7 @@ const dummyBoxData: BoxData[] = [
             count: 3
           }
         ],
-        ...walkersCosts
+        ...walkersBoxItem
       },
       {
         itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
@@ -180,7 +187,7 @@ const dummyBoxData: BoxData[] = [
             count: 7
           }
         ],
-        ...natureValleyCosts
+        ...natureValleyBoxItem
       },
       {
         itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
@@ -191,7 +198,7 @@ const dummyBoxData: BoxData[] = [
             count: 7
           }
         ],
-        ...dietCokeCosts
+        ...dietCokeBoxItem
       }
     ],
     count: 17,
@@ -212,7 +219,7 @@ const dummyBoxData: BoxData[] = [
             count: 4
           }
         ],
-        ...walkersCosts
+        ...walkersBoxItem
       },
       {
         itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
@@ -224,7 +231,7 @@ const dummyBoxData: BoxData[] = [
             count: 6
           }
         ],
-        ...natureValleyCosts
+        ...natureValleyBoxItem
       },
       {
         itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
@@ -236,7 +243,7 @@ const dummyBoxData: BoxData[] = [
             count: 8
           }
         ],
-        ...dietCokeCosts
+        ...dietCokeBoxItem
       }
     ],
     ...shipping,
@@ -258,7 +265,7 @@ const dummyBoxData: BoxData[] = [
             count: 10
           }
         ],
-        ...walkersCosts
+        ...walkersBoxItem
       },
       {
         itemID: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
@@ -270,7 +277,7 @@ const dummyBoxData: BoxData[] = [
             count: 12
           }
         ],
-        ...natureValleyCosts
+        ...natureValleyBoxItem
       },
       {
         itemID: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
@@ -282,7 +289,7 @@ const dummyBoxData: BoxData[] = [
             count: 15
           }
         ],
-        ...dietCokeCosts
+        ...dietCokeBoxItem
       }
     ],
     ...shipping,
