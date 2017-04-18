@@ -55,7 +55,7 @@ export default ({ breakdown }) => {
 
   return subtotal === 0 ?
     <p>No breakdown available.</p> :
-    <table className="table col-12" style={{ borderCollapse: 'collapse' }} >
+    <table className="table col-11 mx-auto" style={{ borderCollapse: 'collapse' }} >
       <tbody>
         {data.map(row)}
       </tbody>
