@@ -25,7 +25,7 @@ const Depleted = ({ registered, itemId }) => (
 );
 
 const ItemDetail = ({
-  item: { id, name, price: { breakdown, total }, image, count, unit, unitPlural, qualifier, notes, weight, location, isMarketplace, isLiked },
+  item: { id, name, price: { breakdown, total }, image, count, unit, unitPlural, qualifier, notes, weight, location, isMarketplace, isLiked, expires },
   balance,
   performLikeItem,
   performUnlikeItem,
@@ -56,19 +56,17 @@ const ItemDetail = ({
     }
   };
 
-  const buttonClasses = `btn btn-primary btn-big ${isMarketplace ? 'btn-more' : ''}`;
+  const buttonClasses = `btn btn-primary ${isMarketplace ? 'btn-more' : ''}`;
 
-  const registeredPurchaseButton = <p>
+  const registeredPurchaseButton =
     <Link className={buttonClasses} onClick={() => onClick(1)}>
       {payForText(1)}
-    </Link>
-  </p>;
+    </Link>;
 
-  const unregisteredPurchaseButton = <p>
+  const unregisteredPurchaseButton =
     <Link className={buttonClasses} to={`/register/${id}`}>
       {payForText(1)}
-    </Link>
-  </p>;
+    </Link>;
 
   return (
     <Full
@@ -77,20 +75,41 @@ const ItemDetail = ({
       >
       {id != null &&
         <div>
-          <div className="col-4 mt3 mx-auto">
+          <h1 className="mt1 mb0">{name}</h1>
+          {
+            qualifier &&
+            <h3 className="mt0 aqua regular">
+              {qualifier}
+            </h3>
+          }
+          <div className="col-6 mx-auto">
             <div className="bg-center bg-no-repeat"
               style={{ backgroundImage: `url(${safeLookupItemImage(image)})`, paddingBottom: '100%', lineHeight: 0 }}>
               {'\u00a0'}
             </div>
           </div>
-          <h1 className="mt1 mb0">{name}</h1>
+          <div className="my3">
+            {registered ? registeredPurchaseButton : unregisteredPurchaseButton}
+          </div>
           {
-            qualifier &&
-            <h3 className="mt0 mb3 aqua regular">
-              {qualifier}
-            </h3>
+            notes &&
+            <p>{notes}</p>
           }
-          {registered ? registeredPurchaseButton : unregisteredPurchaseButton}
+          <ul className="list-reset">
+            {
+              weight &&
+              <li>Weight: {`${weight}g`}</li>
+            }
+            {
+              location &&
+              <li>Location: {location}</li>
+            }
+            {
+              expires &&
+              <li>Expires: {expires}</li>
+            }
+          </ul>
+          <div>
             {
               count === 0 ?
               <Depleted registered={registered} itemId={id} /> :
@@ -98,29 +117,7 @@ const ItemDetail = ({
               <FlagOutOfStock itemId={id} /> :
               null
             }
-          <h3 className="mt3">Item Details</h3>
-          {
-            notes &&
-            <p>{notes}</p>
-          }
-          <table className="table mx-auto">
-            <tbody>
-              {
-                location &&
-                <tr>
-                  <th className="col-6 right-align">Location</th>
-                  <td>{location}</td>
-                </tr>
-              }
-              {
-                weight &&
-                <tr>
-                    <th className="col-6 right-align">Weight</th>
-                    <td>{`${weight}g`}</td>
-                </tr>
-              }
-            </tbody>
-          </table>
+          </div>
           <h3>Price Breakdown</h3>
           <p>Storage, packaging, packing, postage and the service fee are shared equally across all items in a box.</p>
           <Breakdown breakdown={breakdown}/>

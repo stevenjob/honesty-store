@@ -5,10 +5,10 @@ import { performOutOfStock } from '../actions/out-of-stock';
 
 const OutOfStock = ({ itemId, performOutOfStock }) => (
   <Link
-    className="btn white bg-red"
+    className="aqua"
     onClick={() => performOutOfStock({ itemId })}
   >
-    Report Out of Stock
+    Report out of stock
   </Link>
 );
 
