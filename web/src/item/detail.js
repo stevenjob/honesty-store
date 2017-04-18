@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import history from '../history';
 import { Back } from '../chrome/link';
 import Currency from '../format/Currency';
+import formatDate from '../format/date';
 import { performPurchase } from '../actions/purchase';
 import { performUnlikeItem, performLikeItem } from '../actions/like-item';
 import isRegistered from '../reducers/is-registered-user';
@@ -106,7 +107,7 @@ const ItemDetail = ({
             }
             {
               expiry &&
-              <li>Expires: <strong>{expiry}</strong></li>
+              <li>Expires: <strong>{formatDate(expiry)}</strong></li>
             }
           </ul>
           <div>
