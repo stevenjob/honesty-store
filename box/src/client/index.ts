@@ -36,6 +36,7 @@ type ShippingDetails = {
 export type BoxItem = BoxItemWithBatchReference & FixedBoxItemOverheads & VariableBoxItemOverheads & {
   count: number;
   depleted?: number;
+  expiry: number;
 };
 
 export type ShippedBoxSubmission = ShippingDetails & Donatable & {

@@ -9,6 +9,7 @@ export interface StoreItem {
   count: number;
 
   id: string;
+  expiry: number;
   price: {
     total: number;
     breakdown: PriceBreakdown;
@@ -129,7 +130,7 @@ export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
     getUniqueItemCounts(openBoxes)
       .map(async ({ itemID, count, isMarketplace }) => {
         const boxItem = getBoxItem(openBoxes, itemID);
-        const { total } = boxItem;
+        const { total, expiry } = boxItem;
         const breakdown = getPriceBreakdown(boxItem);
 
         return ({
@@ -137,6 +138,7 @@ export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
           count,
           isMarketplace,
           id: itemID,
+          expiry,
           price: {
             total,
             breakdown

@@ -25,7 +25,7 @@ const Depleted = ({ registered, itemId }) => (
 );
 
 const ItemDetail = ({
-  item: { id, name, price: { breakdown, total }, image, count, unit, unitPlural, qualifier, notes, weight, location, isMarketplace, isLiked, expires },
+  item: { id, name, price: { breakdown, total }, image, count, unit, unitPlural, qualifier, notes, weight, location, isMarketplace, isLiked, expiry },
   balance,
   performLikeItem,
   performUnlikeItem,
@@ -105,8 +105,8 @@ const ItemDetail = ({
               <li>Location: <strong>{location}</strong></li>
             }
             {
-              expires &&
-              <li>Expires: <strong>{expires}</strong></li>
+              expiry &&
+              <li>Expires: <strong>{expiry}</strong></li>
             }
           </ul>
           <div>
