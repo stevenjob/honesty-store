@@ -1,11 +1,7 @@
 import React from 'react';
+import zeroPad from '../format/number';
 
-const zeroPadMonth = (month) => {
-  const prefix = month < 10 ? '0' : '';
-  return `${prefix}${month}`;
-};
-
-const formatExpiry = ({ expMonth, expYear }) => `${zeroPadMonth(expMonth)}/${expYear % 100}`;
+const formatExpiry = ({ expMonth, expYear }) => `${zeroPad(expMonth)}/${expYear % 100}`;
 
 const Mastercard = () =>
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 155 20">
