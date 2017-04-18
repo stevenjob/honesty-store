@@ -98,15 +98,15 @@ const ItemDetail = ({
           <ul className="list-reset">
             {
               weight &&
-              <li>Weight: {`${weight}g`}</li>
+              <li>Weight: <strong>{`${weight}g`}</strong></li>
             }
             {
               location &&
-              <li>Location: {location}</li>
+              <li>Location: <strong>{location}</strong></li>
             }
             {
               expires &&
-              <li>Expires: {expires}</li>
+              <li>Expires: <strong>{expires}</strong></li>
             }
           </ul>
           <div>
