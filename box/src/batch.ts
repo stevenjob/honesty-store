@@ -763,6 +763,11 @@ export const getBatch = (batchId: string) => {
   return batch;
 };
 
+export const getExpiry = (batchId: string): number => {
+  const { expiry } = batches.get(batchId);
+  return expiry;
+};
+
 export const getItemCost = (batchId: string): number => {
   const { priceExcludingVAT, itemQuantity } = getBatch(batchId);
   return priceExcludingVAT / itemQuantity;

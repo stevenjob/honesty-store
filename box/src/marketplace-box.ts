@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { getBatch, getItemCost } from './batch';
+import { getExpiry, getItemCost } from './batch';
 import { Box, BoxItem, FixedBoxItemOverheads, MarketplaceBoxSubmission, VariableBoxItemOverheads } from './client';
 import { roundItemCosts } from './math';
 
@@ -33,7 +33,7 @@ export default (storeId: string, submission: MarketplaceBoxSubmission): Box & { 
   };
 
   const roundedCosts = roundItemCosts({ ...fixedOverheads, ...variableCosts });
-  const { expiry } = getBatch(id);
+  const expiry = getExpiry(id);
 
   const boxItem: BoxItem = {
     ...batchReference,

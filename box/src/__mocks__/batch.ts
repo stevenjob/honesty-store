@@ -6,3 +6,7 @@ export const getItemCost = (batchId: string): number => {
 export const getVATRate = (_batchId: string): number => {
   return 0.2;
 };
+
+export const getExpiry = (_batchId: string) => {
+  return 0;
+};

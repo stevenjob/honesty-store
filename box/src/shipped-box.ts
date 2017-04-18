@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { getBatch, getItemCost as getBatchItemCost, getVATRate } from './batch';
+import { getExpiry, getItemCost as getBatchItemCost, getVATRate } from './batch';
 import {
   BatchReference, Box, BoxItem,
   BoxItemWithBatchReference, FixedBoxItemOverheads, ShippedBoxSubmission,
@@ -70,9 +70,9 @@ const getPricedBoxItem = (
 
   const roundedCosts = roundItemCosts({ ...fixedOverheads, ...variableCosts });
 
-  const { expiry } = batches.map(({ id }) => getBatch(id))
+  const expiry = batches.map(({ id }) => getExpiry(id))
     .sort((a, b) => {
-      return a.expiry - b.expiry;
+      return a - b;
     })[0];
 
   return {
