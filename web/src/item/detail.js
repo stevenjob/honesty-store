@@ -118,8 +118,8 @@ const ItemDetail = ({
               null
             }
           </div>
-          <h3>Price Breakdown</h3>
-          <p>Storage, packaging, packing, postage and the service fee are shared equally across all items in a box.</p>
+          <h4 className="mt3">Price Breakdown</h4>
+          <p>Your snack's journey to you</p>
           <Breakdown breakdown={breakdown}/>
         </div>
       }

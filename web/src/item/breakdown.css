@@ -1,0 +1,30 @@
+.vertical-line {
+  position: absolute;
+  border-left: 2px solid #43BCD6;
+  left: 4px;
+}
+
+.vertical-line-middle {
+  top: 0;
+  bottom: 0;
+}
+
+.vertical-line-top {
+  height: 80%;
+  bottom: 0;
+}
+
+.vertical-line-bottom {
+  height: 20%;
+  top: 0;
+}
+
+.circle {
+  background-color: #FFF;
+  border: 2px solid #43BCD6;
+  border-radius: 6px;
+  height: 8px;
+  width: 8px;
+  position: absolute;
+  top: 20%;
+}
