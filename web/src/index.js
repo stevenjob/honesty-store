@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
+import throttle from 'lodash.throttle';
 import App from './app';
 import Home from './home/index';
 import HomeSuccess from './home/success';
@@ -57,13 +58,18 @@ const store = createStore(
   applyMiddleware(...middlewares)
 );
 
-store.subscribe(() => {
-  const { refreshToken, likedItemIds } = store.getState();
+const throttledSaveState = throttle(() => {
+  const { refreshToken, likedItemIds, error: { fullPage } } = store.getState();
+  if (fullPage) {
+    return;
+  }
   saveState({
     refreshToken,
     likedItemIds
   }, store.dispatch);
-});
+}, 1000);
+
+store.subscribe(throttledSaveState);
 
 const redirectUnauthorised = (nextState, replace) => {
   const { refreshToken } = store.getState();
