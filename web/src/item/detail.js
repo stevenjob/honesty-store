@@ -16,15 +16,9 @@ import Breakdown from './breakdown';
 import Like from './like';
 import FlagOutOfStock from './out-of-stock';
 
-const Depleted = ({ registered, itemId }) => (
-  <p>
-    This item has been reported out of stock
-    <br />
-    <Link className="m1" to={`/help/item/${itemId}`}>
-      Report a Problem
-    </Link>
-  </p>
-);
+const Depleted = ({ registered }) => <p className="red">This item has been reported out of stock</p>;
+
+const Report = ({ itemId }) => <Link to={`/help/item/${itemId}`}>Report a problem</Link>;
 
 const ItemDetail = ({
   item: {
@@ -133,15 +127,20 @@ const ItemDetail = ({
           <div>
             {
               count === 0 ?
-              <Depleted registered={registered} itemId={id} /> :
+              <Depleted registered={registered}/> :
               registered ?
               <FlagOutOfStock itemId={id} /> :
               null
             }
           </div>
-          <h4 className="mt3">Price Breakdown</h4>
-          <p>Your {makePossessive(genericName)} journey to you</p>
-          <Breakdown breakdown={breakdown} isMarketplace={isMarketplace}/>
+          <div>
+            <h4 className="mt3">Price Breakdown</h4>
+            <p>Your {makePossessive(genericName)} journey to you</p>
+            <Breakdown breakdown={breakdown} isMarketplace={isMarketplace}/>
+          </div>
+          <div className="mt3 mb1">
+            <Report itemId={id}/>
+          </div>
         </div>
       }
     </Full>
