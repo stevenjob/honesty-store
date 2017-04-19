@@ -70,13 +70,12 @@ const getPricedBoxItem = (
 
   const roundedCosts = roundItemCosts({ ...fixedOverheads, ...variableCosts });
 
-  const expiry = batches.map(({ id }) => getExpiry(id))
-    .filter(el => el != null)
-    .reduce((a, b) => Math.min(a, b));
+  const expiries = batches.map(({ id }) => getExpiry(id))
+    .filter(el => el != null);
 
   return {
     count: sumBatches(batches),
-    expiry,
+    expiry: expiries.length === 0 ? null : expiries.reduce((a, b) => Math.min(a, b)),
     ...roundedCosts,
     ...boxItemWithBatchRef
   };
