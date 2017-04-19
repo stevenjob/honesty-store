@@ -5,6 +5,7 @@ import history from '../history';
 import { Back } from '../chrome/link';
 import Currency from '../format/Currency';
 import formatDate from '../format/date';
+import makePossessive from '../format/item';
 import { performPurchase } from '../actions/purchase';
 import { performUnlikeItem, performLikeItem } from '../actions/like-item';
 import isRegistered from '../reducers/is-registered-user';
@@ -26,7 +27,26 @@ const Depleted = ({ registered, itemId }) => (
 );
 
 const ItemDetail = ({
-  item: { id, name, price: { breakdown, total }, image, count, unit, unitPlural, qualifier, notes, weight, location, isMarketplace, isLiked, expiry },
+  item: {
+    id,
+    name,
+    price: {
+      breakdown,
+      total
+    },
+    image,
+    count,
+    unit,
+    unitPlural,
+    qualifier,
+    notes,
+    weight,
+    location,
+    isMarketplace,
+    isLiked,
+    expiry,
+    genericName
+  },
   balance,
   performLikeItem,
   performUnlikeItem,
@@ -120,7 +140,7 @@ const ItemDetail = ({
             }
           </div>
           <h4 className="mt3">Price Breakdown</h4>
-          <p>Your snack's journey to you</p>
+          <p>Your {makePossessive(genericName)} journey to you</p>
           <Breakdown breakdown={breakdown}/>
         </div>
       }
