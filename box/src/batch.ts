@@ -20,7 +20,8 @@ const userIds = {
   godds: 'a3d9667e-a947-441a-8efd-b71e51beca02',
   chris: 'f9c8b541-0a30-4adc-8e0d-887e6db9f301',
   rob: 'a8960624-7558-468c-9791-984ca0c620ba',
-  graham: 'a3d9667e-a947-441a-8efd-b71e51beca02'
+  graham: 'a3d9667e-a947-441a-8efd-b71e51beca02',
+  sam: 'c71733c4-dc05-42f9-848e-fb53bf08a2d7'
 };
 
 const batchesInternal: Batch[] = [
@@ -742,6 +743,16 @@ const batchesInternal: Batch[] = [
     itemQuantity: 6,
     expiry: 1512172800000,
     itemId: '3c7b3f8d-ba8e-4d5e-a550-81fb9ccef11c'
+  },
+  {
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.sam,
+    id: '4f50b9a1-76a5-42d6-852e-696a9f299d96',
+    quantity: 1,
+    priceExcludingVAT: 289,
+    itemQuantity: 24,
+    expiry: 1512172800000,
+    itemId: '4b41c613-d0a9-474c-be38-f6c89f4df582'
   }
 ];
 

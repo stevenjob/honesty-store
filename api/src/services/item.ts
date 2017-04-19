@@ -535,6 +535,17 @@ const items: (Item & { id: string })[] = [
     unitPlural: 'packs',
     genericName: 'biscuits',
     genericNamePlural: 'biscuits'
+  },
+  {
+    id: '4b41c613-d0a9-474c-be38-f6c89f4df582',
+    name: 'Seabrook (Variety)',
+    location: 'Next to HS-box',
+    image: 'misc-crisps.svg',
+    weight: 25,
+    unit: 'pack',
+    unitPlural: 'packs',
+    genericName: 'crisps',
+    genericNamePlural: 'crisps'
   }
 ];
 
