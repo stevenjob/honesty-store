@@ -71,6 +71,7 @@ const getPricedBoxItem = (
   const roundedCosts = roundItemCosts({ ...fixedOverheads, ...variableCosts });
 
   const expiry = batches.map(({ id }) => getExpiry(id))
+    .filter(el => el != null)
     .reduce((a, b) => Math.min(a, b));
 
   return {
