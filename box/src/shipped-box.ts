@@ -71,9 +71,7 @@ const getPricedBoxItem = (
   const roundedCosts = roundItemCosts({ ...fixedOverheads, ...variableCosts });
 
   const expiry = batches.map(({ id }) => getExpiry(id))
-    .sort((a, b) => {
-      return a - b;
-    })[0];
+    .reduce((a, b) => Math.min(a, b));
 
   return {
     count: sumBatches(batches),
