@@ -1,5 +1,4 @@
 export default (name) => {
-  const lastChar = name.substring(name.length - 1);
-  const possesiveChars = lastChar === 's' ? `'` : `'s`;
+  const possesiveChars =  name.substring(name.length - 1) === 's' ? `'` : `'s`;
   return `${name}${possesiveChars}`;
 };

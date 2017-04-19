@@ -25,9 +25,10 @@ const row = ({ name, title, description, amount, subtotal }, index, array) => {
   );
 };
 
-export default ({ breakdown }) => {
+export default ({ breakdown, isMarketplace }) => {
+  const marketplaceDescription = isMarketplace ? 'Someone from your office buys it in bulk' : 'We buy it from our supplier';
   const fields = [
-    { name: 'wholesaleCost', title: 'Wholesale', description: 'We buy it from our supplier' },
+    { name: 'wholesaleCost', title: 'Wholesale', description: marketplaceDescription },
     { name: 'handlingFee', title: 'Handling fee', description: 'We store, pack, package and post it' },
     { name: 'serviceFee', title: 'Service fee', description: 'We take a bit to keep the store going' },
     { name: 'creditCardFee', title: 'Card fee', description: 'We pay the card processor' },

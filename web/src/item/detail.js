@@ -141,7 +141,7 @@ const ItemDetail = ({
           </div>
           <h4 className="mt3">Price Breakdown</h4>
           <p>Your {makePossessive(genericName)} journey to you</p>
-          <Breakdown breakdown={breakdown}/>
+          <Breakdown breakdown={breakdown} isMarketplace={isMarketplace}/>
         </div>
       }
     </Full>
