@@ -392,7 +392,7 @@ export default (state, action) => {
       return {
         ...state,
         error: {
-          fullpage: action.error
+          fullPage: action.error
         }
       };
     }
