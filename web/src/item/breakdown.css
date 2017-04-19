@@ -10,12 +10,12 @@
 }
 
 .vertical-line-top {
-  height: 80%;
+  height: 77%;
   bottom: 0;
 }
 
 .vertical-line-bottom {
-  height: 20%;
+  height: 23%;
   top: 0;
 }
 
@@ -26,5 +26,5 @@
   height: 8px;
   width: 8px;
   position: absolute;
-  top: 20%;
+  top: 23%;
 }
