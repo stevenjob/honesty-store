@@ -5,7 +5,7 @@ import safeLookupItemImage from '../item/safeLookupItemImage';
 import Currency from '../format/Currency';
 
 export default ({ item: { id, name, price: { total: price }, image, qualifier, count, isMarketplace, isLiked } }) =>
-  <Link to={`/item/${id}`} className="btn regular flex navy" style={{ filter: count === 0 ? 'grayscale()' : undefined }}>
+  <Link to={`/item/${id}`} className={`btn regular flex navy ${count === 0 ? 'out-of-stock' : '' }`}>
     <div className="flex-none col-3">
       <div className="bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${safeLookupItemImage(image)})`, paddingBottom: '100%' }}>

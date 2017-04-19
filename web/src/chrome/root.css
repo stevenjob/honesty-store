@@ -22,3 +22,7 @@ textarea, input[type] {
 .btn:focus {
   box-shadow: none;
 }
+
+.out-of-stock {
+  filter: grayscale();
+}
