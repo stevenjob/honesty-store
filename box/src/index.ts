@@ -163,6 +163,26 @@ const flagOutOfStock = async ({ key, boxId, itemId, depleted }) => {
   return {};
 };
 
+const markBoxAsReceived = async ({ key, boxId, userId }) => {
+  info(key, `Marking box as received`, { boxId, userId });
+
+  const box = await getBox(boxId);
+
+  // TODO: userId and store.agentId must match
+  // const boxStoreId = box.storeId;
+  // Get agent of store -> must match
+
+  if (box.received != null) {
+    throw new CodedError('BoxAlreadyMarkedAsReceived', `Box ${boxId} already marked as received`);
+  }
+
+  box.received = new Date().getTime();
+
+  await cruft.update(box);
+
+  return {};
+};
+
 const sendShippedNotification = async ({ key, emailAddress, boxId }) => {
   const message = `( https://honesty.store )
 
@@ -236,12 +256,6 @@ app.use(bodyParser.json());
 const router = serviceRouter('box', 1);
 
 router.get(
-  '/:boxId',
-  serviceAuthentication,
-  async (_key, { boxId }) => getBox(boxId)
-);
-
-router.get(
   '/store/:storeId',
   serviceAuthentication,
   async (_key, { storeId }) => getBoxesForStore(storeId)
@@ -265,6 +279,18 @@ router.post(
   '/:boxId/out-of-stock/:itemId/:depleted',
   serviceAuthentication,
   async (key, { boxId, itemId, depleted }) => flagOutOfStock({ key, boxId, itemId, depleted })
+);
+
+router.post(
+  '/:boxId/received/:userId',
+  serviceAuthentication,
+  async (key, { boxId, userId }) => markBoxAsReceived({ key, boxId, userId })
+);
+
+router.get(
+  '/:boxId',
+  serviceAuthentication,
+  async (_key, { boxId }) => getBox(boxId)
 );
 
 app.use(router);

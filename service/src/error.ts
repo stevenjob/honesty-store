@@ -21,6 +21,7 @@ export type ErrorCode =
   'MagicLinkTokenExpired' |
   'TokenError' |
   'ItemNotInBox' |
+  'BoxAlreadyMarkedAsReceived' |
   'UnknownError';
 
 export class CodedError extends Error {

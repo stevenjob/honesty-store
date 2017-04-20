@@ -59,6 +59,9 @@ const { get, post } = fetch('box');
 export const flagOutOfStock = ({ key, boxId, itemId, depleted }) =>
   post<{}>(1, key, `/${boxId}/out-of-stock/${itemId}/${depleted}`, {});
 
+export const markBoxAsReceived = (key, boxId: string, userId: string) =>
+  post<{}>(1, key, `/${boxId}/received/${userId}`, {});
+
 export const createShippedBox = (key, storeId: string, submission: ShippedBoxSubmission, dryRun) =>
   post<Box>(1, key, `/store/${storeId}/shipped?dryRun=${dryRun}`, submission);
 
