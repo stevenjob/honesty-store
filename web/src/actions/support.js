@@ -40,8 +40,8 @@ export const performSupport = ({ message, emailAddress }, successUrl = `/help/su
       getToken: () => getState().accessToken
     }, dispatch, getState);
 
-    dispatch(supportSuccess(response));
-    history.push(`/help/success`);
+    history.push(successUrl);
+    dispatch(supportSuccess());
 
   } catch (e) {
     dispatch(supportFailure(e));
