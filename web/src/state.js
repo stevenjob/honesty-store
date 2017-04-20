@@ -19,10 +19,25 @@ export const getInitialState = () => {
 
 export const loadState = () => {
   const deserializedState = JSON.parse(localStorage.getItem('state'));
-  return {
+  const state = {
     ...getInitialState(),
     ...deserializedState
   };
+
+  // backwards-compat for refreshToken
+  const oldRefreshToken = localStorage.getItem('refreshToken');
+  if (!state.refreshToken && oldRefreshToken) {
+    state.refreshToken = oldRefreshToken;
+  }
+
+  // backwards-compat for likedItemIds
+  const oldLikedItemIds = localStorage.getItem('likedItemIds');
+  if ((!state.likedItemIds || state.likedItemIds.length === 0) && oldLikedItemIds) {
+    state.likedItemIds = oldLikedItemIds;
+  }
+
+
+  return state;
 };
 
 export const saveState = (state, dispatch) => {
