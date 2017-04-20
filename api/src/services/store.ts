@@ -31,14 +31,25 @@ interface PriceBreakdown {
   packingCost: number;
 }
 
-export const storeList = ['sl-ncl', 'sl-edn', 'sl-brs', 'sl-ldn', 'dev-test', 'dev-test-2'];
+interface Store {
+  code: string;
+  agentEmail: string;
+}
+
+export const stores: Store[] = [
+  { code: 'sl-ncl', agentEmail: 'price.c@gmail.com' },
+  { code: 'sl-edn', agentEmail: 'grahamodds@hotmail.com' },
+  { code: 'sl-brs', agentEmail: 'dgorst@scottlogic.com' },
+  { code: 'sl-ldn', agentEmail: 'tmakarem@scottlogic.co.uk' },
+  { code: 'dev-test', agentEmail: 'support@honesty.store' }
+];
 
 // currently storeCode and storeID are identical
 export const storeIDToStoreCode = (storeID) => storeID;
 export const storeCodeToStoreID = (storeCode) => storeCode;
 
 const assertValidStoreCode = (storeCode) => {
-  if (!storeList.some(el => el === storeCode)) {
+  if (!stores.some(({ code }) => code === storeCode)) {
     throw new Error(`Store does not exist with code '${storeCode}'`);
   }
 };

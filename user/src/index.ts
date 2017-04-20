@@ -5,7 +5,7 @@ import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isEmail = require('validator/lib/isEmail');
-import { storeList } from '../../api/src/services/store'; // until we have the store service
+import { stores } from '../../api/src/services/store'; // until we have the store service
 import { CodedError } from '../../service/src/error';
 import { createServiceKey } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
@@ -36,7 +36,8 @@ const assertValidUserId = createAssertValidUuid('userId');
 const assertValidRefreshToken = createAssertValidUuid('refreshToken');
 
 const assertValidDefaultStoreId = (defaultStoreId) => {
-  if (storeList.indexOf(defaultStoreId) === -1) {
+  const storeCodes = stores.map(({ code }) => code);
+  if (storeCodes.indexOf(defaultStoreId) === -1) {
     throw new CodedError('StoreNotFound', `Invalid defaultStoreId ${defaultStoreId}`);
   }
 };

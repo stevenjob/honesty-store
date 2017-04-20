@@ -3,7 +3,7 @@ import cruftDDB from 'cruft-ddb';
 import bodyParser = require('body-parser');
 import express = require('express');
 import isUUID = require('validator/lib/isUUID');
-import { storeList } from '../../api/src/services/store';
+import { stores } from '../../api/src/services/store';
 import { CodedError } from '../../service/src/error';
 import { info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
@@ -20,7 +20,7 @@ const cruft = cruftDDB<Box>({
 });
 
 const assertValidStoreId = (storeId) => {
-  if (!storeList.some((el) => el === storeId)) {
+  if (!stores.some(({ code }) => code === storeId)) {
     throw new Error(`No store found with id '${storeId}'`);
   }
 };
