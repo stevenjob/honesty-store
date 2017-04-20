@@ -1,4 +1,4 @@
-import { Box, flagOutOfStock, getBoxesForStore } from  '../../../box/src/client';
+import { Box, flagOutOfStock, getBoxesForStore, markBoxAsReceived } from  '../../../box/src/client';
 import { authenticateAccessToken } from '../middleware/authenticate';
 
 const itemInBox = (itemId) => ({ boxItems }: Box) => boxItems.some(item => item.itemID === itemId);
@@ -20,4 +20,10 @@ export default (router) => {
 
       return {};
     });
+
+  router.post(
+    '/received/:boxId',
+    authenticateAccessToken,
+    async (key, { boxId }, {}, { user }) => markBoxAsReceived(key, boxId, user.id)
+  );
 };
