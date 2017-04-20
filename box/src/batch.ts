@@ -17,7 +17,6 @@ export const MARKETPLACE_ID = 'HS_MARKETPLACE';
 
 const userIds = {
   heather: '77a68b8a-97bb-4c04-a823-31e6fd8d7df5',
-  godds: 'a3d9667e-a947-441a-8efd-b71e51beca02',
   chris: 'f9c8b541-0a30-4adc-8e0d-887e6db9f301',
   rob: 'a8960624-7558-468c-9791-984ca0c620ba',
   graham: 'a3d9667e-a947-441a-8efd-b71e51beca02',
@@ -582,7 +581,7 @@ const batchesInternal: Batch[] = [
     expiry: 1554505200000,
     itemId: '190ee06f-455f-4778-b3db-1dfc74c3e966',
     supplier: MARKETPLACE_ID,
-    supplierCode: userIds.godds,
+    supplierCode: userIds.graham,
     priceExcludingVAT: 480
   },
   {
@@ -592,7 +591,7 @@ const batchesInternal: Batch[] = [
     expiry: 1509840000000,
     itemId: '88efb45b-2d7a-4b75-9a57-7c2ef3b784a8',
     supplier: MARKETPLACE_ID,
-    supplierCode: userIds.godds,
+    supplierCode: userIds.graham,
     priceExcludingVAT: 100
   },
   {
@@ -602,7 +601,7 @@ const batchesInternal: Batch[] = [
     expiry: 1519689600000,
     itemId: 'f01f533f-8bf6-4291-8fb8-a76c3bedc276',
     supplier: MARKETPLACE_ID,
-    supplierCode: userIds.godds,
+    supplierCode: userIds.graham,
     priceExcludingVAT: 100
   },
 
