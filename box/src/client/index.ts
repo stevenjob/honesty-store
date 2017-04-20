@@ -57,7 +57,7 @@ export type Box = ShippingDetails & Donatable & {
 const { get, post } = fetch('box');
 
 export const flagOutOfStock = ({ key, boxId, itemId, depleted }) =>
-  post<{}>(1, key, `/out-of-stock/${boxId}/${itemId}/${depleted}`, {});
+  post<{}>(1, key, `/${boxId}/out-of-stock/${itemId}/${depleted}`, {});
 
 export const createShippedBox = (key, storeId: string, submission: ShippedBoxSubmission, dryRun) =>
   post<Box>(1, key, `/store/${storeId}/shipped?dryRun=${dryRun}`, submission);

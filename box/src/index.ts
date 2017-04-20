@@ -262,7 +262,7 @@ router.post(
 );
 
 router.post(
-  '/out-of-stock/:boxId/:itemId/:depleted',
+  '/:boxId/out-of-stock/:itemId/:depleted',
   serviceAuthentication,
   async (key, { boxId, itemId, depleted }) => flagOutOfStock({ key, boxId, itemId, depleted })
 );
