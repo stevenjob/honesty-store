@@ -24,13 +24,13 @@ const supportFailure = (error) => {
   };
 };
 
-export const performSupport = ({ message, emailAddress }) => async (dispatch, getState) => {
+export const performSupport = ({ message, emailAddress }, successUrl = `/help/success`) => async (dispatch, getState) => {
   dispatch(supportRequest());
 
   try {
     const userAgent = navigator.userAgent;
 
-    const response = await apifetch({
+    await apifetch({
       url: '/api/v1/support',
       body: {
         message,
