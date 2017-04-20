@@ -44,6 +44,11 @@ export const saveState = (state, dispatch) => {
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem('state', serializedState);
+
+    // migration
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('likedItemIds');
+
   } catch (e) {
     dispatch(localStorageSaveError());
   }
