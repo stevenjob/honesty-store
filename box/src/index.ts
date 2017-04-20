@@ -1,4 +1,4 @@
-import { config } from 'aws-sdk';
+import { config, SES } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 import bodyParser = require('body-parser');
 import express = require('express');
@@ -163,6 +163,35 @@ const flagOutOfStock = async ({ key, boxId, itemId, depleted }) => {
   return {};
 };
 
+const sendShippedNotification = async ({ key, emailAddress, boxId }) => {
+  const message = `( https://honesty.store )
+
+*********************************************************************
+Your honesty.store box is on its way to you!
+
+When it arrives, please tap the button below to make the items available to purchase.
+*********************************************************************
+
+( https://honesty.store/received/${boxId} )
+`;
+  const { MessageId } = await new SES({ apiVersion: '2010-12-01' })
+    .sendEmail({
+      Destination: {
+        ToAddresses: [emailAddress]
+      },
+      Source: 'no-reply@honesty.store',
+      Message: {
+        Subject: { Charset: 'UTF-8', Data: 'Your box is on its way!' },
+        Body: { Text: { Charset: 'UTF-8', Data: message } }
+      }
+    })
+    .promise();
+
+  info(key, `Shipped box notification email sent to ${emailAddress}: ${MessageId}`);
+
+  return MessageId;
+};
+
 const createMarketplaceBox = async ({ key, storeId, submission, dryRun}): Promise<Box> => {
   info(key, `New marketplace submission received for store ${storeId}`, { submission });
 
@@ -188,6 +217,9 @@ const createShippedBox = async ({ key, storeId, submission, dryRun }): Promise<B
 
   if (!dryRun) {
     await cruft.create(box);
+    // TODO: Send email about box being shipped
+    // TODO: Get email address from agent attached to store
+    await sendShippedNotification({ key, emailAddress: 'sam.burnstone@gmail.com', boxId: box.id });
   }
 
   return box;
