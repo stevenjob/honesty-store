@@ -167,10 +167,14 @@ const markBoxAsReceived = async ({ key, boxId, userId }) => {
   info(key, `Marking box as received`, { boxId, userId });
 
   const box = await getBox(boxId);
+  const boxStoreId = box.storeId;
 
-  // TODO: userId and store.agentId must match
-  // const boxStoreId = box.storeId;
-  // Get agent of store -> must match
+  const { emailAddress } = await getUser(key, userId);
+  const isStoreAgent = stores.some((el) => el.code === boxStoreId && emailAddress === el.agentEmail);
+
+  if (!isStoreAgent) {
+    throw new CodedError('UserIsNotStoreAgent', `Must be agent of store to mark a box as received`);
+  }
 
   if (box.received != null) {
     throw new CodedError('BoxAlreadyMarkedAsReceived', `Box ${boxId} already marked as received`);
