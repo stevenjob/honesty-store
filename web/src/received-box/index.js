@@ -1,16 +1,30 @@
 import React from 'react';
-import history from '../history';
-import { Success } from '../layout/alert';
+import { connect } from 'react-redux';
+import { performSupport } from '../actions/support';
 
-export default class ReceivedBox extends React.Component {
+class ReceivedBox extends React.Component {
 
   componentDidMount() {
-    console.log('Send support message here');
+    const { params: { boxId }, emailAddress, performSupport } = this.props;
+    const message = `Box ${boxId} has arrived`;
+    performSupport({ emailAddress, message }, '/box/received/success');
+  }
+
+  shouldComponentUpdate() {
+    return false;
   }
 
   render() {
-    return <Success title="Feel free to put the box out & we'll enable the items shortly"
-      subtitle="Great to hear your box has arrived!"
-      onClick={() => history.replace(`/store`)} />;
+    return null;
   }
 }
+
+const mapStateToProps = (
+  { user: { emailAddress } },
+  { params: { boxId } }
+) => ({
+  emailAddress,
+  boxId
+});
+
+export default connect(mapStateToProps, { performSupport })(ReceivedBox);
