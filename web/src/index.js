@@ -39,6 +39,7 @@ import ItemDetail from './item/detail';
 import ItemStockReport from './item/stockreport';
 import ItemPurchaseSuccess from './item/success';
 import ConfirmStoreChange from './confirm-store-change/index';
+import ReceivedBox from './received-box/index';
 import reducer from './reducers/reducer';
 import { performInitialise } from './actions/inititialise';
 import './chrome/style';
@@ -125,6 +126,7 @@ ReactDOM.render((
           <Route path="card/no-details" component={HelpCardNoDetails} />
         </Route>
         <Route path="help/success" component={HelpSuccess} onEnter={redirectUnauthorised} />
+        <Route path="box/received/:boxId" component={ReceivedBox} onEnter={redirectUnauthorised} />
         <Route path=":storeCode" />
       </Route>
     </Router>
