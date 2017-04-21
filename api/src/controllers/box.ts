@@ -24,6 +24,6 @@ export default (router) => {
   router.post(
     '/received/:boxId',
     authenticateAccessToken,
-    async (key, { boxId }, {}, { user }) => markBoxAsReceived(key, boxId, user.id)
+    async (key, { boxId }, {}, {}) => markBoxAsReceived(key, boxId)
   );
 };

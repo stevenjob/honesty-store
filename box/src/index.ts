@@ -163,18 +163,10 @@ const flagOutOfStock = async ({ key, boxId, itemId, depleted }) => {
   return {};
 };
 
-const markBoxAsReceived = async ({ key, boxId, userId }) => {
-  info(key, `Marking box as received`, { boxId, userId });
+const markBoxAsReceived = async ({ key, boxId }) => {
+  info(key, `Marking box as received`, { boxId });
 
   const box = await getBox(boxId);
-  const boxStoreId = box.storeId;
-
-  const { emailAddress } = await getUser(key, userId);
-  const isStoreAgent = stores.some((el) => el.code === boxStoreId && emailAddress === el.agentEmail);
-
-  if (!isStoreAgent) {
-    throw new CodedError('UserIsNotStoreAgent', `Must be agent of store to mark a box as received`);
-  }
 
   if (box.received != null) {
     throw new CodedError('BoxAlreadyMarkedAsReceived', `Box ${boxId} already marked as received`);
@@ -286,9 +278,9 @@ router.post(
 );
 
 router.post(
-  '/:boxId/received/:userId',
+  '/:boxId/received',
   serviceAuthentication,
-  async (key, { boxId, userId }) => markBoxAsReceived({ key, boxId, userId })
+  async (key, { boxId }) => markBoxAsReceived({ key, boxId })
 );
 
 router.get(
