@@ -68,8 +68,10 @@ export const createShippedBox = (key, storeId: string, submission: ShippedBoxSub
 export const createMarketplaceBox = (key, storeId: string, submission: MarketplaceBoxSubmission, dryRun: boolean) =>
   post<Box>(1, key, `/store/${storeId}/marketplace?dryRun=${dryRun}`, submission);
 
-export const getBoxesForStore = (key, storeId) =>
-  get<Box[]>(1, key, `/store/${storeId}`);
+export const getBoxesForStore = async (key, storeId: string, filter: (box: Box) => boolean) => {
+  const boxes = await get<Box[]>(1, key, `/store/${storeId}`);
+  return boxes.filter(filter);
+};
 
 export const getBox = (key, boxId: string) =>
   get<Box>(1, key, `/${boxId}`);

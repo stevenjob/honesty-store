@@ -82,9 +82,11 @@ const getBoxItem = (boxes: Box[], itemID: string): BoxItem => {
   return inStockBoxItems[0];
 };
 
+export const openAndReceivedBoxesPredicate = (box) => box.closed == null && box.received != null;
+
 export const getItemPriceFromStore = async (key, storeCode: string, itemID: string) => {
   assertValidStoreCode(storeCode);
-  const boxes = await getBoxesForStore(key, storeCode);
+  const boxes = await getBoxesForStore(key, storeCode, openAndReceivedBoxesPredicate);
   const { total } = getBoxItem(boxes, itemID);
   return total;
 };
@@ -134,8 +136,7 @@ const getPriceBreakdown = (boxItem: BoxItem): PriceBreakdown => {
 };
 
 export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
-  const openBoxes = (await getBoxesForStore(key, storeCode))
-    .filter(({ closed }) => closed == null);
+  const openBoxes = await getBoxesForStore(key, storeCode, openAndReceivedBoxesPredicate);
 
   return Promise.all(
     getUniqueItemCounts(openBoxes)

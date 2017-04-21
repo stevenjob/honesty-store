@@ -1,5 +1,6 @@
 import { Box, flagOutOfStock, getBoxesForStore, markBoxAsReceived } from  '../../../box/src/client';
 import { authenticateAccessToken } from '../middleware/authenticate';
+import { openAndReceivedBoxesPredicate } from '../services/store';
 
 const itemInBox = (itemId) => ({ boxItems }: Box) => boxItems.some(item => item.itemID === itemId);
 
@@ -9,7 +10,7 @@ export default (router) => {
     '/out-of-stock',
     authenticateAccessToken,
     async (key, _params, { itemId }, { user }) => {
-      const boxes = await getBoxesForStore(key, user.defaultStoreId);
+      const boxes = await getBoxesForStore(key, user.defaultStoreId, openAndReceivedBoxesPredicate);
       const depleted = Date.now();
 
       const flagPromises = boxes
