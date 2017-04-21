@@ -30,7 +30,7 @@ export const performPurchase = ({ itemId, quantity }) => async (dispatch, getSta
 
   try {
     const response = await apifetch({
-      url: '/api/v1/purchase',
+      url: '/_api/v1/purchase',
       getToken: () => getState().accessToken,
       body: {
         itemID: itemId,

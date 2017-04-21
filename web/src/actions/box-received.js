@@ -29,7 +29,7 @@ export const performBoxReceived = ({ boxId }) => async (dispatch, getState) => {
 
   try {
     await apifetch({
-      url: `/api/v1/received/${boxId}`,
+      url: `/_api/v1/received/${boxId}`,
       getToken: () => getState().accessToken
     }, dispatch, getState);
 

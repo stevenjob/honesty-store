@@ -35,7 +35,7 @@ export const performMarketplace = ({
 
   try {
     const response = await apifetch({
-      url: '/api/v1/marketplace',
+      url: '/_api/v1/marketplace',
       body: {
         item: {
           description,

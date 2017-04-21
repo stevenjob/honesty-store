@@ -29,7 +29,7 @@ export const performSignin = ({ itemId, emailAddress }) => async (dispatch, getS
 
   try {
     const response = await apifetch({
-      url: '/api/v1/signin',
+      url: '/_api/v1/signin',
       body: {
         emailAddress
       }

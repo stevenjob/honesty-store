@@ -40,7 +40,7 @@ export const performTopup = ({ amount, cardDetails }) => async (dispatch, getSta
 
   try {
     const response = await apifetch({
-      url: '/api/v1/topup',
+      url: '/_api/v1/topup',
       body: {
         stripeToken: cardDetails ? await createStripeToken(cardDetails) : undefined,
         amount

@@ -31,7 +31,7 @@ export const performOutOfStock = ({ itemId }) => async (dispatch, getState) => {
 
   try {
     const response = await apifetch({
-      url: '/api/v1/out-of-stock',
+      url: '/_api/v1/out-of-stock',
       getToken: () => getState().accessToken,
       body: { itemId }
     }, dispatch, getState);
