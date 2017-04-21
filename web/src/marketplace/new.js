@@ -6,6 +6,14 @@ import { Back } from '../chrome/link';
 import Full from '../layout/full';
 
 const ourFees = 0.1;
+const expiryLimitYears = 6;
+
+const extractYYYYMMDDFromDate = date => date.toISOString().split('T')[0];
+
+const addYears = (date, years) => {
+  date.setFullYear(date.getFullYear() + years);
+  return date;
+};
 
 class MarketplaceItemAdd extends React.Component {
   constructor(props) {
@@ -94,6 +102,8 @@ class MarketplaceItemAdd extends React.Component {
 
   render() {
     const { validity } = this.state;
+    const minDate = extractYYYYMMDDFromDate(new Date());
+    const maxDate = extractYYYYMMDDFromDate(addYears(new Date(), expiryLimitYears));
 
     return (
       <Full left={<Back />}>
@@ -159,6 +169,8 @@ class MarketplaceItemAdd extends React.Component {
             <input
               id="expiry"
               onChange={(e) => this.handleExpiryChange(e)}
+              min={minDate}
+              max={maxDate}
               value={this.state.expiry}
               className="input"
               noValidate
