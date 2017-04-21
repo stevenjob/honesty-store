@@ -185,7 +185,7 @@ const batchesInternal: Batch[] = [
     supplierCode: '186384',
     itemId: '3fa0db7c-3f90-404e-b875-3792eda3e185',
     itemQuantity: 48,
-    expiry: 1483833600000,
+    expiry: 1501545600000,
     priceExcludingVAT: 1579,
     VATRate: 0.2
   },
