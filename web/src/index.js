@@ -92,43 +92,45 @@ ReactDOM.render((
       <Route path="/" component={App} onEnter={initialiseWithParams} >
         <IndexRoute component={Home} />
         <Route path="success" component={HomeSuccess} />
-        <Route path="register" component={RegisterEmail} onEnter={redirectUnauthorised} />
-        <Route path="register/:itemId" component={RegisterEmail} onEnter={redirectUnauthorised} />
-        <Route path="register//success" component={RegisterSuccessWithoutPurchase} onEnter={redirectUnauthorised} />
-        <Route path="register/:itemId/success" component={RegisterSuccessWithPurchase} onEnter={redirectUnauthorised} />
-        <Route path="register/:itemId/partial" component={RegisterPartialSuccess} onEnter={redirectUnauthorised} />
-        <Route path="register//:emailAddress" component={RegisterCard} onEnter={redirectUnauthorised} />
-        <Route path="register/:itemId/:emailAddress" component={RegisterCard} onEnter={redirectUnauthorised} />
-        <Route path="signin/success" component={SignInSuccess} />
-        <Route path="store" component={Store} onEnter={redirectUnauthorised} />
-        <Route path="store/change/:storeCode" component={ConfirmStoreChange} onEnter={redirectUnauthorised} />
-        <Route path="item/:itemId" component={ItemDetail} onEnter={redirectUnauthorised} />
-        <Route path="item/:itemId/out-of-stock" component={ItemStockReport} onEnter={redirectUnauthorised} />
-        <Route path="item/:itemId/:quantity/success" component={ItemPurchaseSuccess} onEnter={redirectUnauthorised} />
-        <Route path="survey" component={Survey} onEnter={redirectUnauthorised} />
-        <Route path="survey/questions" component={SurveyQuestions} onEnter={redirectUnauthorised} />
-        <Route path="survey/complete" component={SurveyComplete} onEnter={redirectUnauthorised} />
-        <Route path="topup" component={TopupAmount} onEnter={redirectUnauthorised} />
-        <Route path="topup/success" component={TopupSuccess} onEnter={redirectUnauthorised} />
-        <Route path="topup/:amount" component={TopupExistingCard} onEnter={redirectUnauthorised} />
-        <Route path="topup/:amount/new" component={TopupNewCard} onEnter={redirectUnauthorised} />
-        <Route path="history" component={History} onEnter={redirectUnauthorised} />
-        <Route path="more" component={Marketplace} onEnter={redirectUnauthorised} />
-        <Route path="more/new" component={MarketplaceNew} onEnter={redirectUnauthorised} />
-        <Route path="more/success" component={MarketplaceComplete} onEnter={redirectUnauthorised} />
-        <Route path="profile" component={Profile} onEnter={redirectUnauthorised} />
-        <Route path="profile/close" component={CloseProfile} onEnter={redirectUnauthorised} />
-        <Route path="profile/edit" component={EditProfile} onEnter={redirectUnauthorised} />
-        <Route path="profile/logout" component={LogoutProfile} onEnter={redirectUnauthorised} />
-        <Route path="help" onEnter={redirectUnauthorised}>
-          <IndexRoute component={Help} />
-          <Route path="item/:itemId" component={HelpItem} />
-          <Route path="card/expired" component={HelpCardExpired} />
-          <Route path="card/no-details" component={HelpCardNoDetails} />
+        <Route onEnter={redirectUnauthorised}>
+          <Route path="register" component={RegisterEmail} />
+          <Route path="register/:itemId" component={RegisterEmail} />
+          <Route path="register//success" component={RegisterSuccessWithoutPurchase} />
+          <Route path="register/:itemId/success" component={RegisterSuccessWithPurchase} />
+          <Route path="register/:itemId/partial" component={RegisterPartialSuccess} />
+          <Route path="register//:emailAddress" component={RegisterCard} />
+          <Route path="register/:itemId/:emailAddress" component={RegisterCard} />
+          <Route path="store" component={Store} />
+          <Route path="store/change/:storeCode" component={ConfirmStoreChange} />
+          <Route path="item/:itemId" component={ItemDetail} />
+          <Route path="item/:itemId/out-of-stock" component={ItemStockReport} />
+          <Route path="item/:itemId/:quantity/success" component={ItemPurchaseSuccess} />
+          <Route path="survey" component={Survey} />
+          <Route path="survey/questions" component={SurveyQuestions} />
+          <Route path="survey/complete" component={SurveyComplete} />
+          <Route path="topup" component={TopupAmount} />
+          <Route path="topup/success" component={TopupSuccess} />
+          <Route path="topup/:amount" component={TopupExistingCard} />
+          <Route path="topup/:amount/new" component={TopupNewCard}  />
+          <Route path="history" component={History} />
+          <Route path="more" component={Marketplace} />
+          <Route path="more/new" component={MarketplaceNew} />
+          <Route path="more/success" component={MarketplaceComplete} />
+          <Route path="profile" component={Profile} />
+          <Route path="profile/close" component={CloseProfile} />
+          <Route path="profile/edit" component={EditProfile} />
+          <Route path="profile/logout" component={LogoutProfile} />
+          <Route path="box/received/success" component={ReceivedBoxSuccess} />
+          <Route path="box/received/:boxId" onEnter={markBoxAsReceived} />
+          <Route path="help">
+            <IndexRoute component={Help} />
+            <Route path="item/:itemId" component={HelpItem} />
+            <Route path="card/expired" component={HelpCardExpired} />
+            <Route path="card/no-details" component={HelpCardNoDetails} />
+            <Route path="success" component={HelpSuccess} />
+          </Route>
         </Route>
-        <Route path="help/success" component={HelpSuccess} onEnter={redirectUnauthorised} />
-        <Route path="box/received/success" component={ReceivedBoxSuccess} onEnter={redirectUnauthorised} />
-        <Route path="box/received/:boxId" component={ReceivedBoxReport} onEnter={redirectUnauthorised} />
+        <Route path="signin/success" component={SignInSuccess} />
         <Route path=":storeCode" />
       </Route>
     </Router>
