@@ -69,6 +69,12 @@ const errorDefinitions = {
     actionDescription: `We've reset your session`,
     dismissalText: dismissalText.DISMISS
   },
+  UserIsNotStoreAgent: {
+    message: `You need to be the store's agent to do that`,
+    actionDescription: `Please log in as the agent or get in touch with us`,
+    dismissalText: dismissalText.DISMISS,
+    redirectionURL: `/store`
+  },
   UnknownError: {
     message: `Oops! Something went wrong...`,
     actionDescription: `Can you try that again, please?`,
