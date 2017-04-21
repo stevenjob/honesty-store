@@ -16,6 +16,7 @@ import { MARKETPLACE_REQUEST, MARKETPLACE_SUCCESS, MARKETPLACE_FAILURE } from '.
 import { OUT_OF_STOCK_REQUEST, OUT_OF_STOCK_SUCCESS, OUT_OF_STOCK_FAILURE } from '../actions/out-of-stock';
 import { UNLIKE_ITEM, LIKE_ITEM } from '../actions/like-item';
 import { LOCAL_STORAGE_SAVE_ERROR } from '../actions/save-error';
+import { BOX_RECEIVED_REQUEST, BOX_RECEIVED_SUCCESS, BOX_RECEIVED_FAILURE } from '../actions/box-received';
 import { getInitialState } from '../state';
 
 export default (state, action) => {
@@ -394,6 +395,28 @@ export default (state, action) => {
         error: {
           fullPage: action.error
         }
+      };
+    }
+    case BOX_RECEIVED_REQUEST: {
+      return {
+        ...state,
+        pending: [...state.pending, 'box-received']
+      };
+    }
+    case BOX_RECEIVED_SUCCESS: {
+      return {
+        ...state,
+        pending: state.pending.filter(e => e !== 'box-received')
+      };
+    }
+    case BOX_RECEIVED_FAILURE: {
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          fullPage: action.error
+        },
+        pending: state.pending.filter(e => e !== 'box-received')
       };
     }
     default: {
