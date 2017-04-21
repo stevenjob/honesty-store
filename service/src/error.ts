@@ -22,7 +22,6 @@ export type ErrorCode =
   'TokenError' |
   'ItemNotInBox' |
   'BoxAlreadyMarkedAsReceived' |
-  'UserIsNotStoreAgent' |
   'UnknownError';
 
 export class CodedError extends Error {
