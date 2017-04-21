@@ -233,9 +233,9 @@ const createShippedBox = async ({ key, storeId, submission, dryRun }): Promise<B
 
   if (!dryRun) {
     await cruft.create(box);
-    // TODO: Send email about box being shipped
-    // TODO: Get email address from agent attached to store
-    await sendShippedNotification({ key, emailAddress: 'sam.burnstone@gmail.com', boxId: box.id });
+
+    const { agentEmail } = stores.find(({ code }) => code === storeId);
+    await sendShippedNotification({ key, emailAddress: agentEmail, boxId: box.id });
   }
 
   return box;
