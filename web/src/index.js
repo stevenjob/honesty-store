@@ -121,7 +121,7 @@ ReactDOM.render((
           <Route path="profile/edit" component={EditProfile} />
           <Route path="profile/logout" component={LogoutProfile} />
           <Route path="box/received/success" component={ReceivedBoxSuccess} />
-          <Route path="box/received/:boxId" onEnter={markBoxAsReceived} />
+          <Route path="box/received/:boxId" component={ReceivedBoxReport} />
           <Route path="help">
             <IndexRoute component={Help} />
             <Route path="item/:itemId" component={HelpItem} />

@@ -1,13 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { performSupport } from '../actions/support';
+import { performBoxReceived } from '../actions/box-received';
 
 class ReceivedBox extends React.Component {
 
   componentDidMount() {
-    const { params: { boxId }, emailAddress, performSupport } = this.props;
-    const message = `Box ${boxId} has arrived`;
-    performSupport({ emailAddress, message }, '/box/received/success');
+    const { params: { boxId }, performBoxReceived } = this.props;
+    performBoxReceived({ boxId });
   }
 
   shouldComponentUpdate() {
@@ -27,4 +26,4 @@ const mapStateToProps = (
   boxId
 });
 
-export default connect(mapStateToProps, { performSupport })(ReceivedBox);
+export default connect(mapStateToProps, { performBoxReceived })(ReceivedBox);
