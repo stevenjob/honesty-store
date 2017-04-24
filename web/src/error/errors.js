@@ -75,6 +75,12 @@ const errorDefinitions = {
     redirectionURL: '/store',
     dismissalText: dismissalText.DISMISS
   },
+  FullRegistrationRequired: {
+    message: `You need to be fully registered to do that`,
+    actionDescription: `Please sign up for an account and then try again`,
+    redirectionURL: '/register',
+    dismissalText: dismissalText.DISMISS
+  },
   UnknownError: {
     message: `Oops! Something went wrong...`,
     actionDescription: `Can you try that again, please?`,
