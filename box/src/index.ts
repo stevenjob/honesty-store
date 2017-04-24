@@ -172,7 +172,7 @@ const markBoxAsReceived = async ({ key, boxId }) => {
     throw new CodedError('BoxAlreadyMarkedAsReceived', `Box ${boxId} already marked as received`);
   }
 
-  box.received = new Date().getTime();
+  box.received = Date.now();
 
   await cruft.update(box);
 

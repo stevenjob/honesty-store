@@ -42,7 +42,7 @@ export default (storeId: string, submission: MarketplaceBoxSubmission): Box & { 
     expiry
   };
 
-  const itemDeploymentDate = new Date().getTime();
+  const itemDeploymentDate = Date.now();
 
   return {
     id: uuid(),
