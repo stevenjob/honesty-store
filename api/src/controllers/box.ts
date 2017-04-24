@@ -31,7 +31,7 @@ export default (router) => {
       if (emailAddress == null || !isEmail(emailAddress)) {
         throw new CodedError('FullRegistrationRequired', 'Full registration required to mark box as received');
       }
-      markBoxAsReceived(key, boxId);
+      return markBoxAsReceived(key, boxId);
     }
   );
 };
