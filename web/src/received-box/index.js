@@ -9,10 +9,6 @@ class ReceivedBox extends React.Component {
     performBoxReceived({ boxId });
   }
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     return null;
   }
