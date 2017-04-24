@@ -5,9 +5,10 @@ export const BOX_RECEIVED_REQUEST = 'BOX_RECEIVED_REQUEST';
 export const BOX_RECEIVED_SUCCESS = 'BOX_RECEIVED_SUCCESS';
 export const BOX_RECEIVED_FAILURE = 'BOX_RECEIVED_FAILURE';
 
-const boxReceivedRequest = () => {
+const boxReceivedRequest = (boxId) => {
   return {
     type: BOX_RECEIVED_REQUEST,
+    boxId
   };
 };
 
@@ -25,7 +26,15 @@ const boxReceivedFailure = (error) => {
 };
 
 export const performBoxReceived = ({ boxId }) => async (dispatch, getState) => {
-  dispatch(boxReceivedRequest());
+
+  const { lastBoxIdMarkedAsReceived } = getState();
+
+  if (lastBoxIdMarkedAsReceived === boxId) {
+    // prevent double-send due to component being reloaded
+    return;
+  }
+
+  dispatch(boxReceivedRequest(boxId));
 
   try {
     await apifetch({
@@ -33,8 +42,8 @@ export const performBoxReceived = ({ boxId }) => async (dispatch, getState) => {
       getToken: () => getState().accessToken
     }, dispatch, getState);
 
-    history.push('/box/received/success');
     dispatch(boxReceivedSuccess());
+    history.push('/box/received/success');
   } catch (e) {
     dispatch(boxReceivedFailure(e));
   }

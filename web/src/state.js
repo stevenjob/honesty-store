@@ -13,7 +13,8 @@ export const getInitialState = () => {
     accessToken: null,
     refreshToken: null,
     survey: undefined,
-    likedItemIds: []
+    likedItemIds: [],
+    lastBoxIdMarkedAsReceived: null
   };
 };
 

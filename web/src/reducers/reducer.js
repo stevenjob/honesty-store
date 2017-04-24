@@ -398,9 +398,11 @@ export default (state, action) => {
       };
     }
     case BOX_RECEIVED_REQUEST: {
+      const { boxId } = action;
       return {
         ...state,
-        pending: [...state.pending, 'box-received']
+        pending: [...state.pending, 'box-received'],
+        lastBoxIdMarkedAsReceived: boxId
       };
     }
     case BOX_RECEIVED_SUCCESS: {
@@ -416,7 +418,8 @@ export default (state, action) => {
           ...state.error,
           fullPage: action.error
         },
-        pending: state.pending.filter(e => e !== 'box-received')
+        pending: state.pending.filter(e => e !== 'box-received'),
+        lastBoxIdMarkedAsReceived: null
       };
     }
     default: {
