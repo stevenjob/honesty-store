@@ -1,4 +1,6 @@
+import isEmail = require('validator/lib/isEmail');
 import { Box, flagOutOfStock, getBoxesForStore, markBoxAsReceived } from  '../../../box/src/client';
+import { CodedError } from '../../../service/src/error';
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { boxIsReceivedAndOpen } from '../services/store';
 
@@ -25,6 +27,11 @@ export default (router) => {
   router.post(
     '/received/:boxId',
     authenticateAccessToken,
-    async (key, { boxId }, {}, {}) => markBoxAsReceived(key, boxId)
+    async (key, { boxId }, {}, { user: { emailAddress } }) => {
+      if (emailAddress == null || !isEmail(emailAddress)) {
+        throw new CodedError('FullRegistrationRequired', 'Full registration required to mark box as received');
+      }
+      markBoxAsReceived(key, boxId);
+    }
   );
 };

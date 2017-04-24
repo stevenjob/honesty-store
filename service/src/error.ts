@@ -22,6 +22,7 @@ export type ErrorCode =
   'TokenError' |
   'ItemNotInBox' |
   'BoxAlreadyMarkedAsReceived' |
+  'FullRegistrationRequired' |
   'UnknownError';
 
 export class CodedError extends Error {
