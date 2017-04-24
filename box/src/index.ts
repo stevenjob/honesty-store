@@ -163,22 +163,6 @@ const flagOutOfStock = async ({ key, boxId, itemId, depleted }) => {
   return {};
 };
 
-const markBoxAsReceived = async ({ key, boxId }) => {
-  info(key, `Marking box as received`, { boxId });
-
-  const box = await getBox(boxId);
-
-  if (box.received != null) {
-    throw new CodedError('BoxAlreadyMarkedAsReceived', `Box ${boxId} already marked as received`);
-  }
-
-  box.received = Date.now();
-
-  await cruft.update(box);
-
-  return {};
-};
-
 const sendShippedNotification = async ({ key, emailAddress, boxId }) => {
   const message = `( https://honesty.store )
 
@@ -208,6 +192,38 @@ When it arrives, please tap the button below to make the items available to purc
   return MessageId;
 };
 
+const markBoxAsShipped = async ({ key, boxId, date }) => {
+  info(key, `Marking box as shipped`, { boxId, date });
+
+  const box = await getBox(boxId);
+
+  box.shipped = date;
+
+  cruft.update(box);
+
+  const { storeId } = box;
+  const { agentEmail } = stores.find(({ code }) => code === storeId);
+  await sendShippedNotification({ key, emailAddress: agentEmail, boxId });
+
+  return {};
+};
+
+const markBoxAsReceived = async ({ key, boxId }) => {
+  info(key, `Marking box as received`, { boxId });
+
+  const box = await getBox(boxId);
+
+  if (box.received != null) {
+    throw new CodedError('BoxAlreadyMarkedAsReceived', `Box ${boxId} already marked as received`);
+  }
+
+  box.received = Date.now();
+
+  await cruft.update(box);
+
+  return {};
+};
+
 const createMarketplaceBox = async ({ key, storeId, submission, dryRun}): Promise<Box> => {
   info(key, `New marketplace submission received for store ${storeId}`, { submission });
 
@@ -233,9 +249,6 @@ const createShippedBox = async ({ key, storeId, submission, dryRun }): Promise<B
 
   if (!dryRun) {
     await cruft.create(box);
-
-    const { agentEmail } = stores.find(({ code }) => code === storeId);
-    await sendShippedNotification({ key, emailAddress: agentEmail, boxId: box.id });
   }
 
   return box;
@@ -281,6 +294,12 @@ router.post(
   '/:boxId/received',
   serviceAuthentication,
   async (key, { boxId }) => markBoxAsReceived({ key, boxId })
+);
+
+router.put(
+  '/:boxId/shipped/:date',
+  serviceAuthentication,
+  async (key, { boxId, date }) => markBoxAsShipped({ key, boxId, date })
 );
 
 router.get(

@@ -54,13 +54,16 @@ export type Box = ShippingDetails & Donatable & {
   id: string;
 };
 
-const { get, post } = fetch('box');
+const { get, post, put } = fetch('box');
 
 export const flagOutOfStock = ({ key, boxId, itemId, depleted }) =>
   post<{}>(1, key, `/${boxId}/out-of-stock/${itemId}/${depleted}`, {});
 
 export const markBoxAsReceived = (key, boxId: string) =>
   post<{}>(1, key, `/${boxId}/received`, {});
+
+export const markBoxAsShipped = (key, boxId: string, date: number) =>
+  put<{}>(1, key, `/${boxId}/shipped/${date}`, {});
 
 export const createShippedBox = (key, storeId: string, submission: ShippedBoxSubmission, dryRun) =>
   post<Box>(1, key, `/store/${storeId}/shipped?dryRun=${dryRun}`, submission);
