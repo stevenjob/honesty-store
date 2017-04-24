@@ -406,8 +406,10 @@ export default (state, action) => {
       };
     }
     case BOX_RECEIVED_SUCCESS: {
+      const { store } = action.response;
       return {
         ...state,
+        store,
         pending: state.pending.filter(e => e !== 'box-received')
       };
     }

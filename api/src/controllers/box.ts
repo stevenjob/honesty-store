@@ -2,6 +2,7 @@ import isEmail = require('validator/lib/isEmail');
 import { Box, flagOutOfStock, getBoxesForStore, markBoxAsReceived } from  '../../../box/src/client';
 import { CodedError } from '../../../service/src/error';
 import { authenticateAccessToken } from '../middleware/authenticate';
+import { getSessionData  } from '../services/session';
 import { boxIsReceivedAndOpen } from '../services/store';
 
 const itemInBox = (itemId) => ({ boxItems }: Box) => boxItems.some(item => item.itemID === itemId);
@@ -27,11 +28,14 @@ export default (router) => {
   router.post(
     '/received/:boxId',
     authenticateAccessToken,
-    async (key, { boxId }, {}, { user: { emailAddress } }) => {
+    async (key, { boxId }, {}, { user }) => {
+      const { emailAddress } =  user;
       if (emailAddress == null || !isEmail(emailAddress)) {
         throw new CodedError('FullRegistrationRequired', 'Full registration required to mark box as received');
       }
-      return markBoxAsReceived(key, boxId);
+      await markBoxAsReceived(key, boxId);
+
+      return await getSessionData(key, { user });
     }
   );
 };

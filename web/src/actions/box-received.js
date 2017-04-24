@@ -12,9 +12,10 @@ const boxReceivedRequest = (boxId) => {
   };
 };
 
-const boxReceivedSuccess = () => {
+const boxReceivedSuccess = (response) => {
   return {
-    type: BOX_RECEIVED_SUCCESS
+    type: BOX_RECEIVED_SUCCESS,
+    response
   };
 };
 
@@ -37,12 +38,12 @@ export const performBoxReceived = ({ boxId }) => async (dispatch, getState) => {
   dispatch(boxReceivedRequest(boxId));
 
   try {
-    await apifetch({
+    const response = await apifetch({
       url: `/_api/v1/received/${boxId}`,
       getToken: () => getState().accessToken
     }, dispatch, getState);
 
-    dispatch(boxReceivedSuccess());
+    dispatch(boxReceivedSuccess(response));
     history.push('/box/received/success');
   } catch (e) {
     dispatch(boxReceivedFailure(e));
