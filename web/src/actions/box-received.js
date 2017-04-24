@@ -33,8 +33,8 @@ export const performBoxReceived = ({ boxId }) => async (dispatch, getState) => {
       getToken: () => getState().accessToken
     }, dispatch, getState);
 
-    dispatch(boxReceivedSuccess());
     history.push('/box/received/success');
+    dispatch(boxReceivedSuccess());
   } catch (e) {
     dispatch(boxReceivedFailure(e));
   }
