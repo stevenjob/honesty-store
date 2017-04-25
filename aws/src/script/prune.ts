@@ -6,6 +6,7 @@ import { pruneTaskDefinitions } from '../ecs/taskDefinition';
 import { pruneLoadBalancers } from '../elbv2/loadbalancer';
 import { pruneTargetGroups } from '../elbv2/targetgroup';
 import { getOriginBranchNames } from '../git/branch';
+import { pruneFunctions } from '../lambda/function';
 import { pruneAliases } from '../route53/alias';
 import { ensureWebStack, prefix } from './deploy';
 
@@ -23,6 +24,10 @@ export default async () => {
     branchPrefixes.some(branchPrefix => branchPrefix.test(name));
 
   const filter = (name) => matchesGlobalPrefix(name) && !matchesBranchPrefixes(name);
+
+  await pruneFunctions(
+    lambda => filter(lambda.FunctionName)
+  );
 
   await pruneLoadBalancers({
     filter: ({ LoadBalancerName }) => filter(LoadBalancerName)
