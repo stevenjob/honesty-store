@@ -33,15 +33,15 @@ interface PriceBreakdown {
 
 interface Store {
   code: string;
-  agentEmail: string;
+  agentId: string;
 }
 
 export const stores: Store[] = [
-  { code: 'sl-ncl', agentEmail: 'price.c@gmail.com' },
-  { code: 'sl-edn', agentEmail: 'grahamodds@hotmail.com' },
-  { code: 'sl-brs', agentEmail: 'dgorst@scottlogic.com' },
-  { code: 'sl-ldn', agentEmail: 'tmakarem@scottlogic.co.uk' },
-  { code: 'dev-test', agentEmail: 'support@honesty.store' }
+  { code: 'sl-ncl', agentId: 'f9c8b541-0a30-4adc-8e0d-887e6db9f301' },
+  { code: 'sl-edn', agentId: 'a3d9667e-a947-441a-8efd-b71e51beca02' },
+  { code: 'sl-brs', agentId: '1f0ee5a5-2689-4c14-a079-494ce18e3cdc' },
+  { code: 'sl-ldn', agentId: 'cbbe71c9-4fdf-4140-9bac-b41dff842944' },
+  { code: 'dev-test', agentId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649' }
 ];
 
 // currently storeCode and storeID are identical

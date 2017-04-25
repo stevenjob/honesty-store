@@ -202,8 +202,9 @@ const markBoxAsShipped = async ({ key, boxId, date }) => {
   cruft.update(box);
 
   const { storeId } = box;
-  const { agentEmail } = stores.find(({ code }) => code === storeId);
-  await sendShippedNotification({ key, emailAddress: agentEmail, boxId });
+  const { agentId } = stores.find(({ code }) => code === storeId);
+  const { emailAddress } = await getUser(key, agentId);
+  await sendShippedNotification({ key, emailAddress, boxId });
 
   return {};
 };
