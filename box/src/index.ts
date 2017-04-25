@@ -172,7 +172,7 @@ Your honesty.store box is on its way to you!
 When it arrives, please tap the button below to make the items available to purchase.
 *********************************************************************
 
-( https://honesty.store/box/received/${boxId} )
+( https://honesty.store/agent/received/${boxId} )
 `;
   const { MessageId } = await new SES({ apiVersion: '2010-12-01' })
     .sendEmail({

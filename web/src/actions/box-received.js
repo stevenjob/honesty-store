@@ -44,7 +44,7 @@ export const performBoxReceived = ({ boxId }) => async (dispatch, getState) => {
     }, dispatch, getState);
 
     dispatch(boxReceivedSuccess(response));
-    history.push('/box/received/success');
+    history.push('/agent/received/success');
   } catch (e) {
     dispatch(boxReceivedFailure(e));
   }
