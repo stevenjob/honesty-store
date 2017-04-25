@@ -22,7 +22,7 @@ export const performInitialise = ({ pathname, storeCode, emailToken }) => async 
   dispatch(initialise());
 
   if (emailToken != null) {
-    return dispatch(performSignin2({ emailToken }));
+    return dispatch(performSignin2({ emailToken, storeId: storeCode }));
   }
   if (refreshToken != null) {
     if (pathname === '/' || storeCode != null) {

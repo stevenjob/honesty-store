@@ -25,14 +25,14 @@ const signin2Failure = (error) => {
   };
 };
 
-export const performSignin2 = ({ emailToken }) => async (dispatch, getState) => {
+export const performSignin2 = ({ emailToken, storeId }) => async (dispatch, getState) => {
   dispatch(signin2Request());
 
   try {
     const response = await apifetch({
       url: '/api/v1/signin2',
       getToken: () => emailToken,
-      body: {}
+      body: { storeId }
     }, dispatch, getState);
 
     dispatch(signin2Success(response));

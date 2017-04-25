@@ -3,7 +3,7 @@ import { authenticateAccessToken } from '../middleware/authenticate';
 import { getSessionData } from '../services/session';
 import { storeCodeToStoreID } from '../services/store';
 
-const updateDefaultStoreCode = async (key, userID, storeCode) => {
+export const updateDefaultStoreCode = async (key, userID, storeCode) => {
   return await updateUser(key, userID, { defaultStoreId: storeCodeToStoreID(storeCode) });
 };
 
