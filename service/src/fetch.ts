@@ -16,7 +16,7 @@ interface ApiResponse<T> {
 // tslint:disable-next-line:export-name
 export default (service: string) => {
   const fetchAndParse = async <Result>({ method, version, path, key, body = undefined }): Promise<Result> => {
-    const url = `${baseUrl}/_${service}/v${version}${path}`;
+    const url = `${baseUrl}/${service}/v${version}${path}`;
 
     info(key, `send ${method} ${url}`);
 
