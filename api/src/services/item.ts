@@ -546,6 +546,16 @@ const items: (Item & { id: string })[] = [
     unitPlural: 'packs',
     genericName: 'crisps',
     genericNamePlural: 'crisps'
+  },
+  {
+    id: '0d7c0ddb-cfc7-43ff-bdea-f255a66b21b6',
+    name: 'Oreo 2-Pack',
+    image: 'misc-bar.svg',
+    weight: 22,
+    unit: 'pack',
+    unitPlural: 'packs',
+    genericName: 'biscuits',
+    genericNamePlural: 'biscuits'
   }
 ];
 
