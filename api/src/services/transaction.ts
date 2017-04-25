@@ -15,7 +15,7 @@ const expandItemDetails = (transaction) => {
   };
 };
 
-const pageItems = ({ items, page, perPage = 10 }) => {
+const pageItems = <T>({ items, page, perPage = 10 }: { items: T[], page: number, perPage?: number }) => {
   const startIndex = perPage * page;
   const endIndex = Math.min(startIndex + perPage, items.length);
   return items.slice(startIndex, endIndex);
