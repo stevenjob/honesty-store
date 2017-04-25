@@ -306,6 +306,7 @@ const dirToTable = {
       {
         id: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649',
         accountId: 'b423607f-64de-441f-ac39-12d50aaedbe9',
+        defaultStoreId: 'dev-test',
         emailAddress: 'support@honesty.store',
         refreshToken: '34726c71-92aa-4e2e-83ec-0b4a5d83dedf'
       }
