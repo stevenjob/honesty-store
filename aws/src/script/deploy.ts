@@ -177,6 +177,8 @@ export default async ({ branch, dirs }) => {
     protocol: 'HTTPS'
   });
 
+  const lambdaBaseUrls = {};
+
   for (const dir of dirs) {
     if (!lambdaConfig[dir]) {
       continue;
@@ -200,12 +202,14 @@ export default async ({ branch, dirs }) => {
       }
     });
 
-    const gatewayIntegration = await ensureApiGateway({
+    const gatewayStage = await ensureApiGateway({
       serviceName: dir,
       lambdaArn: lambda.FunctionArn
     });
 
-    // TODO: export $WHATEVER.execute-api.eu-west-1.amazonaws.com to other services
+    const { stageName } = gatewayStage;
+
+    lambdaBaseUrls[dir] = `${stageName}.execute-api.eu-west-1.amazonaws.com`;
   }
 
   const services: ECS.Service[] = [];
@@ -245,7 +249,8 @@ export default async ({ branch, dirs }) => {
         serviceSecret,
         userSecret,
         liveStripeKey: generateStripeKey({ branch, type: 'live' }),
-        testStripeKey: generateStripeKey({ branch, type: 'test' })
+        testStripeKey: generateStripeKey({ branch, type: 'test' }),
+        lambdaBaseUrls
       }
     });
 
