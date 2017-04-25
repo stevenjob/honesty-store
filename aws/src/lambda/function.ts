@@ -30,7 +30,7 @@ export const ensureFunction = async ({
 
   const getFuncResponse = await lambda.getFunction({ FunctionName: name }).promise();
   const { Configuration: { CodeSize: size, CodeSha256: sha256 } } = getFuncResponse;
-  if ((()=>true)() || (size === zipFile.byteLength && sha256 === calculateSha256(zipFile))) {
+  if (size === zipFile.byteLength && sha256 === calculateSha256(zipFile)) {
     return getFuncResponse.Configuration;
   }
 
@@ -74,7 +74,7 @@ export const ensureFunction = async ({
 
     const config = await lambda.updateFunctionConfiguration({
       FunctionName: name,
-      ...params,
+      ...params
     })
       .promise();
 

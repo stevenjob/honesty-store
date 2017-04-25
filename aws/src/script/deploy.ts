@@ -1,4 +1,4 @@
-import { ECS, DynamoDB } from 'aws-sdk';
+import { DynamoDB, ECS } from 'aws-sdk';
 import * as winston from 'winston';
 import { ensureApiGateway } from '../apigateway/gateway';
 import { ensureStack } from '../cloudformation/stack';
@@ -8,11 +8,11 @@ import { ensureTable } from '../dynamodb/table';
 import buildAndPushImage from '../ecr/buildAndPushImage';
 import { ensureService, waitForServicesStable } from '../ecs/service';
 import { ensureTaskDefinition, pruneTaskDefinitions } from '../ecs/taskDefinition';
-import { ensureFunction } from '../lambda/function';
 import { ensureListener } from '../elbv2/listener';
 import { ensureLoadBalancer } from '../elbv2/loadbalancer';
 import { ensureRule } from '../elbv2/rule';
 import { ensureTargetGroup } from '../elbv2/targetgroup';
+import { ensureFunction } from '../lambda/function';
 import { aliasToBaseUrl, ensureAlias } from '../route53/alias';
 import dirToTable from '../table/tables';
 
@@ -30,8 +30,7 @@ export const ensureWebStack = async () =>
       SubnetBCidrBlock: '10.1.1.0/24',
       SubnetCCidrBlock: '10.1.2.0/24',
       VpcCidrBlock: '10.1.0.0/16'
-    }
-  });
+    }});
 
 const serviceConfig = {
   web: {
