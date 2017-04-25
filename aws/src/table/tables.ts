@@ -430,6 +430,35 @@ const dirToTable = {
     readCapacityUnits,
     writeCapacityUnits,
     dummyData: dummyBoxData
+  }),
+
+  item: ({ readCapacityUnits, writeCapacityUnits }) => template({
+    readCapacityUnits,
+    writeCapacityUnits,
+    dummyData: [
+      {
+        id: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
+        name: 'Walkers',
+        image: 'walkers-cheese-onion.svg',
+        weight: 32.5,
+        qualifier: 'Cheese & Onion',
+        unit: 'pack',
+        unitPlural: 'packs',
+        genericName: 'crisps',
+        genericNamePlural: 'crisps'
+      },
+      {
+        id: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
+        name: 'Nature Valley',
+        qualifier: 'Crunchy Oats & Honey',
+        image: 'nature-valley-oats-n-honey.svg',
+        weight: 42,
+        unit: 'bar',
+        unitPlural: 'bars',
+        genericName: 'cereal bar',
+        genericNamePlural: 'cereal bars'
+      }
+    ]
   })
 };
 
