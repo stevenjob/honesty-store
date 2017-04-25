@@ -3,8 +3,8 @@ import { sendMagicLinkEmail } from '../../../user/src/client/index';
 import { authenticateEmailToken, noopAuthentication } from '../middleware/authenticate';
 import { getSessionData } from '../services/session';
 
-export const sendEmailToken = async (key, emailAddress) => {
-  await sendMagicLinkEmail(tagKey(key, { emailAddress }), emailAddress);
+export const sendEmailToken = async (key, emailAddress, storeId) => {
+  await sendMagicLinkEmail(tagKey(key, { emailAddress, storeId }), emailAddress, storeId);
   return {};
 };
 
@@ -12,7 +12,7 @@ const setupSignInPhase1 = (router) => {
   router.post(
     '/signin',
     noopAuthentication,
-    async (key, _params, { emailAddress }) => await sendEmailToken(key, emailAddress));
+    async (key, _params, { emailAddress, storeId }) => await sendEmailToken(key, emailAddress, storeId));
 };
 
 const setupSignInPhase2 = (router) => {

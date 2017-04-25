@@ -56,8 +56,8 @@ export const updateUser = (key, userId: string, userProfile: UserProfile) =>
 
 export const userRegistered = (user: User) => user.emailAddress != null;
 
-export const sendMagicLinkEmail = (key, emailAddress: string) =>
-  post<{}>(1, key, `/magicLink/${emailAddress}`, {});
+export const sendMagicLinkEmail = (key, emailAddress: string, storeId) =>
+  post<{}>(1, key, `/magicLink/${emailAddress}/${storeId}`, {});
 
 export const logout = async (key, userId: string) =>
   post<{}>(1, key, `/logout/${userId}`, {});

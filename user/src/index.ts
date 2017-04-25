@@ -174,8 +174,10 @@ const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
   return externaliseUser(await cruft.update(updatedUser));
 };
 
-const sendMagicLinkEmail = async ({ key, emailAddress }) => {
+const sendMagicLinkEmail = async ({ key, emailAddress, storeId }) => {
   const user = await scanByEmailAddress({ emailAddress });
+
+  const requestedStoreId = storeId || user.defaultStoreId;
 
   const message = `( https://honesty.store )
 
@@ -183,7 +185,7 @@ const sendMagicLinkEmail = async ({ key, emailAddress }) => {
 Tap the button below on your phone to log in to honesty.store
 *********************************************************************
 
-Log in to honesty.store ( https://honesty.store/${user.defaultStoreId}?code=${signAccessToken({ userId: user.id })} )
+Log in to honesty.store ( https://honesty.store/${requestedStoreId}?code=${signAccessToken({ userId: user.id })} )
 `;
   const response = await new SES({ apiVersion: '2010-12-01' })
     .sendEmail({
@@ -270,10 +272,10 @@ router.put(
 );
 
 router.post(
-  '/magicLink/:emailAddress',
+  '/magicLink/:emailAddress/:storeId',
   serviceAuthentication,
-  async (key, { emailAddress }, { }) => {
-    await sendMagicLinkEmail({ key, emailAddress });
+  async (key, { emailAddress, storeId }, { }) => {
+    await sendMagicLinkEmail({ key, emailAddress, storeId });
     return {};
   }
 );

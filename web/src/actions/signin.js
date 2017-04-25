@@ -24,14 +24,15 @@ const signinFailure = (error) => {
   };
 };
 
-export const performSignin = ({ itemId, emailAddress }) => async (dispatch, getState) => {
+export const performSignin = ({ itemId, emailAddress, storeId }) => async (dispatch, getState) => {
   dispatch(signinRequest());
 
   try {
     const response = await apifetch({
       url: '/api/v1/signin',
       body: {
-        emailAddress
+        emailAddress,
+        storeId
       }
     }, dispatch, getState);
 

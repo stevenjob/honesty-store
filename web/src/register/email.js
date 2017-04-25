@@ -22,12 +22,12 @@ class Email extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const { performSignin, params: { itemId } } = this.props;
+    const { performSignin, params: { itemId }, storeId } = this.props;
     const { emailAddress } = this.state;
     const valid = isEmail(emailAddress);
     this.setState({ valid });
     if (valid) {
-      performSignin({ itemId, emailAddress });
+      performSignin({ itemId, emailAddress, storeId });
     }
   }
 
@@ -57,8 +57,12 @@ class Email extends React.Component {
   }
 }
 
-const mapStateToProps = (_, { params: { itemId }}) => ({
-  itemId
+const mapStateToProps = (
+  { store: { code } },
+  { params: { itemId }}
+) => ({
+  itemId,
+  storeId: code
 });
 
 const mapDispatchToProps = { performSignin };
