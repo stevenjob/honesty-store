@@ -28,7 +28,7 @@ export const performStoreChange = ({ storeCode }) => async (dispatch, getState) 
         storeCode
       },
       getToken: () => getState().accessToken
-    });
+    }, dispatch, getState);
 
     dispatch(storeSuccess(response));
     history.push(`/store`);

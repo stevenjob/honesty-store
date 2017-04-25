@@ -29,7 +29,7 @@ export const submitSurvey = ({ survey, answers }) => async (dispatch, getState) 
         answers: answers
       },
       getToken: () => getState().accessToken
-    });
+    }, dispatch, getState);
 
     dispatch(surveySuccess(response));
     history.replace(`/survey/complete`);
