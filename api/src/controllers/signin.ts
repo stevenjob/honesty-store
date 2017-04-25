@@ -21,10 +21,14 @@ const setupSignInPhase2 = (router) => {
     '/signin2',
     authenticateEmailToken,
     async (key, _params, { storeId: storeCode }, { user }) => {
+      let updatedUser = user;
       if (storeCode) {
-        await updateDefaultStoreCode(key, user.id, storeCode);
+        updatedUser = {
+          ...user,
+          ...(await updateDefaultStoreCode(key, user.id, storeCode))
+        };
       }
-      return await getSessionData(key, { user });
+      return await getSessionData(key, { user: updatedUser });
     });
 };
 
