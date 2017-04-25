@@ -1,5 +1,6 @@
-import { ECS } from 'aws-sdk';
+import { ECS, DynamoDB } from 'aws-sdk';
 import * as winston from 'winston';
+import { ensureApiGateway } from '../apigateway/gateway';
 import { ensureStack } from '../cloudformation/stack';
 import { ensureLogGroup } from '../cloudwatchlogs/loggroup';
 import containerForDir from '../containerDefinition/containers';
@@ -7,6 +8,7 @@ import { ensureTable } from '../dynamodb/table';
 import buildAndPushImage from '../ecr/buildAndPushImage';
 import { ensureService, waitForServicesStable } from '../ecs/service';
 import { ensureTaskDefinition, pruneTaskDefinitions } from '../ecs/taskDefinition';
+import { ensureFunction } from '../lambda/function';
 import { ensureListener } from '../elbv2/listener';
 import { ensureLoadBalancer } from '../elbv2/loadbalancer';
 import { ensureRule } from '../elbv2/rule';
@@ -57,6 +59,11 @@ const serviceConfig = {
   box: {
     database: true,
     loadBalancer: { pathPattern: '/box/*', priority: 7 }
+  }
+};
+const lambdaConfig = {
+  item: {
+    database: true
   }
 };
 
@@ -169,8 +176,44 @@ export default async ({ branch, dirs }) => {
     certificateArn: getCertificateArn({ branch }),
     protocol: 'HTTPS'
   });
+
+  for (const dir of dirs) {
+    if (!lambdaConfig[dir]) {
+      continue;
+    }
+
+    let db: DynamoDB.TableDescription = null;
+    if (lambdaConfig[dir].database) {
+      db = await ensureDatabase({ branch, dir });
+    }
+
+    const lambda = await ensureFunction({
+      name: `${dir}-lambda`,
+      codeDirectory: dir,
+      codeFilter: path => /(lib|node_modules)/.test(path),
+      handler: `lib/${dir}/src/lambda.handler`,
+      requireDynamo: lambdaConfig[dir].database,
+      environment: {
+        TABLE_NAME: db && db.TableName,
+        BASE_URL: baseUrl,
+        SERVICE_TOKEN_SECRET: serviceSecret
+      }
+    });
+
+    const gatewayIntegration = await ensureApiGateway({
+      serviceName: dir,
+      lambdaArn: lambda.FunctionArn
+    });
+
+    // TODO: export $WHATEVER.execute-api.eu-west-1.amazonaws.com to other services
+  }
+
   const services: ECS.Service[] = [];
   for (const dir of dirs) {
+    if (!serviceConfig[dir]) {
+      continue;
+    }
+
     const logGroup = generateName({ branch, dir });
     await ensureLogGroup({
       name: logGroup,

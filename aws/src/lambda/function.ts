@@ -1,28 +1,58 @@
 import { Lambda } from 'aws-sdk';
+import crypto = require('crypto');
 import * as winston from 'winston';
-import JSZip = require('jszip');
+import zipdir = require('zip-dir');
 
-const zip = async (_filename, content) => {
-  const jszip = new JSZip();
-  jszip.file('index.js', content);
-  return await jszip.generateAsync({
-    type: 'nodebuffer'
+const zip = (dir, filter) => new Promise<Buffer>((res, rej) => {
+  zipdir(dir, { filter }, (err, buffer) => {
+    if (err) {
+      return rej(err);
+    }
+    return res(buffer);
   });
-};
+});
 
-export const ensureFunction = async ({ name, code }) => {
-  const zipFile = await zip('index.js', code);
+const calculateSha256 = buffer =>
+ crypto.createHash('sha256')
+    .update(buffer)
+    .digest('base64');
 
+export const ensureFunction = async ({
+  name,
+  codeDirectory,
+  codeFilter,
+  handler,
+  environment,
+  requireDynamo = false
+}) => {
+  const zipFile = await zip(codeDirectory, codeFilter);
   const lambda = new Lambda({ apiVersion: '2015-03-31' });
+
+  const getFuncResponse = await lambda.getFunction({ FunctionName: name }).promise();
+  const { Configuration: { CodeSize: size, CodeSha256: sha256 } } = getFuncResponse;
+  if ((()=>true)() || (size === zipFile.byteLength && sha256 === calculateSha256(zipFile))) {
+    return getFuncResponse.Configuration;
+  }
+
+  const role = requireDynamo
+    ? 'arn:aws:iam::812374064424:role/aws-lambda-and-dynamo-streams'
+    : 'arn:aws:iam::812374064424:role/lambda_basic_execution';
+  const params = {
+    FunctionName: name,
+    Role: role,
+    Handler: handler,
+    Environment: {
+      Variables: environment
+    },
+    Runtime: 'nodejs6.10'
+  };
+
   try {
     const response = await lambda.createFunction({
+      ...params,
       Code: {
         ZipFile: zipFile
-      },
-      FunctionName: name,
-      Role: 'arn:aws:iam::812374064424:role/lambda_basic_execution',
-      Handler: 'index.handler',
-      Runtime: 'nodejs4.3'
+      }
     })
       .promise();
 
@@ -33,16 +63,24 @@ export const ensureFunction = async ({ name, code }) => {
     if (e.code !== 'ResourceConflictException') {
       throw e;
     }
-    const response = await lambda.updateFunctionCode({
+    const func = await lambda.updateFunctionCode({
       FunctionName: name,
       ZipFile: zipFile,
       Publish: true
     })
       .promise();
 
-    winston.debug(`function: updateFunctionCode`, response);
+    winston.debug(`function: updateFunctionCode`, func);
 
-    return response;
+    const config = await lambda.updateFunctionConfiguration({
+      FunctionName: name,
+      ...params,
+    })
+      .promise();
+
+    winston.debug(`function: updateFunctionConfiguration`, config);
+
+    return func;
   }
 };
 
