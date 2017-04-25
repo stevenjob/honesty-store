@@ -23,7 +23,7 @@ export const submitSurvey = ({ survey, answers }) => async (dispatch, getState) 
   dispatch(surveyRequest());
   try {
     const response = await apifetch({
-      url: '/_api/v1/survey',
+      url: '/api/v1/survey',
       body: {
         surveyId: survey.id,
         answers: answers

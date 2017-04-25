@@ -28,7 +28,7 @@ export const performRegister = ({ storeCode }) => async (dispatch, getState) => 
   dispatch(registerRequest());
   try {
     const response = await apifetch({
-      url: '/_api/v1/register',
+      url: '/api/v1/register',
       body: {
         storeCode
       }

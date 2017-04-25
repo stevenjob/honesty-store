@@ -59,7 +59,7 @@ export const serviceAuthentication = (request, response, next) => {
 const createEndPoint = (service, internalRouter, version, method: 'get' | 'post' | 'put') =>
   <Body, Result>(path, authentication: ExpressAuthentication, action: BodyAction<Body, Result>) => {
     internalRouter[method](
-      `/_${service}/v${version}${path}`,
+      `/${service}/v${version}${path}`,
       authentication,
       (request, response) => {
         const timer = time();

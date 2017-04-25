@@ -31,7 +31,7 @@ export const performSupport = ({ message, emailAddress }, successUrl = `/help/su
     const userAgent = navigator.userAgent;
 
     await apifetch({
-      url: '/_api/v1/support',
+      url: '/api/v1/support',
       body: {
         message,
         emailAddress,

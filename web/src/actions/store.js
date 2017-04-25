@@ -23,7 +23,7 @@ export const performStoreChange = ({ storeCode }) => async (dispatch, getState) 
   dispatch(storeRequest());
   try {
     const response = await apifetch({
-      url: '/_api/v1/store',
+      url: '/api/v1/store',
       body: {
         storeCode
       },

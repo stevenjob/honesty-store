@@ -36,27 +36,27 @@ const serviceConfig = {
     loadBalancer: { pathPattern: '/*', priority: 10 }
   },
   api: {
-    loadBalancer: { pathPattern: '/_api/*', priority: 1 }
+    loadBalancer: { pathPattern: '/api/*', priority: 1 }
   },
   transaction: {
     database: true,
-    loadBalancer: { pathPattern: '/_transaction/*', priority: 3 }
+    loadBalancer: { pathPattern: '/transaction/*', priority: 3 }
   },
   user: {
     database: true,
-    loadBalancer: { pathPattern: '/_user/*', priority: 4 }
+    loadBalancer: { pathPattern: '/user/*', priority: 4 }
   },
   topup: {
     database: true,
-    loadBalancer: { pathPattern: '/_topup/*', priority: 5 }
+    loadBalancer: { pathPattern: '/topup/*', priority: 5 }
   },
   survey: {
     database: true,
-    loadBalancer: { pathPattern: '/_survey/*', priority: 6 }
+    loadBalancer: { pathPattern: '/survey/*', priority: 6 }
   },
   box: {
     database: true,
-    loadBalancer: { pathPattern: '/_box/*', priority: 7 }
+    loadBalancer: { pathPattern: '/box/*', priority: 7 }
   }
 };
 

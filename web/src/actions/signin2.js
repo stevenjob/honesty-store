@@ -30,7 +30,7 @@ export const performSignin2 = ({ emailToken }) => async (dispatch, getState) => 
 
   try {
     const response = await apifetch({
-      url: '/_api/v1/signin2',
+      url: '/api/v1/signin2',
       getToken: () => emailToken,
       body: {}
     }, dispatch, getState);

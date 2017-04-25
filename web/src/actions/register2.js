@@ -44,7 +44,7 @@ export const performRegister2 = ({ itemID, topUpAmount, emailAddress, cardDetail
 
   try {
     const response = await apifetch({
-      url: '/_api/v1/register2',
+      url: '/api/v1/register2',
       body: {
         stripeToken: await createStripeToken(cardDetails),
         itemID,
