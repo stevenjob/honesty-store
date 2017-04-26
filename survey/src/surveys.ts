@@ -1,4 +1,5 @@
-import { getItem } from '../../api/src/services/item';
+import { getItem } from '../../item/src/client';
+import { createServiceKey } from '../../service/src/key';
 import { Survey } from './client';
 
 const internalSurveys: Survey[] = [
@@ -33,6 +34,7 @@ const internalSurveys: Survey[] = [
 ];
 
 const surveys = new Map<string, Survey>();
+const key = createServiceKey({ service: 'survey-init' });
 
 for (const survey of internalSurveys) {
   if (surveys.has(survey.id)) {
@@ -41,8 +43,12 @@ for (const survey of internalSurveys) {
 
   for (const [ itemIdA, itemIdB ] of survey.questions) {
     // ensure the itemIDs are valid
-    getItem(itemIdA);
-    getItem(itemIdB);
+    Promise.all([
+      getItem(key, itemIdA),
+      getItem(key, itemIdB)
+    ])
+      .then(() => void 0)
+      .catch(e => { throw e; });
   }
 
   surveys.set(survey.id, survey);

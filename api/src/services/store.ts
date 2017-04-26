@@ -1,6 +1,6 @@
 import { isMarketplaceBatch } from '../../../box/src/batch';
 import { Box, BoxItem, getBoxesForStore } from '../../../box/src/client';
-import { getItem } from './item';
+import { getItem } from '../../../item/src/client';
 
 export interface StoreItem {
   name: string;
@@ -146,7 +146,7 @@ export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
         const breakdown = getPriceBreakdown(boxItem);
 
         return ({
-          ...getItem(itemID),
+          ...await getItem(key, itemID),
           count,
           isMarketplace,
           id: itemID,

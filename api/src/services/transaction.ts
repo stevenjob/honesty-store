@@ -1,11 +1,11 @@
+import { getItem } from '../../../item/src/client';
 import { CodedError } from '../../../service/src/error';
 import { createTransaction, getAccount, TransactionBody } from '../../../transaction/src/client/index';
-import { getItem } from '../services/item';
 import { getItemPriceFromStore } from './store';
 
-const expandItemDetails = (transaction) => {
+const expandItemDetails = async (key, transaction) => {
   const { itemId } = transaction.data;
-  const item = itemId != null ? getItem(itemId) : null;
+  const item = itemId && await getItem(key, itemId);
   return {
     ...transaction,
     data: {
@@ -52,20 +52,20 @@ export const purchase = async ({ key, itemID, userID, accountID, storeID, quanti
   const response = await createTransaction(key, accountID, transaction);
   return {
     balance: response.balance,
-    transaction: expandItemDetails(response.transaction)
+    transaction: await expandItemDetails(key, response.transaction)
   };
 };
 
 export const getExpandedTransactionsAndBalance = async ({ key, accountID, page = 0 }) => {
   const { balance, transactions: rawTransactions } = await getAccount(key, accountID);
-  const transactions = pageItems({
+  const transactionPromises = pageItems({
       items: rawTransactions,
       page
     })
-    .map(expandItemDetails);
+    .map(item => expandItemDetails(key, item));
 
   return {
     balance,
-    transactions
+    transactions: await Promise.all(transactionPromises)
   };
 };

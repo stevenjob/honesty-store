@@ -3,7 +3,8 @@
 import cruftDDB from 'cruft-ddb';
 import { stringify } from 'csv';
 
-import { getItem } from '../../api/src/services/item';
+import { getAllItems } from '../../item/src/client';
+import { createServiceKey } from '../../service/src/key';
 import { InternalAccount, InternalTransaction } from '../../transaction/src/client/index';
 import { User } from '../../user/src/client/index';
 
@@ -55,6 +56,8 @@ const main = async (args) => {
     ];
   };
 
+  const items = await getAllItems(createServiceKey({ service: 'dump-transactions' }));
+
   const userTransactions = allAccounts
     .map(account => {
       const user = registeredUsers.find(({ accountId }) => accountId === account.id);
@@ -70,7 +73,7 @@ const main = async (args) => {
       return transactions.map((transaction) => {
         // tslint:disable-next-line:no-unused-variable
         const { id: transactionId, data, next, ...transactionDetails } = transaction;
-        const itemDetails = data.itemId ? getItem(data.itemId) : {};
+        const itemDetails = data.itemId ? items.find(({ id }) => id === data.itemId) : {};
         return {
           userId,
           ...userDetails,

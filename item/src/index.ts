@@ -4,8 +4,8 @@ import express = require('express');
 import bodyParser = require('body-parser');
 import isUUID = require('validator/lib/isUUID');
 
-import { Item } from './client';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
+import { Item } from './client';
 
 config.region = process.env.AWS_REGION;
 
@@ -25,6 +25,8 @@ const getItem = async(itemId): Promise<Item> => {
   return await cruft.read({ id: itemId });
 };
 
+const getAllItems = () => cruft.__findAll({});
+
 export const app = express();
 
 app.use(bodyParser.json());
@@ -35,6 +37,12 @@ router.get(
   '/:itemId',
   serviceAuthentication,
   async (_key, { itemId }) => getItem(itemId)
+);
+
+router.get(
+  '/all',
+  serviceAuthentication,
+  async (_key, {}) => getAllItems()
 );
 
 app.use(router);

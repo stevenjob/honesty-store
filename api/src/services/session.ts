@@ -75,7 +75,7 @@ const getStoreSessionData = async (key, user): Promise<StoreSessionData> => {
 
 const getSurveySessionData = async (key, user) => {
   const surveys = await getUserSurveys(key, user.id);
-  return expandTopPrioritySurvey(surveys);
+  return await expandTopPrioritySurvey(surveys);
 };
 
 export const getSessionData = async (key, { user }): Promise<SessionData> => {

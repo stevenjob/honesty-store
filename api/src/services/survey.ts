@@ -1,6 +1,6 @@
-import { getItem } from '../services/item';
+import { getItem } from '../../../item/src/client';
 
-export const expandTopPrioritySurvey = (surveys) => {
+export const expandTopPrioritySurvey = async (surveys) => {
   if (surveys.length === 0) {
     return null;
   }
@@ -9,6 +9,6 @@ export const expandTopPrioritySurvey = (surveys) => {
 
   return {
     ...survey,
-    questions: survey.questions.map(itemIds => itemIds.map(getItem))
+    questions: await Promise.all(survey.questions.map(itemIds => itemIds.map(getItem)))
   };
 };

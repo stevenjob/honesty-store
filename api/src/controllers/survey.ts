@@ -8,6 +8,6 @@ export default (router) => {
     authenticateAccessToken,
     async (key, _params, { surveyId, answers }, { user }) => {
       const surveys = await acceptUserSurvey(key, user.id, surveyId, answers);
-      return expandTopPrioritySurvey(surveys);
+      return await expandTopPrioritySurvey(surveys);
     });
 };

@@ -1,4 +1,5 @@
-import { getItem } from '../../api/src/services/item';
+import { getItem } from '../../item/src/client';
+import { createServiceKey } from '../../service/src/key';
 
 export interface Batch {
   id: string;
@@ -886,12 +887,18 @@ const batchesInternal: Batch[] = [
 ];
 
 const batches = new Map<string, Batch>();
+
+const key = createServiceKey({ service: 'batch-init' });
+
 for (const batch of batchesInternal) {
   if (batches.has(batch.id)) {
     throw new Error(`Duplicate ID ${batch.id}`);
   }
   // ensure the itemId is valid
-  getItem(batch.itemId);
+  getItem(key, batch.itemId)
+    .then(() => void 0)
+    .catch(e => { throw e; });
+
   batches.set(batch.id, batch);
 }
 
