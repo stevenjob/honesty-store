@@ -69,7 +69,7 @@ const lambdaConfig = {
 const isLive = (branch) => branch === 'live';
 
 const generateName = ({ branch, dir }: { branch: string, dir?: string }) => {
-  const base = isLive(branch) ? 'honesty-store' : `hs-${branch}`;
+  const base = isLive(branch) ? 'honesty-store' : `${prefix}-${branch}`;
   return dir == null ? base : `${base}-${dir}`;
 };
 
