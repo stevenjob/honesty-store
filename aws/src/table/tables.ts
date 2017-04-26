@@ -437,6 +437,17 @@ const dirToTable = {
     writeCapacityUnits,
     dummyData: [
       {
+        id: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
+        name: 'Nakd',
+        qualifier: 'Apple Crunch Bar',
+        image: 'nakd-apple-crunch.svg',
+        weight: 30,
+        unit: 'bar',
+        unitPlural: 'bars',
+        genericName: 'cereal bar',
+        genericNamePlural: 'cereal bars'
+      },
+      {
         id: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
         name: 'Walkers',
         image: 'walkers-cheese-onion.svg',
@@ -446,6 +457,17 @@ const dirToTable = {
         unitPlural: 'packs',
         genericName: 'crisps',
         genericNamePlural: 'crisps'
+      },
+      {
+        id: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
+        name: 'Diet Coke',
+        location: 'Fridge',
+        image: 'diet-cola-can.svg',
+        weight: 400,
+        unit: 'can',
+        unitPlural: 'cans',
+        genericName: 'drink',
+        genericNamePlural: 'drinks'
       },
       {
         id: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
