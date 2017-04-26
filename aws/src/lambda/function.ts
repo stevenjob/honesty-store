@@ -1,5 +1,4 @@
 import { Lambda } from 'aws-sdk';
-import crypto = require('crypto');
 import uuid = require('uuid/v4');
 import * as winston from 'winston';
 import zipdir = require('zip-dir');
@@ -13,25 +12,8 @@ const zip = (dir, filter) => new Promise<Buffer>((res, rej) => {
   });
 });
 
-const calculateSha256 = buffer =>
- crypto.createHash('sha256')
-    .update(buffer)
-    .digest('base64');
-
 const ensureLambda = async ({ name, handler, environment, withDynamo, zipFile }) => {
   const lambda = new Lambda({ apiVersion: '2015-03-31' });
-
-  try {
-    const getFuncResponse = await lambda.getFunction({ FunctionName: name }).promise();
-    const { Configuration: { CodeSize: size, CodeSha256: sha256 } } = getFuncResponse;
-    if (size === zipFile.byteLength && sha256 === calculateSha256(zipFile)) {
-      return getFuncResponse.Configuration;
-    }
-  } catch (e) {
-    if (e.code !== 'ResourceNotFoundException') {
-      throw e;
-    }
-  }
 
   const role = withDynamo
     ? 'arn:aws:iam::812374064424:role/aws-lambda-and-dynamo-ro'
