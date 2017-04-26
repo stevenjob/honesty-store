@@ -24,14 +24,12 @@ const getRestApis = async () =>
   .promise())
   .items;
 
-const ensureRestApi = async ({ branch }): Promise<APIGateway.RestApi> => {
+const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
 
   const restApis = await getRestApis();
 
-  const restApiName = `lambda-${branch}`;
-
-  const found = restApis.filter(({ name }) => name === restApiName);
+  const found = restApis.filter(restApi => restApi.name === name);
 
   if (found.length) {
     const response = found[0];
@@ -41,9 +39,9 @@ const ensureRestApi = async ({ branch }): Promise<APIGateway.RestApi> => {
     return response;
   }
 
-  winston.debug(`apigateway: couldn't find '${restApiName}'`);
+  winston.debug(`apigateway: couldn't find '${name}'`);
 
-  const response = await apigateway.createRestApi({ name: restApiName }).promise();
+  const response = await apigateway.createRestApi({ name }).promise();
 
   winston.debug(`apigateway: createRestApi`, response);
 
@@ -231,11 +229,11 @@ const ensureStagedIntegration = async ({ restApi, deployment }) => {
 };
 
 export const ensureApiGateway = async ({
-  branch,
+  name,
   serviceName,
   lambdaArn
 }) => {
-  const restApi = await ensureRestApi({ branch });
+  const restApi = await ensureRestApi({ name });
 
   await ensureResource({
     restApi,

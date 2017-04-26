@@ -189,7 +189,7 @@ export default async ({ branch, dirs }) => {
     }
 
     const lambda = await ensureFunction({
-      name: `${dir}-lambda`,
+      name: generateName({ branch, dir }),
       codeDirectory: dir,
       codeFilter: path => /(lib|node_modules)/.test(path),
       handler: `lib/${dir}/src/lambda.handler`,
@@ -202,7 +202,7 @@ export default async ({ branch, dirs }) => {
     });
 
     const gatewayStage = await ensureApiGateway({
-      branch,
+      name: generateName({ branch }),
       serviceName: dir,
       lambdaArn: lambda.FunctionArn
     });
