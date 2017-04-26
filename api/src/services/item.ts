@@ -557,6 +557,24 @@ const items: (Item & { id: string })[] = [
     unitPlural: 'packs',
     genericName: 'biscuits',
     genericNamePlural: 'biscuits'
+  },
+  {
+    id: '9aa6305f-370a-4d39-8baa-c67ac35b0dfc',
+    name: 'Sun-Maid Raisins',
+    image: 'misc-bar.svg',
+    unit: 'box',
+    unitPlural: 'boxes',
+    genericName: 'raisins',
+    genericNamePlural: 'raisins'
+  },
+  {
+    id: '1eb45850-3bb1-4b66-a816-27d856f03afe',
+    name: 'Mars Bar',
+    image: 'misc-bar.svg',
+    unit: 'bar',
+    unitPlural: 'bars',
+    genericName: 'chocolate bar',
+    genericNamePlural: 'chocolate bars'
   }
 ];
 
