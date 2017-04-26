@@ -247,14 +247,10 @@ export const ensureApiGateway = async ({
   });
 
   const restMethod = await ensureProxyMethod({ restApi, resource: proxyResource });
-  const integration = await ensureIntegration({ restApi, resource: proxyResource, restMethod, lambdaArn });
+  await ensureIntegration({ restApi, resource: proxyResource, restMethod, lambdaArn });
   const deployment = await ensureDeployment({ restApi, serviceName });
-  const stage = await ensureStagedIntegration({ restApi, deployment });
 
-  // tslint:disable-next-line:no-unused-expression
-  void integration;
-
-  return stage;
+  return await ensureStagedIntegration({ restApi, deployment });
 };
 
 const pruneRestApi = (restApi: APIGateway.RestApi) => {
