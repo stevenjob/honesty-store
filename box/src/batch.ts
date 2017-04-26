@@ -1,4 +1,4 @@
-import { getItem } from '../../item/src/client';
+import { assertItemExistsAsync } from '../../item/src/client';
 import { createServiceKey } from '../../service/src/key';
 
 export interface Batch {
@@ -895,9 +895,7 @@ for (const batch of batchesInternal) {
     throw new Error(`Duplicate ID ${batch.id}`);
   }
   // ensure the itemId is valid
-  getItem(key, batch.itemId)
-    .then(() => void 0)
-    .catch(e => { throw e; });
+  assertItemExistsAsync(key, batch.itemId);
 
   batches.set(batch.id, batch);
 }

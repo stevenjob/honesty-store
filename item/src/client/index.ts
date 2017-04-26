@@ -21,3 +21,11 @@ export const getItem = (key, itemId: string) =>
 
 export const getAllItems = (key) =>
   get<Item[]>(1, key, `/all`);
+
+export const assertItemExistsAsync = (key, itemId: string) =>
+  getItem(key, itemId)
+    .then(() => void 0)
+    .catch(e => {
+      console.error(`item '${itemId}' doesn't exist`, e);
+      process.exit(1);
+    });

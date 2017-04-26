@@ -1,4 +1,4 @@
-import { getItem } from '../../item/src/client';
+import { assertItemExistsAsync } from '../../item/src/client';
 import { createServiceKey } from '../../service/src/key';
 import { Survey } from './client';
 
@@ -43,12 +43,8 @@ for (const survey of internalSurveys) {
 
   for (const [ itemIdA, itemIdB ] of survey.questions) {
     // ensure the itemIDs are valid
-    Promise.all([
-      getItem(key, itemIdA),
-      getItem(key, itemIdB)
-    ])
-      .then(() => void 0)
-      .catch(e => { throw e; });
+    assertItemExistsAsync(key, itemIdA);
+    assertItemExistsAsync(key, itemIdB);
   }
 
   surveys.set(survey.id, survey);
