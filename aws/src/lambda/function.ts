@@ -18,7 +18,7 @@ const calculateSha256 = buffer =>
     .update(buffer)
     .digest('base64');
 
-const ensureLambda = async ({ name, handler, environment, requireDynamo, zipFile }) => {
+const ensureLambda = async ({ name, handler, environment, withDynamo, zipFile }) => {
   const lambda = new Lambda({ apiVersion: '2015-03-31' });
 
   try {
@@ -33,7 +33,7 @@ const ensureLambda = async ({ name, handler, environment, requireDynamo, zipFile
     }
   }
 
-  const role = requireDynamo
+  const role = withDynamo
     ? 'arn:aws:iam::812374064424:role/aws-lambda-and-dynamo-ro'
     : 'arn:aws:iam::812374064424:role/lambda_basic_execution';
   const params = {
@@ -103,12 +103,15 @@ export const ensureFunction = async ({
   codeFilter,
   handler,
   environment,
-  requireDynamo = false
+  withDynamo = false,
+  withApiGateway = false
 }) => {
   const zipFile = await zip(codeDirectory, codeFilter);
-  const lambda = await ensureLambda({ name, handler, environment, requireDynamo, zipFile });
+  const lambda = await ensureLambda({ name, handler, environment, withDynamo, zipFile });
 
-  await permitLambdaOnApiGateway({ func: lambda });
+  if (withApiGateway) {
+    await permitLambdaOnApiGateway({ func: lambda });
+  }
 
   return lambda;
 };

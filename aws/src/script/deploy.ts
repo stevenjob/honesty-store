@@ -193,7 +193,8 @@ export default async ({ branch, dirs }) => {
       codeDirectory: dir,
       codeFilter: path => /(lib|node_modules)/.test(path),
       handler: `lib/${dir}/src/lambda.handler`,
-      requireDynamo: lambdaConfig[dir].database,
+      withDynamo: lambdaConfig[dir].database,
+      withApiGateway: true,
       environment: {
         TABLE_NAME: db && db.TableName,
         BASE_URL: baseUrl,
