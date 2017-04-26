@@ -772,6 +772,116 @@ const batchesInternal: Batch[] = [
     itemQuantity: 40,
     expiry: 1499468400000,
     itemId: '3b7a6669-770c-4dbb-97e2-0e0aae3ca5ff'
+  },
+
+  // costco 25/04/17 - https://goo.gl/photos/4YXvSv5BLFpHDY5g6
+  {
+    supplier: 'Costco',
+    supplierCode: '0046244',
+    purchased: 1493074800000,
+    id: 'afbb9341-499c-4614-8208-38f0a33bf3d4',
+    priceExcludingVAT: 1489,
+    quantity: 1,
+    VATRate: 0.2,
+    expiry: 1519862400000,
+    itemId: 'e91e7274-fe28-405c-86c8-5768197eb6ac',
+    itemQuantity: 48
+  },
+  {
+    supplier: 'Costco',
+    supplierCode: '0011745',
+    purchased: 1493074800000,
+    id: '8c197c2b-ff2f-4efb-9036-01b6b6952e33',
+    priceExcludingVAT: 479,
+    quantity: 1,
+    VATRate: 0,
+    expiry: 1527721200000,
+    itemId: '9aa6305f-370a-4d39-8baa-c67ac35b0dfc',
+    itemQuantity: 24
+  },
+  {
+    supplier: 'Costco',
+    supplierCode: '0223586',
+    purchased: 1493074800000,
+    id: 'd7ac9f55-8d9b-4acc-bf91-8a9caa22a8d6',
+    priceExcludingVAT: 1289,
+    quantity: 3,
+    VATRate: 0,
+    expiry: 1505948400000,
+    itemId: 'd8c73ee1-a9b1-4090-a6ad-ee4d778a852a',
+    itemQuantity: 24
+  },
+  {
+    supplier: 'Costco',
+    supplierCode: '0000009',
+    purchased: 1493074800000,
+    id: 'e03926a4-fb2b-4223-8e30-0f82169cb625',
+    priceExcludingVAT: 1499,
+    quantity: 1,
+    VATRate: 0.2,
+    expiry: 1515888000000,
+    itemId: '1eb45850-3bb1-4b66-a816-27d856f03afe',
+    itemQuantity: 48
+  },
+  {
+    supplier: 'Costco',
+    supplierCode: '0180268',
+    purchased: 1493074800000,
+    id: '6b9be50d-2d76-4a2f-8887-0d4a020f60ce',
+    priceExcludingVAT: 799 / 3,
+    quantity: 4,
+    VATRate: 0.2,
+    expiry: 1519603200000,
+    itemId: '249409b8-c7cc-4e2c-9a8b-e960c6b50029',
+    itemQuantity: 8
+  },
+  {
+    supplier: 'Costco',
+    supplierCode: '0180268',
+    purchased: 1493074800000,
+    id: '63fc9d19-cb5a-4eed-a10d-810c3d0b0aaf',
+    priceExcludingVAT: 799 / 3,
+    quantity: 4,
+    VATRate: 0.2,
+    expiry: 1519603200000,
+    itemId: 'fac94d27-732e-4f2f-8f03-75c193093dbd',
+    itemQuantity: 8
+  },
+  {
+    supplier: 'Costco',
+    supplierCode: '0180268',
+    purchased: 1493074800000,
+    id: '57cfb66c-e813-49da-9669-8117c4f869b1',
+    priceExcludingVAT: 799 / 3,
+    quantity: 4,
+    VATRate: 0.2,
+    expiry: 1519603200000,
+    itemId: '8bd6f737-6f64-4c18-a8b8-15c7eb1f4a77',
+    itemQuantity: 8
+  },
+  {
+    supplier: 'Costco',
+    supplierCode: '0180268',
+    purchased: 1493074800000,
+    id: 'aeb2ec43-912c-480d-b1f6-5850e0e78553',
+    priceExcludingVAT: 799,
+    quantity: 2,
+    VATRate: 0.2,
+    expiry: 1507071600000,
+    itemId: '8268e7f5-0b53-48e7-b288-2251cd375e97',
+    itemQuantity: 18
+  },
+  {
+    supplier: 'Costco',
+    supplierCode: '0180268',
+    purchased: 1493074800000,
+    id: '7fbcd3ac-1888-4cb3-a0f1-0c9abbcda330',
+    priceExcludingVAT: 499,
+    quantity: 3,
+    VATRate: 0.2,
+    expiry: 1518998400000,
+    itemId: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
+    itemQuantity: 40
   }
 ];
 
