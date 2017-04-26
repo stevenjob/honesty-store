@@ -18,11 +18,13 @@ type IntegrationParams =
 const assumedLimit = 200;
 const stageName = 'prod';
 
-const getRestApis = async () =>
-  (await new APIGateway({ apiVersion: '2015-07-09' })
-  .getRestApis({ limit: assumedLimit })
-  .promise())
-  .items;
+const getRestApis = async () => {
+  const restApis = await new APIGateway({ apiVersion: '2015-07-09' })
+    .getRestApis({ limit: assumedLimit })
+    .promise();
+
+  return restApis.items;
+};
 
 const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
