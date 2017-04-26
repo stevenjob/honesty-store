@@ -35,7 +35,7 @@ export const ensureFunction = async ({
   }
 
   const role = requireDynamo
-    ? 'arn:aws:iam::812374064424:role/aws-lambda-and-dynamo-streams'
+    ? 'arn:aws:iam::812374064424:role/aws-lambda-and-dynamo-ro'
     : 'arn:aws:iam::812374064424:role/lambda_basic_execution';
   const params = {
     FunctionName: name,
