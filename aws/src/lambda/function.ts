@@ -21,10 +21,16 @@ const calculateSha256 = buffer =>
 const ensureLambda = async ({ name, handler, environment, requireDynamo, zipFile }) => {
   const lambda = new Lambda({ apiVersion: '2015-03-31' });
 
-  const getFuncResponse = await lambda.getFunction({ FunctionName: name }).promise();
-  const { Configuration: { CodeSize: size, CodeSha256: sha256 } } = getFuncResponse;
-  if (size === zipFile.byteLength && sha256 === calculateSha256(zipFile)) {
-    return getFuncResponse.Configuration;
+  try {
+    const getFuncResponse = await lambda.getFunction({ FunctionName: name }).promise();
+    const { Configuration: { CodeSize: size, CodeSha256: sha256 } } = getFuncResponse;
+    if (size === zipFile.byteLength && sha256 === calculateSha256(zipFile)) {
+      return getFuncResponse.Configuration;
+    }
+  } catch (e) {
+    if (e.code !== 'ResourceNotFoundException') {
+      throw e;
+    }
   }
 
   const role = requireDynamo
