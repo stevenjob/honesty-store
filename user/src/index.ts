@@ -5,7 +5,7 @@ import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isUUID = require('validator/lib/isUUID');
 import isEmail = require('validator/lib/isEmail');
-import { stores } from '../../api/src/services/store'; // until we have the store service
+import { storeIDToStoreCode, stores } from '../../api/src/services/store'; // until we have the store service
 import { CodedError } from '../../service/src/error';
 import { createServiceKey } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
@@ -174,10 +174,10 @@ const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
   return externaliseUser(await cruft.update(updatedUser));
 };
 
-const sendMagicLinkEmail = async ({ key, emailAddress, storeId }) => {
+const sendMagicLinkEmail = async ({ key, emailAddress, storeCode }) => {
   const user = await scanByEmailAddress({ emailAddress });
 
-  const requestedStoreId = storeId || user.defaultStoreId;
+  const requestedStoreCode = storeCode || storeIDToStoreCode(user.defaultStoreId);
 
   const message = `( https://honesty.store )
 
@@ -185,7 +185,7 @@ const sendMagicLinkEmail = async ({ key, emailAddress, storeId }) => {
 Tap the button below on your phone to log in to honesty.store
 *********************************************************************
 
-Log in to honesty.store ( https://honesty.store/${requestedStoreId}?code=${signAccessToken({ userId: user.id })} )
+Log in to honesty.store ( https://honesty.store/${requestedStoreCode}?code=${signAccessToken({ userId: user.id })} )
 `;
   const response = await new SES({ apiVersion: '2010-12-01' })
     .sendEmail({
@@ -272,10 +272,10 @@ router.put(
 );
 
 router.post(
-  '/magicLink/:emailAddress/:storeId',
+  '/magicLink/:emailAddress/:storeCode',
   serviceAuthentication,
-  async (key, { emailAddress, storeId }, { }) => {
-    await sendMagicLinkEmail({ key, emailAddress, storeId });
+  async (key, { emailAddress, storeCode }, { }) => {
+    await sendMagicLinkEmail({ key, emailAddress, storeCode });
     return {};
   }
 );
