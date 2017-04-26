@@ -1,3 +1,4 @@
+import { pruneApiGateway } from '../apigateway/gateway';
 import { pruneLogGroups } from '../cloudwatchlogs/loggroup';
 import { pruneTables } from '../dynamodb/table';
 import { pruneRepositories } from '../ecr/repository';
@@ -9,7 +10,6 @@ import { getOriginBranchNames } from '../git/branch';
 import { pruneFunctions } from '../lambda/function';
 import { pruneAliases } from '../route53/alias';
 import { ensureWebStack, prefix } from './deploy';
-import { pruneApiGateway } from '../apigateway/gateway';
 
 const force = process.env.FORCE;
 
