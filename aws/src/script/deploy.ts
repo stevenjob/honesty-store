@@ -202,6 +202,7 @@ export default async ({ branch, dirs }) => {
     });
 
     const gatewayStage = await ensureApiGateway({
+      branch,
       serviceName: dir,
       lambdaArn: lambda.FunctionArn
     });

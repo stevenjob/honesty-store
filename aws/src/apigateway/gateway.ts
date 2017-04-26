@@ -18,14 +18,14 @@ type IntegrationParams =
 const assumedLimit = 200;
 const stageName = 'prod';
 
-const ensureRestApi = async ({ serviceName }: { serviceName: string }): Promise<APIGateway.RestApi> => {
+const ensureRestApi = async ({ branch }): Promise<APIGateway.RestApi> => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
 
   const restApis = await apigateway
     .getRestApis({ limit: assumedLimit })
     .promise();
 
-  const restApiName = `lambda-api-${serviceName}`;
+  const restApiName = `lambda-${branch}`;
 
   const found = restApis.items.filter(({ name }) => name === restApiName);
 
@@ -46,10 +46,8 @@ const ensureRestApi = async ({ serviceName }: { serviceName: string }): Promise<
   return response;
 };
 
-const ensureResource = async ({ restApi }: NestedRestApi) => {
+const ensureResource = async ({ restApi, path, parentPath }) => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
-
-  const proxyPath = '{proxy+}';
 
   const resources = await apigateway.getResources({
     restApiId: restApi.id,
@@ -57,22 +55,28 @@ const ensureResource = async ({ restApi }: NestedRestApi) => {
   })
     .promise();
 
-  const existingResources = resources.items.filter(resource => resource.pathPart === proxyPath);
+  const existingResources = resources.items.filter(resource => resource.pathPart === path);
   if (existingResources.length) {
     const existing = existingResources[0];
     winston.debug(`apigateway: found existing resource`, existing);
     return existing;
   }
 
-  winston.debug(`apigateway: couldn't find '${proxyPath}' resource, creating...`, resources.items);
+  winston.debug(`apigateway: couldn't find '${path}' resource, creating...`, resources.items);
 
-  const rootId = resources.items
-    .filter(resource => resource.path === '/')[0].id;
+  const parentIds = resources.items
+    .filter(resource => resource.path === parentPath);
+
+  if (parentIds.length !== 1) {
+    throw new Error(`too many (${parentIds.length}) parentIds for path=${path} parentPath=${parentPath}`);
+  }
+
+  const parentId = parentIds[0].id;
 
   const response = await apigateway.createResource({
     restApiId: restApi.id,
-    parentId: rootId,
-    pathPart: proxyPath
+    parentId,
+    pathPart: path
   })
     .promise();
 
@@ -223,13 +227,25 @@ const ensureStagedIntegration = async ({ restApi, deployment }) => {
 };
 
 export const ensureApiGateway = async ({
+  branch,
   serviceName,
   lambdaArn
 }) => {
-  const restApi = await ensureRestApi({ serviceName });
-  const resource = await ensureResource({ restApi });
-  const restMethod = await ensureProxyMethod({ restApi, resource });
-  const integration = await ensureIntegration({ restApi, resource, restMethod, lambdaArn });
+  const restApi = await ensureRestApi({ branch });
+
+  await ensureResource({
+    restApi,
+    path: serviceName,
+    parentPath: '/'
+  });
+  const proxyResource = await ensureResource({
+    restApi,
+    path: '{proxy+}',
+    parentPath: `/${serviceName}`
+  });
+
+  const restMethod = await ensureProxyMethod({ restApi, resource: proxyResource });
+  const integration = await ensureIntegration({ restApi, resource: proxyResource, restMethod, lambdaArn });
   const deployment = await ensureDeployment({ restApi, serviceName });
   const stage = await ensureStagedIntegration({ restApi, deployment });
 
