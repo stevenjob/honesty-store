@@ -762,6 +762,16 @@ const batchesInternal: Batch[] = [
     itemQuantity: 72,
     expiry: 1497571200000,
     itemId: '0d7c0ddb-cfc7-43ff-bdea-f255a66b21b6'
+  },
+  {
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.chris,
+    id: '8407cf78-95a5-4fb1-a266-29aa1e6cee64',
+    quantity: 1,
+    priceExcludingVAT: 335,
+    itemQuantity: 40,
+    expiry: 1499468400000,
+    itemId: '3b7a6669-770c-4dbb-97e2-0e0aae3ca5ff'
   }
 ];
 

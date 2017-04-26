@@ -194,7 +194,8 @@ const items: (Item & { id: string })[] = [
   },
   {
     id: '3b7a6669-770c-4dbb-97e2-0e0aae3ca5ff',
-    name: 'Walkers (Box)',
+    name: 'Walkers (Variety)',
+    location: 'Next to box',
     image: 'misc-crisps.svg',
     weight: 22,
     notes: 'Multipack not for individual resale.',
