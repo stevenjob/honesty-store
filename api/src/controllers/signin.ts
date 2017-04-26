@@ -13,14 +13,14 @@ const setupSignInPhase1 = (router) => {
   router.post(
     '/signin',
     noopAuthentication,
-    async (key, _params, { emailAddress, storeId: storeCode }) => await sendEmailToken(key, emailAddress, storeCode));
+    async (key, _params, { emailAddress, storeCode }) => await sendEmailToken(key, emailAddress, storeCode));
 };
 
 const setupSignInPhase2 = (router) => {
   router.post(
     '/signin2',
     authenticateEmailToken,
-    async (key, _params, { storeId: storeCode }, { user }) => {
+    async (key, _params, { storeCode }, { user }) => {
       let updatedUser = user;
       if (storeCode) {
         updatedUser = {

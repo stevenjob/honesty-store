@@ -24,7 +24,7 @@ const signinFailure = (error) => {
   };
 };
 
-export const performSignin = ({ itemId, emailAddress, storeId }) => async (dispatch, getState) => {
+export const performSignin = ({ itemId, emailAddress, storeCode }) => async (dispatch, getState) => {
   dispatch(signinRequest());
 
   try {
@@ -32,7 +32,7 @@ export const performSignin = ({ itemId, emailAddress, storeId }) => async (dispa
       url: '/api/v1/signin',
       body: {
         emailAddress,
-        storeId
+        storeCode
       }
     }, dispatch, getState);
 
