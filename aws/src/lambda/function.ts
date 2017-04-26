@@ -83,7 +83,7 @@ const ensureLambda = async ({ name, handler, environment, withDynamo, zipFile })
   }
 };
 
-const permitLambdaOnApiGateway = async ({ func }) => {
+const permitLambdaCallFromApiGateway = async ({ func }) => {
   const lambda = new Lambda({ apiVersion: '2015-03-31' });
 
   const permission = await lambda.addPermission({
@@ -110,7 +110,7 @@ export const ensureFunction = async ({
   const lambda = await ensureLambda({ name, handler, environment, withDynamo, zipFile });
 
   if (withApiGateway) {
-    await permitLambdaOnApiGateway({ func: lambda });
+    await permitLambdaCallFromApiGateway({ func: lambda });
   }
 
   return lambda;
