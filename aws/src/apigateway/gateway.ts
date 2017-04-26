@@ -18,16 +18,20 @@ type IntegrationParams =
 const assumedLimit = 200;
 const stageName = 'prod';
 
+const getRestApis = async () =>
+  (await new APIGateway({ apiVersion: '2015-07-09' })
+  .getRestApis({ limit: assumedLimit })
+  .promise())
+  .items;
+
 const ensureRestApi = async ({ branch }): Promise<APIGateway.RestApi> => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
 
-  const restApis = await apigateway
-    .getRestApis({ limit: assumedLimit })
-    .promise();
+  const restApis = await getRestApis();
 
   const restApiName = `lambda-${branch}`;
 
-  const found = restApis.items.filter(({ name }) => name === restApiName);
+  const found = restApis.filter(({ name }) => name === restApiName);
 
   if (found.length) {
     const response = found[0];
@@ -255,6 +259,20 @@ export const ensureApiGateway = async ({
   return stage;
 };
 
-export const pruneGateway = async (_filter: (_: string) => boolean) => {
-  // TODO
+const pruneRestApi = (restApi: APIGateway.RestApi) => {
+  const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
+
+  return apigateway.deleteRestApi({ restApiId: restApi.id }).promise();
+};
+
+export const pruneApiGateway = async (filter: (_: APIGateway.RestApi) => boolean) => {
+  const restApis = await getRestApis();
+
+  winston.debug(`pruneApiGateway: restApis`, restApis);
+
+  const promises = restApis
+    .filter(filter)
+    .map(pruneRestApi);
+
+  await Promise.all(promises);
 };
