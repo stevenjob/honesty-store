@@ -1,5 +1,6 @@
 import { Lambda } from 'aws-sdk';
 import crypto = require('crypto');
+import uuid = require('uuid/v4');
 import * as winston from 'winston';
 import zipdir = require('zip-dir');
 
@@ -17,15 +18,7 @@ const calculateSha256 = buffer =>
     .update(buffer)
     .digest('base64');
 
-export const ensureFunction = async ({
-  name,
-  codeDirectory,
-  codeFilter,
-  handler,
-  environment,
-  requireDynamo = false
-}) => {
-  const zipFile = await zip(codeDirectory, codeFilter);
+const ensureLambda = async ({ name, handler, environment, requireDynamo, zipFile }) => {
   const lambda = new Lambda({ apiVersion: '2015-03-31' });
 
   const getFuncResponse = await lambda.getFunction({ FunctionName: name }).promise();
@@ -82,6 +75,36 @@ export const ensureFunction = async ({
 
     return func;
   }
+};
+
+const permitLambdaOnApiGateway = async ({ func }) => {
+  const lambda = new Lambda({ apiVersion: '2015-03-31' });
+
+  const permission = await lambda.addPermission({
+    FunctionName: func.FunctionArn,
+    StatementId: uuid(),
+    Action: 'lambda:InvokeFunction',
+    Principal: 'apigateway.amazonaws.com'
+  })
+    .promise();
+
+  winston.debug(`function: addPermission`, permission);
+};
+
+export const ensureFunction = async ({
+  name,
+  codeDirectory,
+  codeFilter,
+  handler,
+  environment,
+  requireDynamo = false
+}) => {
+  const zipFile = await zip(codeDirectory, codeFilter);
+  const lambda = await ensureLambda({ name, handler, environment, requireDynamo, zipFile });
+
+  await permitLambdaOnApiGateway({ func: lambda });
+
+  return lambda;
 };
 
 export const pruneFunctions = async (filter = (_func: Lambda.FunctionConfiguration) => false) => {
