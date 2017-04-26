@@ -31,14 +31,12 @@ const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
 
   const restApis = await getRestApis();
 
-  const found = restApis.filter(restApi => restApi.name === name);
+  const found = restApis.find(restApi => restApi.name === name);
 
-  if (found.length) {
-    const response = found[0];
+  if (found) {
+    winston.debug(`apigateway: found restApi`, found);
 
-    winston.debug(`apigateway: found restApi`, response);
-
-    return response;
+    return found;
   }
 
   winston.debug(`apigateway: couldn't find '${name}'`);
@@ -59,11 +57,10 @@ const ensureResource = async ({ restApi, path, parentPath }) => {
   })
     .promise();
 
-  const existingResources = resources.items.filter(resource => resource.pathPart === path);
-  if (existingResources.length) {
-    const existing = existingResources[0];
-    winston.debug(`apigateway: found existing resource`, existing);
-    return existing;
+  const existingResource = resources.items.find(resource => resource.pathPart === path);
+  if (existingResource) {
+    winston.debug(`apigateway: found existing resource`, existingResource);
+    return existingResource;
   }
 
   winston.debug(`apigateway: couldn't find '${path}' resource, creating...`, resources.items);
@@ -187,8 +184,8 @@ const ensureDeployment = async ({ restApi, serviceName }) => {
 
     winston.debug(`apigateway: getDeployments`, response);
 
-    return response.items.filter(
-      deployment => deployment.description === description)[0];
+    return response.items.find(
+      deployment => deployment.description === description);
   }
 };
 
