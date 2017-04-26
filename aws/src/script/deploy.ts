@@ -176,7 +176,7 @@ export default async ({ branch, dirs }) => {
     protocol: 'HTTPS'
   });
 
-  const lambdaBaseUrls = {};
+  let lambdaBaseUrl = '';
 
   for (const dir of dirs) {
     if (!lambdaConfig[dir]) {
@@ -208,8 +208,13 @@ export default async ({ branch, dirs }) => {
     });
 
     const { stageName } = gatewayStage;
+    const stageUrl = `${stageName}.execute-api.eu-west-1.amazonaws.com`;
 
-    lambdaBaseUrls[dir] = `${stageName}.execute-api.eu-west-1.amazonaws.com`;
+    if (!lambdaBaseUrl) {
+      lambdaBaseUrl = stageUrl;
+    } else if (lambdaBaseUrl !== stageUrl) {
+      throw new Error(`lambda function ${lambda.FunctionArn} not placed on same restapi deployment ('${lambdaBaseUrl}' != '${stageUrl}')`);
+    }
   }
 
   const services: ECS.Service[] = [];
@@ -250,7 +255,7 @@ export default async ({ branch, dirs }) => {
         userSecret,
         liveStripeKey: generateStripeKey({ branch, type: 'live' }),
         testStripeKey: generateStripeKey({ branch, type: 'test' }),
-        lambdaBaseUrls
+        lambdaBaseUrl
       }
     });
 

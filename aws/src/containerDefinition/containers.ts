@@ -1,6 +1,6 @@
 import { ECS } from 'aws-sdk';
 
-const template = ({ image, baseUrl, lambdaBaseUrls, serviceSecret, logGroup, environment, port = 3000 }): ECS.ContainerDefinitions => [
+const template = ({ image, baseUrl, lambdaBaseUrl, serviceSecret, logGroup, environment, port = 3000 }): ECS.ContainerDefinitions => [
   {
     name: 'container',
     image,
@@ -22,11 +22,10 @@ const template = ({ image, baseUrl, lambdaBaseUrls, serviceSecret, logGroup, env
         name: 'SERVICE_TOKEN_SECRET',
         value: serviceSecret
       },
-      ...Object.keys(lambdaBaseUrls)
-        .map(dir => ({
-          name: `BASE_URL_${dir}`,
-          value: lambdaBaseUrls[dir]
-        })),
+      {
+        name: 'LAMBDA_BASE_URL',
+        value: lambdaBaseUrl
+      },
       ...environment
     ],
     logConfiguration: {
@@ -41,21 +40,21 @@ const template = ({ image, baseUrl, lambdaBaseUrls, serviceSecret, logGroup, env
 ];
 
 const dirToContainer = {
-  api: ({ image, baseUrl, lambdaBaseUrls, serviceSecret, logGroup }) =>
+  api: ({ image, baseUrl, lambdaBaseUrl, serviceSecret, logGroup }) =>
     template({
       image,
       baseUrl,
-      lambdaBaseUrls,
+      lambdaBaseUrl,
       serviceSecret,
       logGroup,
       environment: []
     }),
 
-  topup: ({ image, baseUrl, lambdaBaseUrls, serviceSecret, logGroup, tableName, liveStripeKey, testStripeKey }) =>
+  topup: ({ image, baseUrl, lambdaBaseUrl, serviceSecret, logGroup, tableName, liveStripeKey, testStripeKey }) =>
     template({
       image,
       baseUrl,
-      lambdaBaseUrls,
+      lambdaBaseUrl,
       serviceSecret,
       logGroup,
       environment: [
@@ -78,11 +77,11 @@ const dirToContainer = {
       ]
     }),
 
-  transaction: ({ image, baseUrl, lambdaBaseUrls, serviceSecret, logGroup, tableName }) =>
+  transaction: ({ image, baseUrl, lambdaBaseUrl, serviceSecret, logGroup, tableName }) =>
     template({
       image,
       baseUrl,
-      lambdaBaseUrls,
+      lambdaBaseUrl,
       serviceSecret,
       logGroup,
       environment: [
@@ -97,11 +96,11 @@ const dirToContainer = {
       ]
     }),
 
-  user: ({ image, baseUrl, lambdaBaseUrls, serviceSecret, logGroup, tableName, userSecret }) =>
+  user: ({ image, baseUrl, lambdaBaseUrl, serviceSecret, logGroup, tableName, userSecret }) =>
     template({
       image,
       baseUrl,
-      lambdaBaseUrls,
+      lambdaBaseUrl,
       serviceSecret,
       logGroup,
       environment: [
@@ -120,22 +119,22 @@ const dirToContainer = {
       ]
     }),
 
-  web: ({ image, baseUrl, lambdaBaseUrls, serviceSecret, logGroup }) =>
+  web: ({ image, baseUrl, lambdaBaseUrl, serviceSecret, logGroup }) =>
     template({
       image,
       baseUrl,
-      lambdaBaseUrls,
+      lambdaBaseUrl,
       serviceSecret,
       logGroup,
       environment: [],
       port: 8080
     }),
 
-  survey: ({ image, baseUrl, lambdaBaseUrls, serviceSecret, logGroup, tableName }) =>
+  survey: ({ image, baseUrl, lambdaBaseUrl, serviceSecret, logGroup, tableName }) =>
     template({
       image,
       baseUrl,
-      lambdaBaseUrls,
+      lambdaBaseUrl,
       serviceSecret,
       logGroup,
       environment: [
@@ -150,13 +149,13 @@ const dirToContainer = {
       ]
     }),
 
-  box: ({ image, baseUrl, lambdaBaseUrls, serviceSecret, logGroup, tableName }) =>
+  box: ({ image, baseUrl, lambdaBaseUrl, serviceSecret, logGroup, tableName }) =>
     template({
       image,
       baseUrl,
       serviceSecret,
       logGroup,
-      lambdaBaseUrls,
+      lambdaBaseUrl,
       environment: [
         {
           name: 'TABLE_NAME',
