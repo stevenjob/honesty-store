@@ -208,8 +208,8 @@ export default async ({ branch, dirs }) => {
       lambdaArn: lambda.FunctionArn
     });
 
-    const { stageName } = gatewayStage;
-    const stageUrl = `${stageName}.execute-api.eu-west-1.amazonaws.com`;
+    const { stageName, deploymentId } = gatewayStage;
+    const stageUrl = `https://${deploymentId}.execute-api.eu-west-1.amazonaws.com/${stageName}`;
 
     if (!lambdaBaseUrl) {
       lambdaBaseUrl = stageUrl;
