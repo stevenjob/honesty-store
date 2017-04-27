@@ -202,14 +202,11 @@ export default async ({ branch, dirs }) => {
       }
     });
 
-    const gatewayStage = await ensureApiGateway({
+    const stageUrl = await ensureApiGateway({
       name: generateName({ branch }),
       serviceName: dir,
       lambdaArn: lambda.FunctionArn
     });
-
-    const { stageName, deploymentId } = gatewayStage;
-    const stageUrl = `https://${deploymentId}.execute-api.eu-west-1.amazonaws.com/${stageName}`;
 
     if (!lambdaBaseUrl) {
       lambdaBaseUrl = stageUrl;

@@ -249,7 +249,9 @@ export const ensureApiGateway = async ({
   await ensureIntegration({ restApi, resource: proxyResource, restMethod, lambdaArn });
   const deployment = await ensureDeployment({ restApi, serviceName });
 
-  return await ensureStagedIntegration({ restApi, deployment });
+  const stage = await ensureStagedIntegration({ restApi, deployment });
+
+  return `https://${restApi.id}.execute-api.eu-west-1.amazonaws.com/${stage.stageName}`;
 };
 
 const pruneRestApi = (restApi: APIGateway.RestApi) => {
