@@ -79,17 +79,18 @@ const storeOrdering = (items) => {
   });
 };
 
-const mapStateToProps = ({ user, store: { code, items }, survey, likedItemIds }) => {
+const mapStateToProps = ({ user, store: { code, items = [] }, survey, likedItemIds }) => {
   const itemsWithLikeProp = items.map((item) => ({
     ...item,
     isLiked: isLikedItem(item, likedItemIds)
   }));
+  const { features, balance } = user;
 
   return {
     registered: isRegisteredUser(user),
-    showMarketplace: user.features.marketplace,
+    showMarketplace: features ? features.marketplace : false,
     storeCode: code,
-    balance: user.balance || 0,
+    balance: balance || 0,
     items: storeOrdering(itemsWithLikeProp),
     surveyAvailable: survey != null
   };
