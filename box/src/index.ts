@@ -156,7 +156,7 @@ const flagOutOfStock = async ({ key, boxId, itemId, depleted }) => {
   }
 
   if (!entry.depleted) {
-    entry.depleted = depleted;
+    entry.depleted = Number(depleted);
     await cruft.update(box);
   }
 
@@ -197,7 +197,7 @@ const markBoxAsShipped = async ({ key, boxId, date }) => {
 
   const box = await getBox(boxId);
 
-  box.shipped = date;
+  box.shipped = Number(date);
 
   cruft.update(box);
 
