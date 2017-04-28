@@ -883,6 +883,116 @@ const batchesInternal: Batch[] = [
     expiry: 1518998400000,
     itemId: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
     itemQuantity: 40
+  },
+
+  // Epicurium 28/04/17
+  {
+    id: 'd6f870e4-f9cc-485f-a22f-9614bfeeb6e9',
+    itemId: '64e177af-6313-4d9e-b39a-8495c2f1d939',
+    expiry: 1506812400000,
+    purchased: 1493391145967,
+    priceExcludingVAT: 1120,
+    VATRate:   0,
+    quantity: 1,
+    itemQuantity: 24,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-LCN-I-003'
+  },
+  {
+    id: '7880bb6f-1024-493e-be5e-7e88ba51d2bb',
+    itemId: '80984458-bab9-4a8f-86a7-b3e46f62139d',
+    expiry: 1504220400000,
+    purchased: 1493391145967,
+    priceExcludingVAT:  799,
+    VATRate: 0.2,
+    quantity: 1,
+    itemQuantity: 24,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-PRO-S-002'
+  },
+  {
+    id: '5be84d18-cd50-420d-83d7-d737633c8054',
+    itemId: 'bed229db-3d36-4bbb-b45d-a799421431fd',
+    expiry: 1516752000000,
+    purchased: 1493391145967,
+    priceExcludingVAT: 1035,
+    VATRate: 0.2,
+    quantity: 1,
+    itemQuantity: 24,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-POP-S-006'
+  },
+  {
+    id: 'b6be26cb-8944-4498-8443-40404f4cf79d',
+    itemId: 'ea44a2b2-bbb9-4a9a-89f2-9de52d0bfcf0',
+    expiry: 1521158400000,
+    purchased: 1493391145967,
+    priceExcludingVAT: 1035,
+    VATRate: 0.2,
+    quantity: 1,
+    itemQuantity: 24,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-POP-S-004'
+  },
+  {
+    id: '0db83730-d7a0-4dce-bf14-1d7188cde83e',
+    itemId: 'b410f4ad-a379-43fe-aca9-76d2143a20b9',
+    expiry: 1506812400000,
+    purchased: 1493391145967,
+    priceExcludingVAT: 1120,
+    VATRate:   0,
+    quantity: 1,
+    itemQuantity: 24,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-LCN-I-002'
+  },
+  {
+    id: '6d54a2a9-d8d8-4d80-b27a-02b8b05eb23f',
+    itemId: '92d7f78b-bd6c-4764-87a4-1b27bfa97cd7',
+    expiry: 1506812400000,
+    purchased: 1493391145967,
+    priceExcludingVAT: 1120,
+    VATRate:   0,
+    quantity: 1,
+    itemQuantity: 24,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-LCN-I-001'
+  },
+  {
+    id: '924439e3-24c1-406a-8aff-59570faaef23',
+    itemId: '8dec0c6f-1bb3-433e-944f-52fe478efc32',
+    expiry: 1504220400000,
+    purchased: 1493391145967,
+    priceExcludingVAT:  799,
+    VATRate: 0.2,
+    quantity: 1,
+    itemQuantity: 24,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-PRO-S-005'
+  },
+  {
+    id: '99a99fa4-b9ba-40be-88db-d630b201194d',
+    itemId: 'eddeb014-4ae9-4983-b2c9-f2911e5b9def',
+    expiry: 1501455600000,
+    purchased: 1493391145967,
+    priceExcludingVAT: 1216,
+    VATRate: 0.2,
+    quantity: 1,
+    itemQuantity: 24,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-CRN-I-003'
+  },
+  {
+    id: 'f27aad47-5639-40ac-9db3-517d5726b0b7',
+    itemId: '827d7305-ee8c-4d1d-b5a1-82973c35d2db',
+    expiry: 1512000000000,
+    purchased: 1493391145967,
+    priceExcludingVAT: 1280,
+    VATRate: 0.2,
+    quantity: 1,
+    itemQuantity: 24,
+    supplier: 'Epicurium',
+    supplierCode: 'EP-CRN-I-004'
   }
 ];
 
