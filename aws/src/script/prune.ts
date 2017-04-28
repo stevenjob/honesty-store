@@ -69,6 +69,9 @@ export default async () => {
   });
 
   await pruneLogGroups({
-    filter: ({ name }) => filter(name)
+    filter: ({ name }) => {
+      const matches = name.match(new RegExp('/aws/lambda/(.*)'));
+      return filter((matches && matches[1]) || name);
+    }
   });
 };
