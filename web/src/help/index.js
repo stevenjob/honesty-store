@@ -16,7 +16,7 @@ const Help = class extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: '',
+      message: props.message || '',
       emailAddress: props.emailAddress || ''
     };
   }
@@ -43,8 +43,8 @@ const Help = class extends React.Component {
   }
 
   render() {
-    const { valid, emailAddress } = this.state;
-    const { registered, balance, message } = this.props;
+    const { valid, emailAddress, message } = this.state;
+    const { registered, balance } = this.props;
     return <Chrome title="Help"
       left={registered ? null : <Store />}
       right={registered ? <Balance balance={balance} /> : null}>
