@@ -25,6 +25,16 @@ const addPendingRequest = (name, state) =>
   pending: [...state.pending, name]
 });
 
+const showFullPageError = (name, error, state) =>
+({
+  ...state,
+  error: {
+    ...state.error,
+    fullPage: error
+  },
+  pending: state.pending.filter(e => e !== name)
+});
+
 export default (state, action) => {
   switch (action.type) {
     case INITIALISE: {
@@ -51,16 +61,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'register')
       };
     }
-    case REGISTER_FAILURE: {
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          fullPage: action.error
-        },
-        pending: state.pending.filter(e => e !== 'register')
-      };
-    }
+    case REGISTER_FAILURE:
+      return showFullPageError('register', action.error, state);
     case SIGNIN_REQUEST:
       return addPendingRequest('signin', state);
     case SIGNIN_SUCCESS: {
@@ -68,16 +70,8 @@ export default (state, action) => {
         ...getInitialState()
       };
     }
-    case SIGNIN_FAILURE: {
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          fullPage: action.error
-        },
-        pending: state.pending.filter(e => e !== 'signin')
-      };
-    }
+    case SIGNIN_FAILURE:
+      return showFullPageError('signin', action.error, state);
     case SIGNIN2_REQUEST:
       return addPendingRequest('signin2', state);
     case SIGNIN2_SUCCESS: {
@@ -87,16 +81,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'signin2')
       };
     }
-    case SIGNIN2_FAILURE: {
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          fullPage: action.error
-        },
-        pending: state.pending.filter(e => e !== 'signin2')
-      };
-    }
+    case SIGNIN2_FAILURE:
+      return showFullPageError('signin2', action.error, state);
     case DESTROY_SESSION: {
       return {
         ...getInitialState(),
@@ -152,16 +138,8 @@ export default (state, action) => {
         error: state.error
       };
     }
-    case SESSION_FAILURE: {
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          fullPage: action.error
-        },
-        pending: state.pending.filter(e => e !== 'session')
-      };
-    }
+    case SESSION_FAILURE:
+      return showFullPageError('session', action.error, state);
     case OUT_OF_STOCK_REQUEST:
       return addPendingRequest('outofstock', state);
     case OUT_OF_STOCK_SUCCESS: {
@@ -176,16 +154,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'outofstock')
       };
     }
-    case OUT_OF_STOCK_FAILURE: {
-      return {
-        ...state,
-        pending: state.pending.filter(e => e !== 'outofstock'),
-        error: {
-          ...state.error,
-          fullPage: action.error
-        }
-      };
-    }
+    case OUT_OF_STOCK_FAILURE:
+      return showFullPageError('outofstock', action.error, state);
     case SUPPORT_REQUEST:
       return addPendingRequest('support', state);
     case SUPPORT_SUCCESS: {
@@ -194,16 +164,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'support')
       };
     }
-    case SUPPORT_FAILURE: {
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          fullPage: action.error
-        },
-        pending: state.pending.filter(e => e !== 'support')
-      };
-    }
+    case SUPPORT_FAILURE:
+      return showFullPageError('support', action.error, state);
     case LOGOUT_REQUEST:
       return addPendingRequest('logout', state);
     case LOGOUT_SUCCESS: {
@@ -212,16 +174,8 @@ export default (state, action) => {
         error: state.error
       };
     }
-    case LOGOUT_FAILURE: {
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          fullPage: action.error
-        },
-        pending: state.pending.filter(e => e !== 'logout')
-      };
-    }
+    case LOGOUT_FAILURE:
+      return showFullPageError('logout', action.error, state);
     case TOPUP_REQUEST:
       return addPendingRequest('topup', state);
     case TOPUP_SUCCESS: {
@@ -264,16 +218,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'purchase')
       };
     }
-    case PURCHASE_FAILURE: {
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          fullPage: action.error
-        },
-        pending: state.pending.filter(e => e !== 'purchase')
-      };
-    }
+    case PURCHASE_FAILURE:
+      return showFullPageError('purhcase', action.error, state);
     case STORE_REQUEST:
       return addPendingRequest('store', state);
     case STORE_SUCCESS: {
@@ -283,16 +229,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'store')
       };
     }
-    case STORE_FAILURE: {
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          fullPage: action.error
-        },
-        pending: state.pending.filter(e => e !== 'store')
-      };
-    }
+    case STORE_FAILURE:
+      return showFullPageError('store', action.error, state);
     case SURVEY_REQUEST:
       return addPendingRequest('survey', state);
     case SURVEY_SUCCESS: {
@@ -302,16 +240,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'survey')
       };
     }
-    case SURVEY_FAILURE: {
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          fullPage: action.error
-        },
-        pending: state.pending.filter(e => e !== 'survey')
-      };
-    }
+    case SURVEY_FAILURE:
+      return showFullPageError('survey', action.error, state);
     case MARKETPLACE_REQUEST:
       return addPendingRequest('marketplace', state);
     case MARKETPLACE_SUCCESS: {
@@ -320,16 +250,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'marketplace')
       };
     }
-    case MARKETPLACE_FAILURE: {
-      return {
-        ...state,
-        error: {
-          ...state.error,
-          fullPage: action.error
-        },
-        pending: state.pending.filter(e => e !== 'marketplace')
-      };
-    }
+    case MARKETPLACE_FAILURE:
+      return showFullPageError('marketplace', action.error, state);
     case LIKE_ITEM: {
       const { itemId } = action;
       const { likedItemIds } = state;
@@ -377,12 +299,7 @@ export default (state, action) => {
     }
     case BOX_RECEIVED_FAILURE: {
       return {
-        ...state,
-        error: {
-          ...state.error,
-          fullPage: action.error
-        },
-        pending: state.pending.filter(e => e !== 'box-received'),
+        ...showFullPageError('box-received', action.error, state),
         lastBoxIdMarkedAsReceived: null
       };
     }
