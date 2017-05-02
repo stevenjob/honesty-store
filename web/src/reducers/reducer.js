@@ -19,6 +19,12 @@ import { LOCAL_STORAGE_SAVE_ERROR } from '../actions/save-error';
 import { BOX_RECEIVED_REQUEST, BOX_RECEIVED_SUCCESS, BOX_RECEIVED_FAILURE } from '../actions/box-received';
 import { getInitialState } from '../state';
 
+const addPendingRequest = (name, state) =>
+({
+  ...state,
+  pending: [...state.pending, name]
+});
+
 export default (state, action) => {
   switch (action.type) {
     case INITIALISE: {
@@ -36,12 +42,8 @@ export default (state, action) => {
         }
       };
     }
-    case REGISTER_REQUEST: {
-      return {
-        ...state,
-        pending: [...state.pending, 'register']
-      };
-    }
+    case REGISTER_REQUEST:
+      return addPendingRequest('register', state);
     case REGISTER_SUCESSS: {
       return {
         ...state,
@@ -59,12 +61,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'register')
       };
     }
-    case SIGNIN_REQUEST: {
-      return {
-        ...state,
-        pending: [...state.pending, 'signin']
-      };
-    }
+    case SIGNIN_REQUEST:
+      return addPendingRequest('signin', state);
     case SIGNIN_SUCCESS: {
       return {
         ...getInitialState()
@@ -80,12 +78,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'signin')
       };
     }
-    case SIGNIN2_REQUEST: {
-      return {
-        ...state,
-        pending: [...state.pending, 'signin2']
-      };
-    }
+    case SIGNIN2_REQUEST:
+      return addPendingRequest('signin2', state);
     case SIGNIN2_SUCCESS: {
       return {
         ...state,
@@ -168,12 +162,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'session')
       };
     }
-    case OUT_OF_STOCK_REQUEST: {
-      return {
-        ...state,
-        pending: [...state.pending, 'outofstock']
-      };
-    }
+    case OUT_OF_STOCK_REQUEST:
+      return addPendingRequest('outofstock', state);
     case OUT_OF_STOCK_SUCCESS: {
       const { itemId } = action;
       const tagItemAsDepleted = item => item.id === itemId ? { ...item, count: 0 } : item;
@@ -196,12 +186,8 @@ export default (state, action) => {
         }
       };
     }
-    case SUPPORT_REQUEST: {
-      return {
-        ...state,
-        pending: [...state.pending, 'support']
-      };
-    }
+    case SUPPORT_REQUEST:
+      return addPendingRequest('support', state);
     case SUPPORT_SUCCESS: {
       return {
         ...state,
@@ -218,12 +204,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'support')
       };
     }
-    case LOGOUT_REQUEST: {
-      return {
-        ...state,
-        pending: [...state.pending, 'logout']
-      };
-    }
+    case LOGOUT_REQUEST:
+      return addPendingRequest('logout', state);
     case LOGOUT_SUCCESS: {
       return {
         ...getInitialState(),
@@ -240,12 +222,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'logout')
       };
     }
-    case TOPUP_REQUEST: {
-      return {
-        ...state,
-        pending: [...state.pending, 'topup']
-      };
-    }
+    case TOPUP_REQUEST:
+      return addPendingRequest('topup', state);
     case TOPUP_SUCCESS: {
       const { balance, transaction, cardDetails } = action.response;
       const { user } = state;
@@ -271,12 +249,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'topup')
       };
     }
-    case PURCHASE_REQUEST: {
-      return {
-        ...state,
-        pending: [...state.pending, 'purchase']
-      };
-    }
+    case PURCHASE_REQUEST:
+      return addPendingRequest('purchase', state);
     case PURCHASE_SUCCESS: {
       const { balance, transaction } = action.response;
       const { user } = state;
@@ -300,12 +274,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'purchase')
       };
     }
-    case STORE_REQUEST: {
-      return {
-        ...state,
-        pending: [...state.pending, 'store']
-      };
-    }
+    case STORE_REQUEST:
+      return addPendingRequest('store', state);
     case STORE_SUCCESS: {
       return {
         ...state,
@@ -323,12 +293,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'store')
       };
     }
-    case SURVEY_REQUEST: {
-      return {
-        ...state,
-        pending: [...state.pending, 'survey']
-      };
-    }
+    case SURVEY_REQUEST:
+      return addPendingRequest('survey', state);
     case SURVEY_SUCCESS: {
       return {
         ...state,
@@ -346,12 +312,8 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'survey')
       };
     }
-    case MARKETPLACE_REQUEST: {
-      return {
-        ...state,
-        pending: [...state.pending, 'marketplace']
-      };
-    }
+    case MARKETPLACE_REQUEST:
+      return addPendingRequest('marketplace', state);
     case MARKETPLACE_SUCCESS: {
       return {
         ...state,
