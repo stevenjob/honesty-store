@@ -1,13 +1,9 @@
 import { DynamoDB } from 'aws-sdk';
-import isUUID = require('validator/lib/isUUID');
 
+import { createAssertValidUuid } from '../../service/src/assert';
 import { InternalAccount } from './client';
 
-export const assertValidAccountId = (accountId) => {
-  if (accountId == null || !isUUID(accountId, 4)) {
-    throw new Error(`Invalid accountId ${accountId}`);
-  }
-};
+export const assertValidAccountId = createAssertValidUuid('accountId');
 
 export const getAccountInternal = async ({ accountId }): Promise<InternalAccount> => {
   assertValidAccountId(accountId);

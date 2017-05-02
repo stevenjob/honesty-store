@@ -1,20 +1,13 @@
 import { config, DynamoDB } from 'aws-sdk';
 import bodyParser = require('body-parser');
 import express = require('express');
-import isUUID = require('validator/lib/isUUID');
 
+import { createAssertValidUuid } from '../../service/src/assert';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { SurveyResponse } from './client';
 import { getSurvey, getSurveys } from './surveys';
 
 config.region = process.env.AWS_REGION;
-
-const createAssertValidUuid = (name) =>
-  (uuid) => {
-    if (uuid == null || !isUUID(uuid, 4)) {
-      throw new Error(`Invalid ${name} ${uuid}`);
-    }
-  };
 
 const assertValidUserId = createAssertValidUuid('userId');
 const assertValidItemId = createAssertValidUuid('itemId');

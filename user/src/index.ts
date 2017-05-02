@@ -3,9 +3,9 @@ import cruftDDB from 'cruft-ddb';
 import bodyParser = require('body-parser');
 import express = require('express');
 import { v4 as uuid } from 'uuid';
-import isUUID = require('validator/lib/isUUID');
 import isEmail = require('validator/lib/isEmail');
 import { storeIDToStoreCode, stores } from '../../api/src/services/store'; // until we have the store service
+import { createAssertValidUuid } from '../../service/src/assert';
 import { CodedError } from '../../service/src/error';
 import { createServiceKey } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
@@ -24,13 +24,6 @@ interface InternalUser extends User {
   version: number;
   refreshToken: string;
 }
-
-const createAssertValidUuid = (name) =>
-  (uuid) => {
-    if (uuid == null || !isUUID(uuid, 4)) {
-      throw new Error(`Invalid ${name} ${uuid}`);
-    }
-  };
 
 const assertValidUserId = createAssertValidUuid('userId');
 const assertValidRefreshToken = createAssertValidUuid('refreshToken');

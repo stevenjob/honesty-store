@@ -1,10 +1,10 @@
 import { config, DynamoDB } from 'aws-sdk';
 import bodyParser = require('body-parser');
 import express = require('express');
-import { v4 as uuid } from 'uuid';
-import isUUID = require('validator/lib/isUUID');
 import * as stripeFactory from 'stripe';
+import { v4 as uuid } from 'uuid';
 
+import { createAssertValidUuid } from '../../service/src/assert';
 import { CodedError } from '../../service/src/error';
 import { Key } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
@@ -18,13 +18,6 @@ const stripeTest = stripeFactory(process.env.TEST_STRIPE_KEY);
 const stripeProd = stripeFactory(process.env.LIVE_STRIPE_KEY);
 
 config.region = process.env.AWS_REGION;
-
-const createAssertValidUuid = (name) =>
-  (uuid) => {
-    if (uuid == null || !isUUID(uuid, 4)) {
-      throw new Error(`Invalid ${name} ${uuid}`);
-    }
-  };
 
 const assertValidAccountId = createAssertValidUuid('accountId');
 const assertValidUserId = createAssertValidUuid('userId');

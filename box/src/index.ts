@@ -2,8 +2,8 @@ import { config, SES } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 import bodyParser = require('body-parser');
 import express = require('express');
-import isUUID = require('validator/lib/isUUID');
 import { stores } from '../../api/src/services/store';
+import { createAssertValidUuid } from '../../service/src/assert';
 import { CodedError } from '../../service/src/error';
 import { info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
@@ -25,11 +25,9 @@ const assertValidStoreId = (storeId) => {
   }
 };
 
-const assertValidBoxId = (boxId) => {
-  if (boxId == null || !isUUID(boxId, 4)) {
-    throw new Error(`Invalid boxId ${boxId}`);
-  }
-};
+const assertValidBoxId = createAssertValidUuid('boxId');
+const assertValidBatchId = createAssertValidUuid('batchId');
+const assertValidItemId = createAssertValidUuid('boxItemId');
 
 const assertValidShippedBatch = (batch: Batch) => {
   const { id: batchId, supplier } = batch;
@@ -53,9 +51,7 @@ const assertValidMarketplaceBatch = async (key, batch: Batch) => {
 };
 
 const assertValidBatchReference = ({ id, count }) => {
-  if (id == null || !isUUID(id, 4)) {
-    throw new Error(`Invalid id ${id}`);
-  }
+  assertValidBatchId(id);
   if (!Number.isInteger(count)) {
     throw new Error(`Non-integral count ${count}`);
   }
@@ -66,9 +62,7 @@ const assertValidBoxItemWithBatchReference = async (key, boxItem, isMarketplaceS
     throw new Error('Box item cannot be undefined');
   }
   const { itemID, batches } = boxItem;
-  if (itemID == null || !isUUID(itemID, 4)) {
-    throw new Error(`Invalid itemID ${itemID}`);
-  }
+  assertValidItemId(itemID);
   if (!Array.isArray(batches)) {
     throw new Error(`Invalid batches ${batches}`);
   }

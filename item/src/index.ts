@@ -2,8 +2,8 @@ import { config } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 import express = require('express');
 import bodyParser = require('body-parser');
-import isUUID = require('validator/lib/isUUID');
 
+import { createAssertValidUuid } from '../../service/src/assert';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { Item } from './client';
 
@@ -13,11 +13,7 @@ const cruft = cruftDDB<Item>({
   tableName: process.env.TABLE_NAME
 });
 
-const assertValidItemId = (id) => {
-  if (!isUUID(id, 4)) {
-    throw new Error(`Invalid itemId '${id}'`);
-  }
-};
+const assertValidItemId = createAssertValidUuid('itemId');
 
 const getItem = async(itemId): Promise<Item> => {
   assertValidItemId(itemId);
