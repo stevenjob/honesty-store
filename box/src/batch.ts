@@ -998,7 +998,7 @@ const batchesInternal: Batch[] = [
   // sl office order 2017-05-02
   {
     // 90 Coke Zero £25
-    id: 'eafa239d-7db2-408e-8520-ace24a002da5',
+    id: '17f7d9ef-192e-4025-894f-9067c9695619',
     quantity: 1,
     itemQuantity: 90,
     expiry: 1506812400000,
@@ -1009,7 +1009,7 @@ const batchesInternal: Batch[] = [
   },
   {
     // 60 Pepsi Max £8.50
-    id: '26da093d-3b41-405b-8703-6682eb070df5',
+    id: 'd3a8289b-a267-4627-add3-d047b70f0c81',
     quantity: 1,
     itemQuantity: 24,
     expiry: 1512086400000,
@@ -1020,7 +1020,7 @@ const batchesInternal: Batch[] = [
   },
   {
     // 30 Diet Coke £25
-    id: 'df1209e5-b2cb-48ac-9e49-6451f38a292e',
+    id: 'd68fcc1f-aeb3-4f5a-9a7b-fa49b6705455',
     quantity: 1,
     itemQuantity: 90,
     expiry: 1506812400000,
@@ -1031,7 +1031,7 @@ const batchesInternal: Batch[] = [
   },
   {
     // 30 Fat Coke £10
-    id: 'd3a01851-1d62-4196-83b6-172ac45f0a1d',
+    id: 'acd2584e-beb4-4d92-9b31-fadc1c3ba553',
     quantity: 1,
     itemQuantity: 36,
     expiry: 1522710000000,
