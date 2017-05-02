@@ -993,6 +993,52 @@ const batchesInternal: Batch[] = [
     itemQuantity: 24,
     supplier: 'Epicurium',
     supplierCode: 'EP-CRN-I-004'
+  },
+
+  // sl office order 2017-05-02
+  {
+    // 90 Coke Zero £25
+    id: 'eafa239d-7db2-408e-8520-ace24a002da5',
+    quantity: 1,
+    itemQuantity: 90,
+    expiry: 1506812400000,
+    itemId: 'd5d10152-3f8a-419b-9abd-6d6e916ea64a',
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.heather,
+    priceExcludingVAT: 2500
+  },
+  {
+    // 60 Pepsi Max £8.50
+    id: '26da093d-3b41-405b-8703-6682eb070df5',
+    quantity: 1,
+    itemQuantity: 24,
+    expiry: 1512086400000,
+    itemId: 'e615de4e-ce10-451b-80ad-9717662a904a',
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.heather,
+    priceExcludingVAT: 850
+  },
+  {
+    // 30 Diet Coke £25
+    id: 'df1209e5-b2cb-48ac-9e49-6451f38a292e',
+    quantity: 1,
+    itemQuantity: 90,
+    expiry: 1506812400000,
+    itemId: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.heather,
+    priceExcludingVAT: 2500
+  },
+  {
+    // 30 Fat Coke £10
+    id: 'd3a01851-1d62-4196-83b6-172ac45f0a1d',
+    quantity: 1,
+    itemQuantity: 36,
+    expiry: 1522710000000,
+    itemId: 'ccad58e3-e27a-4463-9139-17a36ff7f7b8',
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.heather,
+    priceExcludingVAT: 1000
   }
 ];
 
