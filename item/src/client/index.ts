@@ -14,7 +14,12 @@ export interface Item {
   notes?: string;
 }
 
-const { get } = fetch('item', process.env.LAMBDA_BASE_URL);
+const lambdaBaseUrl = process.env.LAMBDA_BASE_URL;
+if (!lambdaBaseUrl) {
+  throw new Error('no $LAMBDA_BASE_URL provided');
+}
+
+const { get } = fetch('item', lambdaBaseUrl);
 
 export const getItem = (key, itemId: string) =>
   get<Item>(1, key, `/${itemId}`);
