@@ -34,15 +34,15 @@ app.use(bodyParser.json());
 const router = serviceRouter('item', 1);
 
 router.get(
-  '/:itemId',
-  serviceAuthentication,
-  async (_key, { itemId }) => getItem(itemId)
-);
-
-router.get(
   '/all',
   serviceAuthentication,
   async (_key, {}) => getAllItems()
+);
+
+router.get(
+  '/:itemId',
+  serviceAuthentication,
+  async (_key, { itemId }) => getItem(itemId)
 );
 
 app.use(router);
