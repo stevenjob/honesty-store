@@ -54,14 +54,13 @@ const serviceConfig = {
   survey: {
     database: true,
     loadBalancer: { pathPattern: '/survey/*', priority: 6 }
-  },
-  box: {
-    database: true,
-    loadBalancer: { pathPattern: '/box/*', priority: 7 }
   }
 };
 const lambdaConfig = {
   item: {
+    database: true
+  },
+  box: {
     database: true
   }
 };

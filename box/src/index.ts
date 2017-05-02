@@ -253,7 +253,7 @@ const assertConnectivity = async () => {
   await cruft.read({ id: '06439c6c-57c9-4a17-b218-2018ea8dae55' });
 };
 
-const app = express();
+export const app = express();
 
 app.use(bodyParser.json());
 

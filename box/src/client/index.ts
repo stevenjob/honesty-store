@@ -54,7 +54,9 @@ export type Box = ShippingDetails & Donatable & {
   id: string;
 };
 
-const { get, post, put } = fetch('box');
+import { lambdaBaseUrl } from '../../../service/src/baseUrl';
+
+const { get, post, put } = fetch('box', lambdaBaseUrl);
 
 export const flagOutOfStock = ({ key, boxId, itemId, depleted }) =>
   post<{}>(1, key, `/${boxId}/out-of-stock/${itemId}/${depleted}`, {});
