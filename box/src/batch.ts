@@ -1039,6 +1039,16 @@ const batchesInternal: Batch[] = [
     supplier: MARKETPLACE_ID,
     supplierCode: userIds.heather,
     priceExcludingVAT: 1000
+  },
+  {
+    supplier: MARKETPLACE_ID,
+    supplierCode: userIds.chris,
+    id: '84fbd053-a71f-42f8-a78c-25eadf4e0a45',
+    quantity: 1,
+    priceExcludingVAT: 335,
+    itemQuantity: 40,
+    expiry: 1499468400000,
+    itemId: '3b7a6669-770c-4dbb-97e2-0e0aae3ca5ff'
   }
 ];
 
