@@ -193,7 +193,7 @@ const markBoxAsShipped = async ({ key, boxId, date }) => {
 
   box.shipped = Number(date);
 
-  cruft.update(box);
+  await cruft.update(box);
 
   const { storeId } = box;
   const { agentId } = stores.find(({ code }) => code === storeId);
