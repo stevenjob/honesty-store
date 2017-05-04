@@ -84,13 +84,13 @@ const mapStateToProps = ({ user, store: { code, items = [] }, survey, likedItemI
     ...item,
     isLiked: isLikedItem(item, likedItemIds)
   }));
-  const { features, balance } = user;
+  const { features, balance = 0 } = user;
 
   return {
     registered: isRegisteredUser(user),
     showMarketplace: features ? features.marketplace : false,
     storeCode: code,
-    balance: balance || 0,
+    balance,
     items: storeOrdering(itemsWithLikeProp),
     surveyAvailable: survey != null
   };
