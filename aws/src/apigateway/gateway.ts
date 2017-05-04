@@ -26,6 +26,22 @@ const getRestApis = async () => {
   return restApis.items;
 };
 
+// fix for TooManyRequestsException - https://github.com/aws/aws-sdk-js/issues/1014
+const makeRetryable = request => {
+  request.on('extractError', ({ error }) => {
+    if (error.code === 'TooManyRequestsException') {
+      error.retryable = true;
+    }
+  });
+  request.on('retry', ({ error }) => {
+    if (error.code === 'TooManyRequestsException') {
+      error.retryDelay = 500;
+    }
+  });
+
+  return request;
+};
+
 const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
 
@@ -41,7 +57,7 @@ const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
 
   winston.debug(`apigateway: couldn't find '${name}'`);
 
-  const response = await apigateway.createRestApi({ name }).promise();
+  const response = await makeRetryable(apigateway.createRestApi({ name })).promise();
 
   winston.debug(`apigateway: createRestApi`, response);
 
@@ -74,11 +90,11 @@ const ensureResource = async ({ restApi, path, parentPath }) => {
 
   const parentId = parentIds[0].id;
 
-  const response = await apigateway.createResource({
+  const response = await makeRetryable(apigateway.createResource({
     restApiId: restApi.id,
     parentId,
     pathPart: path
-  })
+  }))
     .promise();
 
   winston.debug(`apigateway: createResource`, response);
@@ -90,12 +106,12 @@ const ensureProxyMethod = async ({ restApi, resource }: NestedRestApi & NestedRe
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
 
   try {
-    const response = await apigateway.putMethod({
+    const response = await makeRetryable(apigateway.putMethod({
       restApiId: restApi.id,
       resourceId: resource.id,
       httpMethod: 'ANY',
       authorizationType: 'NONE'
-    })
+    }))
       .promise();
 
     winston.debug(`apigateway: putMethod`, response);
@@ -124,7 +140,7 @@ const ensureIntegration = async ({ restApi, resource, lambdaArn }: IntegrationPa
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
 
   try {
-    const response = await apigateway.putIntegration({
+    const response = await makeRetryable(apigateway.putIntegration({
       restApiId: restApi.id,
       resourceId: resource.id,
       httpMethod: 'ANY',
@@ -133,7 +149,7 @@ const ensureIntegration = async ({ restApi, resource, lambdaArn }: IntegrationPa
       uri: `arn:aws:apigateway:${config.region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations`,
       contentHandling: 'CONVERT_TO_TEXT',
       credentials: null
-    })
+    }))
       .promise();
 
     winston.debug(`apigateway: putIntegration`, response);
@@ -144,11 +160,11 @@ const ensureIntegration = async ({ restApi, resource, lambdaArn }: IntegrationPa
       throw e;
     }
 
-    const response = await apigateway.updateIntegration({
+    const response = await makeRetryable(apigateway.updateIntegration({
       restApiId: restApi.id,
       resourceId: resource.id,
       httpMethod: 'ANY'
-    })
+    }))
       .promise();
 
     winston.debug(`apigateway: updateIntegration`, response);
@@ -162,11 +178,11 @@ const ensureDeployment = async ({ restApi, serviceName }) => {
   const description = `${serviceName} deployment`;
 
   try {
-    const response = await apigateway.createDeployment({
+    const response = await makeRetryable(apigateway.createDeployment({
       restApiId: restApi.id,
       stageName,
       description
-    })
+    }))
       .promise();
 
     winston.debug(`apigateway: createDeployment`, response);
@@ -193,11 +209,11 @@ const ensureStagedIntegration = async ({ restApi, deployment }) => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
 
   try {
-    const response = await apigateway.createStage({
+    const response = await makeRetryable(apigateway.createStage({
       restApiId: restApi.id,
       stageName,
       deploymentId: deployment.id
-    })
+    }))
       .promise();
 
     winston.debug(`apigateway: createStage`, response);
@@ -208,7 +224,7 @@ const ensureStagedIntegration = async ({ restApi, deployment }) => {
       throw e;
     }
 
-    const response = await apigateway.updateStage({
+    const response = await makeRetryable(apigateway.updateStage({
       restApiId: restApi.id,
       stageName,
       patchOperations: [
@@ -218,7 +234,7 @@ const ensureStagedIntegration = async ({ restApi, deployment }) => {
           value: deployment.id
         }
       ]
-    })
+    }))
       .promise();
 
     winston.debug(`apigateway: updateStage`, response);
