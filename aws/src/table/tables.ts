@@ -481,6 +481,37 @@ const dirToTable = {
         genericNamePlural: 'cereal bars'
       }
     ]
+  }),
+
+  batch: ({ readCapacityUnits, writeCapacityUnits }) => template({
+    readCapacityUnits,
+    writeCapacityUnits,
+    dummyData: [
+      {
+        id: 'e43816d4-e7af-4717-b549-0e820c3cf24b',
+        quantity: 3,
+        itemId: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
+        itemQuantity: 1
+      },
+      {
+        id: '1c92a408-283d-4053-9def-610221bed72d',
+        quantity: 50,
+        itemId: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
+        itemQuantity: 3
+      },
+      {
+        id: '8338b3e2-914d-4bfb-a738-580ece5521c0',
+        quantity: 10,
+        itemId: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
+        itemQuantity: 1
+      },
+      {
+        id: '82b9f8ce-0b7a-401d-8095-bab4377c47d5',
+        quantity: 5,
+        itemId: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
+        itemQuantity: 1
+      }
+    ]
   })
 };
 
