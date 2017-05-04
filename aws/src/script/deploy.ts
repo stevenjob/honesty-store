@@ -64,6 +64,9 @@ const lambdaConfig = {
   },
   box: {
     database: 'rw'
+  },
+  batch: {
+    database: 'ro'
   }
 };
 
