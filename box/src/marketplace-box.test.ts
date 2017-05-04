@@ -1,4 +1,4 @@
-jest.mock('./batch');
+jest.mock('../../batch/src/client');
 
 import { expect } from 'chai';
 import { MarketplaceBoxSubmission } from './client';
@@ -16,9 +16,11 @@ const boxSubmission: MarketplaceBoxSubmission = {
   }
 };
 
+const key = null;
+
 describe('Box Submission', () => {
-  it('should create a box item with derived costs for marketplace', () => {
-    const { boxItems } = calculateMarketplaceBoxPricing(storeId, boxSubmission);
+  it('should create a box item with derived costs for marketplace', async () => {
+    const { boxItems } = await calculateMarketplaceBoxPricing(key, storeId, boxSubmission);
 
     const {
       wholesaleCost,
@@ -48,8 +50,8 @@ describe('Box Submission', () => {
     expect(VAT).to.equal(0);
   });
 
-  it('should create a box with a single box item', () => {
-    const { count: totalBoxCount, boxItems, shippingCost } = calculateMarketplaceBoxPricing(storeId, boxSubmission);
+  it('should create a box with a single box item', async () => {
+    const { count: totalBoxCount, boxItems, shippingCost } = await calculateMarketplaceBoxPricing(key, storeId, boxSubmission);
     const { count: itemCount } = boxItems[0];
 
     expect(boxItems.length).to.equal(1);

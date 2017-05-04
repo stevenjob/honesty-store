@@ -13,7 +13,7 @@ export interface Batch {
   VATRate?: number;
 }
 
-const MARKETPLACE_ID = 'HS_MARKETPLACE';
+export const MARKETPLACE_ID = 'HS_MARKETPLACE';
 
 const lambdaBaseUrl = process.env.LAMBDA_BASE_URL;
 if (!lambdaBaseUrl) {
@@ -30,17 +30,17 @@ export const getExpiry = async (key, batchId: string) => {
   return batch.expiry;
 };
 
-export const getItemCost = async (batchId: string) => {
+export const getItemCost = async (key, batchId: string) => {
   const { priceExcludingVAT, itemQuantity } = await getBatch(key, batchId);
   return priceExcludingVAT / itemQuantity;
 };
 
-export const getVATRate = (batchId: string): number => {
+export const getVATRate = async (key, batchId: string) => {
   const { VATRate } = await getBatch(key, batchId);
   return VATRate;
 };
 
-export const isMarketplaceBatch = (batchId: string): boolean => {
+export const isMarketplaceBatch = async (key, batchId: string) => {
   const { supplier } = await getBatch(key, batchId);
   return supplier === MARKETPLACE_ID;
 };

@@ -3,12 +3,12 @@ import cruftDDB from 'cruft-ddb';
 import bodyParser = require('body-parser');
 import express = require('express');
 import { stores } from '../../api/src/services/store';
+import { Batch, getBatch, MARKETPLACE_ID } from '../../batch/src/client';
 import { createAssertValidUuid } from '../../service/src/assert';
 import { CodedError } from '../../service/src/error';
 import { info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { getUser } from '../../user/src/client';
-import { Batch, getBatch, MARKETPLACE_ID } from './batch';
 import { Box } from './client';
 import calculateMarketplaceBoxPricing from './marketplace-box';
 import calculateShippedBoxPricing from './shipped-box';
@@ -68,7 +68,7 @@ const assertValidBoxItemWithBatchReference = async (key, boxItem, isMarketplaceS
   }
   for (const batchRef of batches) {
     assertValidBatchReference(batchRef);
-    const batch = getBatch(batchRef.id);
+    const batch = await getBatch(key, batchRef.id);
     const { itemId: batchItemId } = batch;
     if (batchItemId !== itemID) {
       throw new Error(`Batch ${batchRef.id} does not contain item ${itemID}`);
@@ -225,7 +225,7 @@ const createMarketplaceBox = async ({ key, storeId, submission, dryRun}): Promis
   assertValidStoreId(storeId);
   await assertValidMarketplaceBoxSubmission(key, submission);
 
-  const box = calculateMarketplaceBoxPricing(storeId, submission);
+  const box = await calculateMarketplaceBoxPricing(key, storeId, submission);
 
   if (!dryRun) {
     await cruft.create(box);
@@ -240,7 +240,7 @@ const createShippedBox = async ({ key, storeId, submission, dryRun }): Promise<B
   assertValidStoreId(storeId);
   await assertValidShippedBoxSubmission(submission);
 
-  const box = calculateShippedBoxPricing(storeId, submission);
+  const box = await calculateShippedBoxPricing(key, storeId, submission);
 
   if (!dryRun) {
     await cruft.create(box);

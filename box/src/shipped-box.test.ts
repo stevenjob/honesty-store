@@ -1,4 +1,4 @@
-jest.mock('./batch');
+jest.mock('../../batch/src/client');
 
 import { expect } from 'chai';
 import { ShippedBoxSubmission } from './client';
@@ -28,33 +28,35 @@ const boxSubmission: ShippedBoxSubmission = {
   ]
 };
 
+const key = null;
+
 describe('Average Cost', () => {
-  it('should calculate the average item cost across the batches', () => {
+  it('should calculate the average item cost across the batches', async () => {
     const { boxItems } = boxSubmission;
-    const averageItemCost = getAverageItemCost(boxItems);
+    const averageItemCost = await getAverageItemCost(key, boxItems);
     expect(averageItemCost).to.be.approximately(35, precision);
   });
 });
 
 describe('Wholesale item cost', () => {
-  it('should determine the wholesale value of item-a', () => {
+  it('should determine the wholesale value of item-a', async () => {
     const { boxItems } = boxSubmission;
     const batches = boxItems[0].batches;
-    const wholesaleItemCost = getItemCost(batches);
+    const wholesaleItemCost = await getItemCost(key, batches);
     expect(wholesaleItemCost).to.be.approximately(32, precision);
   });
 
-  it('should determine the wholesale value of item b', () => {
+  it('should determine the wholesale value of item b', async () => {
     const { boxItems } = boxSubmission;
     const batches = boxItems[1].batches;
-    const wholesaleItemCost = getItemCost(batches);
+    const wholesaleItemCost = await getItemCost(key, batches);
     expect(wholesaleItemCost).to.be.approximately(37, precision);
   });
 });
 
 describe('Box Submission', () => {
-  it('should calculate box item costs', () => {
-    const { boxItems } = calculateShippedBoxPricing(storeId, boxSubmission);
+  it('should calculate box item costs', async () => {
+    const { boxItems } = await calculateShippedBoxPricing(key, storeId, boxSubmission);
 
     const {
       wholesaleCost,
@@ -84,21 +86,21 @@ describe('Box Submission', () => {
     expect(total).to.equal(234, 'Incorrect item price');
   });
 
-  it('should calculate total items in box', () => {
-    const { count } = calculateShippedBoxPricing(storeId, boxSubmission);
+  it('should calculate total items in box', async () => {
+    const { count } = await calculateShippedBoxPricing(key, storeId, boxSubmission);
     expect(count).to.equal(8);
   });
 
-  it('should calculate total of individual box items', () => {
-    const { boxItems } = calculateShippedBoxPricing(storeId, boxSubmission);
+  it('should calculate total of individual box items', async () => {
+    const { boxItems } = await calculateShippedBoxPricing(key, storeId, boxSubmission);
     const { count: boxItem0Count } = boxItems[0];
     const { count: boxItem1Count } = boxItems[1];
     expect(boxItem0Count).to.equal(3);
     expect(boxItem1Count).to.equal(5);
   });
 
-  it('should assign storeId to box', () => {
-    const { storeId: boxStoreId } = calculateShippedBoxPricing(storeId, boxSubmission);
+  it('should assign storeId to box', async () => {
+    const { storeId: boxStoreId } = await calculateShippedBoxPricing(key, storeId, boxSubmission);
     expect(boxStoreId).to.equal(storeId);
   });
 });

@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { getExpiry, getItemCost as getBatchItemCost, getVATRate } from './batch';
+import { getExpiry, getItemCost as getBatchItemCost, getVATRate } from '../../batch/src/client';
 import {
   BatchReference, Box, BoxItem,
   BoxItemWithBatchReference, FixedBoxItemOverheads, ShippedBoxSubmission,
@@ -21,37 +21,52 @@ export const sumBatches = (batches: BatchReference[]) =>
 export const sumBoxItems = (boxItems: BoxItemWithBatchReference[]) =>
   sum(boxItems, ({ batches }) => sumBatches(batches));
 
-export const getItemCost = (batches: BatchReference[]) =>
-  avg(
+export const getItemCost = async (key, batches: BatchReference[]) => {
+  const batchItemCosts = new Map<string, number>();
+
+  await Promise.all(
+    batches.map(async ({ id }) =>
+      batchItemCosts.set(id, await getBatchItemCost(key, id))));
+
+  return avg(
     batches,
     ({ id, count }) => ({
-      value: getBatchItemCost(id),
+      value: batchItemCosts.get(id),
       count
     })
   );
+};
 
-export const getAverageItemCost = (boxItems): number =>
-  avg(
+export const getAverageItemCost = async (key, boxItems: BoxItemWithBatchReference[]) => {
+  const costs = new Map<string, number>();
+
+  await Promise.all(
+    boxItems.map(async ({ itemID, batches }) =>
+      costs.set(itemID, await getItemCost(key, batches))));
+
+  return avg(
     boxItems,
-    ({ batches }) => ({
-      value: getItemCost(batches),
+    ({ itemID, batches }) => ({
+      value: costs.get(itemID),
       count: sumBatches(batches)
     })
   );
+};
 
-const getPricedBoxItem = (
+const getPricedBoxItem = async (
+  key,
   boxItemWithBatchRef: BoxItemWithBatchReference,
   fixedOverheads: FixedBoxItemOverheads,
   donationRate: number
-): BoxItem => {
+): Promise<BoxItem> => {
   const { batches } = boxItemWithBatchRef;
 
   const { shippingCost, warehousingCost, packagingCost, packingCost, serviceFee } = fixedOverheads;
-  const wholesaleCost = getItemCost(batches);
+  const wholesaleCost = await getItemCost(key, batches);
   const subtotal = wholesaleCost + shippingCost + warehousingCost + packagingCost + packingCost
     + serviceFee;
 
-  const rate = getVATRate(batches[0].id);
+  const rate = await getVATRate(key, batches[0].id);
   const totalExclDonation = subtotal / (1 - creditCardFeeRate - rate);
   const VAT = totalExclDonation * rate;
   const creditCardFee = totalExclDonation * creditCardFeeRate;
@@ -70,18 +85,19 @@ const getPricedBoxItem = (
 
   const roundedCosts = roundItemCosts({ ...fixedOverheads, ...variableCosts });
 
-  const expiries = batches.map(({ id }) => getExpiry(id))
-    .filter(el => el != null);
+  const expiries = await Promise.all(batches.map(({ id }) => getExpiry(key, id)));
+
+  const presentExpiries = expiries.filter(el => el != null);
 
   return {
     count: sumBatches(batches),
-    expiry: expiries.length === 0 ? null : expiries.reduce((a, b) => Math.min(a, b)),
+    expiry: presentExpiries.length === 0 ? null : presentExpiries.reduce((a, b) => Math.min(a, b)),
     ...roundedCosts,
     ...boxItemWithBatchRef
   };
 };
 
-export default (storeId: string, boxSubmission: ShippedBoxSubmission): Box & { version: 0 } => {
+export default async (key, storeId: string, boxSubmission: ShippedBoxSubmission): Promise<Box & { version: 0 }> => {
   const { boxItems, ...rest } = boxSubmission;
   const { shippingCost, donationRate } = rest;
 
@@ -91,7 +107,7 @@ export default (storeId: string, boxSubmission: ShippedBoxSubmission): Box & { v
 
   const convertBoxCostToPerItem = (cost: number) => cost / expectedBoxQuantity;
 
-  const averageItemCost = getAverageItemCost(boxItems);
+  const averageItemCost = await getAverageItemCost(key, boxItems);
   const shrinkagePerBox = averageItemCost * expectedLossQuantity;
 
   const fixedOverheads: FixedBoxItemOverheads = {
@@ -102,7 +118,7 @@ export default (storeId: string, boxSubmission: ShippedBoxSubmission): Box & { v
     serviceFee: convertBoxCostToPerItem(feePerBox) + convertBoxCostToPerItem(shrinkagePerBox)
   };
 
-  const pricedBoxItems = boxItems.map((el) => getPricedBoxItem(el, fixedOverheads, donationRate));
+  const pricedBoxItems = await Promise.all(boxItems.map((el) => getPricedBoxItem(key, el, fixedOverheads, donationRate)));
 
   return {
     id: uuid(),

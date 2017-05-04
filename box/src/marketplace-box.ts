@@ -1,15 +1,15 @@
 import { v4 as uuid } from 'uuid';
-import { getExpiry, getItemCost } from './batch';
+import { getExpiry, getItemCost } from '../../batch/src/client';
 import { Box, BoxItem, FixedBoxItemOverheads, MarketplaceBoxSubmission, VariableBoxItemOverheads } from './client';
 import { roundItemCosts } from './math';
 
-export default (storeId: string, submission: MarketplaceBoxSubmission): Box & { version: 0 } => {
+export default async (key, storeId: string, submission: MarketplaceBoxSubmission): Promise<Box & { version: 0 }> => {
   const { donationRate, boxItem: batchReference } = submission;
   const { batches } = batchReference;
 
   const { id, count } = batches[0];
 
-  const wholesaleCost = getItemCost(id);
+  const wholesaleCost = await getItemCost(key, id);
   const serviceFee = wholesaleCost * 0.1;
   const subtotal = wholesaleCost + serviceFee;
   const donation = subtotal * donationRate;
@@ -33,7 +33,7 @@ export default (storeId: string, submission: MarketplaceBoxSubmission): Box & { 
   };
 
   const roundedCosts = roundItemCosts({ ...fixedOverheads, ...variableCosts });
-  const expiry = getExpiry(id);
+  const expiry = await getExpiry(key, id);
 
   const boxItem: BoxItem = {
     ...batchReference,

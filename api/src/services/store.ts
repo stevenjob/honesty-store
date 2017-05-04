@@ -1,4 +1,4 @@
-import { isMarketplaceBatch } from '../../../box/src/batch';
+import { isMarketplaceBatch } from '../../../batch/src/client';
 import { Box, BoxItem, getBoxesForStore } from '../../../box/src/client';
 import { getItem } from '../../../item/src/client';
 
@@ -91,14 +91,14 @@ export const getItemPriceFromStore = async (key, storeCode: string, itemID: stri
   return total;
 };
 
-const getUniqueItemCounts = (boxes: Box[]) => {
+const getUniqueItemCounts = async (key, boxes: Box[]) => {
   const map = new Map<string, { count: number, isMarketplace: boolean }>();
   for (const { boxItems } of boxes) {
     for (const { itemID, count, depleted, batches } of boxItems) {
       const existingCount = map.has(itemID) ? map.get(itemID).count : 0;
       const updatedCount = existingCount + (depleted ? 0 : count);
 
-      const isMarketplace = batches.length === 1 && isMarketplaceBatch(batches[0].id);
+      const isMarketplace = batches.length === 1 && await isMarketplaceBatch(key, batches[0].id);
       map.set(itemID, { count: updatedCount, isMarketplace });
     }
   }
@@ -139,7 +139,7 @@ export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
   const openBoxes = await getBoxesForStore(key, storeCode, boxIsReceivedAndOpen);
 
   return Promise.all(
-    getUniqueItemCounts(openBoxes)
+    (await getUniqueItemCounts(key, openBoxes))
       .map(async ({ itemID, count, isMarketplace }) => {
         const boxItem = getBoxItem(openBoxes, itemID);
         const { total, expiry } = boxItem;
