@@ -189,7 +189,7 @@ export default (state, action) => {
       return stateOnRequestCompletion('purchase', updatedStateProps, state);
     }
     case PURCHASE_FAILURE:
-      return stateWithFullPageError('purhcase', action.error, state);
+      return stateWithFullPageError('purchase', action.error, state);
     case STORE_REQUEST:
       return stateOnRequestInitialization('store', {}, state);
     case STORE_SUCCESS:
