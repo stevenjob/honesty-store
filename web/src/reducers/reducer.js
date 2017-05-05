@@ -19,14 +19,14 @@ import { LOCAL_STORAGE_SAVE_ERROR } from '../actions/save-error';
 import { BOX_RECEIVED_REQUEST, BOX_RECEIVED_SUCCESS, BOX_RECEIVED_FAILURE } from '../actions/box-received';
 import { getInitialState } from '../state';
 
-const stateOnRequestInitialization = (requestId, updatedProps, state) =>
+const requestState = (requestId, updatedProps, state) =>
   ({
     ...state,
     ...updatedProps,
     pending: [...state.pending, requestId]
   });
 
-const stateWithFullPageError = (requestId, error, state) =>
+const fullPageErrorState = (requestId, error, state) =>
   ({
     ...state,
     error: {
@@ -36,7 +36,7 @@ const stateWithFullPageError = (requestId, error, state) =>
     pending: state.pending.filter(e => e !== requestId)
   });
 
-const stateOnRequestCompletion = (requestId, updatedProps, state) =>
+const completionState = (requestId, updatedProps, state) =>
   ({
     ...state,
     ...updatedProps,
@@ -61,23 +61,23 @@ export default (state, action) => {
       };
     }
     case REGISTER_REQUEST:
-      return stateOnRequestInitialization('register', {}, state);
+      return requestState('register', {}, state);
     case REGISTER_SUCESSS:
-      return stateOnRequestCompletion('register', action.response, state);
+      return completionState('register', action.response, state);
     case REGISTER_FAILURE:
-      return stateWithFullPageError('register', action.error, state);
+      return fullPageErrorState('register', action.error, state);
     case SIGNIN_REQUEST:
-      return stateOnRequestInitialization('signin', {}, state);
+      return requestState('signin', {}, state);
     case SIGNIN_SUCCESS:
-      return stateOnRequestCompletion('signin', getInitialState(), state);
+      return completionState('signin', getInitialState(), state);
     case SIGNIN_FAILURE:
-      return stateWithFullPageError('signin', action.error, state);
+      return fullPageErrorState('signin', action.error, state);
     case SIGNIN2_REQUEST:
-      return stateOnRequestInitialization('signin2', {}, state);
+      return requestState('signin2', {}, state);
     case SIGNIN2_SUCCESS:
-      return stateOnRequestCompletion('signin2', action.response, state);
+      return completionState('signin2', action.response, state);
     case SIGNIN2_FAILURE:
-      return stateWithFullPageError('signin2', action.error, state);
+      return fullPageErrorState('signin2', action.error, state);
     case DESTROY_SESSION:
       return {
         ...getInitialState(),
@@ -87,7 +87,7 @@ export default (state, action) => {
       const updatedStateProps = {
         register: {},
       };
-      return stateOnRequestInitialization('register2', updatedStateProps, state);
+      return requestState('register2', updatedStateProps, state);
     }
     case REGISTER2_SUCESSS: {
       const { user } = action.response;
@@ -98,7 +98,7 @@ export default (state, action) => {
         },
         user
       };
-      return stateOnRequestCompletion('register2', updatedStateProps, state);
+      return completionState('register2', updatedStateProps, state);
     }
     case REGISTER2_FAILURE: {
       const { cardError, error } = action;
@@ -108,21 +108,21 @@ export default (state, action) => {
           fullPage: error
         }
       };
-      return stateOnRequestCompletion('register2', updatedStateProps, state);
+      return completionState('register2', updatedStateProps, state);
     }
     case SESSION_REQUEST:
-      return stateOnRequestInitialization('session', {}, state);
+      return requestState('session', {}, state);
     case SESSION_SUCCESS:
-      return stateOnRequestCompletion('session', action.response, state);
+      return completionState('session', action.response, state);
     case SESSION_RESET:
       return {
         ...getInitialState(),
         error: state.error
       };
     case SESSION_FAILURE:
-      return stateWithFullPageError('session', action.error, state);
+      return fullPageErrorState('session', action.error, state);
     case OUT_OF_STOCK_REQUEST:
-      return stateOnRequestInitialization('outofstock', {}, state);
+      return requestState('outofstock', {}, state);
     case OUT_OF_STOCK_SUCCESS: {
       const { itemId } = action;
       const tagItemAsDepleted = item => item.id === itemId ? { ...item, count: 0 } : item;
@@ -132,24 +132,24 @@ export default (state, action) => {
           items: state.store.items.map(tagItemAsDepleted),
         }
       };
-      return stateOnRequestCompletion('outofstock', updatedStateProps, state);
+      return completionState('outofstock', updatedStateProps, state);
     }
     case OUT_OF_STOCK_FAILURE:
-      return stateWithFullPageError('outofstock', action.error, state);
+      return fullPageErrorState('outofstock', action.error, state);
     case SUPPORT_REQUEST:
-      return stateOnRequestInitialization('support', {}, state);
+      return requestState('support', {}, state);
     case SUPPORT_SUCCESS:
-      return stateOnRequestCompletion('support', {}, state);
+      return completionState('support', {}, state);
     case SUPPORT_FAILURE:
-      return stateWithFullPageError('support', action.error, state);
+      return fullPageErrorState('support', action.error, state);
     case LOGOUT_REQUEST:
-      return stateOnRequestInitialization('logout', {}, state);
+      return requestState('logout', {}, state);
     case LOGOUT_SUCCESS:
-      return stateOnRequestCompletion('logout', getInitialState(), state);
+      return completionState('logout', getInitialState(), state);
     case LOGOUT_FAILURE:
-      return stateWithFullPageError('logout', action.error, state);
+      return fullPageErrorState('logout', action.error, state);
     case TOPUP_REQUEST:
-      return stateOnRequestInitialization('topup', {}, state);
+      return requestState('topup', {}, state);
     case TOPUP_SUCCESS: {
       const { balance, transaction, cardDetails } = action.response;
       const { user } = state;
@@ -161,7 +161,7 @@ export default (state, action) => {
           transactions: [transaction, ...user.transactions]
         }
       };
-      return stateOnRequestCompletion('topup', updatedStateProps, state);
+      return completionState('topup', updatedStateProps, state);
     }
     case TOPUP_FAILURE: {
       const { error, cardError } = action;
@@ -171,10 +171,10 @@ export default (state, action) => {
           fullPage: error
         }
       };
-      return stateOnRequestCompletion('topup', updatedStateProps, state);
+      return completionState('topup', updatedStateProps, state);
     }
     case PURCHASE_REQUEST:
-      return stateOnRequestInitialization('purchase', {}, state);
+      return requestState('purchase', {}, state);
     case PURCHASE_SUCCESS: {
       const { balance, transaction } = action.response;
       const { user } = state;
@@ -185,28 +185,28 @@ export default (state, action) => {
           transactions: [transaction, ...user.transactions]
         }
       };
-      return stateOnRequestCompletion('purchase', updatedStateProps, state);
+      return completionState('purchase', updatedStateProps, state);
     }
     case PURCHASE_FAILURE:
-      return stateWithFullPageError('purchase', action.error, state);
+      return fullPageErrorState('purchase', action.error, state);
     case STORE_REQUEST:
-      return stateOnRequestInitialization('store', {}, state);
+      return requestState('store', {}, state);
     case STORE_SUCCESS:
-      return stateOnRequestCompletion('store', action.response, state);
+      return completionState('store', action.response, state);
     case STORE_FAILURE:
-      return stateWithFullPageError('store', action.error, state);
+      return fullPageErrorState('store', action.error, state);
     case SURVEY_REQUEST:
-      return stateOnRequestInitialization('survey', {}, state);
+      return requestState('survey', {}, state);
     case SURVEY_SUCCESS:
-      return stateOnRequestCompletion('survey', action.response, state);
+      return completionState('survey', action.response, state);
     case SURVEY_FAILURE:
-      return stateWithFullPageError('survey', action.error, state);
+      return fullPageErrorState('survey', action.error, state);
     case MARKETPLACE_REQUEST:
-      return stateOnRequestInitialization('marketplace', {}, state);
+      return requestState('marketplace', {}, state);
     case MARKETPLACE_SUCCESS:
-      return stateOnRequestCompletion('marketplace', {}, state);
+      return completionState('marketplace', {}, state);
     case MARKETPLACE_FAILURE:
-      return stateWithFullPageError('marketplace', action.error, state);
+      return fullPageErrorState('marketplace', action.error, state);
     case LIKE_ITEM: {
       const { itemId } = action;
       const { likedItemIds } = state;
@@ -241,15 +241,15 @@ export default (state, action) => {
         pending: [...state.pending, 'box-received'],
         lastBoxIdMarkedAsReceived: boxId
       };
-      return stateOnRequestInitialization('box-received', updatedStateProps, state);
+      return requestState('box-received', updatedStateProps, state);
     }
     case BOX_RECEIVED_SUCCESS: {
       const { store } = action.response;
-      return stateOnRequestCompletion('box-received', { store }, state);
+      return completionState('box-received', { store }, state);
     }
     case BOX_RECEIVED_FAILURE:
       return {
-        ...stateWithFullPageError('box-received', action.error, state),
+        ...fullPageErrorState('box-received', action.error, state),
         lastBoxIdMarkedAsReceived: null
       };
     default:
