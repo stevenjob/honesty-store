@@ -22,6 +22,7 @@ import { getInitialState } from '../state';
 const stateOnRequestInitialization = (requestId, updatedProps, state) =>
   ({
     ...state,
+    ...updatedProps,
     pending: [...state.pending, requestId]
   });
 
