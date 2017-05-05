@@ -103,14 +103,13 @@ export default (state, action) => {
     }
     case REGISTER2_FAILURE: {
       const { cardError, error } = action;
-      return {
-        ...state,
+      const updatedStateProps = {
         error: {
           inline: cardError,
           fullPage: error
-        },
-        pending: state.pending.filter(e => e !== 'register2')
+        }
       };
+      return stateOnRequestCompletion('register2', updatedStateProps, state);
     }
     case SESSION_REQUEST:
       return stateOnRequestInitialization('session', {}, state);
@@ -147,10 +146,7 @@ export default (state, action) => {
     case LOGOUT_REQUEST:
       return stateOnRequestInitialization('logout', {}, state);
     case LOGOUT_SUCCESS:
-      return {
-        ...getInitialState(),
-        error: state.error
-      };
+      return stateOnRequestCompletion('logout', getInitialState(), state);
     case LOGOUT_FAILURE:
       return stateWithFullPageError('logout', action.error, state);
     case TOPUP_REQUEST:
