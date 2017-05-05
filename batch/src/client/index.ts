@@ -25,22 +25,8 @@ const { get } = fetch('batch', lambdaBaseUrl);
 export const getBatch = (key, batchId: string) =>
   get<Batch>(1, key, `/${batchId}`);
 
-export const getExpiry = async (key, batchId: string) => {
-  const batch = await getBatch(key, batchId);
-  return batch.expiry;
-};
+export const itemCostFromBatch = ({ priceExcludingVAT, itemQuantity }: Batch) =>
+  priceExcludingVAT / itemQuantity;
 
-export const getItemCost = async (key, batchId: string) => {
-  const { priceExcludingVAT, itemQuantity } = await getBatch(key, batchId);
-  return priceExcludingVAT / itemQuantity;
-};
-
-export const getVATRate = async (key, batchId: string) => {
-  const { VATRate } = await getBatch(key, batchId);
-  return VATRate;
-};
-
-export const isMarketplaceBatch = async (key, batchId: string) => {
-  const { supplier } = await getBatch(key, batchId);
-  return supplier === MARKETPLACE_ID;
-};
+export const isMarketplaceBatch = ({ supplier }: Batch) =>
+  supplier === MARKETPLACE_ID;

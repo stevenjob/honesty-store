@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { getExpiry, getItemCost as getBatchItemCost, getVATRate } from '../../batch/src/client';
+import { getBatch, itemCostFromBatch } from '../../batch/src/client';
 import {
   BatchReference, Box, BoxItem,
   BoxItemWithBatchReference, FixedBoxItemOverheads, ShippedBoxSubmission,
@@ -25,8 +25,10 @@ export const getItemCost = async (key, batches: BatchReference[]) => {
   const batchItemCosts = new Map<string, number>();
 
   await Promise.all(
-    batches.map(async ({ id }) =>
-      batchItemCosts.set(id, await getBatchItemCost(key, id))));
+    batches.map(async ({ id }) => {
+      const batch = await getBatch(key, id);
+      batchItemCosts.set(id, itemCostFromBatch(batch));
+    }));
 
   return avg(
     batches,
@@ -59,14 +61,14 @@ const getPricedBoxItem = async (
   fixedOverheads: FixedBoxItemOverheads,
   donationRate: number
 ): Promise<BoxItem> => {
-  const { batches } = boxItemWithBatchRef;
+  const { batches: batchRefs } = boxItemWithBatchRef;
 
   const { shippingCost, warehousingCost, packagingCost, packingCost, serviceFee } = fixedOverheads;
-  const wholesaleCost = await getItemCost(key, batches);
+  const wholesaleCost = await getItemCost(key, batchRefs);
   const subtotal = wholesaleCost + shippingCost + warehousingCost + packagingCost + packingCost
     + serviceFee;
 
-  const rate = await getVATRate(key, batches[0].id);
+  const { VATRate: rate } = await getBatch(key, batchRefs[0].id);
   const totalExclDonation = subtotal / (1 - creditCardFeeRate - rate);
   const VAT = totalExclDonation * rate;
   const creditCardFee = totalExclDonation * creditCardFeeRate;
@@ -85,13 +87,14 @@ const getPricedBoxItem = async (
 
   const roundedCosts = roundItemCosts({ ...fixedOverheads, ...variableCosts });
 
-  const expiries = await Promise.all(batches.map(({ id }) => getExpiry(key, id)));
-
-  const presentExpiries = expiries.filter(el => el != null);
+  const batches = await Promise.all(batchRefs.map(({ id }) => getBatch(key, id)));
+  const expiries = batches
+    .map(({ expiry }) => expiry)
+    .filter(el => el != null);
 
   return {
-    count: sumBatches(batches),
-    expiry: presentExpiries.length === 0 ? null : presentExpiries.reduce((a, b) => Math.min(a, b)),
+    count: sumBatches(batchRefs),
+    expiry: expiries.length === 0 ? null : expiries.reduce((a, b) => Math.min(a, b)),
     ...roundedCosts,
     ...boxItemWithBatchRef
   };

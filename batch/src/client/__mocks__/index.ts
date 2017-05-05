@@ -1,11 +1,15 @@
-export const getItemCost = async (_key, batchId: string) => {
-  return Number(batchId);
-};
+import { Batch, MARKETPLACE_ID } from '../';
 
-export const getVATRate = async (_key, _batchId: string) => {
-  return 0.2;
-};
+export const getBatch = (_key, batchId: string) => ({
+  id: batchId,
+  quantity: 1,
+  itemId: 'item',
+  itemQuantity: 1,
+  expiry: 0,
+  VATRate: 0.2
+});
 
-export const getExpiry = async (_key, _batchId: string) => {
-  return 0;
-};
+export const itemCostFromBatch = ({ id }: Batch) => Number(id);
+
+export const isMarketplaceBatch = ({ supplier }: Batch) =>
+  supplier === MARKETPLACE_ID;

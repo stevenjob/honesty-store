@@ -1,4 +1,4 @@
-import { isMarketplaceBatch } from '../../../batch/src/client';
+import { getBatch, isMarketplaceBatch } from '../../../batch/src/client';
 import { Box, BoxItem, getBoxesForStore } from '../../../box/src/client';
 import { getItem } from '../../../item/src/client';
 
@@ -98,7 +98,7 @@ const getUniqueItemCounts = async (key, boxes: Box[]) => {
       const existingCount = map.has(itemID) ? map.get(itemID).count : 0;
       const updatedCount = existingCount + (depleted ? 0 : count);
 
-      const isMarketplace = batches.length === 1 && await isMarketplaceBatch(key, batches[0].id);
+      const isMarketplace = batches.length === 1 && isMarketplaceBatch(await getBatch(key, batches[0].id));
       map.set(itemID, { count: updatedCount, isMarketplace });
     }
   }
