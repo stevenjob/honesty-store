@@ -1059,6 +1059,18 @@ const batchesInternal: Batch[] = [
     itemQuantity: 32,
     expiry: 1505001600000,
     itemId: 'e838ba40-a6db-4556-beb6-ef433c26d5ff'
+  },
+
+  // stu frost 5 May 2017
+  {
+    supplier: MARKETPLACE_ID,
+    supplierCode: '318ff9ec-4cd3-4eff-8f12-76f1e3ffa835',
+    id: '0a7c13db-80f9-4f26-99dc-cda846789b27',
+    quantity: 1,
+    priceExcludingVAT: 120,
+    itemQuantity: 2,
+    expiry: 1514764800000,
+    itemId: 'ab36b496-125f-44f6-921a-4e64d25ffc5b'
   }
 ];
 
