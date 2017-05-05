@@ -19,21 +19,28 @@ import { LOCAL_STORAGE_SAVE_ERROR } from '../actions/save-error';
 import { BOX_RECEIVED_REQUEST, BOX_RECEIVED_SUCCESS, BOX_RECEIVED_FAILURE } from '../actions/box-received';
 import { getInitialState } from '../state';
 
-const addPendingRequest = (requestId, state) =>
-({
-  ...state,
-  pending: [...state.pending, requestId]
-});
+const stateOnRequestInitialization = (requestId, updatedProps, state) =>
+  ({
+    ...state,
+    pending: [...state.pending, requestId]
+  });
 
-const showFullPageError = (requestId, error, state) =>
-({
-  ...state,
-  error: {
-    ...state.error,
-    fullPage: error
-  },
-  pending: state.pending.filter(e => e !== requestId)
-});
+const stateWithFullPageError = (requestId, error, state) =>
+  ({
+    ...state,
+    error: {
+      ...state.error,
+      fullPage: error
+    },
+    pending: state.pending.filter(e => e !== requestId)
+  });
+
+const stateOnRequestCompletion = (requestId, updatedProps, state) =>
+  ({
+    ...state,
+    ...updatedProps,
+    pending: state.pending.filter(e => e !== requestId)
+  });
 
 export default (state, action) => {
   switch (action.type) {
@@ -53,60 +60,46 @@ export default (state, action) => {
       };
     }
     case REGISTER_REQUEST:
-      return addPendingRequest('register', state);
-    case REGISTER_SUCESSS: {
-      return {
-        ...state,
-        ...action.response,
-        pending: state.pending.filter(e => e !== 'register')
-      };
-    }
+      return stateOnRequestInitialization('register', {}, state);
+    case REGISTER_SUCESSS:
+      return stateOnRequestCompletion('register', action.response, state);
     case REGISTER_FAILURE:
-      return showFullPageError('register', action.error, state);
+      return stateWithFullPageError('register', action.error, state);
     case SIGNIN_REQUEST:
-      return addPendingRequest('signin', state);
-    case SIGNIN_SUCCESS: {
+      return stateOnRequestInitialization('signin', {}, state);
+    case SIGNIN_SUCCESS:
       return {
         ...getInitialState()
       };
-    }
     case SIGNIN_FAILURE:
-      return showFullPageError('signin', action.error, state);
+      return stateWithFullPageError('signin', action.error, state);
     case SIGNIN2_REQUEST:
-      return addPendingRequest('signin2', state);
-    case SIGNIN2_SUCCESS: {
-      return {
-        ...state,
-        ...action.response,
-        pending: state.pending.filter(e => e !== 'signin2')
-      };
-    }
+      return stateOnRequestInitialization('signin2', {}, state);
+    case SIGNIN2_SUCCESS:
+      return stateOnRequestCompletion('signin2', action.response, state);
     case SIGNIN2_FAILURE:
-      return showFullPageError('signin2', action.error, state);
-    case DESTROY_SESSION: {
+      return stateWithFullPageError('signin2', action.error, state);
+    case DESTROY_SESSION:
       return {
         ...getInitialState(),
         error: state.error
       };
-    }
     case REGISTER2_REQUEST: {
-      return {
-        ...state,
+      const updatedStateProps = {
         register: {},
-        pending: [...state.pending, 'register2']
       };
+      return stateOnRequestInitialization('register2', updatedStateProps, state);
     }
     case REGISTER2_SUCESSS: {
       const { user } = action.response;
-      return {
-        ...state,
+      const updatedStateProps = {
         error: {
           ...state.error,
           inline: undefined
         },
-        user: user,
-        pending: state.pending.filter(e => e !== 'register2')
+        user
       };
+      return stateOnRequestCompletion('register2', updatedStateProps, state);
     }
     case REGISTER2_FAILURE: {
       const { cardError, error } = action;
@@ -119,139 +112,106 @@ export default (state, action) => {
         pending: state.pending.filter(e => e !== 'register2')
       };
     }
-    case SESSION_REQUEST: {
-      return {
-        ...state,
-        pending: [...state.pending, 'session']
-      };
-    }
-    case SESSION_SUCCESS: {
-      return {
-        ...state,
-        ...action.response,
-        pending: state.pending.filter(e => e !== 'session')
-      };
-    }
-    case SESSION_RESET: {
+    case SESSION_REQUEST:
+      return stateOnRequestInitialization('session', {}, state);
+    case SESSION_SUCCESS:
+      return stateOnRequestCompletion('session', action.response, state);
+    case SESSION_RESET:
       return {
         ...getInitialState(),
         error: state.error
       };
-    }
     case SESSION_FAILURE:
-      return showFullPageError('session', action.error, state);
+      return stateWithFullPageError('session', action.error, state);
     case OUT_OF_STOCK_REQUEST:
-      return addPendingRequest('outofstock', state);
+      return stateOnRequestInitialization('outofstock', {}, state);
     case OUT_OF_STOCK_SUCCESS: {
       const { itemId } = action;
       const tagItemAsDepleted = item => item.id === itemId ? { ...item, count: 0 } : item;
-      return {
-        ...state,
+      const updatedStateProps = {
         store: {
           ...state.store,
           items: state.store.items.map(tagItemAsDepleted),
-        },
-        pending: state.pending.filter(e => e !== 'outofstock')
+        }
       };
+      return stateOnRequestCompletion('outofstock', updatedStateProps, state);
     }
     case OUT_OF_STOCK_FAILURE:
-      return showFullPageError('outofstock', action.error, state);
+      return stateWithFullPageError('outofstock', action.error, state);
     case SUPPORT_REQUEST:
-      return addPendingRequest('support', state);
-    case SUPPORT_SUCCESS: {
-      return {
-        ...state,
-        pending: state.pending.filter(e => e !== 'support')
-      };
-    }
+      return stateOnRequestInitialization('support', {}, state);
+    case SUPPORT_SUCCESS:
+      return stateOnRequestCompletion('support', {}, state);
     case SUPPORT_FAILURE:
-      return showFullPageError('support', action.error, state);
+      return stateWithFullPageError('support', action.error, state);
     case LOGOUT_REQUEST:
-      return addPendingRequest('logout', state);
-    case LOGOUT_SUCCESS: {
+      return stateOnRequestInitialization('logout', {}, state);
+    case LOGOUT_SUCCESS:
       return {
         ...getInitialState(),
         error: state.error
       };
-    }
     case LOGOUT_FAILURE:
-      return showFullPageError('logout', action.error, state);
+      return stateWithFullPageError('logout', action.error, state);
     case TOPUP_REQUEST:
-      return addPendingRequest('topup', state);
+      return stateOnRequestInitialization('topup', {}, state);
     case TOPUP_SUCCESS: {
       const { balance, transaction, cardDetails } = action.response;
       const { user } = state;
-      return {
-        ...state,
+      const updatedStateProps = {
         user: {
           ...state.user,
           balance,
           cardDetails,
           transactions: [transaction, ...user.transactions]
-        },
-        pending: state.pending.filter(e => e !== 'topup')
+        }
       };
+      return stateOnRequestCompletion('topup', updatedStateProps, state);
     }
     case TOPUP_FAILURE: {
       const { error, cardError } = action;
-      return {
-        ...state,
+      const updatedStateProps = {
         error: {
           inline: cardError,
           fullPage: error
-        },
-        pending: state.pending.filter(e => e !== 'topup')
+        }
       };
+      return stateOnRequestCompletion('topup', updatedStateProps, state);
     }
     case PURCHASE_REQUEST:
-      return addPendingRequest('purchase', state);
+      return stateOnRequestInitialization('purchase', {}, state);
     case PURCHASE_SUCCESS: {
       const { balance, transaction } = action.response;
       const { user } = state;
-      return {
-        ...state,
+      const updatedStateProps = {
         user: {
           ...user,
           balance,
           transactions: [transaction, ...user.transactions]
-        },
-        pending: state.pending.filter(e => e !== 'purchase')
+        }
       };
+      return stateOnRequestCompletion('purchase', updatedStateProps, state);
     }
     case PURCHASE_FAILURE:
-      return showFullPageError('purhcase', action.error, state);
+      return stateWithFullPageError('purhcase', action.error, state);
     case STORE_REQUEST:
-      return addPendingRequest('store', state);
-    case STORE_SUCCESS: {
-      return {
-        ...state,
-        ...action.response,
-        pending: state.pending.filter(e => e !== 'store')
-      };
-    }
+      return stateOnRequestInitialization('store', {}, state);
+    case STORE_SUCCESS:
+      return stateOnRequestCompletion('store', action.response, state);
     case STORE_FAILURE:
-      return showFullPageError('store', action.error, state);
+      return stateWithFullPageError('store', action.error, state);
     case SURVEY_REQUEST:
-      return addPendingRequest('survey', state);
-    case SURVEY_SUCCESS: {
-      return {
-        ...state,
-        survey: action.response,
-        pending: state.pending.filter(e => e !== 'survey')
-      };
-    }
+      return stateOnRequestInitialization('survey', {}, state);
+    case SURVEY_SUCCESS:
+      return stateOnRequestCompletion('survey', action.response, state);
     case SURVEY_FAILURE:
-      return showFullPageError('survey', action.error, state);
+      return stateWithFullPageError('survey', action.error, state);
     case MARKETPLACE_REQUEST:
-      return addPendingRequest('marketplace', state);
-    case MARKETPLACE_SUCCESS: {
-      return {
-        ...state,
-        pending: state.pending.filter(e => e !== 'marketplace')
-      };
-    }
+      return stateOnRequestInitialization('marketplace', {}, state);
+    case MARKETPLACE_SUCCESS:
+      return stateOnRequestCompletion('marketplace', {}, state);
     case MARKETPLACE_FAILURE:
-      return showFullPageError('marketplace', action.error, state);
+      return stateWithFullPageError('marketplace', action.error, state);
     case LIKE_ITEM: {
       const { itemId } = action;
       const { likedItemIds } = state;
@@ -273,38 +233,31 @@ export default (state, action) => {
         likedItemIds: updatedLikedItemIds
       };
     }
-    case LOCAL_STORAGE_SAVE_ERROR: {
+    case LOCAL_STORAGE_SAVE_ERROR:
       return {
         ...state,
         error: {
           fullPage: action.error
         }
       };
-    }
     case BOX_RECEIVED_REQUEST: {
       const { boxId } = action;
-      return {
-        ...state,
+      const updatedStateProps = {
         pending: [...state.pending, 'box-received'],
         lastBoxIdMarkedAsReceived: boxId
       };
+      return stateOnRequestInitialization('box-received', updatedStateProps, state);
     }
     case BOX_RECEIVED_SUCCESS: {
       const { store } = action.response;
-      return {
-        ...state,
-        store,
-        pending: state.pending.filter(e => e !== 'box-received')
-      };
+      return stateOnRequestCompletion('box-received', { store }, state);
     }
-    case BOX_RECEIVED_FAILURE: {
+    case BOX_RECEIVED_FAILURE:
       return {
-        ...showFullPageError('box-received', action.error, state),
+        ...stateWithFullPageError('box-received', action.error, state),
         lastBoxIdMarkedAsReceived: null
       };
-    }
-    default: {
+    default:
       return state;
-    }
   }
 };
