@@ -2,8 +2,8 @@ import { config } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 import express = require('express');
 import bodyParser = require('body-parser');
-import isUUID = require('validator/lib/isUUID');
 
+import { createAssertValidUuid } from '../../service/src/assert';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { Batch } from './client';
 
@@ -13,11 +13,7 @@ const cruft = cruftDDB<Batch>({
   tableName: process.env.TABLE_NAME
 });
 
-const assertValidBatchId = (id) => {
-  if (!isUUID(id, 4)) {
-    throw new Error(`Invalid batchId '${id}'`);
-  }
-};
+const assertValidBatchId = createAssertValidUuid('batchId');
 
 const getBatch = async (batchId): Promise<Batch> => {
   assertValidBatchId(batchId);
