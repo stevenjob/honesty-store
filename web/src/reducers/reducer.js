@@ -19,20 +19,20 @@ import { LOCAL_STORAGE_SAVE_ERROR } from '../actions/save-error';
 import { BOX_RECEIVED_REQUEST, BOX_RECEIVED_SUCCESS, BOX_RECEIVED_FAILURE } from '../actions/box-received';
 import { getInitialState } from '../state';
 
-const addPendingRequest = (name, state) =>
+const addPendingRequest = (requestId, state) =>
 ({
   ...state,
-  pending: [...state.pending, name]
+  pending: [...state.pending, requestId]
 });
 
-const showFullPageError = (name, error, state) =>
+const showFullPageError = (requestId, error, state) =>
 ({
   ...state,
   error: {
     ...state.error,
     fullPage: error
   },
-  pending: state.pending.filter(e => e !== name)
+  pending: state.pending.filter(e => e !== requestId)
 });
 
 export default (state, action) => {
