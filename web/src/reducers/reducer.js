@@ -68,9 +68,7 @@ export default (state, action) => {
     case SIGNIN_REQUEST:
       return stateOnRequestInitialization('signin', {}, state);
     case SIGNIN_SUCCESS:
-      return {
-        ...getInitialState()
-      };
+      return stateOnRequestCompletion('signin', getInitialState(), state);
     case SIGNIN_FAILURE:
       return stateWithFullPageError('signin', action.error, state);
     case SIGNIN2_REQUEST:
