@@ -1,7 +1,9 @@
+import ms = require('ms');
 import fetch from 'node-fetch';
+import asyncCache from './asyncCache';
 import { baseUrl as defaultBaseUrl } from './baseUrl';
 import { CodedError, ErrorCode } from './error';
-import { Key } from './key';
+import { createServiceKey, Key } from './key';
 import { error, info } from './log';
 import { signServiceSecret } from './serviceSecret';
 
@@ -15,9 +17,9 @@ interface ApiResponse<T> {
 
 // tslint:disable-next-line:export-name
 export default (service: string, baseUrl = defaultBaseUrl) => {
-  const fetchAndParse = async <Result>({ method, version, path, key, body = undefined }): Promise<Result> => {
-    const url = `${baseUrl}/${service}/v${version}${path}`;
+  const getUrl = (version: number, path: string) => `${baseUrl}/${service}/v${version}${path}`;
 
+  const fetchAndParse = async <Result>({ method, url, key, body = undefined }): Promise<Result> => {
     info(key, `send ${method} ${url}`);
 
     const fetchOptions = {
@@ -53,7 +55,7 @@ export default (service: string, baseUrl = defaultBaseUrl) => {
           responseText
         });
 
-      throw new Error(`${method} ${path} failed (couldn't parse json), HTTP ${response.status}`);
+      throw new Error(`${method} ${url} failed (couldn't parse json), HTTP ${response.status}`);
     }
 
     if (json.error) {
@@ -69,31 +71,37 @@ export default (service: string, baseUrl = defaultBaseUrl) => {
     return json.response;
   };
 
+  const cache = asyncCache<string, any>({
+    max: 1000,
+    maxAge: ms('5s'),
+    load: (url) =>
+      fetchAndParse({
+        method: 'GET',
+        url,
+        key: createServiceKey({ service })
+      })
+  });
+
   // tslint:disable-next-line:no-reserved-keywords
-  const get = async <Result>(version: number, key: Key, path: String) => {
-    return await fetchAndParse<Result>({
-      method: 'GET',
-      version,
-      path,
-      key
-    });
+  const get = async <Result>(version: number, key: Key, path: string) => {
+    const url = getUrl(version, path);
+    info(key, `cache check for GET ${url}`);
+    return <Result>(await cache.get(url));
   };
 
-  const post = async <Result>(version: number, key: Key, path: String, body: any): Promise<Result> => {
+  const post = async <Result>(version: number, key: Key, path: string, body: any): Promise<Result> => {
     return await fetchAndParse<Result>({
       method: 'POST',
-      version,
-      path,
+      url: getUrl(version, path),
       key,
       body
     });
   };
 
-  const put = async <Result>(version: number, key: Key, path: String, body: any): Promise<Result> => {
+  const put = async <Result>(version: number, key: Key, path: string, body: any): Promise<Result> => {
     return await fetchAndParse<Result>({
       method: 'PUT',
-      version,
-      path,
+      url: getUrl(version, path),
       key,
       body
     });
