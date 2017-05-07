@@ -11,6 +11,7 @@
     "lambdapackage": "zip --quiet -r lambda.zip lib/ node_modules/"
   },
   "dependencies": {
+    "async-cache": "^1.1.0",
     "aws-sdk": "^2.7.10",
     "aws-serverless-express": "^2.2.0",
     "body-parser": "^1.15.2",
