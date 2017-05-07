@@ -1,6 +1,3 @@
-import { assertItemExistsAsync } from '../../item/src/client';
-import { createServiceKey } from '../../service/src/key';
-
 export interface Batch {
   id: string;
   purchased?: number;
@@ -1076,15 +1073,10 @@ const batchesInternal: Batch[] = [
 
 const batches = new Map<string, Batch>();
 
-const key = createServiceKey({ service: 'batch-init' });
-
 for (const batch of batchesInternal) {
   if (batches.has(batch.id)) {
     throw new Error(`Duplicate ID ${batch.id}`);
   }
-  // ensure the itemId is valid
-  assertItemExistsAsync(key, batch.itemId);
-
   batches.set(batch.id, batch);
 }
 
