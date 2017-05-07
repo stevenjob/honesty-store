@@ -1,5 +1,3 @@
-import { assertItemExistsAsync } from '../../item/src/client';
-import { createServiceKey } from '../../service/src/key';
 import { Survey } from './client';
 
 const internalSurveys: Survey[] = [
@@ -34,17 +32,10 @@ const internalSurveys: Survey[] = [
 ];
 
 const surveys = new Map<string, Survey>();
-const key = createServiceKey({ service: 'survey-init' });
 
 for (const survey of internalSurveys) {
   if (surveys.has(survey.id)) {
     throw new Error(`Duplicate ID ${survey.id}`);
-  }
-
-  for (const [ itemIdA, itemIdB ] of survey.questions) {
-    // ensure the itemIDs are valid
-    assertItemExistsAsync(key, itemIdA);
-    assertItemExistsAsync(key, itemIdB);
   }
 
   surveys.set(survey.id, survey);
