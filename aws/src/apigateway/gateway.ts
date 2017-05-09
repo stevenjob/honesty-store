@@ -75,7 +75,8 @@ const ensureResource = async ({ restApi, path, parentPath }) => {
   })
     .promise();
 
-  const existingResource = resources.items.find(resource => resource.pathPart === path);
+  const expectedPath = `${parentPath}/${path}`.replace(/\/\//g, '/');
+  const existingResource = resources.items.find(resource => resource.path === expectedPath);
   if (existingResource) {
     winston.debug(`apigateway: found existing resource`, existingResource);
     return existingResource;
