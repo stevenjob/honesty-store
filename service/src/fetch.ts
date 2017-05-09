@@ -67,7 +67,7 @@ export default (service: string, baseUrl = defaultBaseUrl) => {
       throw new Error(json.error.message);
     }
 
-    info(key, `success ${method} ${url}`);
+    info(key, `success ${method} ${url}`, { status: response.status, response: json });
     return json.response;
   };
 
