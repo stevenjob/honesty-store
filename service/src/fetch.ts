@@ -58,6 +58,11 @@ export default (service: string, baseUrl = defaultBaseUrl) => {
       throw new Error(`${method} ${url} failed (couldn't parse json), HTTP ${response.status}`);
     }
 
+    if (!response.ok) {
+      error(key, `failed non-2xx ${method} ${url} ${response.status}`);
+      throw new Error(`${method} ${url} failed (non-2xx response), HTTP ${response.status}`);
+    }
+
     if (json.error) {
       error(key, `error ${method} ${url} ${json.error.message}`);
 
