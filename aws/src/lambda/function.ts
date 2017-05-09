@@ -31,6 +31,7 @@ const ensureLambda = async ({ name, handler, environment, withDynamo, zipFile })
   try {
     const response = await lambda.createFunction({
       ...params,
+      Timeout: 10,
       Code: {
         ZipFile: zipFile
       }
