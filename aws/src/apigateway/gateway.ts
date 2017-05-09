@@ -35,6 +35,8 @@ const makeRetryable = request => {
   });
   request.on('retry', ({ error }) => {
     if (error.code === 'TooManyRequestsException') {
+      winston.debug(`apigateway: request failed, retrying in 500ms`, { request, error });
+      error.retryable = true;
       error.retryDelay = 500;
     }
   });
