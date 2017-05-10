@@ -196,6 +196,7 @@ export default async ({ branch, dirs }) => {
       handler: `lib/${dir}/src/lambda.handler`,
       dynamoAccess: lambdaConfig[dir].database,
       withApiGateway: true,
+      live: isLive(branch),
       environment: {
         TABLE_NAME: db && db.TableName,
         BASE_URL: baseUrl,

@@ -12,23 +12,20 @@ const zip = (dir, filter) => new Promise<Buffer>((res, rej) => {
   });
 });
 
-const dynamoAccessToRole = (access: 'ro' | 'rw' | 'none') => {
-  switch (access) {
-    case 'ro':
-      return 'arn:aws:iam::812374064424:role/aws-lambda-and-dynamo-ro';
-    case 'rw':
-      return 'arn:aws:iam::812374064424:role/aws-lambda-and-dynamo-rw';
-    case 'none':
-      return 'arn:aws:iam::812374064424:role/lambda_basic_execution';
-    default:
-      throw new Error(`wrong dynamo access "${access}"`);
+const dynamoAccessToRole = (access: 'ro' | 'rw' | 'none', live: boolean) => {
+  if (access === 'none') {
+    return 'arn:aws:iam::812374064424:role/lambda_basic_execution';
   }
+
+  const name = live ? 'honesty-store' : 'hs';
+
+  return `arn:aws:iam::812374064424:role/${name}-lambda-dynamo-${access}`;
 };
 
-const ensureLambda = async ({ name, handler, environment, dynamoAccess, zipFile }) => {
+const ensureLambda = async ({ name, handler, environment, dynamoAccess, zipFile, live }) => {
   const lambda = new Lambda({ apiVersion: '2015-03-31' });
 
-  const role = dynamoAccessToRole(dynamoAccess);
+  const role = dynamoAccessToRole(dynamoAccess, live);
   const params = {
     FunctionName: name,
     Role: role,
@@ -98,10 +95,11 @@ export const ensureFunction = async ({
   handler,
   environment,
   dynamoAccess = 'none',
-  withApiGateway = false
+  withApiGateway = false,
+  live
 }) => {
   const zipFile = await zip(codeDirectory, codeFilter);
-  const lambda = await ensureLambda({ name, handler, environment, dynamoAccess, zipFile });
+  const lambda = await ensureLambda({ name, handler, environment, dynamoAccess, zipFile, live });
 
   if (withApiGateway) {
     await permitLambdaCallFromApiGateway({ func: lambda });
