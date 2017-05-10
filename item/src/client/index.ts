@@ -14,10 +14,7 @@ export interface Item {
   notes?: string;
 }
 
-const lambdaBaseUrl = process.env.LAMBDA_BASE_URL;
-if (!lambdaBaseUrl) {
-  throw new Error('no $LAMBDA_BASE_URL provided');
-}
+import { lambdaBaseUrl } from '../../../service/src/baseUrl';
 
 const { get } = fetch('item', lambdaBaseUrl);
 
