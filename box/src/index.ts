@@ -61,14 +61,17 @@ const assertValidBoxItemWithBatchReference = async (key, boxItem, isMarketplaceS
   if (!boxItem) {
     throw new Error('Box item cannot be undefined');
   }
-  const { itemID, batches } = boxItem;
+  const { itemID, batches: batchReferences } = boxItem;
   assertValidItemId(itemID);
-  if (!Array.isArray(batches)) {
-    throw new Error(`Invalid batches ${batches}`);
+  if (!Array.isArray(batchReferences)) {
+    throw new Error(`Invalid batches ${batchReferences}`);
   }
-  for (const batchRef of batches) {
+
+  const batches = await Promise.all(batchReferences.map(({ id }) => getBatch(key, id)));
+
+  for (const batchRef of batchReferences) {
     assertValidBatchReference(batchRef);
-    const batch = await getBatch(key, batchRef.id);
+    const batch = batches.find(({ id }) => id === batchRef.id);
     const { itemId: batchItemId } = batch;
     if (batchItemId !== itemID) {
       throw new Error(`Batch ${batchRef.id} does not contain item ${itemID}`);
