@@ -58,7 +58,7 @@ const makeRetryable = request => {
   return request;
 };
 
-const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
+export const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
 
   const restApis = await getRestApis();
@@ -260,13 +260,14 @@ const ensureStagedIntegration = async ({ restApi, deployment }) => {
   }
 };
 
+export const restApiToBaseUrl = ({ id }: APIGateway.RestApi) =>
+  `https://${id}.execute-api.eu-west-1.amazonaws.com/${stageName}`;
+
 export const ensureApiGateway = async ({
-  name,
+  restApi,
   serviceName,
   lambdaArn
 }) => {
-  const restApi = await ensureRestApi({ name });
-
   await ensureResource({
     restApi,
     path: serviceName,
@@ -282,9 +283,7 @@ export const ensureApiGateway = async ({
   await ensureIntegration({ restApi, resource: proxyResource, restMethod, lambdaArn });
   const deployment = await ensureDeployment({ restApi, serviceName });
 
-  const stage = await ensureStagedIntegration({ restApi, deployment });
-
-  return `https://${restApi.id}.execute-api.eu-west-1.amazonaws.com/${stage.stageName}`;
+  await ensureStagedIntegration({ restApi, deployment });
 };
 
 const pruneRestApi = (restApi: APIGateway.RestApi) => {

@@ -1,6 +1,6 @@
 import { DynamoDB, ECS } from 'aws-sdk';
 import * as winston from 'winston';
-import { ensureApiGateway } from '../apigateway/gateway';
+import { ensureApiGateway, ensureRestApi, restApiToBaseUrl } from '../apigateway/gateway';
 import { ensureStack } from '../cloudformation/stack';
 import { ensureLogGroup } from '../cloudwatchlogs/loggroup';
 import containerForDir from '../containerDefinition/containers';
@@ -177,8 +177,8 @@ export default async ({ branch, dirs }) => {
     protocol: 'HTTPS'
   });
 
-  let lambdaBaseUrl = '';
-
+  const restApi = await ensureRestApi({ name: generateName({ branch }) });
+  const lambdaBaseUrl = restApiToBaseUrl(restApi);
   for (const dir of dirs) {
     if (!lambdaConfig[dir]) {
       continue;
@@ -205,17 +205,11 @@ export default async ({ branch, dirs }) => {
       }
     });
 
-    const stageUrl = await ensureApiGateway({
-      name: generateName({ branch }),
+    await ensureApiGateway({
+      restApi,
       serviceName: dir,
       lambdaArn: lambda.FunctionArn
     });
-
-    if (!lambdaBaseUrl) {
-      lambdaBaseUrl = stageUrl;
-    } else if (lambdaBaseUrl !== stageUrl) {
-      throw new Error(`lambda function ${lambda.FunctionArn} not placed on same restapi deployment ('${lambdaBaseUrl}' != '${stageUrl}')`);
-    }
   }
 
   const services: ECS.Service[] = [];
