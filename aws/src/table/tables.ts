@@ -488,28 +488,56 @@ const dirToTable = {
     writeCapacityUnits,
     dummyData: [
       {
-        id: 'e43816d4-e7af-4717-b549-0e820c3cf24b',
-        quantity: 3,
-        itemId: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
-        itemQuantity: 1
-      },
-      {
-        id: '1c92a408-283d-4053-9def-610221bed72d',
-        quantity: 50,
-        itemId: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
-        itemQuantity: 3
-      },
-      {
-        id: '8338b3e2-914d-4bfb-a738-580ece5521c0',
-        quantity: 10,
-        itemId: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
-        itemQuantity: 1
-      },
-      {
-        id: '82b9f8ce-0b7a-401d-8095-bab4377c47d5',
-        quantity: 5,
+        id: '03e918c6-8868-4682-9c40-43caebdfc5b7',
+        purchased: 1484179200000,
+        version: 0,
+        quantity: 2,
+        supplier: 'Costco',
+        supplierCode: '163126',
         itemId: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
-        itemQuantity: 1
+        itemQuantity: 40,
+        expiry: null,
+        priceExcludingVAT: 999,
+        VATRate: 0.2
+      },
+      {
+        id: '1bea7790-5c53-4bdc-91dd-21b004310ac1',
+        purchased: 1484179200000,
+        version: 0,
+        quantity: 1,
+        supplier: 'Costco',
+        supplierCode: null,
+        itemId: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
+        itemQuantity: 32,
+        expiry: null,
+        priceExcludingVAT: 979,
+        VATRate: 0.2
+      },
+      {
+        id: '3af2571d-abe2-49f3-849e-9f180a1a8f8f',
+        purchased: 1486339200000,
+        version: 0,
+        quantity: 3,
+        supplier: 'Poundstretcher',
+        supplierCode: '263178',
+        itemId: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
+        itemQuantity: 10,
+        expiry: 1483833600000,
+        priceExcludingVAT: 249,
+        VATRate: 0.2
+      },
+      {
+        id: '989721c5-b0db-43b0-8c49-0db83a1b3276',
+        purchased: 1484179200000,
+        version: 0,
+        quantity: 1,
+        supplier: 'HS_MARKETPLACE',
+        supplierCode: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649',
+        itemId: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
+        itemQuantity: 20,
+        expiry: 1506812400000,
+        priceExcludingVAT: 1000,
+        VATRate: 0
       }
     ]
   })
