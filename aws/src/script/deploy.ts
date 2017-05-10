@@ -57,6 +57,8 @@ const serviceConfig = {
   }
 };
 const lambdaConfig = {
+  // Hack: item lambda will get an empty LAMBDA_BASE_URL
+  // Currently okay as it doesn't need to talk to other services
   item: {
     database: true
   },
@@ -197,6 +199,7 @@ export default async ({ branch, dirs }) => {
       environment: {
         TABLE_NAME: db && db.TableName,
         BASE_URL: baseUrl,
+        LAMBDA_BASE_URL: lambdaBaseUrl,
         SERVICE_TOKEN_SECRET: serviceSecret
       }
     });
