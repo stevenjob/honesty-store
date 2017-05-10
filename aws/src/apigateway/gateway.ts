@@ -1,5 +1,6 @@
 import { APIGateway, config } from 'aws-sdk';
 import * as winston from 'winston';
+import ms = require('ms');
 
 interface NestedRestApi {
   restApi: APIGateway.RestApi;
@@ -39,7 +40,7 @@ const makeRetryable = request => {
    *
    * handle TooManyRequestsException - https://github.com/aws/aws-sdk-js/issues/1014
    */
-  const retryDelay = 1000 * 60;
+  const retryDelay = ms('60s');
 
   request.on('extractError', ({ error }) => {
     if (error.code === 'TooManyRequestsException') {
