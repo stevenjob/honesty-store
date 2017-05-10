@@ -28,6 +28,7 @@ const ensureLambda = async ({ name, handler, environment, dynamoAccess, zipFile,
   const role = dynamoAccessToRole(dynamoAccess, live);
   const params = {
     FunctionName: name,
+    Timeout: 10,
     Role: role,
     Handler: handler,
     Environment: {
@@ -39,7 +40,6 @@ const ensureLambda = async ({ name, handler, environment, dynamoAccess, zipFile,
   try {
     const response = await lambda.createFunction({
       ...params,
-      Timeout: 10,
       Code: {
         ZipFile: zipFile
       }
