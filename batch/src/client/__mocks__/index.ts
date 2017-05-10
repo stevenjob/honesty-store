@@ -1,5 +1,4 @@
-import { MARKETPLACE_ID } from '../constants';
-export { MARKETPLACE_ID } from '../constants';
+export const MARKETPLACE_ID = 'HS_MARKETPLACE';
 
 export const getBatch = (_key, batchId: string) => ({
   id: batchId,

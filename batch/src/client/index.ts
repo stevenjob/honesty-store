@@ -1,8 +1,5 @@
 import fetch from '../../../service/src/fetch';
 
-import { MARKETPLACE_ID } from './constants';
-export { MARKETPLACE_ID } from './constants';
-
 export interface Batch {
   id: string;
   purchased?: number;
@@ -15,6 +12,8 @@ export interface Batch {
   priceExcludingVAT?: number;
   VATRate?: number;
 }
+
+export const MARKETPLACE_ID = 'HS_MARKETPLACE';
 
 import { lambdaBaseUrl } from '../../../service/src/baseUrl';
 
