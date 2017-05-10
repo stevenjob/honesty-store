@@ -17,7 +17,7 @@ type IntegrationParams =
   };
 
 const assumedLimit = 200;
-const stageName = 'prod';
+const stageName = 'live';
 
 const getRestApis = async () => {
   const restApis = await new APIGateway({ apiVersion: '2015-07-09' })
