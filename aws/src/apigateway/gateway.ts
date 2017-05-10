@@ -26,8 +26,21 @@ const getRestApis = async () => {
   return restApis.items;
 };
 
-// fix for TooManyRequestsException - https://github.com/aws/aws-sdk-js/issues/1014
 const makeRetryable = request => {
+  /*
+   * Action            Limit
+   * ---------------------------------------------------------------------------
+   * CreateRestApi     2 requests per minute per account.
+   * DeleteRestApi     2 requests per minute per account
+   * CreateDeployment  3 requests per minute per account
+   * GetResources      150 requests per minute per account
+   * CreateResource    300 requests per minute per account
+   * Total operations  10 request per second (rps) with a burst limit of 40 rps.
+   *
+   * handle TooManyRequestsException - https://github.com/aws/aws-sdk-js/issues/1014
+   */
+  const retryDelay = 1000 * 60;
+
   request.on('extractError', ({ error }) => {
     if (error.code === 'TooManyRequestsException') {
       error.retryable = true;
@@ -35,9 +48,9 @@ const makeRetryable = request => {
   });
   request.on('retry', ({ error }) => {
     if (error.code === 'TooManyRequestsException') {
-      winston.debug(`apigateway: request failed, retrying in 500ms`, { request, error });
       error.retryable = true;
-      error.retryDelay = 500;
+      error.retryDelay = retryDelay;
+      winston.debug(`apigateway: request failed, retrying in ${error.retryDelay}ms`, { error });
     }
   });
 
