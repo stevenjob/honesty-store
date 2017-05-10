@@ -12,12 +12,23 @@ const zip = (dir, filter) => new Promise<Buffer>((res, rej) => {
   });
 });
 
-const ensureLambda = async ({ name, handler, environment, withDynamo, zipFile }) => {
+const dynamoAccessToRole = (access: 'ro' | 'rw' | 'none') => {
+  switch (access) {
+    case 'ro':
+      return 'arn:aws:iam::812374064424:role/aws-lambda-and-dynamo-ro';
+    case 'rw':
+      return 'arn:aws:iam::812374064424:role/aws-lambda-and-dynamo-rw';
+    case 'none':
+      return 'arn:aws:iam::812374064424:role/lambda_basic_execution';
+    default:
+      throw new Error(`wrong dynamo access "${access}"`);
+  }
+};
+
+const ensureLambda = async ({ name, handler, environment, dynamoAccess, zipFile }) => {
   const lambda = new Lambda({ apiVersion: '2015-03-31' });
 
-  const role = withDynamo
-    ? 'arn:aws:iam::812374064424:role/aws-lambda-and-dynamo-ro'
-    : 'arn:aws:iam::812374064424:role/lambda_basic_execution';
+  const role = dynamoAccessToRole(dynamoAccess);
   const params = {
     FunctionName: name,
     Role: role,
@@ -86,11 +97,11 @@ export const ensureFunction = async ({
   codeFilter,
   handler,
   environment,
-  withDynamo = false,
+  dynamoAccess = 'none',
   withApiGateway = false
 }) => {
   const zipFile = await zip(codeDirectory, codeFilter);
-  const lambda = await ensureLambda({ name, handler, environment, withDynamo, zipFile });
+  const lambda = await ensureLambda({ name, handler, environment, dynamoAccess, zipFile });
 
   if (withApiGateway) {
     await permitLambdaCallFromApiGateway({ func: lambda });

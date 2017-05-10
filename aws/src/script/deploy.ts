@@ -60,10 +60,10 @@ const lambdaConfig = {
   // Hack: item lambda will get an empty LAMBDA_BASE_URL
   // Currently okay as it doesn't need to talk to other services
   item: {
-    database: true
+    database: 'ro'
   },
   box: {
-    database: true
+    database: 'rw'
   }
 };
 
@@ -194,7 +194,7 @@ export default async ({ branch, dirs }) => {
       codeDirectory: dir,
       codeFilter: path => /(lib|node_modules)/.test(path),
       handler: `lib/${dir}/src/lambda.handler`,
-      withDynamo: lambdaConfig[dir].database,
+      dynamoAccess: lambdaConfig[dir].database,
       withApiGateway: true,
       environment: {
         TABLE_NAME: db && db.TableName,
