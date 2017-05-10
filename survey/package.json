@@ -29,8 +29,7 @@
     "jsonwebtoken": "^7.2.1",
     "node-fetch": "^1.6.3",
     "uuid": "^3.0.1",
-    "validator": "^6.2.1",
-    "winston": "^2.3.0"
+    "validator": "^6.2.1"
   },
   "main": "lib/survey/src/index.js"
 }
