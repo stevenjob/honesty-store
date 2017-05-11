@@ -38,10 +38,6 @@ const serviceConfig = {
   },
   api: {
     loadBalancer: { pathPattern: '/api/*', priority: 1 }
-  },
-  user: {
-    database: true,
-    loadBalancer: { pathPattern: '/user/*', priority: 4 }
   }
 };
 const lambdaConfig = {
@@ -63,6 +59,9 @@ const lambdaConfig = {
     database: 'rw'
   },
   topup: {
+    database: 'rw'
+  },
+  user: {
     database: 'rw'
   }
 };

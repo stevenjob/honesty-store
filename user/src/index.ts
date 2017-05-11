@@ -216,7 +216,7 @@ const logoutUser = async (userId) => {
   return {};
 };
 
-const app = express();
+export const app = express();
 
 app.use(bodyParser.json());
 
