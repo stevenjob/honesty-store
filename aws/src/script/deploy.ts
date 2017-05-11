@@ -50,10 +50,6 @@ const serviceConfig = {
   topup: {
     database: true,
     loadBalancer: { pathPattern: '/topup/*', priority: 5 }
-  },
-  survey: {
-    database: true,
-    loadBalancer: { pathPattern: '/survey/*', priority: 6 }
   }
 };
 const lambdaConfig = {
@@ -67,6 +63,9 @@ const lambdaConfig = {
   },
   batch: {
     database: 'ro'
+  },
+  survey: {
+    database: 'rw'
   }
 };
 

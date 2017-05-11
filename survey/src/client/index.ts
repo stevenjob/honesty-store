@@ -17,7 +17,9 @@ export interface SurveyResponse {
   answers: ItemId[];
 }
 
-const { get, post } = fetch('survey');
+import { lambdaBaseUrl } from '../../../service/src/baseUrl';
+
+const { get, post } = fetch('survey', lambdaBaseUrl);
 
 export const getUserSurveys = (key, userId) =>
   get<Survey[]>(1, key, `/${userId}`);

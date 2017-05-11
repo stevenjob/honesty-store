@@ -157,7 +157,7 @@ router.post(
     acceptUserSurvey({ userId, answers, surveyId })
 );
 
-const app = express();
+export const app = express();
 app.use(bodyParser.json());
 app.use(router);
 
