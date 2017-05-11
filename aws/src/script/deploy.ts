@@ -57,10 +57,12 @@ const lambdaConfig = {
     database: 'rw'
   },
   topup: {
-    database: 'rw'
+    database: 'rw',
+    withStripe: true
   },
   user: {
-    database: 'rw'
+    database: 'rw',
+    withUserSecret: true
   }
 };
 
@@ -198,7 +200,10 @@ export default async ({ branch, dirs }) => {
         TABLE_NAME: db && db.TableName,
         BASE_URL: baseUrl,
         LAMBDA_BASE_URL: lambdaBaseUrl,
-        SERVICE_TOKEN_SECRET: serviceSecret
+        SERVICE_TOKEN_SECRET: serviceSecret,
+        USER_TOKEN_SECRET: lambdaConfig[dir].withUserSecret && userSecret,
+        LIVE_STRIPE_KEY: lambdaConfig[dir].withStripe && generateStripeKey({ branch, type: 'live' }),
+        TEST_STRIPE_KEY: lambdaConfig[dir].withStripe && generateStripeKey({ branch, type: 'test' })
       }
     });
 
