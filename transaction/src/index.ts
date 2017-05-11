@@ -85,7 +85,7 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
   };
 };
 
-const app = express();
+export const app = express();
 
 app.use(bodyParser.json());
 

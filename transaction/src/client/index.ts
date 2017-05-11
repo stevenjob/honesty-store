@@ -41,7 +41,9 @@ export interface TransactionAndBalance {
   balance: number;
 }
 
-const { get, post } = fetch('transaction');
+import { lambdaBaseUrl } from '../../../service/src/baseUrl';
+
+const { get, post } = fetch('transaction', lambdaBaseUrl);
 
 export const createAccount = (key, accountId: string) =>
   post<AccountAndTransactions>(1, key, '/', { accountId });
