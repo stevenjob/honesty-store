@@ -95,6 +95,12 @@ aws-sdk@^2.17.0:
     xml2js "0.4.15"
     xmlbuilder "2.6.2"
 
+aws-serverless-express@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/aws-serverless-express/-/aws-serverless-express-2.2.0.tgz#288e6915d44ff6866f9f1993237cc494808a3c36"
+  dependencies:
+    binary-case "^1.0.0"
+
 babel-code-frame@^6.20.0:
   version "6.22.0"
   resolved "https://registry.yarnpkg.com/babel-code-frame/-/babel-code-frame-6.22.0.tgz#027620bee567a88c32561574e7fd0801d33118e4"
@@ -114,6 +120,10 @@ base64-js@^1.0.2:
 base64url@2.0.0, base64url@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/base64url/-/base64url-2.0.0.tgz#eac16e03ea1438eff9423d69baa36262ed1f70bb"
+
+binary-case@^1.0.0:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/binary-case/-/binary-case-1.1.3.tgz#f91d0e3008f1fb0f4043d6594522d66d6d1c8409"
 
 body-parser@^1.15.2:
   version "1.16.1"
