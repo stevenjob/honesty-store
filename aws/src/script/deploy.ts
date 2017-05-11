@@ -41,8 +41,6 @@ const serviceConfig = {
   }
 };
 const lambdaConfig = {
-  // Hack: item lambda will get an empty LAMBDA_BASE_URL
-  // Currently okay as it doesn't need to talk to other services
   item: {
     database: 'ro'
   },
