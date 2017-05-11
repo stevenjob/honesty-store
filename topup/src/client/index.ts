@@ -35,7 +35,9 @@ export type TopupResponse = {
   cardDetails: CardDetails;
 } & TransactionAndBalance;
 
-const { get, post } = fetch('topup');
+import { lambdaBaseUrl } from '../../../service/src/baseUrl';
+
+const { get, post } = fetch('topup', lambdaBaseUrl);
 
 export const createTopup = (key, request: TopupRequest) =>
   post<TopupResponse>(1, key, '/', request);

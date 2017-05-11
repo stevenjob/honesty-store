@@ -350,7 +350,7 @@ const assertConnectivity = async () => {
   await assertStripeConnectivity({ test: true });
 };
 
-const app = express();
+export const app = express();
 
 app.use(bodyParser.json());
 
