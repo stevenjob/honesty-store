@@ -1,6 +1,6 @@
 import { getBatch, isMarketplaceBatch } from '../../../batch/src/client';
 import { Box, BoxItem, getBoxesForStore } from '../../../box/src/client';
-import { getItem } from '../../../item/src/client';
+import { getItem, Item } from '../../../item/src/client';
 
 export interface StoreItem {
   name: string;
@@ -66,7 +66,7 @@ const extractBoxItems = (boxes: Box[], itemId: string, matchingCondition = (_box
     );
 };
 
-const getBoxItem = (boxes: Box[], itemID: string): BoxItem => {
+const mostRecentBoxItem = (boxes: Box[], itemID: string): BoxItem => {
   const boxesByDateReceived = boxes.slice().sort((a, b) => a.received - b.received);
   const inStockBoxItems = extractBoxItems(boxesByDateReceived, itemID, (({ depleted }) => depleted == null ));
 
@@ -87,31 +87,8 @@ export const boxIsReceivedAndOpen = (box) => box.closed == null && box.received 
 export const getItemPriceFromStore = async (key, storeCode: string, itemID: string) => {
   assertValidStoreCode(storeCode);
   const boxes = await getBoxesForStore(key, storeCode, boxIsReceivedAndOpen);
-  const { total } = getBoxItem(boxes, itemID);
+  const { total } = mostRecentBoxItem(boxes, itemID);
   return total;
-};
-
-const getUniqueItemCounts = async (key, boxes: Box[]) => {
-  const map = new Map<string, { count: number, isMarketplace: boolean }>();
-
-  const updateUniqueItemCount = async ({ itemID, count, depleted, batches }: BoxItem) => {
-    const existingCount = map.has(itemID) ? map.get(itemID).count : 0;
-    const updatedCount = existingCount + (depleted ? 0 : count);
-
-    const isMarketplace = batches.length === 1 && isMarketplaceBatch(await getBatch(key, batches[0].id));
-    map.set(itemID, { count: updatedCount, isMarketplace });
-  };
-
-  const updatePromises = [];
-  for (const { boxItems } of boxes) {
-    for (const boxItem of boxItems) {
-      updatePromises.push(updateUniqueItemCount(boxItem));
-    }
-  }
-  await Promise.all(updatePromises);
-
-  return Array.from(map.entries())
-    .map(([itemID, { count, isMarketplace }]) => ({ itemID, count, isMarketplace }));
 };
 
 const getPriceBreakdown = (boxItem: BoxItem): PriceBreakdown => {
@@ -146,24 +123,53 @@ const getPriceBreakdown = (boxItem: BoxItem): PriceBreakdown => {
 export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
   const openBoxes = await getBoxesForStore(key, storeCode, boxIsReceivedAndOpen);
 
-  return Promise.all(
-    (await getUniqueItemCounts(key, openBoxes))
-      .map(async ({ itemID, count, isMarketplace }) => {
-        const boxItem = getBoxItem(openBoxes, itemID);
-        const { total, expiry } = boxItem;
-        const breakdown = getPriceBreakdown(boxItem);
+  const items = await Promise.all(openBoxes.map(({ boxItems }) =>
+      boxItems.map(async ({ itemID: itemId, count, depleted, batches }) => {
+        const [ item, batch ] = await Promise.all([
+          getItem(key, itemId),
+          getBatch(key, batches[0].id)
+        ]);
 
-        return ({
-          ...await getItem(key, itemID),
-          count,
-          isMarketplace,
-          id: itemID,
-          expiry,
-          price: {
-            total,
-            breakdown
-          }
+        return {
+          ...item,
+          count: depleted ? 0 : count,
+          isMarketplace: batches.length === 1 && isMarketplaceBatch(batch)
+        };
+      }))
+    .reduce((acc, promises) => acc.concat(promises), []));
+
+  const uniqueItems = Array.from(items.reduce((map, item) => {
+      const existing = map.get(item.id);
+
+      if (!existing) {
+        map.set(item.id, item);
+      } else {
+        map.set(item.id, {
+          ...existing,
+          ...item,
+          isMarketplace: existing.isMarketplace && item.isMarketplace,
+          count: existing.count + item.count
         });
-      })
-  );
+      }
+
+      return map;
+    },
+    // tslint:disable-next-line:align
+    new Map<string, Item & { count: number, isMarketplace: boolean }>())
+    .values());
+
+  return uniqueItems.map(item => {
+    const mostRecentInstance = mostRecentBoxItem(openBoxes, item.id);
+    const { total, expiry } = mostRecentInstance;
+    const breakdown = getPriceBreakdown(mostRecentInstance);
+
+    return {
+      ...item,
+      expiry,
+      price: {
+        total,
+        breakdown
+      }
+    };
+  });
 };
