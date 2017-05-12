@@ -1,24 +1,14 @@
-import { DynamoDB, ECS } from 'aws-sdk';
+import { DynamoDB } from 'aws-sdk';
 import * as winston from 'winston';
 import { ensureLambdaMethod, ensureResource, ensureRestApi, restApiToBaseUrl } from '../apigateway/gateway';
 import { ensureStack } from '../cloudformation/stack';
-import { ensureLogGroup } from '../cloudwatchlogs/loggroup';
-import containerForDir from '../containerDefinition/containers';
 import { ensureTable } from '../dynamodb/table';
-import buildAndPushImage from '../ecr/buildAndPushImage';
-import { ensureService, waitForServicesStable } from '../ecs/service';
-import { ensureTaskDefinition, pruneTaskDefinitions } from '../ecs/taskDefinition';
-import { ensureListener } from '../elbv2/listener';
 import { ensureLoadBalancer } from '../elbv2/loadbalancer';
-import { ensureRule } from '../elbv2/rule';
-import { ensureTargetGroup } from '../elbv2/targetgroup';
 import { ensureFunction } from '../lambda/function';
 import { aliasToBaseUrl, ensureAlias } from '../route53/alias';
 import dirToTable from '../table/tables';
 
 export const prefix = 'hs';
-export const defaultTargetGroupDir = 'web';
-export const ecsServiceRole = 'arn:aws:iam::812374064424:role/ecs-service-role';
 
 export const ensureWebStack = async () =>
   await ensureStack({
@@ -32,8 +22,6 @@ export const ensureWebStack = async () =>
       VpcCidrBlock: '10.1.0.0/16'
     }});
 
-const serviceConfig = {
-};
 const lambdaConfig = {
   item: {
     database: 'ro'
@@ -121,19 +109,6 @@ const generateSecret = ({ secretPrefix, branch, liveSecret }) => {
   return `${secretPrefix}:${bareSecret()}`;
 };
 
-const getTaskRoleArn = ({ branch, database }) => {
-  if (database) {
-    return isLive(branch) ?
-      'arn:aws:iam::812374064424:role/live-task-role' :
-      'arn:aws:iam::812374064424:role/dynamo-db-role';
-  }
-  return undefined;
-};
-
-const getCertificateArn = ({ branch }) => isLive(branch) ?
-  'arn:aws:acm:eu-west-1:812374064424:certificate/49b5410d-0c99-4de0-a222-3fe364bfbc73' :
-  'arn:aws:acm:eu-west-1:812374064424:certificate/0fd0796a-98c9-4e3c-8316-1efcf70aae77';
-
 const createApiGatewayResource = async ({ restApi, dir, catchAllResource }) => {
   if (catchAllResource) {
     return await ensureResource({
@@ -197,22 +172,6 @@ export default async ({ branch, dirs }) => {
     name: branch,
     value: loadBalancer.DNSName
   });
-  const defaultTargetGroup = await ensureTargetGroup({
-    name: generateName({ branch, dir: defaultTargetGroupDir }),
-    vpc: stack.Vpc
-  });
-  await ensureListener({
-    loadBalancerArn: loadBalancer.LoadBalancerArn,
-    defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn,
-    certificateArn: undefined,
-    protocol: 'HTTP'
-  });
-  const listener = await ensureListener({
-    loadBalancerArn: loadBalancer.LoadBalancerArn,
-    defaultTargetGroupArn: defaultTargetGroup.TargetGroupArn,
-    certificateArn: getCertificateArn({ branch }),
-    protocol: 'HTTPS'
-  });
 
   const restApi = await ensureRestApi({ name: generateName({ branch }) });
   const lambdaBaseUrl = restApiToBaseUrl(restApi);
@@ -252,81 +211,6 @@ export default async ({ branch, dirs }) => {
       catchAllResource: lambdaConfig[dir].catchAllResource
     });
   }
-
-  const services: ECS.Service[] = [];
-  for (const dir of dirs) {
-    if (!serviceConfig[dir]) {
-      continue;
-    }
-
-    const logGroup = generateName({ branch, dir });
-    await ensureLogGroup({
-      name: logGroup,
-      retention: isLive(branch) ? 30 : 1
-    });
-    const targetGroup = await ensureTargetGroup({
-      name: generateName({ branch, dir }),
-      vpc: stack.Vpc
-    });
-    await ensureRule({
-      listenerArn: listener.ListenerArn,
-      targetGroupArn: targetGroup.TargetGroupArn,
-      pathPattern: serviceConfig[dir].loadBalancer.pathPattern,
-      priority: serviceConfig[dir].loadBalancer.priority
-    });
-    const image = await buildAndPushImage({
-      dir,
-      repositoryName: generateName({ branch, dir })
-    });
-    const db = serviceConfig[dir].database ? await ensureDatabase({ branch, dir }) : {};
-    // TODO: create bespoke roles
-    const containerDefinitions = containerForDir({
-      dir,
-      data: {
-        image,
-        logGroup,
-        tableName: db.TableName,
-        baseUrl: lambdaBaseUrl,
-        serviceSecret,
-        userSecret,
-        liveStripeKey: generateStripeKey({ branch, type: 'live' }),
-        testStripeKey: generateStripeKey({ branch, type: 'test' }),
-        lambdaBaseUrl
-      }
-    });
-
-    const taskDefinition = await ensureTaskDefinition({
-      family: generateName({ branch, dir }),
-      containerDefinitions,
-      taskRoleArn: getTaskRoleArn({ branch, database: serviceConfig[dir].database })
-    });
-    await pruneTaskDefinitions({
-      filter: ({ family, revision }) => family === taskDefinition.family && revision !== taskDefinition.revision
-    });
-    // For now assuming all tasks contain only one container with a port mapping which should be load balanced
-    const service = await ensureService({
-      serviceName: generateName({ branch, dir }),
-      cluster: stack.Cluster,
-      desiredCount: isLive(branch) ? 2 : 1,
-      taskDefinition: taskDefinition.taskDefinitionArn,
-      loadBalancers: [
-        {
-          containerName: taskDefinition.containerDefinitions[0].name,
-          containerPort: taskDefinition.containerDefinitions[0].portMappings[0].containerPort,
-          targetGroupArn: targetGroup.TargetGroupArn
-        }
-      ],
-      role: ecsServiceRole
-    });
-    services.push(service);
-  }
-
-  winston.info('Waiting for stability');
-
-  await waitForServicesStable({
-    cluster: stack.Cluster,
-    services: services.map(service => service.serviceName)
-  });
 
   winston.info(`Deployed to ${baseUrl}`);
 };
