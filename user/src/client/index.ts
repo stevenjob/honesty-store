@@ -31,9 +31,7 @@ export type UserWithAccessAndRefreshTokens = User & WithAccessToken & WithRefres
 
 export type UserWithMagicLinkToken = User & WithMagicLinkToken;
 
-import { lambdaBaseUrl } from '../../../service/src/baseUrl';
-
-const { get, post, put } = fetch('user', lambdaBaseUrl);
+const { get, post, put } = fetch('user');
 
 export const getUser = (key, userId: string) =>
   get<User>(1, key, `/${userId}`);
