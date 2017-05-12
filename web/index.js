@@ -7,6 +7,8 @@ const cors = require('cors');
 const port = process.env.PORT || 8080;
 const app = express();
 
+exports.app = app;
+
 // Upgrade HTTP connections to HTTPS automatically
 // (ignore non-proxied requests i.e. LB probes)
 app.use((req, res, next) => {
