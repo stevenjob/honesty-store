@@ -22,6 +22,7 @@ const cruft = cruftDDB<Box>({
 const assertValidBoxId = createAssertValidUuid('boxId');
 const assertValidBatchId = createAssertValidUuid('batchId');
 const assertValidItemId = createAssertValidUuid('boxItemId');
+const assertValidStoreId = createAssertValidUuid('storeId');
 
 const assertValidShippedBatch = (batch: Batch) => {
   const { id: batchId, supplier } = batch;
@@ -131,6 +132,8 @@ const getBox = async (boxId) => {
 };
 
 const getBoxesForStore = async (storeId) => {
+  assertValidStoreId(storeId);
+
   return await cruft.__findAll({ storeId });
 };
 
