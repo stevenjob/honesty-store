@@ -27,6 +27,7 @@ dependencies:
     - cd box && yarn install
     - cd batch && yarn install
     - cd scripts && yarn install
+    - cd store && yarn install
 compile:
   override:
     - cd api && npm run ci
@@ -43,6 +44,7 @@ compile:
     - cd box && npm run ci
     - cd batch && npm run ci
     - cd scripts && npm run ci
+    - cd store && npm run ci
 test:
   post:
     - cd api && yarn install --production --ignore-scripts --prefer-offline
@@ -58,12 +60,13 @@ test:
     - cd box && yarn install --production --ignore-scripts --prefer-offline
     - cd batch && yarn install --production --ignore-scripts --prefer-offline
     - cd scripts && yarn install --production --ignore-scripts --prefer-offline
+    - cd store && yarn install --production --ignore-scripts --prefer-offline
 deployment:
   aws:
     branch: /.*/
     commands:
       # currently we don't deploy support - it contains scripts intended to be locally-run
-      - ./aws/bin/aws deploy $CIRCLE_BRANCH api batch item transaction user web topup survey box
+      - ./aws/bin/aws deploy $CIRCLE_BRANCH api batch item transaction user web topup survey box store
       - ./aws/bin/aws prune
 general:
   # attempt to speed up artifact collection by specifying an empty list

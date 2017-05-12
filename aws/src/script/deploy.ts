@@ -50,6 +50,9 @@ const lambdaConfig = {
   batch: {
     database: 'ro'
   },
+  store: {
+    database: 'ro'
+  },
   survey: {
     database: 'rw'
   },
