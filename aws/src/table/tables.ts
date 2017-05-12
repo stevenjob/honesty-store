@@ -565,7 +565,7 @@ export default ({ dir, readCapacityUnits, writeCapacityUnits }) => {
   const createJSON: (_: { readCapacityUnits, writeCapacityUnits }) => TableTemplate = dirToTable[dir];
 
   if (!createJSON) {
-    throw new Error(`no container for directory '${dir}'`);
+    throw new Error(`no table entry for directory '${dir}'`);
   }
 
   return createJSON({ readCapacityUnits, writeCapacityUnits });
