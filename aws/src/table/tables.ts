@@ -540,7 +540,19 @@ const dirToTable = {
         VATRate: 0
       }
     ]
-  })
+  }),
+
+  store: ({ readCapacityUnits, writeCapacityUnits }) => template({
+    readCapacityUnits,
+    writeCapacityUnits,
+    dummyData: [
+      {
+        id: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
+        code: 'dev-test',
+        agentId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649'
+      }
+    ]
+  }),
 };
 
 export default ({ dir, readCapacityUnits, writeCapacityUnits }) => {
