@@ -22,7 +22,19 @@ export const ensureWebStack = async () =>
       VpcCidrBlock: '10.1.0.0/16'
     }});
 
-const lambdaConfig = {
+interface LambdaConfig {
+  [key: string]: {
+    database?: 'ro' | 'rw';
+    handler?: string;
+
+    withStripe?: boolean;
+    withUserSecret?: boolean;
+
+    catchAllResource?: boolean;
+  };
+}
+
+const lambdaConfig: LambdaConfig = {
   item: {
     database: 'ro'
   },
@@ -50,10 +62,8 @@ const lambdaConfig = {
     withUserSecret: true
   },
   api: {
-    database: 'none'
   },
   web: {
-    database: 'none',
     handler: 'lambda.handler',
     catchAllResource: true
   }

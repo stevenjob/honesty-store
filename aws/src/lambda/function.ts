@@ -12,8 +12,8 @@ const zip = (dir, filter) => new Promise<Buffer>((res, rej) => {
   });
 });
 
-const dynamoAccessToRole = (access: 'ro' | 'rw' | 'none', live: boolean) => {
-  if (access === 'none') {
+const dynamoAccessToRole = ({ access, live }: { access?: 'ro' | 'rw', live: boolean }) => {
+  if (!access) {
     return 'arn:aws:iam::812374064424:role/lambda_basic_execution';
   }
 
@@ -25,7 +25,7 @@ const dynamoAccessToRole = (access: 'ro' | 'rw' | 'none', live: boolean) => {
 const ensureLambda = async ({ name, handler, environment, dynamoAccess, zipFile, live }) => {
   const lambda = new Lambda({ apiVersion: '2015-03-31' });
 
-  const role = dynamoAccessToRole(dynamoAccess, live);
+  const role = dynamoAccessToRole({ access: dynamoAccess, live });
   const params = {
     FunctionName: name,
     Timeout: 10,
@@ -94,7 +94,7 @@ export const ensureFunction = async ({
   codeFilter,
   handler,
   environment,
-  dynamoAccess = 'none',
+  dynamoAccess,
   withApiGateway = false,
   live
 }) => {
