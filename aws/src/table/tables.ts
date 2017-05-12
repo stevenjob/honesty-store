@@ -127,7 +127,7 @@ const dietCokeBoxItem = {
 const dummyBoxData: BoxData[] = [
   {
     id: 'f46228cc-a138-495d-b28e-c5f7f0973f56',
-    storeId: 'dev-test',
+    storeId: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
     version: 0,
     shippingCost: 0,
     packed: 1491300007664,
@@ -162,7 +162,7 @@ const dummyBoxData: BoxData[] = [
   },
   {
     id: '06439c6c-57c9-4a17-b218-2018ea8dae55',
-    storeId: 'dev-test',
+    storeId: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
     version: 0,
     donationRate: 0.1,
     boxItems: [
@@ -206,7 +206,7 @@ const dummyBoxData: BoxData[] = [
   },
   {
     id: 'a7a863c6-9974-475d-96e9-4b4078a2e1c2',
-    storeId: 'dev-test',
+    storeId: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
     version: 0,
     donationRate: 0.1,
     boxItems: [
@@ -251,7 +251,7 @@ const dummyBoxData: BoxData[] = [
   },
   {
     id: '5b3b4683-918e-49b1-bc68-9c33a5bbdf33',
-    storeId: 'dev-test',
+    storeId: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
     version: 0,
     donationRate: 0.1,
     boxItems: [
@@ -306,7 +306,7 @@ const dirToTable = {
       {
         id: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649',
         accountId: 'b423607f-64de-441f-ac39-12d50aaedbe9',
-        defaultStoreId: 'dev-test',
+        defaultStoreId: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
         emailAddress: 'support@honesty.store',
         refreshToken: '34726c71-92aa-4e2e-83ec-0b4a5d83dedf'
       }
