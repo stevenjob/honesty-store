@@ -1,11 +1,12 @@
 import { config } from 'aws-sdk';
+import bodyParser = require('body-parser');
 import cruftDDB from 'cruft-ddb';
 import express = require('express');
-import bodyParser = require('body-parser');
 
-import { Store } from './client';
 import { CodedError } from '../../service/src/error';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
+import { Store } from './client';
+
 config.region = process.env.AWS_REGION;
 
 const cruft = cruftDDB<Store>({
@@ -15,8 +16,7 @@ const cruft = cruftDDB<Store>({
 const getStoreFromId = async (id: string) => {
   try {
     return await cruft.read({ id });
-  }
-  catch (e) {
+  } catch (e) {
     throw new CodedError('StoreNotFound', `No store found with id ${id} - ${e.message}`);
   }
 };

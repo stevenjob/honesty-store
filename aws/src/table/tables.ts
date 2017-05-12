@@ -552,7 +552,7 @@ const dirToTable = {
         agentId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649'
       }
     ]
-  }),
+  })
 };
 
 export default ({ dir, readCapacityUnits, writeCapacityUnits }) => {

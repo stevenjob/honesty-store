@@ -15,7 +15,7 @@
     "aws-sdk": "^2.7.10",
     "aws-serverless-express": "^2.2.0",
     "body-parser": "^1.15.2",
-    "cruft-ddb": "^1.0.5",
+    "cruft-ddb": "1.0.5",
     "express": "^4.14.0",
     "http-status": "^0.2.5",
     "jsonwebtoken": "^7.2.1",
@@ -29,8 +29,8 @@
     "@types/node": "0.0.2",
     "@types/uuid": "^2.0.29",
     "@types/validator": "^5.7.35",
-    "tslint": "^4.4.2",
-    "tslint-microsoft-contrib": "^4.0.0",
+    "tslint": "4.4.2",
+    "tslint-microsoft-contrib": "4.0.0",
     "typescript": "2.1.5"
   }
 }
