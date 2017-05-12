@@ -1,6 +1,6 @@
 import { DynamoDB, ECS } from 'aws-sdk';
 import * as winston from 'winston';
-import { ensureApiGateway, ensureRestApi, restApiToBaseUrl } from '../apigateway/gateway';
+import { ensureLambdaMethod, ensureResource, ensureRestApi, restApiToBaseUrl } from '../apigateway/gateway';
 import { ensureStack } from '../cloudformation/stack';
 import { ensureLogGroup } from '../cloudwatchlogs/loggroup';
 import containerForDir from '../containerDefinition/containers';
@@ -132,6 +132,27 @@ const getCertificateArn = ({ branch }) => isLive(branch) ?
   'arn:aws:acm:eu-west-1:812374064424:certificate/49b5410d-0c99-4de0-a222-3fe364bfbc73' :
   'arn:aws:acm:eu-west-1:812374064424:certificate/0fd0796a-98c9-4e3c-8316-1efcf70aae77';
 
+const setupApiGateway = async ({ restApi, dir, lambdaArn }) => {
+  await ensureResource({
+    restApi,
+    path: dir,
+    parentPath: '/'
+  });
+
+  const proxyResource = await ensureResource({
+    restApi,
+    path: '{proxy+}',
+    parentPath: `/${dir}`
+  });
+
+  await ensureLambdaMethod({
+    restApi,
+    serviceName: dir,
+    lambdaArn,
+    resource: proxyResource
+  });
+};
+
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
 export default async ({ branch, dirs }) => {
   const serviceSecret = generateSecret({
@@ -210,11 +231,7 @@ export default async ({ branch, dirs }) => {
       }
     });
 
-    await ensureApiGateway({
-      restApi,
-      serviceName: dir,
-      lambdaArn: lambda.FunctionArn
-    });
+    await setupApiGateway({ restApi, dir, lambdaArn: lambda.FunctionArn });
   }
 
   const services: ECS.Service[] = [];

@@ -80,7 +80,7 @@ export const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
   return response;
 };
 
-const ensureResource = async ({ restApi, path, parentPath }) => {
+export const ensureResource = async ({ restApi, path, parentPath }) => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
 
   const resources = await apigateway.getResources({
@@ -263,24 +263,14 @@ const ensureStagedIntegration = async ({ restApi, deployment }) => {
 export const restApiToBaseUrl = ({ id }: APIGateway.RestApi) =>
   `https://${id}.execute-api.eu-west-1.amazonaws.com/${stageName}`;
 
-export const ensureApiGateway = async ({
+export const ensureLambdaMethod = async ({
   restApi,
   serviceName,
-  lambdaArn
+  lambdaArn,
+  resource
 }) => {
-  await ensureResource({
-    restApi,
-    path: serviceName,
-    parentPath: '/'
-  });
-  const proxyResource = await ensureResource({
-    restApi,
-    path: '{proxy+}',
-    parentPath: `/${serviceName}`
-  });
-
-  const restMethod = await ensureProxyMethod({ restApi, resource: proxyResource });
-  await ensureIntegration({ restApi, resource: proxyResource, restMethod, lambdaArn });
+  const restMethod = await ensureProxyMethod({ restApi, resource });
+  await ensureIntegration({ restApi, resource, restMethod, lambdaArn });
   const deployment = await ensureDeployment({ restApi, serviceName });
 
   await ensureStagedIntegration({ restApi, deployment });
