@@ -17,7 +17,7 @@ import topUpController from './controllers/topup';
 import transactionsController from './controllers/transactions';
 import { apiVersion } from './version';
 
-const app = express();
+export const app = express();
 const router = serviceRouter('api', apiVersion);
 
 app.use(compression());
