@@ -1,10 +1,11 @@
+import { getStoreFromCode } from '../../../store/src/client';
 import { updateUser } from '../../../user/src/client/index';
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { getSessionData } from '../services/session';
-import { storeCodeToStoreID } from '../services/store';
 
 export const updateDefaultStoreCode = async (key, userID, storeCode) => {
-  return await updateUser(key, userID, { defaultStoreId: storeCodeToStoreID(storeCode) });
+  const { id: defaultStoreId } = await getStoreFromCode(key, storeCode);
+  return await updateUser(key, userID, { defaultStoreId });
 };
 
 const updateStoreAndGetItems = async (key, userId, storeCode) => {

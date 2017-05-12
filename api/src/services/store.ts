@@ -44,10 +44,6 @@ export const stores: Store[] = [
   { code: 'dev-test', agentId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649' }
 ];
 
-// currently storeCode and storeID are identical
-export const storeIDToStoreCode = (storeID) => storeID;
-export const storeCodeToStoreID = (storeCode) => storeCode;
-
 const assertValidStoreCode = (storeCode) => {
   if (!stores.some(({ code }) => code === storeCode)) {
     throw new Error(`Store does not exist with code '${storeCode}'`);
@@ -120,8 +116,8 @@ const getPriceBreakdown = (boxItem: BoxItem): PriceBreakdown => {
   };
 };
 
-export const storeItems = async (key, storeCode): Promise<StoreItem[]> => {
-  const openBoxes = await getBoxesForStore(key, storeCode, boxIsReceivedAndOpen);
+export const storeItems = async (key, storeId): Promise<StoreItem[]> => {
+  const openBoxes = await getBoxesForStore(key, storeId, boxIsReceivedAndOpen);
 
   const items = await Promise.all(openBoxes.map(({ boxItems }) =>
       boxItems.map(async ({ itemID: itemId, count, depleted, batches }) => {

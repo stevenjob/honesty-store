@@ -2,18 +2,19 @@ import isEmail = require('validator/lib/isEmail');
 import { error } from '../../../service/src/log';
 import uuid = require('uuid/v4');
 
+import { getStoreFromCode } from '../../../store/src/client';
 import { createTopup } from '../../../topup/src/client/index';
 import { TransactionAndBalance } from '../../../transaction/src/client/index';
 import { createUser, updateUser } from '../../../user/src/client/index';
 import { authenticateAccessToken, noopAuthentication } from '../middleware/authenticate';
 import { getSessionData, getUserFeatures, UserSessionData } from '../services/session';
-import { storeCodeToStoreID } from '../services/store';
 import { purchase } from '../services/transaction';
 
 const register = async (key, storeCode) => {
   const userId = uuid();
+  const { id: defaultStoreId } = await getStoreFromCode(key, storeCode);
   const profile = {
-    defaultStoreId: storeCodeToStoreID(storeCode)
+    defaultStoreId
   };
   const user = await createUser(key, userId, profile);
 

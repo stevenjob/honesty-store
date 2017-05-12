@@ -2,12 +2,12 @@ import { config, SES } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 import bodyParser = require('body-parser');
 import express = require('express');
-import { stores } from '../../api/src/services/store';
 import { Batch, getBatch, MARKETPLACE_ID } from '../../batch/src/client';
 import { createAssertValidUuid } from '../../service/src/assert';
 import { CodedError } from '../../service/src/error';
 import { info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
+import { getStoreFromId } from '../../store/src/client';
 import { getUser } from '../../user/src/client';
 import { Box } from './client';
 import calculateMarketplaceBoxPricing from './marketplace-box';
@@ -18,12 +18,6 @@ config.region = process.env.AWS_REGION;
 const cruft = cruftDDB<Box>({
   tableName: process.env.TABLE_NAME
 });
-
-const assertValidStoreId = (storeId) => {
-  if (!stores.some(({ code }) => code === storeId)) {
-    throw new Error(`No store found with id '${storeId}'`);
-  }
-};
 
 const assertValidBoxId = createAssertValidUuid('boxId');
 const assertValidBatchId = createAssertValidUuid('batchId');
@@ -137,8 +131,6 @@ const getBox = async (boxId) => {
 };
 
 const getBoxesForStore = async (storeId) => {
-  assertValidStoreId(storeId);
-
   return await cruft.__findAll({ storeId });
 };
 
@@ -199,7 +191,7 @@ const markBoxAsShipped = async ({ key, boxId, date }) => {
   await cruft.update(box);
 
   const { storeId } = box;
-  const { agentId } = stores.find(({ code }) => code === storeId);
+  const { agentId } = await getStoreFromId(key, storeId);
   const { emailAddress } = await getUser(key, agentId);
   await sendShippedNotification({ key, emailAddress, boxId });
 
@@ -236,7 +228,7 @@ const assertValidlyPricedBox = (box: Box) => {
 const createMarketplaceBox = async ({ key, storeId, submission, dryRun}): Promise<Box> => {
   info(key, `New marketplace submission received for store ${storeId}`, { submission });
 
-  assertValidStoreId(storeId);
+  await getStoreFromId(key, storeId);
   await assertValidMarketplaceBoxSubmission(key, submission);
 
   const box = await calculateMarketplaceBoxPricing(key, storeId, submission);
@@ -252,7 +244,7 @@ const createMarketplaceBox = async ({ key, storeId, submission, dryRun}): Promis
 const createShippedBox = async ({ key, storeId, submission, dryRun }): Promise<Box> => {
   info(key, `New box submission received for store ${storeId}`, { submission });
 
-  assertValidStoreId(storeId);
+  await getStoreFromId(key, storeId);
   await assertValidShippedBoxSubmission(submission);
 
   const box = await calculateShippedBoxPricing(key, storeId, submission);

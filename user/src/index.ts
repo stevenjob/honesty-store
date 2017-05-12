@@ -4,12 +4,12 @@ import bodyParser = require('body-parser');
 import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isEmail = require('validator/lib/isEmail');
-import { storeIDToStoreCode, stores } from '../../api/src/services/store'; // until we have the store service
 import { createAssertValidUuid } from '../../service/src/assert';
 import { CodedError } from '../../service/src/error';
 import { createServiceKey } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
+import { getStoreFromId } from '../../store/src/client';
 import { createAccount } from '../../transaction/src/client';
 import { TEST_DATA_USER_ID, User, UserProfile, UserWithAccessAndRefreshTokens, UserWithAccessToken } from './client';
 import { signAccessToken, signRefreshToken, verifyAccessToken, verifyMagicLinkToken, verifyRefreshToken } from './token';
@@ -27,13 +27,7 @@ interface InternalUser extends User {
 
 const assertValidUserId = createAssertValidUuid('userId');
 const assertValidRefreshToken = createAssertValidUuid('refreshToken');
-
-const assertValidDefaultStoreId = (defaultStoreId) => {
-  const storeCodes = stores.map(({ code }) => code);
-  if (storeCodes.indexOf(defaultStoreId) === -1) {
-    throw new CodedError('StoreNotFound', `Invalid defaultStoreId ${defaultStoreId}`);
-  }
-};
+const assertValidDefaultStoreId = createAssertValidUuid('storeId');
 
 const assertValidEmailAddress = (emailAddress) => {
   if (emailAddress == null || !isEmail(emailAddress)) {
@@ -170,7 +164,7 @@ const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
 const sendMagicLinkEmail = async ({ key, emailAddress, storeCode }) => {
   const user = await scanByEmailAddress({ emailAddress });
 
-  const requestedStoreCode = storeCode || storeIDToStoreCode(user.defaultStoreId);
+  const requestedStoreCode = storeCode || (await getStoreFromId(key, storeCode)).code;
 
   const message = `( https://honesty.store )
 
