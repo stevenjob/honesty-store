@@ -69,7 +69,10 @@ export const ensureDomainName = async ({ restApi, alias, certificateArn }:
 
   const name = aliasToName(alias);
 
-  const found = await apigateway.getDomainName({ domainName: name });
+  const domainNames = await apigateway.getDomainNames({ limit: assumedLimit })
+    .promise();
+
+  const found = domainNames.items.find(domainName => domainName.domainName === name);
 
   if (found) {
     winston.debug(`apigateway: found domainName (lazily assuming basePathMapping exists)`, found);
