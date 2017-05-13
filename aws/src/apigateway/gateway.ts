@@ -1,6 +1,7 @@
 import { APIGateway, config } from 'aws-sdk';
 import * as winston from 'winston';
 import ms = require('ms');
+import { aliasToName } from '../route53/alias';
 
 interface NestedRestApi {
   restApi: APIGateway.RestApi;
@@ -56,6 +57,47 @@ const makeRetryable = request => {
   });
 
   return request;
+};
+
+interface CreateDomainNameRequest extends APIGateway.CreateDomainNameRequest {
+  certificateArn: string;
+}
+
+export const ensureDomainName = async ({ restApi, alias, certificateArn }:
+  { restApi: APIGateway.RestApi, alias: string, certificateArn: string }): Promise<APIGateway.DomainName> => {
+  const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
+
+  const name = aliasToName(alias);
+
+  const found = await apigateway.getDomainName({ domainName: name });
+
+  if (found) {
+    winston.debug(`apigateway: found domainName (lazily assuming basePathMapping exists)`, found);
+
+    return found;
+  }
+
+  winston.debug(`apigateway: couldn't find domainName ${name}`);
+
+  const domainName = await apigateway.createDomainName(<CreateDomainNameRequest>{
+    certificateArn,
+    domainName: name
+  })
+    .promise();
+
+  winston.debug(`apigateway: createDomainName`, domainName);
+
+  const basePathMapping = await apigateway.createBasePathMapping({
+    domainName: name,
+    basePath: '',
+    restApiId: restApi.id,
+    stage: stageName
+  })
+    .promise();
+
+  winston.debug(`apigateway: createBasePathMapping`, basePathMapping);
+
+  return domainName;
 };
 
 export const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
@@ -290,6 +332,39 @@ export const pruneApiGateway = async (filter: (_: APIGateway.RestApi) => boolean
   const promises = restApis
     .filter(filter)
     .map(pruneRestApi);
+
+  await Promise.all(promises);
+};
+
+const pruneDomainName = async (domainName: string) => {
+  const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
+
+  winston.debug(`pruneDomainName: deleteBasePathMapping`, domainName);
+
+  await apigateway.deleteBasePathMapping({
+    domainName,
+    basePath: ''
+  })
+    .promise();
+
+  winston.debug(`pruneDomainName: deleteDomainName`, domainName);
+
+  await apigateway.deleteDomainName({ domainName })
+    .promise();
+};
+
+export const pruneDomainNames = async (filter: (_: string) => boolean) => {
+  const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
+
+  const domainNames = await apigateway.getDomainNames({ limit: assumedLimit })
+    .promise();
+
+  winston.debug(`pruneDomainNames: domainNames`, domainNames.items);
+
+  const promises = domainNames.items
+    .map(({ domainName }) => domainName)
+    .filter(filter)
+    .map(pruneDomainName);
 
   await Promise.all(promises);
 };

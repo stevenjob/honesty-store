@@ -1,9 +1,8 @@
 import { DynamoDB } from 'aws-sdk';
 import * as winston from 'winston';
-import { ensureLambdaMethod, ensureResource, ensureRestApi, restApiToBaseUrl } from '../apigateway/gateway';
+import { ensureDomainName, ensureLambdaMethod, ensureResource, ensureRestApi } from '../apigateway/gateway';
 import { ensureStack } from '../cloudformation/stack';
 import { ensureTable } from '../dynamodb/table';
-import { ensureLoadBalancer } from '../elbv2/loadbalancer';
 import { ensureFunction } from '../lambda/function';
 import { aliasToBaseUrl, ensureAlias } from '../route53/alias';
 import dirToTable from '../table/tables';
@@ -152,6 +151,10 @@ const setupApiGateway = async ({ restApi, dir, lambdaArn, catchAllResource }) =>
   });
 };
 
+const getCertificateArn = ({ branch }) => isLive(branch) ?
+  'arn:aws:acm:eu-west-1:812374064424:certificate/49b5410d-0c99-4de0-a222-3fe364bfbc73' :
+  'arn:aws:acm:eu-west-1:812374064424:certificate/0fd0796a-98c9-4e3c-8316-1efcf70aae77';
+
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
 export default async ({ branch, dirs }) => {
   const serviceSecret = generateSecret({
@@ -166,25 +169,20 @@ export default async ({ branch, dirs }) => {
   });
 
   const baseUrl = aliasToBaseUrl(branch);
-  const stack = await ensureWebStack();
-  const loadBalancer = await ensureLoadBalancer({
-    name: generateName({ branch }),
-    securityGroups: [
-      stack.SecurityGroupAllowAll
-    ],
-    subnets: [
-      stack.SubnetA,
-      stack.SubnetB,
-      stack.SubnetC
-    ]
-  });
-  await ensureAlias({
-    name: branch,
-    value: loadBalancer.DNSName
-  });
 
   const restApi = await ensureRestApi({ name: generateName({ branch }) });
-  const lambdaBaseUrl = restApiToBaseUrl(restApi);
+
+  const customDomain = await ensureDomainName({
+    restApi,
+    alias: branch,
+    certificateArn: getCertificateArn({ branch })
+  });
+
+  await ensureAlias({
+    alias: branch,
+    value: customDomain.distributionDomainName
+  });
+
   for (const dir of dirs) {
     if (!lambdaConfig[dir]) {
       continue;
@@ -205,8 +203,8 @@ export default async ({ branch, dirs }) => {
       live: isLive(branch),
       environment: {
         TABLE_NAME: db && db.TableName,
-        BASE_URL: lambdaBaseUrl,
-        LAMBDA_BASE_URL: lambdaBaseUrl,
+        BASE_URL: baseUrl,
+        LAMBDA_BASE_URL: baseUrl,
         SERVICE_TOKEN_SECRET: serviceSecret,
         USER_TOKEN_SECRET: lambdaConfig[dir].withUserSecret && userSecret,
         LIVE_STRIPE_KEY: lambdaConfig[dir].withStripe && generateStripeKey({ branch, type: 'live' }),

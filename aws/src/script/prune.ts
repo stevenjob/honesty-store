@@ -1,4 +1,4 @@
-import { pruneApiGateway } from '../apigateway/gateway';
+import { pruneApiGateway, pruneDomainNames } from '../apigateway/gateway';
 import { pruneLogGroups } from '../cloudwatchlogs/loggroup';
 import { pruneTables } from '../dynamodb/table';
 import { pruneRepositories } from '../ecr/repository';
@@ -8,7 +8,7 @@ import { pruneLoadBalancers } from '../elbv2/loadbalancer';
 import { pruneTargetGroups } from '../elbv2/targetgroup';
 import { getOriginBranchNames } from '../git/branch';
 import { pruneFunctions } from '../lambda/function';
-import { pruneAliases } from '../route53/alias';
+import { aliasToName, pruneAliases } from '../route53/alias';
 import { ensureWebStack, prefix } from './deploy';
 
 const force = process.env.FORCE;
@@ -28,6 +28,12 @@ export default async () => {
 
   await pruneFunctions(
     lambda => filter(lambda.FunctionName)
+  );
+
+  await pruneDomainNames(
+    (domainName) => !branchNames.some(
+      branchName => aliasToName(branchName) === domainName
+    )
   );
 
   await pruneApiGateway(

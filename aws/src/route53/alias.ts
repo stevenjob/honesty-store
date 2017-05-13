@@ -4,11 +4,13 @@ import * as winston from 'winston';
 
 const HostedZoneId = 'Z1NOZ8HJXP3L7I';
 
-export const aliasToBaseUrl = (alias) => `https://${alias}.honesty.store`;
+export const aliasToName = (alias) => `${alias}.honesty.store`;
 
-export const ensureAlias = async ({ name, value }) => {
+export const aliasToBaseUrl = (alias) => `https://${aliasToName(alias)}`;
+
+export const ensureAlias = async ({ alias, value }) => {
   const resourceRecordSet: Route53.ResourceRecordSet = {
-    Name: `${name}.honesty.store.`,
+    Name: aliasToName(alias),
     Type: 'CNAME',
     ResourceRecords: [
       { Value: value }
