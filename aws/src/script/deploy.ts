@@ -152,8 +152,8 @@ const setupApiGateway = async ({ restApi, dir, lambdaArn, catchAllResource }) =>
 };
 
 const getCertificateArn = ({ branch }) => isLive(branch) ?
-  'arn:aws:acm:eu-west-1:812374064424:certificate/49b5410d-0c99-4de0-a222-3fe364bfbc73' :
-  'arn:aws:acm:eu-west-1:812374064424:certificate/0fd0796a-98c9-4e3c-8316-1efcf70aae77';
+  'arn:aws:acm:us-east-1:812374064424:certificate/8f1b6ff9-f215-4c9c-8a14-04a2aab84004' :
+  'arn:aws:acm:us-east-1:812374064424:certificate/952d48cc-77bc-4736-b398-c5451e7dc970';
 
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
 export default async ({ branch, dirs }) => {
