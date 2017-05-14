@@ -143,11 +143,20 @@ const createApiGatewayResource = async ({ restApi, dir, catchAllResource }) => {
 const setupApiGateway = async ({ restApi, dir, lambdaArn, catchAllResource }) => {
   const resource = await createApiGatewayResource({ restApi, dir, catchAllResource });
 
+  if (catchAllResource) {
+    await ensureLambdaMethod({
+      restApi,
+      serviceName: dir,
+      lambdaArn,
+      resourceId: resource.parentId
+    });
+  }
+
   await ensureLambdaMethod({
     restApi,
     serviceName: dir,
     lambdaArn,
-    resource
+    resourceId: resource.id
   });
 };
 

@@ -6,12 +6,12 @@ import { aliasToName } from '../route53/alias';
 interface NestedRestApi {
   restApi: APIGateway.RestApi;
 }
-interface NestedResource {
-  resource: APIGateway.Resource;
+interface NestedResourceId {
+  resourceId: string;
 }
 type IntegrationParams =
   NestedRestApi &
-  NestedResource &
+  NestedResourceId &
   {
     restMethod: APIGateway.Method;
     lambdaArn: string;
@@ -125,7 +125,7 @@ export const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
   return response;
 };
 
-export const ensureResource = async ({ restApi, path, parentPath }) => {
+export const ensureResource = async ({ restApi, path, parentPath }): Promise<APIGateway.Resource> => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
 
   const resources = await apigateway.getResources({
@@ -164,13 +164,13 @@ export const ensureResource = async ({ restApi, path, parentPath }) => {
   return response;
 };
 
-const ensureProxyMethod = async ({ restApi, resource }: NestedRestApi & NestedResource) => {
+const ensureProxyMethod = async ({ restApi, resourceId }: NestedRestApi & NestedResourceId) => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
 
   try {
     const response = await makeRetryable(apigateway.putMethod({
       restApiId: restApi.id,
-      resourceId: resource.id,
+      resourceId: resourceId,
       httpMethod: 'ANY',
       authorizationType: 'NONE'
     }))
@@ -187,7 +187,7 @@ const ensureProxyMethod = async ({ restApi, resource }: NestedRestApi & NestedRe
     // nothing to update
     const response = await apigateway.getMethod({
       restApiId: restApi.id,
-      resourceId: resource.id,
+      resourceId: resourceId,
       httpMethod: 'ANY'
     })
       .promise();
@@ -198,13 +198,13 @@ const ensureProxyMethod = async ({ restApi, resource }: NestedRestApi & NestedRe
   }
 };
 
-const ensureIntegration = async ({ restApi, resource, lambdaArn }: IntegrationParams) => {
+const ensureIntegration = async ({ restApi, resourceId, lambdaArn }: IntegrationParams) => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
 
   try {
     const response = await makeRetryable(apigateway.putIntegration({
       restApiId: restApi.id,
-      resourceId: resource.id,
+      resourceId: resourceId,
       httpMethod: 'ANY',
       integrationHttpMethod: 'POST',
       type: 'AWS_PROXY',
@@ -224,7 +224,7 @@ const ensureIntegration = async ({ restApi, resource, lambdaArn }: IntegrationPa
 
     const response = await makeRetryable(apigateway.updateIntegration({
       restApiId: restApi.id,
-      resourceId: resource.id,
+      resourceId: resourceId,
       httpMethod: 'ANY'
     }))
       .promise();
@@ -312,10 +312,10 @@ export const ensureLambdaMethod = async ({
   restApi,
   serviceName,
   lambdaArn,
-  resource
+  resourceId
 }) => {
-  const restMethod = await ensureProxyMethod({ restApi, resource });
-  await ensureIntegration({ restApi, resource, restMethod, lambdaArn });
+  const restMethod = await ensureProxyMethod({ restApi, resourceId });
+  await ensureIntegration({ restApi, resourceId, restMethod, lambdaArn });
   const deployment = await ensureDeployment({ restApi, serviceName });
 
   await ensureStagedIntegration({ restApi, deployment });
