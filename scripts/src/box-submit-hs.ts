@@ -31,7 +31,7 @@ const warnAndExit = e => {
 
 const key = createServiceKey({ service: 'marketplace-script' });
 
-const packBox = async (shippingCost: number, storeId: string, isDryRun: boolean, date: number) => {
+const packBox = async (shippingCost: number, storeId: string, donationRate: number, isDryRun: boolean, date: number) => {
   const boxItems = readFileSync('/dev/stdin')
     .toString()
     .split('\n')
@@ -74,7 +74,7 @@ const packBox = async (shippingCost: number, storeId: string, isDryRun: boolean,
     .values();
 
   const submission: ShippedBoxSubmission = {
-    donationRate: 0,
+    donationRate,
     boxItems: Array.from(boxItems),
     shippingCost,
     packed: date
@@ -86,14 +86,15 @@ const packBox = async (shippingCost: number, storeId: string, isDryRun: boolean,
 
 const shipBox = async (boxId: string, date: number) => markBoxAsShipped(key, boxId, date);
 
-program.command('pack <shipping-cost> <store-id> <dry-run>')
+program.command('pack <shipping-cost> <store-id> <donation-rate> <dry-run>')
   // tslint:disable-next-line:max-line-length
   .description(`Submits a box with 'packed' field set to the current date (can be overriden using '-d' option). Reads box data (from standard input) lines consisting of: count item-id batch-id`)
   .option('-d, --date [date]', 'date box was packed, as a unix timestamp')
-  .action((shippingCost, storeId, isDryRun, options) =>
+  .action((shippingCost, storeId, donationRate, isDryRun, options) =>
     packBox(
       maybeParseInt(shippingCost, 'shipping-cost'),
       storeId,
+      maybeParseInt(donationRate, 'donation-rate'),
       maybeParseBool(isDryRun, 'dry-run'),
       options.date ? maybeParseInt(options.date, 'date') : Date.now()
     ).catch(warnAndExit)
