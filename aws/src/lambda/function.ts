@@ -98,7 +98,9 @@ export const ensureFunction = async ({
   withApiGateway = false,
   live
 }) => {
+  winston.debug(`function: zipping...`);
   const zipFile = await zip(codeDirectory, codeFilter);
+  winston.debug(`function: uploading...`);
   const lambda = await ensureLambda({ name, handler, environment, dynamoAccess, zipFile, live });
 
   if (withApiGateway) {
