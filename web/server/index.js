@@ -27,7 +27,7 @@ app.use(cors());
 app.use(
   '/.well-known/apple-app-site-association',
   express.static(
-    __dirname + '../build/.well-known/apple-app-site-association',
+    path.resolve(__dirname, '..', 'build', '.well-known', 'apple-app-site-association'),
     { setHeaders: (res) => res.type('json'), }
   )
 );
@@ -36,7 +36,7 @@ app.use(
 app.use(
   '/static',
   express.static(
-    __dirname + '../build/static',
+    path.resolve(__dirname, '..', 'build', 'static'),
     { maxAge: '1y' }
   )
 );
@@ -44,7 +44,7 @@ app.use(
 // serve unversioned static assets without cache
 app.use(
   express.static(
-    __dirname + '../build'
+    path.resolve(__dirname, '..', 'build')
   )
 );
 
