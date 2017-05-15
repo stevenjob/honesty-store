@@ -214,7 +214,7 @@ export default async ({ branch, dirs }) => {
       live: isLive(branch),
       environment: {
         TABLE_NAME: db && db.TableName,
-        BASE_URL: baseUrl,
+        BASE_URL: lambdaBaseUrl,
         LAMBDA_BASE_URL: lambdaBaseUrl,
         SERVICE_TOKEN_SECRET: serviceSecret,
         USER_TOKEN_SECRET: lambdaConfig[dir].withUserSecret && userSecret,
@@ -263,7 +263,7 @@ export default async ({ branch, dirs }) => {
         image,
         logGroup,
         tableName: db.TableName,
-        baseUrl,
+        baseUrl: lambdaBaseUrl,
         serviceSecret,
         userSecret,
         liveStripeKey: generateStripeKey({ branch, type: 'live' }),
