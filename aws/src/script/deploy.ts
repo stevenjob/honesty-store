@@ -196,7 +196,7 @@ export default async ({ branch, dirs }) => {
     const lambda = await ensureFunction({
       name: generateName({ branch, dir }),
       codeDirectory: dir,
-      codeFilter: path => /(lib|node_modules|server|public)/.test(path),
+      codeFilter: path => /(lib|node_modules|server|build)/.test(path),
       handler: lambdaConfig[dir].handler || `lib/${dir}/src/lambda.handler`,
       dynamoAccess: lambdaConfig[dir].database,
       withApiGateway: true,
