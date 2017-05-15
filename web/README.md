@@ -1,1 +1,0 @@
-# Honesty Store - Web
