@@ -118,7 +118,31 @@ export const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
 
   winston.debug(`apigateway: couldn't find '${name}'`);
 
-  const response = await makeRetryable(apigateway.createRestApi({ name })).promise();
+  const binaryMediaTypes = [
+    'application/font-woff',
+    'application/font-woff2',
+    'application/javascript',
+    'application/json',
+    'application/octet-stream',
+    'application/xml',
+    'font/eot',
+    'font/opentype',
+    'font/otf',
+    'image/jpeg',
+    'image/png',
+    'image/svg+xml',
+    'image/x-icon',
+    'text/comma-separated-values',
+    'text/css',
+    'text/html',
+    'text/javascript',
+    'text/plain',
+    'text/text',
+    'text/xml',
+    '*/*'
+  ];
+
+  const response = await makeRetryable(apigateway.createRestApi({ name, binaryMediaTypes })).promise();
 
   winston.debug(`apigateway: createRestApi`, response);
 
@@ -207,6 +231,7 @@ const ensureIntegration = async ({ restApi, resourceId, lambdaArn }: Integration
       resourceId: resourceId,
       httpMethod: 'ANY',
       integrationHttpMethod: 'POST',
+      contentHandling: 'CONVERT_TO_BINARY',
       type: 'AWS_PROXY',
       uri: `arn:aws:apigateway:${config.region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations`,
       credentials: null
