@@ -222,6 +222,17 @@ const markBoxAsReceived = async ({ key, boxId }) => {
   return {};
 };
 
+const assertValidlyPricedBox = (box: Box) => {
+  if (box.count <= 0 || box.boxItems.length <= 0) {
+    throw new Error('Box has items <= 0');
+  }
+  for (const { itemID: itemId, total } of box.boxItems) {
+    if (total <= 0) {
+      throw new Error(`Box item '${itemId}' has a price of ${total}`);
+    }
+  }
+};
+
 const createMarketplaceBox = async ({ key, storeId, submission, dryRun}): Promise<Box> => {
   info(key, `New marketplace submission received for store ${storeId}`, { submission });
 
@@ -229,6 +240,7 @@ const createMarketplaceBox = async ({ key, storeId, submission, dryRun}): Promis
   await assertValidMarketplaceBoxSubmission(key, submission);
 
   const box = await calculateMarketplaceBoxPricing(key, storeId, submission);
+  assertValidlyPricedBox(box);
 
   if (!dryRun) {
     await cruft.create(box);
@@ -244,6 +256,7 @@ const createShippedBox = async ({ key, storeId, submission, dryRun }): Promise<B
   await assertValidShippedBoxSubmission(submission);
 
   const box = await calculateShippedBoxPricing(key, storeId, submission);
+  assertValidlyPricedBox(box);
 
   if (!dryRun) {
     await cruft.create(box);
