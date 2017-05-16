@@ -235,9 +235,9 @@ const ensureIntegration = async ({ restApi, resourceId, lambdaArn }: Integration
   }
 };
 
-const ensureDeployment = async ({ restApi, serviceName }) => {
+const ensureDeployment = async ({ restApi }) => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
-  const description = `${serviceName} deployment`;
+  const description = `${restApi.id} deployment`;
 
   try {
     const response = await makeRetryable(apigateway.createDeployment({
@@ -310,14 +310,15 @@ export const restApiToBaseUrl = ({ id }: APIGateway.RestApi) =>
 
 export const ensureLambdaMethod = async ({
   restApi,
-  serviceName,
   lambdaArn,
   resourceId
 }) => {
   const restMethod = await ensureProxyMethod({ restApi, resourceId });
   await ensureIntegration({ restApi, resourceId, restMethod, lambdaArn });
-  const deployment = await ensureDeployment({ restApi, serviceName });
+};
 
+export const ensureStagedDeployment = async ({ restApi }) => {
+  const deployment = await ensureDeployment({ restApi });
   await ensureStagedIntegration({ restApi, deployment });
 };
 

@@ -1,6 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
 import * as winston from 'winston';
-import { ensureDomainName, ensureLambdaMethod, ensureResource, ensureRestApi } from '../apigateway/gateway';
+import { ensureDomainName, ensureLambdaMethod, ensureResource, ensureRestApi, ensureStagedDeployment } from '../apigateway/gateway';
 import { ensureStack } from '../cloudformation/stack';
 import { ensureTable } from '../dynamodb/table';
 import { ensureFunction } from '../lambda/function';
@@ -140,13 +140,12 @@ const createApiGatewayResource = async ({ restApi, dir, catchAllResource }) => {
   });
 };
 
-const setupApiGateway = async ({ restApi, dir, lambdaArn, catchAllResource }) => {
+const ensureRouteForLambda = async ({ restApi, dir, lambdaArn, catchAllResource }) => {
   const resource = await createApiGatewayResource({ restApi, dir, catchAllResource });
 
   if (catchAllResource) {
     await ensureLambdaMethod({
       restApi,
-      serviceName: dir,
       lambdaArn,
       resourceId: resource.parentId
     });
@@ -154,7 +153,6 @@ const setupApiGateway = async ({ restApi, dir, lambdaArn, catchAllResource }) =>
 
   await ensureLambdaMethod({
     restApi,
-    serviceName: dir,
     lambdaArn,
     resourceId: resource.id
   });
@@ -221,13 +219,15 @@ export default async ({ branch, dirs }) => {
       }
     });
 
-    await setupApiGateway({
+    await ensureRouteForLambda({
       restApi,
       dir,
       lambdaArn: lambda.FunctionArn,
       catchAllResource: lambdaConfig[dir].catchAllResource
     });
   }
+
+  await ensureStagedDeployment({ restApi });
 
   winston.info(`Deployed to ${baseUrl}`);
 };
