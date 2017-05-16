@@ -209,7 +209,6 @@ const ensureIntegration = async ({ restApi, resourceId, lambdaArn }: Integration
       integrationHttpMethod: 'POST',
       type: 'AWS_PROXY',
       uri: `arn:aws:apigateway:${config.region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations`,
-      contentHandling: 'CONVERT_TO_TEXT',
       credentials: null
     }))
       .promise();
