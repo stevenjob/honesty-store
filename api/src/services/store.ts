@@ -31,25 +31,6 @@ interface PriceBreakdown {
   packingCost: number;
 }
 
-interface Store {
-  code: string;
-  agentId: string;
-}
-
-export const stores: Store[] = [
-  { code: 'sl-ncl', agentId: 'f9c8b541-0a30-4adc-8e0d-887e6db9f301' },
-  { code: 'sl-edn', agentId: 'a3d9667e-a947-441a-8efd-b71e51beca02' },
-  { code: 'sl-brs', agentId: '1f0ee5a5-2689-4c14-a079-494ce18e3cdc' },
-  { code: 'sl-ldn', agentId: 'cbbe71c9-4fdf-4140-9bac-b41dff842944' },
-  { code: 'dev-test', agentId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649' }
-];
-
-const assertValidStoreCode = (storeCode) => {
-  if (!stores.some(({ code }) => code === storeCode)) {
-    throw new Error(`Store does not exist with code '${storeCode}'`);
-  }
-};
-
 const extractBoxItems = (boxes: Box[], itemId: string, matchingCondition = (_boxItem: BoxItem) => true) => {
   const extractBoxItem = (box: Box, itemID: string) => box.boxItems.find((el) => el.itemID === itemID);
   return boxes.filter(({ boxItems }) => boxItems.some((e) => e.itemID === itemId && matchingCondition(e)))
@@ -80,9 +61,8 @@ const mostRecentBoxItem = (boxes: Box[], itemID: string): BoxItem => {
 
 export const boxIsReceivedAndOpen = (box) => box.closed == null && box.received != null;
 
-export const getItemPriceFromStore = async (key, storeCode: string, itemID: string) => {
-  assertValidStoreCode(storeCode);
-  const boxes = await getBoxesForStore(key, storeCode, boxIsReceivedAndOpen);
+export const getItemPriceFromStore = async (key, storeId: string, itemID: string) => {
+  const boxes = await getBoxesForStore(key, storeId, boxIsReceivedAndOpen);
   const { total } = mostRecentBoxItem(boxes, itemID);
   return total;
 };
