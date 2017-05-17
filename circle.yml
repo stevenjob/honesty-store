@@ -13,21 +13,8 @@ dependencies:
   cache_directories:
     - ~/.cache/yarn
   override:
-    - cd api && yarn install
-    - cd item && yarn install
-    - cd aws && yarn install
-    - cd transaction && yarn install
-    - cd user && yarn install
-    - cd web && yarn install
-    - cd topup && yarn install
-    - cd service && yarn install
-    - cd test && yarn install
-    - cd support && yarn install
-    - cd survey && yarn install
-    - cd box && yarn install
-    - cd batch && yarn install
-    - cd scripts && yarn install
-    - cd store && yarn install
+    - yarn install
+    - yarn run bootstrap
 compile:
   override:
     - cd api && npm run ci

@@ -1,0 +1,14 @@
+{
+  "name": "honesty-store",
+  "version": "0.0.0",
+  "repository": "git@github.com:honesty-store/honesty-store.git",
+  "scripts": {
+    "bootstrap": "./bootstrap.js clean-hs && ./bootstrap.js install"
+  },
+  "devDependencies": {
+    "commander": "^2.9.0",
+    "tslint": "^5.2.0",
+    "tslint-eslint-rules": "^4.0.0",
+    "typescript": "^2.3.2"
+  }
+}
