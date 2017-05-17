@@ -3,7 +3,7 @@ import * as AWSXRay from 'aws-xray-sdk';
 import bodyParser = require('body-parser');
 import express = require('express');
 
-import { serviceAuthentication, serviceRouter } from '../../service/src/router';
+import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src/router';
 import { assertValidAccountId, createAccount, getAccountInternal, updateAccount } from './account';
 import {
   AccountAndTransactions, balanceLimit, InternalAccount,

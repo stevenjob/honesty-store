@@ -1,5 +1,5 @@
-import { CodedError } from '../../../service/src/error';
-import fetch from '../../../service/src/fetch';
+import { CodedError } from '@honesty-store/service/src/error';
+import fetch from '@honesty-store/service/src/fetch';
 
 export const balanceLimit = 1000; // £10
 
