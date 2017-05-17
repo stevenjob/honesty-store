@@ -17,21 +17,22 @@ dependencies:
     - yarn run bootstrap
 compile:
   override:
-    - cd api && npm run ci
-    - cd item && npm run ci
-    - cd aws && npm run ci
-    - cd transaction && npm run ci
-    - cd user && npm run ci
-    - cd web && npm run ci
-    - cd topup && npm run ci
-    - cd service && npm run ci
-    - cd test && npm run ci
-    - cd support && npm run ci
-    - cd survey && npm run ci
-    - cd box && npm run ci
-    - cd batch && npm run ci
-    - cd scripts && npm run ci
-    - cd store && npm run ci
+    - yarn run tslint
+    - cd api && yarn run build
+    - cd item && yarn run build
+    - cd aws && yarn run build
+    - cd transaction && yarn run build
+    - cd user && yarn run build
+    - cd web && yarn run ci
+    - cd topup && yarn run build
+    - cd service && yarn run build
+    - cd test && yarn run build
+    - cd support && yarn run build
+    - cd survey && yarn run build
+    - cd box && yarn run build
+    - cd batch && yarn run build
+    - cd scripts && yarn run build
+    - cd store && yarn run build
 test:
   post:
     - cd api && yarn install --production --ignore-scripts --prefer-offline

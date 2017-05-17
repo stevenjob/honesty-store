@@ -3,10 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "compile": "../node_modules/.bin/tsc",
-    "lint": "../node_modules/.bin/tslint  --config ../tslint.json --project tsconfig.json --format stylish --type-check",
-    "test": "npm run lint && npm run compile",
-    "ci": "npm test"
+    "build": "../node_modules/.bin/tsc"
   },
   "devDependencies": {
     "@types/commander": "^2.3.31",
