@@ -1,4 +1,4 @@
-import fetch from '../../../service/src/fetch';
+import fetch from '@honesty-store/service/src/fetch';
 
 export interface User {
   id: string;

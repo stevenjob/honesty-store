@@ -1,3 +1,10 @@
+import { createAssertValidUuid } from '@honesty-store/service/src/assert';
+import { CodedError } from '@honesty-store/service/src/error';
+import { createServiceKey } from '@honesty-store/service/src/key';
+import { error, info } from '@honesty-store/service/src/log';
+import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src/router';
+import { getStoreFromId, migrateStoreCodeToId } from '@honesty-store/store/src/client';
+import { createAccount } from '@honesty-store/transaction/src/client';
 import { config, SES } from 'aws-sdk';
 import * as AWSXRay from 'aws-xray-sdk';
 import cruftDDB from 'cruft-ddb';
@@ -5,13 +12,6 @@ import bodyParser = require('body-parser');
 import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isEmail = require('validator/lib/isEmail');
-import { createAssertValidUuid } from '../../service/src/assert';
-import { CodedError } from '../../service/src/error';
-import { createServiceKey } from '../../service/src/key';
-import { error, info } from '../../service/src/log';
-import { serviceAuthentication, serviceRouter } from '../../service/src/router';
-import { getStoreFromId, migrateStoreCodeToId } from '../../store/src/client';
-import { createAccount } from '../../transaction/src/client';
 import { TEST_DATA_USER_ID, User, UserProfile, UserWithAccessAndRefreshTokens, UserWithAccessToken } from './client';
 import { signAccessToken, signRefreshToken, verifyAccessToken, verifyMagicLinkToken, verifyRefreshToken } from './token';
 
