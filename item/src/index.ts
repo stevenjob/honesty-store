@@ -4,8 +4,8 @@ import cruftDDB from 'cruft-ddb';
 import express = require('express');
 import bodyParser = require('body-parser');
 
-import { createAssertValidUuid } from '../../service/src/assert';
-import { serviceAuthentication, serviceRouter } from '../../service/src/router';
+import { createAssertValidUuid } from '@honesty-store/service/src/assert';
+import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src/router';
 import { Item } from './client';
 
 config.region = process.env.AWS_REGION;
