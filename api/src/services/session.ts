@@ -66,10 +66,13 @@ const getUserSessionData = async (key, user): Promise<UserSessionData> => {
 const getStoreSessionData = async (key, user): Promise<StoreSessionData> => {
   const { defaultStoreId } = user;
 
-  const { code } = await getStoreFromId(key, defaultStoreId);
+  const [{ code }, items] = await Promise.all([
+    getStoreFromId(key, defaultStoreId),
+    storeItems(key, defaultStoreId)
+  ]);
 
   return {
-    items: await storeItems(key, defaultStoreId),
+    items,
     code
   };
 };
