@@ -2,15 +2,15 @@ import { config, DynamoDB } from 'aws-sdk';
 import * as AWSXRay from 'aws-xray-sdk';
 import bodyParser = require('body-parser');
 import express = require('express');
+import { createAssertValidUuid } from '@honesty-store/service/src/assert';
+import { CodedError } from '@honesty-store/service/src/error';
+import { Key } from '@honesty-store/service/src/key';
+import { error, info } from '@honesty-store/service/src/log';
+import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src/router';
+import { assertBalanceWithinLimit, createTransaction, TransactionBody } from '@honesty-store/transaction/src/client/index';
 import * as stripeFactory from 'stripe';
 import { v4 as uuid } from 'uuid';
 
-import { createAssertValidUuid } from '../../service/src/assert';
-import { CodedError } from '../../service/src/error';
-import { Key } from '../../service/src/key';
-import { error, info } from '../../service/src/log';
-import { serviceAuthentication, serviceRouter } from '../../service/src/router';
-import { assertBalanceWithinLimit, createTransaction, TransactionBody } from '../../transaction/src/client/index';
 import { CardDetails, TopupAccount, TopupRequest } from './client/index';
 
 const fixedTopupAmount = 500; // £5

@@ -1,5 +1,5 @@
-import fetch from '../../../service/src/fetch';
-import { TransactionAndBalance } from '../../../transaction/src/client/index';
+import fetch from '@honesty-store/service/src/fetch';
+import { TransactionAndBalance } from '@honesty-store/transaction/src/client/index';
 
 interface Stripe {
   customer: any;
