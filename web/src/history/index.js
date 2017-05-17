@@ -5,11 +5,10 @@ import Chrome from '../layout/chrome';
 import HistoryItem from './item';
 import Balance from '../topup/balance';
 
-const itemRenderer = (transaction) => <HistoryItem transaction={transaction} />;
+const itemRenderer = transaction => <HistoryItem transaction={transaction} />;
 
 const History = ({ transactions, balance }) => (
-  <Chrome title="History"
-    right={<Balance balance={balance} />}>
+  <Chrome title="History" right={<Balance balance={balance} />}>
     <List data={transactions} itemRenderer={itemRenderer} />
   </Chrome>
 );

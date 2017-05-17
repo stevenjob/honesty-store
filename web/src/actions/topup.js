@@ -8,18 +8,18 @@ export const TOPUP_FAILURE = 'TOPUP_FAILURE';
 
 const topupRequest = () => {
   return {
-    type: TOPUP_REQUEST,
+    type: TOPUP_REQUEST
   };
 };
 
-const topupSuccess = (response) => {
+const topupSuccess = response => {
   return {
     type: TOPUP_SUCCESS,
     response
   };
 };
 
-const topupFailure = (error) => {
+const topupFailure = error => {
   if (error.fromLocalValidation) {
     // an error from createStripeToken()
     return {
@@ -35,22 +35,30 @@ const topupFailure = (error) => {
   };
 };
 
-export const performTopup = ({ amount, cardDetails }) => async (dispatch, getState) => {
+export const performTopup = ({ amount, cardDetails }) => async (
+  dispatch,
+  getState
+) => {
   dispatch(topupRequest());
 
   try {
-    const response = await apifetch({
-      url: '/api/v1/topup',
-      body: {
-        stripeToken: cardDetails ? await createStripeToken(cardDetails) : undefined,
-        amount
+    const response = await apifetch(
+      {
+        url: '/api/v1/topup',
+        body: {
+          stripeToken: cardDetails
+            ? await createStripeToken(cardDetails)
+            : undefined,
+          amount
+        },
+        getToken: () => getState().accessToken
       },
-      getToken: () => getState().accessToken
-    }, dispatch, getState);
+      dispatch,
+      getState
+    );
 
     dispatch(topupSuccess(response));
     history.push(`/topup/success`);
-
   } catch (e) {
     if (!e.param) {
       e.param = paramFromCardProviderError(e);

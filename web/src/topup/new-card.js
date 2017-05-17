@@ -7,15 +7,16 @@ import { performTopup } from '../actions/topup';
 
 const NewCard = ({ performTopup, ...rest }) => {
   return (
-    <Full left={<Back></Back>}>
-    <Card
-      isInitialTopUp={false}
-      confirmButtonText="Update Card & Top Up £5"
-      onSubmit={({ topUpAmount: amount, cardDetails }) => performTopup({ amount, cardDetails })}
-      {...rest}
-    />
+    <Full left={<Back />}>
+      <Card
+        isInitialTopUp={false}
+        confirmButtonText="Update Card & Top Up £5"
+        onSubmit={({ topUpAmount: amount, cardDetails }) =>
+          performTopup({ amount, cardDetails })}
+        {...rest}
+      />
     </Full>
   );
 };
 
-export default connect(() => ({}), ({ performTopup }))(NewCard);
+export default connect(() => ({}), { performTopup })(NewCard);

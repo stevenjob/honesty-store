@@ -7,37 +7,43 @@ export const SIGNIN2_FAILURE = 'SIGNIN2_FAILURE';
 
 const signin2Request = () => {
   return {
-    type: SIGNIN2_REQUEST,
+    type: SIGNIN2_REQUEST
   };
 };
 
-const signin2Success = (response) => {
+const signin2Success = response => {
   return {
     type: SIGNIN2_SUCCESS,
     response
   };
 };
 
-const signin2Failure = (error) => {
+const signin2Failure = error => {
   return {
     type: SIGNIN2_FAILURE,
     error
   };
 };
 
-export const performSignin2 = ({ emailToken, storeCode }) => async (dispatch, getState) => {
+export const performSignin2 = ({ emailToken, storeCode }) => async (
+  dispatch,
+  getState
+) => {
   dispatch(signin2Request());
 
   try {
-    const response = await apifetch({
-      url: '/api/v1/signin2',
-      getToken: () => emailToken,
-      body: { storeCode }
-    }, dispatch, getState);
+    const response = await apifetch(
+      {
+        url: '/api/v1/signin2',
+        getToken: () => emailToken,
+        body: { storeCode }
+      },
+      dispatch,
+      getState
+    );
 
     dispatch(signin2Success(response));
     history.push(`/store`);
-
   } catch (e) {
     if (e.code === 'NetworkError' && e.status === 401) {
       const emailTokenError = new Error('Not Authorised');

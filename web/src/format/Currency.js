@@ -1,7 +1,7 @@
 import React from 'react';
-const formatNumber = (amount) => (amount / 100).toFixed(2);
+const formatNumber = amount => (amount / 100).toFixed(2);
 
-const formatAny = (value) => {
+const formatAny = value => {
   if (value == null) {
     throw new Error(`Null/undefined amount`);
   }

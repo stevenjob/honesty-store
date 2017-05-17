@@ -5,9 +5,7 @@ import Help from './index';
 const HelpItem = ({ params: { itemId }, items }) => {
   const { name } = items.find(item => item.id === itemId);
 
-  return (
-    <Help message={`I've spotted a problem with ${name}`} />
-  );
+  return <Help message={`I've spotted a problem with ${name}`} />;
 };
 
 const mapStateToProps = ({ store: { items } }) => ({

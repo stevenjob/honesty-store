@@ -1,4 +1,4 @@
-export default (path) => {
+export default path => {
   try {
     return require(`../item/assets/${path}`);
   } catch (e) {

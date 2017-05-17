@@ -9,8 +9,7 @@ const dismiss = () => {
   };
 };
 
-export const dismissError = (code) => async (dispatch) => {
-
+export const dismissError = code => async dispatch => {
   if (code != null) {
     const { redirectionURL } = getErrorDefinition(code);
     if (redirectionURL != null) {

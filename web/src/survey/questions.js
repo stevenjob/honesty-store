@@ -111,30 +111,28 @@ class Survey extends React.Component {
             Swipe left or right to decide!
           </p>
           <div className="flex">
-            <div className="col-6"
+            <div
+              className="col-6"
               onClick={() => this.swipedLeft()}
               onMouseEnter={() => this.swipingLeft(100)}
-              onMouseLeave={() => this.swipingLeft(0)}>
-              <SurveyItem
-                item={itemPair[0]}
-                delta={-delta}
-                outro={outro}/>
+              onMouseLeave={() => this.swipingLeft(0)}
+            >
+              <SurveyItem item={itemPair[0]} delta={-delta} outro={outro} />
             </div>
-            <div className="col-6"
+            <div
+              className="col-6"
               onClick={() => this.swipedRight()}
               onMouseEnter={() => this.swipingRight(100)}
-              onMouseLeave={() => this.swipingRight(0)}>
-              <SurveyItem
-                item={itemPair[1]}
-                delta={delta}
-                outro={outro} />
+              onMouseLeave={() => this.swipingRight(0)}
+            >
+              <SurveyItem item={itemPair[1]} delta={delta} outro={outro} />
             </div>
           </div>
         </Full>
       </Swipeable>
     );
   }
-};
+}
 
 const mapStateToProps = ({ survey }) => ({ survey });
 

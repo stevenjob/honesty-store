@@ -1,1 +1,1 @@
-export default (user) => user.emailAddress != null;
+export default user => user.emailAddress != null;

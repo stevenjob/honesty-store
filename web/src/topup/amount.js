@@ -13,16 +13,25 @@ const Amount = ({ balance }) => {
       <h1 className="aqua"><Currency amount={balance} /></h1>
       <Stepper
         label="How much would you like to top up?"
-        onIncrement={(amount) => amount}
+        onIncrement={amount => amount}
         incrementDisabled={() => true}
-        onDecrement={(amount) => amount}
+        onDecrement={amount => amount}
         decrementDisabled={() => true}
-        formatDescription={(amount) => <span>Your balance will be <Currency amount={balance + amount} /></span>}
-        formatValue={(amount) => <Currency amount={amount} />}
-        formatButton={(amount) => ({ text: 'Top Up using a Card', disabled: false })}
+        formatDescription={amount => (
+          <span>
+            Your balance will be <Currency amount={balance + amount} />
+          </span>
+        )}
+        formatValue={amount => <Currency amount={amount} />}
+        formatButton={amount => ({
+          text: 'Top Up using a Card',
+          disabled: false
+        })}
         initialValue={500}
-        onClick={(amount) => { history.push(`/topup/${amount}`); } }
-        />
+        onClick={amount => {
+          history.push(`/topup/${amount}`);
+        }}
+      />
     </Full>
   );
 };
@@ -30,6 +39,5 @@ const Amount = ({ balance }) => {
 const mapStateToProps = ({ user: { balance = 0 } }) => ({
   balance
 });
-
 
 export default connect(mapStateToProps)(Amount);

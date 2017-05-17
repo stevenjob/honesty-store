@@ -7,7 +7,7 @@ export const MARKETPLACE_FAILURE = 'MARKETPLACE_FAILURE';
 
 const marketplaceRequest = () => {
   return {
-    type: MARKETPLACE_REQUEST,
+    type: MARKETPLACE_REQUEST
   };
 };
 
@@ -17,7 +17,7 @@ const marketplaceSuccess = () => {
   };
 };
 
-const marketplaceFailure = (error) => {
+const marketplaceFailure = error => {
   return {
     type: MARKETPLACE_FAILURE,
     error
@@ -34,23 +34,26 @@ export const performMarketplace = ({
   dispatch(marketplaceRequest());
 
   try {
-    const response = await apifetch({
-      url: '/api/v1/marketplace',
-      body: {
-        item: {
-          description,
-          totalPrice,
-          quantity,
-          location,
-          expiry
-        }
+    const response = await apifetch(
+      {
+        url: '/api/v1/marketplace',
+        body: {
+          item: {
+            description,
+            totalPrice,
+            quantity,
+            location,
+            expiry
+          }
+        },
+        getToken: () => getState().accessToken
       },
-      getToken: () => getState().accessToken
-    }, dispatch, getState);
+      dispatch,
+      getState
+    );
 
     dispatch(marketplaceSuccess(response));
     history.push(`/more/success`);
-
   } catch (e) {
     dispatch(marketplaceFailure(e));
   }

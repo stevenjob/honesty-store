@@ -19,7 +19,7 @@ const outOfStockSuccess = (response, itemId) => {
   };
 };
 
-const outOfStockFailure = (error) => {
+const outOfStockFailure = error => {
   return {
     type: OUT_OF_STOCK_FAILURE,
     error
@@ -30,16 +30,19 @@ export const performOutOfStock = ({ itemId }) => async (dispatch, getState) => {
   dispatch(outOfStockRequest());
 
   try {
-    const response = await apifetch({
-      url: '/api/v1/out-of-stock',
-      getToken: () => getState().accessToken,
-      body: { itemId }
-    }, dispatch, getState);
+    const response = await apifetch(
+      {
+        url: '/api/v1/out-of-stock',
+        getToken: () => getState().accessToken,
+        body: { itemId }
+      },
+      dispatch,
+      getState
+    );
 
     dispatch(outOfStockSuccess(response, itemId));
 
     history.push(`/item/${itemId}/out-of-stock`);
-
   } catch (e) {
     dispatch(outOfStockFailure(e));
   }

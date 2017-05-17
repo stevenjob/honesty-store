@@ -4,10 +4,13 @@ import history from '../history';
 import { Success } from '../layout/alert';
 import Currency from '../format/Currency';
 
-export const TopupSuccess = ({ balance }) =>
-  <Success title={<span>Your balance is now <Currency amount={balance} /></span>}
+export const TopupSuccess = ({ balance }) => (
+  <Success
+    title={<span>Your balance is now <Currency amount={balance} /></span>}
     subtitle="Thank you for your top up!"
-    onClick={() => history.replace(`/history`)} />;
+    onClick={() => history.replace(`/history`)}
+  />
+);
 
 const mapStateToProps = ({ user: { balance = 0 } }) => ({
   balance

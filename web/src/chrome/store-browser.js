@@ -1,19 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-const extractStoreCode = (url) => {
+const extractStoreCode = url => {
   const [storeCode] = url.match(/([^/]*)$/);
   return storeCode === 'honesty.store' ? '' : storeCode;
 };
 
-const setCursorPosition = (element) => () => {
+const setCursorPosition = element => () => {
   requestAnimationFrame(() => {
     element.selectionStart = element.selectionEnd = element.value.length;
   });
 };
 
 class StoreBrowser extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -24,9 +23,12 @@ class StoreBrowser extends React.Component {
   handleStoreCodeChange(event) {
     const { value } = event.target;
     const storeCode = extractStoreCode(value);
-    this.setState({
-      storeCode: `https://honesty.store/${storeCode}`
-    }, setCursorPosition(event.target));
+    this.setState(
+      {
+        storeCode: `https://honesty.store/${storeCode}`
+      },
+      setCursorPosition(event.target)
+    );
   }
 
   openStore(e) {
@@ -42,9 +44,10 @@ class StoreBrowser extends React.Component {
     const { storeCode } = this.state;
     const { buttonText, storePlaceholder } = this.props;
     return (
-      <form onSubmit={(e) => this.openStore(e)}>
+      <form onSubmit={e => this.openStore(e)}>
         <p>
-          <input className="input"
+          <input
+            className="input"
             name="storeCode"
             autoComplete="off"
             autoCorrect="off"
@@ -52,11 +55,14 @@ class StoreBrowser extends React.Component {
             value={storeCode}
             type="text"
             placeholder={`https://honesty.store/${storePlaceholder}`}
-            onFocus={(e) => this.handleStoreCodeChange(e)}
-            onChange={(e) => this.handleStoreCodeChange(e)} />
+            onFocus={e => this.handleStoreCodeChange(e)}
+            onChange={e => this.handleStoreCodeChange(e)}
+          />
         </p>
         <p>
-          <Link className="btn btn-primary" onClick={(e) => this.openStore(e)}>{buttonText}</Link>
+          <Link className="btn btn-primary" onClick={e => this.openStore(e)}>
+            {buttonText}
+          </Link>
         </p>
       </form>
     );

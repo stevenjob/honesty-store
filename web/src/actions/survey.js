@@ -9,27 +9,34 @@ const surveyRequest = () => ({
   type: SURVEY_REQUEST
 });
 
-const surveySuccess = (response) => ({
+const surveySuccess = response => ({
   type: SURVEY_SUCCESS,
   response
 });
 
-const surveyFailure = (error) => ({
+const surveyFailure = error => ({
   type: SURVEY_FAILURE,
   error
 });
 
-export const submitSurvey = ({ survey, answers }) => async (dispatch, getState) => {
+export const submitSurvey = ({ survey, answers }) => async (
+  dispatch,
+  getState
+) => {
   dispatch(surveyRequest());
   try {
-    const response = await apifetch({
-      url: '/api/v1/survey',
-      body: {
-        surveyId: survey.id,
-        answers: answers
+    const response = await apifetch(
+      {
+        url: '/api/v1/survey',
+        body: {
+          surveyId: survey.id,
+          answers: answers
+        },
+        getToken: () => getState().accessToken
       },
-      getToken: () => getState().accessToken
-    }, dispatch, getState);
+      dispatch,
+      getState
+    );
 
     dispatch(surveySuccess(response));
     history.replace(`/survey/complete`);

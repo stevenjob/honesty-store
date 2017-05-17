@@ -19,20 +19,27 @@ const registerSuccess = ({ user, store, accessToken, refreshToken }) => ({
   }
 });
 
-const registerFailure = (error) => ({
+const registerFailure = error => ({
   type: REGISTER_FAILURE,
   error
 });
 
-export const performRegister = ({ storeCode }) => async (dispatch, getState) => {
+export const performRegister = ({ storeCode }) => async (
+  dispatch,
+  getState
+) => {
   dispatch(registerRequest());
   try {
-    const response = await apifetch({
-      url: '/api/v1/register',
-      body: {
-        storeCode
-      }
-    }, dispatch, getState);
+    const response = await apifetch(
+      {
+        url: '/api/v1/register',
+        body: {
+          storeCode
+        }
+      },
+      dispatch,
+      getState
+    );
 
     dispatch(registerSuccess(response));
     history.push(`/store`);

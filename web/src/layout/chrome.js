@@ -3,13 +3,7 @@ import { connect } from 'react-redux';
 import { Store, History, Profile, Help } from './nav';
 import isRegisteredUser from '../reducers/is-registered-user.js';
 
-const Chrome = ({
-  title,
-  left,
-  right,
-  children,
-  nav
-}) =>
+const Chrome = ({ title, left, right, children, nav }) => (
   <div className="sm-col-10 md-col-8 lg-col-6 mx-auto">
     <header className="fixed top-0 right-0 left-0 bg-navy border-silver border-bottom white z1">
       <div className="sm-col-10 md-col-8 lg-col-6 mx-auto flex items-center ">
@@ -24,20 +18,37 @@ const Chrome = ({
         </div>
       </div>
     </header>
-    <section style={{ paddingTop: '3.5625rem', paddingBottom: nav ? '3.3125rem' : '0' }}>
+    <section
+      style={{
+        paddingTop: '3.5625rem',
+        paddingBottom: nav ? '3.3125rem' : '0'
+      }}
+    >
       {children}
     </section>
     {nav &&
       <nav className="fixed bottom-0 right-0 left-0 bg-silver border-gray border-top white">
         <div className="sm-col-10 md-col-8 lg-col-6 mx-auto flex justify-around">
-          <Store className="inline-block btn btn-small line-height-1 center gray regular h6" style={{ width: '4rem' }} />
-          <History className="inline-block btn btn-small line-height-1 center gray regular h6" style={{ width: '4rem' }} />
-          <Profile className="inline-block btn btn-small line-height-1 center gray regular h6" style={{ width: '4rem' }} />
-          <Help className="inline-block btn btn-small line-height-1 center gray regular h6" style={{ width: '4rem' }} />
+          <Store
+            className="inline-block btn btn-small line-height-1 center gray regular h6"
+            style={{ width: '4rem' }}
+          />
+          <History
+            className="inline-block btn btn-small line-height-1 center gray regular h6"
+            style={{ width: '4rem' }}
+          />
+          <Profile
+            className="inline-block btn btn-small line-height-1 center gray regular h6"
+            style={{ width: '4rem' }}
+          />
+          <Help
+            className="inline-block btn btn-small line-height-1 center gray regular h6"
+            style={{ width: '4rem' }}
+          />
         </div>
-      </nav>
-    }
-  </div>;
+      </nav>}
+  </div>
+);
 
 const mapStateToProps = ({ user }) => ({
   nav: isRegisteredUser(user)

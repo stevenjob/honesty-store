@@ -13,13 +13,16 @@ const ErrorInternal = ({
   dismissError,
   errorCode,
   ...other
-}) =>
-  <Alert title={title}
+}) => (
+  <Alert
+    title={title}
     subtitle={subtitle}
     image={image}
     onClick={() => dismissError(errorCode)}
     className="error"
-    {...other} />;
+    {...other}
+  />
+);
 
 const mapStateToProps = ({ error: { fullPage: error } }) => {
   if (!error) {

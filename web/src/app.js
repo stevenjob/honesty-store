@@ -13,7 +13,6 @@ const App = ({ error, children, loading }) => {
   return children;
 };
 
-
 const mapStateToProps = ({ error, pending }) => ({
   error,
   loading: pending.length > 0

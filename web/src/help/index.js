@@ -7,12 +7,9 @@ import { performSupport } from '../actions/support';
 import isRegisteredUser from '../reducers/is-registered-user';
 import isEmail from 'validator/lib/isEmail';
 
-
-const Store = () =>
-  <Link className="btn" to={`/store`}>Store</Link>;
+const Store = () => <Link className="btn" to={`/store`}>Store</Link>;
 
 const Help = class extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -45,41 +42,49 @@ const Help = class extends React.Component {
   render() {
     const { valid, emailAddress, message } = this.state;
     const { registered, balance } = this.props;
-    return <Chrome title="Help"
-      left={registered ? null : <Store />}
-      right={registered ? <Balance balance={balance} /> : null}>
-      <form className="center px2 navy" onSubmit={(e) => this.handleSubmit(e)}>
-        <p>Having problems? Want to share an idea or some feedback?</p>
-        <p>
-          <textarea className="textarea"
-            rows="8"
-            name="message"
-            placeholder="Please tell us all about it here"
-            onChange={(e) => this.handleMessageChange(e)}
-            value={message} />
-        </p>
-        {
-          valid !== false ?
-            <p>Please enter your email address below</p>
-            :
-            <p className="red">Please enter a valid email address</p>
-        }
-        <p>
-          <input type="email"
-            name="emailAddress"
-            disabled={registered}
-            value={emailAddress}
-            placeholder="honest.jo@honesty.store"
-            className={valid === false ? 'input border-red' : 'input'}
-            onChange={(e) => this.handleEmailChange(e)}/>
-        </p>
-        <p>
-          <Link className="btn btn-primary" onClick={(e) => this.handleSubmit(e)}>
-            Send to Customer Support
-          </Link>
-        </p>
-      </form>
-    </Chrome>;
+    return (
+      <Chrome
+        title="Help"
+        left={registered ? null : <Store />}
+        right={registered ? <Balance balance={balance} /> : null}
+      >
+        <form className="center px2 navy" onSubmit={e => this.handleSubmit(e)}>
+          <p>Having problems? Want to share an idea or some feedback?</p>
+          <p>
+            <textarea
+              className="textarea"
+              rows="8"
+              name="message"
+              placeholder="Please tell us all about it here"
+              onChange={e => this.handleMessageChange(e)}
+              value={message}
+            />
+          </p>
+          {valid !== false
+            ? <p>Please enter your email address below</p>
+            : <p className="red">Please enter a valid email address</p>}
+          <p>
+            <input
+              type="email"
+              name="emailAddress"
+              disabled={registered}
+              value={emailAddress}
+              placeholder="honest.jo@honesty.store"
+              className={valid === false ? 'input border-red' : 'input'}
+              onChange={e => this.handleEmailChange(e)}
+            />
+          </p>
+          <p>
+            <Link
+              className="btn btn-primary"
+              onClick={e => this.handleSubmit(e)}
+            >
+              Send to Customer Support
+            </Link>
+          </p>
+        </form>
+      </Chrome>
+    );
   }
 };
 

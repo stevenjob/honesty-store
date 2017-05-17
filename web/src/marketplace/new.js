@@ -63,21 +63,15 @@ class MarketplaceItemAdd extends React.Component {
     event.preventDefault();
 
     const { performMarketplace } = this.props;
-    const {
-      description,
-      totalPrice,
-      quantity,
-      location,
-      expiry
-    } = this.state;
+    const { description, totalPrice, quantity, location, expiry } = this.state;
 
-    const validity = (
-      description.length &&
+    const validity = description.length &&
       totalPrice.length &&
       quantity.length &&
       location.length &&
       expiry.length
-    ) ? 'valid' : 'invalid';
+      ? 'valid'
+      : 'invalid';
 
     this.setState({ validity });
 
@@ -95,7 +89,7 @@ class MarketplaceItemAdd extends React.Component {
   calculatePerItemCost() {
     const price = Number(this.state.totalPrice);
     const quantity = Number(this.state.quantity);
-    const result = (price / quantity) * (1 + ourFees);
+    const result = price / quantity * (1 + ourFees);
 
     return !Number.isFinite(result) ? `` : `£${result.toFixed(2)}`;
   }
@@ -103,94 +97,99 @@ class MarketplaceItemAdd extends React.Component {
   render() {
     const { validity } = this.state;
     const minDate = extractYYYYMMDDFromDate(new Date());
-    const maxDate = extractYYYYMMDDFromDate(addYears(new Date(), expiryLimitYears));
+    const maxDate = extractYYYYMMDDFromDate(
+      addYears(new Date(), expiryLimitYears)
+    );
 
     return (
       <Full left={<Back />}>
-        <form className="center px2 navy" onSubmit={(e) => this.handleSubmit(e)}>
+        <form className="center px2 navy" onSubmit={e => this.handleSubmit(e)}>
           <p>Please fill in the details for your items</p>
-          {
-            validity === 'invalid' &&
-            <p className="red">Please fill out every field</p>
-          }
+          {validity === 'invalid' &&
+            <p className="red">Please fill out every field</p>}
           <p>
             <label htmlFor="description">Description</label>
             <textarea
               id="description"
               placeholder="Diet Coke 330ml can"
-              onChange={(e) => this.handleDescriptionChange(e)}
+              onChange={e => this.handleDescriptionChange(e)}
               value={this.state.description}
               className="textarea input"
               noValidate
               rows="1"
-              />
+            />
           </p>
           <p>
             <label htmlFor="price">Total Price Paid (£)</label>
             <input
               id="price"
               placeholder="3"
-              onChange={(e) => this.handlePriceChange(e)}
+              onChange={e => this.handlePriceChange(e)}
               value={this.state.price}
               className="input"
               noValidate
               type="number"
               min="1"
               step="any"
-              />
+            />
           </p>
           <p>
             <label htmlFor="quantity">Item Quantity</label>
             <input
               id="quantity"
               placeholder="10"
-              onChange={(e) => this.handleQuantityChange(e)}
+              onChange={e => this.handleQuantityChange(e)}
               value={this.state.quantity}
               className="input"
               noValidate
               type="number"
               min="1"
               step="1"
-              />
+            />
           </p>
           <p>
             <label htmlFor="location">Location</label>
             <input
               id="location"
               placeholder="Fridge"
-              onChange={(e) => this.handleLocationChange(e)}
+              onChange={e => this.handleLocationChange(e)}
               value={this.state.location}
               className="input"
               noValidate
-              />
+            />
           </p>
           <p>
             <label htmlFor="expiry">Expiry Date</label>
             <input
               id="expiry"
-              onChange={(e) => this.handleExpiryChange(e)}
+              onChange={e => this.handleExpiryChange(e)}
               min={minDate}
               max={maxDate}
               value={this.state.expiry}
               className="input"
               noValidate
               type="date"
-              />
+            />
           </p>
           <p>
-            <label htmlFor="pricingBreakdown">Per Item Cost (inc. Service Fee)</label>
+            <label htmlFor="pricingBreakdown">
+              Per Item Cost (inc. Service Fee)
+            </label>
             <input
               id="pricingBreakdown"
               placeholder="£0.33"
               value={this.calculatePerItemCost()}
               disabled={true}
-              onChange={(e) => e.preventDefault()}
+              onChange={e => e.preventDefault()}
               className="input"
               noValidate
-              />
+            />
           </p>
           <p className="my3">
-            <Link className="btn btn-primary" onClick={(e) => this.handleSubmit(e)}>
+            <Link
+              className="btn btn-primary"
+              onClick={e => this.handleSubmit(e)}
+            >
               Submit item
             </Link>
           </p>
@@ -198,6 +197,6 @@ class MarketplaceItemAdd extends React.Component {
       </Full>
     );
   }
-};
+}
 
 export default connect(() => ({}), { performMarketplace })(MarketplaceItemAdd);

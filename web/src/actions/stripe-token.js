@@ -1,4 +1,4 @@
-const createToken = (data) =>
+const createToken = data =>
   new Promise((resolve, reject) => {
     const stripeResponseHandler = (status, response) => {
       if (response.error != null) {
@@ -18,13 +18,22 @@ const createToken = (data) =>
 export const createStripeToken = ({ number, cvc, exp }) => {
   const Stripe = window.Stripe;
   if (!Stripe.card.validateCardNumber(number)) {
-    throw Object.assign(new Error('Invalid card number'), { param: 'number', fromLocalValidation: true });
+    throw Object.assign(new Error('Invalid card number'), {
+      param: 'number',
+      fromLocalValidation: true
+    });
   }
   if (!Stripe.card.validateExpiry(exp)) {
-    throw Object.assign(new Error('Invalid expiry'), { param: 'exp', fromLocalValidation: true });
+    throw Object.assign(new Error('Invalid expiry'), {
+      param: 'exp',
+      fromLocalValidation: true
+    });
   }
   if (!Stripe.card.validateCVC(cvc)) {
-    throw Object.assign(new Error('Invalid CVC'), { param: 'cvc', fromLocalValidation: true });
+    throw Object.assign(new Error('Invalid CVC'), {
+      param: 'cvc',
+      fromLocalValidation: true
+    });
   }
   return createToken({ number, cvc, exp });
 };

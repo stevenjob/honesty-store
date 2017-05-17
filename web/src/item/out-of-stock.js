@@ -4,10 +4,7 @@ import { Link } from 'react-router';
 import { performOutOfStock } from '../actions/out-of-stock';
 
 const OutOfStock = ({ itemId, performOutOfStock }) => (
-  <Link
-    className="aqua"
-    onClick={() => performOutOfStock({ itemId })}
-  >
+  <Link className="aqua" onClick={() => performOutOfStock({ itemId })}>
     Report out of stock
   </Link>
 );

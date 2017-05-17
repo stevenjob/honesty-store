@@ -12,7 +12,11 @@ const initialise = () => {
   };
 };
 
-export const performInitialise = ({ pathname, storeCode, emailToken }) => async (dispatch, getState) => {
+export const performInitialise = ({
+  pathname,
+  storeCode,
+  emailToken
+}) => async (dispatch, getState) => {
   const { refreshToken, initialised } = getState();
 
   if (initialised) {
@@ -33,12 +37,10 @@ export const performInitialise = ({ pathname, storeCode, emailToken }) => async 
 
     const { user, store: { code } } = getState();
 
-    if (storeCode != null &&
-        storeCode !== code) {
+    if (storeCode != null && storeCode !== code) {
       if (isRegisteredUser(user)) {
         history.replace(`/store/change/${storeCode}`);
-      }
-      else {
+      } else {
         dispatch(performRegister({ storeCode }));
       }
     }

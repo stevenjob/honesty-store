@@ -11,14 +11,14 @@ const logoutRequest = () => {
   };
 };
 
-const logoutSuccess = (response) => {
+const logoutSuccess = response => {
   return {
     type: LOGOUT_SUCCESS,
     response
   };
 };
 
-const logoutFailure = (error) => {
+const logoutFailure = error => {
   return {
     type: LOGOUT_FAILURE,
     error
@@ -29,14 +29,17 @@ export const performLogout = () => async (dispatch, getState) => {
   dispatch(logoutRequest());
 
   try {
-    const response = await apifetch({
-      url: '/api/v1/logout',
-      getToken: () => getState().accessToken
-    }, dispatch, getState);
+    const response = await apifetch(
+      {
+        url: '/api/v1/logout',
+        getToken: () => getState().accessToken
+      },
+      dispatch,
+      getState
+    );
 
     dispatch(logoutSuccess(response));
     history.push(`/`);
-
   } catch (e) {
     dispatch(logoutFailure(e));
   }

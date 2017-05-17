@@ -28,7 +28,8 @@ import TopupSuccess from './topup/success';
 import RegisterEmail from './register/email';
 import RegisterCard from './register/card';
 import RegisterSuccessWithPurchase from './register/success-with-purchase';
-import RegisterSuccessWithoutPurchase from './register/success-without-purchase';
+import RegisterSuccessWithoutPurchase
+  from './register/success-without-purchase';
 import RegisterPartialSuccess from './register/partial-success';
 import SignInSuccess from './signin/success';
 import Help from './help/index';
@@ -65,10 +66,13 @@ const throttledSaveState = throttle(() => {
   if (fullPage) {
     return;
   }
-  saveState({
-    refreshToken,
-    likedItemIds
-  }, store.dispatch);
+  saveState(
+    {
+      refreshToken,
+      likedItemIds
+    },
+    store.dispatch
+  );
 }, 1000);
 
 store.subscribe(throttledSaveState);
@@ -76,42 +80,63 @@ store.subscribe(throttledSaveState);
 const redirectUnauthorised = (nextState, replace) => {
   const { refreshToken } = store.getState();
 
-  if (!refreshToken){
+  if (!refreshToken) {
     replace('/');
   }
 };
 
-const initialiseWithParams = (nextState) => {
-  const { params: { storeCode }, location: { query: { code: emailToken }, pathname } } = nextState;
+const initialiseWithParams = nextState => {
+  const {
+    params: { storeCode },
+    location: { query: { code: emailToken }, pathname }
+  } = nextState;
   store.dispatch(performInitialise({ pathname, storeCode, emailToken }));
 };
 
-ReactDOM.render((
+ReactDOM.render(
   <Provider store={store}>
-    <Router history={history} onUpdate={() => scrollTo(0, 0)} >
-      <Route path="/" component={App} onEnter={initialiseWithParams} >
+    <Router history={history} onUpdate={() => scrollTo(0, 0)}>
+      <Route path="/" component={App} onEnter={initialiseWithParams}>
         <IndexRoute component={Home} />
         <Route path="success" component={HomeSuccess} />
         <Route onEnter={redirectUnauthorised}>
           <Route path="register" component={RegisterEmail} />
           <Route path="register/:itemId" component={RegisterEmail} />
-          <Route path="register//success" component={RegisterSuccessWithoutPurchase} />
-          <Route path="register/:itemId/success" component={RegisterSuccessWithPurchase} />
-          <Route path="register/:itemId/partial" component={RegisterPartialSuccess} />
+          <Route
+            path="register//success"
+            component={RegisterSuccessWithoutPurchase}
+          />
+          <Route
+            path="register/:itemId/success"
+            component={RegisterSuccessWithPurchase}
+          />
+          <Route
+            path="register/:itemId/partial"
+            component={RegisterPartialSuccess}
+          />
           <Route path="register//:emailAddress" component={RegisterCard} />
-          <Route path="register/:itemId/:emailAddress" component={RegisterCard} />
+          <Route
+            path="register/:itemId/:emailAddress"
+            component={RegisterCard}
+          />
           <Route path="store" component={Store} />
-          <Route path="store/change/:storeCode" component={ConfirmStoreChange} />
+          <Route
+            path="store/change/:storeCode"
+            component={ConfirmStoreChange}
+          />
           <Route path="item/:itemId" component={ItemDetail} />
           <Route path="item/:itemId/out-of-stock" component={ItemStockReport} />
-          <Route path="item/:itemId/:quantity/success" component={ItemPurchaseSuccess} />
+          <Route
+            path="item/:itemId/:quantity/success"
+            component={ItemPurchaseSuccess}
+          />
           <Route path="survey" component={Survey} />
           <Route path="survey/questions" component={SurveyQuestions} />
           <Route path="survey/complete" component={SurveyComplete} />
           <Route path="topup" component={TopupAmount} />
           <Route path="topup/success" component={TopupSuccess} />
           <Route path="topup/:amount" component={TopupExistingCard} />
-          <Route path="topup/:amount/new" component={TopupNewCard}  />
+          <Route path="topup/:amount/new" component={TopupNewCard} />
           <Route path="history" component={History} />
           <Route path="more" component={Marketplace} />
           <Route path="more/new" component={MarketplaceNew} />
@@ -134,8 +159,9 @@ ReactDOM.render((
         <Route path=":storeCode" />
       </Route>
     </Router>
-  </Provider>
-), document.getElementById('root'));
+  </Provider>,
+  document.getElementById('root')
+);
 
 requestAnimationFrame(() => {
   document.documentElement.className = 'loaded';
@@ -145,9 +171,11 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
       const registration = await navigator.serviceWorker.register('/sw.js');
-      console.log('ServiceWorker registration successful with scope: ', registration.scope);
-    }
-    catch (e) {
+      console.log(
+        'ServiceWorker registration successful with scope: ',
+        registration.scope
+      );
+    } catch (e) {
       console.log('ServiceWorker registration failed: ', e);
     }
   });

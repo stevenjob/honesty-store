@@ -90,13 +90,13 @@ const errorDefinitions = {
   EmailNotFound: { message: `Couldn't find your email` },
   RefreshTokenExpired: { message: `Your session has expired` },
   CardIncorrectNumber: { message: `Incorrect card number` },
-  CardInvalidNumber: { message: `Invalid card number`},
+  CardInvalidNumber: { message: `Invalid card number` },
   CardInvalidExpiryMonth: { message: `Invalid expiry month` },
   CardInvalidExpiryYear: { message: `Invalid expiry year` },
   CardIncorrectCVC: { message: `Incorrect CVC` },
-  CardInvalidCVC: { message: `Invalid CVC` },
+  CardInvalidCVC: { message: `Invalid CVC` }
 };
 
-export default (code) => {
+export default code => {
   return errorDefinitions[code] || errorDefinitions['UnknownError'];
 };

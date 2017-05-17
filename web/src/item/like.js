@@ -10,7 +10,7 @@ const Like = ({ isLiked, onClick }) => {
         className={classNames}
         style={{ border: '1px solid #E8E8E8' }}
         onClick={onClick}
-        >
+      >
         {isLiked ? 'Liked' : 'Like'}
       </button>
     </div>

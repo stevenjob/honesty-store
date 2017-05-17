@@ -7,25 +7,25 @@ export const SESSION_FAILURE = 'SESSION_FAILURE';
 
 const sessionRequest = () => {
   return {
-    type: SESSION_REQUEST,
+    type: SESSION_REQUEST
   };
 };
 
-const sessionSuccess = (response) => {
+const sessionSuccess = response => {
   return {
     type: SESSION_SUCCESS,
     response
   };
 };
 
-const sessionFailure = (error) => {
+const sessionFailure = error => {
   return {
     type: SESSION_FAILURE,
     error
   };
 };
 
-export const sessionReset = (error) => {
+export const sessionReset = error => {
   return {
     type: SESSION_RESET,
     error
@@ -36,13 +36,16 @@ export const performSession = () => async (dispatch, getState) => {
   dispatch(sessionRequest());
 
   try {
-    const response = await apifetch({
-      url: '/api/v1/session',
-      getToken: () => getState().refreshToken
-    }, dispatch, getState);
+    const response = await apifetch(
+      {
+        url: '/api/v1/session',
+        getToken: () => getState().refreshToken
+      },
+      dispatch,
+      getState
+    );
 
     dispatch(sessionSuccess(response));
-
   } catch (e) {
     dispatch(sessionFailure(e));
   }

@@ -33,10 +33,12 @@ export const loadState = () => {
 
   // backwards-compat for likedItemIds
   const oldLikedItemIds = localStorage.getItem('likedItemIds');
-  if ((!state.likedItemIds || state.likedItemIds.length === 0) && oldLikedItemIds) {
+  if (
+    (!state.likedItemIds || state.likedItemIds.length === 0) &&
+    oldLikedItemIds
+  ) {
     state.likedItemIds = oldLikedItemIds;
   }
-
 
   return state;
 };
@@ -49,7 +51,6 @@ export const saveState = (state, dispatch) => {
     // migration
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('likedItemIds');
-
   } catch (e) {
     dispatch(localStorageSaveError());
   }

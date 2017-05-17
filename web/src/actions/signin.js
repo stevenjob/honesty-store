@@ -7,7 +7,7 @@ export const SIGNIN_FAILURE = 'SIGNIN_FAILURE';
 
 const signinRequest = () => {
   return {
-    type: SIGNIN_REQUEST,
+    type: SIGNIN_REQUEST
   };
 };
 
@@ -17,28 +17,34 @@ const signinSuccess = () => {
   };
 };
 
-const signinFailure = (error) => {
+const signinFailure = error => {
   return {
     type: SIGNIN_FAILURE,
     error
   };
 };
 
-export const performSignin = ({ itemId, emailAddress, storeCode }) => async (dispatch, getState) => {
+export const performSignin = ({ itemId, emailAddress, storeCode }) => async (
+  dispatch,
+  getState
+) => {
   dispatch(signinRequest());
 
   try {
-    const response = await apifetch({
-      url: '/api/v1/signin',
-      body: {
-        emailAddress,
-        storeCode
-      }
-    }, dispatch, getState);
+    const response = await apifetch(
+      {
+        url: '/api/v1/signin',
+        body: {
+          emailAddress,
+          storeCode
+        }
+      },
+      dispatch,
+      getState
+    );
 
     dispatch(signinSuccess(response));
     history.push(`/signin/success`);
-
   } catch (e) {
     if (e.code === 'EmailNotFound') {
       dispatch(signinFailure(undefined));

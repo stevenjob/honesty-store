@@ -6,18 +6,28 @@ const row = ({ name, title, description, amount, subtotal }, index, array) => {
   let borderClass;
 
   switch (index) {
-    case 0: borderClass = 'vertical-line-top'; break;
-    case (array.length - 1): borderClass = 'vertical-line-bottom'; break;
-    default: borderClass = 'vertical-line-middle';
+    case 0:
+      borderClass = 'vertical-line-top';
+      break;
+    case array.length - 1:
+      borderClass = 'vertical-line-bottom';
+      break;
+    default:
+      borderClass = 'vertical-line-middle';
   }
   return (
-     <tr key={name}>
+    <tr key={name}>
       <th className="col-10 left-align py1 relative">
-        <div className={`vertical-line ${borderClass}`}></div>
-        <div className="circle"></div>
+        <div className={`vertical-line ${borderClass}`} />
+        <div className="circle" />
         <div className="pl3">
           <p className="my0">{title}</p>
-          <p className="my0 regular" style={{ fontSize: '0.8rem', color: '#5D7E91' }}>{description}</p>
+          <p
+            className="my0 regular"
+            style={{ fontSize: '0.8rem', color: '#5D7E91' }}
+          >
+            {description}
+          </p>
         </div>
       </th>
       <td className="col-3 right-align py1 align-bottom">{amount}</td>
@@ -26,14 +36,36 @@ const row = ({ name, title, description, amount, subtotal }, index, array) => {
 };
 
 export default ({ breakdown, isMarketplace }) => {
-  const marketplaceDescription = isMarketplace ? 'Someone from your office buys it in bulk' : 'We buy it from our supplier';
+  const marketplaceDescription = isMarketplace
+    ? 'Someone from your office buys it in bulk'
+    : 'We buy it from our supplier';
   const fields = [
-    { name: 'wholesaleCost', title: 'Wholesale', description: marketplaceDescription },
-    { name: 'handlingFee', title: 'Handling fee', description: 'We store, pack, package and post it' },
-    { name: 'serviceFee', title: 'Service fee', description: 'We take a bit to keep the store going' },
-    { name: 'creditCardFee', title: 'Card fee', description: 'We pay the card processor' },
+    {
+      name: 'wholesaleCost',
+      title: 'Wholesale',
+      description: marketplaceDescription
+    },
+    {
+      name: 'handlingFee',
+      title: 'Handling fee',
+      description: 'We store, pack, package and post it'
+    },
+    {
+      name: 'serviceFee',
+      title: 'Service fee',
+      description: 'We take a bit to keep the store going'
+    },
+    {
+      name: 'creditCardFee',
+      title: 'Card fee',
+      description: 'We pay the card processor'
+    },
     { name: 'VAT', title: 'VAT', description: `We pay VAT on it` },
-    { name: 'donation', title: 'Charity', description: `We give a bit to charity` }
+    {
+      name: 'donation',
+      title: 'Charity',
+      description: `We give a bit to charity`
+    }
   ];
 
   let subtotal = 0;
@@ -51,11 +83,14 @@ export default ({ breakdown, isMarketplace }) => {
     });
   }
 
-  return subtotal === 0 ?
-    <p>No breakdown available.</p> :
-    <table className="table col-11 mx-auto" style={{ borderCollapse: 'collapse' }} >
-      <tbody>
-        {data.map(row)}
-      </tbody>
-    </table>;
+  return subtotal === 0
+    ? <p>No breakdown available.</p>
+    : <table
+        className="table col-11 mx-auto"
+        style={{ borderCollapse: 'collapse' }}
+      >
+        <tbody>
+          {data.map(row)}
+        </tbody>
+      </table>;
 };

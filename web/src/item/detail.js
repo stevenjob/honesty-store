@@ -16,18 +16,19 @@ import Breakdown from './breakdown';
 import Like from './like';
 import FlagOutOfStock from './out-of-stock';
 
-const Depleted = ({ registered }) => <p className="red">This item has been reported out of stock</p>;
+const Depleted = ({ registered }) => (
+  <p className="red">This item has been reported out of stock</p>
+);
 
-const Report = ({ itemId }) => <Link to={`/help/item/${itemId}`}>Report a problem</Link>;
+const Report = ({ itemId }) => (
+  <Link to={`/help/item/${itemId}`}>Report a problem</Link>
+);
 
 const ItemDetail = ({
   item: {
     id,
     name,
-    price: {
-      breakdown,
-      total
-    },
+    price: { breakdown, total },
     image,
     count,
     unit,
@@ -47,14 +48,14 @@ const ItemDetail = ({
   performPurchase,
   registered
 }) => {
-  const calculateBalanceRemaining = (numItems) => balance - (total * numItems);
+  const calculateBalanceRemaining = numItems => balance - total * numItems;
 
-  const payForText = (count) =>
+  const payForText = count =>
     count !== 1
-    ? `Pay for ${count} ${unitPlural}`
-    : <span>Pay <Currency amount={total} /> for 1 {unit}</span>;
+      ? `Pay for ${count} ${unitPlural}`
+      : <span>Pay <Currency amount={total} /> for 1 {unit}</span>;
 
-  const onClick = (numItems) => {
+  const onClick = numItems => {
     const balance = calculateBalanceRemaining(numItems);
     if (balance < 0) {
       history.push(`/topup`);
@@ -73,82 +74,71 @@ const ItemDetail = ({
 
   const buttonClasses = `btn btn-primary ${isMarketplace ? 'btn-more' : ''}`;
 
-  const registeredPurchaseButton =
+  const registeredPurchaseButton = (
     <Link className={buttonClasses} onClick={() => onClick(1)}>
       {payForText(1)}
-    </Link>;
+    </Link>
+  );
 
-  const unregisteredPurchaseButton =
+  const unregisteredPurchaseButton = (
     <Link className={buttonClasses} to={`/register/${id}`}>
       {payForText(1)}
-    </Link>;
+    </Link>
+  );
 
   return (
     <Full
       left={<Back />}
-      right={<Like isLiked={isLiked} onClick={handleLikeOrUnlikeClick}/>}
-      >
+      right={<Like isLiked={isLiked} onClick={handleLikeOrUnlikeClick} />}
+    >
       {id != null &&
         <div>
           <h1 className="mt1 mb0">{name}</h1>
-          {
-            qualifier &&
+          {qualifier &&
             <h3 className="mt0 aqua regular">
               {qualifier}
-            </h3>
-          }
+            </h3>}
           <div className="col-6 mx-auto">
-            <div className={`bg-center bg-no-repeat ${count === 0 ? 'out-of-stock' : ''}`}
-              style={{ backgroundImage: `url(${safeLookupItemImage(image)})`, paddingBottom: '100%', lineHeight: 0 }}>
+            <div
+              className={`bg-center bg-no-repeat ${count === 0 ? 'out-of-stock' : ''}`}
+              style={{
+                backgroundImage: `url(${safeLookupItemImage(image)})`,
+                paddingBottom: '100%',
+                lineHeight: 0
+              }}
+            >
               {'\u00a0'}
             </div>
           </div>
           <div className="my3">
             {registered ? registeredPurchaseButton : unregisteredPurchaseButton}
           </div>
-          {
-            notes &&
-            <p>{notes}</p>
-          }
+          {notes && <p>{notes}</p>}
           <ul className="list-reset">
-            {
-              weight &&
-              <li>Weight: <strong>{`${weight}g`}</strong></li>
-            }
-            {
-              location &&
-              <li>Location: <strong>{location}</strong></li>
-            }
-            {
-              expiry &&
-              <li>Expires: <strong>{formatDate(expiry)}</strong></li>
-            }
+            {weight && <li>Weight: <strong>{`${weight}g`}</strong></li>}
+            {location && <li>Location: <strong>{location}</strong></li>}
+            {expiry && <li>Expires: <strong>{formatDate(expiry)}</strong></li>}
           </ul>
           <div>
-            {
-              count === 0 ?
-              <Depleted registered={registered}/> :
-              registered ?
-              <FlagOutOfStock itemId={id} /> :
-              null
-            }
+            {count === 0
+              ? <Depleted registered={registered} />
+              : registered ? <FlagOutOfStock itemId={id} /> : null}
           </div>
           <div>
             <h4 className="mt3">Price Breakdown</h4>
             <p>Your {makePossessive(genericName)} journey to you</p>
-            <Breakdown breakdown={breakdown} isMarketplace={isMarketplace}/>
+            <Breakdown breakdown={breakdown} isMarketplace={isMarketplace} />
           </div>
           <div className="mt3 mb1">
-            <Report itemId={id}/>
+            <Report itemId={id} />
           </div>
-        </div>
-      }
+        </div>}
     </Full>
   );
 };
 
 const mapStateToProps = (
-  { store: { items = []}, user, likedItemIds },
+  { store: { items = [] }, user, likedItemIds },
   { params: { itemId } }
 ) => {
   const item = (() => {
@@ -162,10 +152,14 @@ const mapStateToProps = (
   return {
     item,
     balance,
-    registered: isRegistered(user),
+    registered: isRegistered(user)
   };
 };
 
-const mapDispatchToProps = { performPurchase, performLikeItem, performUnlikeItem };
+const mapDispatchToProps = {
+  performPurchase,
+  performLikeItem,
+  performUnlikeItem
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemDetail);

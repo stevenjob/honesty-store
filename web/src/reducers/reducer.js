@@ -1,47 +1,93 @@
 import { DISMISS_ERROR } from '../actions/dismissError';
 import { INITIALISE } from '../actions/inititialise';
-import { REGISTER_REQUEST, REGISTER_SUCESSS, REGISTER_FAILURE } from '../actions/register';
-import { REGISTER2_REQUEST, REGISTER2_SUCESSS, REGISTER2_FAILURE } from '../actions/register2';
-import { SESSION_REQUEST, SESSION_SUCCESS, SESSION_RESET, SESSION_FAILURE } from '../actions/session';
+import {
+  REGISTER_REQUEST,
+  REGISTER_SUCESSS,
+  REGISTER_FAILURE
+} from '../actions/register';
+import {
+  REGISTER2_REQUEST,
+  REGISTER2_SUCESSS,
+  REGISTER2_FAILURE
+} from '../actions/register2';
+import {
+  SESSION_REQUEST,
+  SESSION_SUCCESS,
+  SESSION_RESET,
+  SESSION_FAILURE
+} from '../actions/session';
 import { TOPUP_REQUEST, TOPUP_SUCCESS, TOPUP_FAILURE } from '../actions/topup';
-import { PURCHASE_REQUEST, PURCHASE_SUCCESS, PURCHASE_FAILURE } from '../actions/purchase';
+import {
+  PURCHASE_REQUEST,
+  PURCHASE_SUCCESS,
+  PURCHASE_FAILURE
+} from '../actions/purchase';
 import { DESTROY_SESSION } from '../actions/destroy-session';
-import { LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE } from '../actions/logout';
-import { SUPPORT_REQUEST, SUPPORT_SUCCESS, SUPPORT_FAILURE } from '../actions/support';
-import { SIGNIN_REQUEST, SIGNIN_SUCCESS, SIGNIN_FAILURE } from '../actions/signin';
-import { SIGNIN2_REQUEST, SIGNIN2_SUCCESS, SIGNIN2_FAILURE } from '../actions/signin2';
+import {
+  LOGOUT_REQUEST,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE
+} from '../actions/logout';
+import {
+  SUPPORT_REQUEST,
+  SUPPORT_SUCCESS,
+  SUPPORT_FAILURE
+} from '../actions/support';
+import {
+  SIGNIN_REQUEST,
+  SIGNIN_SUCCESS,
+  SIGNIN_FAILURE
+} from '../actions/signin';
+import {
+  SIGNIN2_REQUEST,
+  SIGNIN2_SUCCESS,
+  SIGNIN2_FAILURE
+} from '../actions/signin2';
 import { STORE_REQUEST, STORE_SUCCESS, STORE_FAILURE } from '../actions/store';
-import { SURVEY_REQUEST, SURVEY_SUCCESS, SURVEY_FAILURE } from '../actions/survey';
-import { MARKETPLACE_REQUEST, MARKETPLACE_SUCCESS, MARKETPLACE_FAILURE } from '../actions/marketplace';
-import { OUT_OF_STOCK_REQUEST, OUT_OF_STOCK_SUCCESS, OUT_OF_STOCK_FAILURE } from '../actions/out-of-stock';
+import {
+  SURVEY_REQUEST,
+  SURVEY_SUCCESS,
+  SURVEY_FAILURE
+} from '../actions/survey';
+import {
+  MARKETPLACE_REQUEST,
+  MARKETPLACE_SUCCESS,
+  MARKETPLACE_FAILURE
+} from '../actions/marketplace';
+import {
+  OUT_OF_STOCK_REQUEST,
+  OUT_OF_STOCK_SUCCESS,
+  OUT_OF_STOCK_FAILURE
+} from '../actions/out-of-stock';
 import { UNLIKE_ITEM, LIKE_ITEM } from '../actions/like-item';
 import { LOCAL_STORAGE_SAVE_ERROR } from '../actions/save-error';
-import { BOX_RECEIVED_REQUEST, BOX_RECEIVED_SUCCESS, BOX_RECEIVED_FAILURE } from '../actions/box-received';
+import {
+  BOX_RECEIVED_REQUEST,
+  BOX_RECEIVED_SUCCESS,
+  BOX_RECEIVED_FAILURE
+} from '../actions/box-received';
 import { getInitialState } from '../state';
 
-const requestState = (requestId, updatedProps, state) =>
-  ({
-    ...state,
-    ...updatedProps,
-    pending: [...state.pending, requestId]
-  });
+const requestState = (requestId, updatedProps, state) => ({
+  ...state,
+  ...updatedProps,
+  pending: [...state.pending, requestId]
+});
 
-const fullPageErrorState = (requestId, error, state) =>
-  ({
-    ...state,
-    error: {
-      ...state.error,
-      fullPage: error
-    },
-    pending: state.pending.filter(e => e !== requestId)
-  });
+const fullPageErrorState = (requestId, error, state) => ({
+  ...state,
+  error: {
+    ...state.error,
+    fullPage: error
+  },
+  pending: state.pending.filter(e => e !== requestId)
+});
 
-const completionState = (requestId, updatedProps, state) =>
-  ({
-    ...state,
-    ...updatedProps,
-    pending: state.pending.filter(e => e !== requestId)
-  });
+const completionState = (requestId, updatedProps, state) => ({
+  ...state,
+  ...updatedProps,
+  pending: state.pending.filter(e => e !== requestId)
+});
 
 export default (state, action) => {
   switch (action.type) {
@@ -85,7 +131,7 @@ export default (state, action) => {
       };
     case REGISTER2_REQUEST: {
       const updatedStateProps = {
-        register: {},
+        register: {}
       };
       return requestState('register2', updatedStateProps, state);
     }
@@ -125,11 +171,12 @@ export default (state, action) => {
       return requestState('outofstock', {}, state);
     case OUT_OF_STOCK_SUCCESS: {
       const { itemId } = action;
-      const tagItemAsDepleted = item => item.id === itemId ? { ...item, count: 0 } : item;
+      const tagItemAsDepleted = item =>
+        item.id === itemId ? { ...item, count: 0 } : item;
       const updatedStateProps = {
         store: {
           ...state.store,
-          items: state.store.items.map(tagItemAsDepleted),
+          items: state.store.items.map(tagItemAsDepleted)
         }
       };
       return completionState('outofstock', updatedStateProps, state);
@@ -220,8 +267,9 @@ export default (state, action) => {
     case UNLIKE_ITEM: {
       const { itemId } = action;
       const { likedItemIds } = state;
-      const updatedLikedItemIds = [...new Set(likedItemIds)]
-        .filter((el) => el !== itemId);
+      const updatedLikedItemIds = [...new Set(likedItemIds)].filter(
+        el => el !== itemId
+      );
 
       return {
         ...state,

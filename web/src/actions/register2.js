@@ -23,7 +23,7 @@ const register2Success = ({ user, store }) => {
   };
 };
 
-const register2Failure = (error) => {
+const register2Failure = error => {
   if (error.fromLocalValidation) {
     // an error from createStripeToken()
     return {
@@ -39,20 +39,29 @@ const register2Failure = (error) => {
   };
 };
 
-export const performRegister2 = ({ itemID, topUpAmount, emailAddress, cardDetails }) => async (dispatch, getState) => {
+export const performRegister2 = ({
+  itemID,
+  topUpAmount,
+  emailAddress,
+  cardDetails
+}) => async (dispatch, getState) => {
   dispatch(register2Request());
 
   try {
-    const response = await apifetch({
-      url: '/api/v1/register2',
-      body: {
-        stripeToken: await createStripeToken(cardDetails),
-        itemID,
-        topUpAmount,
-        emailAddress
+    const response = await apifetch(
+      {
+        url: '/api/v1/register2',
+        body: {
+          stripeToken: await createStripeToken(cardDetails),
+          itemID,
+          topUpAmount,
+          emailAddress
+        },
+        getToken: () => getState().accessToken
       },
-      getToken: () => getState().accessToken,
-    }, dispatch, getState);
+      dispatch,
+      getState
+    );
 
     dispatch(register2Success(response));
 
@@ -62,8 +71,7 @@ export const performRegister2 = ({ itemID, topUpAmount, emailAddress, cardDetail
     let path;
     if (itemID == null) {
       path = `/register//success`;
-    }
-    else {
+    } else {
       path = user.transactions.length === 2
         ? `/register/${itemID}/success`
         : `/register/${itemID}/partial`;

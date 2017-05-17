@@ -9,26 +9,33 @@ const storeRequest = () => ({
   type: STORE_REQUEST
 });
 
-const storeSuccess = (response) => ({
+const storeSuccess = response => ({
   type: STORE_SUCCESS,
   response
 });
 
-const storeFailure = (error) => ({
+const storeFailure = error => ({
   type: STORE_FAILURE,
   error
 });
 
-export const performStoreChange = ({ storeCode }) => async (dispatch, getState) => {
+export const performStoreChange = ({ storeCode }) => async (
+  dispatch,
+  getState
+) => {
   dispatch(storeRequest());
   try {
-    const response = await apifetch({
-      url: '/api/v1/store',
-      body: {
-        storeCode
+    const response = await apifetch(
+      {
+        url: '/api/v1/store',
+        body: {
+          storeCode
+        },
+        getToken: () => getState().accessToken
       },
-      getToken: () => getState().accessToken
-    }, dispatch, getState);
+      dispatch,
+      getState
+    );
 
     dispatch(storeSuccess(response));
     history.push(`/store`);

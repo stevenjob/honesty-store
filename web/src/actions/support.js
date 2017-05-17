@@ -7,7 +7,7 @@ export const SUPPORT_FAILURE = 'SUPPORT_FAILURE';
 
 const supportRequest = () => {
   return {
-    type: SUPPORT_REQUEST,
+    type: SUPPORT_REQUEST
   };
 };
 
@@ -17,32 +17,38 @@ const supportSuccess = () => {
   };
 };
 
-const supportFailure = (error) => {
+const supportFailure = error => {
   return {
     type: SUPPORT_FAILURE,
     error
   };
 };
 
-export const performSupport = ({ message, emailAddress }, successUrl = `/help/success`) => async (dispatch, getState) => {
+export const performSupport = (
+  { message, emailAddress },
+  successUrl = `/help/success`
+) => async (dispatch, getState) => {
   dispatch(supportRequest());
 
   try {
     const userAgent = navigator.userAgent;
 
-    await apifetch({
-      url: '/api/v1/support',
-      body: {
-        message,
-        emailAddress,
-        userAgent
+    await apifetch(
+      {
+        url: '/api/v1/support',
+        body: {
+          message,
+          emailAddress,
+          userAgent
+        },
+        getToken: () => getState().accessToken
       },
-      getToken: () => getState().accessToken
-    }, dispatch, getState);
+      dispatch,
+      getState
+    );
 
     history.push(successUrl);
     dispatch(supportSuccess());
-
   } catch (e) {
     dispatch(supportFailure(e));
   }
