@@ -1,4 +1,4 @@
-import fetch from '../../../service/src/fetch';
+import fetch from '@honesty-store/service/src/fetch';
 
 type ItemId = string;
 type SurveyId = string;

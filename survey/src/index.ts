@@ -3,8 +3,8 @@ import * as AWSXRay from 'aws-xray-sdk';
 import bodyParser = require('body-parser');
 import express = require('express');
 
-import { createAssertValidUuid } from '../../service/src/assert';
-import { serviceAuthentication, serviceRouter } from '../../service/src/router';
+import { createAssertValidUuid } from '@honesty-store/service/src/assert';
+import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src/router';
 import { SurveyResponse } from './client';
 import { getSurvey, getSurveys } from './surveys';
 
