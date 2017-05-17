@@ -15,4 +15,4 @@ export const getStoreFromCode = (key, code: string) =>
   get<Store>(1, key, `/code/${code}`);
 
 export const getStoreFromId = (key, id: string) =>
-  get<Store>(1, key, `/id/${id}`);
+  get<Store>(1, key, `/${id}`);

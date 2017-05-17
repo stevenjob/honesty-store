@@ -36,15 +36,15 @@ app.use(bodyParser.json());
 const router = serviceRouter('store', 1);
 
 router.get(
-  '/id/:id',
-  serviceAuthentication,
-  async (_key, { id }) => getStoreFromId(id)
-);
-
-router.get(
   '/code/:code',
   serviceAuthentication,
   async (_key, { code }) => getStoreFromCode(code)
+);
+
+router.get(
+  '/:id',
+  serviceAuthentication,
+  async (_key, { id }) => getStoreFromId(id)
 );
 
 app.use(router);
