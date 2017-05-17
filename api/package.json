@@ -10,8 +10,8 @@
     "start": "nodemon ./lib/api/src/app.js"
   },
   "dependencies": {
-    "aws-serverless-express": "^2.2.0",
     "async-cache": "^1.1.0",
+    "aws-serverless-express": "^3.0.0",
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
     "cors": "^2.8.1",
