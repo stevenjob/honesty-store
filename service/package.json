@@ -13,7 +13,7 @@
     "cruft-ddb": "^3.0.6",
     "express": "^4.14.0",
     "http-status": "^0.2.5",
-    "jsonwebtoken": "^7.2.1",
+    "jsonwebtoken": "chrisprice/node-jsonwebtoken#remove-joi",
     "node-fetch": "^1.6.3",
     "uuid": "^3.0.1",
     "validator": "^6.2.1"
