@@ -3,10 +3,10 @@
 import cruftDDB from 'cruft-ddb';
 import { stringify } from 'csv';
 
-import { getAllItems } from '../../item/src/client';
-import { createServiceKey } from '../../service/src/key';
-import { InternalAccount, InternalTransaction } from '../../transaction/src/client/index';
-import { User } from '../../user/src/client/index';
+import { getAllItems } from '@honesty-store/item/src/client';
+import { createServiceKey } from '@honesty-store/service/src/key';
+import { InternalAccount, InternalTransaction } from '@honesty-store/transaction/src/client/index';
+import { User } from '@honesty-store/user/src/client/index';
 
 type TransactionRecord = InternalAccount | InternalTransaction;
 
