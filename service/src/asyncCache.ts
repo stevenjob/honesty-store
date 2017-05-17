@@ -1,5 +1,7 @@
 import * as AsyncCache from 'async-cache';
 
+(<any>Symbol).asyncIterator = Symbol.for('asyncIterator');
+
 interface Options<Key, Value> {
   max?: number;
   maxAge?: number;
