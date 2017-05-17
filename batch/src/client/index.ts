@@ -1,4 +1,4 @@
-import fetch from '../../../service/src/fetch';
+import fetch from '@honesty-store/service/src/fetch';
 
 export interface Batch {
   id: string;
@@ -15,7 +15,7 @@ export interface Batch {
 
 export const MARKETPLACE_ID = 'HS_MARKETPLACE';
 
-import { lambdaBaseUrl } from '../../../service/src/baseUrl';
+import { lambdaBaseUrl } from '@honesty-store/service/src/baseUrl';
 
 const { get } = fetch('batch', lambdaBaseUrl);
 
