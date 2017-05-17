@@ -179,17 +179,6 @@ export default async ({ branch, dirs }) => {
 
   const restApi = await ensureRestApi({ name: generateName({ branch }) });
 
-  const customDomain = await ensureDomainName({
-    restApi,
-    alias: branch,
-    certificateArn: getCertificateArn({ branch })
-  });
-
-  await ensureAlias({
-    alias: branch,
-    value: customDomain.distributionDomainName
-  });
-
   for (const dir of dirs) {
     if (!lambdaConfig[dir]) {
       continue;
@@ -228,6 +217,17 @@ export default async ({ branch, dirs }) => {
   }
 
   await ensureStagedDeployment({ restApi });
+
+  const customDomain = await ensureDomainName({
+    restApi,
+    alias: branch,
+    certificateArn: getCertificateArn({ branch })
+  });
+
+  await ensureAlias({
+    alias: branch,
+    value: customDomain.distributionDomainName
+  });
 
   winston.info(`Deployed to ${baseUrl}`);
 };
