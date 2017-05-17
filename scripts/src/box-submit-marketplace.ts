@@ -1,9 +1,9 @@
 import { config } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 import uuid = require('uuid/v4');
-import { Batch, MARKETPLACE_ID } from '../../batch/src/client';
-import { createMarketplaceBox, MarketplaceBoxSubmission } from '../../box/src/client';
-import { createServiceKey } from '../../service/src/key';
+import { Batch, MARKETPLACE_ID } from '@honesty-store/batch/src/client';
+import { createMarketplaceBox, MarketplaceBoxSubmission } from '@honesty-store/box/src/client';
+import { createServiceKey } from '@honesty-store/service/src/key';
 
 config.region = process.env.AWS_REGION;
 

@@ -1,8 +1,8 @@
 // tslint:disable:no-console
+import { BoxItemWithBatchReference, createShippedBox, markBoxAsShipped, ShippedBoxSubmission } from '@honesty-store/box/src/client';
+import { createServiceKey } from '@honesty-store/service/src/key';
 import * as program from 'commander';
 import { readFileSync } from 'fs';
-import { BoxItemWithBatchReference, createShippedBox, markBoxAsShipped, ShippedBoxSubmission } from '../../box/src/client';
-import { createServiceKey } from '../../service/src/key';
 
 const throwParseError = (type, name, str) => {
   throw new Error(`${name} not a ${type} (${str})`);

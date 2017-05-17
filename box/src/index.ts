@@ -3,7 +3,7 @@ import { createAssertValidUuid } from '@honesty-store/service/src/assert';
 import { CodedError } from '@honesty-store/service/src/error';
 import { info } from '@honesty-store/service/src/log';
 import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src/router';
-import { getStoreFromId } from '@honesty-store/store/src/client';
+import { getStoreFromId, migrateStoreCodeToId } from '@honesty-store/store/src/client';
 import { getUser } from '@honesty-store/user/src/client';
 import { config, SES } from 'aws-sdk';
 import * as AWSXRay from 'aws-xray-sdk';
