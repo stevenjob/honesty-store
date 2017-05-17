@@ -1,10 +1,10 @@
+import { CodedError } from '@honesty-store/service/src/error';
+import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src/router';
 import { config } from 'aws-sdk';
 import bodyParser = require('body-parser');
 import cruftDDB from 'cruft-ddb';
 import express = require('express');
 
-import { CodedError } from '../../service/src/error';
-import { serviceAuthentication, serviceRouter } from '../../service/src/router';
 import { Store } from './client';
 
 config.region = process.env.AWS_REGION;

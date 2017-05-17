@@ -1,4 +1,4 @@
-import fetch from '../../../service/src/fetch';
+import fetch from '@honesty-store/service/src/fetch';
 import isUUID = require('validator/lib/isUUID');
 
 export interface Store {
@@ -8,7 +8,7 @@ export interface Store {
   version: number;
 }
 
-import { lambdaBaseUrl } from '../../../service/src/baseUrl';
+import { lambdaBaseUrl } from '@honesty-store/service/src/baseUrl';
 
 const { get } = fetch('store', lambdaBaseUrl);
 
