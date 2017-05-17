@@ -7,9 +7,15 @@
     "tslint": "tslint --config tslint.json -e '**/node_modules/**' -e 'api/test/**' --format stylish **/*.ts"
   },
   "devDependencies": {
+    "builtin-modules": "^1.1.1",
     "commander": "^2.9.0",
+    "rollup": "^0.41.6",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-json": "^2.1.1",
+    "rollup-plugin-node-resolve": "^3.0.0",
     "tslint": "^5.2.0",
     "tslint-eslint-rules": "^4.0.0",
-    "typescript": "^2.3.2"
+    "typescript": "^2.3.2",
+    "uglify-es": "^3.0.7"
   }
 }

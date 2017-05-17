@@ -4,7 +4,10 @@
   "private": true,
   "main": "lib/src/index.js",
   "scripts": {
-    "build": "../node_modules/.bin/tsc"
+    "tsc": "../node_modules/.bin/tsc",
+    "rollup": "../node_modules/.bin/rollup -c ../rollup.config.js",
+    "uglifyjs": "../node_modules/.bin/uglifyjs lib/bundle.js > lib/bundle-min.js",
+    "build": "npm run tsc && npm run rollup && npm run uglifyjs"
   },
   "dependencies": {
     "@honesty-store/service": "file:../service"

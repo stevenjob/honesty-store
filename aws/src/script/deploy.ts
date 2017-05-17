@@ -24,7 +24,8 @@ export const ensureWebStack = async () =>
 interface LambdaConfig {
   [key: string]: {
     database?: 'ro' | 'rw';
-    handler?: string;
+    handler: string;
+    codeFilter: (path: string) => boolean;
 
     withStripe?: boolean;
     withUserSecret?: boolean;
@@ -36,42 +37,53 @@ interface LambdaConfig {
 const lambdaConfig: LambdaConfig = {
   item: {
     database: 'ro',
-    handler: 'lib/src/lambda.handler'
+    handler: 'lib/bundle-min.handler',
+    codeFilter: path => /(lib|bundle-min\.js)$/.test(path)
   },
   box: {
     database: 'rw',
-    handler: 'lib/src/lambda.handler'
+    handler: 'lib/bundle-min.handler',
+    codeFilter: path => /(lib|bundle-min\.js)$/.test(path)
   },
   batch: {
     database: 'ro',
-    handler: 'lib/src/lambda.handler'
+    handler: 'lib/bundle-min.handler',
+    codeFilter: path => /(lib|bundle-min\.js)$/.test(path)
   },
   store: {
     database: 'ro',
-    handler: 'lib/src/lambda.handler'
+    handler: 'lib/bundle-min.handler',
+    codeFilter: path => /(lib|bundle-min\.js)$/.test(path)
   },
   survey: {
     database: 'rw',
-    handler: 'lib/src/lambda.handler'
+    handler: 'lib/bundle-min.handler',
+    codeFilter: path => /(lib|bundle-min\.js)$/.test(path)
   },
   transaction: {
     database: 'rw',
-    handler: 'lib/src/lambda.handler'
+    handler: 'lib/bundle-min.handler',
+    codeFilter: path => /(lib|bundle-min\.js)$/.test(path)
   },
   topup: {
     database: 'rw',
-    handler: 'lib/src/lambda.handler',
+    handler: 'lib/bundle-min.handler',
+    codeFilter: path => /(lib|bundle-min\.js)$/.test(path),
     withStripe: true
   },
   user: {
     database: 'rw',
-    handler: 'lib/src/lambda.handler',
+    handler: 'lib/bundle-min.handler',
+    codeFilter: path => /(lib|bundle-min\.js)$/.test(path),
     withUserSecret: true
   },
   api: {
+    handler: 'lib/bundle-min.handler',
+    codeFilter: path => /(lib|bundle-min\.js)$/.test(path)
   },
   web: {
     handler: 'server/lambda.handler',
+    codeFilter: path => /(node_modules|server|build)/.test(path),
     catchAllResource: true
   }
 };
@@ -200,8 +212,8 @@ export default async ({ branch, dirs }) => {
     const lambda = await ensureFunction({
       name: generateName({ branch, dir }),
       codeDirectory: dir,
-      codeFilter: path => /(lib|node_modules|server|build)/.test(path),
-      handler: lambdaConfig[dir].handler || `lib/${dir}/src/lambda.handler`,
+      codeFilter: lambdaConfig[dir].codeFilter,
+      handler: lambdaConfig[dir].handler,
       dynamoAccess: lambdaConfig[dir].database,
       withApiGateway: true,
       live: isLive(branch),
