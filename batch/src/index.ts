@@ -1,4 +1,5 @@
 import { config } from 'aws-sdk';
+import * as AWSXRay from 'aws-xray-sdk';
 import cruftDDB from 'cruft-ddb';
 import express = require('express');
 import bodyParser = require('body-parser');
@@ -33,9 +34,12 @@ router.get(
   async (_key, { batchId }) => getBatch(batchId)
 );
 
+app.use(AWSXRay.express.openSegment('batch'));
 app.use(router);
 
 // send healthy response to load balancer probes
 app.get('/', (_req, res) => void res.sendStatus(200));
+
+app.use(AWSXRay.express.closeSegment());
 
 app.listen(3000);

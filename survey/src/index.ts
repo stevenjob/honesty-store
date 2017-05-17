@@ -1,4 +1,5 @@
 import { config, DynamoDB } from 'aws-sdk';
+import * as AWSXRay from 'aws-xray-sdk';
 import bodyParser = require('body-parser');
 import express = require('express');
 
@@ -159,6 +160,7 @@ router.post(
 
 export const app = express();
 app.use(bodyParser.json());
+app.use(AWSXRay.express.openSegment('survey'));
 app.use(router);
 
 // send healthy response to load balancer probes
@@ -167,5 +169,7 @@ app.get('/', (_req, res) => {
     .then(() => res.sendStatus(200))
     .catch(() => res.sendStatus(500));
 });
+
+app.use(AWSXRay.express.closeSegment());
 
 app.listen(3000);
