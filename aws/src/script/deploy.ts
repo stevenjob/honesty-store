@@ -35,29 +35,37 @@ interface LambdaConfig {
 
 const lambdaConfig: LambdaConfig = {
   item: {
-    database: 'ro'
+    database: 'ro',
+    handler: 'lib/src/lambda.handler'
   },
   box: {
-    database: 'rw'
+    database: 'rw',
+    handler: 'lib/src/lambda.handler'
   },
   batch: {
-    database: 'ro'
+    database: 'ro',
+    handler: 'lib/src/lambda.handler'
   },
   store: {
-    database: 'ro'
+    database: 'ro',
+    handler: 'lib/src/lambda.handler'
   },
   survey: {
-    database: 'rw'
+    database: 'rw',
+    handler: 'lib/src/lambda.handler'
   },
   transaction: {
-    database: 'rw'
+    database: 'rw',
+    handler: 'lib/src/lambda.handler'
   },
   topup: {
     database: 'rw',
+    handler: 'lib/src/lambda.handler',
     withStripe: true
   },
   user: {
     database: 'rw',
+    handler: 'lib/src/lambda.handler',
     withUserSecret: true
   },
   api: {

@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "compile": "tsc",
-    "lint": "tslint --config ../tslint.json --project tsconfig.json --format stylish --type-check",
+    "compile": "../node_modules/.bin/tsc",
+    "lint": "../node_modules/.bin/tslint  --config ../tslint.json --project tsconfig.json --format stylish --type-check",
     "test": "npm run lint && npm run compile",
     "ci": "npm test"
   },
@@ -13,10 +13,7 @@
     "@types/jszip": "0.0.32",
     "@types/ms": "^0.7.29",
     "@types/node": "0.0.2",
-    "@types/winston": "0.0.32",
-    "tslint": "^4.4.2",
-    "tslint-microsoft-contrib": "^4.0.0",
-    "typescript": "2.1.5"
+    "@types/winston": "0.0.32"
   },
   "dependencies": {
     "aws-sdk": "^2.50.0",
