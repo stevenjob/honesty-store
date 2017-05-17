@@ -1,11 +1,11 @@
 import isEmail = require('validator/lib/isEmail');
-import { error } from '../../../service/src/log';
-import uuid = require('uuid/v4');
+import { error } from '@honesty-store/service/src/log';
+import { getStoreFromCode } from '@honesty-store/store/src/client';
+import { createTopup } from '@honesty-store/topup/src/client/index';
+import { TransactionAndBalance } from '@honesty-store/transaction/src/client/index';
+import { createUser, updateUser } from '@honesty-store/user/src/client/index';
+import { v4 as uuid } from 'uuid';
 
-import { getStoreFromCode } from '../../../store/src/client';
-import { createTopup } from '../../../topup/src/client/index';
-import { TransactionAndBalance } from '../../../transaction/src/client/index';
-import { createUser, updateUser } from '../../../user/src/client/index';
 import { authenticateAccessToken, noopAuthentication } from '../middleware/authenticate';
 import { getSessionData, getUserFeatures, UserSessionData } from '../services/session';
 import { purchase } from '../services/transaction';

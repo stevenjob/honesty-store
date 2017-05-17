@@ -1,4 +1,4 @@
-import { acceptUserSurvey } from '../../../survey/src/client';
+import { acceptUserSurvey } from '@honesty-store/survey/src/client';
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { expandTopPrioritySurvey } from '../services/survey';
 

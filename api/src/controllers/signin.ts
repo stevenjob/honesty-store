@@ -1,5 +1,5 @@
-import { tagKey } from '../../../service/src/key';
-import { sendMagicLinkEmail } from '../../../user/src/client/index';
+import { tagKey } from '@honesty-store/service/src/key';
+import { sendMagicLinkEmail } from '@honesty-store/user/src/client/index';
 import { authenticateEmailToken, noopAuthentication } from '../middleware/authenticate';
 import { getSessionData } from '../services/session';
 import { updateDefaultStoreCode } from './store';

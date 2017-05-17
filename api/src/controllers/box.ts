@@ -1,6 +1,6 @@
+import { Box, flagOutOfStock, getBoxesForStore, markBoxAsReceived } from '@honesty-store/box/src/client';
+import { CodedError } from '@honesty-store/service/src/error';
 import isEmail = require('validator/lib/isEmail');
-import { Box, flagOutOfStock, getBoxesForStore, markBoxAsReceived } from  '../../../box/src/client';
-import { CodedError } from '../../../service/src/error';
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { getSessionData  } from '../services/session';
 import { boxIsReceivedAndOpen } from '../services/store';

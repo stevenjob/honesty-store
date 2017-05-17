@@ -1,10 +1,10 @@
 import fetch from 'node-fetch';
 import isEmail = require('validator/lib/isEmail');
-import uuid = require('uuid/v4');
+import { v4 as uuid } from 'uuid';
 
-import { Key } from '../../../service/src/key';
-import { info } from '../../../service/src/log';
-import { User, userRegistered } from '../../../user/src/client';
+import { Key } from '@honesty-store/service/src/key';
+import { info } from '@honesty-store/service/src/log';
+import { User, userRegistered } from '@honesty-store/user/src/client';
 import { authenticateAccessToken } from '../middleware/authenticate';
 
 interface SlackMessageParams {

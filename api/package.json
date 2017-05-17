@@ -2,40 +2,37 @@
   "name": "@honesty-store/api",
   "version": "0.0.0",
   "private": true,
-  "main": "./lib/api/src/app.js",
+  "main": "./lib/src/app.js",
   "scripts": {
-    "compile": "tsc",
+    "compile": "../node_modules/.bin/tsc",
     "ci": "npm run lint && npm run compile",
-    "lint": "tslint --config ../tslint.json --project tsconfig.json --format stylish --type-check",
+    "lint": "../node_modules/.bin/tslint  --config ../tslint.json --project tsconfig.json --format stylish --type-check",
     "start": "nodemon ./lib/api/src/app.js"
   },
   "dependencies": {
-    "async-cache": "^1.1.0",
-    "aws-serverless-express": "^3.0.0",
-    "aws-xray-sdk": "^1.1.0",
-    "body-parser": "^1.15.2",
+    "@honesty-store/batch": "file:../batch",
+    "@honesty-store/box": "file:../box",
+    "@honesty-store/item": "file:../item",
+    "@honesty-store/service": "file:../service",
+    "@honesty-store/store": "file:../store",
+    "@honesty-store/survey": "file:../survey",
+    "@honesty-store/topup": "file:../topup",
+    "@honesty-store/transaction": "file:../transaction",
+    "@honesty-store/user": "file:../user",
     "compression": "^1.6.2",
-    "cors": "^2.8.1",
-    "express": "^4.14.0",
-    "http-status": "^0.2.5",
-    "jsonwebtoken": "^7.2.1",
-    "node-fetch": "^1.6.3",
-    "redux": "^3.6.0",
-    "redux-thunk": "^2.1.0",
-    "uuid": "^3.0.1",
-    "validator": "^6.2.0"
+    "cors": "^2.8.1"
   },
   "devDependencies": {
+    "@types/chai": "^3.5.2",
+    "@types/express": "^4.0.35",
     "@types/http-status": "^0.2.29",
+    "@types/mocha": "^2.2.41",
     "@types/node": "^7.0.0",
     "@types/node-fetch": "^1.6.7",
+    "aws-sdk": "2.22.0",
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
-    "request": "^2.79.0",
-    "tslint": "^4.4.2",
-    "tslint-eslint-rules": "^3.2.3",
-    "tslint-microsoft-contrib": "^4.0.0",
-    "typescript": "2.1.5"
+    "request": "^2.79.0"
   }
 }

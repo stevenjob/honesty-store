@@ -1,7 +1,6 @@
 import { getBatch, isMarketplaceBatch } from '@honesty-store/batch/src/client';
 import { Box, BoxItem, getBoxesForStore } from '@honesty-store/box/src/client';
 import { getItem, Item } from '@honesty-store/item/src/client';
-import { createAssertValidUuid } from '@honesty-store/service/src/assert';
 
 export interface StoreItem {
   name: string;

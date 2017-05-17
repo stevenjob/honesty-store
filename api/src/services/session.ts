@@ -1,8 +1,8 @@
-import { getStoreFromId } from '../../../store/src/client';
-import { getUserSurveys } from '../../../survey/src/client';
-import { CardDetails, getCardDetails } from '../../../topup/src/client/index';
-import { Transaction } from '../../../transaction/src/client/index';
-import { userRegistered } from '../../../user/src/client';
+import { getStoreFromId } from '@honesty-store/store/src/client';
+import { getUserSurveys } from '@honesty-store/survey/src/client';
+import { CardDetails, getCardDetails } from '@honesty-store/topup/src/client/index';
+import { Transaction } from '@honesty-store/transaction/src/client/index';
+import { userRegistered } from '@honesty-store/user/src/client';
 import { StoreItem, storeItems } from '../services/store';
 import { getExpandedTransactionsAndBalance } from '../services/transaction';
 import { expandTopPrioritySurvey } from './survey';
@@ -21,6 +21,9 @@ interface StoreSessionData {
 interface SessionData {
   user: UserSessionData;
   store: StoreSessionData;
+  refreshToken: string;
+  accessToken: string;
+  survey: any;
 }
 
 const marketplaceFeature = ({ defaultStoreId }) => {

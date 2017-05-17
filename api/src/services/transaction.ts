@@ -1,6 +1,6 @@
-import { getItem } from '../../../item/src/client';
-import { CodedError } from '../../../service/src/error';
-import { createTransaction, getAccount, TransactionBody } from '../../../transaction/src/client/index';
+import { getItem } from '@honesty-store/item/src/client';
+import { CodedError } from '@honesty-store/service/src/error';
+import { createTransaction, getAccount, TransactionBody } from '@honesty-store/transaction/src/client/index';
 import { getItemPriceFromStore } from './store';
 
 const expandItemDetails = async (key, transaction) => {
