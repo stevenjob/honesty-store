@@ -4,6 +4,7 @@ export interface Store {
   id: string;
   code: string;
   agentId: string;
+  version: number;
 }
 
 import { lambdaBaseUrl } from '../../../service/src/baseUrl';
