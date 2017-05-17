@@ -1,4 +1,4 @@
-import fetch from '../../../service/src/fetch';
+import fetch from '@honesty-store/service/src/fetch';
 
 export interface BatchReference {
   id: string;
@@ -54,7 +54,7 @@ export type Box = ShippingDetails & Donatable & {
   id: string;
 };
 
-import { lambdaBaseUrl } from '../../../service/src/baseUrl';
+import { lambdaBaseUrl } from '@honesty-store/service/src/baseUrl';
 
 const { get, post, put } = fetch('box', lambdaBaseUrl);
 

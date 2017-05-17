@@ -7,13 +7,19 @@
         "sourceMap": false,
         "outDir": "lib",
         "noUnusedParameters": true,
-        "noUnusedLocals": true
+        "noUnusedLocals": true,
+        "lib": [
+            "esnext",
+            "esnext.asynciterable"
+        ]
     },
     "include": [
-        "src/**/*"
+        "src/**/*",
+        "node_modules/@honesty-store/*/src"
     ],
     "exclude": [
-        "node_modules",
+        "node_modules/@honesty-store/*/node_modules",
+        "node_modules/@honesty-store/*/src/**/*.test.ts",
         "src/**/*.test.ts"
     ]
 }

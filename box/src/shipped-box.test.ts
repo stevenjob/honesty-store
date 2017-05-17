@@ -1,4 +1,4 @@
-jest.mock('../../batch/src/client');
+jest.mock('@honesty-store/batch/src/client');
 
 import { expect } from 'chai';
 import { ShippedBoxSubmission } from './client';

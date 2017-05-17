@@ -1,5 +1,5 @@
+import { getBatch, itemCostFromBatch } from '@honesty-store/batch/src/client';
 import { v4 as uuid } from 'uuid';
-import { getBatch, itemCostFromBatch } from '../../batch/src/client';
 import { Box, BoxItem, FixedBoxItemOverheads, MarketplaceBoxSubmission, VariableBoxItemOverheads } from './client';
 import { roundItemCosts } from './math';
 
