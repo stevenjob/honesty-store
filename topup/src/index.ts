@@ -1,5 +1,4 @@
 import { config, DynamoDB } from 'aws-sdk';
-import * as AWSXRay from 'aws-xray-sdk';
 import bodyParser = require('body-parser');
 import express = require('express');
 import { createAssertValidUuid } from '@honesty-store/service/src/assert';
@@ -371,7 +370,6 @@ router.get(
     getCardDetails({ userId })
 );
 
-app.use(AWSXRay.express.openSegment('topup'));
 app.use(router);
 
 // send healthy response to load balancer probes
@@ -380,7 +378,5 @@ app.get('/', (_req, res) => {
     .then(() => res.sendStatus(200))
     .catch(() => res.sendStatus(500));
 });
-
-app.use(AWSXRay.express.closeSegment());
 
 app.listen(3000);

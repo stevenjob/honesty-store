@@ -6,7 +6,6 @@ import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src
 import { getStoreFromId, migrateStoreCodeToId } from '@honesty-store/store/src/client';
 import { getUser } from '@honesty-store/user/src/client';
 import { config, SES } from 'aws-sdk';
-import * as AWSXRay from 'aws-xray-sdk';
 import cruftDDB from 'cruft-ddb';
 import bodyParser = require('body-parser');
 import express = require('express');
@@ -274,7 +273,6 @@ const assertConnectivity = async () => {
 export const app = express();
 
 app.use(bodyParser.json());
-app.use(AWSXRay.express.openSegment('box'));
 
 const router = serviceRouter('box', 1);
 
@@ -330,7 +328,5 @@ app.get('/', (_req, res) => {
     .then(() => res.sendStatus(200))
     .catch(() => res.sendStatus(500));
 });
-
-app.use(AWSXRay.express.closeSegment());
 
 app.listen(3000);

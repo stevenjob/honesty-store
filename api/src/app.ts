@@ -1,4 +1,3 @@
-import * as AWSXRay from 'aws-xray-sdk';
 import express = require('express');
 import bodyParser = require('body-parser');
 import compression = require('compression');
@@ -25,8 +24,6 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use(AWSXRay.express.openSegment('api'));
-
 registerController(router);
 sessionController(router);
 signInController(router);
@@ -46,7 +43,5 @@ app.use(router);
 app.get('/', (_req, res) => {
   res.sendStatus(200);
 });
-
-app.use(AWSXRay.express.closeSegment());
 
 app.listen(3000);

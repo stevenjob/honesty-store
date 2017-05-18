@@ -6,7 +6,6 @@ import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src
 import { getStoreFromId, migrateStoreCodeToId } from '@honesty-store/store/src/client';
 import { createAccount } from '@honesty-store/transaction/src/client';
 import { config, SES } from 'aws-sdk';
-import * as AWSXRay from 'aws-xray-sdk';
 import cruftDDB from 'cruft-ddb';
 import bodyParser = require('body-parser');
 import express = require('express');
@@ -279,7 +278,6 @@ router.post(
   async (_key, { userId }, { }) => await logoutUser(userId)
 );
 
-app.use(AWSXRay.express.openSegment('user'));
 app.use(router);
 
 // send healthy response to load balancer probes
@@ -293,7 +291,5 @@ app.get('/', (_req, res) => {
       error(createServiceKey({ service: 'user' }), 'LB probe error', e);
     });
 });
-
-app.use(AWSXRay.express.closeSegment());
 
 app.listen(3000);

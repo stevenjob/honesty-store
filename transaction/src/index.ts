@@ -1,5 +1,4 @@
 import { config } from 'aws-sdk';
-import * as AWSXRay from 'aws-xray-sdk';
 import bodyParser = require('body-parser');
 import express = require('express');
 
@@ -115,7 +114,6 @@ router.post(
   }
 );
 
-app.use(AWSXRay.express.openSegment('transaction'));
 app.use(router);
 
 // send healthy response to load balancer probes
@@ -128,7 +126,5 @@ app.get('/', (_req, res) => {
       res.sendStatus(500);
     });
 });
-
-app.use(AWSXRay.express.closeSegment());
 
 app.listen(3000);
