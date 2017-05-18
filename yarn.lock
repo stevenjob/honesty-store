@@ -424,6 +424,10 @@ rollup-plugin-commonjs@chrisprice/rollup-plugin-commonjs:
     resolve "^1.1.7"
     rollup-pluginutils "^2.0.1"
 
+rollup-plugin-ignore@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-ignore/-/rollup-plugin-ignore-1.0.3.tgz#9a3caac6709e481471ce4498a48164bbc2359e3d"
+
 rollup-plugin-json@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/rollup-plugin-json/-/rollup-plugin-json-2.1.1.tgz#933390dff3c9e3e654157d61304c5e167fc58623"
