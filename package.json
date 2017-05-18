@@ -11,7 +11,6 @@
     "commander": "^2.9.0",
     "rollup": "^0.41.6",
     "rollup-plugin-commonjs": "chrisprice/rollup-plugin-commonjs",
-    "rollup-plugin-ignore": "^1.0.3",
     "rollup-plugin-json": "^2.1.1",
     "rollup-plugin-node-resolve": "^3.0.0",
     "tslint": "^5.2.0",
