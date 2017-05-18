@@ -414,9 +414,9 @@ resolve@^1.1.6, resolve@^1.1.7, resolve@^1.3.2:
   dependencies:
     path-parse "^1.0.5"
 
-rollup-plugin-commonjs@^8.0.2:
+rollup-plugin-commonjs@chrisprice/rollup-plugin-commonjs:
   version "8.0.2"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-commonjs/-/rollup-plugin-commonjs-8.0.2.tgz#98b1589bfe32a6c0f67790b60c0b499972afed89"
+  resolved "https://codeload.github.com/chrisprice/rollup-plugin-commonjs/tar.gz/d90c17ee74f62157296feb350f268d92e881e559"
   dependencies:
     acorn "^4.0.1"
     estree-walker "^0.3.0"
