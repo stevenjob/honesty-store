@@ -6,8 +6,9 @@
   "scripts": {
     "tsc": "../node_modules/.bin/tsc",
     "rollup": "../node_modules/.bin/rollup -c ../rollup.config.js",
+    "browserify": "../node_modules/.bin/browserify --entry lib/src/lambda.js --exclude moment --external aws-sdk --outfile lib/bundle.js",
     "uglifyjs": "../node_modules/.bin/uglifyjs lib/bundle.js > lib/bundle-min.js",
-    "build": "npm run tsc && npm run rollup && npm run uglifyjs",
+    "build": "npm run tsc && npm run browserify && npm run uglifyjs",
     "start": "nodemon ./lib/api/src/app.js"
   },
   "dependencies": {
