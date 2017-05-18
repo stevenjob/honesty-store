@@ -34,7 +34,10 @@ const ensureLambda = async ({ name, handler, environment, dynamoAccess, zipFile,
     Environment: {
       Variables: environment
     },
-    Runtime: 'nodejs6.10'
+    Runtime: 'nodejs6.10',
+    TracingConfig: {
+      Mode: 'Active'
+    }
   };
 
   try {

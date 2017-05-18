@@ -13,7 +13,7 @@
     "@types/winston": "0.0.32"
   },
   "dependencies": {
-    "aws-sdk": "^2.50.0",
+    "aws-sdk": "^2.54.0",
     "commander": "^2.9.0",
     "ms": "^0.7.2",
     "uuid": "^3.0.1",
