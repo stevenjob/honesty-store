@@ -54,10 +54,16 @@ export const pruneTables = async ({ filter = (_tableName: string) => false }) =>
 
   winston.debug('table: tableNamesToPrune', tableNamesToPrune);
 
-  const promises = tableNamesToPrune.map(tableName =>
-    db.deleteTable({ TableName: tableName })
-      .promise()
-  );
+  const asyncTableDeleteLimit = 5;
+  for (let i = 0; i < tableNamesToPrune.length; i += asyncTableDeleteLimit) {
+    const toDelete = tableNamesToPrune
+      .slice(i, i + asyncTableDeleteLimit);
 
-  await Promise.all(promises);
+    winston.debug('table: tableNamesToPrune::slice', toDelete);
+
+    const promises = toDelete
+      .map(tableName => db.deleteTable({ TableName: tableName }).promise());
+
+    await Promise.all(promises);
+  }
 };
