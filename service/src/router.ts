@@ -1,11 +1,16 @@
 import HTTPStatus = require('http-status');
 import express = require('express');
 
+import * as AWS from 'aws-sdk';
+import * as AWSXRay from 'aws-xray-sdk';
+
 import { CodedError } from './error';
 import { createServiceKey, Key } from './key';
 import { error, info } from './log';
 import { verifyServiceSecret } from './serviceSecret';
 import time from './time';
+
+AWSXRay.captureAWS(AWS);
 
 interface Params {
   [key: string]: string;
