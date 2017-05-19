@@ -25,7 +25,7 @@ interface LambdaConfig {
   [key: string]: {
     database?: 'ro' | 'rw';
     handler: string;
-    codeFilter: (path: string) => boolean;
+    codeFilter: string;
 
     withStripe?: boolean;
     withUserSecret?: boolean;
@@ -38,52 +38,52 @@ const lambdaConfig: LambdaConfig = {
   item: {
     database: 'ro',
     handler: 'lib/bundle-min.handler',
-    codeFilter: path => /(lib|bundle-min\.js)$/.test(path)
+    codeFilter: 'lib/bundle-min.js'
   },
   box: {
     database: 'rw',
     handler: 'lib/bundle-min.handler',
-    codeFilter: path => /(lib|bundle-min\.js)$/.test(path)
+    codeFilter: 'lib/bundle-min.js'
   },
   batch: {
     database: 'ro',
     handler: 'lib/bundle-min.handler',
-    codeFilter: path => /(lib|bundle-min\.js)$/.test(path)
+    codeFilter: 'lib/bundle-min.js'
   },
   store: {
     database: 'ro',
     handler: 'lib/bundle-min.handler',
-    codeFilter: path => /(lib|bundle-min\.js)$/.test(path)
+    codeFilter: 'lib/bundle-min.js'
   },
   survey: {
     database: 'rw',
     handler: 'lib/bundle-min.handler',
-    codeFilter: path => /(lib|bundle-min\.js)$/.test(path)
+    codeFilter: 'lib/bundle-min.js'
   },
   transaction: {
     database: 'rw',
     handler: 'lib/bundle-min.handler',
-    codeFilter: path => /(lib|bundle-min\.js)$/.test(path)
+    codeFilter: 'lib/bundle-min.js'
   },
   topup: {
     database: 'rw',
     handler: 'lib/bundle-min.handler',
-    codeFilter: path => /(lib|bundle-min\.js)$/.test(path),
+    codeFilter: 'lib/bundle-min.js',
     withStripe: true
   },
   user: {
     database: 'rw',
     handler: 'lib/bundle-min.handler',
-    codeFilter: path => /(lib|bundle-min\.js)$/.test(path),
+    codeFilter: 'lib/bundle-min.js',
     withUserSecret: true
   },
   api: {
     handler: 'lib/bundle-min.handler',
-    codeFilter: path => /(lib|bundle-min\.js)$/.test(path)
+    codeFilter: 'lib/bundle-min.js'
   },
   web: {
     handler: 'server/lambda.handler',
-    codeFilter: path => /(node_modules|server|build)/.test(path),
+    codeFilter: '{node_modules,server,build}/**/*',
     catchAllResource: true
   }
 };

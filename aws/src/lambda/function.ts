@@ -1,16 +1,47 @@
 import { Lambda } from 'aws-sdk';
+import concatStream = require('concat-stream');
+import globCb = require('glob');
 import uuid = require('uuid/v4');
+import yazl = require('yazl');
+import { join, relative } from 'path';
 import * as winston from 'winston';
-import zipdir = require('zip-dir');
 
-const zip = (dir, filter) => new Promise<Buffer>((res, rej) => {
-  zipdir(dir, { filter }, (err, buffer) => {
+const globFiles = (pattern) => new Promise<string[]>((resolve, reject) =>
+  globCb(pattern, { mark: true }, (err, files) => {
     if (err) {
-      return rej(err);
+      return reject(err);
     }
-    return res(buffer);
-  });
-});
+    resolve(files.filter(file => file[file.length - 1] !== '/'));
+  })
+);
+
+export const zip = (dir, pattern) =>
+  Promise.all([
+    globFiles(`${dir}/${pattern}`),
+    globFiles('aws/xray/node_modules/**/*')
+  ])
+    .then(([files, xrayFiles]) =>
+      new Promise<Buffer>((resolve) => {
+        if (files.length === 0 || xrayFiles.length === 0) {
+          throw new Error(`No files found in ${dir} ${pattern} (or xray files missing)`);
+        }
+        const zipfile = new yazl.ZipFile();
+        zipfile.outputStream.pipe(concatStream(resolve));
+        for (const file of files) {
+          zipfile.addFile(file, relative(dir, file), {
+            mtime: new Date(0),
+            mode: parseInt('0100664', 8)
+          });
+        }
+        for (const file of xrayFiles) {
+          zipfile.addFile(file, relative(join('aws', 'xray'), file), {
+            mtime: new Date(0),
+            mode: parseInt('0100664', 8)
+          });
+        }
+        zipfile.end();
+      })
+    );
 
 const dynamoAccessToRole = ({ access, live }: { access?: 'ro' | 'rw', live: boolean }) => {
   if (!access) {

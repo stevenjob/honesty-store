@@ -7,9 +7,7 @@ const externalModules = [...builtinModules, 'aws-sdk'];
 
 const hacksPrefix = '\0hacks:';
 const hackedModules = {
-  'moment': 'export default { }',
-  'pkginfo': 'export default function() { }',
-  'winston': 'export default { Logger: function() {} }'
+  'moment': 'export default { }'
 };
 
 const options = {
