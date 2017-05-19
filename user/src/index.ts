@@ -137,6 +137,36 @@ const createUser = async ({ userId, userProfile }): Promise<UserWithAccessAndRef
   return externaliseUserWithAccessTokenAndRefreshToken(user);
 };
 
+const migrateStoreCode = (storeCode, userId) => {
+  const migration = {
+    'sl-edn': 'f79ff70c-2103-43f9-922d-d54a16315361',
+    'sl-ncl': 'b8d7305b-bb7d-4bbe-8b2f-5e94c6267bb6',
+    'sl-ldn': '1cfb21d8-52d8-4eee-98ce-740c466bfc0e',
+    'sl-brs': '9a61dad3-f05c-46aa-a7e4-14311e9cccc5',
+    'dev-test': '1e7c9c0d-a9be-4ab7-8499-e57bf859978d'
+  };
+
+  const id = migration[storeCode];
+  if (!id) {
+    throw new Error(`Couldn't migrate store code '${storeCode}' for user (${userId})`);
+  }
+  return id;
+};
+
+const updateAndMigrate = async (user: InternalUser): Promise<InternalUser> => {
+  const { defaultStoreId } = user;
+  let updated = user;
+
+  if (!isUUID(defaultStoreId)) {
+    updated = {
+      ...user,
+      defaultStoreId: migrateStoreCode(defaultStoreId, user.id);
+    };
+  }
+
+  return await cruft.update(updated);
+};
+
 const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
   assertValidUserId(userId);
 
@@ -158,7 +188,7 @@ const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
     updatedUser.accountId = account.id;
   }
 
-  return externaliseUser(await cruft.update(updatedUser));
+  return externaliseUser(await updateAndMigrate(updatedUser));
 };
 
 const sendMagicLinkEmail = async ({ key, emailAddress, storeCode }) => {
@@ -205,7 +235,7 @@ const logoutUser = async (userId) => {
     refreshToken: uuid()
   };
 
-  await cruft.update(loggedoutUser);
+  await updateAndMigrate(loggedoutUser);
 
   return {};
 };
