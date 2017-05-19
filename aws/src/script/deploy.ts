@@ -26,6 +26,7 @@ interface LambdaConfig {
     database?: 'ro' | 'rw';
     handler: string;
     codeFilter: string;
+    timeout: number;
 
     withStripe?: boolean;
     withUserSecret?: boolean;
@@ -38,53 +39,63 @@ const lambdaConfig: LambdaConfig = {
   item: {
     database: 'ro',
     handler: 'lib/bundle-min.handler',
-    codeFilter: 'lib/bundle-min.js'
+    codeFilter: 'lib/bundle-min.js',
+    timeout: 10
   },
   box: {
     database: 'rw',
     handler: 'lib/bundle-min.handler',
-    codeFilter: 'lib/bundle-min.js'
+    codeFilter: 'lib/bundle-min.js',
+    timeout: 10
   },
   batch: {
     database: 'ro',
     handler: 'lib/bundle-min.handler',
-    codeFilter: 'lib/bundle-min.js'
+    codeFilter: 'lib/bundle-min.js',
+    timeout: 10
   },
   store: {
     database: 'ro',
     handler: 'lib/bundle-min.handler',
-    codeFilter: 'lib/bundle-min.js'
+    codeFilter: 'lib/bundle-min.js',
+    timeout: 10
   },
   survey: {
     database: 'rw',
     handler: 'lib/bundle-min.handler',
-    codeFilter: 'lib/bundle-min.js'
+    codeFilter: 'lib/bundle-min.js',
+    timeout: 10
   },
   transaction: {
     database: 'rw',
     handler: 'lib/bundle-min.handler',
-    codeFilter: 'lib/bundle-min.js'
+    codeFilter: 'lib/bundle-min.js',
+    timeout: 10
   },
   topup: {
     database: 'rw',
     handler: 'lib/bundle-min.handler',
     codeFilter: 'lib/bundle-min.js',
-    withStripe: true
+    withStripe: true,
+    timeout: 10
   },
   user: {
     database: 'rw',
     handler: 'lib/bundle-min.handler',
     codeFilter: 'lib/bundle-min.js',
-    withUserSecret: true
+    withUserSecret: true,
+    timeout: 10
   },
   api: {
     handler: 'lib/bundle-min.handler',
-    codeFilter: 'lib/bundle-min.js'
+    codeFilter: 'lib/bundle-min.js',
+    timeout: 30
   },
   web: {
     handler: 'server/lambda.handler',
     codeFilter: '{node_modules,server,build}/**/*',
-    catchAllResource: true
+    catchAllResource: true,
+    timeout: 10
   }
 };
 
@@ -212,6 +223,7 @@ export default async ({ branch, dirs }) => {
     const lambda = await ensureFunction({
       name: generateName({ branch, dir }),
       codeDirectory: dir,
+      timeout: lambdaConfig[dir].timeout,
       codeFilter: lambdaConfig[dir].codeFilter,
       handler: lambdaConfig[dir].handler,
       dynamoAccess: lambdaConfig[dir].database,

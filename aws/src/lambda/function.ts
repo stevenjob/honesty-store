@@ -53,13 +53,13 @@ const dynamoAccessToRole = ({ access, live }: { access?: 'ro' | 'rw', live: bool
   return `arn:aws:iam::812374064424:role/${name}-lambda-dynamo-${access}`;
 };
 
-const ensureLambda = async ({ name, handler, environment, dynamoAccess, zipFile, live }) => {
+const ensureLambda = async ({ name, timeout, handler, environment, dynamoAccess, zipFile, live }) => {
   const lambda = new Lambda({ apiVersion: '2015-03-31' });
 
   const role = dynamoAccessToRole({ access: dynamoAccess, live });
   const params = {
     FunctionName: name,
-    Timeout: 10,
+    Timeout: timeout,
     Role: role,
     Handler: handler,
     Environment: {
@@ -126,6 +126,7 @@ export const ensureFunction = async ({
   name,
   codeDirectory,
   codeFilter,
+  timeout,
   handler,
   environment,
   dynamoAccess,
@@ -135,7 +136,7 @@ export const ensureFunction = async ({
   winston.debug(`function: zipping...`);
   const zipFile = await zip(codeDirectory, codeFilter);
   winston.debug(`function: uploading...`);
-  const lambda = await ensureLambda({ name, handler, environment, dynamoAccess, zipFile, live });
+  const lambda = await ensureLambda({ name, timeout, handler, environment, dynamoAccess, zipFile, live });
 
   if (withApiGateway) {
     await permitLambdaCallFromApiGateway({ func: lambda });
