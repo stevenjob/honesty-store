@@ -14,6 +14,7 @@
     "cruft-ddb": "^1.0.5",
     "jsonwebtoken": "^7.3.0",
     "node-fetch": "^1.6.3",
+    "uuid": "^3.0.1",
     "validator": "^6.2.0"
   },
   "devDependencies": {

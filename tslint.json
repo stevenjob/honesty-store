@@ -1,5 +1,4 @@
 {
-  "extends": "tslint-microsoft-contrib",
   "rulesDirectory": [
     /*
       We're sharing this config between all TypeScript projects, but the 'tslint-eslint-rules' package can't be installed at this level,

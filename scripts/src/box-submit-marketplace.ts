@@ -1,8 +1,15 @@
+import { config } from 'aws-sdk';
+import cruftDDB from 'cruft-ddb';
+import uuid = require('uuid/v4');
+import { Batch, MARKETPLACE_ID } from '../../batch/src/client';
 import { createMarketplaceBox, MarketplaceBoxSubmission } from '../../box/src/client';
 import { createServiceKey } from '../../service/src/key';
 
+config.region = process.env.AWS_REGION;
+
 const usage = (help): never => {
-  console.error('Usage: path/to/script count-from-batch store-id item-id batch-id dry-run');
+  // require: storeId, itemId, vat (assume 0?), userId, expiry
+  console.error('Usage: path/to/script store-id user-id item-id totalCost count expiry dry-run');
   console.error(help);
   // tslint:disable-next-line:no-constant-condition
   while (true) {
@@ -30,14 +37,52 @@ const maybeParseInt = (str, name) => {
   throwParseError('number', name, str);
 };
 
-const main = async (argv) => {
-  if (argv.length !== 5) { usage('wrong number of arguments'); }
+const createBatch = async (
+  { userId, itemId, count, expiry, totalCost }: { userId: string, itemId: string, count: number, expiry: number, totalCost: number },
+  isDryRun: boolean
+) => {
+  const cruft = cruftDDB<Batch>({
+    tableName: process.env.TABLE_NAME
+  });
+  const batch: Batch & { version: 0 } = {
+    id: uuid(),
+    quantity: 1,
+    itemQuantity: count,
+    expiry,
+    itemId,
+    priceExcludingVAT: totalCost,
+    VATRate: 0,
+    supplier: MARKETPLACE_ID,
+    supplierCode: userId,
+    version: 0
+  };
 
-  const count = maybeParseInt(argv[0], 'count');
-  const storeId = argv[1];
+  if (isDryRun) {
+    return batch;
+  }
+  return await cruft.create(batch);
+};
+
+const main = async (argv) => {
+  if (argv.length !== 7) { usage('wrong number of arguments'); }
+
+  const storeId = argv[0];
+  const userId = argv[1];
   const itemId = argv[2];
-  const batchId = argv[3];
-  const isDryRun = maybeParseBool(argv[4], 'dryrun');
+  const totalCost = maybeParseInt(argv[3], 'total cost');
+  const count = maybeParseInt(argv[4], 'count');
+  const expiry = maybeParseInt(argv[5], 'expiry');
+  const isDryRun = maybeParseBool(argv[6], 'dryrun');
+
+  const batch = await createBatch({
+    itemId,
+    count,
+    totalCost,
+    expiry,
+    userId,
+  }, isDryRun);
+
+  console.log(`Created batch:\n${JSON.stringify(batch, null, 2)}`);
 
   const key = createServiceKey({ service: 'marketplace-script' });
 
@@ -47,12 +92,14 @@ const main = async (argv) => {
       itemID: itemId,
       batches: [
         {
-          id: batchId,
+          id: batch.id,
           count
         }
       ]
     }
   };
+
+  console.log(`StoreId ${storeId}`);
 
   const response = await createMarketplaceBox(key, storeId, submission, isDryRun);
   // tslint:disable-next-line:no-console
