@@ -7,7 +7,7 @@ import { createAssertValidUuid } from '../../service/src/assert';
 import { CodedError } from '../../service/src/error';
 import { info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
-import { getStoreFromId } from '../../store/src/client';
+import { getStoreFromId, migrateStoreCodeToId } from '../../store/src/client';
 import { getUser } from '../../user/src/client';
 import { Box } from './client';
 import calculateMarketplaceBoxPricing from './marketplace-box';
@@ -85,7 +85,8 @@ const assertValidDonationRate = (donationRate) => {
   }
 };
 
-const assertValidShippedBoxSubmission = async ({ shippingCost, boxItems, packed, shipped, received, closed, donationRate }) => {
+const assertValidShippedBoxSubmission = async ({ storeId, shippingCost, boxItems, packed, shipped, received, closed, donationRate }) => {
+  assertValidStoreId(storeId);
   if (!Number.isInteger(shippingCost)) {
     throw new Error(`Non-integral shipping cost ${shippingCost}`);
   }
@@ -115,7 +116,8 @@ const assertValidMarketplaceBoxSubmission = async (key, submission) => {
     throw new Error('Submission cannot be undefined');
   }
 
-  const  { boxItem, donationRate } = submission;
+  const { storeId, boxItem, donationRate } = submission;
+  assertValidStoreId(storeId);
   assertValidDonationRate(donationRate);
   await assertValidBoxItemWithBatchReference(key, boxItem, true);
 
@@ -128,7 +130,12 @@ const assertValidMarketplaceBoxSubmission = async (key, submission) => {
 const getBox = async (boxId) => {
   assertValidBoxId(boxId);
 
-  return await cruft.read({ id: boxId });
+  const box = await cruft.read({ id: boxId });
+
+  return {
+    ...box,
+    storeId: migrateStoreCodeToId(box.storeId)
+  };
 };
 
 const getBoxesForStore = async (storeId) => {
