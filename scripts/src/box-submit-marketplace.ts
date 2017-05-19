@@ -9,7 +9,7 @@ config.region = process.env.AWS_REGION;
 
 const usage = (help): never => {
   // require: storeId, itemId, vat (assume 0?), userId, expiry
-  console.error('Usage: path/to/script store-id user-id item-id totalCost count expiry dry-run');
+  console.error('Usage: path/to/script store-id user-id item-id total-cost count expiry dry-run');
   console.error(help);
   // tslint:disable-next-line:no-constant-condition
   while (true) {
@@ -74,15 +74,15 @@ const main = async (argv) => {
   const expiry = maybeParseInt(argv[5], 'expiry');
   const isDryRun = maybeParseBool(argv[6], 'dryrun');
 
-  const batch = await createBatch(
-    {
-      itemId,
-      count,
-      totalCost,
-      expiry,
-      userId
-    },
-    isDryRun);
+  const batchDetails = {
+    itemId,
+    count,
+    totalCost,
+    expiry,
+    userId
+  };
+
+  const batch = await createBatch(batchDetails, isDryRun);
 
   // tslint:disable-next-line:no-console
   console.log(`Created batch:\n${JSON.stringify(batch, null, 2)}`);
