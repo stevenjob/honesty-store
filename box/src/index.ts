@@ -1,4 +1,3 @@
-import { Batch, getBatch, MARKETPLACE_ID } from '@honesty-store/batch/src/client';
 import { createAssertValidUuid } from '@honesty-store/service/src/assert';
 import { CodedError } from '@honesty-store/service/src/error';
 import { info } from '@honesty-store/service/src/log';
@@ -23,27 +22,6 @@ const assertValidBatchId = createAssertValidUuid('batchId');
 const assertValidItemId = createAssertValidUuid('boxItemId');
 const assertValidStoreId = createAssertValidUuid('storeId');
 
-const assertValidShippedBatch = (batch: Batch) => {
-  const { id: batchId, supplier } = batch;
-  if (supplier === MARKETPLACE_ID) {
-    throw new Error(`Referenced batch '${batchId}' cannot have supplier value '${MARKETPLACE_ID} for a shipped box`);
-  }
-};
-
-const assertValidMarketplaceBatch = async (key, batch: Batch) => {
-  const { id: batchId, supplier, supplierCode } = batch;
-  if (supplier !== MARKETPLACE_ID) {
-    throw new Error(
-      `Referenced batch '${batchId}' must have supplier value '${MARKETPLACE_ID}' for a marketplace box, but found '${supplier}'`
-    );
-  }
-  try {
-    await getUser(key, supplierCode);
-  } catch (e) {
-    throw new Error(`Referenced batch '${batchId}' must have a valid userId assigned to supplierCode, ${e.message}`);
-  }
-};
-
 const assertValidBatchReference = ({ id, count }) => {
   assertValidBatchId(id);
   if (!Number.isInteger(count)) {
@@ -51,7 +29,7 @@ const assertValidBatchReference = ({ id, count }) => {
   }
 };
 
-const assertValidBoxItemWithBatchReference = async (key, boxItem, isMarketplaceSubmission: boolean) => {
+const assertValidBoxItemWithBatchReference = (boxItem) => {
   if (!boxItem) {
     throw new Error('Box item cannot be undefined');
   }
@@ -61,20 +39,8 @@ const assertValidBoxItemWithBatchReference = async (key, boxItem, isMarketplaceS
     throw new Error(`Invalid batches ${batchReferences}`);
   }
 
-  const batches = await Promise.all(batchReferences.map(({ id }) => getBatch(key, id)));
-
-  for (const batchRef of batchReferences) {
-    assertValidBatchReference(batchRef);
-    const batch = batches.find(({ id }) => id === batchRef.id);
-    const { itemId: batchItemId } = batch;
-    if (batchItemId !== itemID) {
-      throw new Error(`Batch ${batchRef.id} does not contain item ${itemID}`);
-    }
-    if (isMarketplaceSubmission) {
-      await assertValidMarketplaceBatch(key, batch);
-    } else {
-      assertValidShippedBatch(batch);
-    }
+  for (const { id } of batchReferences) {
+    assertValidBatchReference(id);
   }
 };
 
@@ -84,7 +50,7 @@ const assertValidDonationRate = (donationRate) => {
   }
 };
 
-const assertValidShippedBoxSubmission = async ({ shippingCost, boxItems, packed, shipped, received, closed, donationRate }) => {
+const assertValidShippedBoxSubmission = ({ shippingCost, boxItems, packed, shipped, received, closed, donationRate }) => {
   if (!Number.isInteger(shippingCost)) {
     throw new Error(`Non-integral shipping cost ${shippingCost}`);
   }
@@ -104,19 +70,19 @@ const assertValidShippedBoxSubmission = async ({ shippingCost, boxItems, packed,
     throw new Error(`Invalid boxItems ${boxItems}`);
   }
   for (const boxItem of boxItems) {
-    await assertValidBoxItemWithBatchReference(null, boxItem, false);
+    assertValidBoxItemWithBatchReference(boxItem);
   }
   assertValidDonationRate(donationRate);
 };
 
-const assertValidMarketplaceBoxSubmission = async (key, submission) => {
+const assertValidMarketplaceBoxSubmission = (submission) => {
   if (!submission) {
     throw new Error('Submission cannot be undefined');
   }
 
   const { boxItem, donationRate } = submission;
   assertValidDonationRate(donationRate);
-  await assertValidBoxItemWithBatchReference(key, boxItem, true);
+  assertValidBoxItemWithBatchReference(boxItem);
 
   const { batches } = boxItem;
   if (batches.length !== 1) {
@@ -235,8 +201,8 @@ const assertValidlyPricedBox = (box: Box) => {
 const createMarketplaceBox = async ({ key, storeId, submission, dryRun }): Promise<Box> => {
   info(key, `New marketplace submission received for store ${storeId}`, { submission });
 
-  await getStoreFromId(key, storeId);
-  await assertValidMarketplaceBoxSubmission(key, submission);
+  assertValidStoreId(storeId);
+  assertValidMarketplaceBoxSubmission(submission);
 
   const box = await calculateMarketplaceBoxPricing(key, storeId, submission);
   assertValidlyPricedBox(box);
