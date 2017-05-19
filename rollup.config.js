@@ -3,7 +3,7 @@ import json from 'rollup-plugin-json';
 import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 
-const externalModules = [...builtinModules, 'aws-sdk'];
+const externalModules = [...builtinModules, 'aws-sdk', 'aws-xray-sdk'];
 
 const hacksPrefix = '\0hacks:';
 const hackedModules = {
