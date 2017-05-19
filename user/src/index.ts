@@ -9,7 +9,7 @@ import { CodedError } from '../../service/src/error';
 import { createServiceKey } from '../../service/src/key';
 import { error, info } from '../../service/src/log';
 import { serviceAuthentication, serviceRouter } from '../../service/src/router';
-import { getStoreFromId } from '../../store/src/client';
+import { getStoreFromId, migrateStoreCodeToId } from '../../store/src/client';
 import { createAccount } from '../../transaction/src/client';
 import { TEST_DATA_USER_ID, User, UserProfile, UserWithAccessAndRefreshTokens, UserWithAccessToken } from './client';
 import { signAccessToken, signRefreshToken, verifyAccessToken, verifyMagicLinkToken, verifyRefreshToken } from './token';
@@ -137,35 +137,11 @@ const createUser = async ({ userId, userProfile }): Promise<UserWithAccessAndRef
   return externaliseUserWithAccessTokenAndRefreshToken(user);
 };
 
-const migrateStoreCode = (storeCode, userId) => {
-  const migration = {
-    'sl-edn': 'f79ff70c-2103-43f9-922d-d54a16315361',
-    'sl-ncl': 'b8d7305b-bb7d-4bbe-8b2f-5e94c6267bb6',
-    'sl-ldn': '1cfb21d8-52d8-4eee-98ce-740c466bfc0e',
-    'sl-brs': '9a61dad3-f05c-46aa-a7e4-14311e9cccc5',
-    'dev-test': '1e7c9c0d-a9be-4ab7-8499-e57bf859978d'
-  };
-
-  const id = migration[storeCode];
-  if (!id) {
-    throw new Error(`Couldn't migrate store code '${storeCode}' for user (${userId})`);
-  }
-  return id;
-};
-
-const updateAndMigrate = async (user: InternalUser): Promise<InternalUser> => {
-  const { defaultStoreId } = user;
-  let updated = user;
-
-  if (!isUUID(defaultStoreId)) {
-    updated = {
-      ...user,
-      defaultStoreId: migrateStoreCode(defaultStoreId, user.id);
-    };
-  }
-
-  return await cruft.update(updated);
-};
+const updateAndMigrate = async (user: InternalUser): Promise<InternalUser> =>
+  await cruft.update({
+    ...user,
+    defaultStoreId: migrateStoreCodeToId(user.defaultStoreId)
+  });
 
 const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
   assertValidUserId(userId);
