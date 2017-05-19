@@ -289,7 +289,7 @@ export const ensureApiGateway = async ({
 const pruneRestApi = (restApi: APIGateway.RestApi) => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
 
-  return apigateway.deleteRestApi({ restApiId: restApi.id }).promise();
+  return makeRetryable(apigateway.deleteRestApi({ restApiId: restApi.id })).promise();
 };
 
 export const pruneApiGateway = async (filter: (_: APIGateway.RestApi) => boolean) => {
