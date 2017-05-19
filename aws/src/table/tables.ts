@@ -308,7 +308,8 @@ const dirToTable = {
         accountId: 'b423607f-64de-441f-ac39-12d50aaedbe9',
         defaultStoreId: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
         emailAddress: 'support@honesty.store',
-        refreshToken: '34726c71-92aa-4e2e-83ec-0b4a5d83dedf'
+        refreshToken: '34726c71-92aa-4e2e-83ec-0b4a5d83dedf',
+        version: 0
       }
     ]
   }),
@@ -445,7 +446,8 @@ const dirToTable = {
         unit: 'bar',
         unitPlural: 'bars',
         genericName: 'cereal bar',
-        genericNamePlural: 'cereal bars'
+        genericNamePlural: 'cereal bars',
+        version: 0
       },
       {
         id: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
@@ -456,7 +458,8 @@ const dirToTable = {
         unit: 'pack',
         unitPlural: 'packs',
         genericName: 'crisps',
-        genericNamePlural: 'crisps'
+        genericNamePlural: 'crisps',
+        version: 0
       },
       {
         id: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
@@ -467,7 +470,8 @@ const dirToTable = {
         unit: 'can',
         unitPlural: 'cans',
         genericName: 'drink',
-        genericNamePlural: 'drinks'
+        genericNamePlural: 'drinks',
+        version: 0
       },
       {
         id: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
@@ -478,7 +482,8 @@ const dirToTable = {
         unit: 'bar',
         unitPlural: 'bars',
         genericName: 'cereal bar',
-        genericNamePlural: 'cereal bars'
+        genericNamePlural: 'cereal bars',
+        version: 0
       }
     ]
   }),
@@ -549,7 +554,8 @@ const dirToTable = {
       {
         id: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
         code: 'dev-test',
-        agentId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649'
+        agentId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649',
+        version: 0
       }
     ]
   })
