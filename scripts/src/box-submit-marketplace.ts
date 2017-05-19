@@ -74,14 +74,17 @@ const main = async (argv) => {
   const expiry = maybeParseInt(argv[5], 'expiry');
   const isDryRun = maybeParseBool(argv[6], 'dryrun');
 
-  const batch = await createBatch({
-    itemId,
-    count,
-    totalCost,
-    expiry,
-    userId,
-  }, isDryRun);
+  const batch = await createBatch(
+    {
+      itemId,
+      count,
+      totalCost,
+      expiry,
+      userId
+    },
+    isDryRun);
 
+  // tslint:disable-next-line:no-console
   console.log(`Created batch:\n${JSON.stringify(batch, null, 2)}`);
 
   const key = createServiceKey({ service: 'marketplace-script' });
@@ -99,6 +102,7 @@ const main = async (argv) => {
     }
   };
 
+  // tslint:disable-next-line:no-console
   console.log(`StoreId ${storeId}`);
 
   const response = await createMarketplaceBox(key, storeId, submission, isDryRun);
