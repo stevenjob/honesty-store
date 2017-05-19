@@ -85,8 +85,7 @@ const assertValidDonationRate = (donationRate) => {
   }
 };
 
-const assertValidShippedBoxSubmission = async ({ storeId, shippingCost, boxItems, packed, shipped, received, closed, donationRate }) => {
-  assertValidStoreId(storeId);
+const assertValidShippedBoxSubmission = async ({ shippingCost, boxItems, packed, shipped, received, closed, donationRate }) => {
   if (!Number.isInteger(shippingCost)) {
     throw new Error(`Non-integral shipping cost ${shippingCost}`);
   }
@@ -116,8 +115,7 @@ const assertValidMarketplaceBoxSubmission = async (key, submission) => {
     throw new Error('Submission cannot be undefined');
   }
 
-  const { storeId, boxItem, donationRate } = submission;
-  assertValidStoreId(storeId);
+  const { boxItem, donationRate } = submission;
   assertValidDonationRate(donationRate);
   await assertValidBoxItemWithBatchReference(key, boxItem, true);
 
