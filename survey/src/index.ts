@@ -3,7 +3,7 @@ import bodyParser = require('body-parser');
 import express = require('express');
 
 import { createAssertValidUuid } from '@honesty-store/service/src/assert';
-import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src/router';
+import { serviceAuthentication, expressRouter } from '@honesty-store/service/src/router';
 import { SurveyResponse } from './client';
 import { getSurvey, getSurveys } from './surveys';
 
@@ -142,7 +142,7 @@ const assertConnectivity = async () => {
     .promise();
 };
 
-const router = serviceRouter('survey', 1);
+const router = expressRouter('survey', 1);
 
 router.get(
   '/:userId',

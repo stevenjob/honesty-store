@@ -2,7 +2,7 @@ import { createAssertValidUuid } from '@honesty-store/service/src/assert';
 import { CodedError } from '@honesty-store/service/src/error';
 import { createServiceKey } from '@honesty-store/service/src/key';
 import { error, info } from '@honesty-store/service/src/log';
-import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src/router';
+import { serviceAuthentication, expressRouter } from '@honesty-store/service/src/router';
 import { getStoreFromId, migrateStoreCodeToId } from '@honesty-store/store/src/client';
 import { createAccount } from '@honesty-store/transaction/src/client';
 import { config, SES } from 'aws-sdk';
@@ -219,7 +219,7 @@ export const app = express();
 
 app.use(bodyParser.json());
 
-const router = serviceRouter('user', 1);
+const router = expressRouter('user', 1);
 
 router.get(
   '/:userId',

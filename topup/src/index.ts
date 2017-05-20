@@ -5,7 +5,7 @@ import { createAssertValidUuid } from '@honesty-store/service/src/assert';
 import { CodedError } from '@honesty-store/service/src/error';
 import { Key } from '@honesty-store/service/src/key';
 import { error, info } from '@honesty-store/service/src/log';
-import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src/router';
+import { serviceAuthentication, expressRouter } from '@honesty-store/service/src/router';
 import { assertBalanceWithinLimit, createTransaction, TransactionBody } from '@honesty-store/transaction/src/client/index';
 import * as stripeFactory from 'stripe';
 import { v4 as uuid } from 'uuid';
@@ -354,7 +354,7 @@ export const app = express();
 
 app.use(bodyParser.json());
 
-const router = serviceRouter('topup', 1);
+const router = expressRouter('topup', 1);
 
 router.post(
   '/',

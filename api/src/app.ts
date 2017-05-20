@@ -1,7 +1,7 @@
 import express = require('express');
 import bodyParser = require('body-parser');
 import compression = require('compression');
-import { serviceRouter } from '@honesty-store/service/src/router';
+import { expressRouter } from '@honesty-store/service/src/router';
 import cors = require('cors');
 import boxController from './controllers/box';
 import logoutController from './controllers/logout';
@@ -18,7 +18,7 @@ import transactionsController from './controllers/transactions';
 import { apiVersion } from './version';
 
 export const app = express();
-const router = serviceRouter('api', apiVersion);
+const router = expressRouter('api', apiVersion);
 
 app.use(compression());
 app.use(bodyParser.json());

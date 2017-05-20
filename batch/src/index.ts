@@ -4,7 +4,7 @@ import express = require('express');
 import bodyParser = require('body-parser');
 
 import { createAssertValidUuid } from '@honesty-store/service/src/assert';
-import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src/router';
+import { serviceAuthentication, expressRouter } from '@honesty-store/service/src/router';
 import { Batch } from './client';
 
 config.region = process.env.AWS_REGION;
@@ -25,7 +25,7 @@ export const app = express();
 
 app.use(bodyParser.json());
 
-const router = serviceRouter('batch', 1);
+const router = expressRouter('batch', 1);
 
 router.get(
   '/:batchId',

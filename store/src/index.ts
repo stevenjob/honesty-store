@@ -1,5 +1,5 @@
 import { CodedError } from '@honesty-store/service/src/error';
-import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src/router';
+import { serviceAuthentication, expressRouter } from '@honesty-store/service/src/router';
 import { config } from 'aws-sdk';
 import bodyParser = require('body-parser');
 import cruftDDB from 'cruft-ddb';
@@ -33,7 +33,7 @@ export const app = express();
 
 app.use(bodyParser.json());
 
-const router = serviceRouter('store', 1);
+const router = expressRouter('store', 1);
 
 router.get(
   '/code/:code',

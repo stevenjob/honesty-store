@@ -2,7 +2,7 @@ import { Batch, getBatch, MARKETPLACE_ID } from '@honesty-store/batch/src/client
 import { createAssertValidUuid } from '@honesty-store/service/src/assert';
 import { CodedError } from '@honesty-store/service/src/error';
 import { info } from '@honesty-store/service/src/log';
-import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src/router';
+import { serviceAuthentication, expressRouter } from '@honesty-store/service/src/router';
 import { getStoreFromId, migrateStoreCodeToId } from '@honesty-store/store/src/client';
 import { getUser } from '@honesty-store/user/src/client';
 import { config, SES } from 'aws-sdk';
@@ -274,7 +274,7 @@ export const app = express();
 
 app.use(bodyParser.json());
 
-const router = serviceRouter('box', 1);
+const router = expressRouter('box', 1);
 
 router.get(
   '/store/:storeId',

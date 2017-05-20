@@ -2,7 +2,7 @@ import { config } from 'aws-sdk';
 import bodyParser = require('body-parser');
 import express = require('express');
 
-import { serviceAuthentication, serviceRouter } from '@honesty-store/service/src/router';
+import { serviceAuthentication, expressRouter } from '@honesty-store/service/src/router';
 import { assertValidAccountId, createAccount, getAccountInternal, updateAccount } from './account';
 import {
   AccountAndTransactions, balanceLimit, InternalAccount,
@@ -89,7 +89,7 @@ export const app = express();
 
 app.use(bodyParser.json());
 
-const router = serviceRouter('transaction', 1);
+const router = expressRouter('transaction', 1);
 
 router.get(
   '/:accountId',
