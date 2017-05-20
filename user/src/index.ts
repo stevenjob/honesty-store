@@ -69,7 +69,12 @@ const externaliseUserWithAccessTokenAndRefreshToken = (user: InternalUser): User
 const getInternal = async ({ userId }) => {
   assertValidUserId(userId);
 
-  return await cruft.read({ id: userId });
+  const user = await cruft.read({ id: userId });
+
+  return {
+    ...user,
+    defaultStoreId: migrateStoreCodeToId(user.defaultStoreId)
+  };
 };
 
 const get = async ({ userId }): Promise<User> => externaliseUser(await getInternal({ userId }));
@@ -137,12 +142,6 @@ const createUser = async ({ userId, userProfile }): Promise<UserWithAccessAndRef
   return externaliseUserWithAccessTokenAndRefreshToken(user);
 };
 
-const updateAndMigrate = async (user: InternalUser): Promise<InternalUser> =>
-  await cruft.update({
-    ...user,
-    defaultStoreId: migrateStoreCodeToId(user.defaultStoreId)
-  });
-
 const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
   assertValidUserId(userId);
 
@@ -164,7 +163,7 @@ const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
     updatedUser.accountId = account.id;
   }
 
-  return externaliseUser(await updateAndMigrate(updatedUser));
+  return externaliseUser(await cruft.update(updatedUser));
 };
 
 const sendMagicLinkEmail = async ({ key, emailAddress, storeCode }) => {
@@ -211,7 +210,7 @@ const logoutUser = async (userId) => {
     refreshToken: uuid()
   };
 
-  await updateAndMigrate(loggedoutUser);
+  await cruft.update(loggedoutUser);
 
   return {};
 };
