@@ -371,7 +371,7 @@ const pruneDomainName = async (domainName: string) => {
 
   await apigateway.deleteBasePathMapping({
     domainName,
-    basePath: ''
+    basePath: '(none)'
   })
     .promise();
 
