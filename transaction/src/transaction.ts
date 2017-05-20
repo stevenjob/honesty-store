@@ -6,7 +6,7 @@ import isUUID = require('validator/lib/isUUID');
 
 import { InternalTransaction, Transaction, TransactionDetails } from './client';
 
-import { migrateStoreCodeToId } from '../../store/src/client';
+import { migrateStoreCodeToId } from '@honesty-store/store/src/client';
 
 const isSHA256 = (hash) => /^[a-f0-9]{64}$/.test(hash);
 
