@@ -89,8 +89,7 @@ const ensureLambda = async ({ name, timeout, handler, environment, dynamoAccess,
     }
     const func = await lambda.updateFunctionCode({
       FunctionName: name,
-      ZipFile: zipFile,
-      Publish: true
+      ZipFile: zipFile
     })
       .promise();
 
@@ -98,11 +97,20 @@ const ensureLambda = async ({ name, timeout, handler, environment, dynamoAccess,
 
     const config = await lambda.updateFunctionConfiguration({
       FunctionName: name,
+
       ...params
     })
       .promise();
 
     winston.debug(`function: updateFunctionConfiguration`, config);
+
+    const version = await lambda.publishVersion({
+      FunctionName: name,
+      CodeSha256: func.CodeSha256
+    })
+      .promise();
+
+    winston.debug(`function: publishVersion`, version);
 
     return func;
   }
