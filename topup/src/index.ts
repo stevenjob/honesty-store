@@ -1,12 +1,10 @@
-import { config, DynamoDB } from 'aws-sdk';
-import bodyParser = require('body-parser');
-import express = require('express');
 import { createAssertValidUuid } from '@honesty-store/service/src/assert';
 import { CodedError } from '@honesty-store/service/src/error';
 import { Key } from '@honesty-store/service/src/key';
 import { error, info } from '@honesty-store/service/src/log';
-import { serviceAuthentication, expressRouter } from '@honesty-store/service/src/router';
+import { lambdaRouter } from '@honesty-store/service/src/router';
 import { assertBalanceWithinLimit, createTransaction, TransactionBody } from '@honesty-store/transaction/src/client/index';
+import { config, DynamoDB } from 'aws-sdk';
 import * as stripeFactory from 'stripe';
 import { v4 as uuid } from 'uuid';
 
@@ -327,56 +325,16 @@ const getCardDetails = async ({ userId }) => {
   return extractCardDetails(topupAccount);
 };
 
-const assertDynamoConnectivity = async () => {
-  await new DynamoDB.DocumentClient()
-    .get({
-      TableName: process.env.TABLE_NAME,
-      Key: {
-        id: 'non-existent-id'
-      }
-    })
-    .promise();
-};
-
-const assertStripeConnectivity = async ({ test }) => {
-  await stripeForUser({ test })
-    .balance
-    .retrieve();
-};
-
-const assertConnectivity = async () => {
-  await assertDynamoConnectivity();
-  await assertStripeConnectivity({ test: false });
-  await assertStripeConnectivity({ test: true });
-};
-
-export const app = express();
-
-app.use(bodyParser.json());
-
-const router = expressRouter('topup', 1);
+export const router = lambdaRouter('topup', 1);
 
 router.post(
   '/',
-  serviceAuthentication,
   async (key, {}, { accountId, userId, amount, stripeToken }) =>
     attemptTopup({ key, accountId, userId, amount, stripeToken })
 );
 
 router.get(
   '/:userId/cardDetails',
-  serviceAuthentication,
   async (_key, { userId }) =>
     getCardDetails({ userId })
 );
-
-app.use(router);
-
-// send healthy response to load balancer probes
-app.get('/', (_req, res) => {
-  assertConnectivity()
-    .then(() => res.sendStatus(200))
-    .catch(() => res.sendStatus(500));
-});
-
-app.listen(3000);

@@ -1,17 +1,14 @@
 import { createAssertValidUuid } from '@honesty-store/service/src/assert';
 import { CodedError } from '@honesty-store/service/src/error';
-import { createServiceKey } from '@honesty-store/service/src/key';
-import { error, info } from '@honesty-store/service/src/log';
-import { serviceAuthentication, expressRouter } from '@honesty-store/service/src/router';
+import { info } from '@honesty-store/service/src/log';
+import { lambdaRouter } from '@honesty-store/service/src/router';
 import { getStoreFromId, migrateStoreCodeToId } from '@honesty-store/store/src/client';
 import { createAccount } from '@honesty-store/transaction/src/client';
 import { config, SES } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
-import bodyParser = require('body-parser');
-import express = require('express');
 import { v4 as uuid } from 'uuid';
 import isEmail = require('validator/lib/isEmail');
-import { TEST_DATA_USER_ID, User, UserProfile, UserWithAccessAndRefreshTokens, UserWithAccessToken } from './client';
+import { User, UserProfile, UserWithAccessAndRefreshTokens, UserWithAccessToken } from './client';
 import { signAccessToken, signRefreshToken, verifyAccessToken, verifyMagicLinkToken, verifyRefreshToken } from './token';
 
 config.region = process.env.AWS_REGION;
@@ -215,57 +212,45 @@ const logoutUser = async (userId) => {
   return {};
 };
 
-export const app = express();
-
-app.use(bodyParser.json());
-
-const router = expressRouter('user', 1);
+export const router = lambdaRouter('user', 1);
 
 router.get(
   '/:userId',
-  serviceAuthentication,
   async (_key, { userId }) => get({ userId })
 );
 
 router.get(
   '/accessToken/:accessToken',
-  serviceAuthentication,
   async (key, { accessToken }) => await getByAccessToken({ key, accessToken })
 );
 
 router.get(
   '/refreshToken/:refreshToken',
-  serviceAuthentication,
   async (key, { refreshToken }) => await getByRefreshToken({ key, refreshToken })
 );
 
 router.get(
   '/magicLink/:magicLinkToken',
-  serviceAuthentication,
   async (key, { magicLinkToken }) => await getByMagicLinkToken({ key, magicLinkToken })
 );
 
 router.get(
   '/emailAddress/:emailAddress',
-  serviceAuthentication,
   async (_key, { emailAddress }) => externaliseUser(await scanByEmailAddress({ emailAddress }))
 );
 
 router.post(
   '/',
-  serviceAuthentication,
   async (_key, { }, { userId, ...userProfile }) => await createUser({ userId, userProfile })
 );
 
 router.put(
   '/:userId',
-  serviceAuthentication,
   async (key, { userId }, userProfile) => await updateUser({ key, userId, userProfile })
 );
 
 router.post(
   '/magicLink/:emailAddress/:storeCode',
-  serviceAuthentication,
   async (key, { emailAddress, storeCode }, { }) => {
     await sendMagicLinkEmail({ key, emailAddress, storeCode });
     return {};
@@ -274,22 +259,5 @@ router.post(
 
 router.post(
   '/logout/:userId',
-  serviceAuthentication,
   async (_key, { userId }, { }) => await logoutUser(userId)
 );
-
-app.use(router);
-
-// send healthy response to load balancer probes
-app.get('/', (_req, res) => {
-  get({ userId: TEST_DATA_USER_ID })
-    .then(() => {
-      res.sendStatus(200);
-    })
-    .catch((e) => {
-      res.sendStatus(500);
-      error(createServiceKey({ service: 'user' }), 'LB probe error', e);
-    });
-});
-
-app.listen(3000);

@@ -1,10 +1,8 @@
 import { config } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
-import express = require('express');
-import bodyParser = require('body-parser');
 
 import { createAssertValidUuid } from '@honesty-store/service/src/assert';
-import { serviceAuthentication, expressRouter } from '@honesty-store/service/src/router';
+import { lambdaRouter } from '@honesty-store/service/src/router';
 import { Batch } from './client';
 
 config.region = process.env.AWS_REGION;
@@ -21,21 +19,9 @@ const getBatch = async (batchId): Promise<Batch> => {
   return await cruft.read({ id: batchId });
 };
 
-export const app = express();
-
-app.use(bodyParser.json());
-
-const router = expressRouter('batch', 1);
+export const router = lambdaRouter('batch', 1);
 
 router.get(
   '/:batchId',
-  serviceAuthentication,
   async (_key, { batchId }) => getBatch(batchId)
 );
-
-app.use(router);
-
-// send healthy response to load balancer probes
-app.get('/', (_req, res) => void res.sendStatus(200));
-
-app.listen(3000);

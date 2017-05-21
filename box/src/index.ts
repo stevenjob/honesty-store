@@ -2,13 +2,11 @@ import { Batch, getBatch, MARKETPLACE_ID } from '@honesty-store/batch/src/client
 import { createAssertValidUuid } from '@honesty-store/service/src/assert';
 import { CodedError } from '@honesty-store/service/src/error';
 import { info } from '@honesty-store/service/src/log';
-import { serviceAuthentication, expressRouter } from '@honesty-store/service/src/router';
+import { lambdaRouter } from '@honesty-store/service/src/router';
 import { getStoreFromId, migrateStoreCodeToId } from '@honesty-store/store/src/client';
 import { getUser } from '@honesty-store/user/src/client';
 import { config, SES } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
-import bodyParser = require('body-parser');
-import express = require('express');
 
 import { Box } from './client';
 import calculateMarketplaceBoxPricing from './marketplace-box';
@@ -266,67 +264,41 @@ const createShippedBox = async ({ key, storeId, submission, dryRun }): Promise<B
   return box;
 };
 
-const assertConnectivity = async () => {
-  await cruft.read({ id: '06439c6c-57c9-4a17-b218-2018ea8dae55' });
-};
-
-export const app = express();
-
-app.use(bodyParser.json());
-
-const router = expressRouter('box', 1);
+export const router = lambdaRouter('box', 1);
 
 router.get(
   '/store/:storeId',
-  serviceAuthentication,
   async (_key, { storeId }) => getBoxesForStore(storeId)
 );
 
 router.post(
   '/store/:storeId/shipped',
-  serviceAuthentication,
-  async (key, { storeId }, submission, { query: { dryRun } }) =>
-    createShippedBox({ key, storeId, submission, dryRun: dryRun !== 'false' })
+  async (key, { storeId }, submission) =>
+    createShippedBox({ key, storeId, submission, dryRun: true }) // HACK
 );
 
 router.post(
   '/store/:storeId/marketplace',
-  serviceAuthentication,
-  async (key, { storeId }, submission, { query: { dryRun } }) =>
-    createMarketplaceBox({ key, storeId, submission, dryRun: dryRun !== 'false' })
+  async (key, { storeId }, submission) =>
+    createMarketplaceBox({ key, storeId, submission, dryRun: true }) // HACK
 );
 
 router.post(
   '/:boxId/out-of-stock/:itemId/:depleted',
-  serviceAuthentication,
   async (key, { boxId, itemId, depleted }) => flagOutOfStock({ key, boxId, itemId, depleted })
 );
 
 router.post(
   '/:boxId/received',
-  serviceAuthentication,
   async (key, { boxId }) => markBoxAsReceived({ key, boxId })
 );
 
 router.put(
   '/:boxId/shipped/:date',
-  serviceAuthentication,
   async (key, { boxId, date }) => markBoxAsShipped({ key, boxId, date })
 );
 
 router.get(
   '/:boxId',
-  serviceAuthentication,
   async (_key, { boxId }) => getBox(boxId)
 );
-
-app.use(router);
-
-// send healthy response to load balancer probes
-app.get('/', (_req, res) => {
-  assertConnectivity()
-    .then(() => res.sendStatus(200))
-    .catch(() => res.sendStatus(500));
-});
-
-app.listen(3000);

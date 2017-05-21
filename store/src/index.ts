@@ -1,9 +1,7 @@
 import { CodedError } from '@honesty-store/service/src/error';
-import { serviceAuthentication, expressRouter } from '@honesty-store/service/src/router';
+import { lambdaRouter } from '@honesty-store/service/src/router';
 import { config } from 'aws-sdk';
-import bodyParser = require('body-parser');
 import cruftDDB from 'cruft-ddb';
-import express = require('express');
 
 import { Store } from './client';
 
@@ -29,27 +27,14 @@ const getStoreFromCode = async (code: string) => {
   }
 };
 
-export const app = express();
-
-app.use(bodyParser.json());
-
-const router = expressRouter('store', 1);
+export const router = lambdaRouter('store', 1);
 
 router.get(
   '/code/:code',
-  serviceAuthentication,
   async (_key, { code }) => getStoreFromCode(code)
 );
 
 router.get(
   '/:id',
-  serviceAuthentication,
   async (_key, { id }) => getStoreFromId(id)
 );
-
-app.use(router);
-
-// send healthy response to load balancer probes
-app.get('/', (_req, res) => void res.sendStatus(200));
-
-app.listen(3000);

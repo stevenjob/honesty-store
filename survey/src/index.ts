@@ -1,9 +1,7 @@
 import { config, DynamoDB } from 'aws-sdk';
-import bodyParser = require('body-parser');
-import express = require('express');
 
 import { createAssertValidUuid } from '@honesty-store/service/src/assert';
-import { serviceAuthentication, expressRouter } from '@honesty-store/service/src/router';
+import { lambdaRouter } from '@honesty-store/service/src/router';
 import { SurveyResponse } from './client';
 import { getSurvey, getSurveys } from './surveys';
 
@@ -131,41 +129,15 @@ const acceptUserSurvey = async ({ userId, answers, surveyId }) => {
   return surveys.filter(({ id }) => surveyId !== id);
 };
 
-const assertConnectivity = async () => {
-  await new DynamoDB.DocumentClient()
-    .get({
-      TableName: process.env.TABLE_NAME,
-      Key: {
-        id: 'non-existent-id'
-      }
-    })
-    .promise();
-};
-
-const router = expressRouter('survey', 1);
+export const router = lambdaRouter('survey', 1);
 
 router.get(
   '/:userId',
-  serviceAuthentication,
   async (_key, { userId }) => surveysForUser(userId)
 );
 
 router.post(
   '/:userId',
-  serviceAuthentication,
   async (_key, { userId }, { answers, surveyId }) =>
     acceptUserSurvey({ userId, answers, surveyId })
 );
-
-export const app = express();
-app.use(bodyParser.json());
-app.use(router);
-
-// send healthy response to load balancer probes
-app.get('/', (_req, res) => {
-  assertConnectivity()
-    .then(() => res.sendStatus(200))
-    .catch(() => res.sendStatus(500));
-});
-
-app.listen(3000);
