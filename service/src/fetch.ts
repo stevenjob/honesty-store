@@ -1,5 +1,6 @@
 import ms = require('ms');
-import fetch from 'node-fetch';
+import { Lambda } from 'aws-sdk';
+import { parse as parseUrl } from 'url';
 import asyncCache from './asyncCache';
 import { baseUrl as defaultBaseUrl } from './baseUrl';
 import { CodedError, ErrorCode } from './error';
@@ -15,52 +16,51 @@ interface ApiResponse<T> {
   };
 }
 
+const getFunctionPrefix = (baseUrl) => {
+  const branch = parseUrl(baseUrl).hostname.split('.')[0];
+  return branch === 'live' ? 'honesty-store-' : `hs-${branch}-` ;
+};
+
 // tslint:disable-next-line:export-name
 export default (service: string, baseUrl = defaultBaseUrl) => {
-  const getUrl = (version: number, path: string) => `${baseUrl}/${service}/v${version}${path}`;
+  const getUrl = (version: number, path: string) => `/${service}/v${version}${path}`;
 
   const fetchAndParse = async <Result>({ method, url, key, body = undefined }): Promise<Result> => {
     info(key, `send ${method} ${url}`);
 
-    const fetchOptions = {
+    const request = {
+      serviceSecret: signServiceSecret(),
+      key,
       method,
-      headers: {
-        'content-type': body ? 'application/json' : undefined,
-        'service-secret': signServiceSecret(),
-        key: JSON.stringify(key)
-      },
-      body: body ? JSON.stringify(body) : undefined
+      path: url,
+      body
     };
 
-    const response = await fetch(url, fetchOptions);
+    const response = await new Lambda({ apiVersion: '2015-03-31' })
+      .invoke({
+        InvocationType: 'RequestResponse',
+        FunctionName: getFunctionPrefix(baseUrl) + service,
+        Payload: JSON.stringify(request)
+      }).promise();
 
     let json: ApiResponse<Result>;
     try {
-      json = await response.json();
-    } catch (jsonParseError) {
-
-      // attempt to get body text to help debugging
-      let responseText: string;
-      try {
-        responseText = await response.text();
-      } catch (textResponseError) {
-        responseText = '';
-      }
-
+      json = JSON.parse(<string>response.Payload);
+    } catch (e) {
       error(
         key,
         `failed ${method} ${url}, couldn't parse json`,
         {
-          httpStatus: response.status,
-          responseText
+          httpStatus: response.StatusCode,
+          responseText: response.Payload
         });
 
-      throw new Error(`${method} ${url} failed (couldn't parse json), HTTP ${response.status}`);
+      throw new Error(`${method} ${url} failed (couldn't parse json), HTTP ${response.StatusCode}`);
     }
 
-    if (!response.ok) {
-      error(key, `failed non-2xx ${method} ${url} ${response.status}`);
-      throw new Error(`${method} ${url} failed (non-2xx response), HTTP ${response.status}`);
+    if (response.StatusCode < 200 || response.StatusCode >= 300) {
+      error(key, `failed non-2xx ${method} ${url} ${response.StatusCode}`);
+      throw new Error(`${method} ${url} failed (non-2xx response), HTTP ${response.StatusCode}`);
     }
 
     if (json.error) {
@@ -72,7 +72,7 @@ export default (service: string, baseUrl = defaultBaseUrl) => {
       throw new Error(json.error.message);
     }
 
-    info(key, `success ${method} ${url}`, { status: response.status, response: json });
+    info(key, `success ${method} ${url}`, { status: response.StatusCode, response: json });
     return json.response;
   };
 
