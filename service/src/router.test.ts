@@ -44,6 +44,12 @@ describe('Lambda Router', () => {
     expect(result.response).to.deep.equal({ key, params: {}, body: null });
   });
 
+  it('should handle an unparameterised post request', async () => {
+    router.post('/foo', endpoint);
+    const result = await invoke('post', '/service/v1/foo', null);
+    expect(result.response).to.deep.equal({ key, params: {}, body: null });
+  });
+
   it('should handle a parameterised get request', async () => {
     router.get('/foo/:bar', endpoint);
     const result = await invoke('get', '/service/v1/foo/bar', null);

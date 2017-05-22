@@ -111,10 +111,10 @@ export const lambdaRouter = (service: string, version: number): LambdaRouter => 
     createEndpoint('get', path, action);
 
   handler.post = <Body, Result>(path: string, action: LambdaBodyAction<Body, Result>) =>
-    createEndpoint('get', path, action);
+    createEndpoint('post', path, action);
 
   handler.put = <Body, Result>(path: string, action: LambdaBodyAction<Body, Result>) =>
-    createEndpoint('get', path, action);
+    createEndpoint('put', path, action);
 
   return handler;
 };
