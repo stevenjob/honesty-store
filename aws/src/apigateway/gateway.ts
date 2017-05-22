@@ -110,14 +110,6 @@ export const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
 
   const found = restApis.find(restApi => restApi.name === name);
 
-  if (found) {
-    winston.debug(`apigateway: found restApi`, found);
-
-    return found;
-  }
-
-  winston.debug(`apigateway: couldn't find '${name}'`);
-
   const binaryMediaTypes = [
     'application/font-woff',
     'application/font-woff2',
@@ -141,6 +133,25 @@ export const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
     'text/xml',
     '*/*'
   ];
+
+  if (found) {
+    winston.debug(`apigateway: found restApi`, found);
+
+    await makeRetryable(apigateway.updateRestApi({
+      restApiId: found.id,
+      patchOperations: [
+        {
+          op: 'replace',
+          path: '/binaryMediaTypes',
+          value: JSON.stringify(binaryMediaTypes)
+        }
+      ]
+    })).promise();
+
+    return found;
+  }
+
+  winston.debug(`apigateway: couldn't find '${name}'`);
 
   const response = await makeRetryable(apigateway.createRestApi({ name, binaryMediaTypes })).promise();
 
