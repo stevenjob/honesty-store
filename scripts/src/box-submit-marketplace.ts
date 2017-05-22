@@ -1,3 +1,4 @@
+// tslint:disable:no-console
 import { config } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 import uuid = require('uuid/v4');
@@ -84,9 +85,6 @@ const main = async (argv) => {
 
   const batch = await createBatch(batchDetails, isDryRun);
 
-  // tslint:disable-next-line:no-console
-  console.log(`Created batch:\n${JSON.stringify(batch, null, 2)}`);
-
   const key = createServiceKey({ service: 'marketplace-script' });
 
   const submission: MarketplaceBoxSubmission = {
@@ -102,12 +100,14 @@ const main = async (argv) => {
     }
   };
 
-  // tslint:disable-next-line:no-console
-  console.log(`StoreId ${storeId}`);
+  const box = await createMarketplaceBox(key, storeId, submission, isDryRun);
 
-  const response = await createMarketplaceBox(key, storeId, submission, isDryRun);
-  // tslint:disable-next-line:no-console
-  console.log(JSON.stringify(response, null, 2));
+  const output = {
+    batch,
+    storeId,
+    box
+  };
+  console.log(JSON.stringify(output, null, 2));
 };
 
 main(process.argv.slice(2))
