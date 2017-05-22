@@ -14,10 +14,6 @@ export const ensureWebStack = async () =>
     name: 'web-cluster',
     templateName: `${__dirname}/../../cloudformation/web-cluster.json`,
     params: {
-      AmiImageId: 'ami-a7f2acc1',
-      SubnetACidrBlock: '10.1.0.0/24',
-      SubnetBCidrBlock: '10.1.1.0/24',
-      SubnetCCidrBlock: '10.1.2.0/24',
       VpcCidrBlock: '10.1.0.0/16'
     }});
 
