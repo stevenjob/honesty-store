@@ -36,7 +36,7 @@ interface LambdaBodyAction<Result, Body> {
   (key: Key, params: Params, body: Body): Promise<Result>;
 }
 
-interface LambdaRouter {
+export interface LambdaRouter {
   (event: any, context: any): void;
   get<Result>(path: string, action: LambdaBodyAction<undefined, Result>);
   post<Body, Result>(path: string, action: LambdaBodyAction<Body, Result>);
@@ -99,7 +99,7 @@ export const lambdaRouter = (service: string, version: number): LambdaRouter => 
         }
         const params = {};
         for (let i = 1; i < matches.length; i++) {
-          params[matches.keys[i - 1].name] = matches[i];
+          params[pathKeys[i - 1].name] = matches[i];
         }
         return params;
       },
