@@ -103,6 +103,37 @@ export const ensureDomainName = async ({ restApi, alias, certificateArn }:
   return domainName;
 };
 
+const replaceBinaryMediaTypes = async ({ apigateway, restApi, binaryMediaTypes }) => {
+  const existingTypes = restApi.binaryMediaTypes;
+  const desiredTypes = binaryMediaTypes;
+
+  const toRemove = existingTypes.filter(existingType => desiredTypes.indexOf(existingType) === -1);
+  const toAdd = desiredTypes.filter(candidate => existingTypes.indexOf(candidate) === -1);
+
+  const escapeType = type => type.replace('/', '~1');
+
+  const patchOperations = [
+    ...toRemove.map(type => ({
+      op: 'replace',
+      path: '/binaryMediaTypes/' + escapeType(type)
+    })),
+    ...toAdd.map(type => ({
+      op: 'add',
+      path: '/binaryMediaTypes/' + escapeType(type),
+      value: type
+    }))
+  ];
+
+  if (patchOperations.length === 0) {
+    return;
+  }
+
+  await makeRetryable(apigateway.updateRestApi({
+    restApiId: restApi.id,
+    patchOperations
+  })).promise();
+};
+
 export const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
   const apigateway = new APIGateway({ apiVersion: '2015-07-09' });
 
@@ -137,16 +168,7 @@ export const ensureRestApi = async ({ name }): Promise<APIGateway.RestApi> => {
   if (found) {
     winston.debug(`apigateway: found restApi`, found);
 
-    await makeRetryable(apigateway.updateRestApi({
-      restApiId: found.id,
-      patchOperations: [
-        {
-          op: 'replace',
-          path: '/binaryMediaTypes',
-          value: JSON.stringify(binaryMediaTypes)
-        }
-      ]
-    })).promise();
+    await replaceBinaryMediaTypes({ apigateway, restApi: found, binaryMediaTypes });
 
     return found;
   }
