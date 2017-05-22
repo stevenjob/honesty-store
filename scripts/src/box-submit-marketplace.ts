@@ -42,6 +42,9 @@ const createBatch = async (
   { userId, itemId, count, expiry, totalCost }: { userId: string, itemId: string, count: number, expiry: number, totalCost: number },
   isDryRun: boolean
 ) => {
+  if (process.env.TABLE_NAME == null) {
+    throw new Error('$TABLE_NAME not defined');
+  }
   const cruft = cruftDDB<Batch>({
     tableName: process.env.TABLE_NAME
   });
