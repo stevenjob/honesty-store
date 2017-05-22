@@ -1,4 +1,5 @@
 import { pruneApiGateway, pruneDomainNames } from '../apigateway/gateway';
+import { ensureStack } from '../cloudformation/stack';
 import { pruneLogGroups } from '../cloudwatchlogs/loggroup';
 import { pruneTables } from '../dynamodb/table';
 import { pruneRepositories } from '../ecr/repository';
@@ -9,9 +10,17 @@ import { pruneTargetGroups } from '../elbv2/targetgroup';
 import { getOriginBranchNames } from '../git/branch';
 import { pruneFunctions } from '../lambda/function';
 import { aliasToName, pruneAliases } from '../route53/alias';
-import { ensureWebStack, prefix } from './deploy';
+import { prefix } from './deploy';
 
 const force = process.env.FORCE;
+
+const ensureWebStack = async () =>
+  await ensureStack({
+    name: 'web-cluster',
+    templateName: `${__dirname}/../../cloudformation/web-cluster.json`,
+    params: {
+      VpcCidrBlock: '10.1.0.0/16'
+    }});
 
 export default async () => {
   const branchNames = force ? ['live', 'test'] : Array.from(await getOriginBranchNames());

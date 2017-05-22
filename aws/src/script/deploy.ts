@@ -1,21 +1,12 @@
 import { DynamoDB } from 'aws-sdk';
 import * as winston from 'winston';
 import { ensureDomainName, ensureLambdaMethod, ensureResource, ensureRestApi, ensureStagedDeployment } from '../apigateway/gateway';
-import { ensureStack } from '../cloudformation/stack';
 import { ensureTable } from '../dynamodb/table';
 import { ensureFunction } from '../lambda/function';
 import { aliasToBaseUrl, ensureAlias } from '../route53/alias';
 import dirToTable from '../table/tables';
 
 export const prefix = 'hs';
-
-export const ensureWebStack = async () =>
-  await ensureStack({
-    name: 'web-cluster',
-    templateName: `${__dirname}/../../cloudformation/web-cluster.json`,
-    params: {
-      VpcCidrBlock: '10.1.0.0/16'
-    }});
 
 interface LambdaConfig {
   [key: string]: {
