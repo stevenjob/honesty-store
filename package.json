@@ -9,6 +9,7 @@
   "devDependencies": {
     "builtin-modules": "^1.1.1",
     "commander": "^2.9.0",
+    "jest": "^19.0.0",
     "rollup": "^0.41.6",
     "rollup-plugin-commonjs": "chrisprice/rollup-plugin-commonjs",
     "rollup-plugin-json": "^2.1.1",
