@@ -25,7 +25,7 @@ compile:
     - cd user && yarn run build
     - cd web && yarn run ci
     - cd topup && yarn run build
-    - cd service && yarn run build
+    - cd service && yarn run ci
     - cd test && yarn run build
     - cd support && yarn run build
     - cd survey && yarn run build

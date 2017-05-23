@@ -1,4 +1,6 @@
 jest.mock('./log');
+jest.mock('./baseUrl');
+jest.mock('./serviceSecret');
 
 import { expect } from 'chai';
 import { createServiceKey } from './key';
