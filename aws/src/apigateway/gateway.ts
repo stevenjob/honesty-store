@@ -112,6 +112,9 @@ const replaceBinaryMediaTypes = async ({ apigateway, restApi, binaryMediaTypes }
 
   const escapeType = type => type.replace('/', '~1');
 
+  winston.debug(`apigateway: binaryMediaTypes removing:`, toRemove);
+  winston.debug(`apigateway: binaryMediaTypes adding:`, toAdd);
+
   const patchOperations = [
     ...toRemove.map(type => ({
       op: 'replace',
