@@ -29,7 +29,7 @@ compile:
     - cd test && yarn run build
     - cd support && yarn run build
     - cd survey && yarn run build
-    - cd box && yarn run build
+    - cd box && yarn run ci
     - cd batch && yarn run build
     - cd scripts && yarn run build
     - cd store && yarn run build

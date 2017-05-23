@@ -6,7 +6,9 @@
     "tsc": "../node_modules/.bin/tsc",
     "rollup": "../node_modules/.bin/rollup -c ../rollup.config.js",
     "uglifyjs": "../node_modules/.bin/uglifyjs lib/bundle.js > lib/bundle-min.js",
-    "build": "npm run tsc && npm run rollup && npm run uglifyjs"
+    "build": "npm run tsc && npm run rollup && npm run uglifyjs",
+    "test": "../node_modules/.bin/jest",
+    "ci": "npm run build && npm run test"
   },
   "devDependencies": {
     "@types/body-parser": "0.0.33",
@@ -16,7 +18,7 @@
     "@types/node": "0.0.2",
     "aws-sdk": "2.22.0",
     "chai": "^3.5.0",
-    "jest": "^19.0.2",
+    "jest": "^19.0.0",
     "mocha": "^3.2.0",
     "ts-jest": "^19.0.0"
   },
