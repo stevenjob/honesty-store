@@ -232,7 +232,7 @@ const assertValidlyPricedBox = (box: Box) => {
   }
 };
 
-const createMarketplaceBox = async ({ key, storeId, submission, dryRun}): Promise<Box> => {
+const createMarketplaceBox = async ({ key, storeId, submission, dryRun }): Promise<Box> => {
   info(key, `New marketplace submission received for store ${storeId}`, { submission });
 
   await getStoreFromId(key, storeId);
@@ -273,14 +273,16 @@ router.get(
 
 router.post(
   '/store/:storeId/shipped',
-  async (key, { storeId }, submission) =>
-    createShippedBox({ key, storeId, submission, dryRun: true }) // HACK
+  async (key, { storeId }, { dryRun, ...submission }) =>
+    // tslint:disable-next-line:triple-equals
+    createShippedBox({ key, storeId, submission, dryRun: dryRun != false })
 );
 
 router.post(
   '/store/:storeId/marketplace',
-  async (key, { storeId }, submission) =>
-    createMarketplaceBox({ key, storeId, submission, dryRun: true }) // HACK
+  async (key, { storeId }, { dryRun, ...submission }) =>
+    // tslint:disable-next-line:triple-equals
+    createMarketplaceBox({ key, storeId, submission, dryRun: dryRun != false })
 );
 
 router.post(

@@ -67,11 +67,11 @@ export const markBoxAsReceived = (key, boxId: string) =>
 export const markBoxAsShipped = (key, boxId: string, date: number) =>
   put<{}>(1, key, `/${boxId}/shipped/${date}`, {});
 
-export const createShippedBox = (key, storeId: string, submission: ShippedBoxSubmission, dryRun) =>
-  post<Box>(1, key, `/store/${storeId}/shipped?dryRun=${dryRun}`, submission);
+export const createShippedBox = (key, storeId: string, submission: ShippedBoxSubmission, dryRun: boolean) =>
+  post<Box>(1, key, `/store/${storeId}/shipped`, { ...submission, dryRun });
 
 export const createMarketplaceBox = (key, storeId: string, submission: MarketplaceBoxSubmission, dryRun: boolean) =>
-  post<Box>(1, key, `/store/${storeId}/marketplace?dryRun=${dryRun}`, submission);
+  post<Box>(1, key, `/store/${storeId}/marketplace`, { ...submission, dryRun });
 
 export const getBoxesForStore = async (key, storeId: string, filter: (box: Box) => boolean) => {
   const boxes = await get<Box[]>(1, key, `/store/${storeId}`);
