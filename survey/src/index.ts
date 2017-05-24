@@ -1,7 +1,7 @@
 import { config, DynamoDB } from 'aws-sdk';
 
 import { createAssertValidUuid } from '@honesty-store/service/src/assert';
-import { lambdaRouter } from '@honesty-store/service/src/router';
+import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
 import { SurveyResponse } from './client';
 import { getSurvey, getSurveys } from './surveys';
 

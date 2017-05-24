@@ -1,7 +1,7 @@
 import express = require('express');
 import bodyParser = require('body-parser');
 import compression = require('compression');
-import { expressRouter } from '@honesty-store/service/src/router';
+import { expressRouter } from '@honesty-store/service/src/expressRouter';
 import cors = require('cors');
 import boxController from './controllers/box';
 import logoutController from './controllers/logout';

@@ -2,7 +2,7 @@ import { config } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 
 import { createAssertValidUuid } from '@honesty-store/service/src/assert';
-import { lambdaRouter } from '@honesty-store/service/src/router';
+import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
 import { Item } from './client';
 
 config.region = process.env.AWS_REGION;

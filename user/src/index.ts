@@ -1,7 +1,7 @@
 import { createAssertValidUuid } from '@honesty-store/service/src/assert';
 import { CodedError } from '@honesty-store/service/src/error';
+import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
 import { info } from '@honesty-store/service/src/log';
-import { lambdaRouter } from '@honesty-store/service/src/router';
 import { getStoreFromId, migrateStoreCodeToId } from '@honesty-store/store/src/client';
 import { createAccount } from '@honesty-store/transaction/src/client';
 import { config, SES } from 'aws-sdk';

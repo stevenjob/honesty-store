@@ -1,6 +1,6 @@
 import { config } from 'aws-sdk';
 
-import { lambdaRouter } from '@honesty-store/service/src/router';
+import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
 import { assertValidAccountId, createAccount, getAccountInternal, updateAccount } from './account';
 import {
   AccountAndTransactions, balanceLimit, InternalAccount,

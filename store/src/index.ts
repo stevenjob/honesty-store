@@ -1,5 +1,5 @@
 import { CodedError } from '@honesty-store/service/src/error';
-import { lambdaRouter } from '@honesty-store/service/src/router';
+import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
 import { config } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 

@@ -1,8 +1,8 @@
 import { createAssertValidUuid } from '@honesty-store/service/src/assert';
 import { CodedError } from '@honesty-store/service/src/error';
 import { Key } from '@honesty-store/service/src/key';
+import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
 import { error, info } from '@honesty-store/service/src/log';
-import { lambdaRouter } from '@honesty-store/service/src/router';
 import { assertBalanceWithinLimit, createTransaction, TransactionBody } from '@honesty-store/transaction/src/client/index';
 import { config, DynamoDB } from 'aws-sdk';
 import * as stripeFactory from 'stripe';

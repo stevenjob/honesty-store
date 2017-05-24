@@ -4,7 +4,7 @@ jest.mock('./serviceSecret');
 
 import { expect } from 'chai';
 import { createServiceKey } from './key';
-import { lambdaRouter, LambdaRouter } from './router';
+import { lambdaRouter, LambdaRouter } from './lambdaRouter';
 import { signServiceSecret } from './serviceSecret';
 
 describe('Lambda Router', () => {
