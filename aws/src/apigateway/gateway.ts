@@ -104,7 +104,7 @@ export const ensureDomainName = async ({ restApi, alias, certificateArn }:
 };
 
 const replaceBinaryMediaTypes = async ({ apigateway, restApi, binaryMediaTypes }) => {
-  const existingTypes = restApi.binaryMediaTypes;
+  const existingTypes = restApi.binaryMediaTypes || [];
   const desiredTypes = binaryMediaTypes;
 
   const toRemove = existingTypes.filter(existingType => desiredTypes.indexOf(existingType) === -1);
