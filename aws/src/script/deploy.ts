@@ -17,6 +17,7 @@ interface LambdaConfig {
 
     withStripe?: boolean;
     withUserSecret?: boolean;
+    exposeOnGateway?: boolean;
 
     catchAllResource?: boolean;
   };
@@ -76,13 +77,15 @@ const lambdaConfig: LambdaConfig = {
   api: {
     handler: 'lib/bundle-min.handler',
     codeFilter: 'lib/bundle-min.js',
-    timeout: 30
+    timeout: 30,
+    exposeOnGateway: true
   },
   web: {
     handler: 'server/lambda.handler',
     codeFilter: '{node_modules,server,build}/**/*',
     catchAllResource: true,
-    timeout: 10
+    timeout: 10,
+    exposeOnGateway: true
   }
 };
 
@@ -227,12 +230,14 @@ export default async ({ branch, dirs }) => {
       }
     });
 
-    await ensureRouteForLambda({
-      restApi,
-      dir,
-      lambdaArn: lambda.FunctionArn,
-      catchAllResource: lambdaConfig[dir].catchAllResource
-    });
+    if (lambdaConfig[dir].exposeOnGateway) {
+      await ensureRouteForLambda({
+        restApi,
+        dir,
+        lambdaArn: lambda.FunctionArn,
+        catchAllResource: lambdaConfig[dir].catchAllResource
+      });
+    }
   }
 
   await ensureStagedDeployment({ restApi });
