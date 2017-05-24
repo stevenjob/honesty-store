@@ -27,7 +27,12 @@ interface SessionData {
 }
 
 const marketplaceFeature = ({ defaultStoreId }) => {
-  const allowedStoreIds = ['sl-ncl', 'sl-edn', 'dev-test'];
+  const allowedStoreIds = [
+    'b8d7305b-bb7d-4bbe-8b2f-5e94c6267bb6', // sl-ncl
+    'f79ff70c-2103-43f9-922d-d54a16315361', // sl-edn
+    '1e7c9c0d-a9be-4ab7-8499-e57bf859978d'  // dev-test
+  ];
+
   return allowedStoreIds.indexOf(defaultStoreId) !== -1;
 };
 
