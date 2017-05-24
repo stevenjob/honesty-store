@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "repository": "git@github.com:honesty-store/honesty-store.git",
   "scripts": {
-    "bootstrap": "./bootstrap.js link && ./bootstrap.js install",
+    "bootstrap": "./bootstrap.js clean-hs && ./bootstrap.js link && ./bootstrap.js install",
     "tslint": "tslint --config tslint.json -e '**/node_modules/**' -e 'api/test/**' --format stylish **/*.ts"
   },
   "devDependencies": {
