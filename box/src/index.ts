@@ -7,7 +7,7 @@ import { getUser } from '@honesty-store/user/src/client';
 import { config, SES } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 
-import { Box } from './client';
+import { BatchReference, Box, BoxItem } from './client';
 import calculateMarketplaceBoxPricing from './marketplace-box';
 import calculateShippedBoxPricing from './shipped-box';
 
@@ -22,14 +22,14 @@ const assertValidBatchId = createAssertValidUuid('batchId');
 const assertValidItemId = createAssertValidUuid('boxItemId');
 const assertValidStoreId = createAssertValidUuid('storeId');
 
-const assertValidBatchReference = ({ id, count }) => {
+const assertValidBatchReference = ({ id, count }: BatchReference) => {
   assertValidBatchId(id);
   if (!Number.isInteger(count)) {
     throw new Error(`Non-integral count ${count}`);
   }
 };
 
-const assertValidBoxItemWithBatchReference = (boxItem) => {
+const assertValidBoxItemWithBatchReference = (boxItem: BoxItem) => {
   if (!boxItem) {
     throw new Error('Box item cannot be undefined');
   }
@@ -39,8 +39,8 @@ const assertValidBoxItemWithBatchReference = (boxItem) => {
     throw new Error(`Invalid batches ${batchReferences}`);
   }
 
-  for (const { id } of batchReferences) {
-    assertValidBatchReference(id);
+  for (const batchReference of batchReferences) {
+    assertValidBatchReference(batchReference);
   }
 };
 
