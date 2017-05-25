@@ -48,6 +48,7 @@ import { performInitialise } from './actions/inititialise';
 import './chrome/style';
 import history from './history';
 import { loadState, saveState } from './state';
+import registerServiceWorker from './registerServiceWorker';
 
 const middlewares = [thunkMiddleware];
 
@@ -96,7 +97,7 @@ const initialiseWithParams = nextState => {
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history} onUpdate={() => scrollTo(0, 0)}>
+    <Router history={history} onUpdate={() => window.scrollTo(0, 0)}>
       <Route path="/" component={App} onEnter={initialiseWithParams}>
         <IndexRoute component={Home} />
         <Route path="success" component={HomeSuccess} />
@@ -167,16 +168,4 @@ requestAnimationFrame(() => {
   document.documentElement.className = 'loaded';
 });
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
-    try {
-      const registration = await navigator.serviceWorker.register('/sw.js');
-      console.log(
-        'ServiceWorker registration successful with scope: ',
-        registration.scope
-      );
-    } catch (e) {
-      console.log('ServiceWorker registration failed: ', e);
-    }
-  });
-}
+registerServiceWorker();
