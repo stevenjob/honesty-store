@@ -169,3 +169,13 @@ requestAnimationFrame(() => {
 });
 
 registerServiceWorker();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistration().then(registration => {
+    if (registration && registration.active) {
+      if (registration.active.scriptURL.indexOf('sw.js') > -1) {
+        registration.unregister();
+      }
+    }
+  });
+}
