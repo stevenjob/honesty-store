@@ -1,5 +1,5 @@
 import { authenticateAccessToken } from '../middleware/authenticate';
-import { sendSlackMessage } from './support';
+import { sendSlackUserMessage } from './support';
 
 export default (router) => {
   router.post(
@@ -13,7 +13,7 @@ export default (router) => {
     ) => {
       const message = 'Marketplace request';
 
-      return await sendSlackMessage({
+      return await sendSlackUserMessage({
         key,
         user,
         message,
