@@ -3,7 +3,7 @@ const program = require('commander');
 const execSync = require('child_process').execSync;
 
 const serviceDirs = ['api', 'scripts', 'box', 'support', 'user', 'topup', 'store', 'transaction', 'test',
-  'survey', 'item', 'batch', 'service'];
+  'survey', 'item', 'batch', 'service', 'transaction-slack'];
 const otherDirs = ['aws', 'web'];
 
 const cleanAll = () => {
