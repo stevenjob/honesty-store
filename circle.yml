@@ -55,7 +55,6 @@ deployment:
   aws:
     branch: /.*/
     commands:
-      # currently we don't deploy support - it contains scripts intended to be locally-run
       - ./aws/bin/aws deploy $CIRCLE_BRANCH api batch item transaction user web topup survey box store
       - ./aws/bin/aws prune
 general:
