@@ -11,6 +11,7 @@ export const sendSlackUserMessage = async ({ key, user, message, emailAddress = 
   return await sendSlackMessage({
     key,
     message,
+    channel: 'support',
     fields: [
       {
         title: 'User',

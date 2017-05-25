@@ -4,16 +4,30 @@ import { v4 as uuid } from 'uuid';
 import { Key } from './key';
 import { info } from './log';
 
+type Channel = 'support' | 'purchases';
+
 interface SlackMessageParams {
   key: Key;
   message: string;
+  channel: Channel;
   fields: {
     title: string;
     value: string;
   }[];
 }
 
-export const sendSlackMessage = async ({ key, message, fields: extraFields }: SlackMessageParams) => {
+const urlForChannel = (channel: Channel) => {
+  switch (channel) {
+    case 'support':
+      return 'https://hooks.slack.com/services/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';
+    case 'purchases':
+      return 'https://hooks.slack.com/services/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';
+    default:
+      throw new Error(`unknown channel '${channel}'`);
+  }
+};
+
+export const sendSlackMessage = async ({ key, message, channel, fields: extraFields }: SlackMessageParams) => {
   const requestId = uuid();
   const fields = [
     {
@@ -27,7 +41,8 @@ export const sendSlackMessage = async ({ key, message, fields: extraFields }: Sl
     ...extraFields
   ];
 
-  const response = await fetch('https://hooks.slack.com/services/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', {
+  const url = urlForChannel(channel);
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'content-type': 'application/json'
@@ -48,4 +63,3 @@ export const sendSlackMessage = async ({ key, message, fields: extraFields }: Sl
     throw new Error(`Unexpected response code from slack ${response.status}`);
   }
 };
-
