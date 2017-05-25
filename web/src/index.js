@@ -37,6 +37,7 @@ import HelpItem from './help/item';
 import { HelpCardExpired, HelpCardNoDetails } from './help/card';
 import HelpSuccess from './help/success';
 import ItemDetail from './item/detail';
+import ItemGuard from './item/guard';
 import ItemStockReport from './item/stockreport';
 import ItemPurchaseSuccess from './item/success';
 import ConfirmStoreChange from './confirm-store-change/index';
@@ -124,12 +125,11 @@ ReactDOM.render(
             path="store/change/:storeCode"
             component={ConfirmStoreChange}
           />
-          <Route path="item/:itemId" component={ItemDetail} />
-          <Route path="item/:itemId/out-of-stock" component={ItemStockReport} />
-          <Route
-            path="item/:itemId/:quantity/success"
-            component={ItemPurchaseSuccess}
-          />
+          <Route path="item/:itemId" component={ItemGuard}>
+            <IndexRoute component={ItemDetail} />
+            <Route path="out-of-stock" component={ItemStockReport} />
+            <Route path=":quantity/success" component={ItemPurchaseSuccess} />
+          </Route>
           <Route path="survey" component={Survey} />
           <Route path="survey/questions" component={SurveyQuestions} />
           <Route path="survey/complete" component={SurveyComplete} />
