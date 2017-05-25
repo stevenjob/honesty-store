@@ -88,6 +88,14 @@ const lambdaConfig: LambdaConfig = {
     catchAllResource: true,
     timeout: 10,
     exposeOnGateway: true
+  },
+  ['transaction-slack']: {
+    handler: 'lib/bundle-min.handler',
+    codeFilter: 'lib/bundle-min.js',
+    timeout: 10,
+    watchedTableNames: [
+      'transaction'
+    ]
   }
 };
 
