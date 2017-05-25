@@ -163,12 +163,6 @@ class Card extends React.Component {
   }
 }
 
-Card.propTypes = {
-  isInitialTopUp: React.PropTypes.bool.isRequired,
-  confirmButtonText: React.PropTypes.string.isRequired,
-  onSubmit: React.PropTypes.func.isRequired
-};
-
 const mapStateToProps = ({ error: { inline } }) => ({ error: inline });
 
 export default connect(mapStateToProps)(Card);

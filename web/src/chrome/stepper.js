@@ -92,17 +92,4 @@ class Stepper extends React.Component {
   }
 }
 
-Stepper.propTypes = {
-  label: React.PropTypes.string,
-  onClick: React.PropTypes.func.isRequired,
-  onIncrement: React.PropTypes.func.isRequired,
-  incrementDisabled: React.PropTypes.func.isRequired,
-  onDecrement: React.PropTypes.func.isRequired,
-  decrementDisabled: React.PropTypes.func.isRequired,
-  formatDescription: React.PropTypes.func.isRequired,
-  formatValue: React.PropTypes.func.isRequired,
-  formatButton: React.PropTypes.func.isRequired,
-  initialValue: React.PropTypes.number.isRequired
-};
-
 export default Stepper;

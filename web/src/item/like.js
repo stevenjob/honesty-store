@@ -17,9 +17,4 @@ const Like = ({ isLiked, onClick }) => {
   );
 };
 
-Like.propTypes = {
-  isLiked: React.PropTypes.bool.isRequired,
-  onClick: React.PropTypes.func.isRequired
-};
-
 export default Like;
