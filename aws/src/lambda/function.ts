@@ -1,4 +1,4 @@
-import { Lambda } from 'aws-sdk';
+import { config, Lambda } from 'aws-sdk';
 import concatStream = require('concat-stream');
 import globCb = require('glob');
 import uuid = require('uuid/v4');
@@ -128,6 +128,28 @@ const permitLambdaCallFromApiGateway = async ({ func }) => {
     .promise();
 
   winston.debug(`function: addPermission`, permission);
+};
+
+export const ensureFunctionDynamoTrigger = async (
+  { lambdaFunc, tableName }: { lambdaFunc: Lambda.FunctionConfiguration, tableName: string }
+) => {
+  const lambda = new Lambda({ apiVersion: '2015-03-31' });
+
+  const when = new Date().toISOString().replace(/Z$/, '');
+  const source = `arn:aws:dynamo:${config.region}:812374064424:table/${tableName}/stream/${when}`;
+
+  try {
+    return await lambda.createEventSourceMapping({
+      EventSourceArn: source,
+      FunctionName: lambdaFunc.FunctionArn,
+      StartingPosition: 'LATEST'
+    })
+      .promise();
+  } catch (e) {
+    if (e.code !== 'ResourceConflictException' || !/already exists/.test(e.message)) {
+      throw e;
+    }
+  }
 };
 
 export const ensureFunction = async ({

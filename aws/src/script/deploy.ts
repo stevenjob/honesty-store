@@ -2,7 +2,7 @@ import { DynamoDB } from 'aws-sdk';
 import * as winston from 'winston';
 import { ensureDomainName, ensureLambdaMethod, ensureResource, ensureRestApi, ensureStagedDeployment } from '../apigateway/gateway';
 import { ensureTable } from '../dynamodb/table';
-import { ensureFunction } from '../lambda/function';
+import { ensureFunction, ensureFunctionDynamoTrigger } from '../lambda/function';
 import { aliasToBaseUrl, ensureAlias } from '../route53/alias';
 import dirToTable from '../table/tables';
 
@@ -20,6 +20,8 @@ interface LambdaConfig {
     exposeOnGateway?: boolean;
 
     catchAllResource?: boolean;
+
+    watchedTableNames?: string[];
   };
 }
 
@@ -229,6 +231,15 @@ export default async ({ branch, dirs }) => {
         TEST_STRIPE_KEY: lambdaConfig[dir].withStripe && generateStripeKey({ branch, type: 'test' })
       }
     });
+
+    if (lambdaConfig[dir].watchedTableNames) {
+      for (const watchedTableName of lambdaConfig[dir].watchedTableNames) {
+        await ensureFunctionDynamoTrigger({
+          lambdaFunc: lambda,
+          tableName: generateName({ branch, dir: watchedTableName })
+        });
+      }
+    }
 
     if (lambdaConfig[dir].exposeOnGateway) {
       await ensureRouteForLambda({
