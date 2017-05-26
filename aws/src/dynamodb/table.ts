@@ -67,3 +67,35 @@ export const pruneTables = async ({ filter = (_tableName: string) => false }) =>
     await Promise.all(promises);
   }
 };
+
+export const ensureStreamingDB = async (tableName: string) => {
+  const dynamo = new DynamoDB({ apiVersion: '2012-08-10' });
+
+  try {
+    const response = await dynamo
+      .updateTable({
+        TableName: tableName,
+        StreamSpecification: {
+          StreamEnabled: true,
+          StreamViewType: 'NEW_IMAGE'
+        }
+      })
+      .promise();
+
+    winston.debug('table: updateTable (stream)', response.TableDescription);
+
+    return response.TableDescription;
+  } catch (e) {
+    if (e.code !== 'ValidationException' || !/already has an enabled stream/.test(e.message)) {
+      throw e;
+    }
+
+    const response = await dynamo.describeTable({
+      TableName: tableName
+    }).promise();
+
+    winston.debug('table: updateTable (stream) - already streaming', response.Table);
+
+    return response.Table;
+  }
+};

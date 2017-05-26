@@ -1,7 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
 import * as winston from 'winston';
 import { ensureDomainName, ensureLambdaMethod, ensureResource, ensureRestApi, ensureStagedDeployment } from '../apigateway/gateway';
-import { ensureTable } from '../dynamodb/table';
+import { ensureStreamingDB, ensureTable } from '../dynamodb/table';
 import { ensureFunction, ensureFunctionDynamoTrigger } from '../lambda/function';
 import { aliasToBaseUrl, ensureAlias } from '../route53/alias';
 import dirToTable from '../table/tables';
@@ -234,9 +234,13 @@ export default async ({ branch, dirs }) => {
 
     if (lambdaConfig[dir].watchedTableNames) {
       for (const watchedTableName of lambdaConfig[dir].watchedTableNames) {
+        const tableName = generateName({ branch, dir: watchedTableName });
+
+        await ensureStreamingDB(tableName);
+
         await ensureFunctionDynamoTrigger({
           lambdaFunc: lambda,
-          tableName: generateName({ branch, dir: watchedTableName })
+          tableName
         });
       }
     }
