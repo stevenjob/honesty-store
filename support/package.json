@@ -10,6 +10,7 @@
     "@honesty-store/service": "file:../service",
     "@honesty-store/transaction": "file:../transaction",
     "@honesty-store/user": "file:../user",
+    "@honesty-store/store": "file:../store",
     "csv": "^1.1.1"
   },
   "devDependencies": {

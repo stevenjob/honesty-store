@@ -5,6 +5,7 @@ import { stringify } from 'csv';
 
 import { getAllItems } from '@honesty-store/item/src/client';
 import { createServiceKey } from '@honesty-store/service/src/key';
+import { Store } from '@honesty-store/store/src/client/index';
 import { InternalAccount, InternalTransaction } from '@honesty-store/transaction/src/client/index';
 import { User } from '@honesty-store/user/src/client/index';
 
@@ -12,6 +13,7 @@ type TransactionRecord = InternalAccount | InternalTransaction;
 
 const cruftAccount = cruftDDB<TransactionRecord>({ tableName: 'honesty-store-transaction' });
 const cruftUser = cruftDDB<User>({ tableName: 'honesty-store-user' });
+const cruftStore = cruftDDB<Store>({ tableName: 'honesty-store-store' });
 
 const usage = () => {
   const script = process.argv[1];
@@ -26,6 +28,11 @@ const main = async (args) => {
   if (args.length !== 0) {
     usage();
   }
+
+  const stores = await cruftStore.__findAll({});
+  const ensureIsStoreCode = codeOrId => stores
+    .find(({ code, id }) => id === codeOrId || code === codeOrId)
+    .code;
 
   const registeredUsers = (await cruftUser.__findAll({}))
     .filter(user => user.emailAddress != null);
@@ -82,6 +89,7 @@ const main = async (args) => {
           transactionId,
           ...transactionDetails,
           ...data,
+          storeCode: data.storeId && ensureIsStoreCode(data.storeId),
           ...itemDetails
         };
       }
