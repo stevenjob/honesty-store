@@ -49,6 +49,7 @@ import './chrome/style';
 import history from './history';
 import { loadState, saveState } from './state';
 import registerServiceWorker from './registerServiceWorker';
+import BlogHonestyStoreIsGettingALotCheaper from './blog/honesty-store-is-getting-a-lot-cheaper';
 
 const middlewares = [thunkMiddleware];
 
@@ -157,6 +158,7 @@ ReactDOM.render(
           </Route>
         </Route>
         <Route path="signin/success" component={SignInSuccess} />
+        <Route path="blog/2017/05/29/honesty-store-is-getting-a-lot-cheaper" component={BlogHonestyStoreIsGettingALotCheaper} />
         <Route path=":storeCode" />
       </Route>
     </Router>
