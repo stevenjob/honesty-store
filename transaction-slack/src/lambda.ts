@@ -1,10 +1,7 @@
-import 'aws-sdk'; // imported for side-effects to allow the below to work
-import * as DynamoConverter from 'aws-sdk/lib/dynamodb/converter';
-
 import { createServiceKey } from '@honesty-store/service/src/key';
 import { sendSlackMessage } from '@honesty-store/service/src/slack';
-
-const dynamoOutputConverter = (<any>DynamoConverter).output;
+import { subscribeTransactions } from '@honesty-store/transaction/src/client/stream';
+import { Transaction } from '@honesty-store/transaction/src/client';
 
 const recordPurchase = async (key, { itemId, storeId, transactionId }) => {
   await sendSlackMessage({
@@ -28,24 +25,7 @@ const recordPurchase = async (key, { itemId, storeId, transactionId }) => {
   });
 };
 
-const recordStockDrop = async (key, record) => {
-  const entry = dynamoOutputConverter({ M: record.dynamodb.NewImage });
-
-  let transactionId;
-  let type;
-  let itemId;
-  let storeId;
-  try {
-    ({ id: transactionId, type, data: { itemId, storeId } } = entry);
-  } catch (e) {
-    if (!(e instanceof TypeError)) {
-      throw e;
-    }
-
-    // transaction's missing fields, ignore
-    return;
-  }
-
+const recordStockDrop = async (key, { id: transactionId, type, data: { itemId, storeId } }: Transaction) => {
   if (type !== 'purchase') {
     return;
   }
@@ -56,9 +36,9 @@ const recordStockDrop = async (key, record) => {
 const asyncHandler = async event => {
   const key = createServiceKey({ service: 'transaction-slack' });
 
-  const promises = event.Records.map(record => recordStockDrop(key, record));
-
-  await Promise.all(promises);
+  for (const transaction of subscribeTransactions(event)) {
+    await recordStockDrop(key, transaction);
+  }
 
   return `Successfully processed ${event.Records.length} records`;
 };
