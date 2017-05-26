@@ -49,7 +49,8 @@ import './chrome/style';
 import history from './history';
 import { loadState, saveState } from './state';
 import registerServiceWorker from './registerServiceWorker';
-import BlogHonestyStoreIsGettingALotCheaper from './blog/honesty-store-is-getting-a-lot-cheaper';
+import BlogHonestyStoreIsGettingALotCheaper
+  from './blog/honesty-store-is-getting-a-lot-cheaper';
 
 const middlewares = [thunkMiddleware];
 
@@ -99,6 +100,10 @@ const initialiseWithParams = nextState => {
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history} onUpdate={() => window.scrollTo(0, 0)}>
+      <Route
+        path="blog/2017/05/29/honesty-store-is-getting-a-lot-cheaper"
+        component={BlogHonestyStoreIsGettingALotCheaper}
+      />
       <Route path="/" component={App} onEnter={initialiseWithParams}>
         <IndexRoute component={Home} />
         <Route path="success" component={HomeSuccess} />
@@ -158,7 +163,6 @@ ReactDOM.render(
           </Route>
         </Route>
         <Route path="signin/success" component={SignInSuccess} />
-        <Route path="blog/2017/05/29/honesty-store-is-getting-a-lot-cheaper" component={BlogHonestyStoreIsGettingALotCheaper} />
         <Route path=":storeCode" />
       </Route>
     </Router>
