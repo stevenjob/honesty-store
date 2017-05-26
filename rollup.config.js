@@ -5,6 +5,11 @@ import resolve from 'rollup-plugin-node-resolve';
 
 const externalModules = [...builtinModules, 'aws-sdk', 'aws-xray-sdk'];
 
+const isExternalModule = module => {
+  const basename = module.replace(/\/.*/, '');
+  return externalModules.indexOf(basename) > -1;
+};
+
 const hacksPrefix = '\0hacks:';
 const hackedModules = {
   'moment': 'export default { }'
@@ -48,8 +53,7 @@ const options = {
     commonjs(),
     json()
   ],
-  external: name => externalModules.indexOf(name) > -1
+  external: isExternalModule
 };
 
 export default options;
-
