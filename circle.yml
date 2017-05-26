@@ -12,6 +12,21 @@ machine:
 dependencies:
   cache_directories:
     - ~/.cache/yarn
+    - api/node_modules
+    - item/node_modules
+    - aws/node_modules
+    - transaction/node_modules
+    - user/node_modules
+    - web/node_modules
+    - topup/node_modules
+    - service/node_modules
+    - test/node_modules
+    - support/node_modules
+    - survey/node_modules
+    - box/node_modules
+    - batch/node_modules
+    - scripts/node_modules
+    - store/node_modules
   override:
     - yarn install
     - yarn run bootstrap
@@ -34,21 +49,8 @@ compile:
     - cd scripts && yarn run build
     - cd store && yarn run build
 test:
-  post:
-    - cd api && yarn install --production --ignore-scripts --prefer-offline
-    - cd item && yarn install --production --ignore-scripts --prefer-offline
-    - cd aws && yarn install --production --ignore-scripts --prefer-offline
-    - cd transaction && yarn install --production --ignore-scripts --prefer-offline
-    - cd user && yarn install --production --ignore-scripts --prefer-offline
-    - cd web && yarn install --production --ignore-scripts --prefer-offline
-    - cd topup && yarn install --production --ignore-scripts --prefer-offline
-    - cd service && yarn install --production --ignore-scripts --prefer-offline
-    - cd test && yarn install --production --ignore-scripts --prefer-offline
-    - cd survey && yarn install --production --ignore-scripts --prefer-offline
-    - cd box && yarn install --production --ignore-scripts --prefer-offline
-    - cd batch && yarn install --production --ignore-scripts --prefer-offline
-    - cd scripts && yarn install --production --ignore-scripts --prefer-offline
-    - cd store && yarn install --production --ignore-scripts --prefer-offline
+  override:
+    - echo we ran them as part of compile
 deployment:
   aws:
     branch: /.*/
