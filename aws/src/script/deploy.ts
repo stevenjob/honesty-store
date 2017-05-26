@@ -243,12 +243,11 @@ export default async ({ branch, dirs }) => {
     if (lambdaConfig[dir].watchedTableNames) {
       for (const watchedTableName of lambdaConfig[dir].watchedTableNames) {
         const tableName = generateName({ branch, dir: watchedTableName });
-
-        await ensureStreamingDB(tableName);
+        const table = await ensureStreamingDB(tableName);
 
         await ensureFunctionDynamoTrigger({
           lambdaFunc: lambda,
-          tableName
+          table
         });
       }
     }

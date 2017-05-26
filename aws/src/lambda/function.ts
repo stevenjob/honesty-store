@@ -1,4 +1,4 @@
-import { config, Lambda } from 'aws-sdk';
+import { DynamoDB, Lambda } from 'aws-sdk';
 import concatStream = require('concat-stream');
 import globCb = require('glob');
 import uuid = require('uuid/v4');
@@ -131,12 +131,14 @@ const permitLambdaCallFromApiGateway = async ({ func }) => {
 };
 
 export const ensureFunctionDynamoTrigger = async (
-  { lambdaFunc, tableName }: { lambdaFunc: Lambda.FunctionConfiguration, tableName: string }
+  { lambdaFunc, table }: { lambdaFunc: Lambda.FunctionConfiguration, table: DynamoDB.Types.TableDescription }
 ) => {
   const lambda = new Lambda({ apiVersion: '2015-03-31' });
 
-  const when = new Date().toISOString().replace(/Z$/, '');
-  const source = `arn:aws:dynamo:${config.region}:812374064424:table/${tableName}/stream/${when}`;
+  const source = table.LatestStreamArn;
+  if (!source) {
+    throw new Error(`trying to enable function trigger on non-streaming table '${table.TableName}'`);
+  }
 
   try {
     return await lambda.createEventSourceMapping({
