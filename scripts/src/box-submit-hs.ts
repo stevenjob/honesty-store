@@ -24,6 +24,15 @@ const maybeParseInt = (str, name) => {
   throwParseError('number', name, str);
 };
 
+const maybeParseFloat = (str, name) => {
+  const f = Number(str);
+  if (Number.isFinite(f)) {
+    return f;
+  }
+
+  throwParseError('number', name, str);
+};
+
 const warnAndExit = e => {
   console.error(e);
   process.exit(1);
@@ -94,7 +103,7 @@ program.command('pack <shipping-cost> <store-id> <donation-rate> <dry-run>')
     packBox(
       maybeParseInt(shippingCost, 'shipping-cost'),
       storeId,
-      maybeParseInt(donationRate, 'donation-rate'),
+      maybeParseFloat(donationRate, 'donation-rate'),
       maybeParseBool(isDryRun, 'dry-run'),
       options.date ? maybeParseInt(options.date, 'date') : Date.now()
     ).catch(warnAndExit)
