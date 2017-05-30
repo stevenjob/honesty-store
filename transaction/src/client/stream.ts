@@ -1,7 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
-import { Transaction } from './';
+import { Transaction, TransactionType } from './';
 
-export const isTransaction = type => type === 'topup' || type === 'purchase';
+const isTransaction = (type: TransactionType) => type === 'topup' || type === 'purchase';
 
 export const subscribeTransactions = function* (event) {
   for (const record of event.Records) {
