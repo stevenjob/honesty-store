@@ -13,7 +13,10 @@
     "aws-sdk": "2.22.0"
   },
   "dependencies": {
+    "@honesty-store/item": "file:../item",
+    "@honesty-store/service": "file:../service",
+    "@honesty-store/store": "file:../store",
     "@honesty-store/transaction": "file:../transaction",
-    "@honesty-store/service": "file:../service"
+    "@honesty-store/user": "file:../user"
   }
 }

@@ -63,3 +63,22 @@ export const sendSlackMessage = async ({ key, message, channel, fields: extraFie
     throw new Error(`Unexpected response code from slack ${response.status}`);
   }
 };
+
+export const sendSlackMessageOneLine = async ({ key, message, channel }) => {
+  const url = urlForChannel(channel);
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      username: 'Support Bot',
+      icon_emoji: ':ghost:',
+      text: message
+    })
+  });
+  info(key, 'One-line message sent', message, response.status);
+  if (response.status !== 200) {
+    throw new Error(`Unexpected response code from slack ${response.status}`);
+  }
+};
