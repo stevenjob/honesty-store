@@ -1,14 +1,17 @@
 import { DynamoDB } from 'aws-sdk';
 import { Transaction, transactionTypes } from './';
 
-const isTransaction = (type: TransactionType) => type === 'topup' || type === 'purchase';
+const isTransaction = (transaction: any): transaction is Transaction => {
+  const { type } = transaction;
+  return transactionTypes.some(txType => txType === type);
+};
 
-export const subscribeTransactions = function* (event) {
+export const subscribeTransactions = function* (event): IterableIterator<Transaction> {
   for (const record of event.Records) {
     const converted = DynamoDB.Converter.output({ M: record.dynamodb.NewImage });
 
-    if (isTransaction(converted.type)) {
-      yield <Transaction>converted;
+    if (isTransaction(converted)) {
+      yield converted;
     }
   }
 };
