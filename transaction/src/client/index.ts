@@ -4,6 +4,7 @@ import fetch from '@honesty-store/service/src/fetch';
 export const balanceLimit = 1000; // £10
 
 export type TransactionType = 'topup' | 'purchase';
+export const transactionTypes = ['topup', 'purchase'];
 
 export interface TransactionBody {
   type: TransactionType;

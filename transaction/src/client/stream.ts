@@ -1,5 +1,5 @@
 import { DynamoDB } from 'aws-sdk';
-import { Transaction, TransactionType } from './';
+import { Transaction, transactionTypes } from './';
 
 const isTransaction = (type: TransactionType) => type === 'topup' || type === 'purchase';
 
