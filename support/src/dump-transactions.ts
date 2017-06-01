@@ -7,12 +7,13 @@ import { getAllItems } from '@honesty-store/item/src/client';
 import { createServiceKey } from '@honesty-store/service/src/key';
 import { Store } from '@honesty-store/store/src/client/index';
 import { InternalAccount, InternalTransaction } from '@honesty-store/transaction/src/client/index';
-import { User } from '@honesty-store/user/src/client/index';
+import { User, WithRefreshToken } from '@honesty-store/user/src/client/index';
 
 type TransactionRecord = InternalAccount | InternalTransaction;
+type UserRecord = User & WithRefreshToken;
 
 const cruftAccount = cruftDDB<TransactionRecord>({ tableName: 'honesty-store-transaction' });
-const cruftUser = cruftDDB<User>({ tableName: 'honesty-store-user' });
+const cruftUser = cruftDDB<UserRecord>({ tableName: 'honesty-store-user' });
 const cruftStore = cruftDDB<Store>({ tableName: 'honesty-store-store' });
 
 const usage = () => {
@@ -71,7 +72,8 @@ const main = async (args) => {
       if (user == null) {
         return [];
       }
-      const { id: userId, ...userDetails } = user;
+      // tslint:disable-next-line:no-unused-variable
+      const { id: userId, refreshToken: ignoredRefreshToken, ...userDetails } = user;
       // tslint:disable-next-line:no-unused-variable
       const { id: accountId, transactionHead, cachedTransactions, ...accountDetails } = account;
 
