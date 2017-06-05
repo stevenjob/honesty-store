@@ -41,7 +41,6 @@ const recordPurchase = async (key, { id: transactionId, type, data: { userId, it
 
   await sendSlackMessageOneLine({
     key,
-    // tslint:disable-next-line:max-line-length
     message: csvMessage,
     channel: 'purchases'
   });
