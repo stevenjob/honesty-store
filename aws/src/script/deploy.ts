@@ -237,7 +237,7 @@ export default async ({ branch, dirs }) => {
         USER_TOKEN_SECRET: lambdaConfig[dir].withUserSecret && userSecret,
         LIVE_STRIPE_KEY: lambdaConfig[dir].withStripe && generateStripeKey({ branch, type: 'live' }),
         TEST_STRIPE_KEY: lambdaConfig[dir].withStripe && generateStripeKey({ branch, type: 'test' }),
-        SLACK_CHANNEL_TYPE: isLive(branch) ? 'live' : 'test'
+        SLACK_CHANNEL_PREFIX: isLive(branch) ? '' : 'test-'
       }
     });
 
