@@ -17,14 +17,28 @@ interface SlackMessageParams {
 }
 
 const urlForChannel = (channel: Channel) => {
-  switch (channel) {
-    case 'support':
-      return 'https://hooks.slack.com/services/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';
-    case 'purchases':
-      return 'https://hooks.slack.com/services/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';
-    default:
-      throw new Error(`unknown channel '${channel}'`);
+  const channels = {
+    support: {
+      live: 'https://hooks.slack.com/services/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',
+      test: 'https://hooks.slack.com/services/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'
+    },
+    purchases: {
+      live: 'https://hooks.slack.com/services/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',
+      test: 'https://hooks.slack.com/services/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'
+    }
+  };
+
+  if (!(channel in channels)) {
+    throw new Error(`unknown channel '${channel}'`);
   }
+
+  const channelType = process.env.SLACK_CHANNEL_TYPE;
+  const url = channels[channel][channelType];
+  if (url == null) {
+    throw new Error(`no channel for $SLACK_CHANNEL_TYPE '${channelType}'`);
+  }
+
+  return url;
 };
 
 export const sendSlackMessage = async ({ key, message, channel, fields: extraFields }: SlackMessageParams) => {
