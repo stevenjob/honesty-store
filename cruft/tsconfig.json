@@ -1,0 +1,24 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "noImplicitAny": false,
+        "sourceMap": false,
+        "strict": true,
+        "outDir": "lib",
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "declaration": true,
+        "lib": [
+            "esnext",
+            "esnext.asynciterable"
+        ]
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

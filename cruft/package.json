@@ -1,0 +1,39 @@
+{
+  "name": "@honesty-store/cruft",
+  "version": "3.0.6",
+  "description": "A simple optimistic-locking abstraction over Dynamo DB",
+  "main": "lib/src/index.js",
+  "repository": "git@github.com:honesty-store/honesty-store.git",
+  "author": "Chris Price <price.c@gmail.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/chai": "^3.4.35",
+    "@types/jest": "^19.2.2",
+    "@types/node": "^7.0.8",
+    "aws-sdk": "2.22.0",
+    "chai": "^3.5.0",
+    "jest": "^19.0.2",
+    "ts-jest": "^19.0.14",
+    "typescript": "^2.3.2"
+  },
+  "scripts": {
+    "start-dynamodb": "docker run -d --name dynamodb -p 8000:8000 deangiberson/aws-dynamodb-local",
+    "stop-dynamodb": "docker rm -f dynamodb",
+    "test": "tsc && npm run start-dynamodb && jest && npm run stop-dynamodb"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "src/.*(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
+  },
+  "peerDependencies": {
+    "aws-sdk": "2.22.0"
+  }
+}
