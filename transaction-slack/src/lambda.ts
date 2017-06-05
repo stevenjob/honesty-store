@@ -30,7 +30,7 @@ const recordPurchase = async (key, { id: transactionId, type, data: { userId, it
   const csvMessage = await csvStringify(
     [{
       emailAddress: user.emailAddress,
-      itemDescription: `${item.name} ${item.qualifier}`,
+      itemDescription: item.name + (item.qualifier ? ` ${item.qualifier}` : ''),
       store: store.code,
       price: -amount,
       shortTxId
