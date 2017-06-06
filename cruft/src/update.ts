@@ -1,61 +1,31 @@
 import { assertHasValidDynamoDBFieldNames } from './assertHasValidDynamoDBFieldNames';
-import { AbstractItem, Configuration, EnhancedItem, UpdatedItem } from './index';
+import { AbstractItem, Configuration, EnhancedItem } from './index';
 
-export const update = <T extends AbstractItem>({ client, tableName, updateRecentEvents = false }:
+export const update = <T extends AbstractItem>({ client, tableName }:
   Configuration & { updateRecentEvents?: boolean }) =>
-  async (item: UpdatedItem<T>): Promise<EnhancedItem<T>> => {
+  async (item: EnhancedItem<T>): Promise<EnhancedItem<T>> => {
     assertHasValidDynamoDBFieldNames(item);
 
     // hack - can't use object rest/spread with types yet - Microsoft/TypeScript/issues/10727
-    const updatedItem = Object.assign({}, item, {
+    const itemWithMetadata = Object.assign({}, item, {
       version: item.version + 1,
       modified: Date.now()
     });
 
-    const fieldNames = Object.keys(updatedItem)
-      .filter(key => key !== 'id')
-      .filter(key => key !== 'created')
-      .filter(key => updateRecentEvents || key !== 'recentEvents');
-
-    const updateExpression = fieldNames.map(key => `#${key}=:${key}`)
-      .join(', ');
-
-    const updateExpressionAttributeNames = fieldNames.reduce(
-      (obj, key) => {
-        obj[`#${key}`] = key;
-        return obj;
-      },
-      {}
-    );
-
-    const updateExpressionAttributeValues = fieldNames.reduce(
-      (obj, key) => {
-        obj[`:${key}`] = updatedItem[key];
-        return obj;
-      },
-      {}
-    );
-
     const conditionAttributeValues = {
-      ':previousVersion': item.version
+      ':previousVersion': item.version,
+      ':previousCreated': item.created
     };
 
-    const expressionAttributeValues = Object.assign({}, updateExpressionAttributeValues, conditionAttributeValues);
-
     try {
-      const response = await client.update({
+      await client.put({
         TableName: tableName,
-        Key: {
-          id: item.id
-        },
-        ConditionExpression: 'version = :previousVersion',
-        UpdateExpression: `set ${updateExpression}`,
-        ExpressionAttributeNames: updateExpressionAttributeNames,
-        ExpressionAttributeValues: expressionAttributeValues,
-        ReturnValues: 'ALL_NEW'
+        Item: itemWithMetadata,
+        ConditionExpression: 'version = :previousVersion AND created = :previousCreated',
+        ExpressionAttributeValues: conditionAttributeValues
       })
         .promise();
-      return <EnhancedItem<T>>response.Attributes;
+      return itemWithMetadata;
     } catch (e) {
       if (e.code !== 'ConditionalCheckFailedException') {
         throw e;

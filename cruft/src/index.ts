@@ -55,8 +55,6 @@ export type EnhancedItem<T extends AbstractItem> = T & HasVersion & HasMetadata;
 
 export type PrototypicalItem<T extends AbstractItem> = Partial<T>;
 
-export type UpdatedItem<T extends AbstractItem> = T & HasVersion & Partial<HasMetadata>;
-
 export type EventItem = AbstractItem & { previous?: string, data: any };
 
 export interface Configuration {
@@ -70,9 +68,9 @@ export interface Cruft<T extends AbstractItem> {
   reduce<Event>(
     aggregateIdSelector: (event: Event) => string,
     eventIdSelector: (event: Event) => string,
-    reducer: (aggregate: T, event: Event) => T
+    reducer: (aggregate: EnhancedItem<T>, event: Event) => EnhancedItem<T>
   ): (event: Event) => Promise<EnhancedItem<T>>;
-  update(item: UpdatedItem<T>): Promise<EnhancedItem<T>>;
+  update(item: EnhancedItem<T>): Promise<EnhancedItem<T>>;
   find(fields: PrototypicalItem<T>): Promise<EnhancedItem<T>>;
   __findAll(fields: PrototypicalItem<T>, options?: { limit?: number }): Promise<EnhancedItem<T>[]>;
   findAll(fields: PrototypicalItem<T>): AsyncIterableIterator<EnhancedItem<T>>;

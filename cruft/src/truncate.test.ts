@@ -17,7 +17,7 @@ describe.only(suiteName, () => {
   it('should throw when truncating an out of date item', async () => {
     const id = nextId();
     const original = await cruft.create({ id, version: 0, bar: 0 });
-    await cruft.update({ id, bar: 1, version: original.version });
+    await cruft.update(Object.assign({}, original, { bar: 1 }));
     try {
       await cruft.truncate({ id, version: original.version });
       fail('Item is out of date');
