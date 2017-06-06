@@ -1,7 +1,8 @@
 import { assertHasValidDynamoDBFieldNames } from './assertHasValidDynamoDBFieldNames';
-import { IConfiguration, AbstractItem, EnhancedItem, UpdatedItem } from './index';
+import { AbstractItem, Configuration, EnhancedItem, UpdatedItem } from './index';
 
-export const update = <T extends AbstractItem>({ client, tableName, updateRecentEvents = false }: IConfiguration & { updateRecentEvents?: boolean }) =>
+export const update = <T extends AbstractItem>({ client, tableName, updateRecentEvents = false }:
+  Configuration & { updateRecentEvents?: boolean }) =>
   async (item: UpdatedItem<T>): Promise<EnhancedItem<T>> => {
     assertHasValidDynamoDBFieldNames(item);
 
@@ -55,8 +56,7 @@ export const update = <T extends AbstractItem>({ client, tableName, updateRecent
       })
         .promise();
       return <EnhancedItem<T>>response.Attributes;
-    }
-    catch (e) {
+    } catch (e) {
       if (e.code !== 'ConditionalCheckFailedException') {
         throw e;
       }

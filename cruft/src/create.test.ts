@@ -1,5 +1,5 @@
-import { createTable, cruftForTable, deleteTable, nextId } from './__tests__/aws';
 import { expect } from 'chai';
+import { createTable, cruftForTable, deleteTable, nextId } from './__tests__/aws';
 
 const suiteName = 'create';
 

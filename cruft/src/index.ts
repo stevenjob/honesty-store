@@ -1,32 +1,32 @@
 import { DynamoDB } from 'aws-sdk';
+import { __findAll } from './__findAll';
 import { create } from './create';
-import { read } from './read';
-import { reduce } from './reduce';
-import { update } from './update';
 import { find } from './find';
 import { findAll } from './findAll';
-import { __findAll } from './__findAll';
+import { read } from './read';
+import { reduce } from './reduce';
 import { truncate } from './truncate';
+import { update } from './update';
 
 (<any>Symbol).asyncIterator = Symbol.for('asyncIterator');
 
 export type Timestamp = number;
 
-export interface IHasId {
+interface HasId {
   /**
    * ID managed by consumer
    */
   id: string;
 }
 
-export interface IHasVersion {
+interface HasVersion {
   /**
    * Monotomically increasing counter managed by store
    */
   version: number;
 }
 
-export interface IHasMetadata {
+interface HasMetadata {
   /**
    * Unix timestamp of record creation managed by store.
    * N.B. The store will always silently override this value if specified to support use cases which read an item, modify it and attempt to
@@ -40,31 +40,31 @@ export interface IHasMetadata {
    */
   modified: Timestamp;
   /**
-   * Recent event IDs that have been reduced on to this aggregate or empty for non-aggregate records.
+   * Last event to be reduced on to this aggregate or null for non-aggregate records.
    */
-  recentEvents: EventItem[];
+  lastEvent?: EventItem;
 }
 
-export type AbstractItem = IHasId & IHasVersion;
+export type AbstractItem = HasId & HasVersion;
 
 // hack - should take an Item without IHasVersion & IHasMetadata but need literal type subtraction
 // for that https://github.com/Microsoft/TypeScript/issues/12215
 export type NewItem<T extends AbstractItem> = T & { version: 0 };
 
-export type EnhancedItem<T extends AbstractItem> = T & IHasVersion & IHasMetadata;
+export type EnhancedItem<T extends AbstractItem> = T & HasVersion & HasMetadata;
 
 export type PrototypicalItem<T extends AbstractItem> = Partial<T>;
 
-export type UpdatedItem<T extends AbstractItem> = T & IHasVersion & Partial<IHasMetadata>;
+export type UpdatedItem<T extends AbstractItem> = T & HasVersion & Partial<HasMetadata>;
 
 export type EventItem = AbstractItem & { previous?: string, data: any };
 
-export interface IConfiguration {
+export interface Configuration {
   client: DynamoDB.DocumentClient;
   tableName: string;
 }
 
-export interface ICruft<T extends AbstractItem> {
+export interface Cruft<T extends AbstractItem> {
   create(item: NewItem<T>): Promise<EnhancedItem<T>>;
   read(id: string): Promise<EnhancedItem<T>>;
   reduce<Event>(
@@ -74,7 +74,7 @@ export interface ICruft<T extends AbstractItem> {
   ): (event: Event) => Promise<EnhancedItem<T>>;
   update(item: UpdatedItem<T>): Promise<EnhancedItem<T>>;
   find(fields: PrototypicalItem<T>): Promise<EnhancedItem<T>>;
-  __findAll(fields: PrototypicalItem<T>, options?: { limit?: number }): Promise<Array<EnhancedItem<T>>>;
+  __findAll(fields: PrototypicalItem<T>, options?: { limit?: number }): Promise<EnhancedItem<T>[]>;
   findAll(fields: PrototypicalItem<T>): AsyncIterableIterator<EnhancedItem<T>>;
   truncate(item: AbstractItem): Promise<void>;
 }
@@ -83,7 +83,7 @@ export default <T extends AbstractItem, Event = any>({
   endpoint = process.env.AWS_DYNAMODB_ENDPOINT,
   region = process.env.AWS_REGION,
   tableName
-}): ICruft<T> => {
+}): Cruft<T> => {
   // hack - endpoint isn't a valid property according to the typings
   const client = new DynamoDB.DocumentClient(<{ endpoint: string }>{
     apiVersion: '2012-08-10',

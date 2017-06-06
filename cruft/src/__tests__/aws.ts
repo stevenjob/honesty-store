@@ -1,7 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
-import index, { ICruft } from '../index';
+import index, { Cruft } from '../index';
 
-export interface IFoo {
+export interface Foo {
   id: string;
   version: number;
   [key: string]: any;
@@ -17,8 +17,8 @@ const db = new DynamoDB(<{ apiVersion: string, endpoint: string }>{
   region
 });
 
-export const cruftForTable = (tableName): ICruft<IFoo> =>
-  index<IFoo>({
+export const cruftForTable = (tableName): Cruft<Foo> =>
+  index<Foo>({
     endpoint,
     region,
     tableName: tablePrefix + tableName
@@ -46,9 +46,9 @@ export const createTable = (tableName: string) =>
           WriteCapacityUnits: 1
         }
       })
-        .promise()
-    }
-    catch (e) {
+        .promise();
+    } catch (e) {
+      // tslint:disable-next-line:no-console
       console.log(e);
       // ignore
     }
@@ -59,8 +59,8 @@ export const deleteTable = (tableName: string) =>
     try {
       await db.deleteTable({ TableName: tablePrefix + tableName })
         .promise();
-    }
-    catch (e) {
+    } catch (e) {
+      // tslint:disable-next-line:no-console
       console.log(e);
       // ignore
     }

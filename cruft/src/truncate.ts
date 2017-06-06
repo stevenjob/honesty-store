@@ -1,6 +1,6 @@
-import { IConfiguration, AbstractItem } from './index';
+import { AbstractItem, Configuration } from './index';
 
-export const truncate = ({ client, tableName }: IConfiguration) =>
+export const truncate = ({ client, tableName }: Configuration) =>
   async (item: AbstractItem): Promise<void> => {
     try {
       await client.delete({
@@ -14,8 +14,7 @@ export const truncate = ({ client, tableName }: IConfiguration) =>
         }
       })
         .promise();
-    }
-    catch (e) {
+    } catch (e) {
       if (e.code !== 'ConditionalCheckFailedException') {
         throw e;
       }

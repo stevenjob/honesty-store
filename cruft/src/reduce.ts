@@ -1,11 +1,9 @@
-import { IConfiguration, AbstractItem, EnhancedItem, EventItem } from './index';
 import { create } from './create';
+import { AbstractItem, Configuration, EnhancedItem, EventItem } from './index';
 import { read } from './read';
 import { update } from './update';
 
-export const RECENT_EVENT_LIMIT = 10;
-
-export const reduce = <Aggregate extends AbstractItem, Event>({ client, tableName }: IConfiguration) =>
+export const reduce = <Aggregate extends AbstractItem, Event>({ client, tableName }: Configuration) =>
   (
     aggregateIdSelector: (event: Event) => string,
     eventIdSelector: (event: Event) => string,
@@ -19,55 +17,47 @@ export const reduce = <Aggregate extends AbstractItem, Event>({ client, tableNam
 
       const eventId = eventIdSelector(event);
 
-      const { recentEvents } = aggregate;
+      const { lastEvent } = aggregate;
 
-      for (const recentEvent of recentEvents) {
-        if (recentEvent.id === eventId) {
-          return aggregate;
-        }
-      }
-
-      try {
-        await read<EventItem>({ client, tableName, consistent: true })(eventId);
+      if (lastEvent != null && lastEvent.id === eventId) {
         return aggregate;
       }
-      catch (e) {
+
+      let archivedEvent: EventItem | null = null;
+
+      try {
+        archivedEvent = await read<EventItem>({ client, tableName, consistent: true })(eventId);
+      } catch (e) {
         if (e.message !== `Key not found ${eventId}`) {
           throw e;
         }
       }
 
-      for (const archivedEvent of recentEvents.slice(RECENT_EVENT_LIMIT - 1)) {
+      if (archivedEvent != null) {
+        return aggregate;
+      }
+
+      if (lastEvent != null) {
         try {
-          await create<EventItem>({ client, tableName })({
-            id: eventIdSelector(archivedEvent),
-            version: 0,
-            data: archivedEvent
-          });
-        }
-        catch (e) {
-          if (e.message !== `Key not found ${eventId}`) {
+          await create<EventItem>({ client, tableName })(<EventItem & { version: 0 }>lastEvent);
+        } catch (e) {
+          if (e.message !== `Item already exists ${lastEvent.id}`) {
             throw e;
           }
         }
       }
 
-      const previousEventId = recentEvents.length > 0 ? recentEvents[0].id : null;
-
-      const updatedRecentEvents: EventItem[] = [
-        {
-          id: eventId,
-          version: 0,
-          data: event,
-          previous: previousEventId
-        },
-        ...recentEvents.slice(0, RECENT_EVENT_LIMIT - 1)
-      ];
-
       const updatedAggregate = Object.assign(
         {},
         reducer(aggregate, event),
-        { recentEvents: updatedRecentEvents }
+        {
+          lastEvent: {
+            id: eventId,
+            version: 0,
+            data: event,
+            previous: lastEvent != null ? lastEvent.id : null
+          }
+        }
       );
 
       return await update<Aggregate>({ client, tableName, updateRecentEvents: true })(updatedAggregate);

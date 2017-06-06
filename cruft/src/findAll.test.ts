@@ -1,5 +1,5 @@
-import { createTable, cruftForTable, deleteTable, nextId } from './__tests__/aws';
 import { expect } from 'chai';
+import { createTable, cruftForTable, deleteTable, nextId } from './__tests__/aws';
 
 const suiteName = 'findAll';
 
@@ -36,7 +36,7 @@ describe.only(suiteName, () => {
       i++;
     }
     expect(i).to.equal(250, 'Incorrect item count');
-  }, 30000);
+  },        30000);
 
   (<any>it)('should find items over many pages and stop if break called', async () => {
     const id = nextId();
@@ -50,6 +50,6 @@ describe.only(suiteName, () => {
       }
     }
     expect(i).to.equal(150, 'Incorrect item count');
-  }, 30000);
+  },        30000);
 
 });

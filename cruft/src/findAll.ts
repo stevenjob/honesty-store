@@ -1,6 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
 import { assertHasValidDynamoDBFieldNames } from './assertHasValidDynamoDBFieldNames';
-import { IConfiguration, AbstractItem, EnhancedItem, PrototypicalItem } from './index';
+import { AbstractItem, Configuration, EnhancedItem, PrototypicalItem } from './index';
 
 const createFilterExpression = (fieldNames, fields) =>
   fieldNames.reduce(
@@ -11,7 +11,7 @@ const createFilterExpression = (fieldNames, fields) =>
     {}
   );
 
-export const findAll = <T extends AbstractItem>({ client, tableName }: IConfiguration) =>
+export const findAll = <T extends AbstractItem>({ client, tableName }: Configuration) =>
   async function*(fields: PrototypicalItem<T>): AsyncIterableIterator<EnhancedItem<T>> {
     assertHasValidDynamoDBFieldNames(fields);
 
@@ -30,7 +30,7 @@ export const findAll = <T extends AbstractItem>({ client, tableName }: IConfigur
       ? undefined
       : createFilterExpression(fieldNames, fields);
 
-    let key: DynamoDB.DocumentClient.Key | undefined = undefined;
+    let key: DynamoDB.DocumentClient.Key | undefined;
 
     do {
       const response = await client.scan({
@@ -42,7 +42,7 @@ export const findAll = <T extends AbstractItem>({ client, tableName }: IConfigur
       })
         .promise();
 
-      for (const item of <Array<EnhancedItem<T>>>response.Items) {
+      for (const item of <EnhancedItem<T>[]>response.Items) {
         yield item;
       }
 

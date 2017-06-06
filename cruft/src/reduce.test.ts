@@ -1,7 +1,5 @@
-import { createTable, cruftForTable, deleteTable, nextId } from './__tests__/aws';
-import { RECENT_EVENT_LIMIT } from './reduce';
-import { EventItem } from './index';
 import { expect } from 'chai';
+import { createTable, cruftForTable, deleteTable, nextId } from './__tests__/aws';
 
 const suiteName = 'reduce';
 
@@ -16,8 +14,7 @@ describe.only(suiteName, () => {
     try {
       await cruft.reduce(_ => id, _ => '', (aggregate, _) => aggregate)({});
       fail('Aggregate not found');
-    }
-    catch (e) {
+    } catch (e) {
       if (e.message !== `Key not found ${id}`) {
         throw e;
       }
@@ -32,10 +29,10 @@ describe.only(suiteName, () => {
     await cruft.create({ id: aggregateId, version: 0 });
     const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _) => aggregate);
     const aggregate = await reduce(event);
-    expect(aggregate.recentEvents).has.lengthOf(1);
-    expect(aggregate.recentEvents[0].id).to.equal(event.id);
-    expect(aggregate.recentEvents[0].data).to.deep.equal(event);
-    expect(aggregate.recentEvents[0].previous).to.equal(null);
+    expect(aggregate.lastEvent && aggregate.lastEvent.id).to.equal(event.id);
+    expect(aggregate.lastEvent && aggregate.lastEvent.version).to.equal(0);
+    expect(aggregate.lastEvent && aggregate.lastEvent.data).to.deep.equal(event);
+    expect(aggregate.lastEvent && aggregate.lastEvent.previous).to.equal(null);
   });
 
   it('should archive event when limit reached', async () => {
@@ -46,14 +43,12 @@ describe.only(suiteName, () => {
     await cruft.create({ id: aggregateId, version: 0 });
     const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _) => aggregate);
     let aggregate = await reduce(event);
-    for (let i = 0; i < RECENT_EVENT_LIMIT; i++) {
-      aggregate = await reduce({ id: nextId() });
-    }
-    expect(aggregate.recentEvents).has.lengthOf(RECENT_EVENT_LIMIT);
-    expect(aggregate.recentEvents.map(eventItem => eventItem.id)).to.not.contain(event.id);
+    aggregate = await reduce({ id: nextId() });
+    expect(aggregate.lastEvent && aggregate.lastEvent.id).to.not.equal(event.id);
+    expect(aggregate.lastEvent && aggregate.lastEvent.previous).to.equal(event.id);
   });
 
-  it('should ignore an event found in recent events', async () => {
+  it('should ignore the last event', async () => {
     const aggregateId = nextId();
     const event = {
       id: nextId()
@@ -79,4 +74,3 @@ describe.only(suiteName, () => {
   });
 
 });
-

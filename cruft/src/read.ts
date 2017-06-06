@@ -1,6 +1,6 @@
-import { IConfiguration, AbstractItem, EnhancedItem } from './index';
+import { AbstractItem, Configuration, EnhancedItem } from './index';
 
-export const read = <T extends AbstractItem>({ client, tableName, consistent = false }: IConfiguration & { consistent?: boolean }) =>
+export const read = <T extends AbstractItem>({ client, tableName, consistent = false }: Configuration & { consistent?: boolean }) =>
   async (id: string): Promise<EnhancedItem<T>> => {
     const response = await client.get({
       TableName: tableName,
