@@ -23,6 +23,9 @@ export type ErrorCode =
   'ItemNotInBox' |
   'BoxAlreadyMarkedAsReceived' |
   'FullRegistrationRequired' |
+  'AutoRefundPeriodExpired' |
+  'RefundAlreadyIssued' |
+  'NonRefundableTransactionType' |
   'UnknownError';
 
 export class CodedError extends Error {
