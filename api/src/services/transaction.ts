@@ -3,7 +3,7 @@ import * as ms from 'ms';
 import { getItem } from '@honesty-store/item/src/client';
 import { CodedError } from '@honesty-store/service/src/error';
 import {
-  createTransaction, getAccount, getTransaction, refundTransaction, Transaction, TransactionBody
+  assertRefundableTransactionType, createTransaction, getAccount, getTransaction, refundTransaction, Transaction, TransactionBody
 } from '@honesty-store/transaction/src/client/index';
 import { getItemPriceFromStore } from './store';
 
@@ -38,6 +38,8 @@ const assertValidQuantity = (quantity) => {
 };
 
 const assertUserCanAutoRefundTransaction = (userId: string, transaction: Transaction) => {
+  assertRefundableTransactionType(transaction.type);
+
   const { id: transactionId, timestamp, data: { userId: transactionUserId } } = transaction;
   const refundCutOffDate = Date.now() - ms('1h');
   if (timestamp < refundCutOffDate) {
