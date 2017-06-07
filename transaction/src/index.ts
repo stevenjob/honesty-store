@@ -106,7 +106,7 @@ const refundTransaction = async (transactionId: string) => {
     {
       type: 'refund',
       amount: -transactionToRefund.amount,
-      data: {},
+      data: { ...transactionToRefund.data },
       other: transactionToRefund.id
     }
   );
