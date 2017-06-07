@@ -3,23 +3,27 @@ import fetch from '@honesty-store/service/src/fetch';
 
 export const balanceLimit = 1000; // £10
 
-export type TransactionType = 'topup' | 'purchase';
-export const transactionTypes = ['topup', 'purchase'];
+export type TransactionType = 'topup' | 'purchase' | 'refund';
+export const transactionTypes = ['topup', 'purchase', 'refund'];
 
+// supplied to transaction service from external service
 export interface TransactionBody {
   type: TransactionType;
   amount: number;
   data: {
     [key: string]: string;
   };
+  other?: string;
+}
+
+// internally used to create a hash of the transaction
+export interface TransactionDetails extends TransactionBody {
+  timestamp: number;
   next?: string;
   legacyId?: string;
 }
 
-export interface TransactionDetails extends TransactionBody {
-  timestamp: number;
-}
-
+// as retrieved from database
 export interface Transaction extends TransactionDetails {
   id: string;
 }
@@ -33,8 +37,6 @@ export interface Account {
 
 export type InternalAccount = Account & { transactionHead?: string } & { cachedTransactions: TransactionList; };
 
-export type InternalTransaction = Transaction & { next?: string };
-
 export type TransactionList = Transaction[];
 
 export type AccountAndTransactions = Account & { transactions: TransactionList };
@@ -47,13 +49,19 @@ export interface TransactionAndBalance {
 const { get, post } = fetch('transaction');
 
 export const createAccount = (key, accountId: string) =>
-  post<AccountAndTransactions>(1, key, '/', { accountId });
+  post<AccountAndTransactions>(1, key, '/account', { accountId });
 
 export const getAccount = (key, accountId: string) =>
-  get<AccountAndTransactions>(1, key, `/${accountId}`);
+  get<AccountAndTransactions>(1, key, `/account/${accountId}`);
 
 export const createTransaction = (key, accountId: string, transaction: TransactionBody) =>
-  post<TransactionAndBalance>(1, key, `/${accountId}`, transaction);
+  post<TransactionAndBalance>(1, key, `/account/${accountId}`, transaction);
+
+export const getTransaction = (key, transactionId: string) =>
+  get<Transaction>(1, key, `/tx/${transactionId}`);
+
+export const refundTransaction = (key, transactionId: string) =>
+  post<TransactionAndBalance>(1, key, `/tx/${transactionId}/refund`, {});
 
 export const assertBalanceWithinLimit = async ({ key, accountId, amount }) => {
   const currentBalance = (await getAccount(key, accountId)).balance;

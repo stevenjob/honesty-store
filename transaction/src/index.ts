@@ -1,12 +1,16 @@
 import { config } from 'aws-sdk';
 
+import { CodedError } from '@honesty-store/service/src/error';
 import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
 import { assertValidAccountId, createAccount, getAccountInternal, updateAccount } from './account';
 import {
   AccountAndTransactions, balanceLimit, InternalAccount,
-  TransactionAndBalance, TransactionDetails
+  TransactionAndBalance, TransactionBody, TransactionDetails
 } from './client';
-import { assertValidTransaction, createTransactionId, getTransactions, hashTransaction, putTransaction } from './transaction';
+import {
+  assertValidTransaction, createTransactionId, extractFieldsFromTransactionId,
+  getTransaction, getTransactions, hashTransaction, putTransaction, walkTransactions
+} from './transaction';
 
 const ACCOUNT_TRANSACTION_CACHE_SIZE = 10;
 const GET_TRANSACTION_LIMIT = 10;
@@ -36,21 +40,18 @@ const getAccountAndTransactions = async ({ accountId, limit = GET_TRANSACTION_LI
   };
 };
 
-const createTransaction = async ({ accountId, type, amount, data }): Promise<TransactionAndBalance> => {
-  assertValidAccountId(accountId);
-
-  const originalAccount = await getAccountInternal({ accountId });
-
+const createTransaction = async (
+  originalAccount: InternalAccount,
+  body: TransactionBody
+): Promise<TransactionAndBalance> => {
   const transactionDetails: TransactionDetails = {
     timestamp: Date.now(),
-    type,
-    amount,
-    data,
-    next: originalAccount.transactionHead
+    next: originalAccount.transactionHead,
+    ...body
   };
 
   const transaction = {
-    id: createTransactionId({ accountId, transactionId: hashTransaction(transactionDetails) }),
+    id: createTransactionId({ accountId: originalAccount.id, transactionId: hashTransaction(transactionDetails) }),
     ...transactionDetails
   };
 
@@ -83,24 +84,70 @@ const createTransaction = async ({ accountId, type, amount, data }): Promise<Tra
   };
 };
 
+const refundTransaction = async (transactionId: string) => {
+  const { accountId } = extractFieldsFromTransactionId(transactionId);
+  const account = await getAccountInternal({ accountId });
+
+  const transactionToRefund = await getTransaction(transactionId);
+
+  if (transactionToRefund.type !== 'purchase') {
+    throw new CodedError('NonRefundableTransactionType', `Only purchase transactions may be refunded`);
+  }
+
+  for await (const transaction of walkTransactions(account.transactionHead)) {
+    if (transaction.type === 'refund' && transaction.other === transactionId) {
+      throw new CodedError('RefundAlreadyIssued', `Refund already issued for transactionId ${transactionId}`);
+    }
+    if (transaction.id === transactionId) {
+      break;
+    }
+  }
+
+  const response = await createTransaction(
+    account,
+    {
+      type: 'refund',
+      amount: -transactionToRefund.amount,
+      data: {},
+      other: transactionToRefund.id
+    }
+  );
+  return {
+    balance: response.balance,
+    transaction: response.transaction
+  };
+};
+
 export const router = lambdaRouter('transaction', 1);
 
 router.get(
-  '/:accountId',
+  '/account/:accountId',
   async (_key, { accountId }) => await getAccountAndTransactions({ accountId })
 );
 
 router.post(
-  '/:accountId',
-  async (_key, { accountId }, { type, amount, data }) =>
-    await createTransaction({ accountId, type, amount, data })
+  '/account/:accountId',
+  async (_key, { accountId }, { type, amount, data }) => {
+    const account = await getAccountInternal({ accountId });
+    return await createTransaction(account, { type, amount, data });
+  }
 );
 
 router.post(
-  '/',
+  '/account',
   async (_key, {}, { accountId }) => {
     const internalAccount = await createAccount({ accountId });
     const { transactionHead, cachedTransactions, ...externalAccount } = internalAccount;
     return externalAccount;
   }
+);
+
+router.get(
+  '/tx/:transactionId',
+  async (_key, { transactionId }) => await getTransaction(transactionId)
+);
+
+router.post(
+  '/tx/:transactionId/refund',
+  async (_key, { transactionId }) => await refundTransaction(transactionId)
 );
