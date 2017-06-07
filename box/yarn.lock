@@ -19,6 +19,7 @@
     http-status "^0.2.5"
     jsonwebtoken chrisprice/node-jsonwebtoken#remove-joi
     node-fetch "^1.6.3"
+    path-to-regexp "^1.7.0"
     uuid "^3.0.1"
     validator "^6.2.1"
 
@@ -31,6 +32,7 @@
   version "0.0.0"
   dependencies:
     "@honesty-store/service" "file:../service"
+    "@honesty-store/store" "file:../store"
     json-stable-stringify "^1.0.1"
 
 "@honesty-store/user@file:../user":
@@ -1719,7 +1721,7 @@ jest-validate@^19.0.2:
     leven "^2.0.0"
     pretty-format "^19.0.0"
 
-jest@^19.0.2:
+jest@^19.0.0:
   version "19.0.2"
   resolved "https://registry.yarnpkg.com/jest/-/jest-19.0.2.tgz#b794faaf8ff461e7388f28beef559a54f20b2c10"
   dependencies:
@@ -2379,6 +2381,12 @@ path-parse@^1.0.5:
 path-to-regexp@0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
+
+path-to-regexp@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-1.7.0.tgz#59fde0f435badacba103a84e9d3bc64e96b9937d"
+  dependencies:
+    isarray "0.0.1"
 
 path-type@^1.0.0:
   version "1.1.0"

@@ -21,7 +21,8 @@
     "@honesty-store/transaction": "file:../transaction",
     "@honesty-store/user": "file:../user",
     "compression": "^1.6.2",
-    "cors": "^2.8.1"
+    "cors": "^2.8.1",
+    "ms": "^1.0.0"
   },
   "devDependencies": {
     "@types/chai": "^3.5.2",
