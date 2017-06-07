@@ -1,6 +1,6 @@
 {
   "name": "@honesty-store/cruft",
-  "version": "3.0.6",
+  "version": "0.0.0",
   "description": "A simple optimistic-locking abstraction over Dynamo DB",
   "main": "lib/src/index.js",
   "repository": "git@github.com:honesty-store/honesty-store.git",
