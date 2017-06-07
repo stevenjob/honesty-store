@@ -5,11 +5,12 @@ export default (router) => {
   router.post(
     '/refund/:transactionId',
     authenticateAccessToken,
-    async (key, { transactionId }, {}, { user }) =>
+    async (key, { transactionId }, { reason }, { user }) =>
     refund({
       key,
       transactionId,
-      userId: user.id
+      userId: user.id,
+      reason
     })
   );
 };

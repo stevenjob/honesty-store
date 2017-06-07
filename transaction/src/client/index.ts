@@ -60,8 +60,8 @@ export const createTransaction = (key, accountId: string, transaction: Transacti
 export const getTransaction = (key, transactionId: string) =>
   get<Transaction>(1, key, `/tx/${transactionId}`);
 
-export const refundTransaction = (key, transactionId: string) =>
-  post<TransactionAndBalance>(1, key, `/tx/${transactionId}/refund`, {});
+export const refundTransaction = (key, transactionId: string, reason: string) =>
+  post<TransactionAndBalance>(1, key, `/tx/${transactionId}/refund`, { reason });
 
 export const assertBalanceWithinLimit = async ({ key, accountId, amount }) => {
   const currentBalance = (await getAccount(key, accountId)).balance;

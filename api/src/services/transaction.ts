@@ -7,6 +7,13 @@ import {
 } from '@honesty-store/transaction/src/client/index';
 import { getItemPriceFromStore } from './store';
 
+type PermittedRefundReason = 'outOfStock' | 'accidentalPurchase' | 'stockExpired';
+const permittedRefundReasons = ['outOfStock', 'accidentalPurchase', 'stockExpired'];
+
+const isPermittedRefundReason = (reason: string): reason is PermittedRefundReason => {
+  return permittedRefundReasons.some(permittedReason => permittedReason === reason);
+};
+
 const expandItemDetails = async (key, transaction) => {
   const { itemId } = transaction.data;
   const item = itemId && await getItem(key, itemId);
@@ -73,10 +80,15 @@ export const purchase = async ({ key, itemID, userID, accountID, storeID, quanti
   };
 };
 
-export const refund = async ({ key, transactionId, userId }) => {
+export const refund = async ({ key, transactionId, userId, reason }) => {
+
+  if (!isPermittedRefundReason(reason)) {
+    throw new Error('Invalid reason for refund');
+  }
+
   const transaction = await getTransaction(key, transactionId);
   assertUserCanAutoRefundTransaction(userId, transaction);
-  return await refundTransaction(key, transactionId);
+  return await refundTransaction(key, transactionId, reason);
 };
 
 export const getExpandedTransactionsAndBalance = async ({ key, accountID, page = 0 }) => {

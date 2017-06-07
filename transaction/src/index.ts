@@ -84,7 +84,11 @@ const createTransaction = async (
   };
 };
 
-const refundTransaction = async (transactionId: string) => {
+const refundTransaction = async (transactionId: string, reason: string) => {
+  if (typeof reason !== 'string') {
+    throw new Error(`Expected reason to be of type 'string', ${reason}`);
+  }
+
   const { accountId } = extractFieldsFromTransactionId(transactionId);
   const account = await getAccountInternal({ accountId });
 
@@ -106,7 +110,10 @@ const refundTransaction = async (transactionId: string) => {
     {
       type: 'refund',
       amount: -transactionToRefund.amount,
-      data: { ...transactionToRefund.data },
+      data: {
+        ...transactionToRefund.data,
+        reason
+      },
       other: transactionToRefund.id
     }
   );
@@ -147,5 +154,5 @@ router.get(
 
 router.post(
   '/tx/:transactionId/refund',
-  async (_key, { transactionId }) => await refundTransaction(transactionId)
+  async (_key, { transactionId }, { reason }) => await refundTransaction(transactionId, reason)
 );
