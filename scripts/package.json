@@ -9,6 +9,7 @@
     "@honesty-store/batch": "file:../batch",
     "@honesty-store/box": "file:../box",
     "@honesty-store/service": "file:../service",
+    "@honesty-store/transaction": "file:../transaction",
     "commander": "^2.9.0",
     "uuid": "^3.0.1"
   },
