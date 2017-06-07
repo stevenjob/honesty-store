@@ -15,7 +15,7 @@ interface Params {
   [key: string]: string;
 }
 
-interface LambdaBodyAction<Result, Body> {
+interface LambdaBodyAction<Body, Result> {
   (key: Key, params: Params, body: Body): Promise<Result>;
 }
 
