@@ -6,10 +6,10 @@ import { stringify } from 'csv';
 import { getAllItems } from '@honesty-store/item/src/client';
 import { createServiceKey } from '@honesty-store/service/src/key';
 import { Store } from '@honesty-store/store/src/client/index';
-import { InternalAccount, InternalTransaction } from '@honesty-store/transaction/src/client/index';
+import { InternalAccount, Transaction } from '@honesty-store/transaction/src/client/index';
 import { User, WithRefreshToken } from '@honesty-store/user/src/client/index';
 
-type TransactionRecord = InternalAccount | InternalTransaction;
+type TransactionRecord = InternalAccount | Transaction;
 type UserRecord = User & WithRefreshToken;
 
 const cruftAccount = cruftDDB<TransactionRecord>({ tableName: 'honesty-store-transaction' });
@@ -42,7 +42,7 @@ const main = async (args) => {
 
   const allTransactions = allAccountsAndTransactions
     // tslint:disable-next-line:triple-equals
-    .filter(account => (account as InternalAccount).balance == undefined) as InternalTransaction[];
+    .filter(account => (account as InternalAccount).balance == undefined) as Transaction[];
 
   const allAccounts = allAccountsAndTransactions
     // tslint:disable-next-line:triple-equals
