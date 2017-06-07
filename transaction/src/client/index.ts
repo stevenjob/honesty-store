@@ -78,4 +78,10 @@ export const assertBalanceWithinLimit = async ({ key, accountId, amount }) => {
   }
 };
 
+export const assertRefundableTransactionType = (type: TransactionType) => {
+  if (type !== 'purchase') {
+    throw new CodedError('NonRefundableTransactionType', `Only purchase transactions may be refunded`);
+  }
+};
+
 export const TEST_DATA_EMPTY_ACCOUNT_ID = 'b423607f-64de-441f-ac39-12d50aaedbe9';

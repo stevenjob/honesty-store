@@ -4,7 +4,7 @@ import { CodedError } from '@honesty-store/service/src/error';
 import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
 import { assertValidAccountId, createAccount, getAccountInternal, updateAccount } from './account';
 import {
-  AccountAndTransactions, balanceLimit, InternalAccount,
+  AccountAndTransactions, assertRefundableTransactionType, balanceLimit, InternalAccount,
   TransactionAndBalance, TransactionBody, TransactionDetails
 } from './client';
 import {
@@ -90,9 +90,7 @@ const refundTransaction = async (transactionId: string) => {
 
   const transactionToRefund = await getTransaction(transactionId);
 
-  if (transactionToRefund.type !== 'purchase') {
-    throw new CodedError('NonRefundableTransactionType', `Only purchase transactions may be refunded`);
-  }
+  assertRefundableTransactionType(transactionToRefund.type);
 
   for await (const transaction of walkTransactions(account.transactionHead)) {
     if (transaction.type === 'refund' && transaction.other === transactionId) {
