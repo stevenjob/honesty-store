@@ -331,7 +331,8 @@ const dirToTable = {
         ],
         created: 1487667277000,
         id: '0b0117da-21b5-4a5e-9c18-7ad20691dd24',
-        transactionHead: '0b0117da-21b5-4a5e-9c18-7ad20691dd24:abd853b75d730ce035dfb04e99f195703dd3c705ce58272d852154e3c23b7c99'
+        transactionHead: '0b0117da-21b5-4a5e-9c18-7ad20691dd24:abd853b75d730ce035dfb04e99f195703dd3c705ce58272d852154e3c23b7c99',
+        version: 0
       },
       {
         balance: 123,
@@ -354,7 +355,8 @@ const dirToTable = {
         ],
         created: 1487667277000,
         id: '08ccf030-537a-4c81-9789-70476dad152a',
-        transactionHead: '08ccf030-537a-4c81-9789-70476dad152a:282cb208113826eb54568759f56eb386d835174436d7da5591eb9f27bd80341a'
+        transactionHead: '08ccf030-537a-4c81-9789-70476dad152a:282cb208113826eb54568759f56eb386d835174436d7da5591eb9f27bd80341a',
+        version: 0
       },
       {
         amount: 100,
@@ -382,7 +384,8 @@ const dirToTable = {
         balance: 0,
         cachedTransactions: [],
         created: 1487667277000,
-        id: 'b423607f-64de-441f-ac39-12d50aaedbe9'
+        id: 'b423607f-64de-441f-ac39-12d50aaedbe9',
+        version: 0
       }
     ]
   }),
