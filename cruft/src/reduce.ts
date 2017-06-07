@@ -55,7 +55,7 @@ export const reduce = <Aggregate extends AbstractItem, Event>({ client, tableNam
             id: eventId,
             version: 0,
             data: event,
-            previous: lastEvent != null ? lastEvent.id : null
+            previousId: lastEvent != null ? lastEvent.id : null
           }
         }
       );

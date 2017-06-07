@@ -55,7 +55,7 @@ export type EnhancedItem<T extends AbstractItem> = T & HasVersion & HasMetadata;
 
 export type PrototypicalItem<T extends AbstractItem> = Partial<T>;
 
-export type EventItem = AbstractItem & { previous?: string, data: any };
+export type EventItem = AbstractItem & { previousId?: string, data: any };
 
 export interface Configuration {
   client: DynamoDB.DocumentClient;

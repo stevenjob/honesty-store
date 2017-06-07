@@ -32,7 +32,7 @@ describe.only(suiteName, () => {
     expect(aggregate.lastEvent && aggregate.lastEvent.id).to.equal(event.id);
     expect(aggregate.lastEvent && aggregate.lastEvent.version).to.equal(0);
     expect(aggregate.lastEvent && aggregate.lastEvent.data).to.deep.equal(event);
-    expect(aggregate.lastEvent && aggregate.lastEvent.previous).to.equal(null);
+    expect(aggregate.lastEvent && aggregate.lastEvent.previousId).to.equal(null);
   });
 
   it('should archive event when limit reached', async () => {
@@ -45,7 +45,7 @@ describe.only(suiteName, () => {
     let aggregate = await reduce(event);
     aggregate = await reduce({ id: nextId() });
     expect(aggregate.lastEvent && aggregate.lastEvent.id).to.not.equal(event.id);
-    expect(aggregate.lastEvent && aggregate.lastEvent.previous).to.equal(event.id);
+    expect(aggregate.lastEvent && aggregate.lastEvent.previousId).to.equal(event.id);
   });
 
   it('should ignore the last event', async () => {
