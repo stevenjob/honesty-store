@@ -1,8 +1,7 @@
 import { assertHasValidDynamoDBFieldNames } from './assertHasValidDynamoDBFieldNames';
 import { AbstractItem, Configuration, EnhancedItem } from './index';
 
-export const update = <T extends AbstractItem>({ client, tableName }:
-  Configuration & { updateRecentEvents?: boolean }) =>
+export const update = <T extends AbstractItem>({ client, tableName }: Configuration) =>
   async (item: EnhancedItem<T>): Promise<EnhancedItem<T>> => {
     assertHasValidDynamoDBFieldNames(item);
 

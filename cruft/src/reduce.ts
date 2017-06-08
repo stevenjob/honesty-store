@@ -8,8 +8,8 @@ export const reduce = <Aggregate extends AbstractItem, Event>({ client, tableNam
     aggregateIdSelector: (event: Event) => string,
     eventIdSelector: (event: Event) => string,
     reducer: (aggregate: EnhancedItem<Aggregate>, event: Event) => EnhancedItem<Aggregate>
-  ) =>
-    async (event: Event): Promise<EnhancedItem<Aggregate>> => {
+  ) => {
+    const reduce = async (event: Event): Promise<EnhancedItem<Aggregate>> => {
 
       const aggregateId = aggregateIdSelector(event);
 
@@ -60,5 +60,8 @@ export const reduce = <Aggregate extends AbstractItem, Event>({ client, tableNam
         }
       );
 
-      return await update<Aggregate>({ client, tableName, updateRecentEvents: true })(updatedAggregate);
+      return await update<Aggregate>({ client, tableName })(updatedAggregate);
     };
+
+    return reduce;
+  };
