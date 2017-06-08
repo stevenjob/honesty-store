@@ -27,6 +27,7 @@ dependencies:
     - batch/node_modules
     - scripts/node_modules
     - store/node_modules
+    - cruft/node_modules
   override:
     - yarn install
     - yarn run bootstrap
@@ -49,6 +50,7 @@ compile:
     - cd scripts && yarn run build
     - cd store && yarn run build
     - cd transaction-slack && yarn run build
+    - cd cruft && yarn run build
 test:
   override:
     - echo we ran them as part of compile
