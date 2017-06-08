@@ -2,12 +2,12 @@
 import * as program from 'commander';
 
 import { createServiceKey } from '@honesty-store/service/src/key';
-import { refundTransaction } from '@honesty-store/transaction/src/client/index';
+import { issueSupportRequestedRefund } from '@honesty-store/transaction/src/client/index';
 
-const issueRefund = async (transactionId, reason) => {
+const issueRefund = async (transactionId, reason, dateLimit) => {
   const key = createServiceKey({ service: 'refund-script' });
   try {
-    const response = await refundTransaction(key, transactionId, reason);
+    const response = await issueSupportRequestedRefund(key, transactionId, reason, dateLimit);
     console.log(JSON.stringify(response, null, 2));
   } catch (e) {
     console.error(e.message);
@@ -15,7 +15,7 @@ const issueRefund = async (transactionId, reason) => {
   }
 };
 
-program.command('issue [transactionId] [reason]')
+program.command('issue [transactionId] [reason] [dateLimit]')
   .description('issues a refund of the given transactionId')
   .action(issueRefund);
 

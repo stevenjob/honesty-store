@@ -60,8 +60,11 @@ export const createTransaction = (key, accountId: string, transaction: Transacti
 export const getTransaction = (key, transactionId: string) =>
   get<Transaction>(1, key, `/tx/${transactionId}`);
 
-export const refundTransaction = (key, transactionId: string, reason: string) =>
-  post<TransactionAndBalance>(1, key, `/tx/${transactionId}/refund`, { reason });
+export const issueUserRequestedRefund = (key, transactionId: string, userId: string, reason: string) =>
+  post<TransactionAndBalance>(1, key, `/tx/${transactionId}/refund/user`, { userId, reason });
+
+export const issueSupportRequestedRefund = (key, transactionId: string, reason: string, dateLimit: number) =>
+  post<TransactionAndBalance>(1, key, `/tx/${transactionId}/refund/support`, { dateLimit, reason });
 
 export const assertBalanceWithinLimit = async ({ key, accountId, amount }) => {
   const currentBalance = (await getAccount(key, accountId)).balance;
@@ -75,12 +78,6 @@ export const assertBalanceWithinLimit = async ({ key, accountId, amount }) => {
     throw new CodedError(
       'TopupExceedsMaxBalance',
       `topping up would increase balance over the limit of £${balanceLimit / 100}`);
-  }
-};
-
-export const assertRefundableTransactionType = (type: TransactionType) => {
-  if (type !== 'purchase') {
-    throw new CodedError('NonRefundableTransactionType', `Only purchase transactions may be refunded`);
   }
 };
 

@@ -1,11 +1,12 @@
 import { config } from 'aws-sdk';
+import * as ms from 'ms';
 
 import { CodedError } from '@honesty-store/service/src/error';
 import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
 import { assertValidAccountId, createAccount, getAccountInternal, updateAccount } from './account';
 import {
-  AccountAndTransactions, assertRefundableTransactionType, balanceLimit, InternalAccount,
-  TransactionAndBalance, TransactionBody, TransactionDetails
+  AccountAndTransactions, balanceLimit, InternalAccount, Transaction,
+  TransactionAndBalance, TransactionBody, TransactionDetails, TransactionType
 } from './client';
 import {
   assertValidTransaction, createTransactionId, extractFieldsFromTransactionId,
@@ -16,6 +17,18 @@ const ACCOUNT_TRANSACTION_CACHE_SIZE = 10;
 const GET_TRANSACTION_LIMIT = 10;
 
 config.region = process.env.AWS_REGION;
+
+type UserPermittedRefundReason = 'outOfStock' | 'accidentalPurchase' | 'stockExpired';
+const userPermittedRefundReasons = ['outOfStock', 'accidentalPurchase', 'stockExpired'];
+const isUserPermittedRefundReason = (reason: string): reason is UserPermittedRefundReason => {
+  return userPermittedRefundReasons.some(permittedReason => permittedReason === reason);
+};
+
+type SupportPermittedRefundReason = UserPermittedRefundReason | 'other';
+const supportPermittedRefundReasons = [...userPermittedRefundReasons, 'other'];
+const isSupportPermittedRefundReason = (reason: string): reason is SupportPermittedRefundReason => {
+  return supportPermittedRefundReasons.some(permittedReason => permittedReason === reason);
+};
 
 const getAccountAndTransactions = async ({ accountId, limit = GET_TRANSACTION_LIMIT }): Promise<AccountAndTransactions> => {
   assertValidAccountId(accountId);
@@ -84,21 +97,64 @@ const createTransaction = async (
   };
 };
 
-const refundTransaction = async (transactionId: string, reason: string) => {
-  if (typeof reason !== 'string') {
-    throw new Error(`Expected reason to be of type 'string', ${reason}`);
+const assertRefundableTransactionType = (type: TransactionType) => {
+  if (type !== 'purchase') {
+    throw new CodedError('NonRefundableTransactionType', `Only purchase transactions may be refunded`);
   }
+};
 
-  const { accountId } = extractFieldsFromTransactionId(transactionId);
-  const account = await getAccountInternal({ accountId });
+const assertUserCanAutoRefundTransaction = (userId: string, transaction: Transaction, refundCutOffDate: number) => {
+  assertRefundableTransactionType(transaction.type);
+
+  const { id: transactionId, timestamp, data: { userId: transactionUserId } } = transaction;
+  if (timestamp < refundCutOffDate) {
+    throw new CodedError('AutoRefundPeriodExpired', 'Refunds can only be requested up to 1 hour after initial purchase');
+  }
+  if (transactionUserId == null || transactionUserId !== userId) {
+    throw new Error(`userId contained within transaction ${transactionId} does not match id of user requesting refund (${userId})`);
+  }
+};
+
+const issueUserRequestedRefund = async (transactionId, userId, reason) => {
+  if (!isUserPermittedRefundReason(reason)) {
+    throw new Error('Invalid reason for refund');
+  }
 
   const transactionToRefund = await getTransaction(transactionId);
 
   assertRefundableTransactionType(transactionToRefund.type);
 
+  const refundCutOffDate = Date.now() - ms('1h');
+  assertUserCanAutoRefundTransaction(userId, transactionToRefund, refundCutOffDate);
+
+  return await issueRefund(transactionToRefund, reason, refundCutOffDate);
+};
+
+const issueSupportRequestedRefund = async (transactionId, reason, dateLimit) => {
+  if (!isSupportPermittedRefundReason(reason)) {
+    throw new Error(`Reason must be one of ${supportPermittedRefundReasons}`);
+  }
+  if (!Number.isInteger(dateLimit)) {
+    throw new Error(`Invalid timestamp for dateLimit ${dateLimit}`);
+  }
+
+  const transactionToRefund = await getTransaction(transactionId);
+
+  return await issueRefund(transactionToRefund, reason, dateLimit);
+};
+
+const issueRefund = async (transactionToRefund: Transaction, reason: SupportPermittedRefundReason, dateLimit: number) => {
+  const { id: transactionId } = transactionToRefund;
+
+  const { accountId } = extractFieldsFromTransactionId(transactionId);
+  const account = await getAccountInternal({ accountId });
+
   for await (const transaction of walkTransactions(account.transactionHead)) {
     if (transaction.type === 'refund' && transaction.other === transactionId) {
       throw new CodedError('RefundAlreadyIssued', `Refund already issued for transactionId ${transactionId}`);
+    }
+    if (transaction.timestamp < dateLimit) {
+      throw new Error(`Transaction cannot be refunded as is earlier than specified date limit ${dateLimit}`);
     }
     if (transaction.id === transactionId) {
       break;
@@ -153,6 +209,11 @@ router.get(
 );
 
 router.post(
-  '/tx/:transactionId/refund',
-  async (_key, { transactionId }, { reason }) => await refundTransaction(transactionId, reason)
+  '/tx/:transactionId/refund/user',
+  async (_key, { transactionId }, { userId, reason }) => await issueUserRequestedRefund(transactionId, userId, reason)
+);
+
+router.post(
+  '/tx/:transactionId/refund/support',
+  async (_key, { transactionId }, { dateLimit, reason }) => await issueSupportRequestedRefund(transactionId, reason, dateLimit)
 );

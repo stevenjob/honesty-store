@@ -1,18 +1,9 @@
-import * as ms from 'ms';
-
 import { getItem } from '@honesty-store/item/src/client';
 import { CodedError } from '@honesty-store/service/src/error';
 import {
-  assertRefundableTransactionType, createTransaction, getAccount, getTransaction, refundTransaction, Transaction, TransactionBody
+  createTransaction, getAccount, issueUserRequestedRefund, TransactionBody
 } from '@honesty-store/transaction/src/client/index';
 import { getItemPriceFromStore } from './store';
-
-type PermittedRefundReason = 'outOfStock' | 'accidentalPurchase' | 'stockExpired';
-const permittedRefundReasons = ['outOfStock', 'accidentalPurchase', 'stockExpired'];
-
-const isPermittedRefundReason = (reason: string): reason is PermittedRefundReason => {
-  return permittedRefundReasons.some(permittedReason => permittedReason === reason);
-};
 
 const expandItemDetails = async (key, transaction) => {
   const { itemId } = transaction.data;
@@ -44,19 +35,6 @@ const assertValidQuantity = (quantity) => {
   }
 };
 
-const assertUserCanAutoRefundTransaction = (userId: string, transaction: Transaction) => {
-  assertRefundableTransactionType(transaction.type);
-
-  const { id: transactionId, timestamp, data: { userId: transactionUserId } } = transaction;
-  const refundCutOffDate = Date.now() - ms('1h');
-  if (timestamp < refundCutOffDate) {
-    throw new CodedError('AutoRefundPeriodExpired', 'Refunds can only be requested up to 1 hour after initial purchase');
-  }
-  if (transactionUserId == null || transactionUserId !== userId) {
-    throw new Error(`userId contained within transaction ${transactionId} does not match id of user requesting refund (${userId})`);
-  }
-};
-
 export const purchase = async ({ key, itemID, userID, accountID, storeID, quantity }) => {
   assertValidQuantity(quantity);
 
@@ -80,16 +58,8 @@ export const purchase = async ({ key, itemID, userID, accountID, storeID, quanti
   };
 };
 
-export const refund = async ({ key, transactionId, userId, reason }) => {
-
-  if (!isPermittedRefundReason(reason)) {
-    throw new Error('Invalid reason for refund');
-  }
-
-  const transaction = await getTransaction(key, transactionId);
-  assertUserCanAutoRefundTransaction(userId, transaction);
-  return await refundTransaction(key, transactionId, reason);
-};
+export const refund = async ({ key, transactionId, userId, reason }) =>
+  await issueUserRequestedRefund(key, transactionId, userId, reason);
 
 export const getExpandedTransactionsAndBalance = async ({ key, accountID, page = 0 }) => {
   const { balance, transactions: rawTransactions } = await getAccount(key, accountID);
