@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import safeLookupItemImage from '../item/safeLookupItemImage';
 import Currency from '../format/Currency';
-import history from '../history';
 
 const HistoryItem = ({ isTopUp, title, subtitle, timestamp, amount, image, transactionId }) => {
   return (

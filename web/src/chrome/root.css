@@ -13,6 +13,10 @@ textarea, input[type] {
   -webkit-appearance: none;
 }
 
+input[type=radio] {
+  -webkit-appearance: radio;
+}
+
 .btn {
   -webkit-tap-highlight-color: transparent;
   border-radius: 5px;
