@@ -66,6 +66,11 @@ import {
   BOX_RECEIVED_SUCCESS,
   BOX_RECEIVED_FAILURE
 } from '../actions/box-received';
+import {
+  REFUND_REQUEST,
+  REFUND_SUCCESS,
+  REFUND_FAILURE
+} from '../actions/refund';
 import { getInitialState } from '../state';
 
 const requestState = (requestId, updatedProps, state) => ({
@@ -300,6 +305,20 @@ export default (state, action) => {
         ...fullPageErrorState('box-received', action.error, state),
         lastBoxIdMarkedAsReceived: null
       };
+    case REFUND_REQUEST: return requestState('refund', {}, state);
+    case REFUND_SUCCESS: {
+      const { balance, transaction } = action.response;
+      const { user } = state;
+      const updatedStateProps = {
+        user: {
+          ...user,
+          balance,
+          transactions: [transaction, ...user.transactions]
+        }
+      };
+      return completionState('refund', updatedStateProps, state)
+    }
+    case REFUND_FAILURE: return fullPageErrorState('refund', action.error, state)
     default:
       return state;
   }
