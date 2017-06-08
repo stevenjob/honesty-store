@@ -7,6 +7,7 @@ import boxController from './controllers/box';
 import logoutController from './controllers/logout';
 import marketplaceController from './controllers/marketplace';
 import purchaseController from './controllers/purchase';
+import refundController from './controllers/refund';
 import registerController from './controllers/register';
 import sessionController from './controllers/session';
 import signInController from './controllers/signin';
@@ -36,6 +37,7 @@ transactionsController(router);
 supportController(router);
 surveyController(router);
 boxController(router);
+refundController(router);
 
 app.use(router);
 
