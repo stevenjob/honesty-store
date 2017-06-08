@@ -5,12 +5,24 @@ import { CodedError } from '@honesty-store/service/src/error';
 import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
 import { assertValidAccountId, createAccount, getAccountInternal, updateAccount } from './account';
 import {
-  AccountAndTransactions, balanceLimit, InternalAccount, Transaction,
-  TransactionAndBalance, TransactionBody, TransactionDetails, TransactionType
+  AccountAndTransactions,
+  assertValidTransaction,
+  balanceLimit,
+  extractFieldsFromTransactionId,
+  InternalAccount,
+  Transaction,
+  TransactionAndBalance,
+  TransactionBody,
+  TransactionDetails,
+  TransactionType
 } from './client';
 import {
-  assertValidTransaction, createTransactionId, extractFieldsFromTransactionId,
-  getTransaction, getTransactions, hashTransaction, putTransaction, walkTransactions
+  createTransactionId,
+  getTransaction,
+  getTransactions,
+  hashTransaction,
+  putTransaction,
+  walkTransactions
 } from './transaction';
 
 const ACCOUNT_TRANSACTION_CACHE_SIZE = 10;
@@ -196,7 +208,7 @@ router.post(
 
 router.post(
   '/account',
-  async (_key, {}, { accountId }) => {
+  async (_key, { }, { accountId }) => {
     const internalAccount = await createAccount({ accountId });
     const { transactionHead, cachedTransactions, ...externalAccount } = internalAccount;
     return externalAccount;
