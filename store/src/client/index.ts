@@ -1,22 +1,65 @@
 import fetch from '@honesty-store/service/src/fetch';
+import { Transaction } from '@honesty-store/transaction/src/client';
 import isUUID = require('validator/lib/isUUID');
+
+export interface StoreItemDetails {
+  name: string;
+  qualifier?: string;
+  genericName: string;
+  genericNamePlural: string;
+  unit: string;
+  unitPlural: string;
+  image: string;
+  price: number;
+}
+
+export interface StoreItemListing extends StoreItemDetails {
+  id: string;
+  sellerId: string;
+  listCount: number;
+}
+
+interface StoreItemTracking {
+  transactionIds: string[];
+  purchaseCount: number;
+  refundCount: number;
+  availableCount: number;
+}
+
+export type StoreItem = StoreItemListing & StoreItemTracking;
 
 export interface Store {
   id: string;
+  version: number;
   code: string;
   agentId: string;
-  version: number;
+  items: StoreItem[];
 }
 
 import { lambdaBaseUrl } from '@honesty-store/service/src/baseUrl';
 
-const { get } = fetch('store', lambdaBaseUrl);
+const { get, post } = fetch('store', lambdaBaseUrl);
 
 export const getStoreFromCode = (key, code: string) =>
   get<Store>(1, key, `/code/${code}`);
 
 export const getStoreFromId = (key, id: string) =>
   get<Store>(1, key, `/${id}`);
+
+export const listItem = (key, storeId: string, listing: StoreItemListing) =>
+  post<Store>(1, key, `/${storeId}/item`, listing);
+
+export const recordTransaction = (key, transaction: Transaction) =>
+  post<Store>(1, key, `/${transaction.data.storeId}/transaction`, transaction);
+
+export const updateItemDetails = (key, storeId: string, itemId: string, details: StoreItemDetails) =>
+  post<Store>(1, key, `/${storeId}/${itemId}`, details);
+
+export const updateItemCount = (key, storeId: string, itemId: string, count: number, userId: string) =>
+  post<Store>(1, key, `/${storeId}/${itemId}/count`, { count, userId });
+
+export const unlistItem = (key, storeId: string, itemId: string) =>
+  post<Store>(1, key, `/${storeId}/${itemId}/unlist`, {});
 
 export const migrateStoreCodeToId = storeCodeOrId => {
   if (isUUID(storeCodeOrId)) {

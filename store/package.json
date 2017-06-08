@@ -10,7 +10,9 @@
     "build": "npm run tsc && npm run rollup && npm run uglifyjs"
   },
   "dependencies": {
-    "@honesty-store/service": "file:../service"
+    "@honesty-store/cruft": "file:../cruft",
+    "@honesty-store/service": "file:../service",
+    "@honesty-store/transaction": "file:../transaction"
   },
   "devDependencies": {
     "@types/body-parser": "0.0.33",
