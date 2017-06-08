@@ -1,45 +1,150 @@
-import { EnhancedItem, default as cruft } from '@honesty-store/cruft/src/index';
-import { createAssertValidObject, assertValidUuid, assertValidString, assertPositiveInteger } from '@honesty-store/service/src/assert';
-import { CodedError } from '@honesty-store/service/src/error';
-import { error } from '@honesty-store/service/src/log';
-import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
-import { Transaction } from '@honesty-store/transaction/src/client';
 import { config } from 'aws-sdk';
+import { v4 as uuid } from 'uuid';
 
-import { Store, StoreItem, StoreItemDetails, StoreItemListing } from './client';
+import { default as cruft, EnhancedItem } from '@honesty-store/cruft/src/index';
+import {
+  assertNever,
+  assertNonZeroPositiveInteger,
+  assertPositiveInteger,
+  assertValidString,
+  assertValidUuid,
+  createAssertValidObject
+} from '@honesty-store/service/src/assert';
+import { CodedError } from '@honesty-store/service/src/error';
+import { createServiceKey } from '@honesty-store/service/src/key';
+import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
+import { error } from '@honesty-store/service/src/log';
+import { assertValidTransaction, TransactionPurchased } from '@honesty-store/transaction/src/client';
+
+import {
+  Store,
+  StoreEvent,
+  StoreItem,
+  StoreItemAudited,
+  StoreItemListed,
+  StoreItemListing,
+  StoreItemPriceChanged,
+  StoreItemUnlisted
+} from './client';
 
 config.region = process.env.AWS_REGION;
 
-const { read, reduce, update, find } = cruft<Store>({
+const { read, reduce, find } = cruft<Store>({
   tableName: process.env.TABLE_NAME
 });
 
+const lookupItem = (store: Store, itemId: string): StoreItem | null => {
+  for (const item of store.items) {
+    if (item.id === itemId) {
+      return item;
+    }
+  }
+  return null;
+};
+
+const reducer = reduce<TransactionPurchased | StoreEvent>(
+  event => {
+    switch (event.type) {
+      case 'purchase':
+        return event.data.storeId;
+      case 'store-audit':
+      case 'store-price-change':
+      case 'store-list':
+      case 'store-unlist':
+        return event.storeId;
+      default:
+        return assertNever(event);
+    }
+  },
+  event => event.id,
+  (store, event) => {
+    const key = createServiceKey({ service: 'store' });
+    switch (event.type) {
+      case 'purchase': {
+        const { id, type, data: { itemId }, data } = event;
+
+        const item = lookupItem(store, itemId);
+
+        if (item == null) {
+          error(key, `Event ${type} ${id} for non-existent item ${itemId} in ${store.id}`);
+          return store;
+        }
+
+        const quantity = Number(data.quantity);
+
+        item.availableCount -= quantity;
+        item.purchaseCount += quantity;
+
+        return store;
+      }
+      case 'store-audit': {
+        const { id, type, itemId, count } = event;
+
+        const item = lookupItem(store, itemId);
+
+        if (item == null) {
+          error(key, `Event ${type} ${id} for non-existent item ${itemId} in ${store.id}`);
+          return store;
+        }
+
+        item.availableCount = count;
+
+        return store;
+      }
+      case 'store-price-change': {
+        const { id, type, itemId, price } = event;
+
+        const item = lookupItem(store, itemId);
+
+        if (item == null) {
+          error(key, `Event ${type} ${id} for non-existent item ${itemId} in ${store.id}`);
+          return store;
+        }
+
+        item.price = price;
+
+        return store;
+      }
+      case 'store-list': {
+        const { listing } = event;
+
+        const existingItem = lookupItem(store, listing.id);
+
+        if (existingItem != null) {
+          throw new Error(`Listing already exists ${listing.id} in ${store.id}`);
+        }
+
+        const item: StoreItem = {
+          ...listing,
+          availableCount: listing.listCount,
+          purchaseCount: 0,
+          refundCount: 0
+        };
+
+        store.items.push(item);
+
+        return store;
+      }
+      case 'store-unlist': {
+        const { itemId } = event;
+
+        const unlistedItem = lookupItem(store, itemId);
+
+        if (unlistedItem == null) {
+          throw new Error(`Listing does not exist ${itemId} in ${store.id}`);
+        }
+
+        store.items = store.items.filter(item => item !== unlistedItem);
+
+        return store;
+      }
+      default:
+        return assertNever(event);
+    }
+  }
+);
+
 export const router = lambdaRouter('store', 1);
-
-const assertValidStoreItemDetails = createAssertValidObject<StoreItemDetails>({
-  name: assertValidString,
-  qualifier: assertValidString,
-  genericName: assertValidString,
-  genericNamePlural: assertValidString,
-  unit: assertValidString,
-  unitPlural: assertValidString,
-  image: assertValidString,
-  price: assertPositiveInteger
-});
-
-const assertValidStoreItemListing = createAssertValidObject<StoreItemListing>({
-  id: assertValidUuid,
-  sellerId: assertValidUuid,
-  listCount: assertPositiveInteger,
-  name: assertValidString,
-  qualifier: assertValidString,
-  genericName: assertValidString,
-  genericNamePlural: assertValidString,
-  unit: assertValidString,
-  unitPlural: assertValidString,
-  image: assertValidString,
-  price: assertPositiveInteger
-});
 
 const externalise = (store: EnhancedItem<Store>): Store => ({
   id: store.id,
@@ -48,28 +153,6 @@ const externalise = (store: EnhancedItem<Store>): Store => ({
   agentId: store.agentId,
   items: store.items
 });
-
-/*
-quantity: String(quantity),
-itemId: itemID,
-userId: userID,
-storeId: storeID
-*/
-
-const reducer = reduce<Transaction & { type: 'topup' | 'refund', data: { itemId: string, quantity: number, storeId: string } }>(
-  event => event.data.storeId,
-  event => `transaction:${event.id}`,
-  (store, transaction) => {
-
-    const itemIndex = store.items.findIndex(item => item.id === transaction.data.itemId);
-
-    if (itemIndex < 0) {
-      error()
-    }
-
-    return store;
-  }
-);
 
 router.get<Store>(
   '/code/:code',
@@ -93,47 +176,99 @@ router.get<Store>(
   }
 );
 
+const assertValidStoreItemListing = createAssertValidObject<StoreItemListing>({
+  id: assertValidUuid,
+  sellerId: assertValidUuid,
+  listCount: assertNonZeroPositiveInteger,
+  name: assertValidString,
+  qualifier: assertValidString,
+  genericName: assertValidString,
+  genericNamePlural: assertValidString,
+  unit: assertValidString,
+  unitPlural: assertValidString,
+  image: assertValidString,
+  price: assertNonZeroPositiveInteger
+});
+
 router.post<StoreItemListing, Store>(
   '/:storeId/item',
-  async (_key, { storeId }, listing: StoreItemListing) => {
+  async (_key, { storeId }, listing) => {
+    assertValidUuid('storeId', storeId);
     assertValidStoreItemListing(listing);
 
-    const store = await read(storeId);
-
-    const existingListing = store.items.find(item => item.id === listing.id);
-
-    if (existingListing) {
-      throw new Error(`Listing already exists ${listing.id}`);
-    }
-
-    const item: StoreItem = {
-      ...listing,
-      availableCount: listing.listCount,
-      purchaseCount: 0,
-      refundCount: 0,
-      transactionIds: []
+    const event: StoreItemListed = {
+      id: uuid(),
+      type: 'store-list',
+      storeId,
+      listing
     };
 
-    const updatedStore = {
-      ...store,
-      items: [item, ...store.items]
-    };
-
-    return externalise(await update(updatedStore));
+    return externalise(await reducer(event));
   }
 );
 
-// export const recordTransaction = (key, transaction: Transaction) =>
-//   post<Store>(1, key, `/${transaction.data.storeId}/transaction`, transaction);
+router.post<TransactionPurchased, Store>(
+  '/transaction',
+  async (_key, {  }, transaction) => {
+    assertValidTransaction(transaction);
 
-// // seller only
-// export const updateItemDetails = (key, storeId: string, itemId: string, details: StoreItemDetails) =>
-//   post<Store>(1, key, `/${storeId}/${itemId}`, details);
+    return externalise(await reducer(transaction));
+  }
+);
 
-// // anyone (audit maintained locally), availableCount can never exceed listCount - purchaseCount + refundCount
-// export const updateItemCount = (key, storeId: string, itemId: string, count: number, userId: string) =>
-//   post<Store>(1, key, `/${storeId}/${itemId}/count`, { count, userId });
+router.post<{ price: number }, Store>(
+  '/:storeId/:itemId',
+  async (_key, { storeId, itemId }, { price }) => {
+    assertValidUuid('storeId', storeId);
+    assertValidUuid('itemId', itemId);
+    assertNonZeroPositiveInteger('price', price);
 
-// // support only, requires cashing out user
-// export const unlistItem = (key, storeId: string, itemId: string) =>
-//   post<Store>(1, key, `/${storeId}/${itemId}/unlist`, {});
+    const event: StoreItemPriceChanged = {
+      id: uuid(),
+      type: 'store-price-change',
+      storeId,
+      itemId,
+      price
+    };
+
+    return externalise(await reducer(event));
+  }
+);
+
+router.post<{ count: number, userId: string }, Store>(
+  '/:storeId/:itemId',
+  async (_key, { storeId, itemId }, { count, userId }) => {
+    assertValidUuid('storeId', storeId);
+    assertValidUuid('itemId', itemId);
+    assertPositiveInteger('count', count);
+    assertValidUuid('userId', userId);
+
+    const event: StoreItemAudited = {
+      id: uuid(),
+      type: 'store-audit',
+      storeId,
+      itemId,
+      userId,
+      count
+    };
+
+    return externalise(await reducer(event));
+  }
+);
+
+router.post<{ count: number, userId: string }, Store>(
+  '/:storeId/:itemId/unlist',
+  async (_key, { storeId, itemId }, { }) => {
+    assertValidUuid('storeId', storeId);
+    assertValidUuid('itemId', itemId);
+
+    const event: StoreItemUnlisted = {
+      id: uuid(),
+      type: 'store-unlist',
+      storeId,
+      itemId
+    };
+
+    return externalise(await reducer(event));
+  }
+);

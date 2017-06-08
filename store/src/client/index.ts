@@ -19,8 +19,42 @@ export interface StoreItemListing extends StoreItemDetails {
   listCount: number;
 }
 
+export interface StoreItemListed {
+  id: string;
+  type: 'store-list';
+  storeId: string;
+  listing: StoreItemListing;
+}
+
+export interface StoreItemUnlisted {
+  id: string;
+  type: 'store-unlist';
+  storeId: string;
+  itemId: string;
+}
+
+export interface StoreItemAudited {
+  id: string;
+  type: 'store-audit';
+  storeId: string;
+  itemId: string;
+  userId: string;
+  count: number;
+}
+
+export interface StoreItemPriceChanged {
+  id: string;
+  type: 'store-price-change';
+  storeId: string;
+  itemId: string;
+  price: number;
+}
+
+export type StoreItemEvent = StoreItemAudited | StoreItemPriceChanged;
+
+export type StoreEvent = StoreItemEvent | StoreItemListed | StoreItemUnlisted;
+
 interface StoreItemTracking {
-  transactionIds: string[];
   purchaseCount: number;
   refundCount: number;
   availableCount: number;
@@ -46,11 +80,11 @@ export const getStoreFromCode = (key, code: string) =>
 export const getStoreFromId = (key, id: string) =>
   get<Store>(1, key, `/${id}`);
 
+export const recordTransaction = (key, transaction: Transaction) =>
+  post<Store>(1, key, `/transaction`, transaction);
+
 export const listItem = (key, storeId: string, listing: StoreItemListing) =>
   post<Store>(1, key, `/${storeId}/item`, listing);
-
-export const recordTransaction = (key, transaction: Transaction) =>
-  post<Store>(1, key, `/${transaction.data.storeId}/transaction`, transaction);
 
 export const updateItemDetails = (key, storeId: string, itemId: string, details: StoreItemDetails) =>
   post<Store>(1, key, `/${storeId}/${itemId}`, details);

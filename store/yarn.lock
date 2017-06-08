@@ -21,7 +21,7 @@
     uuid "^3.0.1"
     validator "^6.2.1"
 
-"@honesty-store/store@file:../store":
+"@honesty-store/store@file:":
   version "0.0.0"
   dependencies:
     "@honesty-store/service" "file:../service"
