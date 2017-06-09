@@ -1,3 +1,4 @@
+import * as ms from 'ms';
 import isUUID = require('validator/lib/isUUID');
 
 import { createAssertValidUuid } from '@honesty-store/service/lib/assert';
@@ -70,6 +71,7 @@ export const assertValidTransaction = ({ type, amount, data, id, other, next, le
   }
 };
 export const balanceLimit = 1000; // £10
+export const AUTO_REFUND_PERIOD = ms('1h');
 
 export type TransactionType = 'topup' | 'purchase' | 'refund';
 export const transactionTypes = ['topup', 'purchase', 'refund'];

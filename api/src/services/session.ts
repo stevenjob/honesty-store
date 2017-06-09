@@ -1,7 +1,7 @@
 import { getStoreFromId } from '@honesty-store/store';
 import { getUserSurveys } from '@honesty-store/survey';
 import { CardDetails, getCardDetails } from '@honesty-store/topup';
-import { Transaction } from '@honesty-store/transaction';
+import { AUTO_REFUND_PERIOD, Transaction } from '@honesty-store/transaction';
 import { userRegistered } from '@honesty-store/user';
 import { StoreItem, storeItems } from '../services/store';
 import { getExpandedTransactionsAndBalance } from '../services/transaction';
@@ -24,6 +24,7 @@ export interface SessionData {
   refreshToken: string;
   accessToken: string;
   survey: any;
+  autoRefundPeriod: number;
 }
 
 const marketplaceFeature = ({ defaultStoreId }) => {
@@ -102,6 +103,7 @@ export const getSessionData = async (key, { user }): Promise<SessionData> => {
     store,
     refreshToken,
     accessToken,
-    survey
+    survey,
+    autoRefundPeriod: AUTO_REFUND_PERIOD
   };
 };

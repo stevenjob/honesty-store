@@ -1,5 +1,4 @@
 import { config } from 'aws-sdk';
-import * as ms from 'ms';
 
 import { CodedError } from '@honesty-store/service/lib/error';
 import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
@@ -7,6 +6,7 @@ import { assertValidAccountId, createAccount, getAccountInternal, updateAccount 
 import {
   AccountAndTransactions,
   assertValidTransaction,
+  AUTO_REFUND_PERIOD,
   balanceLimit,
   extractFieldsFromTransactionId,
   InternalAccount,
@@ -136,7 +136,7 @@ const issueUserRequestedRefund = async (transactionId, userId, reason) => {
 
   assertRefundableTransactionType(transactionToRefund.type);
 
-  const refundCutOffDate = Date.now() - ms('1h');
+  const refundCutOffDate = Date.now() - AUTO_REFUND_PERIOD;
   assertUserCanAutoRefundTransaction(userId, transactionToRefund, refundCutOffDate);
 
   return await issueRefund(transactionToRefund, reason, refundCutOffDate);
