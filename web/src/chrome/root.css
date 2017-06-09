@@ -27,6 +27,6 @@ input[type=radio] {
   box-shadow: none;
 }
 
-.out-of-stock {
+.grayscale {
   filter: grayscale();
 }

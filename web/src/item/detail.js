@@ -100,7 +100,7 @@ const ItemDetail = ({
             </h3>}
           <div className="col-6 mx-auto">
             <div
-              className={`bg-center bg-no-repeat ${count === 0 ? 'out-of-stock' : ''}`}
+              className={`bg-center bg-no-repeat ${count === 0 ? 'grayscale' : ''}`}
               style={{
                 backgroundImage: `url(${safeLookupItemImage(image)})`,
                 paddingBottom: '100%',

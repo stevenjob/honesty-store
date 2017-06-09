@@ -13,9 +13,15 @@ const History = ({ transactions, balance }) => (
   </Chrome>
 );
 
-const mapStateToProps = ({ user: { transactions, balance } }) => ({
-  transactions: transactions || [],
-  balance: balance || 0
-});
+const mapStateToProps = ({ user: { transactions, balance } }) => {
+  const refundTransactions = transactions.filter(({ type }) => type === 'refund');
+  const mergedTransactions = transactions.filter(({ id, type, other }) =>
+    !(type === 'purchase' && refundTransactions.some(({ other }) => other === id)));
+
+  return {
+    transactions: mergedTransactions || [],
+    balance: balance || 0
+  };
+};
 
 export default connect(mapStateToProps)(History);
