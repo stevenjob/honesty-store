@@ -4,7 +4,6 @@ import {
   createTransaction,
   getAccount,
   issueUserRequestedRefund,
-  TransactionAndBalance,
   TransactionBody
 } from '@honesty-store/transaction';
 import { getItemPriceFromStore } from './store';
@@ -62,8 +61,13 @@ export const purchase = async ({ key, itemID, userID, accountID, storeID, quanti
   };
 };
 
-export const refund = async ({ key, transactionId, userId, reason }): Promise<TransactionAndBalance> =>
-  await issueUserRequestedRefund(key, transactionId, userId, reason);
+export const refund = async ({ key, transactionId, userId, reason }) => {
+  const { transaction, balance } = await issueUserRequestedRefund(key, transactionId, userId, reason);
+  return {
+    balance,
+    transaction: await expandItemDetails(key, transaction)
+  };
+};
 
 export const getExpandedTransactionsAndBalance = async ({ key, accountID, page = 0 }) => {
   const { balance, transactions: rawTransactions } = await getAccount(key, accountID);
