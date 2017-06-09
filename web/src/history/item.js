@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import safeLookupItemImage from '../item/safeLookupItemImage';
 import Currency from '../format/Currency';
 
-const HistoryItem = ({ isRefundable = true, type, title, subtitle, timestamp, amount, image, transactionId }) => {
+const HistoryItem = ({ isRefundable = false, type, title, subtitle, timestamp, amount, image, transactionId }) => {
   return (
     <div className={`btn regular navy col-12 flex ${type === 'refund' ? 'grayscale' : ''}`}>
       <div className="bg-center bg-no-repeat"
@@ -40,7 +40,7 @@ const formatItem = (name, quantity) =>
   `${name}${quantity > 1 ? ` x ${quantity}` : ''}`;
 
 const mapStateToProps = (
-  { user: { transactions } },
+  { user: { transactions }, autoRefundPeriod },
   { transaction }
 ) => {
   const { type, timestamp, amount, data, id: transactionId } = transaction;
@@ -56,12 +56,13 @@ const mapStateToProps = (
       };
     case 'purchase':
     case 'refund':
-      const { item: { id, image, name, qualifier }, quantity } = data;
+      const { item: { image, name, qualifier }, quantity } = data;
       return {
         ...commonProps,
         image: safeLookupItemImage(image),
         title: formatItem(name || 'Unknown Item', quantity),
-        subtitle: qualifier
+        subtitle: qualifier,
+        isRefundable: type === 'purchase' && timestamp >= (Date.now() - autoRefundPeriod)
       };
     default:
       return {
