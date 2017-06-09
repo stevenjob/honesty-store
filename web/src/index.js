@@ -44,6 +44,7 @@ import ConfirmStoreChange from './confirm-store-change/index';
 import ReceivedBoxReport from './received-box/index';
 import ReceivedBoxSuccess from './received-box/success';
 import RefundRequest from './refund-request/index';
+import RefundSuccess from './refund-request/success';
 import reducer from './reducers/reducer';
 import { performInitialise } from './actions/inititialise';
 import './chrome/style';
@@ -155,6 +156,7 @@ ReactDOM.render(
           <Route path="profile/logout" component={LogoutProfile} />
           <Route path="agent/received/success" component={ReceivedBoxSuccess} />
           <Route path="agent/received/:boxId" component={ReceivedBoxReport} />
+          <Route path="refund/success" component={RefundSuccess} />
           <Route path="refund/:transactionId" component={RefundRequest} />
           <Route path="help">
             <IndexRoute component={Help} />
