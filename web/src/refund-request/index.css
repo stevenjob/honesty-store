@@ -1,0 +1,40 @@
+.refund-request input[type="radio"] {
+  display: none;
+}
+
+.refund-request label {
+  position: relative;
+}
+
+.refund-request span::before, span::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.refund-request span.radio:hover {
+  cursor: pointer;
+}
+
+.refund-request span.radio::before {
+  left: -30px;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #A9B8B9;
+  border-radius: 10px;
+}
+
+.refund-request span.radio::after {
+  left: -28px;
+  width: 13px;
+  height: 13px;
+  border-radius: 7px;
+  transition: background-color .25s;
+}
+
+.refund-request input[type="radio"]:checked + label span.radio::after {
+  left: -28px;
+  background-color: #43BCD6;
+}

@@ -3,8 +3,13 @@ import { connect } from 'react-redux';
 import { performRefund } from '../actions/refund';
 import { Back } from '../chrome/link';
 import Full from '../layout/full';
+import './index.css';
 
-const Radio = ({ name, value, onClick }) => <input type="radio" name={name} id={value} value={value} onClick={() => onClick(value)} />;
+const Radio = ({ name, value, onClick, text }) =>
+  <div>
+    <input type="radio" name={name} id={value} value={value} onClick={() => onClick(value)} />
+    <label htmlFor={value} className="h3"><span className="radio"></span>{text}</label>
+  </div>;
 
 class RefundRequest extends React.Component {
   constructor(props) {
@@ -38,28 +43,21 @@ class RefundRequest extends React.Component {
 
     return (
       <Full left={<Back></Back>}>
-        <h2 className="regular">Mind telling us why you'd like a refund for your {itemName}?</h2>
-        <form className="col-10 mx-auto center">
-          <div className="py2 left-align">
-            <span className="mr2">
-              <Radio name="refund" value="accidentalPurchase" onClick={() => this.handleRadioClick('accidentalPurchase')} />
-            </span>
-            <label htmlFor="accidentalPurchase" className="h3">I didn't mean to buy it</label>
-          </div>
-          <div className="py2 left-align">
-            <span className="mr2">
-              <Radio name="refund" value="outOfStock" onClick={() => this.handleRadioClick('outOfStock')} />
-            </span>
-            <label htmlFor="outOfStock" className="h3">It's out of stock</label>
-          </div>
-          <div className="py2 left-align">
-            <span className="mr2">
-             <Radio name="refund" value="stockExpired" onClick={() => this.handleRadioClick('stockExpired')} />
-            </span>
-            <label htmlFor="stockExpired" className="h3">It's passed its expiry date</label>
-          </div>
+        <div className="refund-request">
+          <h2 className="regular">Mind telling us why you'd like a refund for your {itemName}?</h2>
+          <form className="col-8 sm-col-6 mx-auto center">
+            <div className="py2 left-align">
+              <Radio name="refund" value="accidentalPurchase" text="I didn't mean to buy it" onClick={() => this.handleRadioClick('accidentalPurchase')} />
+            </div>
+            <div className="py2 left-align">
+              <Radio name="refund" value="outOfStock" text="It's out of stock" onClick={() => this.handleRadioClick('outOfStock')} />
+            </div>
+            <div className="py2 left-align">
+              <Radio name="refund" value="stockExpired" text="It's passed its expiry date" onClick={() => this.handleRadioClick('stockExpired')} />
+            </div>
+          </form>
           <p className="btn btn-primary btn-big center mt2 h3" onClick={() => this.handleRefundRequest()}>Submit refund request</p>
-        </form>
+        </div>
       </Full>
     );
   }
