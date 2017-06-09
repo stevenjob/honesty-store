@@ -43,27 +43,22 @@ const extractBoxItems = (boxes: Box[], itemId: string, matchingCondition = (_box
     );
 };
 
-const mostRecentBoxItem = (boxes: Box[], itemID: string): BoxItem => {
-  const boxesByDateReceived = boxes.slice().sort((a, b) => a.received - b.received);
-  const inStockBoxItems = extractBoxItems(boxesByDateReceived, itemID, (({ depleted }) => depleted == null ));
+const mostExpensiveBoxItem = (boxes: Box[], itemID: string): BoxItem => {
+  const mostExpensive = (items: BoxItem[]) =>
+    items.reduce((top, item) => top.total > item.total ? top : item);
 
-  if (inStockBoxItems.length === 0) {
-    const itemsByDateReceived = extractBoxItems(boxesByDateReceived, itemID);
-    const itemsByDateMarkedDepleted = itemsByDateReceived.slice().sort((a, b) => b.depleted - a.depleted);
-
-    const mostRecentDepletion = itemsByDateMarkedDepleted[0].depleted;
-    const itemsMarkedDepletedOnDate = itemsByDateMarkedDepleted.filter(({ depleted }) => depleted === mostRecentDepletion );
-
-    return itemsMarkedDepletedOnDate.length > 1 ? itemsByDateReceived[0] : itemsByDateMarkedDepleted[0];
+  const inStockItems = extractBoxItems(boxes, itemID, (({ depleted }) => depleted == null ));
+  if (inStockItems.length) {
+    return mostExpensive(inStockItems);
   }
-  return inStockBoxItems[0];
+  return mostExpensive(extractBoxItems(boxes, itemID));
 };
 
 export const boxIsReceivedAndOpen = (box) => box.closed == null && box.received != null;
 
 export const getItemPriceFromStore = async (key, storeId: string, itemID: string) => {
   const boxes = await getBoxesForStore(key, storeId, boxIsReceivedAndOpen);
-  const { total } = mostRecentBoxItem(boxes, itemID);
+  const { total } = mostExpensiveBoxItem(boxes, itemID);
   return total;
 };
 
@@ -135,7 +130,7 @@ export const storeItems = async (key, storeId): Promise<StoreItem[]> => {
     .values());
 
   return uniqueItems.map(item => {
-    const mostRecentInstance = mostRecentBoxItem(openBoxes, item.id);
+    const mostRecentInstance = mostExpensiveBoxItem(openBoxes, item.id);
     const { total, expiry } = mostRecentInstance;
     const breakdown = getPriceBreakdown(mostRecentInstance);
 
