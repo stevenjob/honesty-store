@@ -5,11 +5,24 @@ import { Link } from 'react-router';
 import safeLookupItemImage from '../item/safeLookupItemImage';
 import Currency from '../format/Currency';
 
-const HistoryItem = ({ isRefundable = false, type, title, subtitle, timestamp, amount, image, transactionId }) => {
+const HistoryItem = ({
+  isRefundable = false,
+  type,
+  title,
+  subtitle,
+  timestamp,
+  amount,
+  image,
+  transactionId
+}) => {
   return (
-    <div className={`btn regular navy col-12 flex ${type === 'refund' ? 'grayscale' : ''}`}>
-      <div className="bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${image})`, width: '2.375rem' }}>
+    <div
+      className={`btn regular navy col-12 flex ${type === 'refund' ? 'grayscale' : ''}`}
+    >
+      <div
+        className="bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${image})`, width: '2.375rem' }}
+      >
         {'\u00a0'}
       </div>
       <div className="flex-column flex-auto ml2">
@@ -17,14 +30,9 @@ const HistoryItem = ({ isRefundable = false, type, title, subtitle, timestamp, a
         {subtitle && <p className="mt0 mb0 h6">{subtitle}</p>}
         <p className="mt0 mb0 h6 gray">{moment(timestamp).fromNow()}</p>
         <p className="my0 h6">
-          {
-            isRefundable &&
-            <Link to={`refund/${transactionId}`}>Request a refund</Link>
-          }
-          {
-            type === 'refund' &&
-            'Refund issued'
-          }
+          {isRefundable &&
+            <Link to={`refund/${transactionId}`}>Request a refund</Link>}
+          {type === 'refund' && 'Refund issued'}
         </p>
       </div>
       <div className="col-2 ml1 flex flex-none items-center justify-end">
@@ -62,12 +70,13 @@ const mapStateToProps = (
         image: safeLookupItemImage(image),
         title: formatItem(name || 'Unknown Item', quantity),
         subtitle: qualifier,
-        isRefundable: type === 'purchase' && timestamp >= (Date.now() - autoRefundPeriod)
+        isRefundable: type === 'purchase' &&
+          timestamp >= Date.now() - autoRefundPeriod
       };
     default:
       return {
         ...commonProps,
-        text: 'Unknown',
+        text: 'Unknown'
       };
   }
 };

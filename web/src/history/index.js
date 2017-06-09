@@ -14,9 +14,14 @@ const History = ({ transactions, balance }) => (
 );
 
 const mapStateToProps = ({ user: { transactions, balance } }) => {
-  const refundTransactions = transactions.filter(({ type }) => type === 'refund');
-  const mergedTransactions = transactions.filter(({ id, type, other }) =>
-    !(type === 'purchase' && refundTransactions.some(({ other }) => other === id)));
+  const refundTransactions = transactions.filter(
+    ({ type }) => type === 'refund'
+  );
+  const mergedTransactions = transactions.filter(
+    ({ id, type, other }) =>
+      !(type === 'purchase' &&
+        refundTransactions.some(({ other }) => other === id))
+  );
 
   return {
     transactions: mergedTransactions || [],
