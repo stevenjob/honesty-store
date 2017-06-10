@@ -2,6 +2,9 @@
 # yarn lockfile v1
 
 
+"@honesty-store/cruft@file:../cruft":
+  version "0.0.0"
+
 "@honesty-store/service@file:../service":
   version "0.0.0"
   dependencies:
@@ -21,7 +24,9 @@
 "@honesty-store/store@file:../store":
   version "0.0.0"
   dependencies:
+    "@honesty-store/cruft" "file:../cruft"
     "@honesty-store/service" "file:../service"
+    "@honesty-store/transaction" "file:../transaction"
 
 "@honesty-store/transaction@file:../transaction":
   version "0.0.0"

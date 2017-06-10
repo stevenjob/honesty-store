@@ -2,6 +2,9 @@
 # yarn lockfile v1
 
 
+"@honesty-store/cruft@file:../cruft":
+  version "0.0.0"
+
 "@honesty-store/service@file:../service":
   version "0.0.0"
   dependencies:
@@ -21,7 +24,16 @@
 "@honesty-store/store@file:../store":
   version "0.0.0"
   dependencies:
+    "@honesty-store/cruft" "file:../cruft"
     "@honesty-store/service" "file:../service"
+    "@honesty-store/transaction" "file:../transaction"
+
+"@honesty-store/transaction@file:":
+  version "0.0.0"
+  dependencies:
+    "@honesty-store/service" "file:../service"
+    "@honesty-store/store" "file:../store"
+    json-stable-stringify "^1.0.1"
 
 "@types/express-serve-static-core@*":
   version "4.0.45"
