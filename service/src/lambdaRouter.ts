@@ -26,9 +26,18 @@ export interface LambdaRouter {
   put<Body, Result>(path: string, action: LambdaBodyAction<Body, Result>);
 }
 
+interface StringMap {
+  [key: string]: string;
+}
+
+interface Endpoint<Body, Result> {
+  invoke: LambdaBodyAction<Body, Result>;
+  parse(method: string, path: string): StringMap | undefined;
+}
+
 export const lambdaRouter = (service: string, version: number): LambdaRouter => {
 
-  const endpoints = [];
+  const endpoints : Endpoint<any, any>[] = [];
 
   const handler: any = ({ serviceSecret, key, method, path, body }: any, { succeed }: any) => {
     const timer = time();
@@ -69,7 +78,7 @@ export const lambdaRouter = (service: string, version: number): LambdaRouter => 
   };
 
   const createEndpoint = <Body, Result>(method: 'get' | 'post' | 'put', path: string, action: LambdaBodyAction<Body, Result>) => {
-    const pathKeys = [];
+    const pathKeys: { name: string }[] = [];
     const pathRegex = pathToRegexp(`/${service}/v${version}${path}`, pathKeys);
     endpoints.push({
       parse: (requestMethod, requestPath) => {
@@ -80,7 +89,7 @@ export const lambdaRouter = (service: string, version: number): LambdaRouter => 
         if (matches == null) {
           return;
         }
-        const params = {};
+        const params: StringMap = {};
         for (let i = 1; i < matches.length; i++) {
           params[pathKeys[i - 1].name] = matches[i];
         }

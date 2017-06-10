@@ -8,16 +8,28 @@ import { createServiceKey, Key } from './key';
 import { error, info } from './log';
 import { signServiceSecret } from './serviceSecret';
 
-interface ApiResponse<T> {
-  response?: T;
-  error?: {
+interface ApiResponseSuccess<T> {
+  response: T;
+}
+
+interface ApiResponseError {
+  error: {
     message: string;
     code: ErrorCode;
   };
 }
 
+type ApiResponse<T> = ApiResponseSuccess<T> | ApiResponseError;
+
+const isApiResponseError = <T>(response: ApiResponse<T>): response is ApiResponseError =>
+  'error' in response;
+
 const getFunctionPrefix = (baseUrl) => {
-  const branch = parseUrl(baseUrl).hostname.split('.')[0];
+  const { hostname } = parseUrl(baseUrl);
+  if (hostname == null) {
+    throw new Error(`Failed to parse ${baseUrl}`);
+  }
+  const branch = hostname.split('.')[0];
   return branch === 'live' ? 'honesty-store-' : `hs-${branch}-` ;
 };
 
@@ -58,12 +70,12 @@ export default (service: string, baseUrl = defaultBaseUrl) => {
       throw new Error(`${method} ${url} failed (couldn't parse json), HTTP ${response.StatusCode}`);
     }
 
-    if (response.StatusCode < 200 || response.StatusCode >= 300) {
+    if (response.StatusCode == null || response.StatusCode < 200 || response.StatusCode >= 300) {
       error(key, `failed non-2xx ${method} ${url} ${response.StatusCode}`);
       throw new Error(`${method} ${url} failed (non-2xx response), HTTP ${response.StatusCode}`);
     }
 
-    if (json.error) {
+    if (isApiResponseError(json)) {
       error(key, `error ${method} ${url} ${json.error.message}`);
 
       if (json.error.code) {

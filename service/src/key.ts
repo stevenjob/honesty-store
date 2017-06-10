@@ -15,7 +15,7 @@ export interface AuthenticationKey extends Key {
   setUserId(userId: string);
 }
 
-const createKey = ({ service, correlationKey = uuid(), tags = {} }) => {
+const createKey = ({ service, correlationKey = uuid(), tags = {} }: { service: string, correlationKey?: string, tags?: any }) => {
   return <Key>{
     __IS__A__KEY__: void 0,
     service,
