@@ -14,7 +14,9 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "@types/node": "0.0.2",
+    "@types/node": "0.0.2"
+  },
+  "peerDependencies": {
     "aws-sdk": "2.22.0"
   }
 }

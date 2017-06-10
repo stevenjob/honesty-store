@@ -9,8 +9,7 @@
     "build": "npm run tsc && npm run rollup && npm run uglifyjs"
   },
   "devDependencies": {
-    "@types/node": "0.0.2",
-    "aws-sdk": "2.22.0"
+    "@types/node": "0.0.2"
   },
   "dependencies": {
     "@honesty-store/item": "file:../item",
@@ -19,5 +18,8 @@
     "@honesty-store/transaction": "file:../transaction",
     "@honesty-store/user": "file:../user",
     "csv": "^1.1.1"
+  },
+  "peerDependencies": {
+    "aws-sdk": "2.22.0"
   }
 }

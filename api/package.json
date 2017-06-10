@@ -31,10 +31,12 @@
     "@types/mocha": "^2.2.41",
     "@types/node": "^7.0.0",
     "@types/node-fetch": "^1.6.7",
-    "aws-sdk": "2.22.0",
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
     "request": "^2.79.0"
+  },
+  "peerDependencies": {
+    "aws-sdk": "2.22.0"
   }
 }

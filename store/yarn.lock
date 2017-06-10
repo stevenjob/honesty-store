@@ -24,7 +24,9 @@
 "@honesty-store/store@file:":
   version "0.0.0"
   dependencies:
+    "@honesty-store/cruft" "file:../cruft"
     "@honesty-store/service" "file:../service"
+    "@honesty-store/transaction" "file:../transaction"
 
 "@honesty-store/transaction@file:../transaction":
   version "0.0.0"
