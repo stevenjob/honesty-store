@@ -12,7 +12,7 @@ const Radio = ({ name, value, onClick, text }) => (
       name={name}
       id={value}
       value={value}
-      onClick={() => onClick(value)}
+      onClick={() => onClick()}
     />
     <label htmlFor={value} className="h3 inline-block">
       <span className="mx2 radio" />{text}
