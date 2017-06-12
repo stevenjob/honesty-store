@@ -18,10 +18,11 @@
     "typescript": "^2.3.2"
   },
   "scripts": {
-    "start-dynamodb": "docker run -d --name dynamodb -p 8000:8000 deangiberson/aws-dynamodb-local",
-    "stop-dynamodb": "docker rm -f dynamodb",
-    "test": "npm run build && npm run start-dynamodb && jest && npm run stop-dynamodb",
-    "build": "../node_modules/.bin/tsc"
+    "start-dynamodb": "docker run -d --name dynamodb -p 8000:8000 deangiberson/aws-dynamodb-local || exit 0",
+    "stop-dynamodb": "docker rm -f dynamodb || exit 0",
+    "test": "npm run start-dynamodb && jest && npm run stop-dynamodb",
+    "build": "npm run tsc && npm run test",
+    "tsc": "../node_modules/.bin/tsc"
   },
   "jest": {
     "transform": {
