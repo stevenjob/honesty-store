@@ -11,7 +11,7 @@ const Home = ({ performRegister }) => (
         <h1 className="my0 mx2">
           <img src={logo} alt="honesty.store" />
         </h1>
-        <h3 className="regular">Buy snacks at work, pay online</h3>
+        <h3 className="regular">The digital honesty box</h3>
 
         <hr className="border-none py2 sm-my4" />
 
