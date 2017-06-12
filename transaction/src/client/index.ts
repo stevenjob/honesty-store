@@ -12,12 +12,12 @@ export const extractFieldsFromTransactionId = (id: string) => {
   return {
     accountId,
     transactionId,
-    ...rest
+    rest
   };
 };
 
 export const assertValidTransactionId = (id) => {
-  const { accountId, transactionId, ...rest } = extractFieldsFromTransactionId(id);
+  const { accountId, transactionId, rest } = extractFieldsFromTransactionId(id);
 
   if (rest.length) {
     throw new Error(`Transaction id isn't <accountId>:<transactionHash> (${id})`);
