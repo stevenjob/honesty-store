@@ -47,7 +47,7 @@ export const performRefund = ({ transactionId, reason }) => async (
     );
 
     dispatch(refundSuccess(response));
-    history.replace(`/refund/success`);
+    history.replace(`/refund/${transactionId}/success`);
   } catch (e) {
     dispatch(refundFailure(e));
   }

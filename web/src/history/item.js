@@ -34,7 +34,7 @@ const HistoryItem = ({
         <p className="my0 h6 gray">{moment(timestamp).fromNow()}</p>
         <p className="my0 h6">
           {isRefundable &&
-            <Link to={`refund/${transactionId}`}>Request a refund</Link>}
+            <Link to={`refund/${transactionId}/request`}>Request a refund</Link>}
           {type === 'refund' && 'Refund issued'}
         </p>
       </div>

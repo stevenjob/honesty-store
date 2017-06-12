@@ -157,9 +157,9 @@ ReactDOM.render(
           <Route path="profile/logout" component={LogoutProfile} />
           <Route path="agent/received/success" component={ReceivedBoxSuccess} />
           <Route path="agent/received/:boxId" component={ReceivedBoxReport} />
-          <Route path="refund" component={RefundGuard}>
+          <Route path="refund/:transactionId" component={RefundGuard}>
+            <Route path="request" component={RefundRequest} />
             <Route path="success" component={RefundSuccess} />
-            <Route path=":transactionId" component={RefundRequest} />
           </Route>
           <Route path="help">
             <IndexRoute component={Help} />
