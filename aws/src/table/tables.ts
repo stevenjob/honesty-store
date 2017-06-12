@@ -558,7 +558,11 @@ const dirToTable = {
         id: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
         code: 'dev-test',
         agentId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649',
-        version: 0
+        version: 0,
+        items: [],
+        created: Date.now(),
+        modified: Date.now(),
+        lastEvent: null
       }
     ]
   })
