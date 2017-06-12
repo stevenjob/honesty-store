@@ -53,8 +53,11 @@ class RefundRequest extends React.Component {
       <Full left={<Back />}>
         <div className="refund-request">
           <h2 className="regular">
-            Mind telling us why you'd like a refund for your {itemName}?
+            Want a refund?
           </h2>
+          <p>
+            Please let us know why you'd like a refund for your {itemName}?
+          </p>
           <form className="col-11 sm-col-8 mx-auto center">
             <div className="py2 left-align">
               <Radio
@@ -68,7 +71,7 @@ class RefundRequest extends React.Component {
               <Radio
                 name="refund"
                 value="outOfStock"
-                text="It's out of stock"
+                text="The item's out of stock"
                 onClick={() => this.handleRadioClick('outOfStock')}
               />
             </div>
