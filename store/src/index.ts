@@ -33,14 +33,8 @@ const { read, reduce, find } = cruft<Store>({
   tableName: process.env.TABLE_NAME
 });
 
-const lookupItem = (store: Store, itemId: string): StoreItem | null => {
-  for (const item of store.items) {
-    if (item.id === itemId) {
-      return item;
-    }
-  }
-  return null;
-};
+const lookupItem = (store: Store, itemId: string): StoreItem | undefined =>
+  store.items.find(({ id }) => itemId === id);
 
 const reducer = reduce<TransactionPurchased | StoreEvent>(
   event => {
