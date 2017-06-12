@@ -42,7 +42,11 @@ interface HasMetadata {
   /**
    * Last event to be reduced on to this aggregate or null for non-aggregate records.
    */
-  lastEvent?: EventItem;
+  lastReceived?: EventItem;
+  /**
+   * Last event to be emitted by this aggregate or null for non-aggregate records.
+   */
+  lastEmitted?: EventItem;
 }
 
 export type AbstractItem = HasId & HasVersion;
@@ -55,7 +59,7 @@ export type EnhancedItem<T extends AbstractItem> = T & HasVersion & HasMetadata;
 
 export type PrototypicalItem<T extends AbstractItem> = Partial<T>;
 
-export type EventItem = AbstractItem & { previousId?: string, data: any };
+export type EventItem = AbstractItem & { previous?: string, data: AbstractItem };
 
 export interface Configuration {
   client: DynamoDB.DocumentClient;
@@ -65,7 +69,7 @@ export interface Configuration {
 export interface Cruft<T extends AbstractItem> {
   create(item: NewItem<T>): Promise<EnhancedItem<T>>;
   read(id: string): Promise<EnhancedItem<T>>;
-  reduce<Event>(
+  reduce<Event extends AbstractItem>(
     aggregateIdSelector: (event: Event) => string,
     eventIdSelector: (event: Event) => string,
     reducer: (aggregate: EnhancedItem<T>, event: Event) => EnhancedItem<T>
@@ -77,7 +81,7 @@ export interface Cruft<T extends AbstractItem> {
   truncate(item: AbstractItem): Promise<void>;
 }
 
-export default <T extends AbstractItem, Event = any>({
+export default <T extends AbstractItem, Event extends AbstractItem = AbstractItem>({
   endpoint = process.env.AWS_DYNAMODB_ENDPOINT,
   region = process.env.AWS_REGION,
   tableName

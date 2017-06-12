@@ -3,7 +3,7 @@ import { AbstractItem, Configuration, EnhancedItem, EventItem } from './index';
 import { read } from './read';
 import { update } from './update';
 
-export const reduce = <Aggregate extends AbstractItem, Event>({ client, tableName }: Configuration) =>
+export const reduce = <Aggregate extends AbstractItem, Event extends AbstractItem>({ client, tableName }: Configuration) =>
   (
     aggregateIdSelector: (event: Event) => string,
     eventIdSelector: (event: Event) => string,
@@ -17,9 +17,9 @@ export const reduce = <Aggregate extends AbstractItem, Event>({ client, tableNam
 
       const eventId = eventIdSelector(event);
 
-      const { lastEvent } = aggregate;
+      const { lastReceived: previousLastReceived } = aggregate;
 
-      if (lastEvent != null && lastEvent.id === eventId) {
+      if (previousLastReceived != null && previousLastReceived.id === eventId) {
         return aggregate;
       }
 
@@ -37,26 +37,28 @@ export const reduce = <Aggregate extends AbstractItem, Event>({ client, tableNam
         return aggregate;
       }
 
-      if (lastEvent != null) {
+      if (previousLastReceived != null) {
         try {
-          await create<EventItem>({ client, tableName })(<EventItem & { version: 0 }>lastEvent);
+          await create<EventItem>({ client, tableName })(<EventItem & { version: 0 }>previousLastReceived);
         } catch (e) {
-          if (e.message !== `Item already exists ${lastEvent.id}`) {
+          if (e.message !== `Item already exists ${previousLastReceived.id}`) {
             throw e;
           }
         }
       }
 
+      const updatedLastReceived: EventItem = {
+        id: eventId,
+        version: 0,
+        data: event,
+        previous: previousLastReceived && previousLastReceived.id
+      };
+
       const updatedAggregate = Object.assign(
         {},
         reducer(aggregate, event),
         {
-          lastEvent: {
-            id: eventId,
-            version: 0,
-            data: event,
-            previousId: lastEvent != null ? lastEvent.id : null
-          }
+          lastReceived: updatedLastReceived
         }
       );
 
