@@ -161,6 +161,10 @@ const issueRefund = async (transactionToRefund: Transaction, reason: SupportPerm
   const { accountId } = extractFieldsFromTransactionId(transactionId);
   const account = await getAccountInternal({ accountId });
 
+  if (account.transactionHead == null) {
+    throw new Error('No transactions to refund');
+  }
+
   for await (const transaction of walkTransactions(account.transactionHead)) {
     if (transaction.type === 'refund' && transaction.other === transactionId) {
       throw new CodedError('RefundAlreadyIssued', `Refund already issued for transactionId ${transactionId}`);

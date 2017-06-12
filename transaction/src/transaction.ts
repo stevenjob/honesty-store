@@ -55,14 +55,16 @@ export const getTransaction = async (id) => {
 };
 
 // tslint:disable-next-line:no-function-expression
-export const walkTransactions = async function*(transactionId: string): AsyncIterableIterator<Transaction> {
+export const walkTransactions = async function* (transactionId: string): AsyncIterableIterator<Transaction> {
   const transaction = await getTransaction(transactionId);
   yield transaction;
-  yield* walkTransactions(transaction.next);
+  if (transaction.next != null) {
+    yield* walkTransactions(transaction.next);
+  }
 };
 
 export const getTransactions = async ({ transactionId, limit = Infinity }): Promise<Transaction[]> => {
-  const transactions = [];
+  const transactions: Transaction[] = [];
   for await (const transaction of walkTransactions(transactionId)) {
     if (transactions.length >= limit) {
       break;
