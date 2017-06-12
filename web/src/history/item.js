@@ -13,7 +13,8 @@ const HistoryItem = ({
   timestamp,
   amount,
   image,
-  transactionId
+  transactionId,
+  href
 }) => {
   return (
     <div
@@ -26,8 +27,10 @@ const HistoryItem = ({
         {'\u00a0'}
       </div>
       <div className="flex-column flex-auto ml2">
-        <h4 className="my0">{title}</h4>
-        {subtitle && <p className="mt0 mb0 h6">{subtitle}</p>}
+        <Link className="navy" to={href}>
+          <h4 className="my0">{title}</h4>
+          {subtitle && <p className="mt0 mb0 h6">{subtitle}</p>}
+        </Link>
         <p className="my0 h6 gray">{moment(timestamp).fromNow()}</p>
         <p className="my0 h6">
           {isRefundable &&
@@ -48,7 +51,7 @@ const formatItem = (name, quantity) =>
   `${name}${quantity > 1 ? ` x ${quantity}` : ''}`;
 
 const mapStateToProps = (
-  { user: { transactions }, autoRefundPeriod },
+  { user: { transactions }, store: { items }, autoRefundPeriod },
   { transaction }
 ) => {
   const { type, timestamp, amount, data, id: transactionId } = transaction;
@@ -60,18 +63,21 @@ const mapStateToProps = (
       return {
         ...commonProps,
         image: require('./assets/top-up.svg'),
-        title: 'TOP UP'
+        title: 'TOP UP',
+        href: '/topup'
       };
     case 'purchase':
     case 'refund':
-      const { item: { image, name, qualifier }, quantity } = data;
+      const { item: { id: itemId, image, name, qualifier }, quantity } = data;
+      const itemExistsInStore = items.some(item => item.id === itemId);
       return {
         ...commonProps,
         image: safeLookupItemImage(image),
         title: formatItem(name || 'Unknown Item', quantity),
         subtitle: qualifier,
         isRefundable: type === 'purchase' &&
-          timestamp >= Date.now() - autoRefundPeriod
+          timestamp >= Date.now() - autoRefundPeriod,
+        href: itemExistsInStore ? `/item/${itemId}` : `/history`
       };
     default:
       return {
