@@ -14,8 +14,8 @@ const Radio = ({ name, value, onClick, text }) => (
       value={value}
       onClick={() => onClick(value)}
     />
-    <label htmlFor={value} className="h3">
-      <span className="radio" />{text}
+    <label htmlFor={value} className="h3 inline-block">
+      <span className="mx2 radio" />{text}
     </label>
   </div>
 );
@@ -55,7 +55,7 @@ class RefundRequest extends React.Component {
           <h2 className="regular">
             Mind telling us why you'd like a refund for your {itemName}?
           </h2>
-          <form className="col-8 sm-col-6 mx-auto center">
+          <form className="col-11 sm-col-8 mx-auto center">
             <div className="py2 left-align">
               <Radio
                 name="refund"

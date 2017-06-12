@@ -17,7 +17,7 @@ const HistoryItem = ({
 }) => {
   return (
     <div
-      className={`btn regular navy col-12 flex ${type === 'refund' ? 'grayscale' : ''}`}
+      className={`px2 py1 regular navy col-12 flex ${type === 'refund' ? 'grayscale' : ''}`}
     >
       <div
         className="bg-center bg-no-repeat"
@@ -26,9 +26,9 @@ const HistoryItem = ({
         {'\u00a0'}
       </div>
       <div className="flex-column flex-auto ml2">
-        <h4 className="mt0 mb0">{title}</h4>
+        <h4 className="my0">{title}</h4>
         {subtitle && <p className="mt0 mb0 h6">{subtitle}</p>}
-        <p className="mt0 mb0 h6 gray">{moment(timestamp).fromNow()}</p>
+        <p className="my0 h6 gray">{moment(timestamp).fromNow()}</p>
         <p className="my0 h6">
           {isRefundable &&
             <Link to={`refund/${transactionId}`}>Request a refund</Link>}
