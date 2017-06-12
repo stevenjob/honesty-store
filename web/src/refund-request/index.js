@@ -101,9 +101,6 @@ const mapStateToProps = (
   const { data: { itemId } } = transactions.find(
     ({ id }) => id === transactionId
   );
-  if (itemId == null) {
-    console.error('Transaction cannot be refunded');
-  }
   const { name: itemName } = items.find(({ id }) => id === itemId);
   return {
     ...ownProps,

@@ -5,6 +5,8 @@ export const REFUND_REQUEST = 'REFUND_REQUEST';
 export const REFUND_SUCCESS = 'REFUND_SUCCESS';
 export const REFUND_FAILURE = 'REFUND_FAILURE';
 
+export const NONREFUNDABLE_TRANSACTION = 'NONREFUNDABLE_TRANSACTION';
+
 const refundRequest = () => {
   return {
     type: REFUND_REQUEST
@@ -49,4 +51,11 @@ export const performRefund = ({ transactionId, reason }) => async (
   } catch (e) {
     dispatch(refundFailure(e));
   }
+};
+
+export const nonRefundableTransaction = () => {
+  history.replace('/history');
+  return {
+    type: NONREFUNDABLE_TRANSACTION
+  };
 };

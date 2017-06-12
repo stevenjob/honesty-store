@@ -43,6 +43,7 @@ import ItemPurchaseSuccess from './item/success';
 import ConfirmStoreChange from './confirm-store-change/index';
 import ReceivedBoxReport from './received-box/index';
 import ReceivedBoxSuccess from './received-box/success';
+import RefundGuard from './refund-request/guard';
 import RefundRequest from './refund-request/index';
 import RefundSuccess from './refund-request/success';
 import reducer from './reducers/reducer';
@@ -156,8 +157,10 @@ ReactDOM.render(
           <Route path="profile/logout" component={LogoutProfile} />
           <Route path="agent/received/success" component={ReceivedBoxSuccess} />
           <Route path="agent/received/:boxId" component={ReceivedBoxReport} />
-          <Route path="refund/success" component={RefundSuccess} />
-          <Route path="refund/:transactionId" component={RefundRequest} />
+          <Route path="refund" component={RefundGuard}>
+            <Route path="success" component={RefundSuccess} />
+            <Route path=":transactionId" component={RefundRequest} />
+          </Route>
           <Route path="help">
             <IndexRoute component={Help} />
             <Route path="item/:itemId" component={HelpItem} />
