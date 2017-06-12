@@ -99,11 +99,11 @@ export const getSessionData = async (key, { user }): Promise<SessionData> => {
     getSurveySessionData(key, user)
   ]);
   return {
+    autoRefundPeriod: AUTO_REFUND_PERIOD,
     user: userProfile,
     store,
     refreshToken,
     accessToken,
-    survey,
-    autoRefundPeriod: AUTO_REFUND_PERIOD
+    survey
   };
 };
