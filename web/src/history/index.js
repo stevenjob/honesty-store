@@ -24,7 +24,7 @@ const mapStateToProps = ({ user: { transactions, balance } }) => {
   );
 
   return {
-    transactions: mergedTransactions || [],
+    transactions: mergedTransactions,
     balance: balance || 0
   };
 };
