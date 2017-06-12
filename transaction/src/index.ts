@@ -88,7 +88,7 @@ const createTransaction = async (
     throw new Error(`Balance would be negative ${updatedBalance}`);
   }
   if (updatedBalance > balanceLimit) {
-    throw new Error(`Balance would be greater than ${balanceLimit} (${updatedBalance})`);
+    throw new CodedError('MaxBalanceExceeded', `Balance would be greater than ${balanceLimit} (${updatedBalance})`);
   }
 
   await putTransaction(transaction);

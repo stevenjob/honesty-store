@@ -6,8 +6,8 @@ const dismissalText = {
 };
 
 const errorDefinitions = {
-  TopupExceedsMaxBalance: {
-    message: `Topping up would exceed your maximum balance`,
+  MaxBalanceExceeded: {
+    message: `Your balance can't exceed £10`,
     dismissalText: dismissalText.DISMISS
   },
   TooManyPurchaseItems: {
