@@ -9,8 +9,7 @@ export const create = <T extends AbstractItem>({ client, tableName }: Configurat
     const itemWithMetadata = Object.assign({}, item, {
       version: 0,
       created: Date.now(),
-      modified: Date.now(),
-      recentEvents: []
+      modified: Date.now()
     });
 
     try {
