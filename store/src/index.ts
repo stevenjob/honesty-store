@@ -14,7 +14,7 @@ import { CodedError } from '@honesty-store/service/src/error';
 import { createServiceKey } from '@honesty-store/service/src/key';
 import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
 import { error } from '@honesty-store/service/src/log';
-import { assertValidTransaction, TransactionPurchased } from '@honesty-store/transaction/src/client';
+import { assertValidTransaction, Transaction } from '@honesty-store/transaction/src/client';
 
 import {
   Store,
@@ -36,11 +36,14 @@ const { read, reduce, find } = cruft<Store>({
 const lookupItem = (store: Store, itemId: string): StoreItem | undefined =>
   store.items.find(({ id }) => itemId === id);
 
-const reducer = reduce<TransactionPurchased | StoreEvent>(
+const reducer = reduce<Transaction | StoreEvent>(
   event => {
     switch (event.type) {
       case 'purchase':
+      case 'refund':
         return event.data.storeId;
+      case 'topup':
+        throw new Error(`Unable to handle topup transactions ${event.id}`);
       case 'store-audit':
       case 'store-price-change':
       case 'store-list':
@@ -70,6 +73,26 @@ const reducer = reduce<TransactionPurchased | StoreEvent>(
         item.purchaseCount += quantity;
 
         return store;
+      }
+      case 'refund': {
+        const { id, type, data: { itemId }, data } = event;
+
+        const item = lookupItem(store, itemId);
+
+        if (item == null) {
+          error(key, `Event ${type} ${id} for non-existent item ${itemId} in ${store.id}`);
+          return store;
+        }
+
+        const quantity = Number(data.quantity);
+
+        item.availableCount += quantity;
+        item.refundCount += quantity;
+
+        return store;
+      }
+      case 'topup': {
+        throw new Error(`Unable to handle topup transactions ${event.id}`);
       }
       case 'store-audit': {
         const { id, type, itemId, count } = event;
@@ -201,7 +224,7 @@ router.post<StoreItemListing, Store>(
   }
 );
 
-router.post<TransactionPurchased, Store>(
+router.post<Transaction, Store>(
   '/transaction',
   async (_key, {  }, transaction) => {
     assertValidTransaction(transaction);

@@ -96,19 +96,6 @@ export interface Transaction extends TransactionDetails {
   id: string;
 }
 
-export interface TransactionPurchased {
-  id: string;
-  type: 'purchase';
-  timestamp: number;
-  amount: number;
-  data: {
-    quantity: string;
-    itemId: string;
-    userId: string;
-    storeId: string;
-  };
-}
-
 export interface Account {
   id: string;
   created: number;
