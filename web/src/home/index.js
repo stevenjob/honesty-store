@@ -20,6 +20,11 @@ const Home = ({ performRegister }) => (
 
         <hr className="border-none py2 sm-my4" />
 
+        <Hands
+          className="hands"
+          style={{ maxHeight: handsSize, minHeight: handsSize }}
+        />
+
         <h4>Have a store code? Please enter it below</h4>
         <p className="mt0">
           (you will be able to find it on your honesty.store box)
@@ -31,10 +36,6 @@ const Home = ({ performRegister }) => (
         />
       </div>
     </div>
-    <Hands
-      className="hands"
-      style={{ maxHeight: handsSize, minHeight: handsSize }}
-    />
     <div className="bg-silver py4">
       <div className="col-10 md-col-8 lg-col-6 mx-auto">
         <h3>What is honesty.store?</h3>
