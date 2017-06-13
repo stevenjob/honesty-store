@@ -27,14 +27,14 @@ const NavLink = withRouter(({ to, className, text, router }) => (
   </Link>
 ));
 
-const imageHeight = '4rem';
+const imageHeight = '2rem';
 
 const Chrome = ({ title: _title, storeCode, children, showNav }) => (
   <div className="col-12">
     <div className="fixed top-0 right-0 left-0 bg-navy border-silver white z1">
       <header>
         <div className="mx-auto">
-          <div className="mx4 mt3">
+          <div className="mx4 mt2">
             <img
               src={logo}
               alt="honesty.store"
@@ -42,7 +42,7 @@ const Chrome = ({ title: _title, storeCode, children, showNav }) => (
             />
           </div>
 
-          <h3 className="my2 center regular">
+          <h3 className="my1 center regular">
             {storeCode || '\u00a0'}
           </h3>
         </div>
@@ -61,7 +61,7 @@ const Chrome = ({ title: _title, storeCode, children, showNav }) => (
 
     <section
       style={{
-        paddingTop: showNav ? '13.6rem' : '10rem'
+        paddingTop: showNav ? '9.6rem' : '6rem'
       }}
     >
       {children}
