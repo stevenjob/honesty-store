@@ -1,7 +1,7 @@
 import React from 'react';
 
-export default ({ className }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 267.1 244.8">
+export default ({ className, style }) => (
+  <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 267.1 244.8">
     <g id="slot">
       <path id="Path_999" d="M219.4 179.3c26.1 0 47.5 14.3 47.5 29.1v8.2s-.4 7.4-1.9 9.8c-5.1 8.9-27.1 6.7-45.6 6.7H47.7c-19.3 0-38.1-2-45.7-11.7-2.5-3.1-1.9-7.6-1.9-11.5 0-4.6 1.9-11.5 7.6-16.5 5.7-4.9 22.1-14.3 40-14.3l171.7.2z" className="st0"/>
       <path id="Path_999-Copy" d="M219.4 190.3c26.3 0 47.7 13 47.7 27.8 0 2.3-.8 13.5-11.6 20-10.9 6.4-27.6 6.4-36 6.4H47.7c-9.7 0-26.7-1.6-36.2-8S.4 219.4.4 217.6c0-14.9 21.2-27 47.3-27h171.7v-.3z" className="st1"/>
