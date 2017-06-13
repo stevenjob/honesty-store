@@ -37,7 +37,7 @@ const getFunctionPrefix = (baseUrl) => {
 export default (service: string, baseUrl = defaultBaseUrl) => {
   const getUrl = (version: number, path: string) => `/${service}/v${version}${path}`;
 
-  const fetchAndParse = async <Result>({ method, url, key, body = undefined }): Promise<Result> => {
+  const fetchAndParse = async <Result>({ method, url, key, body }): Promise<Result> => {
     info(key, `send ${method} ${url}`);
 
     const request = {
