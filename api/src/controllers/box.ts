@@ -1,11 +1,9 @@
-import { Box, flagOutOfStock, getBoxesForStore, markBoxAsReceived } from '@honesty-store/box/src/client';
+import { markBoxAsReceived } from '@honesty-store/box/src/client';
 import { CodedError } from '@honesty-store/service/src/error';
+import { updateItemCount } from '@honesty-store/store/src/client';
 import isEmail = require('validator/lib/isEmail');
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { getSessionData  } from '../services/session';
-import { boxIsReceivedAndOpen } from '../services/store';
-
-const itemInBox = (itemId) => ({ boxItems }: Box) => boxItems.some(item => item.itemID === itemId);
 
 // tslint:disable-next-line:export-name
 export default (router) => {
@@ -13,15 +11,7 @@ export default (router) => {
     '/out-of-stock',
     authenticateAccessToken,
     async (key, _params, { itemId }, { user }) => {
-      const boxes = await getBoxesForStore(key, user.defaultStoreId, boxIsReceivedAndOpen);
-      const depleted = Date.now();
-
-      const flagPromises = boxes
-        .filter(itemInBox(itemId))
-        .map(box => flagOutOfStock({ key, boxId: box.id, itemId, depleted }));
-
-      await Promise.all(flagPromises);
-
+      await updateItemCount(key, user.defaultStoreId, itemId, 0, user.id);
       return {};
     });
 
