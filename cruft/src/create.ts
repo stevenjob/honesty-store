@@ -5,12 +5,13 @@ export const create = <T extends AbstractItem>({ client, tableName }: Configurat
   async (item: NewItem<T>): Promise<EnhancedItem<T>> => {
     assertHasValidDynamoDBFieldNames(item);
 
-    const date = Date.now();
+    const now = Date.now();
+
     // hack - can't use object rest/spread with types yet - Microsoft/TypeScript/issues/10727
     const itemWithMetadata = Object.assign({}, item, {
       version: 0,
-      created: date,
-      modified: date
+      created: now,
+      modified: now
     });
 
     try {
