@@ -51,7 +51,9 @@ const options = {
     resolve({
       preferBuiltins: true
     }),
-    commonjs(),
+    commonjs({
+      include: 'node_modules/**'
+    }),
     json()
   ],
   external: isExternalModule
