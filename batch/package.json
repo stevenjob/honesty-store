@@ -10,7 +10,8 @@
     "build": "npm run tsc && npm run rollup && npm run uglifyjs"
   },
   "dependencies": {
-    "@honesty-store/service": "file:../service"
+    "@honesty-store/service": "0.0.0",
+    "cruft-ddb": "^3.0.6"
   },
   "devDependencies": {
     "@types/body-parser": "0.0.33",

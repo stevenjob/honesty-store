@@ -14,7 +14,7 @@
     "@types/node": "0.0.2"
   },
   "dependencies": {
-    "@honesty-store/service": "file:../service"
+    "@honesty-store/service": "0.0.0"
   },
   "main": "lib/src/index.js",
   "peerDependencies": {

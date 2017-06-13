@@ -10,8 +10,8 @@
     "build": "npm run tsc && npm run rollup && npm run uglifyjs"
   },
   "dependencies": {
-    "@honesty-store/service": "file:../service",
-    "@honesty-store/store": "file:../store",
+    "@honesty-store/service": "0.0.0",
+    "@honesty-store/store": "0.0.0",
     "json-stable-stringify": "^1.0.1"
   },
   "devDependencies": {
