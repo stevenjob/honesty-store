@@ -5,10 +5,10 @@ import { Link, withRouter } from 'react-router';
 import isRegisteredUser from '../reducers/is-registered-user.js';
 import logo from '../chrome/assets/logo-inverted.svg';
 
-const navBgColor = "#29526d";
-const navFgColorActive = "#ffffff";
-const navFgColorInactive = "#7591a1";
-const navBarColorActive = "#3fbcd5";
+const navBgColor = '#29526d';
+const navFgColorActive = '#ffffff';
+const navFgColorInactive = '#7591a1';
+const navBarColorActive = '#3fbcd5';
 
 const NavLink = withRouter(({ to, className, text, router }) => (
   <Link to={to}>
@@ -18,7 +18,7 @@ const NavLink = withRouter(({ to, className, text, router }) => (
         background: navBgColor,
         borderBottomWidth: '0.2rem',
         borderBottomStyle: 'solid',
-        borderBottomColor: router.isActive(to) ? navBarColorActive : "#ffffff",
+        borderBottomColor: router.isActive(to) ? navBarColorActive : '#ffffff',
         color: router.isActive(to) ? navFgColorActive : navFgColorInactive
       }}
     >
@@ -35,7 +35,11 @@ const Chrome = ({ title: _title, storeCode, children, showNav }) => (
       <header>
         <div className="mx-auto">
           <div className="mx4 mt3">
-            <img src={logo} alt="honesty.store" style={{ maxHeight: imageHeight, minHeight: imageHeight }} />
+            <img
+              src={logo}
+              alt="honesty.store"
+              style={{ maxHeight: imageHeight, minHeight: imageHeight }}
+            />
           </div>
 
           <h3 className="my2 center regular">
@@ -44,16 +48,14 @@ const Chrome = ({ title: _title, storeCode, children, showNav }) => (
         </div>
       </header>
 
-      {
-        showNav &&
+      {showNav &&
         <nav>
           <div className="col-12">
             <NavLink className="py2 col-4" to="/store" text="Store" />
             <NavLink className="py2 col-4" to="/profile" text="Profile" />
             <NavLink className="py2 col-4" to="/help" text="Support" />
           </div>
-        </nav>
-      }
+        </nav>}
     </div>
 
     <section
