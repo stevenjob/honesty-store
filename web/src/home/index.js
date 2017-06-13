@@ -4,6 +4,9 @@ import StoreBrowser from '../chrome/store-browser';
 import { performRegister } from '../actions/register';
 import logo from '../chrome/assets/logo.svg';
 
+import Hands from './assets/hands';
+import '../item/hands.css';
+
 const Home = ({ performRegister }) => (
   <div className="center navy col-12">
     <div className="bg-white py4">
@@ -26,6 +29,7 @@ const Home = ({ performRegister }) => (
         />
       </div>
     </div>
+    <Hands className="hands" />
     <div className="bg-silver py4">
       <div className="col-10 md-col-8 lg-col-6 mx-auto">
         <h3>What is honesty.store?</h3>
