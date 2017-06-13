@@ -37,7 +37,8 @@ const getFunctionPrefix = (baseUrl) => {
 export default (service: string, baseUrl = defaultBaseUrl) => {
   const getUrl = (version: number, path: string) => `/${service}/v${version}${path}`;
 
-  const fetchAndParse = async <Result>({ method, url, key, body }): Promise<Result> => {
+  // tslint:disable-next-line:no-unnecessary-initializer
+  const fetchAndParse = async <Result>({ method, url, key, body = undefined }): Promise<Result> => {
     info(key, `send ${method} ${url}`);
 
     const request = {
