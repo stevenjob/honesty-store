@@ -51,9 +51,10 @@ const Chrome = ({ title: _title, storeCode, children, showNav }) => (
       {showNav &&
         <nav>
           <div className="col-12">
-            <NavLink className="py2 col-4" to="/store" text="Store" />
-            <NavLink className="py2 col-4" to="/profile" text="Profile" />
-            <NavLink className="py2 col-4" to="/help" text="Support" />
+            <NavLink className="py2 col-3" to="/store" text="Store" />
+            <NavLink className="py2 col-3" to="/profile" text="Profile" />
+            <NavLink className="py2 col-3" to="/history" text="History" />
+            <NavLink className="py2 col-3" to="/help" text="Support" />
           </div>
         </nav>}
     </div>
