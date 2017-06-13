@@ -20,7 +20,7 @@
 .hands .st19 { fill:#328193; }
 
 .hands [id^="hand"] {
-  animation-duration: 4s;
+  animation-duration: 5s;
   animation-iteration-count: infinite;
   will-change: transform;
 }
@@ -33,14 +33,20 @@
   from {
     transform: translateY(180px)
   }
-  6% {
+  3% {
     transform: translateY(0px)
   }
-  12% {
+  6% {
     transform: translateY(20px)
   }
-  to {
+  88% {
     transform: translateY(20px)
+  }
+  95% {
+    transform: translateY(250px)
+  }
+  to {
+    transform: translateY(250px)
   }
 }
 
@@ -48,14 +54,20 @@
   from {
     transform: translateY(180px)
   }
-  8% {
+  4% {
     transform: translateY(0px)
   }
-  13% {
+  7.5% {
     transform: translateY(20px)
   }
-  to {
+  86% {
     transform: translateY(20px)
+  }
+  96% {
+    transform: translateY(250px)
+  }
+  to {
+    transform: translateY(250px)
   }
 }
 
@@ -63,13 +75,19 @@
   from {
     transform: translateY(180px)
   }
-  6% {
+  3% {
     transform: translateY(0px)
   }
-  14% {
+  7% {
     transform: translateY(20px)
   }
-  to {
+  86% {
     transform: translateY(20px)
+  }
+  96% {
+    transform: translateY(250px)
+  }
+  to {
+    transform: translateY(250px)
   }
 }
