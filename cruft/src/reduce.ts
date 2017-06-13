@@ -26,7 +26,7 @@ export const reduce = <Aggregate extends AbstractItem, Event extends AbstractIte
       let archivedEvent: EventItem | null = null;
 
       try {
-        archivedEvent = await read<EventItem>({ client, tableName, consistent: true })(eventId);
+        archivedEvent = await read<EventItem & { version: 0 }>({ client, tableName, consistent: true })(eventId);
       } catch (e) {
         if (e.message !== `Key not found ${eventId}`) {
           throw e;
@@ -39,7 +39,7 @@ export const reduce = <Aggregate extends AbstractItem, Event extends AbstractIte
 
       if (previousLastReceived != null) {
         try {
-          await create<EventItem>({ client, tableName })(<EventItem & { version: 0 }>previousLastReceived);
+          await create<EventItem & { version: 0 }>({ client, tableName })(<EventItem & { version: 0 }>previousLastReceived);
         } catch (e) {
           if (e.message !== `Item already exists ${previousLastReceived.id}`) {
             throw e;
@@ -49,7 +49,6 @@ export const reduce = <Aggregate extends AbstractItem, Event extends AbstractIte
 
       const updatedLastReceived: EventItem = {
         id: eventId,
-        version: 0,
         data: event,
         previous: previousLastReceived && previousLastReceived.id
       };

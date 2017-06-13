@@ -59,7 +59,7 @@ export type EnhancedItem<T extends AbstractItem> = T & HasVersion & HasMetadata;
 
 export type PrototypicalItem<T extends AbstractItem> = Partial<T>;
 
-export type EventItem = AbstractItem & { previous?: string, data: AbstractItem };
+export type EventItem = HasId & { previous?: string, data: HasId };
 
 export interface Configuration {
   client: DynamoDB.DocumentClient;
@@ -69,7 +69,7 @@ export interface Configuration {
 export interface Cruft<T extends AbstractItem> {
   create(item: NewItem<T>): Promise<EnhancedItem<T>>;
   read(id: string): Promise<EnhancedItem<T>>;
-  reduce<Event extends AbstractItem>(
+  reduce<Event extends HasId>(
     aggregateIdSelector: (event: Event) => string,
     eventIdSelector: (event: Event) => string,
     reducer: (aggregate: EnhancedItem<T>, event: Event) => EnhancedItem<T>
