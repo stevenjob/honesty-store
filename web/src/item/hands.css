@@ -22,7 +22,6 @@
 .hands [id^="hand"] {
   animation-duration: 4s;
   animation-iteration-count: infinite;
-  animation-timing-function: cubic-bezier(.5,.5,.5,.5);
   will-change: transform;
 }
 
