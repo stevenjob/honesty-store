@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@honesty-store/service": "0.0.0",
-    "@honesty-store/store": "0.0.0",
     "json-stable-stringify": "^1.0.1"
   },
   "devDependencies": {
