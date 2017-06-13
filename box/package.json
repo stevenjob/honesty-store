@@ -22,10 +22,11 @@
     "ts-jest": "^19.0.0"
   },
   "dependencies": {
-    "@honesty-store/batch": "file:../batch",
-    "@honesty-store/service": "file:../service",
-    "@honesty-store/store": "file:../store",
-    "@honesty-store/user": "file:../user"
+    "@honesty-store/batch": "0.0.0",
+    "@honesty-store/service": "0.0.0",
+    "@honesty-store/store": "0.0.0",
+    "@honesty-store/user": "0.0.0",
+    "cruft-ddb": "^3.0.6"
   },
   "main": "lib/src/index.js",
   "jest": {

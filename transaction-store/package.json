@@ -12,9 +12,9 @@
     "@types/node": "0.0.2"
   },
   "dependencies": {
-    "@honesty-store/service": "file:../service",
-    "@honesty-store/store": "file:../store",
-    "@honesty-store/transaction": "file:../transaction"
+    "@honesty-store/service": "0.0.0",
+    "@honesty-store/store": "0.0.0",
+    "@honesty-store/transaction": "0.0.0"
   },
   "peerDependencies": {
     "aws-sdk": "2.22.0"

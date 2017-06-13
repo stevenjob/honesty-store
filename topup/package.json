@@ -15,8 +15,8 @@
     "@types/uuid": "^2.0.29"
   },
   "dependencies": {
-    "@honesty-store/service": "file:../service",
-    "@honesty-store/transaction": "file:../transaction",
+    "@honesty-store/service": "0.0.0",
+    "@honesty-store/transaction": "0.0.0",
     "stripe": "^4.12.0"
   },
   "main": "lib/src/index.js",

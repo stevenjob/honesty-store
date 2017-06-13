@@ -6,13 +6,15 @@
     "build": "../node_modules/.bin/tsc"
   },
   "dependencies": {
-    "@honesty-store/batch": "file:../batch",
-    "@honesty-store/box": "file:../box",
-    "@honesty-store/item": "file:../item",
-    "@honesty-store/service": "file:../service",
-    "@honesty-store/store": "file:../store",
-    "@honesty-store/transaction": "file:../transaction",
+    "@honesty-store/batch": "0.0.0",
+    "@honesty-store/box": "0.0.0",
+    "@honesty-store/item": "0.0.0",
+    "@honesty-store/service": "0.0.0",
+    "@honesty-store/store": "0.0.0",
+    "@honesty-store/transaction": "0.0.0",
     "commander": "^2.9.0",
+    "cruft-ddb": "^3.0.6",
+    "jsonwebtoken": "chrisprice/node-jsonwebtoken#remove-joi",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
