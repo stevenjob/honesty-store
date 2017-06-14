@@ -12,7 +12,7 @@ export interface UserSessionData {
   transactions: Transaction[];
   cardDetails: CardDetails;
   features: any;
-  emailAddress: string;
+  emailAddress?: string;
 }
 export interface StoreSessionData {
   code: string;

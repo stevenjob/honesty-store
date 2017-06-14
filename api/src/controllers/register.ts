@@ -7,7 +7,7 @@ import { createUser, updateUser } from '@honesty-store/user';
 import { v4 as uuid } from 'uuid';
 
 import { authenticateAccessToken, noopAuthentication } from '../middleware/authenticate';
-import { getSessionData, getUserFeatures, UserSessionData } from '../services/session';
+import { getSessionData, getUserFeatures } from '../services/session';
 import { purchase } from '../services/transaction';
 
 const register = async (key, storeCode) => {
@@ -45,7 +45,10 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
     }
   }
 
+  const sessionData = await getSessionData(key, { user });
+
   return {
+    ...sessionData,
     user: {
       ...user,
       balance: purchaseTx == null ? topupTx.balance : purchaseTx.balance,
@@ -55,7 +58,7 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
       ],
       cardDetails: topupTx.cardDetails,
       features: getUserFeatures(user)
-    } as UserSessionData
+    }
   };
 };
 
