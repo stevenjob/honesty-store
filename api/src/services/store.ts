@@ -15,12 +15,18 @@ export interface StoreItem {
     total: number;
     breakdown: PriceBreakdown;
   };
+  expiry?: number;
+  weight?: number;
+  location?: string;
 }
 
 interface PriceBreakdown {
   wholesaleCost: number;
   serviceFee: number;
   donation: number;
+  handlingFee: number;
+  creditCardFee: number;
+  VAT: number;
 }
 
 export const getItemPriceFromStore = async (key, storeId: string, itemId: string): Promise<number> => {
@@ -56,7 +62,10 @@ export const storeItems = async (key, storeId): Promise<StoreItem[]> => {
         breakdown: {
           wholesaleCost: item.price - serviceFee,
           serviceFee: serviceFee,
-          donation
+          donation,
+          handlingFee: 0,
+          creditCardFee: 0,
+          VAT: 0
         }
       }
     };
