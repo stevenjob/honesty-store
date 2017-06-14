@@ -36,7 +36,7 @@ export const getItemPriceFromStore = async (key, storeId: string, itemId: string
 };
 
 const calculateServiceFee = (price: number): number =>
-  Math.ceil(price * 0.1);
+  Math.ceil(price / 1.1 * 0.1);
 
 const calculateDonation = (storeId: string, price: number): number =>
   storeId === '9a61dad3-f05c-46aa-a7e4-14311e9cccc5' ? Math.ceil(price * 0.1) : 0;
