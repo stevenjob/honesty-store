@@ -15,11 +15,10 @@
     "chai": "^3.5.0",
     "jest": "^19.0.2",
     "ts-jest": "^19.0.14",
-    "typescript": "^2.3.2",
-    "uuid": "^3.0.1"
+    "typescript": "^2.3.2"
   },
   "scripts": {
-    "start-dynamodb": "docker run -d --name dynamodb -p 8000:8000 -m 512M deangiberson/aws-dynamodb-local || exit 0",
+    "start-dynamodb": "docker run -d --name dynamodb -p 8000:8000 deangiberson/aws-dynamodb-local || exit 0",
     "stop-dynamodb": "docker rm -f dynamodb || exit 0",
     "test": "npm run start-dynamodb && jest && npm run stop-dynamodb",
     "build": "npm run tsc && npm run test",

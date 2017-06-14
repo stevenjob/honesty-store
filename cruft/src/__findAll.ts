@@ -1,14 +1,14 @@
 import { findAll } from './findAll';
-import { AbstractItem, EnhancedItem, FindConfiguration, PrototypicalItem } from './index';
+import { AbstractItem, Configuration, EnhancedItem, PrototypicalItem } from './index';
 
 // deprecated hack from before async iterators were supported
 // tslint:disable-next-line:variable-name
-export const __findAll = <T extends AbstractItem>({ client, tableName, limit }: FindConfiguration) =>
+export const __findAll = <T extends AbstractItem>({ client, tableName }: Configuration) =>
   async (fields: PrototypicalItem<T>): Promise<EnhancedItem<T>[]> => {
 
     const result: EnhancedItem<T>[] = [];
 
-    for await (const item of findAll<T>({ client, tableName, limit })(fields)) {
+    for await (const item of findAll<T>({ client, tableName })(fields)) {
       result.push(item);
     }
 

@@ -10,7 +10,7 @@
     "@types/node-fetch": "^1.6.7"
   },
   "dependencies": {
-    "@honesty-store/service": "0.0.0",
+    "@honesty-store/service": "file:../service",
     "stripe": "^4.15.0"
   },
   "peerDependencies": {

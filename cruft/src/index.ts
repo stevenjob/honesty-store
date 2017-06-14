@@ -66,10 +66,6 @@ export interface Configuration {
   tableName: string;
 }
 
-export interface FindConfiguration extends Configuration {
-  limit: number;
-}
-
 export interface Cruft<T extends AbstractItem> {
   create(item: NewItem<T>): Promise<EnhancedItem<T>>;
   read(id: string): Promise<EnhancedItem<T>>;
@@ -88,8 +84,7 @@ export interface Cruft<T extends AbstractItem> {
 export default <T extends AbstractItem, Event extends AbstractItem = AbstractItem>({
   endpoint = process.env.AWS_DYNAMODB_ENDPOINT,
   region = process.env.AWS_REGION,
-  tableName,
-  limit
+  tableName
 }): Cruft<T> => {
   // hack - endpoint isn't a valid property according to the typings
   const client = new DynamoDB.DocumentClient(<{ endpoint: string }>{
@@ -103,9 +98,9 @@ export default <T extends AbstractItem, Event extends AbstractItem = AbstractIte
     read: read<T>({ client, tableName }),
     reduce: reduce<T, Event>({ client, tableName }),
     update: update<T>({ client, tableName }),
-    __findAll: __findAll<T>({ client, tableName, limit }),
-    findAll: findAll<T>({ client, tableName, limit }),
-    find: find<T>({ client, tableName, limit }),
+    __findAll: __findAll<T>({ client, tableName }),
+    findAll: findAll<T>({ client, tableName }),
+    find: find<T>({ client, tableName }),
     truncate: truncate({ client, tableName })
   };
 };

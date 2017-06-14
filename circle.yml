@@ -28,14 +28,29 @@ dependencies:
     - scripts/node_modules
     - store/node_modules
     - cruft/node_modules
-    - node_modules
   override:
-    - yarn
+    - yarn install
     - yarn run bootstrap
 compile:
   override:
     - yarn run tslint
-    - yarn run build
+    - cd api && yarn run build
+    - cd item && yarn run build
+    - cd aws && yarn run build
+    - cd transaction && yarn run build
+    - cd user && yarn run build
+    - cd web && yarn run ci
+    - cd topup && yarn run build
+    - cd service && yarn run ci
+    - cd test && yarn run build
+    - cd support && yarn run build
+    - cd survey && yarn run build
+    - cd box && yarn run ci
+    - cd batch && yarn run build
+    - cd scripts && yarn run build
+    - cd store && yarn run build
+    - cd transaction-slack && yarn run build
+    - cd cruft && yarn run build
 test:
   override:
     - echo we ran them as part of compile

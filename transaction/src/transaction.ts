@@ -4,7 +4,7 @@ import stringify = require('json-stable-stringify');
 
 import { assertValidTransaction, assertValidTransactionId, Transaction, TransactionDetails } from './client';
 
-import { migrateStoreCodeToId } from '@honesty-store/service/src/store';
+import { migrateStoreCodeToId } from '@honesty-store/store/src/client';
 
 export const createTransactionId = ({ accountId, transactionId }) => `${accountId}:${transactionId}`;
 

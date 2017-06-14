@@ -11,21 +11,18 @@
     "start": "nodemon ./lib/api/src/app.js"
   },
   "dependencies": {
-    "@honesty-store/batch": "0.0.0",
-    "@honesty-store/box": "0.0.0",
-    "@honesty-store/item": "0.0.0",
-    "@honesty-store/service": "0.0.0",
-    "@honesty-store/store": "0.0.0",
-    "@honesty-store/survey": "0.0.0",
-    "@honesty-store/topup": "0.0.0",
-    "@honesty-store/transaction": "0.0.0",
-    "@honesty-store/user": "0.0.0",
-    "aws-serverless-express": "^3.0.0",
-    "body-parser": "^1.15.2",
+    "@honesty-store/batch": "file:../batch",
+    "@honesty-store/box": "file:../box",
+    "@honesty-store/item": "file:../item",
+    "@honesty-store/service": "file:../service",
+    "@honesty-store/store": "file:../store",
+    "@honesty-store/survey": "file:../survey",
+    "@honesty-store/topup": "file:../topup",
+    "@honesty-store/transaction": "file:../transaction",
+    "@honesty-store/user": "file:../user",
     "compression": "^1.6.2",
     "cors": "^2.8.1",
-    "ms": "^1.0.0",
-    "validator": "^6.2.1"
+    "ms": "^1.0.0"
   },
   "devDependencies": {
     "@types/chai": "^3.5.2",

@@ -1,6 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
 import { assertHasValidDynamoDBFieldNames } from './assertHasValidDynamoDBFieldNames';
-import { AbstractItem, EnhancedItem, FindConfiguration, PrototypicalItem } from './index';
+import { AbstractItem, Configuration, EnhancedItem, PrototypicalItem } from './index';
 
 const createFilterExpression = (fieldNames, fields) =>
   fieldNames.reduce(
@@ -11,7 +11,7 @@ const createFilterExpression = (fieldNames, fields) =>
     {}
   );
 
-export const findAll = <T extends AbstractItem>({ client, tableName, limit }: FindConfiguration) =>
+export const findAll = <T extends AbstractItem>({ client, tableName }: Configuration) =>
   async function*(fields: PrototypicalItem<T>): AsyncIterableIterator<EnhancedItem<T>> {
     assertHasValidDynamoDBFieldNames(fields);
 
@@ -38,7 +38,7 @@ export const findAll = <T extends AbstractItem>({ client, tableName, limit }: Fi
         FilterExpression: filterExpression,
         ExpressionAttributeValues: expressionAtributeValues,
         ExclusiveStartKey: key,
-        Limit: limit
+        Limit: 100
       })
         .promise();
 

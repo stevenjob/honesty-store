@@ -1,5 +1,4 @@
 import { DynamoDB } from 'aws-sdk';
-import { v4 as uuid } from 'uuid';
 import index, { Cruft } from '../index';
 
 export interface Foo {
@@ -22,8 +21,7 @@ export const cruftForTable = (tableName): Cruft<Foo> =>
   index<Foo>({
     endpoint,
     region,
-    tableName: tablePrefix + tableName,
-    limit: 5
+    tableName: tablePrefix + tableName
   });
 
 export const createTable = (tableName: string) =>
@@ -68,4 +66,6 @@ export const deleteTable = (tableName: string) =>
     }
   };
 
-export const nextId = () => uuid();
+let id = 0;
+
+export const nextId = () => String(id++);

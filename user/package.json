@@ -10,11 +10,9 @@
     "build": "npm run tsc && npm run rollup && npm run uglifyjs"
   },
   "dependencies": {
-    "@honesty-store/service": "0.0.0",
-    "@honesty-store/store": "0.0.0",
-    "@honesty-store/transaction": "0.0.0",
-    "cruft-ddb": "^3.0.6",
-    "validator": "^6.2.1"
+    "@honesty-store/service": "file:../service",
+    "@honesty-store/store": "file:../store",
+    "@honesty-store/transaction": "file:../transaction"
   },
   "devDependencies": {
     "@types/express": "^4.0.34",
