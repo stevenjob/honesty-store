@@ -96,6 +96,14 @@ const lambdaConfig: LambdaConfig = {
     watchedTableNames: [
       'transaction'
     ]
+  },
+  ['transaction-store']: {
+    handler: 'lib/bundle-min.handler',
+    codeFilter: 'lib/bundle-min.js',
+    timeout: 10,
+    watchedTableNames: [
+      'transaction'
+    ]
   }
 };
 
