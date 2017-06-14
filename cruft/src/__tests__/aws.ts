@@ -22,7 +22,8 @@ export const cruftForTable = (tableName): Cruft<Foo> =>
   index<Foo>({
     endpoint,
     region,
-    tableName: tablePrefix + tableName
+    tableName: tablePrefix + tableName,
+    limit: 5
   });
 
 export const createTable = (tableName: string) =>

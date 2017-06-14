@@ -30,7 +30,8 @@ import {
 config.region = process.env.AWS_REGION;
 
 const { read, reduce, find } = cruft<Store>({
-  tableName: process.env.TABLE_NAME
+  tableName: process.env.TABLE_NAME,
+  limit: 100
 });
 
 const lookupItem = (store: Store, itemId: string): StoreItem | undefined =>
