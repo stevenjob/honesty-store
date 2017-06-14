@@ -36,15 +36,18 @@ class RefundRequest extends React.Component {
 
   handleRefundRequest() {
     const { refundReason } = this.state;
-    const valid = refundReason !== '';
-    this.setState({
-      valid: false
-    });
+    const valid = this.isValidReasonSelected();
+
     if (valid) {
       const { performRefund, params: { transactionId } } = this.props;
       performRefund({ transactionId, reason: refundReason });
     }
   }
+
+  isValidReasonSelected() {
+    const { refundReason } = this.state;
+    return refundReason !== '';
+  };
 
   render() {
     const { itemName } = this.props;
@@ -56,7 +59,7 @@ class RefundRequest extends React.Component {
             Want a refund?
           </h2>
           <p>
-            Please let us know why you'd like a refund for your {itemName}?
+            Please let us know why you'd like a refund for your {itemName}
           </p>
           <form className="col-11 sm-col-8 mx-auto center">
             <div className="py2 left-align">
@@ -83,13 +86,14 @@ class RefundRequest extends React.Component {
                 onClick={() => this.handleRadioClick('stockExpired')}
               />
             </div>
+            <button
+              className="btn btn-primary btn-big center mt2 h3"
+              disabled={!this.isValidReasonSelected()}
+              onClick={() => this.handleRefundRequest()}
+            >
+              Submit refund request
+            </button>
           </form>
-          <p
-            className="btn btn-primary btn-big center mt2 h3"
-            onClick={() => this.handleRefundRequest()}
-          >
-            Submit refund request
-          </p>
         </div>
       </Full>
     );
