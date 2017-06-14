@@ -253,7 +253,7 @@ router.post<{ price: number }, Store>(
 );
 
 router.post<{ count: number, userId: string }, Store>(
-  '/:storeId/:itemId',
+  '/:storeId/:itemId/count',
   async (_key, { storeId, itemId }, { count, userId }) => {
     assertValidUuid('storeId', storeId);
     assertValidUuid('itemId', itemId);
