@@ -26,7 +26,7 @@ describe.only(suiteName, () => {
     }
   });
 
-  (<any>it)('should find items over many pages', async () => {
+  it('should find items over many pages', async () => {
     const id = nextId();
     for (let i = 0; i < 15; i++) {
       await cruft.create({ id: `${id}_${i}`, version: 0, bar: id });
@@ -36,9 +36,9 @@ describe.only(suiteName, () => {
       i++;
     }
     expect(i).to.equal(15, 'Incorrect item count');
-  },        30000);
+  });
 
-  (<any>it)('should find items over many pages and stop if break called', async () => {
+  it('should find items over many pages and stop if break called', async () => {
     const id = nextId();
     for (let i = 0; i < 15; i++) {
       await cruft.create({ id: `${id}_${i}`, version: 0, bar: id });
@@ -50,6 +50,6 @@ describe.only(suiteName, () => {
       }
     }
     expect(i).to.equal(10, 'Incorrect item count');
-  },        30000);
+  });
 
 });
