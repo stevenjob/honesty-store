@@ -1,4 +1,5 @@
 import { DynamoDB } from 'aws-sdk';
+import { v4 as uuid } from 'uuid';
 import index, { Cruft } from '../index';
 
 export interface Foo {
@@ -66,6 +67,4 @@ export const deleteTable = (tableName: string) =>
     }
   };
 
-let id = 0;
-
-export const nextId = () => String(id++);
+export const nextId = () => uuid();
