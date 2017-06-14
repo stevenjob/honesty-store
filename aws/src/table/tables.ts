@@ -555,14 +555,173 @@ const dirToTable = {
     writeCapacityUnits,
     dummyData: [
       {
-        id: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
-        code: 'dev-test',
         agentId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649',
-        version: 0,
-        items: [],
-        created: Date.now(),
-        modified: Date.now(),
-        lastEvent: null
+        code: 'dev-test',
+        created: 1497426973580,
+        id: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
+        items: [
+          {
+            availableCount: 1000,
+            genericName: 'crisps',
+            genericNamePlural: 'crisps',
+            id: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
+            image: 'walkers-cheese-onion.svg',
+            listCount: 1000,
+            name: 'Walkers',
+            price: 30,
+            purchaseCount: 0,
+            qualifier: 'Cheese & Onion',
+            refundCount: 0,
+            sellerId: '9127e1db-2a2c-41c5-908f-781ac816b633',
+            unit: 'pack',
+            unitPlural: 'packs'
+          },
+          {
+            availableCount: 1000,
+            genericName: 'cereal bar',
+            genericNamePlural: 'cereal bars',
+            id: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
+            image: 'nature-valley-oats-n-honey.svg',
+            listCount: 1000,
+            name: 'Nature Valley',
+            price: 51,
+            purchaseCount: 0,
+            qualifier: 'Crunchy Oats & Honey',
+            refundCount: 0,
+            sellerId: '9127e1db-2a2c-41c5-908f-781ac816b633',
+            unit: 'bar',
+            unitPlural: 'bars'
+          },
+          {
+            availableCount: 1000,
+            genericName: 'drink',
+            genericNamePlural: 'drinks',
+            id: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
+            image: 'diet-cola-can.svg',
+            listCount: 1000,
+            name: 'Diet Coke',
+            price: 130,
+            purchaseCount: 0,
+            refundCount: 0,
+            sellerId: '9127e1db-2a2c-41c5-908f-781ac816b633',
+            unit: 'can',
+            unitPlural: 'cans'
+          },
+          {
+            availableCount: 1000,
+            genericName: 'cereal bar',
+            genericNamePlural: 'cereal bars',
+            id: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
+            image: 'nakd-apple-crunch.svg',
+            listCount: 1000,
+            name: 'Nakd',
+            price: 36,
+            purchaseCount: 0,
+            qualifier: 'Apple Crunch Bar',
+            refundCount: 0,
+            sellerId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649',
+            unit: 'bar',
+            unitPlural: 'bars'
+          }
+        ],
+        lastEvent: null,
+        lastReceived: {
+          data: {
+            id: '0e02a0c9-40fa-4083-98b7-b5e8a183d251',
+            listing: {
+              genericName: 'cereal bar',
+              genericNamePlural: 'cereal bars',
+              id: '32a9520f-f407-42ee-9bc5-ab9e2a9c76ea',
+              image: 'nakd-apple-crunch.svg',
+              listCount: 1000,
+              name: 'Nakd',
+              price: 36,
+              qualifier: 'Apple Crunch Bar',
+              sellerId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649',
+              unit: 'bar',
+              unitPlural: 'bars'
+            },
+            storeId: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
+            type: 'store-list'
+          },
+          id: '0e02a0c9-40fa-4083-98b7-b5e8a183d251',
+          previous: '9c071db4-8417-4131-9b1e-4ce5f07353d3'
+        },
+        modified: 1497427124564,
+        version: 4
+      },
+      {
+        created: 1497427123919,
+        data: {
+          id: '37919edb-09e4-47ee-8b9e-42be8d01b52a',
+          listing: {
+            genericName: 'cereal bar',
+            genericNamePlural: 'cereal bars',
+            id: 'faeda516-bd9f-41ec-b949-7a676312b0ae',
+            image: 'nature-valley-oats-n-honey.svg',
+            listCount: 1000,
+            name: 'Nature Valley',
+            price: 51,
+            qualifier: 'Crunchy Oats & Honey',
+            sellerId: '9127e1db-2a2c-41c5-908f-781ac816b633',
+            unit: 'bar',
+            unitPlural: 'bars'
+          },
+          storeId: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
+          type: 'store-list'
+        },
+        id: '37919edb-09e4-47ee-8b9e-42be8d01b52a',
+        modified: 1497427123919,
+        previous: '18e23611-4330-4473-bbdb-02310be2ce5c',
+        version: 0
+      },
+      {
+        created: 1497427124481,
+        data: {
+          id: '9c071db4-8417-4131-9b1e-4ce5f07353d3',
+          listing: {
+            genericName: 'drink',
+            genericNamePlural: 'drinks',
+            id: 'cf7a7886-c30d-4760-8c15-39adb2dc8649',
+            image: 'diet-cola-can.svg',
+            listCount: 1000,
+            name: 'Diet Coke',
+            price: 130,
+            sellerId: '9127e1db-2a2c-41c5-908f-781ac816b633',
+            unit: 'can',
+            unitPlural: 'cans'
+          },
+          storeId: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
+          type: 'store-list'
+        },
+        id: '9c071db4-8417-4131-9b1e-4ce5f07353d3',
+        modified: 1497427124481,
+        previous: '37919edb-09e4-47ee-8b9e-42be8d01b52a',
+        version: 0
+      },
+      {
+        created: 1497427123384,
+        data: {
+          id: '18e23611-4330-4473-bbdb-02310be2ce5c',
+          listing: {
+            genericName: 'crisps',
+            genericNamePlural: 'crisps',
+            id: '46ced0c0-8815-4ed2-bfb6-40537f5bd512',
+            image: 'walkers-cheese-onion.svg',
+            listCount: 1000,
+            name: 'Walkers',
+            price: 30,
+            qualifier: 'Cheese & Onion',
+            sellerId: '9127e1db-2a2c-41c5-908f-781ac816b633',
+            unit: 'pack',
+            unitPlural: 'packs'
+          },
+          storeId: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
+          type: 'store-list'
+        },
+        id: '18e23611-4330-4473-bbdb-02310be2ce5c',
+        modified: 1497427123384,
+        version: 0
       }
     ]
   })
