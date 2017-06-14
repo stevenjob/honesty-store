@@ -50,6 +50,7 @@ compile:
     - cd scripts && yarn run build
     - cd store && yarn run build
     - cd transaction-slack && yarn run build
+    - cd transaction-store && yarn run build
     - cd cruft && yarn run build
 test:
   override:
@@ -58,7 +59,7 @@ deployment:
   aws:
     branch: /.*/
     commands:
-      - ./aws/bin/aws deploy $CIRCLE_BRANCH api batch item transaction user web topup survey box store transaction-slack
+      - ./aws/bin/aws deploy $CIRCLE_BRANCH api batch item transaction user web topup survey box store transaction-slack transaction-store
       - ./aws/bin/aws prune
 general:
   # attempt to speed up artifact collection by specifying an empty list
