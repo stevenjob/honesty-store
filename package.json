@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "repository": "git@github.com:honesty-store/honesty-store.git",
   "scripts": {
-    "bootstrap": "lerna bootstrap --npm-client yarn",
+    "bootstrap": "lerna bootstrap",
     "build": "lerna run build && lerna run ci",
     "tslint": "tslint --config tslint.json -e '**/node_modules/**' -e 'api/test/**' --format stylish **/*.ts"
   },
