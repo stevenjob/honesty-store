@@ -14,7 +14,7 @@ import { CodedError } from '@honesty-store/service/lib/error';
 import { createServiceKey } from '@honesty-store/service/lib/key';
 import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
 import { error } from '@honesty-store/service/lib/log';
-import { assertValidTransaction, Transaction } from '@honesty-store/transaction/lib/client';
+import { assertValidTransaction, Transaction } from '@honesty-store/transaction';
 
 import {
   Store,

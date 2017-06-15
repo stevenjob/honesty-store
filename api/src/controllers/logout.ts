@@ -1,4 +1,4 @@
-import { logout } from '@honesty-store/user/lib/client';
+import { logout } from '@honesty-store/user';
 import { authenticateAccessToken } from '../middleware/authenticate';
 
 // tslint:disable-next-line:export-name

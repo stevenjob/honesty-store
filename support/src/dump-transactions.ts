@@ -3,11 +3,11 @@
 import cruftDDB from 'cruft-ddb';
 import { stringify } from 'csv';
 
-import { getAllItems } from '@honesty-store/item/lib/client';
+import { getAllItems } from '@honesty-store/item';
 import { createServiceKey } from '@honesty-store/service/lib/key';
-import { Store } from '@honesty-store/store/lib/client/index';
-import { InternalAccount, Transaction } from '@honesty-store/transaction/lib/client/index';
-import { User, WithRefreshToken } from '@honesty-store/user/lib/client/index';
+import { Store } from '@honesty-store/store';
+import { InternalAccount, Transaction } from '@honesty-store/transaction';
+import { User, WithRefreshToken } from '@honesty-store/user';
 
 type TransactionRecord = InternalAccount | Transaction;
 type UserRecord = User & WithRefreshToken;

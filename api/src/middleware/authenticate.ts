@@ -5,7 +5,7 @@ import {
   getUserByAccessToken,
   getUserByMagicLinkToken,
   getUserByRefreshToken
-} from '@honesty-store/user/lib/client/index';
+} from '@honesty-store/user';
 
 const getToken = (request) => {
   const { authorization } = request.headers;

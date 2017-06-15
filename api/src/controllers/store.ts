@@ -1,5 +1,5 @@
-import { getStoreFromCode } from '@honesty-store/store/lib/client';
-import { updateUser, User } from '@honesty-store/user/lib/client/index';
+import { getStoreFromCode } from '@honesty-store/store';
+import { updateUser, User } from '@honesty-store/user';
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { getSessionData } from '../services/session';
 

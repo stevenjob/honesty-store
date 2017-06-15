@@ -1,4 +1,4 @@
-import { createTopup } from '@honesty-store/topup/lib/client/index';
+import { createTopup } from '@honesty-store/topup';
 import { authenticateAccessToken } from '../middleware/authenticate';
 
 export default (router) => {

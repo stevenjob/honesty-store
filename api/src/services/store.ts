@@ -1,4 +1,4 @@
-import { getStoreFromId } from '@honesty-store/store/lib/client';
+import { getStoreFromId } from '@honesty-store/store';
 
 export interface StoreItem {
   id: string;

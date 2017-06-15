@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { createUserKey } from '@honesty-store/service/lib/key';
-import { createTransaction } from '@honesty-store/transaction/lib/client';
-import { getUser } from '@honesty-store/user/lib/client';
+import { createTransaction } from '@honesty-store/transaction';
+import { getUser } from '@honesty-store/user';
 
 const usage = () => {
   const script = process.argv[1];

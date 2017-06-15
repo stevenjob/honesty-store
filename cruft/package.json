@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "A simple optimistic-locking abstraction over Dynamo DB",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": "git@github.com:honesty-store/honesty-store.git",
   "author": "Chris Price <price.c@gmail.com>",
   "license": "MIT",

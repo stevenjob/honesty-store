@@ -1,5 +1,5 @@
 import fetch from '@honesty-store/service/lib/fetch';
-import { TransactionAndBalance } from '@honesty-store/transaction/lib/client/index';
+import { TransactionAndBalance } from '@honesty-store/transaction';
 
 export interface Stripe {
   customer: any;

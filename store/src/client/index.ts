@@ -1,5 +1,5 @@
 import fetch from '@honesty-store/service/lib/fetch';
-import { Transaction } from '@honesty-store/transaction/lib/client';
+import { Transaction } from '@honesty-store/transaction';
 
 export interface StoreItemDetails {
   name: string;

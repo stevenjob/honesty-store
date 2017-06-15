@@ -1,9 +1,9 @@
 import isEmail = require('validator/lib/isEmail');
 import { error } from '@honesty-store/service/lib/log';
-import { getStoreFromCode } from '@honesty-store/store/lib/client';
-import { createTopup } from '@honesty-store/topup/lib/client/index';
-import { TransactionAndBalance } from '@honesty-store/transaction/lib/client/index';
-import { createUser, updateUser } from '@honesty-store/user/lib/client/index';
+import { getStoreFromCode } from '@honesty-store/store';
+import { createTopup } from '@honesty-store/topup';
+import { TransactionAndBalance } from '@honesty-store/transaction';
+import { createUser, updateUser } from '@honesty-store/user';
 import { v4 as uuid } from 'uuid';
 
 import { authenticateAccessToken, noopAuthentication } from '../middleware/authenticate';

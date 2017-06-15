@@ -29,7 +29,8 @@
     "cruft-ddb": "^3.0.6",
     "uuid": "^3.0.1"
   },
-  "main": "lib/index.js",
+  "main": "lib/client/index.js",
+  "types": "lib/client/index.d.ts",
   "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"

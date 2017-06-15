@@ -1,12 +1,12 @@
 import { stringify as csvStringifyCb } from 'csv';
 
-import { getItem } from '@honesty-store/item/lib/client';
+import { getItem } from '@honesty-store/item';
 import { createServiceKey } from '@honesty-store/service/lib/key';
 import { sendSlackMessageOneLine } from '@honesty-store/service/lib/slack';
-import { getStoreFromId } from '@honesty-store/store/lib/client';
-import { Transaction } from '@honesty-store/transaction/lib/client';
+import { getStoreFromId } from '@honesty-store/store';
+import { Transaction } from '@honesty-store/transaction';
 import { subscribeTransactions } from '@honesty-store/transaction/lib/client/stream';
-import { getUser } from '@honesty-store/user/lib/client';
+import { getUser } from '@honesty-store/user';
 
 const csvStringify = (objects, options) =>
   new Promise((resolve, reject) =>

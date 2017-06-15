@@ -1,4 +1,4 @@
-import { getBatch, itemCostFromBatch } from '@honesty-store/batch/lib/client';
+import { getBatch, itemCostFromBatch } from '@honesty-store/batch';
 import { v4 as uuid } from 'uuid';
 import {
   Box,

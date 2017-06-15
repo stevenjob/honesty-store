@@ -3,8 +3,8 @@ import { CodedError } from '@honesty-store/service/lib/error';
 import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
 import { info } from '@honesty-store/service/lib/log';
 import { migrateStoreCodeToId } from '@honesty-store/service/lib/store';
-import { getStoreFromId } from '@honesty-store/store/lib/client';
-import { getUser } from '@honesty-store/user/lib/client';
+import { getStoreFromId } from '@honesty-store/store';
+import { getUser } from '@honesty-store/user';
 import { config, SES } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 

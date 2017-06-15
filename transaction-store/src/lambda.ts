@@ -1,5 +1,5 @@
 import { createServiceKey } from '@honesty-store/service/lib/key';
-import { recordTransaction } from '@honesty-store/store/lib/client';
+import { recordTransaction } from '@honesty-store/store';
 import { subscribeTransactions } from '@honesty-store/transaction/lib/client/stream';
 
 const asyncHandler = async event => {

@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "main": "./lib/app.js",
+  "types": "./lib/app.d.ts",
   "scripts": {
     "tsc": "../node_modules/.bin/tsc",
     "rollup": "../node_modules/.bin/rollup -c ../rollup.config.js",

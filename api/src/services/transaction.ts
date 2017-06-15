@@ -1,4 +1,4 @@
-import { getItem } from '@honesty-store/item/lib/client';
+import { getItem } from '@honesty-store/item';
 import { CodedError } from '@honesty-store/service/lib/error';
 import {
   createTransaction,
@@ -6,7 +6,7 @@ import {
   issueUserRequestedRefund,
   TransactionAndBalance,
   TransactionBody
-} from '@honesty-store/transaction/lib/client/index';
+} from '@honesty-store/transaction';
 import { getItemPriceFromStore } from './store';
 
 const expandItemDetails = async (key, transaction) => {

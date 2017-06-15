@@ -16,7 +16,8 @@
   "dependencies": {
     "@honesty-store/service": "0.0.0"
   },
-  "main": "lib/index.js",
+  "main": "lib/client/index.js",
+  "types": "lib/client/index.d.ts",
   "peerDependencies": {
     "aws-sdk": "2.22.0"
   }
