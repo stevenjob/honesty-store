@@ -30,7 +30,7 @@ const NavLink = withRouter(({ to, className, text, router }) => (
 const imageHeight = '2rem';
 
 const Chrome = ({ title: _title, storeCode, children, showNav }) => (
-  <div className="col-12">
+  <div className="col-12 mb2">
     <div className="fixed top-0 right-0 left-0 bg-navy border-silver white z1">
       <header>
         <div className="mx-auto">
