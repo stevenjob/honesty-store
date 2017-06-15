@@ -1,17 +1,15 @@
 import { DynamoDB } from 'aws-sdk';
-import { Transaction, transactionTypes } from './';
+import { InternalAccount, Transaction } from './';
 
-const isTransaction = (transaction: any): transaction is Transaction => {
-  const { type } = transaction;
-  return transactionTypes.some(txType => txType === type);
-};
+const isAccount = (account: any): account is InternalAccount =>
+  account.balance != null;
 
 export const subscribeTransactions = function* (event): IterableIterator<Transaction> {
   for (const record of event.Records) {
-    const converted = DynamoDB.Converter.output({ M: record.dynamodb.NewImage });
+    const image = DynamoDB.Converter.output({ M: record.dynamodb.NewImage });
 
-    if (isTransaction(converted)) {
-      yield converted;
+    if (isAccount(image)) {
+      yield image.cachedTransactions[0]; // may generate spurious transactions, but reducers will handle this
     }
   }
 };
