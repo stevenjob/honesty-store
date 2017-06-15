@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@honesty-store/service": "0.0.0",
+    "node-fetch": "^1.6.3",
     "stripe": "^4.15.0"
   },
   "peerDependencies": {

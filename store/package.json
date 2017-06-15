@@ -13,6 +13,7 @@
     "@honesty-store/cruft": "0.0.0",
     "@honesty-store/service": "0.0.0",
     "@honesty-store/transaction": "0.0.0",
+    "uuid": "^3.0.1",
     "validator": "^6.2.1"
   },
   "devDependencies": {

@@ -26,7 +26,8 @@
     "@honesty-store/service": "0.0.0",
     "@honesty-store/store": "0.0.0",
     "@honesty-store/user": "0.0.0",
-    "cruft-ddb": "^3.0.6"
+    "cruft-ddb": "^3.0.6",
+    "uuid": "^3.0.1"
   },
   "main": "lib/index.js",
   "jest": {

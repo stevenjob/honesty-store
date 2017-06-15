@@ -12,6 +12,7 @@
   "dependencies": {
     "@honesty-store/service": "0.0.0",
     "json-stable-stringify": "^1.0.1",
+    "ms": "^1.0.0",
     "validator": "^6.2.1"
   },
   "devDependencies": {
