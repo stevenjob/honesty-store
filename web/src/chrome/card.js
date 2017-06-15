@@ -86,7 +86,8 @@ class Card extends React.Component {
         {error
           ? <div className="red">
               <p>
-                There was a problem collecting payment from your card, please check the details
+                There was a problem collecting payment from your card, please
+                check the details
               </p>
               <p>
                 {error.code
@@ -98,7 +99,10 @@ class Card extends React.Component {
               <h2>{topUpHeaderText}<sup>*</sup></h2>
               <p className="h6">
                 <sup>*</sup>
-                Our card processor charges us a fixed fee + a variable fee for every transaction. By grouping your transactions together in to a single top up, we end up paying less and we pass that saving on to you.
+                Our card processor charges us a fixed fee + a variable fee for
+                every transaction. By grouping your transactions together in to
+                a single top up, we end up paying less and we pass that saving
+                on to you.
               </p>
             </div>}
         <p>

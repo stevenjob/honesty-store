@@ -47,7 +47,7 @@ class RefundRequest extends React.Component {
   isValidReasonSelected() {
     const { refundReason } = this.state;
     return refundReason !== '';
-  };
+  }
 
   render() {
     const { itemName } = this.props;

@@ -7,7 +7,8 @@ export default () => (
   <Full left={<NotNow />}>
     <h1>Want to close your account?</h1>
     <p>
-      If you want to close your account and receive a refund of your remaining balance please chat with customer support.
+      If you want to close your account and receive a refund of your remaining
+      balance please chat with customer support.
     </p>
     <p>
       <Link className="btn btn-primary" to={`/help`}>

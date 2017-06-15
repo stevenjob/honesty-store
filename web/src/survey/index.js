@@ -8,7 +8,8 @@ const Index = ({ surveyAvailable, count }) => (
   <Full left={<Back />}>
     <h1>It's Come To This...<sup>*</sup></h1>
     <p>
-      In the age-old battle for space in your store, many have fallen and only the very strongest prosper.
+      In the age-old battle for space in your store, many have fallen and only
+      the very strongest prosper.
     </p>
     <p>
       We're going to line up
@@ -30,7 +31,8 @@ const Index = ({ surveyAvailable, count }) => (
         </div>}
     <p className="mt4 h6">
       <sup>*</sup>
-      Actually, we already do our best to predict what you'd like to see in your store but sometimes it's nicer to ask...
+      Actually, we already do our best to predict what you'd like to see in your
+      store but sometimes it's nicer to ask...
     </p>
   </Full>
 );

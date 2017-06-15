@@ -17,7 +17,8 @@ const ConfirmStoreChange = ({
       {' '}
       {storeCode}
       {' '}
-      isn't your usual store and at the moment you can only be associated with one.
+      isn't your usual store and at the moment you can only be associated with
+      one.
     </p>
     <p>
       Would you like us to move you over to

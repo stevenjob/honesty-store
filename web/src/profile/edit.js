@@ -7,7 +7,8 @@ export default () => (
   <Full left={<NotNow />}>
     <h1>Want to update your profile?</h1>
     <p>
-      If you want to report a change of email address or update any of your personal information please chat with customer support.
+      If you want to report a change of email address or update any of your
+      personal information please chat with customer support.
     </p>
     <p>
       <Link className="btn btn-primary" to={`/help`}>

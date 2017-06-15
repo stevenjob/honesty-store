@@ -30,10 +30,15 @@ const Home = ({ performRegister }) => (
       <div className="col-10 md-col-8 lg-col-6 mx-auto">
         <h3>What is honesty.store?</h3>
         <p>
-          We think vending machines are an outdated, cumbersome and distrustful concept in the modern workplace (and that's when they're working!). We want to do things differently, to save people time and money by offering a cheaper, more engagaing and more convenient service.
+          We think vending machines are an outdated, cumbersome and distrustful
+          concept in the modern workplace (and that's when they're working!). We
+          want to do things differently, to save people time and money by
+          offering a cheaper, more engagaing and more convenient service.
         </p>
         <p>
-          We're currently alpha testing our new service at a limited number of locations. If you don't have a store code but would like to find out more, please enter your email address below.
+          We're currently alpha testing our new service at a limited number of
+          locations. If you don't have a store code but would like to find out
+          more, please enter your email address below.
         </p>
 
         <form
