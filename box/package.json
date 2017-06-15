@@ -28,7 +28,7 @@
     "@honesty-store/user": "0.0.0",
     "cruft-ddb": "^3.0.6"
   },
-  "main": "lib/src/index.js",
+  "main": "lib/index.js",
   "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
