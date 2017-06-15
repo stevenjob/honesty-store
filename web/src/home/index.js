@@ -18,10 +18,8 @@ const Home = ({ performRegister }) => (
         </h1>
         <h3 className="regular">The digital honesty box</h3>
 
-        <hr className="border-none py2 sm-my4" />
-
         <Hands
-          className="hands"
+          className="hands py2 sm-my4"
           style={{ maxHeight: handsSize, minHeight: handsSize }}
         />
 
