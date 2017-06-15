@@ -17,7 +17,7 @@ export default async (key, storeId: string, submission: MarketplaceBoxSubmission
   const batch = await getBatch(key, batchId);
 
   const wholesaleCost = itemCostFromBatch(batch);
-  const serviceFee = wholesaleCost * 0.1;
+  const serviceFee = Math.max(wholesaleCost * 0.1, 1);
   const subtotal = wholesaleCost + serviceFee;
   const donation = subtotal * donationRate;
   const total = subtotal + donation;
