@@ -76,7 +76,7 @@ export interface Cruft<T extends AbstractItem> {
   reduce<Event extends HasId>(
     aggregateIdSelector: (event: Event) => string,
     eventIdSelector: (event: Event) => string,
-    reducer: (aggregate: EnhancedItem<T>, event: Event) => EnhancedItem<T>
+    reducer: (aggregate: EnhancedItem<T>, event: Event, emit: (event: AbstractItem) => void) => EnhancedItem<T>
   ): (event: Event) => Promise<EnhancedItem<T>>;
   update(item: EnhancedItem<T>): Promise<EnhancedItem<T>>;
   find(fields: PrototypicalItem<T>): Promise<EnhancedItem<T>>;
@@ -85,7 +85,11 @@ export interface Cruft<T extends AbstractItem> {
   truncate(item: AbstractItem): Promise<void>;
 }
 
-export default <T extends AbstractItem, Event extends AbstractItem = AbstractItem>({
+export default <
+  T extends AbstractItem,
+  InEvent extends AbstractItem = AbstractItem,
+  OutEvent extends AbstractItem = AbstractItem
+>({
   endpoint = process.env.AWS_DYNAMODB_ENDPOINT,
   region = process.env.AWS_REGION,
   tableName,
@@ -101,7 +105,7 @@ export default <T extends AbstractItem, Event extends AbstractItem = AbstractIte
   return {
     create: create<T>({ client, tableName }),
     read: read<T>({ client, tableName }),
-    reduce: reduce<T, Event>({ client, tableName }),
+    reduce: reduce<T, InEvent, OutEvent>({ client, tableName }),
     update: update<T>({ client, tableName }),
     __findAll: __findAll<T>({ client, tableName, limit }),
     findAll: findAll<T>({ client, tableName, limit }),

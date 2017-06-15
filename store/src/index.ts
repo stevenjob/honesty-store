@@ -57,7 +57,7 @@ const reducer = reduce<Transaction | StoreEvent>(
     }
   },
   event => event.id,
-  (store, event) => {
+  (store, event, _emit) => {
     const key = createServiceKey({ service: 'store' });
     switch (event.type) {
       case 'purchase': {

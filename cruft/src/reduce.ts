@@ -3,13 +3,15 @@ import { AbstractItem, Configuration, EnhancedItem, EventItem } from './index';
 import { read } from './read';
 import { update } from './update';
 
-export const reduce = <Aggregate extends AbstractItem, Event extends AbstractItem>({ client, tableName }: Configuration) =>
+type ReduceEmit = <Event>(event: Event) => void;
+
+export const reduce = <Aggregate extends AbstractItem, InEvent extends AbstractItem, OutEvent extends AbstractItem>({ client, tableName }: Configuration) =>
   (
-    aggregateIdSelector: (event: Event) => string,
-    eventIdSelector: (event: Event) => string,
-    reducer: (aggregate: EnhancedItem<Aggregate>, event: Event) => EnhancedItem<Aggregate>
+    aggregateIdSelector: (event: InEvent) => string,
+    eventIdSelector: (event: InEvent) => string,
+    reducer: (aggregate: EnhancedItem<Aggregate>, event: InEvent, emit: ReduceEmit) => EnhancedItem<Aggregate>
   ) =>
-    async (event: Event): Promise<EnhancedItem<Aggregate>> => {
+    async (event: InEvent): Promise<EnhancedItem<Aggregate>> => {
 
       const aggregateId = aggregateIdSelector(event);
 
@@ -47,17 +49,24 @@ export const reduce = <Aggregate extends AbstractItem, Event extends AbstractIte
         }
       }
 
+      const emittedEvents: OutEvent[] = [];
+      const emit = (event: OutEvent) => void emittedEvents.push(event);
+      const reducedAggregate = reducer(aggregate, event, emit);
+
       const updatedLastReceived: EventItem = {
         id: eventId,
         data: event,
         previous: previousLastReceived && previousLastReceived.id
       };
 
+      await Promise.all(emittedEvents.map(event => create<OutEvent>({ client, tableName })(<OutEvent & { version: 0 }>event)));
+
       const updatedAggregate = Object.assign(
         {},
-        reducer(aggregate, event),
+        reducedAggregate,
         {
-          lastReceived: updatedLastReceived
+          lastReceived: updatedLastReceived,
+          lastEmitted: emittedEvents[emittedEvents.length - 1]
         }
       );
 
