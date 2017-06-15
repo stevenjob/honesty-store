@@ -1,4 +1,4 @@
-import fetch from '@honesty-store/service/src/fetch';
+import fetch from '@honesty-store/service/lib/fetch';
 
 export interface BatchReference {
   id: string;
@@ -23,10 +23,10 @@ export interface VariableBoxItemOverheads {
   donation: number;
   total: number;
 }
-interface Donatable {
+export type Donatable = {
   donationRate: number;
-}
-type ShippingDetails = {
+};
+export type ShippingDetails = {
   shippingCost: number;
   packed?: number;
   shipped?: number;
@@ -54,7 +54,7 @@ export type Box = ShippingDetails & Donatable & {
   id: string;
 };
 
-import { lambdaBaseUrl } from '@honesty-store/service/src/baseUrl';
+import { lambdaBaseUrl } from '@honesty-store/service/lib/baseUrl';
 
 const { get, post, put } = fetch('box', lambdaBaseUrl);
 

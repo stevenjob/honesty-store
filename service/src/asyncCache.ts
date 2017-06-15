@@ -2,7 +2,7 @@ import * as AsyncCache from 'async-cache';
 
 (<any>Symbol).asyncIterator = Symbol.for('asyncIterator');
 
-interface Options<Key, Value> {
+export interface Options<Key, Value> {
   max?: number;
   maxAge?: number;
   load: (key: Key) => Promise<Value>;

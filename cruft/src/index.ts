@@ -12,21 +12,21 @@ import { update } from './update';
 
 export type Timestamp = number;
 
-interface HasId {
+export interface HasId {
   /**
    * ID managed by consumer
    */
   id: string;
 }
 
-interface HasVersion {
+export interface HasVersion {
   /**
    * Monotomically increasing counter managed by store
    */
   version: number;
 }
 
-interface HasMetadata {
+export interface HasMetadata {
   /**
    * Unix timestamp of record creation managed by store.
    * N.B. The store will always silently override this value if specified to support use cases which read an item, modify it and attempt to

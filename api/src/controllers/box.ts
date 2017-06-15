@@ -1,6 +1,6 @@
-import { markBoxAsReceived } from '@honesty-store/box/src/client';
-import { CodedError } from '@honesty-store/service/src/error';
-import { updateItemCount } from '@honesty-store/store/src/client';
+import { markBoxAsReceived } from '@honesty-store/box/lib/client';
+import { CodedError } from '@honesty-store/service/lib/error';
+import { updateItemCount } from '@honesty-store/store/lib/client';
 import isEmail = require('validator/lib/isEmail');
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { getSessionData  } from '../services/session';

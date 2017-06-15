@@ -16,7 +16,7 @@ const hackedModules = {
 };
 
 const options = {
-  entry: 'lib/src/lambda.js',
+  entry: 'lib/lambda.js',
   exports: 'named',
   format: 'cjs',
   sourceMap: true,

@@ -1,8 +1,8 @@
-import { getStoreFromId } from '@honesty-store/store/src/client';
-import { getUserSurveys } from '@honesty-store/survey/src/client';
-import { CardDetails, getCardDetails } from '@honesty-store/topup/src/client/index';
-import { Transaction } from '@honesty-store/transaction/src/client/index';
-import { userRegistered } from '@honesty-store/user/src/client';
+import { getStoreFromId } from '@honesty-store/store/lib/client';
+import { getUserSurveys } from '@honesty-store/survey/lib/client';
+import { CardDetails, getCardDetails } from '@honesty-store/topup/lib/client/index';
+import { Transaction } from '@honesty-store/transaction/lib/client/index';
+import { userRegistered } from '@honesty-store/user/lib/client';
 import { StoreItem, storeItems } from '../services/store';
 import { getExpandedTransactionsAndBalance } from '../services/transaction';
 import { expandTopPrioritySurvey } from './survey';
@@ -14,11 +14,11 @@ export interface UserSessionData {
   features: any;
   emailAddress: string;
 }
-interface StoreSessionData {
+export interface StoreSessionData {
   code: string;
   items: StoreItem[];
 }
-interface SessionData {
+export interface SessionData {
   user: UserSessionData;
   store: StoreSessionData;
   refreshToken: string;

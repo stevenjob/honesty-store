@@ -7,19 +7,19 @@ import { error, info } from './log';
 import { verifyServiceSecret } from './serviceSecret';
 import time from './time';
 
-interface Params {
+export interface Params {
   [key: string]: string;
 }
 
-interface ExpressBodyAction<Result, Body> {
+export interface ExpressBodyAction<Result, Body> {
   (key: Key, params: Params, body: Body, request: any): Promise<Result>;
 }
 
-interface ExpressAuthentication {
+export interface ExpressAuthentication {
   (request: any, response: any, next: any): void;
 }
 
-interface ExpressRouter {
+export interface ExpressRouter {
   (request: any, response: any, next: any): void;
   get<Result>(path: string, authentication: ExpressAuthentication, action: ExpressBodyAction<undefined, Result>);
   post<Body, Result>(path: string, authentication: ExpressAuthentication, action: ExpressBodyAction<Body, Result>);

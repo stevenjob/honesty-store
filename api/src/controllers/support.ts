@@ -1,7 +1,7 @@
 import isEmail = require('validator/lib/isEmail');
 
-import { sendSlackMessage } from '@honesty-store/service/src/slack';
-import { userRegistered } from '@honesty-store/user/src/client';
+import { sendSlackMessage } from '@honesty-store/service/lib/slack';
+import { userRegistered } from '@honesty-store/user/lib/client';
 import { authenticateAccessToken } from '../middleware/authenticate';
 
 export const sendSlackUserMessage = async ({ key, user, message, emailAddress = null, fields }) => {

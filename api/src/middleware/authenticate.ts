@@ -1,11 +1,11 @@
 import HTTPStatus = require('http-status');
-import { createAuthenticationKey } from '@honesty-store/service/src/key';
-import { error } from '@honesty-store/service/src/log';
+import { createAuthenticationKey } from '@honesty-store/service/lib/key';
+import { error } from '@honesty-store/service/lib/log';
 import {
   getUserByAccessToken,
   getUserByMagicLinkToken,
   getUserByRefreshToken
-} from '@honesty-store/user/src/client/index';
+} from '@honesty-store/user/lib/client/index';
 
 const getToken = (request) => {
   const { authorization } = request.headers;

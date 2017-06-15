@@ -21,7 +21,7 @@ export interface StoreItem extends Item {
   };
 }
 
-interface PriceBreakdown {
+export interface PriceBreakdown {
   wholesaleCost: number;
   handlingFee: number;
   serviceFee: number;

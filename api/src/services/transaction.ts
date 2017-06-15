@@ -1,8 +1,12 @@
-import { getItem } from '@honesty-store/item/src/client';
-import { CodedError } from '@honesty-store/service/src/error';
+import { getItem } from '@honesty-store/item/lib/client';
+import { CodedError } from '@honesty-store/service/lib/error';
 import {
-  createTransaction, getAccount, issueUserRequestedRefund, TransactionBody
-} from '@honesty-store/transaction/src/client/index';
+  createTransaction,
+  getAccount,
+  issueUserRequestedRefund,
+  TransactionAndBalance,
+  TransactionBody
+} from '@honesty-store/transaction/lib/client/index';
 import { getItemPriceFromStore } from './store';
 
 const expandItemDetails = async (key, transaction) => {
@@ -58,7 +62,7 @@ export const purchase = async ({ key, itemID, userID, accountID, storeID, quanti
   };
 };
 
-export const refund = async ({ key, transactionId, userId, reason }) =>
+export const refund = async ({ key, transactionId, userId, reason }): Promise<TransactionAndBalance> =>
   await issueUserRequestedRefund(key, transactionId, userId, reason);
 
 export const getExpandedTransactionsAndBalance = async ({ key, accountID, page = 0 }) => {

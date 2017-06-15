@@ -1,8 +1,12 @@
-import { getBatch, itemCostFromBatch } from '@honesty-store/batch/src/client';
+import { getBatch, itemCostFromBatch } from '@honesty-store/batch/lib/client';
 import { v4 as uuid } from 'uuid';
 import {
-  BatchReference, Box, BoxItem,
-  BoxItemWithBatchReference, FixedBoxItemOverheads, ShippedBoxSubmission,
+  BatchReference,
+  Box,
+  BoxItem,
+  BoxItemWithBatchReference,
+  FixedBoxItemOverheads,
+  ShippedBoxSubmission,
   VariableBoxItemOverheads
 } from './client';
 import { avg, roundItemCosts, sum } from './math';

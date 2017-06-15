@@ -1,8 +1,8 @@
 import isUUID = require('validator/lib/isUUID');
 
-import { createAssertValidUuid } from '@honesty-store/service/src/assert';
-import { CodedError } from '@honesty-store/service/src/error';
-import fetch from '@honesty-store/service/src/fetch';
+import { createAssertValidUuid } from '@honesty-store/service/lib/assert';
+import { CodedError } from '@honesty-store/service/lib/error';
+import fetch from '@honesty-store/service/lib/fetch';
 
 const isSHA256 = (hash) => /^[a-f0-9]{64}$/.test(hash);
 

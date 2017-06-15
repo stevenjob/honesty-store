@@ -1,4 +1,4 @@
-import fetch from '@honesty-store/service/src/fetch';
+import fetch from '@honesty-store/service/lib/fetch';
 
 export interface User {
   id: string;
@@ -16,7 +16,7 @@ export interface WithAccessToken {
   accessToken: string;
 }
 
-interface WithMagicLinkToken {
+export interface WithMagicLinkToken {
   magicLinkToken: string;
 }
 

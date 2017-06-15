@@ -1,7 +1,7 @@
-import fetch from '@honesty-store/service/src/fetch';
-import { TransactionAndBalance } from '@honesty-store/transaction/src/client/index';
+import fetch from '@honesty-store/service/lib/fetch';
+import { TransactionAndBalance } from '@honesty-store/transaction/lib/client/index';
 
-interface Stripe {
+export interface Stripe {
   customer: any;
   nextChargeToken: string;
 }

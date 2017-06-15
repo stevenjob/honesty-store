@@ -1,8 +1,8 @@
 import { config } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 
-import { createAssertValidUuid } from '@honesty-store/service/src/assert';
-import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
+import { createAssertValidUuid } from '@honesty-store/service/lib/assert';
+import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
 import { Batch } from './client';
 
 config.region = process.env.AWS_REGION;
@@ -19,7 +19,7 @@ const getBatch = async (batchId): Promise<Batch> => {
   return await cruft.read({ id: batchId });
 };
 
-export const router = lambdaRouter('batch', 1);
+export const router: LambdaRouter = lambdaRouter('batch', 1);
 
 router.get(
   '/:batchId',

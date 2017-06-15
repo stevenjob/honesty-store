@@ -1,10 +1,10 @@
-import { createAssertValidUuid } from '@honesty-store/service/src/assert';
-import { CodedError } from '@honesty-store/service/src/error';
-import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
-import { info } from '@honesty-store/service/src/log';
-import { migrateStoreCodeToId } from '@honesty-store/service/src/store';
-import { getStoreFromId } from '@honesty-store/store/src/client';
-import { createAccount } from '@honesty-store/transaction/src/client';
+import { createAssertValidUuid } from '@honesty-store/service/lib/assert';
+import { CodedError } from '@honesty-store/service/lib/error';
+import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
+import { info } from '@honesty-store/service/lib/log';
+import { migrateStoreCodeToId } from '@honesty-store/service/lib/store';
+import { getStoreFromId } from '@honesty-store/store/lib/client';
+import { createAccount } from '@honesty-store/transaction/lib/client';
 import { config, SES } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 import { v4 as uuid } from 'uuid';
@@ -213,7 +213,7 @@ const logoutUser = async (userId) => {
   return {};
 };
 
-export const router = lambdaRouter('user', 1);
+export const router: LambdaRouter = lambdaRouter('user', 1);
 
 router.get(
   '/:userId',

@@ -1,6 +1,7 @@
-import jwt = require('jsonwebtoken');
-import { CodedError, ErrorCode } from '@honesty-store/service/src/error';
-import { warn } from '@honesty-store/service/src/log';
+import * as jwt from 'jsonwebtoken';
+
+import { CodedError, ErrorCode } from '@honesty-store/service/lib/error';
+import { warn } from '@honesty-store/service/lib/log';
 
 const secret = process.env.USER_TOKEN_SECRET;
 if (!secret) {

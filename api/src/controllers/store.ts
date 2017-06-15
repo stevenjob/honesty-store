@@ -1,9 +1,9 @@
-import { getStoreFromCode } from '@honesty-store/store/src/client';
-import { updateUser } from '@honesty-store/user/src/client/index';
+import { getStoreFromCode } from '@honesty-store/store/lib/client';
+import { updateUser, User } from '@honesty-store/user/lib/client/index';
 import { authenticateAccessToken } from '../middleware/authenticate';
 import { getSessionData } from '../services/session';
 
-export const updateDefaultStoreCode = async (key, userID, storeCode) => {
+export const updateDefaultStoreCode = async (key, userID, storeCode): Promise<User> => {
   const { id: defaultStoreId } = await getStoreFromCode(key, storeCode);
   return await updateUser(key, userID, { defaultStoreId });
 };

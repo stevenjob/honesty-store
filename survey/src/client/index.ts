@@ -1,10 +1,10 @@
-import fetch from '@honesty-store/service/src/fetch';
+import fetch from '@honesty-store/service/lib/fetch';
 
-type ItemId = string;
-type SurveyId = string;
-type SurveyResponseId = string; // ${userId}--${surveyId}
+export type ItemId = string;
+export type SurveyId = string;
+export type SurveyResponseId = string; // ${userId}--${surveyId}
 
-type ItemPair = [ItemId, ItemId];
+export type ItemPair = [ItemId, ItemId];
 
 export interface Survey {
   id: SurveyId;

@@ -2,7 +2,7 @@
   "name": "@honesty-store/batch",
   "version": "0.0.0",
   "private": true,
-  "main": "lib/src/index.js",
+  "main": "lib/client/index.js",
   "scripts": {
     "tsc": "../node_modules/.bin/tsc",
     "rollup": "../node_modules/.bin/rollup -c ../rollup.config.js",

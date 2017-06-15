@@ -11,15 +11,10 @@
         "lib": [
             "esnext",
             "esnext.asynciterable"
-        ]
+        ],
+        "declaration": true
     },
     "include": [
-        "src/**/*",
-        "node_modules/@honesty-store/*/src"
-    ],
-    "exclude": [
-        "node_modules/@honesty-store/*/node_modules",
-        "node_modules/@honesty-store/*/src/**/*.test.ts",
-        "src/**/*.test.ts"
+        "src/**/*"
     ]
 }

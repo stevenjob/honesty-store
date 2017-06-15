@@ -1,7 +1,7 @@
 import { config, DynamoDB } from 'aws-sdk';
 
-import { createAssertValidUuid } from '@honesty-store/service/src/assert';
-import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
+import { createAssertValidUuid } from '@honesty-store/service/lib/assert';
+import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
 import { SurveyResponse } from './client';
 import { getSurvey, getSurveys } from './surveys';
 
@@ -129,7 +129,7 @@ const acceptUserSurvey = async ({ userId, answers, surveyId }) => {
   return surveys.filter(({ id }) => surveyId !== id);
 };
 
-export const router = lambdaRouter('survey', 1);
+export const router: LambdaRouter = lambdaRouter('survey', 1);
 
 router.get(
   '/:userId',

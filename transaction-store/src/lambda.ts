@@ -1,6 +1,6 @@
-import { createServiceKey } from '@honesty-store/service/src/key';
-import { recordTransaction } from '@honesty-store/store/src/client';
-import { subscribeTransactions } from '@honesty-store/transaction/src/client/stream';
+import { createServiceKey } from '@honesty-store/service/lib/key';
+import { recordTransaction } from '@honesty-store/store/lib/client';
+import { subscribeTransactions } from '@honesty-store/transaction/lib/client/stream';
 
 const asyncHandler = async event => {
   const key = createServiceKey({ service: 'transaction-slack' });

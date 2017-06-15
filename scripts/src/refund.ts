@@ -1,8 +1,8 @@
 // tslint:disable:no-console
 import * as program from 'commander';
 
-import { createServiceKey } from '@honesty-store/service/src/key';
-import { issueSupportRequestedRefund } from '@honesty-store/transaction/src/client/index';
+import { createServiceKey } from '@honesty-store/service/lib/key';
+import { issueSupportRequestedRefund } from '@honesty-store/transaction/lib/client/index';
 
 const issueRefund = async (transactionId, reason, dateLimit) => {
   const key = createServiceKey({ service: 'refund-script' });

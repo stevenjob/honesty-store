@@ -1,8 +1,8 @@
 import { config } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 
-import { createAssertValidUuid } from '@honesty-store/service/src/assert';
-import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
+import { createAssertValidUuid } from '@honesty-store/service/lib/assert';
+import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
 import { Item } from './client';
 
 config.region = process.env.AWS_REGION;
@@ -21,7 +21,7 @@ const getItem = async(itemId): Promise<Item> => {
 
 const getAllItems = () => cruft.__findAll({});
 
-export const router = lambdaRouter('item', 1);
+export const router: LambdaRouter = lambdaRouter('item', 1);
 
 router.get(
   '/all',

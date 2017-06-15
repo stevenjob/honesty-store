@@ -1,7 +1,7 @@
 import { config } from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
 
-import { default as cruft, EnhancedItem } from '@honesty-store/cruft/src/index';
+import { default as cruft, EnhancedItem } from '@honesty-store/cruft/lib/index';
 import {
   assertNever,
   assertNonZeroPositiveInteger,
@@ -9,12 +9,12 @@ import {
   assertValidString,
   assertValidUuid,
   createAssertValidObject
-} from '@honesty-store/service/src/assert';
-import { CodedError } from '@honesty-store/service/src/error';
-import { createServiceKey } from '@honesty-store/service/src/key';
-import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
-import { error } from '@honesty-store/service/src/log';
-import { assertValidTransaction, Transaction } from '@honesty-store/transaction/src/client';
+} from '@honesty-store/service/lib/assert';
+import { CodedError } from '@honesty-store/service/lib/error';
+import { createServiceKey } from '@honesty-store/service/lib/key';
+import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
+import { error } from '@honesty-store/service/lib/log';
+import { assertValidTransaction, Transaction } from '@honesty-store/transaction/lib/client';
 
 import {
   Store,
@@ -162,7 +162,7 @@ const reducer = reduce<Transaction | StoreEvent>(
   }
 );
 
-export const router = lambdaRouter('store', 1);
+export const router: LambdaRouter = lambdaRouter('store', 1);
 
 const externalise = (store: EnhancedItem<Store>): Store => ({
   id: store.id,

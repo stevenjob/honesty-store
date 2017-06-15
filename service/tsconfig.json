@@ -11,7 +11,8 @@
         "lib": [
             "esnext",
             "esnext.asynciterable"
-        ]
+        ],
+        "declaration": true
     },
     "include": [
         "src/**/*"

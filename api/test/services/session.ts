@@ -1,8 +1,8 @@
 const assert = require('chai').assert;
-const { registerUser, updateUser, __users } = require('../../src/services/user');
-const { addItemTransaction } = require('../../src/services/transaction');
-const { getItems } = require('../../src/services/store');
-const getSessionData = require('../../src/services/session');
+const { registerUser, updateUser, __users } = require('../../lib/services/user');
+const { addItemTransaction } = require('../../lib/services/transaction');
+const { getItems } = require('../../lib/services/store');
+const getSessionData = require('../../lib/services/session');
 
 describe('Session Service', () => {
   beforeEach(() => {

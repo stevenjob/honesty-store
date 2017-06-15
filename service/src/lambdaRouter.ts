@@ -11,11 +11,11 @@ import time from './time';
 
 AWSXRay.captureAWS(AWS);
 
-interface Params {
+export interface Params {
   [key: string]: string;
 }
 
-interface LambdaBodyAction<Body, Result> {
+export interface LambdaBodyAction<Body, Result> {
   (key: Key, params: Params, body: Body): Promise<Result>;
 }
 

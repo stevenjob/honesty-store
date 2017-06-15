@@ -1,4 +1,4 @@
-import { getItem } from '@honesty-store/item/src/client';
+import { getItem } from '@honesty-store/item/lib/client';
 
 export const expandTopPrioritySurvey = async (surveys) => {
   if (surveys.length === 0) {

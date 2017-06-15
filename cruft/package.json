@@ -2,7 +2,7 @@
   "name": "@honesty-store/cruft",
   "version": "0.0.0",
   "description": "A simple optimistic-locking abstraction over Dynamo DB",
-  "main": "lib/src/index.js",
+  "main": "lib/index.js",
   "repository": "git@github.com:honesty-store/honesty-store.git",
   "author": "Chris Price <price.c@gmail.com>",
   "license": "MIT",

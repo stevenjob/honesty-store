@@ -1,8 +1,8 @@
 import { config } from 'aws-sdk';
 import * as ms from 'ms';
 
-import { CodedError } from '@honesty-store/service/src/error';
-import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
+import { CodedError } from '@honesty-store/service/lib/error';
+import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
 import { assertValidAccountId, createAccount, getAccountInternal, updateAccount } from './account';
 import {
   AccountAndTransactions,
@@ -195,7 +195,7 @@ const issueRefund = async (transactionToRefund: Transaction, reason: SupportPerm
   };
 };
 
-export const router = lambdaRouter('transaction', 1);
+export const router: LambdaRouter = lambdaRouter('transaction', 1);
 
 router.get(
   '/account/:accountId',

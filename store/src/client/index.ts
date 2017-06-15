@@ -1,5 +1,5 @@
-import fetch from '@honesty-store/service/src/fetch';
-import { Transaction } from '@honesty-store/transaction/src/client';
+import fetch from '@honesty-store/service/lib/fetch';
+import { Transaction } from '@honesty-store/transaction/lib/client';
 
 export interface StoreItemDetails {
   name: string;
@@ -53,7 +53,7 @@ export type StoreItemEvent = StoreItemAudited | StoreItemPriceChanged;
 
 export type StoreEvent = StoreItemEvent | StoreItemListed | StoreItemUnlisted;
 
-interface StoreItemTracking {
+export interface StoreItemTracking {
   purchaseCount: number;
   refundCount: number;
   availableCount: number;
@@ -69,7 +69,7 @@ export interface Store {
   items: StoreItem[];
 }
 
-import { lambdaBaseUrl } from '@honesty-store/service/src/baseUrl';
+import { lambdaBaseUrl } from '@honesty-store/service/lib/baseUrl';
 
 const { get, post } = fetch('store', lambdaBaseUrl);
 

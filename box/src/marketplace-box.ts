@@ -1,6 +1,12 @@
-import { getBatch, itemCostFromBatch } from '@honesty-store/batch/src/client';
+import { getBatch, itemCostFromBatch } from '@honesty-store/batch/lib/client';
 import { v4 as uuid } from 'uuid';
-import { Box, BoxItem, FixedBoxItemOverheads, MarketplaceBoxSubmission, VariableBoxItemOverheads } from './client';
+import {
+  Box,
+  BoxItem,
+  FixedBoxItemOverheads,
+  MarketplaceBoxSubmission,
+  VariableBoxItemOverheads
+} from './client';
 import { roundItemCosts } from './math';
 
 export default async (key, storeId: string, submission: MarketplaceBoxSubmission): Promise<Box & { version: 0 }> => {

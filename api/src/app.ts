@@ -1,7 +1,7 @@
 import express = require('express');
 import bodyParser = require('body-parser');
 import compression = require('compression');
-import { expressRouter } from '@honesty-store/service/src/expressRouter';
+import { expressRouter, ExpressRouter } from '@honesty-store/service/lib/expressRouter';
 import cors = require('cors');
 import boxController from './controllers/box';
 import logoutController from './controllers/logout';
@@ -18,8 +18,8 @@ import topUpController from './controllers/topup';
 import transactionsController from './controllers/transactions';
 import { apiVersion } from './version';
 
-export const app = express();
-const router = expressRouter('api', apiVersion);
+export const app: express.Application = express();
+const router: ExpressRouter = expressRouter('api', apiVersion);
 
 app.use(compression());
 app.use(bodyParser.json());

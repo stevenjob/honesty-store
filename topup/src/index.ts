@@ -1,9 +1,9 @@
-import { createAssertValidUuid } from '@honesty-store/service/src/assert';
-import { CodedError } from '@honesty-store/service/src/error';
-import { Key } from '@honesty-store/service/src/key';
-import { lambdaRouter } from '@honesty-store/service/src/lambdaRouter';
-import { error, info } from '@honesty-store/service/src/log';
-import { assertBalanceWithinLimit, createTransaction, TransactionBody } from '@honesty-store/transaction/src/client/index';
+import { createAssertValidUuid } from '@honesty-store/service/lib/assert';
+import { CodedError } from '@honesty-store/service/lib/error';
+import { Key } from '@honesty-store/service/lib/key';
+import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
+import { error, info } from '@honesty-store/service/lib/log';
+import { assertBalanceWithinLimit, createTransaction, TransactionBody } from '@honesty-store/transaction/lib/client/index';
 import { config, DynamoDB } from 'aws-sdk';
 import * as stripeFactory from 'stripe';
 import { v4 as uuid } from 'uuid';
@@ -325,7 +325,7 @@ const getCardDetails = async ({ userId }) => {
   return extractCardDetails(topupAccount);
 };
 
-export const router = lambdaRouter('topup', 1);
+export const router: LambdaRouter = lambdaRouter('topup', 1);
 
 router.post(
   '/',

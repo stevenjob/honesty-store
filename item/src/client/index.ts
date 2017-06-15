@@ -1,4 +1,4 @@
-import fetch from '@honesty-store/service/src/fetch';
+import fetch from '@honesty-store/service/lib/fetch';
 
 export interface Item {
   id: string;
@@ -14,7 +14,7 @@ export interface Item {
   notes?: string;
 }
 
-import { lambdaBaseUrl } from '@honesty-store/service/src/baseUrl';
+import { lambdaBaseUrl } from '@honesty-store/service/lib/baseUrl';
 
 const { get } = fetch('item', lambdaBaseUrl);
 

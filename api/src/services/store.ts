@@ -1,4 +1,4 @@
-import { getStoreFromId } from '@honesty-store/store/src/client';
+import { getStoreFromId } from '@honesty-store/store/lib/client';
 
 export interface StoreItem {
   id: string;
@@ -20,7 +20,7 @@ export interface StoreItem {
   location?: string;
 }
 
-interface PriceBreakdown {
+export interface PriceBreakdown {
   wholesaleCost: number;
   serviceFee: number;
   donation: number;

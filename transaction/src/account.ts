@@ -1,6 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
 
-import { createAssertValidUuid } from '@honesty-store/service/src/assert';
+import { createAssertValidUuid } from '@honesty-store/service/lib/assert';
 import { InternalAccount } from './client';
 
 export const assertValidAccountId = createAssertValidUuid('accountId');

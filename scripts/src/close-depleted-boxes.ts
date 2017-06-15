@@ -1,4 +1,4 @@
-import { Box } from '@honesty-store/box/src/client';
+import { Box } from '@honesty-store/box/lib/client';
 import { config } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 

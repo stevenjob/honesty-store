@@ -4,9 +4,9 @@ import { v4 as uuid } from 'uuid';
 import { Key } from './key';
 import { info } from './log';
 
-type Channel = 'support' | 'purchases';
+export type Channel = 'support' | 'purchases';
 
-interface SlackMessageParams {
+export interface SlackMessageParams {
   key: Key;
   message: string;
   channel: Channel;
