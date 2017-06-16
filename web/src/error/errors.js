@@ -99,6 +99,12 @@ const errorDefinitions = {
     actionDescription: `Please get in touch with us if you have any questions`,
     dismissalText: dismissalText.DISMISS
   },
+  UserLoggedOut: {
+    message: `Looks like you've signed out`,
+    actionDescription: `Could you please select a store and try signing in again?`,
+    redirectionURL: `/`,
+    dismissalText: dismissalText.DISMISS
+  },
   UnknownError: {
     message: `Oops! Something went wrong...`,
     actionDescription: `Can you try that again, please?`,

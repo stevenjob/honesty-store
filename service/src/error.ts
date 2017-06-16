@@ -26,6 +26,7 @@ export type ErrorCode =
   'AutoRefundPeriodExpired' |
   'RefundAlreadyIssued' |
   'NonRefundableTransactionType' |
+  'UserLoggedOut' |
   'UnknownError';
 
 export class CodedError extends Error {

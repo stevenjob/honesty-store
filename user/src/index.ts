@@ -96,7 +96,7 @@ const getByRefreshToken = async ({ key, refreshToken }): Promise<UserWithAccessT
   able to identify an attack by checking the logs */
   // As well as the JWT signing, we validate a stored uuid for refresh tokens
   if (token !== user.refreshToken) {
-    throw new Error('Invalid refreshToken');
+    throw new CodedError('UserLoggedOut', `Supplied refresh token does not match the one associated with user ${userId}`);
   }
   /* tslint:enable possible-timing-attack */
 
