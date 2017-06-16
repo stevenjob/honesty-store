@@ -86,15 +86,15 @@ export interface Cruft<T extends AbstractItem> {
 }
 
 export default <
-  T extends AbstractItem,
-  InEvent extends AbstractItem = AbstractItem,
-  OutEvent extends AbstractItem = AbstractItem
+  Aggregate extends AbstractItem,
+  ReceivedEvent extends AbstractItem = AbstractItem,
+  EmittedEvent extends AbstractItem = AbstractItem
 >({
   endpoint = process.env.AWS_DYNAMODB_ENDPOINT,
   region = process.env.AWS_REGION,
   tableName,
   limit
-}): Cruft<T> => {
+}): Cruft<Aggregate> => {
   // hack - endpoint isn't a valid property according to the typings
   const client = new DynamoDB.DocumentClient(<{ endpoint: string }>{
     apiVersion: '2012-08-10',
@@ -103,13 +103,13 @@ export default <
   });
 
   return {
-    create: create<T>({ client, tableName }),
-    read: read<T>({ client, tableName }),
-    reduce: reduce<T, InEvent, OutEvent>({ client, tableName }),
-    update: update<T>({ client, tableName }),
-    __findAll: __findAll<T>({ client, tableName, limit }),
-    findAll: findAll<T>({ client, tableName, limit }),
-    find: find<T>({ client, tableName, limit }),
+    create: create<Aggregate>({ client, tableName }),
+    read: read<Aggregate>({ client, tableName }),
+    reduce: reduce<Aggregate, ReceivedEvent, EmittedEvent>({ client, tableName }),
+    update: update<Aggregate>({ client, tableName }),
+    __findAll: __findAll<Aggregate>({ client, tableName, limit }),
+    findAll: findAll<Aggregate>({ client, tableName, limit }),
+    find: find<Aggregate>({ client, tableName, limit }),
     truncate: truncate({ client, tableName })
   };
 };
