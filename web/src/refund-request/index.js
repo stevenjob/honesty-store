@@ -87,6 +87,7 @@ class RefundRequest extends React.Component {
               />
             </div>
             <button
+              type="button"
               className="btn btn-primary btn-big center mt2 h3"
               disabled={!this.isValidReasonSelected()}
               onClick={() => this.handleRefundRequest()}
