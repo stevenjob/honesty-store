@@ -5,7 +5,11 @@ import { update } from './update';
 
 type ReduceEmit = <Event>(event: Event) => void;
 
-export const reduce = <Aggregate extends AbstractItem, InEvent extends AbstractItem, OutEvent extends AbstractItem>({ client, tableName }: Configuration) =>
+export const reduce = <
+  Aggregate extends AbstractItem,
+  InEvent extends AbstractItem,
+  OutEvent extends AbstractItem
+>({ client, tableName }: Configuration) =>
   (
     aggregateIdSelector: (event: InEvent) => string,
     eventIdSelector: (event: InEvent) => string,
@@ -50,14 +54,14 @@ export const reduce = <Aggregate extends AbstractItem, InEvent extends AbstractI
       }
 
       const emittedEvents: EventItem[] = [];
-      const emit = (event: OutEvent) => {
+      const emit = (outEvent: OutEvent) => {
         const previous = emittedEvents.length
           ? emittedEvents[emittedEvents.length - 1]
           : aggregate.lastEmitted;
 
         emittedEvents.push({
           id: aggregate.id + ':' + eventId,
-          data: event,
+          data: outEvent,
           previous: previous && previous.id
         });
       };
@@ -69,7 +73,10 @@ export const reduce = <Aggregate extends AbstractItem, InEvent extends AbstractI
         previous: previousLastReceived && previousLastReceived.id
       };
 
-      await Promise.all(emittedEvents.map(event => create<EventItem & { version: number }>({ client, tableName })(<EventItem & { version: 0 }>event)));
+      const storeEvent = (eventItem: EventItem) =>
+        create<EventItem & { version: number }>({ client, tableName })(<EventItem & { version: 0 }>eventItem);
+
+      await Promise.all(emittedEvents.map(storeEvent));
 
       const updatedAggregate = Object.assign(
         {},
