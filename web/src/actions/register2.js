@@ -13,13 +13,10 @@ const register2Request = () => {
   };
 };
 
-const register2Success = ({ user, store }) => {
+const register2Success = response => {
   return {
     type: REGISTER2_SUCESSS,
-    response: {
-      user,
-      store
-    }
+    response
   };
 };
 

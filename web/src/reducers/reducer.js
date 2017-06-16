@@ -141,13 +141,12 @@ export default (state, action) => {
       return requestState('register2', updatedStateProps, state);
     }
     case REGISTER2_SUCESSS: {
-      const { user } = action.response;
       const updatedStateProps = {
+        ...action.response,
         error: {
           ...state.error,
           inline: undefined
-        },
-        user
+        }
       };
       return completionState('register2', updatedStateProps, state);
     }
