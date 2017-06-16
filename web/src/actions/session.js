@@ -1,4 +1,5 @@
 import apifetch from './apirequest';
+import { loggedOutInAnotherSession } from './logged-out';
 
 export const SESSION_REQUEST = 'SESSION_REQUEST';
 export const SESSION_SUCCESS = 'SESSION_SUCCESS';
@@ -48,5 +49,8 @@ export const performSession = () => async (dispatch, getState) => {
     dispatch(sessionSuccess(response));
   } catch (e) {
     dispatch(sessionFailure(e));
+    if (e.code === 'UserLoggedOut') {
+      dispatch(loggedOutInAnotherSession(e));
+    }
   }
 };
