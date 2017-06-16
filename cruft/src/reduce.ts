@@ -49,8 +49,18 @@ export const reduce = <Aggregate extends AbstractItem, InEvent extends AbstractI
         }
       }
 
-      const emittedEvents: OutEvent[] = [];
-      const emit = (event: OutEvent) => void emittedEvents.push(event);
+      const emittedEvents: EventItem[] = [];
+      const emit = (event: OutEvent) => {
+        const previous = emittedEvents.length
+          ? emittedEvents[emittedEvents.length - 1]
+          : aggregate.lastEmitted;
+
+        emittedEvents.push({
+          id: aggregate.id + ':' + eventId,
+          data: event,
+          previous: previous && previous.id
+        });
+      };
       const reducedAggregate = reducer(aggregate, event, emit);
 
       const updatedLastReceived: EventItem = {
@@ -59,7 +69,7 @@ export const reduce = <Aggregate extends AbstractItem, InEvent extends AbstractI
         previous: previousLastReceived && previousLastReceived.id
       };
 
-      await Promise.all(emittedEvents.map(event => create<OutEvent>({ client, tableName })(<OutEvent & { version: 0 }>event)));
+      await Promise.all(emittedEvents.map(event => create<EventItem & { version: number }>({ client, tableName })(<EventItem & { version: 0 }>event)));
 
       const updatedAggregate = Object.assign(
         {},
