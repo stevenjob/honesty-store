@@ -71,6 +71,7 @@ import {
   REFUND_SUCCESS,
   REFUND_FAILURE
 } from '../actions/refund';
+import { LOGGED_OUT_IN_ANOTHER_SESSION } from '../actions/logged-out';
 import { getInitialState } from '../state';
 
 const requestState = (requestId, updatedProps, state) => ({
@@ -83,7 +84,7 @@ const fullPageErrorState = (requestId, error, state) => ({
   ...state,
   error: {
     ...state.error,
-    fullPage: error
+    fullPage: state.error.fullPage || error
   },
   pending: state.pending.filter(e => e !== requestId)
 });
@@ -155,7 +156,7 @@ export default (state, action) => {
       const updatedStateProps = {
         error: {
           inline: cardError,
-          fullPage: error
+          fullPage: state.error.fullPage || error
         }
       };
       return completionState('register2', updatedStateProps, state);
@@ -219,7 +220,7 @@ export default (state, action) => {
       const updatedStateProps = {
         error: {
           inline: cardError,
-          fullPage: error
+          fullPage: state.error.fullPage || error
         }
       };
       return completionState('topup', updatedStateProps, state);
@@ -320,6 +321,8 @@ export default (state, action) => {
     }
     case REFUND_FAILURE:
       return fullPageErrorState('refund', action.error, state);
+    case LOGGED_OUT_IN_ANOTHER_SESSION:
+      return fullPageErrorState(null, action.error, state);
     default:
       return state;
   }
