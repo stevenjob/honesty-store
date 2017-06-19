@@ -68,6 +68,7 @@ const errorDefinitions = {
   TokenError: {
     message: `Your local session is corrupt`,
     actionDescription: `We've reset your session`,
+    redirectionPath: '/',
     dismissalText: dismissalText.DISMISS
   },
   BoxAlreadyMarkedAsReceived: {
@@ -112,7 +113,11 @@ const errorDefinitions = {
   },
   // The following error codes are handled internally and never presented to the user
   EmailNotFound: { message: `Couldn't find your email` },
-  RefreshTokenExpired: { message: `Your session has expired` },
+  RefreshTokenExpired: {
+    message: `Your session has expired`,
+    redirectionPath: '/',
+    dismissalText: dismissalText.DISMISS
+  },
   CardIncorrectNumber: { message: `Incorrect card number` },
   CardInvalidNumber: { message: `Invalid card number` },
   CardInvalidExpiryMonth: { message: `Invalid expiry month` },
