@@ -49,8 +49,17 @@ export const performSession = () => async (dispatch, getState) => {
     dispatch(sessionSuccess(response));
   } catch (e) {
     dispatch(sessionFailure(e));
-    if (e.code === 'UserLoggedOut') {
-      dispatch(loggedOutInAnotherSession(e));
+
+    switch (e.code) {
+      case 'TokenError':
+      case 'RefreshTokenExpired':
+        dispatch(sessionReset());
+        break;
+      case 'UserLoggedOut':
+        dispatch(loggedOutInAnotherSession(e));
+        break;
+      default:
+        break;
     }
   }
 };
