@@ -77,7 +77,7 @@ export const ensureStreamingDB = async (tableName: string) => {
         TableName: tableName,
         StreamSpecification: {
           StreamEnabled: true,
-          StreamViewType: 'NEW_IMAGE'
+          StreamViewType: 'NEW_AND_OLD_IMAGES'
         }
       })
       .promise();
