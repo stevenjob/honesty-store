@@ -321,8 +321,16 @@ export default (state, action) => {
     }
     case REFUND_FAILURE:
       return fullPageErrorState('refund', action.error, state);
-    case LOGGED_OUT_IN_ANOTHER_SESSION:
-      return fullPageErrorState(null, action.error, state);
+    case LOGGED_OUT_IN_ANOTHER_SESSION: {
+      const updatedState = {
+        ...getInitialState(),
+        error: {
+          ...state.error,
+          fullPage: state.error.fullPage
+        }
+      };
+      return fullPageErrorState(null, action.error, updatedState);
+    }
     default:
       return state;
   }
