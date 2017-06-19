@@ -15,7 +15,6 @@ export type ErrorCode =
   'CardExpired' |
   'CardDeclined' |
   'CardError' |
-  'TokenExpired' |
   'AccessTokenExpired' |
   'RefreshTokenExpired' |
   'MagicLinkTokenExpired' |
