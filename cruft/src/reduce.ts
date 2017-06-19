@@ -7,15 +7,15 @@ type ReduceEmit<Event> = (event: Event) => void;
 
 export const reduce = <
   Aggregate extends AbstractItem,
-  InEvent extends AbstractItem,
+  ReceivedEvent extends AbstractItem,
   OutEvent extends AbstractItem
 >({ client, tableName }: Configuration) =>
   (
-    aggregateIdSelector: (event: InEvent) => string,
-    eventIdSelector: (event: InEvent) => string,
-    reducer: (aggregate: EnhancedItem<Aggregate>, event: InEvent, emit: ReduceEmit<OutEvent>) => EnhancedItem<Aggregate>
+    aggregateIdSelector: (event: ReceivedEvent) => string,
+    eventIdSelector: (event: ReceivedEvent) => string,
+    reducer: (aggregate: EnhancedItem<Aggregate>, event: ReceivedEvent, emit: ReduceEmit<OutEvent>) => EnhancedItem<Aggregate>
   ) =>
-    async (event: InEvent): Promise<EnhancedItem<Aggregate>> => {
+    async (event: ReceivedEvent): Promise<EnhancedItem<Aggregate>> => {
 
       const aggregateId = aggregateIdSelector(event);
 
