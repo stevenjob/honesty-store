@@ -44,6 +44,8 @@ const reducer = reduce<Transaction | StoreEvent>(
       case 'refund':
         return event.data.storeId;
       case 'topup':
+      case 'debit':
+      case 'credit':
         throw new Error(`Unable to handle topup transactions ${event.id}`);
       case 'store-audit':
       case 'store-price-change':
@@ -94,6 +96,10 @@ const reducer = reduce<Transaction | StoreEvent>(
       }
       case 'topup': {
         throw new Error(`Unable to handle topup transactions ${event.id}`);
+      }
+      case 'credit':
+      case 'debit': {
+        throw new Error(`Unable to handle transfer transactions ${event.id}`);
       }
       case 'store-audit': {
         const { id, type, itemId, count } = event;

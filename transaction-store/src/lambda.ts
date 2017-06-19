@@ -6,8 +6,13 @@ const asyncHandler = async event => {
   const key = createServiceKey({ service: 'transaction-slack' });
 
   for (const transaction of subscribeTransactions(event)) {
-    if (transaction.type === 'topup') {
-      continue;
+    switch (transaction.type) {
+      case 'topup':
+      case 'debit':
+      case 'credit':
+        continue;
+      default:
+        break;
     }
     await recordTransaction(key, transaction);
   }

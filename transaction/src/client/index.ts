@@ -73,8 +73,8 @@ export const assertValidTransaction = ({ type, amount, data, id, other, next, le
 export const balanceLimit = 1000; // £10
 export const AUTO_REFUND_PERIOD = ms('1h');
 
-export type TransactionType = 'topup' | 'purchase' | 'refund';
-export const transactionTypes = ['topup', 'purchase', 'refund'];
+export type TransactionType = 'topup' | 'purchase' | 'refund' | 'debit' | 'credit';
+export const transactionTypes = ['topup', 'purchase', 'refund', 'debit', 'credit'];
 
 // supplied to transaction service from external service
 export interface TransactionBody {
