@@ -74,4 +74,32 @@ describe.only(suiteName, () => {
     expect(aggregate.version).to.equal(0);
   });
 
+  it('should store emitted events', async () => {
+    const aggregateId = nextId();
+    const event = {
+      id: nextId()
+    };
+    await cruft.create({ id: aggregateId, version: 0 });
+    const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _, emit) => {
+      emit({ id: 'a' });
+      emit({ id: 'b' });
+      emit({ id: 'c' });
+      return aggregate;
+    });
+
+    await reduce(event);
+
+    await cruft.read(`${event.id}:0`);
+    await cruft.read(`${event.id}:1`);
+    await cruft.read(`${event.id}:2`);
+
+    const oobKey = `${event.id}:3`;
+    try {
+      await cruft.read(oobKey);
+    } catch (e) {
+      if (e.message !== `Key not found ${oobKey}`) {
+        throw e;
+      }
+    }
+  });
 });
