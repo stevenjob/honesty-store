@@ -4,16 +4,12 @@ import { InternalAccount, Transaction } from './';
 const isAccount = (account: any): account is InternalAccount =>
   account.balance != null;
 
-const hasNewTransaction = ({ transactionHead: oldTxHead }: InternalAccount, { transactionHead: newTxHead }: InternalAccount) =>
-  oldTxHead !== newTxHead;
-
 export const subscribeTransactions = function* (event): IterableIterator<Transaction> {
   for (const record of event.Records) {
-    const oldImage = DynamoDB.Converter.output({ M: record.dynamodb.OldImage });
-    const newImage = DynamoDB.Converter.output({ M: record.dynamodb.NewImage });
+    const image = DynamoDB.Converter.output({ M: record.dynamodb.NewImage });
 
-    if (isAccount(oldImage) && isAccount(newImage) && hasNewTransaction(oldImage, newImage)) {
-      yield newImage.cachedTransactions[0];
+    if (isAccount(image)) {
+      yield image.cachedTransactions[0]; // may generate spurious transactions, but reducers will handle this
     }
   }
 };
