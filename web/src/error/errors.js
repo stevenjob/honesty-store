@@ -8,7 +8,7 @@ const dismissalText = {
 const errorDefinitions = {
   MaxBalanceExceeded: {
     message: `Your balance can't exceed £10`,
-    redirectionURL: '/history',
+    redirectionPath: '/history',
     dismissalText: dismissalText.DISMISS
   },
   TooManyPurchaseItems: {
@@ -18,7 +18,7 @@ const errorDefinitions = {
   NoCardDetailsPresent: {
     message: `We have no card details for you`,
     actionDescription: `Please get in touch with us to add a card`,
-    redirectionURL: `/help/card/no-details`,
+    redirectionPath: `/help/card/no-details`,
     dismissalText: dismissalText.GET_IN_TOUCH
   },
   CardError: {
@@ -29,7 +29,7 @@ const errorDefinitions = {
   CardExpired: {
     message: `Card expired`,
     actionDescription: `Please get in touch with us to add a new card`,
-    redirectionURL: `/help/card/expired`,
+    redirectionPath: `/help/card/expired`,
     dismissalText: dismissalText.GET_IN_TOUCH
   },
   CardDeclined: {
@@ -40,7 +40,7 @@ const errorDefinitions = {
   StoreNotFound: {
     message: `We couldn't find that store code`,
     actionDescription: `Could you double check it and try again?`,
-    redirectionURL: `/`,
+    redirectionPath: `/`,
     dismissalText: dismissalText.DISMISS
   },
   LocalStorageBlocked: {
@@ -56,13 +56,13 @@ const errorDefinitions = {
   MagicLinkTokenInvalid: {
     message: `The magic link you followed has expired`,
     actionDescription: `Could you please try signing in again?`,
-    redirectionURL: `/register`,
+    redirectionPath: `/register`,
     dismissalText: dismissalText.DISMISS
   },
   MagicLinkTokenExpired: {
     message: `Your magic link token has expired`,
     actionDescription: `Could you please try signing in again?`,
-    redirectionURL: `/register`,
+    redirectionPath: `/register`,
     dismissalText: dismissalText.DISMISS
   },
   TokenError: {
@@ -73,25 +73,25 @@ const errorDefinitions = {
   BoxAlreadyMarkedAsReceived: {
     message: `You've already marked this box as received`,
     actionDescription: `Please get in touch with us if the items are not available`,
-    redirectionURL: '/store',
+    redirectionPath: '/store',
     dismissalText: dismissalText.DISMISS
   },
   FullRegistrationRequired: {
     message: `You need to be fully registered to do that`,
     actionDescription: `Please sign up for an account and then try again`,
-    redirectionURL: '/register',
+    redirectionPath: '/register',
     dismissalText: dismissalText.DISMISS
   },
   AutoRefundPeriodExpired: {
     message: `You can no longer request a refund of this item`,
     actionDescription: `Please get in touch with us if you have any questions`,
-    redirectionURL: '/history',
+    redirectionPath: '/history',
     dismissalText: dismissalText.DISMISS
   },
   RefundAlreadyIssued: {
     message: `A refund has already been issued for this purchase`,
     actionDescription: `Please get in touch with us if you have any questions`,
-    redirectionURL: '/history',
+    redirectionPath: '/history',
     dismissalText: dismissalText.DISMISS
   },
   NonRefundableTransactionType: {
@@ -102,7 +102,7 @@ const errorDefinitions = {
   UserLoggedOut: {
     message: `Looks like you've signed out`,
     actionDescription: `Could you please select a store and try signing in again?`,
-    redirectionURL: `/`,
+    redirectionPath: `/`,
     dismissalText: dismissalText.DISMISS
   },
   UnknownError: {
