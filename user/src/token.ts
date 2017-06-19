@@ -31,7 +31,7 @@ const verifyToken = (key, token, expiredErrorCode: ErrorCode) => {
 export const verifyAccessToken = (key, token) => {
   const { userId, refreshToken } = verifyToken(key, token, 'AccessTokenExpired');
   if (refreshToken != null) {
-    throw new Error('Refresh token used in place of access token');
+    throw new CodedError('TokenError', 'Refresh token used in place of access token');
   }
   return { userId };
 };
@@ -39,7 +39,7 @@ export const verifyAccessToken = (key, token) => {
 export const verifyRefreshToken = (key, token) => {
   const { userId, refreshToken } = verifyToken(key, token, 'RefreshTokenExpired');
   if (refreshToken == null) {
-    throw new Error('Access token used in place of refresh token');
+    throw new CodedError('TokenError', 'Access token used in place of refresh token');
   }
   return { userId, refreshToken };
 };
@@ -47,7 +47,7 @@ export const verifyRefreshToken = (key, token) => {
 export const verifyMagicLinkToken = (key, token) => {
   const { userId, refreshToken } = verifyToken(key, token, 'MagicLinkTokenExpired');
   if (refreshToken != null) {
-    throw new Error('Refresh token used in place of magiclink token');
+    throw new CodedError('TokenError', 'Refresh token used in place of magiclink token');
   }
   return { userId };
 };
