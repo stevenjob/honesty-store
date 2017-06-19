@@ -17,11 +17,7 @@ const csvStringify = (objects, options) =>
       return resolve(data);
     }));
 
-const recordPurchase = async (key, { id: transactionId, type, data: { userId, itemId, storeId }, amount }: Transaction) => {
-  if (type !== 'purchase') {
-    return;
-  }
-
+const recordPurchase = async (key, { id: transactionId, data: { userId, itemId, storeId }, amount }: Transaction) => {
   const user = await getUser(key, userId);
   const item = await getItem(key, itemId);
   const store = await getStoreFromId(key, storeId);
@@ -50,6 +46,10 @@ const asyncHandler = async event => {
   const key = createServiceKey({ service: 'transaction-slack' });
 
   for (const transaction of subscribeTransactions(event)) {
+    if (transaction.type !== 'purchase') {
+      continue;
+    }
+
     await recordPurchase(key, transaction);
   }
 
