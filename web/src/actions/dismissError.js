@@ -1,6 +1,6 @@
 import getErrorDefinition from '../error/errors';
 import history from '../history';
-import { performSession } from './session';
+import { performSession, sessionReset } from './session';
 
 export const DISMISS_ERROR = 'DISMISS_ERROR';
 
@@ -11,15 +11,23 @@ const dismiss = () => {
 };
 
 export const dismissError = code => async (dispatch, getState) => {
-  const pathname = window.location.pathname;
-  if (code === 'NetworkError' && pathname === '/store') {
-    // try and re-fetch the session data, otherwise we'll show the user an empty store
-    performSession()(dispatch, getState);
-  } else if (code != null) {
-    const { redirectionURL } = getErrorDefinition(code);
-    if (redirectionURL != null) {
-      history.push(redirectionURL);
-    }
+  switch (code) {
+    case 'NetworkError':
+      const pathname = window.location.pathname;
+      if (pathname === 'store') {
+        performSession()(dispatch, getState);
+      }
+      break;
+    case 'TokenError':
+    case 'RefreshTokenExpired':
+      history.push('/');
+      dispatch(sessionReset());
+      break;
+    default:
+      const { redirectionURL } = getErrorDefinition(code);
+      if (redirectionURL != null) {
+        history.push(redirectionURL);
+      }
   }
 
   dispatch(dismiss());
