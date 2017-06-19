@@ -3,7 +3,7 @@ import { AbstractItem, Configuration, EnhancedItem, EventItem } from './index';
 import { read } from './read';
 import { update } from './update';
 
-type ReduceEmit = <Event>(event: Event) => void;
+type ReduceEmit<Event> = (event: Event) => void;
 
 export const reduce = <
   Aggregate extends AbstractItem,
@@ -13,7 +13,7 @@ export const reduce = <
   (
     aggregateIdSelector: (event: InEvent) => string,
     eventIdSelector: (event: InEvent) => string,
-    reducer: (aggregate: EnhancedItem<Aggregate>, event: InEvent, emit: ReduceEmit) => EnhancedItem<Aggregate>
+    reducer: (aggregate: EnhancedItem<Aggregate>, event: InEvent, emit: ReduceEmit<OutEvent>) => EnhancedItem<Aggregate>
   ) =>
     async (event: InEvent): Promise<EnhancedItem<Aggregate>> => {
 
