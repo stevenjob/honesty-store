@@ -60,7 +60,7 @@ export const reduce = <
           : aggregate.lastEmitted;
 
         emittedEvents.push({
-          id: `${eventId}:${emittedEvents.length}`,
+          id: emittedEvent.id,
           data: emittedEvent,
           previous: previous && previous.id
         });

@@ -81,19 +81,19 @@ describe.only(suiteName, () => {
     };
     await cruft.create({ id: aggregateId, version: 0 });
     const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _, emit) => {
-      emit({ id: 'a' });
-      emit({ id: 'b' });
-      emit({ id: 'c' });
+      emit({ id: 'a', version: 0 });
+      emit({ id: 'b', version: 0 });
+      emit({ id: 'c', version: 0 });
       return aggregate;
     });
 
     await reduce(event);
 
-    await cruft.read(`${event.id}:0`);
-    await cruft.read(`${event.id}:1`);
-    await cruft.read(`${event.id}:2`);
+    await cruft.read('a');
+    await cruft.read('b');
+    await cruft.read('c');
 
-    const oobKey = `${event.id}:3`;
+    const oobKey = 'd';
     try {
       await cruft.read(oobKey);
     } catch (e) {
