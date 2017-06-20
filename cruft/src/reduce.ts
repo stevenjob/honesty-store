@@ -8,12 +8,12 @@ type ReduceEmit<Event> = (event: Event) => void;
 export const reduce = <
   Aggregate extends AbstractItem,
   ReceivedEvent extends AbstractItem,
-  OutEvent extends AbstractItem
+  EmittedEvent extends AbstractItem
 >({ client, tableName }: Configuration) =>
   (
     aggregateIdSelector: (event: ReceivedEvent) => string,
     eventIdSelector: (event: ReceivedEvent) => string,
-    reducer: (aggregate: EnhancedItem<Aggregate>, event: ReceivedEvent, emit: ReduceEmit<OutEvent>) => EnhancedItem<Aggregate>
+    reducer: (aggregate: EnhancedItem<Aggregate>, event: ReceivedEvent, emit: ReduceEmit<EmittedEvent>) => EnhancedItem<Aggregate>
   ) =>
     async (event: ReceivedEvent): Promise<EnhancedItem<Aggregate>> => {
 
@@ -54,14 +54,14 @@ export const reduce = <
       }
 
       const emittedEvents: EventItem[] = [];
-      const emit = (outEvent: OutEvent) => {
+      const emit = (emittedEvent: EmittedEvent) => {
         const previous = emittedEvents.length
           ? emittedEvents[emittedEvents.length - 1]
           : aggregate.lastEmitted;
 
         emittedEvents.push({
           id: `${eventId}:${emittedEvents.length}`,
-          data: outEvent,
+          data: emittedEvent,
           previous: previous && previous.id
         });
       };
