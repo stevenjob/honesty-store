@@ -1,7 +1,7 @@
 import * as ms from 'ms';
 import isUUID = require('validator/lib/isUUID');
 
-import { createAssertValidUuid } from '@honesty-store/service/lib/assert';
+import { assertNever, createAssertValidUuid } from '@honesty-store/service/lib/assert';
 import { CodedError } from '@honesty-store/service/lib/error';
 import fetch from '@honesty-store/service/lib/fetch';
 
@@ -92,8 +92,22 @@ export const assertValidTransaction = ({ type, amount, data, id, other, next, le
   if (!Number.isInteger(amount) /* this also checks typeof amount */) {
     throw new Error(`Non-integral transaction amount ${amount}`);
   }
-  if (((type === 'topup' || type === 'refund') && amount <= 0) || (type === 'purchase' && amount >= 0)) {
-    throw new Error(`Invalid transaction amount for type '${type}': ${amount}`);
+  switch (type) {
+    case 'topup':
+    case 'refund':
+    case 'credit':
+      if (amount <= 0) {
+        throw new Error(`Invalid transaction amount for type '${type}': ${amount}`);
+      }
+      break;
+    case 'debit':
+    case 'purchase':
+      if (amount >= 0) {
+        throw new Error(`Invalid transaction amount for type '${type}': ${amount}`);
+      }
+      break;
+    default:
+      assertNever(type);
   }
   if (data == null || typeof data !== 'object') {
     throw new Error(`Invalid transaction data ${JSON.stringify(data)}`);
