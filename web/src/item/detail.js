@@ -118,6 +118,7 @@ const ItemDetail = ({
             {weight && <li>Weight: <strong>{`${weight}g`}</strong></li>}
             {location && <li>Location: <strong>{location}</strong></li>}
             {expiry && <li>Expires: <strong>{formatDate(expiry)}</strong></li>}
+            <li>Remaining: <strong>{count}</strong></li>
           </ul>
           <div>
             {count === 0
