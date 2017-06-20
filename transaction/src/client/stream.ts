@@ -8,7 +8,7 @@ export const subscribeTransactions = function* (event): IterableIterator<Transac
   for (const record of event.Records) {
     const image = DynamoDB.Converter.output({ M: record.dynamodb.NewImage });
 
-    if (isAccount(image)) {
+    if (isAccount(image) && image.cachedTransactions.length > 0) {
       yield image.cachedTransactions[0]; // may generate spurious transactions, but reducers will handle this
     }
   }
