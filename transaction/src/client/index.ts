@@ -5,6 +5,52 @@ import { createAssertValidUuid } from '@honesty-store/service/lib/assert';
 import { CodedError } from '@honesty-store/service/lib/error';
 import fetch from '@honesty-store/service/lib/fetch';
 
+export const balanceLimit = 1000; // £10
+export const AUTO_REFUND_PERIOD = ms('1h');
+
+export type TransactionType = 'topup' | 'purchase' | 'refund' | 'debit' | 'credit';
+export const transactionTypes = ['topup', 'purchase', 'refund', 'debit', 'credit'];
+
+// supplied to transaction service from external service
+export interface TransactionBody {
+  type: TransactionType;
+  amount: number;
+  data: {
+    [key: string]: string;
+  };
+  other?: string;
+}
+
+// internally used to create a hash of the transaction
+export interface TransactionDetails extends TransactionBody {
+  timestamp: number;
+  next?: string;
+  legacyId?: string;
+}
+
+// as retrieved from database
+export interface Transaction extends TransactionDetails {
+  id: string;
+}
+
+export interface Account {
+  id: string;
+  created: number;
+  balance: number;
+  version: number;
+}
+
+export type InternalAccount = Account & { transactionHead?: string } & { cachedTransactions: TransactionList; };
+
+export type TransactionList = Transaction[];
+
+export type AccountAndTransactions = Account & { transactions: TransactionList };
+
+export interface TransactionAndBalance {
+  transaction: Transaction;
+  balance: number;
+}
+
 const isSHA256 = (hash) => /^[a-f0-9]{64}$/.test(hash);
 
 export const extractFieldsFromTransactionId = (id: string) => {
@@ -70,51 +116,6 @@ export const assertValidTransaction = ({ type, amount, data, id, other, next, le
     throw new Error('Invalid transaction properties supplied');
   }
 };
-export const balanceLimit = 1000; // £10
-export const AUTO_REFUND_PERIOD = ms('1h');
-
-export type TransactionType = 'topup' | 'purchase' | 'refund' | 'debit' | 'credit';
-export const transactionTypes = ['topup', 'purchase', 'refund', 'debit', 'credit'];
-
-// supplied to transaction service from external service
-export interface TransactionBody {
-  type: TransactionType;
-  amount: number;
-  data: {
-    [key: string]: string;
-  };
-  other?: string;
-}
-
-// internally used to create a hash of the transaction
-export interface TransactionDetails extends TransactionBody {
-  timestamp: number;
-  next?: string;
-  legacyId?: string;
-}
-
-// as retrieved from database
-export interface Transaction extends TransactionDetails {
-  id: string;
-}
-
-export interface Account {
-  id: string;
-  created: number;
-  balance: number;
-  version: number;
-}
-
-export type InternalAccount = Account & { transactionHead?: string } & { cachedTransactions: TransactionList; };
-
-export type TransactionList = Transaction[];
-
-export type AccountAndTransactions = Account & { transactions: TransactionList };
-
-export interface TransactionAndBalance {
-  transaction: Transaction;
-  balance: number;
-}
 
 const { get, post } = fetch('transaction');
 
