@@ -38,35 +38,30 @@ const recordRefund = async (key, transaction: Transaction) => {
   const commonDetails = await getCommonItemTransactionDetails(key, transaction);
   const { data: { reason } } = transaction;
 
-  const csvMessage = await csvStringify(
-    [{
-      type: ':money_with_wings: (refund)',
-      reason,
-      ...commonDetails
-    }],
-    {
-      header: false
-    });
+  const message = {
+    type: ':money_with_wings: (refund)',
+    reason,
+    ...commonDetails
+  };
 
-  await sendSlackMessageOneLine({
-    key,
-    message: csvMessage,
-    channel: 'purchases'
-  });
+  await sendTransactionNotification(key, message);
 };
 
 const recordPurchase = async (key, transaction: Transaction) => {
   const commonDetails = await getCommonItemTransactionDetails(key, transaction);
 
-  const csvMessage = await csvStringify(
-    [{
-      type: ':moneybag: (purchase)',
-      ...commonDetails
-    }],
-    {
-      header: false
-    });
+  const message = {
+    type: ':moneybag: (purchase)',
+    ...commonDetails
+  };
+  await sendTransactionNotification(key, message);
+};
 
+const sendTransactionNotification = async (key, message: { [key: string]: any }) => {
+  const csvMessage = await csvStringify(
+    [message],
+    { header: false }
+  );
   await sendSlackMessageOneLine({
     key,
     message: csvMessage,
