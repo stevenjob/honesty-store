@@ -5,7 +5,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build && lerna run ci",
-    "tslint": "tslint --config tslint.json -e '**/node_modules/**' -e 'api/test/**' --format stylish **/*.ts"
+    "tslint": "tslint --config tslint.json -e '**/node_modules/**' -e 'api/test/**' -e '*/lib/**' --format stylish **/*.ts"
   },
   "devDependencies": {
     "aws-sdk": "2.22.0",
