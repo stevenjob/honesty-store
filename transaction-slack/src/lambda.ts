@@ -8,6 +8,17 @@ import { Transaction } from '@honesty-store/transaction';
 import { subscribeTransactions } from '@honesty-store/transaction/lib/client/stream';
 import { getUser } from '@honesty-store/user';
 
+interface CSVRow {
+  emoji: string;
+  type: string;
+  emailAddress: string;
+  itemDescription: string;
+  storeCode: string;
+  price: number;
+  shortTxId: string;
+  comment: string;
+}
+
 const csvStringify = (objects, options) =>
   new Promise((resolve, reject) =>
     csvStringifyCb(objects, options, (err, data) => {
@@ -28,7 +39,7 @@ const getCommonItemTransactionDetails = async (key, { id: transactionId, data: {
   return {
     emailAddress: user.emailAddress,
     itemDescription: item.name + (item.qualifier ? ` ${item.qualifier}` : ''),
-    store: store.code,
+    storeCode: store.code,
     price: Math.abs(amount),
     shortTxId
   };
@@ -36,12 +47,13 @@ const getCommonItemTransactionDetails = async (key, { id: transactionId, data: {
 
 const recordRefund = async (key, transaction: Transaction) => {
   const commonDetails = await getCommonItemTransactionDetails(key, transaction);
-  const { data: { reason } } = transaction;
+  const { data: { reason: comment } } = transaction;
 
   const message = {
-    type: ':money_with_wings: (refund)',
-    reason,
-    ...commonDetails
+    emoji: ':money_with_wings:',
+    type: 'refund',
+    ...commonDetails,
+    comment
   };
 
   await sendTransactionNotification(key, message);
@@ -51,13 +63,15 @@ const recordPurchase = async (key, transaction: Transaction) => {
   const commonDetails = await getCommonItemTransactionDetails(key, transaction);
 
   const message = {
-    type: ':moneybag: (purchase)',
-    ...commonDetails
+    emoji: ':moneybag:',
+    type: 'purchase',
+    ...commonDetails,
+    comment: ''
   };
   await sendTransactionNotification(key, message);
 };
 
-const sendTransactionNotification = async (key, message: { [key: string]: any }) => {
+const sendTransactionNotification = async (key, message: CSVRow) => {
   const csvMessage = await csvStringify(
     [message],
     { header: false }
