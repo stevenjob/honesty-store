@@ -12,9 +12,11 @@
     "@honesty-store/service": "0.0.0",
     "@honesty-store/store": "0.0.0",
     "@honesty-store/transaction": "0.0.0",
+    "@honesty-store/user": "0.0.0",
     "commander": "^2.9.0",
     "cruft-ddb": "^3.0.6",
     "jsonwebtoken": "chrisprice/node-jsonwebtoken#remove-joi",
+    "csv": "^1.1.1",
     "uuid": "^3.0.1"
   },
   "devDependencies": {

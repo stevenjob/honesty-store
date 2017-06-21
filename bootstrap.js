@@ -2,7 +2,7 @@
 const program = require('commander');
 const execSync = require('child_process').execSync;
 
-const serviceDirs = ['api', 'scripts', 'box', 'support', 'user', 'topup', 'store', 'transaction', 'test',
+const serviceDirs = ['api', 'scripts', 'box', 'user', 'topup', 'store', 'transaction', 'test',
   'survey', 'item', 'batch', 'service', 'transaction-slack', 'transaction-store', 'cruft'];
 const otherDirs = ['aws', 'web'];
 

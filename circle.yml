@@ -21,7 +21,6 @@ dependencies:
     - topup/node_modules
     - service/node_modules
     - test/node_modules
-    - support/node_modules
     - survey/node_modules
     - box/node_modules
     - batch/node_modules
