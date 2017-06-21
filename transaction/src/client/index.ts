@@ -82,7 +82,7 @@ export const assertValidTransactionId = (id) => {
 const assertValidLegacyId = createAssertValidUuid('legacyId');
 
 const isValidTransactionType = (type): type is TransactionType =>
-  transactionTypes.indexOf(type) !== -1;
+  transactionTypes.some(x => x === type);
 
 export const assertValidTransaction = ({ type, amount, data, id, other, next, legacyId, timestamp, ...rest }: Transaction) => {
   assertValidTransactionId(id);
