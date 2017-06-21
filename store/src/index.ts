@@ -8,7 +8,8 @@ import {
   assertPositiveInteger,
   assertValidString,
   assertValidUuid,
-  createAssertValidObject
+  createAssertValidObject,
+  ObjectValidator
 } from '@honesty-store/service/lib/assert';
 import { CodedError } from '@honesty-store/service/lib/error';
 import { createServiceKey } from '@honesty-store/service/lib/key';
@@ -21,9 +22,10 @@ import {
   StoreEvent,
   StoreItem,
   StoreItemAudited,
+  StoreItemDetails,
+  StoreItemDetailsChanged,
   StoreItemListed,
   StoreItemListing,
-  StoreItemPriceChanged,
   StoreItemUnlisted
 } from './client';
 
@@ -48,7 +50,7 @@ const reducer = reduce<Transaction | StoreEvent>(
       case 'credit':
         throw new Error(`Unable to handle ${event.type} transactions ${event.id}`);
       case 'store-audit':
-      case 'store-price-change':
+      case 'store-details-change':
       case 'store-list':
       case 'store-unlist':
         return event.storeId;
@@ -115,17 +117,29 @@ const reducer = reduce<Transaction | StoreEvent>(
 
         return store;
       }
-      case 'store-price-change': {
-        const { id, type, itemId, price } = event;
+      case 'store-details-change': {
+        const {
+          id,
+          type,
+          itemId,
+          ...details
+        } = event;
 
-        const item = lookupItem(store, itemId);
+        const existingItem = lookupItem(store, itemId);
 
-        if (item == null) {
+        if (existingItem == null) {
           error(key, `Event ${type} ${id} for non-existent item ${itemId} in ${store.id}`);
           return store;
         }
 
-        item.price = price;
+        store.items = store.items.filter(item => item !== existingItem);
+
+        const updatedItem: StoreItem = {
+          ...existingItem,
+          ...details
+        };
+
+        store.items.push(updatedItem);
 
         return store;
       }
@@ -200,10 +214,7 @@ router.get<Store>(
   }
 );
 
-const assertValidStoreItemListing = createAssertValidObject<StoreItemListing>({
-  id: assertValidUuid,
-  sellerId: assertValidUuid,
-  listCount: assertNonZeroPositiveInteger,
+const storeDetailsValidator: ObjectValidator<StoreItemDetails> = {
   name: assertValidString,
   qualifier: assertValidString,
   genericName: assertValidString,
@@ -212,7 +223,16 @@ const assertValidStoreItemListing = createAssertValidObject<StoreItemListing>({
   unitPlural: assertValidString,
   image: assertValidString,
   price: assertNonZeroPositiveInteger
+};
+
+const assertValidStoreItemListing = createAssertValidObject<StoreItemListing>({
+  id: assertValidUuid,
+  sellerId: assertValidUuid,
+  listCount: assertNonZeroPositiveInteger,
+  ...storeDetailsValidator
 });
+
+const assertValidStoreItemDetails = createAssertValidObject<StoreItemDetails>(storeDetailsValidator);
 
 router.post<StoreItemListing, Store>(
   '/:storeId/item',
@@ -240,19 +260,19 @@ router.post<Transaction, Store>(
   }
 );
 
-router.post<{ price: number }, Store>(
+router.post<StoreItemDetails, Store>(
   '/:storeId/:itemId',
-  async (_key, { storeId, itemId }, { price }) => {
+  async (_key, { storeId, itemId }, details) => {
     assertValidUuid('storeId', storeId);
     assertValidUuid('itemId', itemId);
-    assertNonZeroPositiveInteger('price', price);
+    assertValidStoreItemDetails(details);
 
-    const event: StoreItemPriceChanged = {
+    const event: StoreItemDetailsChanged = {
       id: uuid(),
-      type: 'store-price-change',
+      type: 'store-details-change',
       storeId,
       itemId,
-      price
+      ...details
     };
 
     return externalise(await reducer(event));

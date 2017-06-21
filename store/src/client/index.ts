@@ -41,15 +41,22 @@ export interface StoreItemAudited {
   count: number;
 }
 
-export interface StoreItemPriceChanged {
+export interface StoreItemDetailsChanged {
   id: string;
-  type: 'store-price-change';
+  type: 'store-details-change';
   storeId: string;
   itemId: string;
   price: number;
+  name: string;
+  qualifier?: string;
+  genericName: string;
+  genericNamePlural: string;
+  unit: string;
+  unitPlural: string;
+  image: string;
 }
 
-export type StoreItemEvent = StoreItemAudited | StoreItemPriceChanged;
+export type StoreItemEvent = StoreItemAudited | StoreItemDetailsChanged;
 
 export type StoreEvent = StoreItemEvent | StoreItemListed | StoreItemUnlisted;
 
