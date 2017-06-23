@@ -5,11 +5,6 @@ import { update } from './update';
 
 type ReduceEmit<Event> = (event: Event) => void;
 
-export interface EventReduction<Aggregate extends AbstractItem> {
-  aggregate: EnhancedItem<Aggregate>;
-  eventStored: boolean;
-};
-
 export const reduce = <
   Aggregate extends AbstractItem,
   ReceivedEvent extends AbstractItem,
@@ -20,7 +15,7 @@ export const reduce = <
     eventIdSelector: (event: ReceivedEvent) => string,
     reducer: (aggregate: EnhancedItem<Aggregate>, event: ReceivedEvent, emit: ReduceEmit<EmittedEvent>) => EnhancedItem<Aggregate>
   ) =>
-    async (event: ReceivedEvent): Promise<EventReduction<Aggregate>> => {
+    async (event: ReceivedEvent): Promise<EnhancedItem<Aggregate>> => {
 
       const aggregateId = aggregateIdSelector(event);
 
@@ -31,7 +26,7 @@ export const reduce = <
       const { lastReceived: previousLastReceived } = aggregate;
 
       if (previousLastReceived != null && previousLastReceived.id === eventId) {
-        return { aggregate, eventStored: false };
+        return aggregate;
       }
 
       let archivedEvent: EventItem | null = null;
@@ -45,7 +40,7 @@ export const reduce = <
       }
 
       if (archivedEvent != null) {
-        return { aggregate, eventStored: false };
+        return aggregate;
       }
 
       if (previousLastReceived != null) {
@@ -92,8 +87,5 @@ export const reduce = <
         }
       );
 
-      return {
-        aggregate: await update<Aggregate>({ client, tableName })(updatedAggregate),
-        eventStored: true
-      };
+      return await update<Aggregate>({ client, tableName })(updatedAggregate);
     };
