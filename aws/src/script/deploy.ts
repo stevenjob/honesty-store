@@ -90,6 +90,7 @@ const lambdaConfig: LambdaConfig = {
     exposeOnGateway: true
   },
   ['transaction-slack']: {
+    database: 'rw',
     handler: 'lib/bundle-min.handler',
     codeFilter: 'lib/bundle-min.js',
     timeout: 10,

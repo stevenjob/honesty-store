@@ -1,5 +1,6 @@
 import { stringify as csvStringifyCb } from 'csv';
 
+import cruftDDB from '@honesty-store/cruft/lib/index';
 import { getItem } from '@honesty-store/item';
 import { createServiceKey } from '@honesty-store/service/lib/key';
 import { sendSlackMessageOneLine } from '@honesty-store/service/lib/slack';
@@ -18,6 +19,17 @@ interface CSVRow {
   shortTxId: string;
   comment: string;
 }
+
+interface SimplifiedTransaction {
+  id: string;
+  version: number;
+  type: 'refund' | 'purchase';
+}
+
+const cruft = cruftDDB<SimplifiedTransaction>({
+  tableName: process.env.TABLE_NAME,
+  limit: 100
+});
 
 const csvStringify = (objects, options) =>
   new Promise((resolve, reject) =>
@@ -83,10 +95,29 @@ const sendTransactionNotification = async (key, message: CSVRow) => {
   });
 };
 
-const asyncHandler = async event => {
+const asyncHandler = async dynamoEvent => {
   const key = createServiceKey({ service: 'transaction-slack' });
 
-  for (const transaction of subscribeTransactions(event)) {
+  const reduce = cruft.reduce<SimplifiedTransaction>(
+    event => event.type,
+    event => event.id,
+    (aggregate, _event, _emit) => aggregate);
+
+  for (const transaction of subscribeTransactions(dynamoEvent)) {
+    if (transaction.type !== 'purchase' && transaction.type !== 'refund') {
+      continue
+    }
+
+    const simplifiedTx = {
+      id: transaction.id,
+      type: transaction.type,
+      version: 0
+    };
+    const { eventStored } = await reduce(simplifiedTx);
+    if (!eventStored) {
+      continue;
+    }
+
     switch (transaction.type) {
       case 'purchase':
         await sendSlackPurchaseMessage(key, transaction);
@@ -99,7 +130,7 @@ const asyncHandler = async event => {
     }
   }
 
-  return `Successfully processed ${event.Records.length} records`;
+  return `Successfully processed ${dynamoEvent.Records.length} records`;
 };
 
 export const handler = (event, context) =>

@@ -17,6 +17,7 @@
     "@honesty-store/store": "0.0.0",
     "@honesty-store/transaction": "0.0.0",
     "@honesty-store/user": "0.0.0",
+    "@honesty-store/cruft": "0.0.0",
     "csv": "^1.1.1"
   },
   "peerDependencies": {
