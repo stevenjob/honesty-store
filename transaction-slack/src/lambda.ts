@@ -2,6 +2,7 @@ import { stringify as csvStringifyCb } from 'csv';
 
 import cruftDDB from '@honesty-store/cruft/lib/index';
 import { getItem } from '@honesty-store/item';
+import { assertNever } from '@honesty-store/service/lib/assert';
 import { createServiceKey } from '@honesty-store/service/lib/key';
 import { sendSlackMessageOneLine } from '@honesty-store/service/lib/slack';
 import { getStoreFromId } from '@honesty-store/store';
@@ -98,27 +99,12 @@ const sendTransactionNotification = async (key, message: CSVRow) => {
 const asyncHandler = async dynamoEvent => {
   const key = createServiceKey({ service: 'transaction-slack' });
 
-  const reduce = cruft.reduce<SimplifiedTransaction>(
-    event => event.type,
-    event => event.id,
-    (aggregate, _event, _emit) => aggregate);
+  const transactions = [...subscribeTransactions(dynamoEvent)];
 
-  for (const transaction of subscribeTransactions(dynamoEvent)) {
-    if (transaction.type !== 'purchase' && transaction.type !== 'refund') {
-      continue
-    }
+  const sendSlackMessage = async (event: SimplifiedTransaction) => {
+    const transaction = transactions.find(({ id }) => id === event.id);
 
-    const simplifiedTx = {
-      id: transaction.id,
-      type: transaction.type,
-      version: 0
-    };
-    const { eventStored } = await reduce(simplifiedTx);
-    if (!eventStored) {
-      continue;
-    }
-
-    switch (transaction.type) {
+    switch (event.type) {
       case 'purchase':
         await sendSlackPurchaseMessage(key, transaction);
         break;
@@ -126,8 +112,30 @@ const asyncHandler = async dynamoEvent => {
         await sendSlackRefundMessage(key, transaction);
         break;
       default:
+        assertNever(event.type);
         break;
     }
+  };
+
+  const reduce = cruft.reduce<SimplifiedTransaction>(
+    event => event.type,
+    event => event.id,
+    async (aggregate, event, _emit) => {
+      await sendSlackMessage(event);
+      return aggregate;
+    });
+
+  for (const transaction of transactions) {
+    if (transaction.type !== 'purchase' && transaction.type !== 'refund') {
+      continue;
+    }
+
+    const simplifiedTx = {
+      id: transaction.id,
+      type: transaction.type,
+      version: 0
+    };
+    await reduce(simplifiedTx);
   }
 
   return `Successfully processed ${dynamoEvent.Records.length} records`;
