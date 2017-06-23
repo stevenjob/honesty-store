@@ -4,6 +4,7 @@ import { read } from './read';
 import { update } from './update';
 
 type ReduceEmit<Event> = (event: Event) => void;
+type MaybePromise<T> = Promise<T> | T;
 
 export const reduce = <
   Aggregate extends AbstractItem,
@@ -13,7 +14,11 @@ export const reduce = <
   (
     aggregateIdSelector: (event: ReceivedEvent) => string,
     eventIdSelector: (event: ReceivedEvent) => string,
-    reducer: (aggregate: EnhancedItem<Aggregate>, event: ReceivedEvent, emit: ReduceEmit<EmittedEvent>) => EnhancedItem<Aggregate>
+    reducer: (
+      aggregate: EnhancedItem<Aggregate>,
+      event: ReceivedEvent,
+      emit: ReduceEmit<EmittedEvent>
+    ) => MaybePromise<EnhancedItem<Aggregate>>
   ) =>
     async (event: ReceivedEvent): Promise<EnhancedItem<Aggregate>> => {
 
@@ -65,7 +70,7 @@ export const reduce = <
           previous: previous && previous.id
         });
       };
-      const reducedAggregate = reducer(aggregate, event, emit);
+      const reducedAggregate = await Promise.resolve(reducer(aggregate, event, emit));
 
       const updatedLastReceived: EventItem = {
         id: eventId,

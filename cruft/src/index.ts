@@ -76,7 +76,7 @@ export interface Cruft<T extends AbstractItem> {
   reduce<Event extends HasId>(
     aggregateIdSelector: (event: Event) => string,
     eventIdSelector: (event: Event) => string,
-    reducer: (aggregate: EnhancedItem<T>, event: Event, emit: (event: AbstractItem) => void) => EnhancedItem<T>
+    reducer: (aggregate: EnhancedItem<T>, event: Event, emit: (event: AbstractItem) => void) => Promise<EnhancedItem<T>> | EnhancedItem<T>
   ): (event: Event) => Promise<EnhancedItem<T>>;
   update(item: EnhancedItem<T>): Promise<EnhancedItem<T>>;
   find(fields: PrototypicalItem<T>): Promise<EnhancedItem<T>>;
