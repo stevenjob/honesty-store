@@ -118,7 +118,7 @@ const asyncHandler = async dynamoEvent => {
   };
 
   const reduce = cruft.reduce<SimplifiedTransaction>(
-    event => event.type,
+    _event => 'aggregate',
     event => event.id,
     async (aggregate, event, _emit) => {
       await sendSlackMessage(event);
