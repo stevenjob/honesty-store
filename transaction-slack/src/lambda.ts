@@ -45,7 +45,7 @@ const getCommonItemTransactionDetails = async (key, { id: transactionId, data: {
   };
 };
 
-const recordRefund = async (key, transaction: Transaction) => {
+const sendSlackRefundMessage = async (key, transaction: Transaction) => {
   const commonDetails = await getCommonItemTransactionDetails(key, transaction);
   const { data: { reason: comment } } = transaction;
 
@@ -59,7 +59,7 @@ const recordRefund = async (key, transaction: Transaction) => {
   await sendTransactionNotification(key, message);
 };
 
-const recordPurchase = async (key, transaction: Transaction) => {
+const sendSlackPurchaseMessage = async (key, transaction: Transaction) => {
   const commonDetails = await getCommonItemTransactionDetails(key, transaction);
 
   const message = {
@@ -89,10 +89,10 @@ const asyncHandler = async event => {
   for (const transaction of subscribeTransactions(event)) {
     switch (transaction.type) {
       case 'purchase':
-        await recordPurchase(key, transaction);
+        await sendSlackPurchaseMessage(key, transaction);
         break;
       case 'refund':
-        await recordRefund(key, transaction);
+        await sendSlackRefundMessage(key, transaction);
         break;
       default:
         break;
