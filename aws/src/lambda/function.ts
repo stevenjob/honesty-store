@@ -144,7 +144,7 @@ export const ensureFunctionDynamoTrigger = async (
     return await lambda.createEventSourceMapping({
       EventSourceArn: source,
       FunctionName: lambdaFunc.FunctionArn,
-      StartingPosition: 'LATEST'
+      StartingPosition: 'TRIM_HORIZON'
     })
       .promise();
   } catch (e) {
