@@ -4,7 +4,7 @@ import { create } from './create';
 import { find } from './find';
 import { findAll } from './findAll';
 import { read } from './read';
-import { reduce } from './reduce';
+import { EventReduction, reduce } from './reduce';
 import { truncate } from './truncate';
 import { update } from './update';
 
@@ -77,7 +77,7 @@ export interface Cruft<T extends AbstractItem> {
     aggregateIdSelector: (event: Event) => string,
     eventIdSelector: (event: Event) => string,
     reducer: (aggregate: EnhancedItem<T>, event: Event, emit: (event: AbstractItem) => void) => EnhancedItem<T>
-  ): (event: Event) => Promise<EnhancedItem<T>>;
+  ): (event: Event) => Promise<EventReduction<T>>;
   update(item: EnhancedItem<T>): Promise<EnhancedItem<T>>;
   find(fields: PrototypicalItem<T>): Promise<EnhancedItem<T>>;
   __findAll(fields: PrototypicalItem<T>, options?: { limit?: number }): Promise<EnhancedItem<T>[]>;

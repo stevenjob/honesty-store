@@ -28,7 +28,7 @@ describe.only(suiteName, () => {
     };
     await cruft.create({ id: aggregateId, version: 0 });
     const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _) => aggregate);
-    const aggregate = await reduce(event);
+    const { aggregate } = await reduce(event);
     expect(aggregate.lastReceived && aggregate.lastReceived.id).to.equal(event.id);
     expect(aggregate.lastReceived && aggregate.lastReceived.data).to.deep.equal(event);
     expect(aggregate.lastReceived && aggregate.lastReceived.previous).to.equal(undefined);
@@ -41,10 +41,10 @@ describe.only(suiteName, () => {
     };
     await cruft.create({ id: aggregateId, version: 0 });
     const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _) => aggregate);
-    let aggregate = await reduce(event);
-    aggregate = await reduce({
+    let { aggregate } = await reduce(event);
+    ({ aggregate } = await reduce({
       id: nextId()
-    });
+    }));
     expect(aggregate.lastReceived && aggregate.lastReceived.id).to.not.equal(event.id);
     expect(aggregate.lastReceived && aggregate.lastReceived.previous).to.equal(event.id);
   });
@@ -56,9 +56,9 @@ describe.only(suiteName, () => {
     };
     await cruft.create({ id: aggregateId, version: 0 });
     const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _) => aggregate);
-    let aggregate = await reduce(event);
+    let { aggregate } = await reduce(event);
     expect(aggregate.version).to.equal(1);
-    aggregate = await reduce(event);
+    ({ aggregate } = await reduce(event));
     expect(aggregate.version).to.equal(1);
   });
 
@@ -70,7 +70,7 @@ describe.only(suiteName, () => {
     await cruft.create({ id: aggregateId, version: 0 });
     await cruft.create({ id: event.id, version: 0, data: event });
     const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _) => aggregate);
-    const aggregate = await reduce(event);
+    const { aggregate } = await reduce(event);
     expect(aggregate.version).to.equal(0);
   });
 
@@ -101,5 +101,45 @@ describe.only(suiteName, () => {
         throw e;
       }
     }
+  });
+
+  it('should return true for new events', async () => {
+    const aggregateId = nextId();
+    const event = {
+      id: nextId()
+    };
+    await cruft.create({ id: aggregateId, version: 0 });
+    const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _) => aggregate);
+    const { eventStored } = await reduce(event);
+    expect(eventStored).to.equal(true);
+  });
+
+  it('should return false for recently archived events', async () => {
+    const aggregateId = nextId();
+    const event = {
+      id: nextId()
+    };
+    await cruft.create({ id: aggregateId, version: 0 });
+    const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _) => aggregate);
+
+    await reduce(event);
+
+    const { eventStored } = await reduce(event);
+    expect(eventStored).to.equal(false);
+  });
+
+  it('should return false for historic archived events', async () => {
+    const aggregateId = nextId();
+    const event = {
+      id: nextId()
+    };
+    await cruft.create({ id: aggregateId, version: 0 });
+    const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _) => aggregate);
+
+    await reduce(event);
+    await reduce({ id: nextId() });
+
+    const { eventStored } = await reduce(event);
+    expect(eventStored).to.equal(false);
   });
 });
