@@ -72,6 +72,16 @@ import {
   REFUND_FAILURE
 } from '../actions/refund';
 import { LOGGED_OUT_IN_ANOTHER_SESSION } from '../actions/logged-out';
+import {
+  ALL_ITEMS_REQUEST,
+  ALL_ITEMS_SUCCESS,
+  ALL_ITEMS_FAILURE
+} from '../actions/all-items';
+import {
+  UPDATE_ITEM_REQUEST,
+  UPDATE_ITEM_SUCCESS,
+  UPDATE_ITEM_FAILURE
+} from '../actions/update-item';
 import { getInitialState } from '../state';
 
 const requestState = (requestId, updatedProps, state) => ({
@@ -331,6 +341,37 @@ export default (state, action) => {
       };
       return fullPageErrorState(null, action.error, updatedState);
     }
+    case ALL_ITEMS_REQUEST:
+      return requestState('all-items', {}, state);
+    case ALL_ITEMS_SUCCESS: {
+      const { response } = action;
+      const updatedStateProps = {
+        marketplace: {
+          items: response
+        }
+      };
+      return completionState('all-items', updatedStateProps, state);
+    }
+    case ALL_ITEMS_FAILURE:
+      return fullPageErrorState('all-items', action.error, state);
+    case UPDATE_ITEM_REQUEST:
+      return requestState('update-item', {}, state);
+    case UPDATE_ITEM_SUCCESS: {
+      const updatedItem = action.response;
+      const { items } = state.marketplace || [];
+      const updatedState = {
+        marketplace: {
+          ...state.marketplace,
+          items: [
+            ...items.filter(({ id }) => id !== updatedItem.id),
+            updatedItem
+          ]
+        }
+      };
+      return completionState('update-item', updatedState, state);
+    }
+    case UPDATE_ITEM_FAILURE:
+      return fullPageErrorState('update-item', action.error, state);
     default:
       return state;
   }

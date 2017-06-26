@@ -14,7 +14,8 @@ export const getInitialState = () => {
     refreshToken: null,
     survey: undefined,
     likedItemIds: [],
-    lastBoxIdMarkedAsReceived: null
+    lastBoxIdMarkedAsReceived: null,
+    marketplace: {}
   };
 };
 
