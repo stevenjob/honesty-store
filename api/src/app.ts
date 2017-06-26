@@ -1,9 +1,12 @@
 import express = require('express');
 import bodyParser = require('body-parser');
 import compression = require('compression');
-import { expressRouter, ExpressRouter } from '@honesty-store/service/lib/expressRouter';
 import cors = require('cors');
+
+import { expressRouter, ExpressRouter } from '@honesty-store/service/lib/expressRouter';
+
 import boxController from './controllers/box';
+import itemController from './controllers/item';
 import logoutController from './controllers/logout';
 import marketplaceController from './controllers/marketplace';
 import purchaseController from './controllers/purchase';
@@ -38,6 +41,7 @@ supportController(router);
 surveyController(router);
 boxController(router);
 refundController(router);
+itemController(router);
 
 app.use(router);
 
