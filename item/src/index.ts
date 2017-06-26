@@ -3,6 +3,7 @@ import { default as cruftDDB, IHasMetadata, IHasVersion } from 'cruft-ddb';
 
 import {
   assertPositiveInteger,
+  assertValidOptional,
   assertValidString,
   createAssertValidObject,
   createAssertValidUuid
@@ -21,15 +22,15 @@ const cruft = cruftDDB<ItemInternal>({
 const assertValidItemId = createAssertValidUuid('itemId');
 const assertValidItemDetails = createAssertValidObject<ItemDetails>({
   name: assertValidString,
-  qualifier: assertValidString,
+  qualifier: assertValidOptional(assertValidString),
   genericName: assertValidString,
   genericNamePlural: assertValidString,
   unit: assertValidString,
   unitPlural: assertValidString,
-  location: assertValidString,
+  location: assertValidOptional(assertValidString),
   image: assertValidString,
-  weight: assertPositiveInteger,
-  notes: assertValidString
+  weight: assertValidOptional(assertPositiveInteger),
+  notes: assertValidOptional(assertValidString)
 });
 
 const externalise = ({ version: _version, modified: _modifed, created: _created , ...details }: ItemInternal): Item => details;

@@ -31,6 +31,14 @@ export const assertNonZeroPositiveInteger = (key: string, value: any) => {
   }
 };
 
+export const assertValidOptional = (validator: Validator) => (key: string, value: any) => {
+  return () => {
+    if (value != null) {
+      validator(key, value);
+    }
+  };
+};
+
 export type Validator = (key: string, value: any) => void;
 
 export type ObjectValidator<Type> = { [Key in keyof Type]: Validator };
