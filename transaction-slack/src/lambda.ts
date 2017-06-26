@@ -1,6 +1,6 @@
 import { stringify as csvStringifyCb } from 'csv';
 
-import cruftDDB from '@honesty-store/cruft/lib/index';
+import cruftDDB from '@honesty-store/cruft';
 import { getItem } from '@honesty-store/item';
 import { assertNever } from '@honesty-store/service/lib/assert';
 import { createServiceKey } from '@honesty-store/service/lib/key';
