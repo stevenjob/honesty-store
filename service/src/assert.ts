@@ -45,6 +45,14 @@ export const createAssertValidObject = <Type>(validator: ObjectValidator<Type>) 
       }
       validator[key](key, value);
     }
+    for (const key of <(keyof Type)[]>Object.keys(validator)) {
+      const value = object[key];
+      const keyValidator = validator[key];
+      if (keyValidator == null) {
+        throw new Error(`Expected ${key} to exist on object`);
+      }
+      validator[key](key, value);
+    }
   };
 
 export const assertNever = (value: never): never => {
