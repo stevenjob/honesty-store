@@ -1,7 +1,7 @@
+import { lambdaBaseUrl } from '@honesty-store/service/lib/baseUrl';
 import fetch from '@honesty-store/service/lib/fetch';
 
-export interface Item {
-  id: string;
+export interface ItemDetails {
   name: string;
   qualifier?: string;
   genericName: string;
@@ -14,9 +14,14 @@ export interface Item {
   notes?: string;
 }
 
-import { lambdaBaseUrl } from '@honesty-store/service/lib/baseUrl';
+export interface Item extends ItemDetails {
+  id: string;
+}
 
-const { get } = fetch('item', lambdaBaseUrl);
+const { get, post } = fetch('item', lambdaBaseUrl);
+
+export const updateItem = (key, itemId: string, details) =>
+  post(1, key, `/${itemId}`, details);
 
 export const getItem = (key, itemId: string) =>
   get<Item>(1, key, `/${itemId}`);

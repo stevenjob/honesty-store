@@ -27,7 +27,7 @@ interface LambdaConfig {
 
 const lambdaConfig: LambdaConfig = {
   item: {
-    database: 'ro',
+    database: 'rw',
     handler: 'lib/bundle-min.handler',
     codeFilter: 'lib/bundle-min.js',
     timeout: 10
