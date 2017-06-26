@@ -51,8 +51,7 @@ const updateItem = async (itemId: string, details: ItemDetails) => {
   const originalItem = await cruft.read({ id: itemId });
   const updatedItem: ItemInternal = {
     ...originalItem,
-    ...details,
-    qualifier: details.qualifier || undefined
+    ...details
   };
   //tslint:disable
   console.log(`Updated item ${JSON.stringify(updatedItem)}`);

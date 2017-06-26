@@ -32,13 +32,21 @@ class MarketplaceItemDetailsEdit extends React.Component {
     });
   }
 
+  convertEmptyStringToNull(obj) {
+    let objectWithConvertedValues = {};
+    for (const key of Object.keys(obj)) {
+      objectWithConvertedValues[key] = obj[key] === '' ? null : obj[key];
+    }
+    return objectWithConvertedValues;
+  }
+
   handleUpdateItemSubmit() {
     const { id: _id, ...details } = this.state;
     const { performUpdateItem, item: { id } } = this.props;
 
     performUpdateItem({
       id,
-      details
+      details: this.convertEmptyStringToNull(details)
     });
   }
 
