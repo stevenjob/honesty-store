@@ -111,6 +111,11 @@ const errorDefinitions = {
     actionDescription: `Can you try that again, please?`,
     dismissalText: dismissalText.DISMISS
   },
+  AccessDenied: {
+    message: `You don't have permission to access this page`,
+    dismissalText: dismissalText.DISMISS,
+    redirectionPath: `/store`
+  },
   // The following error codes are handled internally and never presented to the user
   EmailNotFound: { message: `Couldn't find your email` },
   RefreshTokenExpired: {

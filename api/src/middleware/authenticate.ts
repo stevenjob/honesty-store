@@ -1,4 +1,5 @@
 import HTTPStatus = require('http-status');
+import { CodedError } from '@honesty-store/service/lib/error';
 import { createAuthenticationKey } from '@honesty-store/service/lib/key';
 import { error } from '@honesty-store/service/lib/log';
 import {
@@ -61,7 +62,7 @@ const authenticateAdminUser = (request, _response, next) => {
     'c71733c4-dc05-42f9-848e-fb53bf08a2d7'
   ];
   if (!allowedUserIds.some((el) => el === id)) {
-    throw new Error(`userId ${id} does not have permission to view item details`);
+    throw new CodedError('AccessDenied', `userId ${id} does not have permission to view item details`);
   }
   next();
 };

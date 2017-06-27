@@ -26,6 +26,7 @@ export type ErrorCode =
   'RefundAlreadyIssued' |
   'NonRefundableTransactionType' |
   'UserLoggedOut' |
+  'AccessDenied' |
   'UnknownError';
 
 export class CodedError extends Error {
