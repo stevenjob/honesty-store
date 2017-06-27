@@ -53,8 +53,6 @@ const updateItem = async (itemId: string, details: ItemDetails) => {
     ...originalItem,
     ...details
   };
-  //tslint:disable
-  console.log(`Updated item ${JSON.stringify(updatedItem)}`);
   return externalise(await cruft.update(updatedItem));
 };
 
