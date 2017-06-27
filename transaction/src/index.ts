@@ -142,7 +142,7 @@ const issueUserRequestedRefund = async (transactionId, userId, reason) => {
   return await issueRefund(transactionToRefund, reason, refundCutOffDate);
 };
 
-const issueSupportRequestedRefund = async (transactionId, reason, dateLimit) => {
+const issueSupportRequestedRefund = async (transactionId: string, reason: string, dateLimit: number) => {
   if (!isSupportPermittedRefundReason(reason)) {
     throw new Error(`Reason must be one of ${supportPermittedRefundReasons}`);
   }
@@ -231,5 +231,5 @@ router.post(
 
 router.post(
   '/tx/:transactionId/refund/support',
-  async (_key, { transactionId }, { dateLimit, reason }) => await issueSupportRequestedRefund(transactionId, reason, dateLimit)
+  async (_key, { transactionId }, { dateLimit, reason }) => await issueSupportRequestedRefund(transactionId, reason, Number(dateLimit))
 );
