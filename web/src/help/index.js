@@ -2,12 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Chrome from '../layout/chrome';
-import Balance from '../topup/balance';
 import { performSupport } from '../actions/support';
 import isRegisteredUser from '../reducers/is-registered-user';
 import isEmail from 'validator/lib/isEmail';
-
-const Store = () => <Link className="btn" to={`/store`}>Store</Link>;
 
 const Help = class extends React.Component {
   constructor(props) {
@@ -41,13 +38,9 @@ const Help = class extends React.Component {
 
   render() {
     const { valid, emailAddress, message } = this.state;
-    const { registered, balance } = this.props;
+    const { registered } = this.props;
     return (
-      <Chrome
-        title="Help"
-        left={registered ? null : <Store />}
-        right={registered ? <Balance balance={balance} /> : null}
-      >
+      <Chrome>
         <form className="center px2 navy" onSubmit={e => this.handleSubmit(e)}>
           <p>Having problems? Want to share an idea or some feedback?</p>
           <p>
@@ -90,8 +83,7 @@ const Help = class extends React.Component {
 
 const mapStateToProps = ({ user }) => ({
   emailAddress: user.emailAddress,
-  registered: isRegisteredUser(user),
-  balance: user.balance || 0
+  registered: isRegisteredUser(user)
 });
 
 const mapDispatchToProps = { performSupport };

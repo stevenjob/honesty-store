@@ -1,14 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import List from '../chrome/list';
 import Chrome from '../layout/chrome';
 import HistoryItem from './item';
-import Balance from '../topup/balance';
+import Currency from '../format/Currency';
 
 const itemRenderer = transaction => <HistoryItem transaction={transaction} />;
 
 const History = ({ transactions, balance }) => (
-  <Chrome title="History" right={<Balance balance={balance} />}>
+  <Chrome>
+    <div className="border-gray border-top border-bottom bg-white mt3 mb3">
+      <Link
+        to="/topup"
+        className="btn regular flex items-center justify-between navy"
+      >
+        <div>
+          <h3>
+            Your balance is <Currency amount={balance} />
+          </h3>
+          <p className="aqua">
+            Tap here to top up using your registered card.
+          </p>
+        </div>
+      </Link>
+    </div>
     <List data={transactions} itemRenderer={itemRenderer} />
   </Chrome>
 );

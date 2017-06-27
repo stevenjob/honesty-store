@@ -2,12 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Chrome from '../layout/chrome';
-import Balance from '../topup/balance';
 import StoreBrowser from '../chrome/store-browser';
 import { performStoreChange } from '../actions/store';
 
 const Profile = ({ emailAddress, balance, storeCode, performStoreChange }) => (
-  <Chrome title="Profile" right={<Balance balance={balance} />}>
+  <Chrome>
     <div className="flex px2 navy bg-white border-bottom border-gray">
       <div className="col-9">
         <h2 className="mt2 mb1">Email</h2>
