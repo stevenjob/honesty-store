@@ -1,4 +1,4 @@
-import { getAllItems, updateItem } from '@honesty-store/item';
+import { getAllItems, ItemDetails, updateItem } from '@honesty-store/item';
 import { ExpressRouter } from '@honesty-store/service/lib/expressRouter';
 import { authenticateAccessTokenAndAdminUser } from '../middleware/authenticate';
 
@@ -13,6 +13,6 @@ export default (router: ExpressRouter) => {
   router.post(
     '/item/:itemId',
     authenticateAccessTokenAndAdminUser,
-    async (key, { itemId }, details, { }) => await updateItem(key, itemId, details)
+    async (key, { itemId }, details: ItemDetails, { }) => await updateItem(key, itemId, details)
   );
 };
