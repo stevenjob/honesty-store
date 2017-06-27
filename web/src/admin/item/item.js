@@ -33,7 +33,7 @@ class MarketplaceItemDetailsEdit extends React.Component {
   }
 
   convertEmptyStringToNull(obj) {
-    let objectWithConvertedValues = {};
+    const objectWithConvertedValues = {};
     for (const key of Object.keys(obj)) {
       objectWithConvertedValues[key] = obj[key] === '' ? null : obj[key];
     }
