@@ -42,7 +42,7 @@ const getItem = async(itemId): Promise<Item> => {
 
 const getAllItems = async (): Promise<Item[]> => {
   const items = await cruft.__findAll({});
-  return items.map((item) => externalise(item));
+  return items.map(externalise);
 };
 
 const updateItem = async (itemId: string, details: ItemDetails) => {
