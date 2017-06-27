@@ -21,11 +21,8 @@ const MarketplaceCategoryList = ({ items }) => {
 };
 
 const mapStateToProps = ({ admin }, { params: { id } }) => {
-  const items = (admin.items || []).sort((a, b) => {
-    if (a.name > b.name) return 1;
-    if (a.name < b.name) return -1;
-    return 0;
-  });
+  const items = (admin.items || [])
+    .sort((a, b) => a.name.localeCompare(b.name));
   return {
     items
   };
