@@ -51,15 +51,13 @@ export const createAssertValidObject = <Type>(validator: ObjectValidator<Type>) 
       if (keyValidator == null) {
         throw new Error(`${key} with value ${value} is not a specified key of the object being validated`);
       }
-      validator[key](key, value);
+      keyValidator(key, value);
     }
     for (const key of <(keyof Type)[]>Object.keys(validator)) {
-      const value = object[key];
-      const keyValidator = validator[key];
-      if (keyValidator == null) {
+      if (!(key in object)) {
         throw new Error(`Expected ${key} to exist on object`);
       }
-      validator[key](key, value);
+      validator[key](key, object[key]);
     }
   };
 
