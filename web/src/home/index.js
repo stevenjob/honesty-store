@@ -4,10 +4,7 @@ import StoreBrowser from '../chrome/store-browser';
 import { performRegister } from '../actions/register';
 import logo from '../chrome/assets/logo.svg';
 
-import Hands from './assets/hands';
-import '../item/hands.css';
-
-const handsSize = '8rem';
+import Hands from './hands';
 
 const Home = ({ performRegister }) => (
   <div className="center navy col-12">
@@ -17,12 +14,7 @@ const Home = ({ performRegister }) => (
           <img src={logo} alt="honesty.store" />
         </h1>
         <h3 className="regular">The digital honesty box</h3>
-
-        <Hands
-          className="hands py2 sm-my4"
-          style={{ maxHeight: handsSize, minHeight: handsSize }}
-        />
-
+        <Hands className="my3 sm-my4 mx-auto sm-col-4 col-6" />
         <h4>Have a store code? Please enter it below</h4>
         <p className="mt0">
           (you will be able to find it on your honesty.store box)
