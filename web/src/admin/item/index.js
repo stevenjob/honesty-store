@@ -2,22 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import List from '../../chrome/list';
-import { Back } from '../../chrome/link';
-import Chrome from '../../layout/chrome';
+import Full from '../../layout/full';
 
 const MarketplaceCategoryList = ({ items }) => {
   const itemRenderer = ({ id, name, qualifier, image }) => (
     <Link to={`/admin/item/${id}`}>
-      <div className="px2 py1 regular navy col-12">
+      <div className="px2 py1 regular navy col-12 left-align">
         <p>{name} {qualifier && qualifier}</p>
       </div>
     </Link>
   );
 
   return (
-    <Chrome left={<Back />} title="All Items">
+    <Full>
       <List data={items} itemRenderer={itemRenderer} />
-    </Chrome>
+    </Full>
   );
 };
 

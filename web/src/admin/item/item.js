@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Back } from '../../chrome/link';
-import Chrome from '../../layout/chrome';
+import Full from '../../layout/full';
 import { performUpdateItem } from '../../actions/update-item';
 
 const FormElement = ({ id, description, value, handler }) => (
@@ -61,7 +61,7 @@ class MarketplaceItemDetailsEdit extends React.Component {
       image
     } = this.state;
     return (
-      <Chrome left={<Back />} title="Edit Item">
+      <Full left={<Back />}>
         <div className="px2 center">
           <form>
             <FormElement
@@ -115,7 +115,7 @@ class MarketplaceItemDetailsEdit extends React.Component {
             </button>
           </form>
         </div>
-      </Chrome>
+      </Full>
     );
   }
 }
