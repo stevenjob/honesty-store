@@ -15,7 +15,7 @@ class ItemFetch extends React.Component {
   }
 }
 
-const mapStateToProps = ({ marketplace: { items }, pending }) => ({
+const mapStateToProps = ({ admin: { items }, pending }) => ({
   items,
   pending
 });

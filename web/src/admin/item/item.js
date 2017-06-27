@@ -120,11 +120,9 @@ class MarketplaceItemDetailsEdit extends React.Component {
   }
 }
 
-const mapStateToProps = ({ marketplace }, { params: { itemId } }) => {
-  if (marketplace == null) {
-    return {};
-  }
-  const item = marketplace.items.find(({ id }) => id === itemId);
+const mapStateToProps = ({ admin }, { params: { itemId } }) => {
+  const items = admin.items || [];
+  const item = items.find(({ id }) => id === itemId);
   return {
     item
   };

@@ -346,7 +346,7 @@ export default (state, action) => {
     case ALL_ITEMS_SUCCESS: {
       const { response } = action;
       const updatedStateProps = {
-        marketplace: {
+        admin: {
           items: response
         }
       };
@@ -358,10 +358,10 @@ export default (state, action) => {
       return requestState('update-item', {}, state);
     case UPDATE_ITEM_SUCCESS: {
       const updatedItem = action.response;
-      const { items } = state.marketplace || [];
+      const { items } = state.admin || [];
       const updatedState = {
-        marketplace: {
-          ...state.marketplace,
+        admin: {
+          ...state.admin,
           items: [
             ...items.filter(({ id }) => id !== updatedItem.id),
             updatedItem

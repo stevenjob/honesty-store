@@ -15,7 +15,7 @@ export const getInitialState = () => {
     survey: undefined,
     likedItemIds: [],
     lastBoxIdMarkedAsReceived: null,
-    marketplace: {}
+    admin: {}
   };
 };
 

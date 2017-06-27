@@ -20,8 +20,8 @@ const MarketplaceCategoryList = ({ items }) => {
   );
 };
 
-const mapStateToProps = ({ marketplace }, { params: { id } }) => {
-  const items = (marketplace.items || []).sort((a, b) => {
+const mapStateToProps = ({ admin }, { params: { id } }) => {
+  const items = (admin.items || []).sort((a, b) => {
     if (a.name > b.name) return 1;
     if (a.name < b.name) return -1;
     return 0;
