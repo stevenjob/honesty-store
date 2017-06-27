@@ -2,8 +2,8 @@ import { config } from 'aws-sdk';
 import { default as cruftDDB, IHasMetadata, IHasVersion } from 'cruft-ddb';
 
 import {
+  assertOptional,
   assertPositiveInteger,
-  assertValidOptional,
   assertValidString,
   createAssertValidObject,
   createAssertValidUuid
@@ -22,18 +22,27 @@ const cruft = cruftDDB<ItemInternal>({
 const assertValidItemId = createAssertValidUuid('itemId');
 const assertValidItemDetails = createAssertValidObject<ItemDetails>({
   name: assertValidString,
-  qualifier: assertValidOptional(assertValidString),
+  qualifier: assertOptional(assertValidString),
   genericName: assertValidString,
   genericNamePlural: assertValidString,
   unit: assertValidString,
   unitPlural: assertValidString,
-  location: assertValidOptional(assertValidString),
+  location: assertOptional(assertValidString),
   image: assertValidString,
-  weight: assertValidOptional(assertPositiveInteger),
-  notes: assertValidOptional(assertValidString)
+  weight: assertOptional(assertPositiveInteger),
+  notes: assertOptional(assertValidString)
 });
 
-const externalise = ({ version: _version, modified: _modifed, created: _created , ...details }: ItemInternal): Item => details;
+const externalise = ({ id, name, qualifier, genericName, genericNamePlural, unit, unitPlural, image }: ItemInternal): Item => ({
+  id,
+  name,
+  qualifier,
+  genericName,
+  genericNamePlural,
+  unit,
+  unitPlural,
+  image
+});
 
 const getItem = async(itemId): Promise<Item> => {
   assertValidItemId(itemId);
