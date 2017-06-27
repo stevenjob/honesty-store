@@ -40,7 +40,8 @@ export const performRefund = ({ transactionId, reason }) => async (
         getToken: () => getState().accessToken,
         body: {
           reason
-        }
+        },
+        method: 'POST'
       },
       dispatch,
       getState

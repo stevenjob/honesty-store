@@ -37,7 +37,8 @@ export const performSignin = ({ itemId, emailAddress, storeCode }) => async (
         body: {
           emailAddress,
           storeCode
-        }
+        },
+        method: 'POST'
       },
       dispatch,
       getState

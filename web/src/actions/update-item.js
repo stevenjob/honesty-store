@@ -35,7 +35,8 @@ export const performUpdateItem = ({ id, details }) => async (
       {
         url: `/api/v1/item/${id}`,
         body: details,
-        getToken: () => getState().accessToken
+        getToken: () => getState().accessToken,
+        method: 'POST'
       },
       dispatch,
       getState

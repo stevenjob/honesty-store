@@ -36,7 +36,8 @@ export const performSignin2 = ({ emailToken, storeCode }) => async (
       {
         url: '/api/v1/signin2',
         getToken: () => emailToken,
-        body: { storeCode }
+        body: { storeCode },
+        method: 'POST'
       },
       dispatch,
       getState

@@ -41,7 +41,8 @@ export const performSupport = (
           emailAddress,
           userAgent
         },
-        getToken: () => getState().accessToken
+        getToken: () => getState().accessToken,
+        method: 'POST'
       },
       dispatch,
       getState

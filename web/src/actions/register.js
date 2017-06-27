@@ -35,7 +35,8 @@ export const performRegister = ({ storeCode }) => async (
         url: '/api/v1/register',
         body: {
           storeCode
-        }
+        },
+        method: 'POST'
       },
       dispatch,
       getState

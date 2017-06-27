@@ -32,7 +32,8 @@ export const submitSurvey = ({ survey, answers }) => async (
           surveyId: survey.id,
           answers: answers
         },
-        getToken: () => getState().accessToken
+        getToken: () => getState().accessToken,
+        method: 'POST'
       },
       dispatch,
       getState

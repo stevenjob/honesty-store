@@ -31,7 +31,8 @@ export const performStoreChange = ({ storeCode }) => async (
         body: {
           storeCode
         },
-        getToken: () => getState().accessToken
+        getToken: () => getState().accessToken,
+        method: 'POST'
       },
       dispatch,
       getState

@@ -54,7 +54,8 @@ export const performRegister2 = ({
           topUpAmount,
           emailAddress
         },
-        getToken: () => getState().accessToken
+        getToken: () => getState().accessToken,
+        method: 'POST'
       },
       dispatch,
       getState

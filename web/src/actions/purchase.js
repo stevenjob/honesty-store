@@ -39,7 +39,8 @@ export const performPurchase = ({ itemId, quantity }) => async (
         body: {
           itemID: itemId,
           quantity
-        }
+        },
+        method: 'POST'
       },
       dispatch,
       getState

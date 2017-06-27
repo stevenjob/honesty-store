@@ -32,7 +32,8 @@ export const performLogout = () => async (dispatch, getState) => {
     const response = await apifetch(
       {
         url: '/api/v1/logout',
-        getToken: () => getState().accessToken
+        getToken: () => getState().accessToken,
+        method: 'POST'
       },
       dispatch,
       getState

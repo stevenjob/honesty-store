@@ -51,7 +51,8 @@ export const performTopup = ({ amount, cardDetails }) => async (
             : undefined,
           amount
         },
-        getToken: () => getState().accessToken
+        getToken: () => getState().accessToken,
+        method: 'POST'
       },
       dispatch,
       getState

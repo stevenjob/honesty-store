@@ -1,7 +1,7 @@
 import { performSession, sessionReset } from './session';
 import history from '../history';
 
-const apifetch = async ({ url, getToken, body }, method) => {
+const apifetch = async ({ url, getToken, body, method }) => {
   const headers = {};
 
   if (body) {
@@ -43,13 +43,13 @@ const apifetch = async ({ url, getToken, body }, method) => {
   return json.response;
 };
 
-export default async (params, dispatch, getState, method = 'POST') => {
+export default async (params, dispatch, getState) => {
   try {
-    return await apifetch(params, method);
+    return await apifetch(params);
   } catch (error) {
     if (error.code === 'AccessTokenExpired') {
       await performSession()(dispatch, getState);
-      return await apifetch(params, method);
+      return await apifetch(params);
     }
     if (error.code === 'TokenError') {
       // Our refresh token hasn't expired (that's RefreshTokenExpired),

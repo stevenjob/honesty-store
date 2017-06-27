@@ -31,11 +31,11 @@ export const performAllItems = () => async (dispatch, getState) => {
     const response = await apifetch(
       {
         url: `/api/v1/item/all`,
-        getToken: () => getState().accessToken
+        getToken: () => getState().accessToken,
+        method: 'GET'
       },
       dispatch,
-      getState,
-      'GET'
+      getState
     );
 
     dispatch(allItemsSuccess(response));
