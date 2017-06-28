@@ -25,7 +25,10 @@ const SpecialEntry = ({ to, title, children }) => (
           {children}
         </div>
       </div>
-      <MiscSelection className="flex-auto" style={{ height: '5rem' }} />
+      <MiscSelection
+        className="xs-hide"
+        style={{ height: '5rem', width: '5rem' }}
+      />
     </Link>
   </div>
 );
