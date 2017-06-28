@@ -82,6 +82,11 @@ import {
   UPDATE_ITEM_SUCCESS,
   UPDATE_ITEM_FAILURE
 } from '../actions/update-item';
+import {
+  CREATE_ITEM_REQUEST,
+  CREATE_ITEM_SUCCESS,
+  CREATE_ITEM_FAILURE
+} from '../actions/create-item';
 import { getInitialState } from '../state';
 
 const requestState = (requestId, updatedProps, state) => ({
@@ -372,6 +377,21 @@ export default (state, action) => {
     }
     case UPDATE_ITEM_FAILURE:
       return fullPageErrorState('update-item', action.error, state);
+    case CREATE_ITEM_REQUEST:
+      return requestState('create-item', {}, state);
+    case CREATE_ITEM_SUCCESS: {
+      const updatedItem = action.response;
+      const { items } = state.admin || [];
+      const updatedState = {
+        admin: {
+          ...state.admin,
+          items: [...items, updatedItem]
+        }
+      };
+      return completionState('create-item', updatedState, state);
+    }
+    case CREATE_ITEM_FAILURE:
+      return fullPageErrorState('create-item', action.error, state);
     default:
       return state;
   }
