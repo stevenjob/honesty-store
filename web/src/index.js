@@ -15,7 +15,8 @@ import Marketplace from './marketplace';
 import MarketplaceNew from './marketplace/new';
 import MarketplaceComplete from './marketplace/complete';
 import AdminItemsList from './admin/item/index';
-import AdminItemDetailsEdit from './admin/item/item';
+import AdminItemDetailsEdit from './admin/item/edit';
+import AdminItemDetailsNew from './admin/item/new';
 import AdminItemFetch from './admin/item/fetch';
 import Profile from './profile/index';
 import CloseProfile from './profile/close';
@@ -156,6 +157,7 @@ ReactDOM.render(
           <Route path="more/success" component={MarketplaceComplete} />
           <Route path="admin/item" component={AdminItemFetch}>
             <IndexRoute component={AdminItemsList} />
+            <Route path="new" component={AdminItemDetailsNew} />
             <Route path=":itemId" component={AdminItemDetailsEdit} />
           </Route>
           <Route path="profile" component={Profile} />

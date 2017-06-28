@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Back } from '../../chrome/link';
 import Full from '../../layout/full';
-import { performUpdateItem } from '../../actions/update-item';
 
 const FormElement = ({ id, description, value, handler }) => (
   <p>
@@ -42,12 +41,9 @@ class AdminItemDetailsEdit extends React.Component {
 
   handleUpdateItemSubmit() {
     const { id: _id, ...details } = this.state;
-    const { performUpdateItem, item: { id } } = this.props;
+    const { onSubmit } = this.props;
 
-    performUpdateItem({
-      id,
-      details: this.convertEmptyStringToNull(details)
-    });
+    onSubmit(this.convertEmptyStringToNull(details));
   }
 
   render() {
@@ -120,14 +116,12 @@ class AdminItemDetailsEdit extends React.Component {
   }
 }
 
-const mapStateToProps = ({ admin }, { params: { itemId } }) => {
+const mapStateToProps = ({ admin }, { itemId }) => {
   const items = admin.items || [];
-  const item = items.find(({ id }) => id === itemId);
+  const item = itemId ? items.find(({ id }) => id === itemId) : {};
   return {
     item
   };
 };
 
-export default connect(mapStateToProps, { performUpdateItem })(
-  AdminItemDetailsEdit
-);
+export default connect(mapStateToProps)(AdminItemDetailsEdit);
