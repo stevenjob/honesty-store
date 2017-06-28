@@ -1,5 +1,6 @@
 import { config } from 'aws-sdk';
-import { default as cruftDDB, IHasMetadata, IHasVersion } from 'cruft-ddb';
+import { default as cruftDDB, IHasVersion } from 'cruft-ddb';
+import { v4 as uuid } from 'uuid';
 
 import {
   assertOptional,
@@ -13,7 +14,7 @@ import { Item, ItemDetails } from './client';
 
 config.region = process.env.AWS_REGION;
 
-type ItemInternal = Item & IHasMetadata & IHasVersion;
+type ItemInternal = Item & IHasVersion;
 
 const cruft = cruftDDB<ItemInternal>({
   tableName: process.env.TABLE_NAME
@@ -65,7 +66,24 @@ const updateItem = async (itemId: string, details: ItemDetails) => {
   return externalise(await cruft.update(updatedItem));
 };
 
+const createItem = async (details: ItemDetails) => {
+  assertValidItemDetails(details);
+
+  const item = await cruft.create({
+    id: uuid(),
+    version: 0,
+    ...details
+  });
+
+  return externalise(item);
+};
+
 export const router: LambdaRouter = lambdaRouter('item', 1);
+
+router.post<ItemDetails, Item>(
+  '/',
+  async (_key, { }, details) => createItem(details)
+);
 
 router.get(
   '/all',

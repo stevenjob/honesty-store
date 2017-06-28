@@ -20,6 +20,9 @@ export interface Item extends ItemDetails {
 
 const { get, post } = fetch('item', lambdaBaseUrl);
 
+export const createItem = (key, details: ItemDetails) =>
+  post(1, key, `/`, details);
+
 export const updateItem = (key, itemId: string, details: ItemDetails) =>
   post(1, key, `/${itemId}`, details);
 

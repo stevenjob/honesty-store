@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@honesty-store/service": "0.0.0",
-    "cruft-ddb": "^3.0.6"
+    "cruft-ddb": "^3.0.6",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "@types/body-parser": "0.0.33",
