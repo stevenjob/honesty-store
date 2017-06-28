@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Back } from '../../chrome/link';
+import { BackToPage } from '../../chrome/link';
 import Full from '../../layout/full';
 
 const FormElement = ({ id, description, value, handler }) => (
@@ -57,7 +57,7 @@ class AdminItemDetailsEdit extends React.Component {
       image
     } = this.state;
     return (
-      <Full left={<Back />}>
+      <Full left={<BackToPage path="/admin/item" title="Items" />}>
         <div className="px2 center">
           <form>
             <FormElement
