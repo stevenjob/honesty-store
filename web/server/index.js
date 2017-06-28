@@ -18,7 +18,7 @@ app.use((req, res, next) => {
     return next();
   }
 });
-
+app.set('etag', 'strong');
 app.use(expressLogging(logger));
 app.use(compression());
 app.use(cors());
