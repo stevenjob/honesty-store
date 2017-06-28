@@ -31,9 +31,9 @@ export const assertNonZeroPositiveInteger = (key: string, value: any) => {
   }
 };
 
-export const assertOptional = (validator: Validator) => (key: string, value: any) => {
-  return () => {
-    if (value !== null) {
+export const assertOptional = (validator: Validator) => {
+  return (key: string, value: any) => {
+    if (value != null) {
       validator(key, value);
     }
   };
@@ -45,19 +45,13 @@ export type ObjectValidator<Type> = { [Key in keyof Type]: Validator };
 
 export const createAssertValidObject = <Type>(validator: ObjectValidator<Type>) =>
   (object: Type) => {
-    for (const key of <(keyof Type)[]>Object.keys(object)) {
-      const value = object[key];
-      const keyValidator = validator[key];
-      if (keyValidator == null) {
-        throw new Error(`${key} with value ${value} is not a specified key of the object being validated`);
-      }
-      keyValidator(key, value);
-    }
     for (const key of <(keyof Type)[]>Object.keys(validator)) {
-      if (!(key in object)) {
-        throw new Error(`Expected ${key} to exist on object`);
-      }
-      validator[key](key, object[key]);
+      const value = object[key];
+      validator[key](key, value);
+    }
+    const unexpectedKeys = Object.keys(object).filter((key) => !(key in validator));
+    if (unexpectedKeys.length !== 0) {
+      throw new Error(`Unexpected key(s) found on object: ${unexpectedKeys}`);
     }
   };
 
