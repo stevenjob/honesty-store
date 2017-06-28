@@ -203,5 +203,3 @@ if ('serviceWorker' in navigator) {
     }
   });
 }
-
-console.log('chris & rob debugging');
