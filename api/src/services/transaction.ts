@@ -6,7 +6,7 @@ import {
   issueUserRequestedRefund,
   TransactionBody
 } from '@honesty-store/transaction';
-import { getItemPriceFromStore } from './store';
+import { calculateDonation, getItemPriceFromStore } from './store';
 
 const expandItemDetails = async (key, transaction) => {
   const { itemId } = transaction.data;
@@ -41,11 +41,13 @@ const assertValidQuantity = (quantity) => {
 export const purchase = async ({ key, itemID, userID, accountID, storeID, quantity }) => {
   assertValidQuantity(quantity);
 
-  const price = quantity * await getItemPriceFromStore(key, storeID, itemID);
+  const subtotal = quantity * await getItemPriceFromStore(key, storeID, itemID);
+  const donation = calculateDonation(storeID, subtotal);
+  const total = subtotal + donation;
 
   const transaction: TransactionBody = {
     type: 'purchase',
-    amount: -price,
+    amount: -total,
     data: {
       quantity: String(quantity),
       itemId: itemID,
