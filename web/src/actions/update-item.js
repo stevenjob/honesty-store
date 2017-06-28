@@ -1,4 +1,5 @@
 import apifetch from './apirequest';
+import history from '../history';
 
 export const UPDATE_ITEM_REQUEST = 'UPDATE_ITEM_REQUEST';
 export const UPDATE_ITEM_SUCCESS = 'UPDATE_ITEM_SUCCESS';
@@ -43,6 +44,7 @@ export const performUpdateItem = ({ id, details }) => async (
     );
 
     dispatch(updateItemSuccess(response));
+    history.push(`/admin/item/${response.id}/success`);
   } catch (e) {
     dispatch(updateItemFailure(e));
   }

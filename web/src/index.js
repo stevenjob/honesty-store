@@ -17,6 +17,7 @@ import MarketplaceComplete from './marketplace/complete';
 import AdminItemsList from './admin/item/index';
 import AdminItemDetailsEdit from './admin/item/edit';
 import AdminItemDetailsNew from './admin/item/new';
+import AdminItemDetailsSuccess from './admin/item/success';
 import AdminItemFetch from './admin/item/fetch';
 import Profile from './profile/index';
 import CloseProfile from './profile/close';
@@ -159,6 +160,7 @@ ReactDOM.render(
             <IndexRoute component={AdminItemsList} />
             <Route path="new" component={AdminItemDetailsNew} />
             <Route path=":itemId" component={AdminItemDetailsEdit} />
+            <Route path=":itemId/success" component={AdminItemDetailsSuccess} />
           </Route>
           <Route path="profile" component={Profile} />
           <Route path="profile/close" component={CloseProfile} />

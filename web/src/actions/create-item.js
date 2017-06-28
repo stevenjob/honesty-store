@@ -1,4 +1,5 @@
 import apifetch from './apirequest';
+import history from '../history';
 
 export const CREATE_ITEM_REQUEST = 'CREATE_ITEM_REQUEST';
 export const CREATE_ITEM_SUCCESS = 'CREATE_ITEM_SUCCESS';
@@ -43,6 +44,7 @@ export const performCreateItem = ({ details }) => async (
     );
 
     dispatch(createItemSuccess(response));
+    history.push(`/admin/item/${response.id}/success`);
   } catch (e) {
     dispatch(createItemFailure(e));
   }
