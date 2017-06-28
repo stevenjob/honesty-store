@@ -23,18 +23,6 @@ app.use(expressLogging(logger));
 app.use(compression());
 app.use(cors());
 
-// Needs to be served with this exact url but with JSON
-app.use(
-  '/.well-known/apple-app-site-association',
-  express.static(
-    path.resolve(__dirname, '..', 'build', '.well-known', 'apple-app-site-association'),
-    {
-      setHeaders: (res) => res.type('json'),
-      etag: false
-    }
-  )
-);
-
 // serve versioned static assets with 1Y cache
 app.use(
   '/static',
