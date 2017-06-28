@@ -25,7 +25,7 @@ const SpecialEntry = ({ to, title, children }) => (
           {children}
         </div>
       </div>
-      <MiscSelection style={{ width: '5rem', height: '5rem' }} />
+      <MiscSelection className="flex-auto" style={{ height: '5rem' }} />
     </Link>
   </div>
 );
@@ -38,12 +38,15 @@ const Store = ({
   performDestroySession
 }) => (
   <Chrome>
-    <SpecialEntry to={`/store`} title={`Welcome to the ${storeCode} store`}>
+    <SpecialEntry
+      to={`/store`}
+      title={`You're browsing the ${storeCode} store`}
+    >
       <p>
-        Something missing? Feature request?
+        Think something's missing from the store? An idea for a killer feature?
       </p>
       <p>
-        Share your thoughts in the SL Slack #honesty-store channel.
+        Please share your thoughts in the SL Slack #honesty-store channel.
       </p>
     </SpecialEntry>
     <List data={items} itemRenderer={itemRenderer} />

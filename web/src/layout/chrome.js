@@ -54,7 +54,7 @@ const Chrome = ({ storeCode, children, registered }) => (
       </nav>
     </div>
 
-    <section style={{ paddingTop: '3.6rem' }}>
+    <section style={{ paddingTop: '3.4rem' }}>
       {children}
     </section>
   </div>
