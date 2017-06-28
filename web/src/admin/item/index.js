@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import List from '../../chrome/list';
 import Full from '../../layout/full';
 
-const MarketplaceItemList = ({ items }) => {
+const AdminItemList = ({ items }) => {
   const itemRenderer = ({ id, name, qualifier, image }) => (
     <Link to={`/admin/item/${id}`}>
       <div className="px2 py1 regular navy col-12 left-align">
@@ -28,4 +28,4 @@ const mapStateToProps = ({ admin }, { params: { id } }) => {
   };
 };
 
-export default connect(mapStateToProps)(MarketplaceItemList);
+export default connect(mapStateToProps)(AdminItemList);

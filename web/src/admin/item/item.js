@@ -17,7 +17,7 @@ const FormElement = ({ id, description, value, handler }) => (
   </p>
 );
 
-class MarketplaceItemDetailsEdit extends React.Component {
+class AdminItemDetailsEdit extends React.Component {
   constructor(props) {
     super(props);
     const { item } = this.props;
@@ -129,5 +129,5 @@ const mapStateToProps = ({ admin }, { params: { itemId } }) => {
 };
 
 export default connect(mapStateToProps, { performUpdateItem })(
-  MarketplaceItemDetailsEdit
+  AdminItemDetailsEdit
 );
