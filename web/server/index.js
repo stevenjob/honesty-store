@@ -18,7 +18,7 @@ app.use((req, res, next) => {
     return next();
   }
 });
-app.set('etag', 'strong');
+
 app.use(expressLogging(logger));
 app.use(compression());
 app.use(cors());
@@ -28,7 +28,10 @@ app.use(
   '/.well-known/apple-app-site-association',
   express.static(
     path.resolve(__dirname, '..', 'build', '.well-known', 'apple-app-site-association'),
-    { setHeaders: (res) => res.type('json'), }
+    {
+      setHeaders: (res) => res.type('json'),
+      etag: false
+    }
   )
 );
 
@@ -44,14 +47,18 @@ app.use(
 // serve unversioned static assets without cache
 app.use(
   express.static(
-    path.resolve(__dirname, '..', 'build')
+    path.resolve(__dirname, '..', 'build'),
+    { etag: false }
   )
 );
 
 // handle every other route with index.html, which will contain
 // a script tag to your application's JavaScript file(s).
 app.get('*', (request, response) => {
-  response.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
+  response.sendFile(
+    path.resolve(__dirname, '..', 'build', 'index.html'),
+    { etag: false }
+  );
 });
 
 app.listen(port);
