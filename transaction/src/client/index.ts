@@ -37,6 +37,7 @@ export interface Account {
   id: string;
   created: number;
   balance: number;
+  creditLimit: number;
   version: number;
 }
 

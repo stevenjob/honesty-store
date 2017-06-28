@@ -84,8 +84,8 @@ const createTransaction = async (
 
   const updatedBalance = originalAccount.balance + transaction.amount;
 
-  if (updatedBalance < 0) {
-    throw new Error(`Balance would be negative ${updatedBalance}`);
+  if (updatedBalance < originalAccount.creditLimit) {
+    throw new Error(`Balance would be less than credit limit ${originalAccount.creditLimit} (${updatedBalance})`);
   }
   if (updatedBalance > balanceLimit) {
     throw new CodedError('MaxBalanceExceeded', `Balance would be greater than ${balanceLimit} (${updatedBalance})`);

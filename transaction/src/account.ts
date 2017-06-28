@@ -23,6 +23,10 @@ export const getAccountInternal = async ({ accountId }): Promise<InternalAccount
     throw new Error(`Account not found ${accountId}`);
   }
 
+  if (item.creditLimit == null) {
+    item.creditLimit = 0;
+  }
+
   return <InternalAccount>item;
 };
 
@@ -32,6 +36,7 @@ export const createAccount = async ({ accountId }): Promise<InternalAccount> => 
   const account: InternalAccount = {
     id: accountId,
     created: Date.now(),
+    creditLimit: 0,
     balance: 0,
     version: 0,
     cachedTransactions: []
