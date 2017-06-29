@@ -1,10 +1,11 @@
 import React from 'react';
 
-export const InvertedSmall = ({ style }) => (
+export const InvertedSmall = ({ style, className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 267.56 294.7"
     style={style}
+    className={className}
   >
     <path
       fill="#ffce06"

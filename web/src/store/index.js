@@ -37,7 +37,7 @@ const Store = ({
             </p>
           </div>
         </div>
-        <MiscSelection className="xs-hide" style={{ height: '5rem' }} />
+        <MiscSelection className="xs-hide" style={{ height: '5rem', width: '5rem' }} />
       </a>
     </div>
     <List data={items} itemRenderer={itemRenderer} />
