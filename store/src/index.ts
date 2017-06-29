@@ -5,6 +5,7 @@ import { default as cruft, EnhancedItem } from '@honesty-store/cruft/lib/index';
 import {
   assertNever,
   assertNonZeroPositiveInteger,
+  assertOptional,
   assertPositiveInteger,
   assertValidString,
   assertValidUuid,
@@ -216,7 +217,7 @@ router.get<Store>(
 
 const storeDetailsValidator: ObjectValidator<StoreItemDetails> = {
   name: assertValidString,
-  qualifier: assertValidString,
+  qualifier: assertOptional(assertValidString),
   genericName: assertValidString,
   genericNamePlural: assertValidString,
   unit: assertValidString,
