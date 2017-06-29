@@ -24,12 +24,13 @@ const NavLink = withRouter(({ to, className, router, children }) => (
   </Link>
 ));
 
-const Chrome = ({ storeCode, children, registered }) => (
+const Chrome = ({ storeCode, children, registered, balance }) => (
   <div className="col-12 sm-col-10 md-col-8 lg-col-6 mx-auto">
     <header className="bg-navy center pt4 pb2 relative">
-      <div className="top-0 right-0 white absolute">
-        <Balance balance={0} />
-      </div>
+      {registered &&
+        <div className="top-0 right-0 white absolute">
+          <Balance balance={balance} />
+        </div>}
       <Logo.Inverted className="col-9 py1" />
       <h2 className="my0 white regular">{storeCode}</h2>
     </header>
@@ -57,7 +58,8 @@ const Chrome = ({ storeCode, children, registered }) => (
 
 const mapStateToProps = ({ user, store: { code: storeCode } }) => ({
   storeCode,
-  registered: isRegisteredUser(user)
+  registered: isRegisteredUser(user),
+  balance: user.balance || 0
 });
 
 export default connect(mapStateToProps, {})(Chrome);
