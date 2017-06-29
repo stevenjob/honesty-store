@@ -147,7 +147,7 @@ const topupExistingAccount = async (key, topupAccount: EnhancedItem<TopupAccount
   };
 };
 
-const createAndRecordCustomerDetails = async (
+const generateStripeCustomerFromStripeToken = async (
   key, topupAccount: EnhancedItem<TopupAccount>, stripeToken
 ): Promise<EnhancedItem<TopupAccount>> => {
   const { id, stripe, stripeHistory: previousStripeHistory, ...other } = topupAccount;
@@ -199,7 +199,7 @@ const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: Top
   let topupAccount = await getOrCreate({ key, accountId, userId });
 
   if (stripeToken) {
-    topupAccount = await createAndRecordCustomerDetails(key, topupAccount, stripeToken);
+    topupAccount = await generateStripeCustomerFromStripeToken(key, topupAccount, stripeToken);
   }
 
   return topupExistingAccount(key, topupAccount, amount);
