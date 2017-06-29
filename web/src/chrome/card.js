@@ -11,6 +11,36 @@ const setCursorPosition = element => () => {
   });
 };
 
+const getTopupText = ({ isInitialTopUp, isPrepay }) => {
+  if (isPrepay) {
+    const smallPrintPrepay =
+      'Our card processor charges us a fixed fee + a variable fee for' +
+      'every transaction. By grouping your transactions together in to' +
+      'a single top up, we end up paying less and we pass that saving' +
+      'on to you.';
+
+    if (isInitialTopUp) {
+      return {
+        topUpHeaderText: 'To get you started we need to take a £5 top up',
+        smallPrintText: smallPrintPrepay
+      };
+    }
+
+    return {
+      topUpHeaderText: "Let's update your card and top up £5",
+      smallPrintText: smallPrintPrepay
+    };
+  } else {
+    return {
+      topUpHeaderText: 'To take payment we need your card details',
+      smallPrintText: 'Our card processor charges us a fixed fee + a variable ' +
+        'fee for every transaction. To save on that fee (savings we pass on to ' +
+        'you!) we group your transactions together and charge your card at ' +
+        'regular intervals.'
+    };
+  }
+};
+
 class Card extends React.Component {
   constructor(props) {
     super(props);
@@ -76,11 +106,12 @@ class Card extends React.Component {
   }
 
   render() {
-    const { error, isInitialTopUp, confirmButtonText } = this.props;
+    const { error, isInitialTopUp, isPrepay, confirmButtonText } = this.props;
     const { number, exp, cvc } = this.state;
-    const topUpHeaderText = isInitialTopUp
-      ? 'To get you started we need to take a £5 top up'
-      : "Let's update your card and top up £5";
+    const { topUpHeaderText, smallPrintText } = getTopupText({
+      isInitialTopUp,
+      isPrepay
+    });
     return (
       <form onSubmit={e => this.handleSubmit(e)}>
         {error
@@ -99,10 +130,7 @@ class Card extends React.Component {
               <h2>{topUpHeaderText}<sup>*</sup></h2>
               <p className="h6">
                 <sup>*</sup>
-                Our card processor charges us a fixed fee + a variable fee for
-                every transaction. By grouping your transactions together in to
-                a single top up, we end up paying less and we pass that saving
-                on to you.
+                {smallPrintText}
               </p>
             </div>}
         <p>
@@ -167,6 +195,9 @@ class Card extends React.Component {
   }
 }
 
-const mapStateToProps = ({ error: { inline } }) => ({ error: inline });
+const mapStateToProps = ({ user: { creditLimit }, error: { inline } }) => ({
+  error: inline,
+  isPrepay: creditLimit.hard === 0 && creditLimit.soft === 0
+});
 
 export default connect(mapStateToProps)(Card);
