@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import getErrorDefinition from '../error/errors';
+import { determinePrepay } from '../balance/prepay';
 
 const TOPUP_AMOUNT = 500;
 
@@ -197,7 +198,7 @@ class Card extends React.Component {
 
 const mapStateToProps = ({ user: { creditLimit }, error: { inline } }) => ({
   error: inline,
-  isPrepay: creditLimit.hard === 0 && creditLimit.soft === 0
+  isPrepay: determinePrepay(creditLimit)
 });
 
 export default connect(mapStateToProps)(Card);
