@@ -6,6 +6,7 @@ import cors = require('cors');
 import { expressRouter, ExpressRouter } from '@honesty-store/service/lib/expressRouter';
 
 import boxController from './controllers/box';
+import cardController from './controllers/card';
 import itemController from './controllers/item';
 import logoutController from './controllers/logout';
 import marketplaceController from './controllers/marketplace';
@@ -31,6 +32,7 @@ app.use(cors());
 registerController(router);
 sessionController(router);
 signInController(router);
+cardController(router);
 topUpController(router);
 purchaseController(router);
 storeController(router);
