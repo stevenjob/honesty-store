@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import Chrome from '../layout/chrome';
 import List from '../chrome/list';
 import StoreItem from './item';
@@ -11,28 +10,6 @@ import { performDestroySession } from '../actions/destroy-session';
 
 const itemRenderer = (item, index) => <StoreItem item={item} />;
 
-const SpecialEntry = ({ to, title, children }) => (
-  <div className="border-gray border-top border-bottom bg-white mt3 mb3">
-    <Link
-      to={to}
-      className="btn regular flex items-center justify-between navy"
-    >
-      <div>
-        <h3>
-          {title}
-        </h3>
-        <div className="aqua">
-          {children}
-        </div>
-      </div>
-      <MiscSelection
-        className="xs-hide"
-        style={{ height: '5rem', width: '5rem' }}
-      />
-    </Link>
-  </div>
-);
-
 const Store = ({
   registered,
   storeCode,
@@ -41,17 +18,28 @@ const Store = ({
   performDestroySession
 }) => (
   <Chrome>
-    <SpecialEntry
-      to={`/store`}
-      title={`You're browsing the ${storeCode} store`}
-    >
-      <p>
-        Think something's missing from the store? An idea for a killer feature?
-      </p>
-      <p>
-        Please share your thoughts in the SL Slack #honesty-store channel.
-      </p>
-    </SpecialEntry>
+    <div className="border-gray border-top border-bottom bg-white mt3 mb3">
+      <a
+        href="https://scottlogic.slack.com/messages/C5EDYBH5L/"
+        target="_new"
+        className="btn regular flex items-center justify-between navy"
+      >
+        <div>
+          <h3>
+            You're browsing the {storeCode} store
+          </h3>
+          <div className="aqua">
+            <p>
+              Think something's missing from the store? An idea for a killer feature?
+            </p>
+            <p>
+              Please share your thoughts in the SL Slack #honesty-store channel.
+            </p>
+          </div>
+        </div>
+        <MiscSelection className="xs-hide" style={{ height: '5rem' }} />
+      </a>
+    </div>
     <List data={items} itemRenderer={itemRenderer} />
   </Chrome>
 );
