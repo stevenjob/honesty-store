@@ -211,6 +211,12 @@ const getCardDetails = async (id) => {
   return extractCardDetails(topupAccount);
 };
 
+const addCard = async ({ key, userId, stripeToken }): Promise<CardDetails> => {
+  const topupAccount: TopupAccount = await get({ userId });
+  const updatedAccount = await updateStripeTokenForAccount({ key, topupAccount, stripeToken });
+  return extractCardDetails(updatedAccount);
+};
+
 export const router: LambdaRouter = lambdaRouter('topup', 1);
 
 router.post(
@@ -233,4 +239,10 @@ router.get(
     assertValidAccountId(id);
     return await getCardDetails(id);
   }
+);
+
+router.post(
+  '/:userId/addCard',
+  async (key, { userId }, { stripeToken }) =>
+    addCard({ key, userId, stripeToken })
 );
