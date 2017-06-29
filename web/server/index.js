@@ -36,7 +36,10 @@ app.use(
 app.use(
   express.static(
     path.resolve(__dirname, '..', 'build'),
-    { etag: false }
+    {
+      etag: false,
+      lastModified: false
+    }
   )
 );
 
@@ -45,7 +48,10 @@ app.use(
 app.get('*', (request, response) => {
   response.sendFile(
     path.resolve(__dirname, '..', 'build', 'index.html'),
-    { etag: false }
+    {
+      etag: false,
+      lastModified: false
+    }
   );
 });
 
