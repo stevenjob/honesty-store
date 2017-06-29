@@ -6,20 +6,24 @@ import StoreBrowser from '../chrome/store-browser';
 import { performStoreChange } from '../actions/store';
 import Currency from '../format/Currency';
 import Transaction from './transaction';
+import { determinePrepay } from '../balance/prepay';
 
 const Profile = ({
   emailAddress,
   balance,
   storeCode,
   performStoreChange,
-  latestTransaction
+  latestTransaction,
+  isPrepay
 }) => (
   <Chrome>
     <div className="navy bg-white center py2">
       <h3 className="mt0 mb1 regular">Your account balance is</h3>
       <h1 className="mt1 mb1 regular"><Currency amount={balance} /></h1>
       <h3 className="regular my0 regular">
-        <Link to="/topup/500">Topup now</Link>
+        {isPrepay
+          ? <Link to="/topup/500">Topup now</Link>
+          : <Link to="/balance">View card</Link>}
       </h3>
     </div>
     <div className="navy bg-white p2 mt1 col-12">
@@ -64,13 +68,14 @@ const Profile = ({
 );
 
 const mapStateToProps = ({
-  user: { emailAddress, balance, transactions },
+  user: { creditLimit, emailAddress, balance, transactions },
   store: { code }
 }) => ({
   emailAddress,
   balance: balance || 0,
   storeCode: code,
-  latestTransaction: transactions.length > 0 ? transactions[0] : undefined
+  latestTransaction: transactions.length > 0 ? transactions[0] : undefined,
+  isPrepay: determinePrepay(creditLimit)
 });
 
 const mapDispatchToProps = { performStoreChange };

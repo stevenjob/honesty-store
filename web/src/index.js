@@ -56,6 +56,9 @@ import BlogHonestyStoreIsGettingALotCheaper
   from './blog/honesty-store-is-getting-a-lot-cheaper';
 import BlogHonestyStoreIsTakingEarlyRetirement
   from './blog/honesty-store-is-taking-early-retirement';
+import Balance from './balance';
+import BalanceNewCard from './balance/new-card';
+import BalanceNewCardSuccess from './balance/success';
 import asyncComponent from './asyncComponent';
 
 const middlewares = [thunkMiddleware];
@@ -153,6 +156,9 @@ ReactDOM.render(
             <Route path="out-of-stock" component={ItemStockReport} />
             <Route path=":quantity/success" component={ItemPurchaseSuccess} />
           </Route>
+          <Route path="balance" component={Balance} />
+          <Route path="balance/new-card" component={BalanceNewCard} />
+          <Route path="balance/success" component={BalanceNewCardSuccess} />
           <Route path="survey" component={Survey} />
           <Route path="survey/questions" component={SurveyQuestions} />
           <Route path="survey/complete" component={SurveyComplete} />
