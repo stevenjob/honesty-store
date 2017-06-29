@@ -1,6 +1,7 @@
 .item-misc-selection {
   position: relative;
   transform: translateX(10%);
+  padding-bottom: 100%;
 }
 
 .item-misc-selection>svg {

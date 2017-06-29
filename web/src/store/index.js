@@ -31,13 +31,13 @@ const Store = ({
           <div className="aqua">
             <p>
               Think something's missing from the store? An idea for a killer feature?
-            </p>
-            <p>
               Please share your thoughts in the SL Slack #honesty-store channel.
             </p>
           </div>
         </div>
-        <MiscSelection className="xs-hide" style={{ height: '5rem', width: '5rem' }} />
+        <div className="xs-hide col-3">
+          <MiscSelection />
+        </div>
       </a>
     </div>
     <List data={items} itemRenderer={itemRenderer} />
