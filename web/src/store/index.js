@@ -26,12 +26,11 @@ const Store = ({
       >
         <div>
           <h3>
-            You're browsing the {storeCode} store
+            Great idea for a feature? Something nagging?
           </h3>
           <div className="aqua">
             <p>
-              Think something's missing from the store? An idea for a killer feature?
-              Please share your thoughts in the SL Slack #honesty-store channel.
+              Tap here to share your thoughts in the SL Slack #honesty-store channel.
             </p>
           </div>
         </div>

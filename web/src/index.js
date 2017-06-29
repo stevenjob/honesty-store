@@ -107,7 +107,13 @@ const initialiseWithParams = nextState => {
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history} onUpdate={() => window.scrollTo(0, 0)}>
+    <Router
+      history={history}
+      onUpdate={() => {
+        const nav = document.querySelector('nav');
+        window.scrollTo(0, nav ? nav.offsetTop : 0);
+      }}
+    >
       <Route
         path="blog/2017/05/29/honesty-store-is-getting-a-lot-cheaper"
         component={BlogHonestyStoreIsGettingALotCheaper}

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router';
 
 import * as Logo from '../chrome/logo';
+import Balance from '../topup/balance';
 import isRegisteredUser from '../reducers/is-registered-user';
 
 const navBarHeight = '3.4rem';
@@ -25,26 +26,32 @@ const NavLink = withRouter(({ to, className, router, children }) => (
 
 const Chrome = ({ storeCode, children, registered }) => (
   <div className="col-12 sm-col-10 md-col-8 lg-col-6 mx-auto">
-    <nav className="fixed top-0 col-12 sm-col-10 md-col-8 lg-col-6 mx-auto bg-navy white z1 flex items-center">
-      <NavLink to={registered ? '/store' : '/'}>
-        <Logo.InvertedSmall
-          className="align-middle"
-          style={{ height: '2rem', width: navBarHeight }}
-        />
-      </NavLink>
-      <NavLink className="flex-auto" to="/store">Store</NavLink>
-      {registered &&
-        <NavLink className="flex-auto" to="/profile">Profile</NavLink>}
-      {registered &&
-        <NavLink className="flex-auto" to="/history">History</NavLink>}
-      <NavLink className="flex-auto" to="/help">Help</NavLink>
-      {!registered &&
-        <NavLink className="flex-auto" to="/register">Sign In</NavLink>}
-    </nav>
+    <header className="bg-navy center pt4 pb2 relative">
+      <div className="top-0 right-0 white absolute">
+        <Balance balance={0} />
+      </div>
+      <Logo.Inverted className="col-9 py1" />
+      <h2 className="my0 white regular">{storeCode}</h2>
+    </header>
+    <div style={{ minHeight: '100vh' }}>
+      <nav
+        style={{ position: 'sticky' }}
+        className="top-0 bg-navy white flex items-center z1"
+      >
+        <NavLink className="flex-auto" to="/store">Store</NavLink>
+        {registered &&
+          <NavLink className="flex-auto" to="/profile">Profile</NavLink>}
+        {registered &&
+          <NavLink className="flex-auto" to="/history">History</NavLink>}
+        <NavLink className="flex-auto" to="/help">Help</NavLink>
+        {!registered &&
+          <NavLink className="flex-auto" to="/register">Sign In</NavLink>}
+      </nav>
 
-    <section style={{ paddingTop: navBarHeight }}>
-      {children}
-    </section>
+      <section>
+        {children}
+      </section>
+    </div>
   </div>
 );
 
