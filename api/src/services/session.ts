@@ -13,6 +13,7 @@ export interface UserSessionData {
   cardDetails: CardDetails;
   features: any;
   emailAddress?: string;
+  creditLimit: number;
 }
 export interface StoreSessionData {
   code: string;
@@ -43,9 +44,9 @@ export const getUserFeatures = (user) => ({
 
 const getUserSessionData = async (key, user): Promise<UserSessionData> => {
   const { accountId, emailAddress } = user;
-  const { balance, transactions } = accountId ?
-    await getExpandedTransactionsAndBalance({ key, accountID: accountId }) :
-    { balance: 0, transactions: [] };
+  const { balance = 0, transactions = [], creditLimit = 0 } = accountId
+    && await getExpandedTransactionsAndAccount({ key, accountID: accountId })
+    || {};
 
   const features = getUserFeatures(user);
 
@@ -68,6 +69,7 @@ const getUserSessionData = async (key, user): Promise<UserSessionData> => {
     balance,
     transactions,
     cardDetails,
+    creditLimit,
     features
   };
 };

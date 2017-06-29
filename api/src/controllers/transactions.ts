@@ -1,5 +1,5 @@
 import { authenticateAccessToken } from '../middleware/authenticate';
-import { getExpandedTransactionsAndBalance } from '../services/transaction';
+import { getExpandedTransactionsAndAccount } from '../services/transaction';
 
 export default (router) => {
   router.get(
@@ -8,6 +8,6 @@ export default (router) => {
     async (key, _params, _body, { query, user }) => {
       const page = parseInt(query.page, 10) || 0;
 
-      return await getExpandedTransactionsAndBalance({ key, accountID: user.accountId, page });
+      return await getExpandedTransactionsAndAccount({ key, accountID: user.accountId, page });
     });
 };
