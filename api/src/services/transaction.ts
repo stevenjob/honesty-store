@@ -71,8 +71,8 @@ export const refund = async ({ key, transactionId, userId, reason }) => {
   };
 };
 
-export const getExpandedTransactionsAndBalance = async ({ key, accountID, page = 0 }) => {
-  const { balance, transactions: rawTransactions } = await getAccount(key, accountID);
+export const getExpandedTransactionsAndAccount = async ({ key, accountID, page = 0 }) => {
+  const { balance, transactions: rawTransactions, creditLimit } = await getAccount(key, accountID);
   const transactionPromises = pageItems({
       items: rawTransactions,
       page
@@ -81,6 +81,7 @@ export const getExpandedTransactionsAndBalance = async ({ key, accountID, page =
 
   return {
     balance,
+    creditLimit,
     transactions: await Promise.all(transactionPromises)
   };
 };

@@ -4,7 +4,7 @@ import { CardDetails, getCardDetails } from '@honesty-store/topup';
 import { AUTO_REFUND_PERIOD, Transaction } from '@honesty-store/transaction';
 import { userRegistered } from '@honesty-store/user';
 import { StoreItem, storeItems } from '../services/store';
-import { getExpandedTransactionsAndBalance } from '../services/transaction';
+import { getExpandedTransactionsAndAccount } from '../services/transaction';
 import { expandTopPrioritySurvey } from './survey';
 
 export interface UserSessionData {
