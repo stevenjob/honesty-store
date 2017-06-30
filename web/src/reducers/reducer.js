@@ -18,9 +18,9 @@ import {
 } from '../actions/session';
 import { TOPUP_REQUEST, TOPUP_SUCCESS, TOPUP_FAILURE } from '../actions/topup';
 import {
-  NEWCARD_REQUEST,
-  NEWCARD_SUCCESS,
-  NEWCARD_FAILURE
+  NEW_CARD_REQUEST,
+  NEW_CARD_SUCCESS,
+  NEW_CARD_FAILURE
 } from '../actions/new-card';
 import {
   PURCHASE_REQUEST,
@@ -250,9 +250,9 @@ export default (state, action) => {
       return completionState('logout', getInitialState(), state);
     case LOGOUT_FAILURE:
       return fullPageErrorState('logout', action.error, state);
-    case NEWCARD_REQUEST:
+    case NEW_CARD_REQUEST:
       return requestState('new-card', {}, state);
-    case NEWCARD_SUCCESS: {
+    case NEW_CARD_SUCCESS: {
       const cardDetails = action.response;
       const updatedStateProps = {
         user: {
@@ -262,7 +262,7 @@ export default (state, action) => {
       };
       return completionState('new-card', updatedStateProps, state);
     }
-    case NEWCARD_FAILURE: {
+    case NEW_CARD_FAILURE: {
       const { error, cardError } = action;
       const updatedStateProps = {
         error: {

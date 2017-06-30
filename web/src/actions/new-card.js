@@ -2,19 +2,19 @@ import apifetch from './apirequest';
 import history from '../history';
 import { createStripeToken, paramFromCardProviderError } from './stripe-token';
 
-export const NEWCARD_REQUEST = 'NEWCARD_REQUEST';
-export const NEWCARD_SUCCESS = 'NEWCARD_SUCCESS';
-export const NEWCARD_FAILURE = 'NEWCARD_FAILURE';
+export const NEW_CARD_REQUEST = 'NEW_CARD_REQUEST';
+export const NEW_CARD_SUCCESS = 'NEW_CARD_SUCCESS';
+export const NEW_CARD_FAILURE = 'NEW_CARD_FAILURE';
 
 const newCardRequest = () => {
   return {
-    type: NEWCARD_REQUEST
+    type: NEW_CARD_REQUEST
   };
 };
 
 const newCardSuccess = response => {
   return {
-    type: NEWCARD_SUCCESS,
+    type: NEW_CARD_SUCCESS,
     response
   };
 };
@@ -23,14 +23,14 @@ const newCardFailure = error => {
   if (error.fromLocalValidation) {
     // an error from createStripeToken()
     return {
-      type: NEWCARD_FAILURE,
+      type: NEW_CARD_FAILURE,
       cardError: error
     };
   }
 
   // error is from the backend/fetch
   return {
-    type: NEWCARD_FAILURE,
+    type: NEW_CARD_FAILURE,
     error
   };
 };
