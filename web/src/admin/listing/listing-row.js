@@ -46,7 +46,7 @@ const ListingRow = ({
       </td>
       <td>{purchaseCount}</td>
       <td>{refundCount}</td>
-      <td>{sellerId}</td>
+      <td>{sellerId.replace(/-.*/, '')}</td>
       <td>
         <Link
           className="red"
