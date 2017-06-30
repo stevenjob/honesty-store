@@ -87,6 +87,31 @@ import {
   CREATE_ITEM_SUCCESS,
   CREATE_ITEM_FAILURE
 } from '../actions/create-item';
+import {
+  ALL_LISTINGS_REQUEST,
+  ALL_LISTINGS_SUCCESS,
+  ALL_LISTINGS_FAILURE
+} from '../actions/all-listings';
+import {
+  UPDATE_LISTING_COUNT_REQUEST,
+  UPDATE_LISTING_COUNT_SUCCESS,
+  UPDATE_LISTING_COUNT_FAILURE
+} from '../actions/update-listing-count';
+import {
+  UPDATE_LISTING_DETAILS_REQUEST,
+  UPDATE_LISTING_DETAILS_SUCCESS,
+  UPDATE_LISTING_DETAILS_FAILURE
+} from '../actions/update-listing-details';
+import {
+  CREATE_LISTING_REQUEST,
+  CREATE_LISTING_SUCCESS,
+  CREATE_LISTING_FAILURE
+} from '../actions/create-listing';
+import {
+  REMOVE_LISTING_REQUEST,
+  REMOVE_LISTING_SUCCESS,
+  REMOVE_LISTING_FAILURE
+} from '../actions/remove-listing';
 import { getInitialState } from '../state';
 
 const requestState = (requestId, updatedProps, state) => ({
@@ -352,6 +377,7 @@ export default (state, action) => {
       const { response } = action;
       const updatedStateProps = {
         admin: {
+          ...state.admin,
           items: response
         }
       };
@@ -392,6 +418,84 @@ export default (state, action) => {
     }
     case CREATE_ITEM_FAILURE:
       return fullPageErrorState('create-item', action.error, state);
+    case ALL_LISTINGS_REQUEST:
+      return requestState('all-listings', {}, state);
+    case ALL_LISTINGS_SUCCESS: {
+      const { response } = action;
+      const updatedState = {
+        admin: {
+          ...state.admin,
+          listings: response
+        }
+      };
+      return completionState('all-listings', updatedState, state);
+    }
+    case ALL_LISTINGS_FAILURE:
+      return fullPageErrorState('all-listings', action.error, state);
+    case UPDATE_LISTING_COUNT_REQUEST:
+      return requestState('update-listing-count', {}, state);
+    case UPDATE_LISTING_COUNT_SUCCESS: {
+      const updatedListing = action.response;
+      const { admin } = state;
+      const updatedState = {
+        admin: {
+          ...admin,
+          listings: [
+            ...admin.listings.filter(({ id }) => id !== updatedListing.id),
+            updatedListing
+          ]
+        }
+      };
+      return completionState('update-listing-count', updatedState, state);
+    }
+    case UPDATE_LISTING_COUNT_FAILURE:
+      return fullPageErrorState('update-listing-count', action.error, state);
+    case UPDATE_LISTING_DETAILS_REQUEST:
+      return requestState('update-listing-details', {}, state);
+    case UPDATE_LISTING_DETAILS_SUCCESS: {
+      const updatedListing = action.response;
+      const { admin } = state;
+      const updatedState = {
+        admin: {
+          ...admin,
+          listings: [
+            ...admin.listings.filter(({ id }) => id !== updatedListing.id),
+            updatedListing
+          ]
+        }
+      };
+      return completionState('update-listing-details', updatedState, state);
+    }
+    case UPDATE_LISTING_DETAILS_FAILURE:
+      return fullPageErrorState('update-listing-details', action.error, state);
+    case CREATE_LISTING_REQUEST:
+      return requestState('create-listing', {}, state);
+    case CREATE_LISTING_SUCCESS: {
+      const { admin } = state;
+      const updatedState = {
+        admin: {
+          ...admin,
+          listings: [...admin.listings, action.response]
+        }
+      };
+      return completionState('create-listing', updatedState, state);
+    }
+    case CREATE_LISTING_FAILURE:
+      return fullPageErrorState('create-listing', action.error, state);
+    case REMOVE_LISTING_REQUEST:
+      return requestState('remove-listing', {}, state);
+    case REMOVE_LISTING_SUCCESS: {
+      const { admin } = state;
+      const updatedState = {
+        admin: {
+          ...admin,
+          listings: admin.listings.filter(({ id }) => id !== action.itemId)
+        }
+      };
+      return completionState('remove-listing', updatedState, state);
+    }
+    case REMOVE_LISTING_FAILURE:
+      return fullPageErrorState('remove-listing', action.error, state);
     default:
       return state;
   }
