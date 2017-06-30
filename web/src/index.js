@@ -18,7 +18,11 @@ import AdminItemsList from './admin/item/index';
 import AdminItemDetailsEdit from './admin/item/edit';
 import AdminItemDetailsNew from './admin/item/new';
 import AdminItemDetailsSuccess from './admin/item/success';
-import AdminItemFetch from './admin/item/fetch';
+import AdminFetch from './admin/fetch';
+import AdminItemListings from './admin/listing/index';
+import AdminItemListingsNew from './admin/listing/new';
+import AdminItemListingEdit from './admin/listing/edit';
+import AdminItemListingItemSelect from './admin/listing/item-select';
 import Profile from './profile/index';
 import CloseProfile from './profile/close';
 import EditProfile from './profile/edit';
@@ -162,11 +166,25 @@ ReactDOM.render(
           <Route path="more" component={Marketplace} />
           <Route path="more/new" component={MarketplaceNew} />
           <Route path="more/success" component={MarketplaceComplete} />
-          <Route path="admin/item" component={AdminItemFetch}>
-            <IndexRoute component={AdminItemsList} />
-            <Route path="new" component={AdminItemDetailsNew} />
-            <Route path=":itemId" component={AdminItemDetailsEdit} />
-            <Route path=":itemId/success" component={AdminItemDetailsSuccess} />
+          <Route path="admin" component={AdminFetch}>
+            <Route path="item">
+              <IndexRoute component={AdminItemsList} />
+              <Route path="new" component={AdminItemDetailsNew} />
+              <Route path=":itemId" component={AdminItemDetailsEdit} />
+              <Route
+                path=":itemId/success"
+                component={AdminItemDetailsSuccess}
+              />
+            </Route>
+            <Route path="listing/:code">
+              <IndexRoute component={AdminItemListings} />
+              <Route path="item" component={AdminItemListingItemSelect} />
+              <Route
+                path="item/:itemId/edit"
+                component={AdminItemListingEdit}
+              />
+              <Route path="item/:itemId" component={AdminItemListingsNew} />
+            </Route>
           </Route>
           <Route path="profile" component={Profile} />
           <Route path="profile/close" component={CloseProfile} />
