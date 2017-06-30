@@ -1,6 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { BackToPage } from '../../chrome/link';
 import Full from '../../layout/full';
 
 const FormElement = ({ id, description, value, handler }) => (
@@ -16,12 +14,27 @@ const FormElement = ({ id, description, value, handler }) => (
   </p>
 );
 
-class AdminItemDetailsEdit extends React.Component {
+export default class EditItemDetails extends React.Component {
   constructor(props) {
     super(props);
     const { item } = this.props;
+    const {
+      name,
+      qualifier,
+      genericName,
+      genericNamePlural,
+      unit,
+      unitPlural,
+      image
+    } = item || {};
     this.state = {
-      ...item
+      name,
+      qualifier,
+      genericName,
+      genericNamePlural,
+      unit,
+      unitPlural,
+      image
     };
   }
 
@@ -40,10 +53,8 @@ class AdminItemDetailsEdit extends React.Component {
   }
 
   handleUpdateItemSubmit() {
-    const { id: _id, ...details } = this.state;
     const { onSubmit } = this.props;
-
-    onSubmit(this.convertEmptyStringToNull(details));
+    onSubmit(this.convertEmptyStringToNull(this.state));
   }
 
   render() {
@@ -56,8 +67,9 @@ class AdminItemDetailsEdit extends React.Component {
       unitPlural,
       image
     } = this.state;
+    const { left } = this.props;
     return (
-      <Full left={<BackToPage path="/admin/item" title="Items" />}>
+      <Full left={left}>
         <div className="px2 center">
           <form>
             <FormElement
@@ -115,13 +127,3 @@ class AdminItemDetailsEdit extends React.Component {
     );
   }
 }
-
-const mapStateToProps = ({ admin }, { itemId }) => {
-  const items = admin.items || [];
-  const item = itemId ? items.find(({ id }) => id === itemId) : {};
-  return {
-    item
-  };
-};
-
-export default connect(mapStateToProps)(AdminItemDetailsEdit);
