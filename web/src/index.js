@@ -18,7 +18,8 @@ import AdminItemsList from './admin/item/index';
 import AdminItemDetailsEdit from './admin/item/edit';
 import AdminItemDetailsNew from './admin/item/new';
 import AdminItemDetailsSuccess from './admin/item/success';
-import AdminFetch from './admin/fetch';
+import AdminItemFetch from './admin/item/fetch';
+import AdminListingsFetch from './admin/listing/fetch';
 import AdminItemListings from './admin/listing/index';
 import AdminItemListingsNew from './admin/listing/new';
 import AdminItemListingEdit from './admin/listing/edit';
@@ -166,7 +167,7 @@ ReactDOM.render(
           <Route path="more" component={Marketplace} />
           <Route path="more/new" component={MarketplaceNew} />
           <Route path="more/success" component={MarketplaceComplete} />
-          <Route path="admin" component={AdminFetch}>
+          <Route path="admin" component={AdminItemFetch}>
             <Route path="item">
               <IndexRoute component={AdminItemsList} />
               <Route path="new" component={AdminItemDetailsNew} />
@@ -176,7 +177,7 @@ ReactDOM.render(
                 component={AdminItemDetailsSuccess}
               />
             </Route>
-            <Route path="listing/:code">
+            <Route path="listing/:code" component={AdminListingsFetch}>
               <IndexRoute component={AdminItemListings} />
               <Route path="item" component={AdminItemListingItemSelect} />
               <Route
