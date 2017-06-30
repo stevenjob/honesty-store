@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import safeLookupItemImage from '../item/safeLookupItemImage';
@@ -31,7 +31,7 @@ const HistoryItem = ({
           <h4 className="my0">{title}</h4>
           {subtitle && <p className="mt0 mb0 h6">{subtitle}</p>}
         </Link>
-        <p className="my0 h6 gray">{moment(timestamp).fromNow()}</p>
+        <p className="my0 h6 gray">{distanceInWordsToNow(timestamp)} ago</p>
         <p className="my0 h6">
           {isRefundable &&
             <Link to={`refund/${transactionId}/request`}>
