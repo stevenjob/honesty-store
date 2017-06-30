@@ -27,10 +27,11 @@ const NavLink = withRouter(({ to, className, router, children }) => (
 const Chrome = ({ storeCode, children, registered, balance }) => (
   <div className="col-12 sm-col-10 md-col-8 lg-col-6 mx-auto">
     <header className="bg-navy center pt4 pb2 relative">
-      {registered &&
-        <div className="top-0 right-0 white absolute">
-          <Balance balance={balance} />
-        </div>}
+      <div className="top-0 right-0 m1 white absolute">
+        {registered
+          ? <Balance balance={balance} />
+          : <Link className="btn btn-big white" to="/register">Sign In</Link>}
+      </div>
       <Logo.Inverted className="col-9 py1" />
       <h2 className="my0 white regular">{storeCode}</h2>
     </header>
@@ -42,8 +43,6 @@ const Chrome = ({ storeCode, children, registered, balance }) => (
         {registered &&
           <NavLink className="flex-auto" to="/history">History</NavLink>}
         <NavLink className="flex-auto" to="/help">Help</NavLink>
-        {!registered &&
-          <NavLink className="flex-auto" to="/register">Sign In</NavLink>}
       </nav>
 
       <section>
