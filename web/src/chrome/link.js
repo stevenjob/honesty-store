@@ -4,12 +4,20 @@ import history from '../history';
 
 // Doing some runtime checking here as these components are so commonly used
 
+const createGoBack = path => () => {
+  if (history.length > 0) {
+    history.goBack();
+  } else {
+    history.push(path || `/store`);
+  }
+};
+
 export const Back = props => {
   if (props.to || props.children === 'Back') {
     throw new Error(`Don't specify to or 'Back' as children`);
   }
   return (
-    <Link className={`btn aqua ${props.className}`} onClick={history.goBack}>
+    <Link className={`btn aqua ${props.className}`} onClick={createGoBack(props.path)}>
       <span className="h2">&lt;&nbsp;</span>
       {props.children || 'Back'}
     </Link>
