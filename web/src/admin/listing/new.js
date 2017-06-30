@@ -3,19 +3,7 @@ import { connect } from 'react-redux';
 import { performCreateListing } from '../../actions/create-listing';
 import { BackToPage } from '../../chrome/link';
 import Full from '../../layout/full';
-
-const FormElement = ({ id, description, value, handler }) => (
-  <p>
-    <label htmlFor="name">{description}</label>
-    <input
-      id={id}
-      type="text"
-      value={value || ''}
-      className="input"
-      onChange={handler}
-    />
-  </p>
-);
+import FormElement from '../shared/form-element';
 
 class NewListingDetails extends React.Component {
   constructor(props) {

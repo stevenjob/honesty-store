@@ -1,18 +1,6 @@
 import React from 'react';
 import Full from '../../layout/full';
-
-const FormElement = ({ id, description, value, handler }) => (
-  <p>
-    <label htmlFor="name">{description}</label>
-    <input
-      id={id}
-      type="text"
-      value={value || ''}
-      className="input"
-      onChange={handler}
-    />
-  </p>
-);
+import FormElement from '../shared/form-element';
 
 export default class EditItemDetails extends React.Component {
   constructor(props) {
