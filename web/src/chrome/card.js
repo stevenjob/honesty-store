@@ -15,9 +15,9 @@ const setCursorPosition = element => () => {
 const getTopupText = ({ isInitialTopUp, isPrepay }) => {
   if (isPrepay) {
     const smallPrintPrepay =
-      'Our card processor charges us a fixed fee + a variable fee for' +
-      'every transaction. By grouping your transactions together in to' +
-      'a single top up, we end up paying less and we pass that saving' +
+      'Our card processor charges us a fixed fee + a variable fee for ' +
+      'every transaction. By grouping your transactions together in to ' +
+      'a single top up, we end up paying less and we pass that saving ' +
       'on to you.';
 
     if (isInitialTopUp) {
