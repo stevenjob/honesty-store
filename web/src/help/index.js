@@ -5,6 +5,7 @@ import Chrome from '../layout/chrome';
 import { performSupport } from '../actions/support';
 import isRegisteredUser from '../reducers/is-registered-user';
 import isEmail from 'validator/lib/isEmail';
+import Slack from './assets/slack';
 
 const Help = class extends React.Component {
   constructor(props) {
@@ -42,7 +43,26 @@ const Help = class extends React.Component {
     return (
       <Chrome>
         <form className="center px2 navy" onSubmit={e => this.handleSubmit(e)}>
-          <p>Having problems? Want to share an idea or some feedback?</p>
+          <div className="left-align navy flex items-center justify-center">
+            <div className="col-2 py2 pr2">
+              <Slack className="fit" />
+            </div>
+            <p className="">
+              You can also share your thoughts in the
+              {' '}
+              <a
+                href="https://scottlogic.slack.com/messages/C5EDYBH5L/"
+                target="_new"
+              >
+
+                #honesty-store Slack channel.
+              </a>
+            </p>
+          </div>
+          <hr className="m0" />
+          <p>
+            Having problems? Think something's missing? Maybe an idea for a killer feature?
+          </p>
           <p>
             <textarea
               className="textarea"

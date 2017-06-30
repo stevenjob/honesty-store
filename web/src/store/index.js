@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import Chrome from '../layout/chrome';
 import List from '../chrome/list';
 import StoreItem from './item';
-import MiscSelection from '../item/misc-selection';
 import isRegisteredUser from '../reducers/is-registered-user';
 import isLikedItem from '../reducers/is-liked-item';
 import { performDestroySession } from '../actions/destroy-session';
@@ -18,27 +17,6 @@ const Store = ({
   performDestroySession
 }) => (
   <Chrome>
-    <div className="border-gray border-top border-bottom bg-white mt3 mb3">
-      <a
-        href="https://scottlogic.slack.com/messages/C5EDYBH5L/"
-        target="_new"
-        className="btn regular flex items-center justify-between navy"
-      >
-        <div>
-          <h3>
-            Great idea for a feature? Something nagging?
-          </h3>
-          <div className="aqua">
-            <p>
-              Tap here to share your thoughts in the SL Slack #honesty-store channel.
-            </p>
-          </div>
-        </div>
-        <div className="xs-hide col-3">
-          <MiscSelection />
-        </div>
-      </a>
-    </div>
     <List data={items} itemRenderer={itemRenderer} />
   </Chrome>
 );
