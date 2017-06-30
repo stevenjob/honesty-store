@@ -35,10 +35,7 @@ const Chrome = ({ storeCode, children, registered, balance }) => (
       <h2 className="my0 white regular">{storeCode}</h2>
     </header>
     <div style={{ minHeight: '100vh' }}>
-      <nav
-        style={{ position: 'sticky' }}
-        className="top-0 bg-navy white flex items-center z1"
-      >
+      <nav className="sticky top-0 bg-navy white flex items-center z1">
         <NavLink className="flex-auto" to="/store">Store</NavLink>
         {registered &&
           <NavLink className="flex-auto" to="/profile">Profile</NavLink>}
