@@ -14,16 +14,6 @@ import History from './history/index';
 import Marketplace from './marketplace';
 import MarketplaceNew from './marketplace/new';
 import MarketplaceComplete from './marketplace/complete';
-import AdminItemsList from './admin/item/index';
-import AdminItemDetailsEdit from './admin/item/edit';
-import AdminItemDetailsNew from './admin/item/new';
-import AdminItemDetailsSuccess from './admin/item/success';
-import AdminItemFetch from './admin/item/fetch';
-import AdminListingsFetch from './admin/listing/fetch';
-import AdminItemListings from './admin/listing/index';
-import AdminItemListingsNew from './admin/listing/new';
-import AdminItemListingEdit from './admin/listing/edit';
-import AdminItemListingItemSelect from './admin/listing/item-select';
 import Profile from './profile/index';
 import CloseProfile from './profile/close';
 import EditProfile from './profile/edit';
@@ -64,6 +54,7 @@ import { loadState, saveState } from './state';
 import registerServiceWorker from './registerServiceWorker';
 import BlogHonestyStoreIsGettingALotCheaper
   from './blog/honesty-store-is-getting-a-lot-cheaper';
+import asyncComponent from './asyncComponent';
 
 const middlewares = [thunkMiddleware];
 
@@ -167,26 +158,10 @@ ReactDOM.render(
           <Route path="more" component={Marketplace} />
           <Route path="more/new" component={MarketplaceNew} />
           <Route path="more/success" component={MarketplaceComplete} />
-          <Route path="admin" component={AdminItemFetch}>
-            <Route path="item">
-              <IndexRoute component={AdminItemsList} />
-              <Route path="new" component={AdminItemDetailsNew} />
-              <Route path=":itemId" component={AdminItemDetailsEdit} />
-              <Route
-                path=":itemId/success"
-                component={AdminItemDetailsSuccess}
-              />
-            </Route>
-            <Route path="listing/:code" component={AdminListingsFetch}>
-              <IndexRoute component={AdminItemListings} />
-              <Route path="item" component={AdminItemListingItemSelect} />
-              <Route
-                path="item/:itemId/edit"
-                component={AdminItemListingEdit}
-              />
-              <Route path="item/:itemId" component={AdminItemListingsNew} />
-            </Route>
-          </Route>
+          <Route
+            path="admin*"
+            component={asyncComponent(() => import('./admin/routes'))}
+          />
           <Route path="profile" component={Profile} />
           <Route path="profile/close" component={CloseProfile} />
           <Route path="profile/edit" component={EditProfile} />
