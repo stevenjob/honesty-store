@@ -4,6 +4,7 @@ import { performCreateListing } from '../../actions/create-listing';
 import { BackToPage } from '../../chrome/link';
 import Full from '../../layout/full';
 import FormElement from '../shared/form-element';
+import convertEmptyStringToNull from '../convertToNull';
 
 class NewListingDetails extends React.Component {
   constructor(props) {
@@ -41,14 +42,6 @@ class NewListingDetails extends React.Component {
     });
   }
 
-  convertEmptyStringToNull(obj) {
-    const objectWithConvertedValues = {};
-    for (const key of Object.keys(obj)) {
-      objectWithConvertedValues[key] = obj[key] === '' ? null : obj[key];
-    }
-    return objectWithConvertedValues;
-  }
-
   handleUpdateItemSubmit() {
     const { params: { code, itemId }, performCreateListing } = this.props;
     const { price, listCount, ...other } = this.state;
@@ -60,7 +53,7 @@ class NewListingDetails extends React.Component {
     performCreateListing({
       storeCode: code,
       itemId,
-      details: this.convertEmptyStringToNull(listingDetails)
+      details: convertEmptyStringToNull(listingDetails)
     });
   }
 

@@ -6,6 +6,7 @@ import {
 import { BackToPage } from '../../chrome/link';
 import Full from '../../layout/full';
 import FormElement from '../shared/form-element';
+import convertEmptyStringToNull from '../convertToNull';
 
 class EditListingDetails extends React.Component {
   constructor(props) {
@@ -39,14 +40,6 @@ class EditListingDetails extends React.Component {
     });
   }
 
-  convertEmptyStringToNull(obj) {
-    const objectWithConvertedValues = {};
-    for (const key of Object.keys(obj)) {
-      objectWithConvertedValues[key] = obj[key] === '' ? null : obj[key];
-    }
-    return objectWithConvertedValues;
-  }
-
   handleUpdateItemSubmit() {
     const {
       params: { code, itemId },
@@ -60,7 +53,7 @@ class EditListingDetails extends React.Component {
     performUpdateListingDetails({
       storeCode: code,
       itemId,
-      details: this.convertEmptyStringToNull(listingDetails)
+      details: convertEmptyStringToNull(listingDetails)
     });
   }
 

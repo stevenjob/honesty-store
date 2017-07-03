@@ -1,6 +1,7 @@
 import React from 'react';
 import Full from '../../layout/full';
 import FormElement from '../shared/form-element';
+import convertEmptyStringToNull from '../convertToNull';
 
 export default class EditItemDetails extends React.Component {
   constructor(props) {
@@ -32,17 +33,9 @@ export default class EditItemDetails extends React.Component {
     });
   }
 
-  convertEmptyStringToNull(obj) {
-    const objectWithConvertedValues = {};
-    for (const key of Object.keys(obj)) {
-      objectWithConvertedValues[key] = obj[key] === '' ? null : obj[key];
-    }
-    return objectWithConvertedValues;
-  }
-
   handleUpdateItemSubmit() {
     const { onSubmit } = this.props;
-    onSubmit(this.convertEmptyStringToNull(this.state));
+    onSubmit(convertEmptyStringToNull(this.state));
   }
 
   render() {
