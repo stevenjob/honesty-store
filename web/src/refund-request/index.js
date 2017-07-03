@@ -53,7 +53,7 @@ class RefundRequest extends React.Component {
     const { itemName } = this.props;
 
     return (
-      <Full left={<Back />}>
+      <Full left={<Back fallbackPath='/history' />}>
         <div className="refund-request">
           <h2 className="regular">
             Want a refund?
