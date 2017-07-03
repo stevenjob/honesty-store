@@ -107,7 +107,13 @@ class Card extends React.Component {
   }
 
   render() {
-    const { error, isInitialTopUp, isPrepay, confirmButtonText, softCreditLimit } = this.props;
+    const {
+      error,
+      isInitialTopUp,
+      isPrepay,
+      confirmButtonText,
+      softCreditLimit
+    } = this.props;
     const { number, exp, cvc } = this.state;
     const { topUpHeaderText, smallPrintText } = getTopupText({
       isInitialTopUp,
