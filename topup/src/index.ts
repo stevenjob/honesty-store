@@ -9,7 +9,7 @@ import * as stripeFactory from 'stripe';
 import { v4 as uuid } from 'uuid';
 import { userErrorFromStripeError } from './errors';
 
-import { CardDetails, Stripe, TopupAccount, TopupRequest } from './client';
+import { CardDetails, Stripe, TopupAccount, TopupRequest, TopupResponse } from './client';
 
 import {
   assertObject,
@@ -197,7 +197,9 @@ const assertValidTopupAmount = (amount) => {
   }
 };
 
-const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: TopupRequest & { key: Key }) => {
+const attemptTopup = async (
+  { key, accountId, userId, amount, stripeToken }: TopupRequest & { key: Key }
+): Promise<TopupResponse> => {
   assertValidTopupAmount(amount);
 
   let topupAccount = await getOrCreate({ key, accountId, userId });
@@ -206,7 +208,9 @@ const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: Top
     topupAccount = await generateStripeCustomerFromStripeToken(key, topupAccount, stripeToken);
   }
 
-  return topupExistingAccount(key, topupAccount, amount);
+  return amount
+    ? topupExistingAccount(key, topupAccount, amount)
+    : { cardDetails: extractCardDetails(topupAccount) };
 };
 
 const getCardDetails = async (id) => {

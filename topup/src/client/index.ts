@@ -38,7 +38,7 @@ export interface CardDetails {
 
 export type TopupResponse = {
   cardDetails: CardDetails;
-} & TransactionAndBalance;
+} & Partial<TransactionAndBalance>;
 
 const { get, post } = fetch('topup');
 
