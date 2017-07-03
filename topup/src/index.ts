@@ -188,8 +188,12 @@ const generateStripeCustomerFromStripeToken = async (
 };
 
 const assertValidTopupAmount = (amount) => {
-  if (amount !== fixedTopupAmount) {
-    throw new Error(`topup amount must be £${fixedTopupAmount / 100}`);
+  switch (amount) {
+    case fixedTopupAmount:
+    case 0:
+      break;
+    default:
+      throw new Error(`topup amount must be £0 or £${fixedTopupAmount / 100}`);
   }
 };
 
@@ -209,12 +213,6 @@ const getCardDetails = async (id) => {
   const topupAccount: TopupAccount = await read(id);
   assertValidStripeDetails(topupAccount);
   return extractCardDetails(topupAccount);
-};
-
-const addCard = async ({ key, userId, stripeToken }): Promise<CardDetails> => {
-  const topupAccount: TopupAccount = await get({ userId });
-  const updatedAccount = await updateStripeTokenForAccount({ key, topupAccount, stripeToken });
-  return extractCardDetails(updatedAccount);
 };
 
 export const router: LambdaRouter = lambdaRouter('topup', 1);
@@ -239,10 +237,4 @@ router.get(
     assertValidAccountId(id);
     return await getCardDetails(id);
   }
-);
-
-router.post(
-  '/:userId/addCard',
-  async (key, { userId }, { stripeToken }) =>
-    addCard({ key, userId, stripeToken })
 );
