@@ -12,7 +12,7 @@ const setCursorPosition = element => () => {
   });
 };
 
-const getTopupText = ({ isInitialTopUp, isPrepay }) => {
+const getTopupText = ({ isInitialTopUp, isPrepay, softCreditLimit }) => {
   if (isPrepay) {
     const smallPrintPrepay =
       'Our card processor charges us a fixed fee + a variable fee for ' +
@@ -37,7 +37,7 @@ const getTopupText = ({ isInitialTopUp, isPrepay }) => {
       smallPrintText: 'Our card processor charges us a fixed fee + a variable ' +
         'fee for every transaction. To save on that fee (savings we pass on to ' +
         'you!) we group your transactions together and charge your card at ' +
-        'regular intervals.'
+        `regular intervals, usually when you pass your credit limit (£${softCreditLimit / 100}).`
     };
   }
 };
@@ -107,11 +107,12 @@ class Card extends React.Component {
   }
 
   render() {
-    const { error, isInitialTopUp, isPrepay, confirmButtonText } = this.props;
+    const { error, isInitialTopUp, isPrepay, confirmButtonText, softCreditLimit } = this.props;
     const { number, exp, cvc } = this.state;
     const { topUpHeaderText, smallPrintText } = getTopupText({
       isInitialTopUp,
-      isPrepay
+      isPrepay,
+      softCreditLimit
     });
     return (
       <form onSubmit={e => this.handleSubmit(e)}>
@@ -198,7 +199,8 @@ class Card extends React.Component {
 
 const mapStateToProps = ({ user: { creditLimit }, error: { inline } }) => ({
   error: inline,
-  isPrepay: determinePrepay(creditLimit)
+  isPrepay: determinePrepay(creditLimit),
+  softCreditLimit: creditLimit.soft
 });
 
 export default connect(mapStateToProps)(Card);
