@@ -122,7 +122,7 @@ class NewListingDetails extends React.Component {
             <FormElement
               id="price"
               description="Price (p)"
-              value={`${price || ''}`}
+              value={price || ''}
               handler={e => this.updateState(e)}
             />
             <FormElement
