@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Card from '../chrome/card';
-import { Back } from '../chrome/link';
+import { BackToPage } from '../chrome/link';
 import Full from '../layout/full';
 import { performTopup } from '../actions/topup';
 
 const NewCard = ({ performTopup, ...rest }) => {
   return (
-    <Full left={<Back />}>
+    <Full left={<BackToPage path='/topup' />}>
       <Card
         isInitialTopUp={false}
         confirmButtonText="Update Card & Top Up £5"

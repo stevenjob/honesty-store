@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Full from '../layout/full';
-import { Back } from '../chrome/link';
+import { BackToPage } from '../chrome/link';
 
 const Index = ({ surveyAvailable, count }) => (
-  <Full left={<Back />}>
+  <Full left={<BackToPage path='/store' />}>
     <h1>It's Come To This...<sup>*</sup></h1>
     <p>
       In the age-old battle for space in your store, many have fallen and only

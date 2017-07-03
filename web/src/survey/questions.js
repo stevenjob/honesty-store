@@ -2,7 +2,7 @@ import React from 'react';
 import Swipeable from 'react-swipeable';
 import { connect } from 'react-redux';
 import Full from '../layout/full';
-import { Back } from '../chrome/link';
+import { BackToPage } from '../chrome/link';
 import SurveyItem from './item';
 import { submitSurvey } from '../actions/survey';
 
@@ -100,7 +100,7 @@ class Survey extends React.Component {
         onSwipingLeft={(e, delta) => this.swipingLeft(delta)}
         onSwipingRight={(e, delta) => this.swipingRight(delta)}
       >
-        <Full left={<Back />}>
+        <Full left={<BackToPage path='/store' />}>
           <h2>
             Question {this.state.index + 1} of {questions.length}
           </h2>

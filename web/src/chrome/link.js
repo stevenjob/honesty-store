@@ -17,7 +17,7 @@ export const Back = props => {
     throw new Error(`Don't specify to or 'Back' as children`);
   }
   return (
-    <Link className={`btn aqua ${props.className}`} onClick={createGoBack(props.path)}>
+    <Link className={`btn aqua ${props.className}`} onClick={createGoBack(props.fallbackPath)}>
       <span className="h2">&lt;&nbsp;</span>
       {props.children || 'Back'}
     </Link>

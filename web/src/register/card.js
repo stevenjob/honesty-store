@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Card from '../chrome/card';
-import { Back } from '../chrome/link';
+import { BackToPage } from '../chrome/link';
 import Full from '../layout/full';
 import { performRegister2 } from '../actions/register2';
 
@@ -21,7 +21,7 @@ const RegisterCard = ({
 
   const topUpText = 'Confirm £5 Top Up';
   return (
-    <Full left={<Back>Register</Back>}>
+    <Full left={<BackToPage path={`/item/${itemId}`}>Register</BackToPage>}>
       <Card
         isInitialTopUp={true}
         confirmButtonText={itemId ? `${topUpText} & Pay` : topUpText}

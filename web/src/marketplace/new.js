@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { performMarketplace } from '../actions/marketplace';
-import { Back } from '../chrome/link';
+import { BackToPage } from '../chrome/link';
 import Full from '../layout/full';
 
 const ourFees = 0.1;
@@ -102,7 +102,7 @@ class MarketplaceItemAdd extends React.Component {
     );
 
     return (
-      <Full left={<Back />}>
+      <Full left={<BackToPage path='/more' title='Marketplace' />}>
         <form className="center px2 navy" onSubmit={e => this.handleSubmit(e)}>
           <p>Please fill in the details for your items</p>
           {validity === 'invalid' &&

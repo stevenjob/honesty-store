@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { performTopup } from '../actions/topup';
-import { Back } from '../chrome/link';
+import { BackToPage } from '../chrome/link';
 import Currency from '../format/Currency';
 import Card from './card';
 import Full from '../layout/full';
@@ -56,7 +56,7 @@ const NewCard = ({ amount }) => (
 );
 
 const TopupPrompt = ({ amount, cardDetails, performTopup }) => (
-  <Full left={<Back>Balance</Back>}>
+  <Full left={<BackToPage path='/topup' >Balance</BackToPage>}>
     {cardDetails
       ? <TopupCard
           cardDetails={cardDetails}

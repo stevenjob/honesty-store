@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import history from '../history';
-import { Back } from '../chrome/link';
+import { BackToPage } from '../chrome/link';
 import Currency from '../format/Currency';
 import formatDate from '../format/date';
 import makePossessive from '../format/item';
@@ -88,7 +88,7 @@ const ItemDetail = ({
 
   return (
     <Full
-      left={<Back />}
+      left={<BackToPage path='/store' title='Store' />}
       right={<Like isLiked={isLiked} onClick={handleLikeOrUnlikeClick} />}
     >
       {id != null &&

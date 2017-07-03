@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Full from '../layout/full';
-import { Back } from '../chrome/link';
+import { BackToPage } from '../chrome/link';
 
 export default () => (
-  <Full left={<Back />}>
+  <Full left={<BackToPage path='/store' />}>
     <h1>Victory!</h1>
     <p>
       You've fought valiantly on behalf of your favourite snacks and they are
