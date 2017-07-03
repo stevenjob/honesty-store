@@ -88,7 +88,7 @@ const ItemDetail = ({
 
   return (
     <Full
-      left={<BackToPage path='/store' title='Store' />}
+      left={<BackToPage path="/store" title="Store" />}
       right={<Like isLiked={isLiked} onClick={handleLikeOrUnlikeClick} />}
     >
       {id != null &&

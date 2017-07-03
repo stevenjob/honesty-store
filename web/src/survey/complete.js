@@ -4,7 +4,7 @@ import Full from '../layout/full';
 import { BackToPage } from '../chrome/link';
 
 export default () => (
-  <Full left={<BackToPage path='/store' />}>
+  <Full left={<BackToPage path="/store" />}>
     <h1>Victory!</h1>
     <p>
       You've fought valiantly on behalf of your favourite snacks and they are

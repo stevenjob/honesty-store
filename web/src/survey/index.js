@@ -5,7 +5,7 @@ import Full from '../layout/full';
 import { BackToPage } from '../chrome/link';
 
 const Index = ({ surveyAvailable, count }) => (
-  <Full left={<BackToPage path='/store' />}>
+  <Full left={<BackToPage path="/store" />}>
     <h1>It's Come To This...<sup>*</sup></h1>
     <p>
       In the age-old battle for space in your store, many have fallen and only
