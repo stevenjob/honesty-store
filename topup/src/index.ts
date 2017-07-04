@@ -1,15 +1,15 @@
-import { createAssertValidUuid } from '@honesty-store/service/lib/assert';
+import cruftDDB, { EnhancedItem } from '@honesty-store/cruft';
 import { CodedError } from '@honesty-store/service/lib/error';
 import { Key } from '@honesty-store/service/lib/key';
 import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
 import { error, info } from '@honesty-store/service/lib/log';
-import { assertBalanceWithinLimit, createTransaction, TransactionBody } from '@honesty-store/transaction';
-import { config, DynamoDB } from 'aws-sdk';
+import { assertBalanceWithinLimit, createTransaction } from '@honesty-store/transaction';
+import { config } from 'aws-sdk';
 import * as stripeFactory from 'stripe';
 import { v4 as uuid } from 'uuid';
 import { userErrorFromStripeError } from './errors';
 
-import { CardDetails, TopupAccount, TopupRequest } from './client/index';
+import { CardDetails, Stripe, TopupAccount, TopupRequest } from './client';
 
 import {
   assertObject,
@@ -86,37 +86,23 @@ const assertValidStripeDetails = (topupAccount: TopupAccount) => {
     }
   }
 };
-const appendTopupTransaction = async ({ key, topupAccount, amount, data }
-  : { key: Key, topupAccount: TopupAccount, amount: number, data: any }) => {
-  const transactionBody: TransactionBody = {
-    type: 'topup',
-    amount,
-    data: {
-      ...data,
-      topupAccountId: topupAccount.id,
-      topupCustomerId: topupAccount.stripe.customer.id
-    }
-  };
+
+const topupExistingAccount = async (key, topupAccount: EnhancedItem<TopupAccount>, amount: number) => {
+  assertValidStripeDetails(topupAccount);
+
+  await assertBalanceWithinLimit({ key, accountId: topupAccount.id, amount });
+
+  let charge = null;
 
   try {
-    return await createTransaction(key, topupAccount.accountId, transactionBody);
-  } catch (e) {
-    error(key, 'couldn\'t createTransaction()', e);
-    // remap error message
-    throw new Error(`couldn't add transaction: ${e.message}`);
-  }
-};
-
-const createStripeCharge = async ({ key, topupAccount, amount }: { key: Key, topupAccount: TopupAccount, amount: number }) => {
-  try {
-    return await stripeForUser(topupAccount).charges.create(
+    charge = await stripeForUser(topupAccount).charges.create(
       {
         amount,
         currency: 'gbp',
         customer: topupAccount.stripe.customer.id,
-        description: `topup for ${topupAccount.accountId}`,
+        description: `topup for ${topupAccount.id}`,
         metadata: {
-          accountId: topupAccount.accountId
+          accountId: topupAccount.id
         },
         expand: ['balance_transaction']
       },
@@ -140,27 +126,19 @@ const createStripeCharge = async ({ key, topupAccount, amount }: { key: Key, top
 
     throw userErrorFromStripeError(e);
   }
-};
 
-const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, topupAccount: TopupAccount, amount: number }) => {
-  assertValidStripeDetails(topupAccount);
-
-  await assertBalanceWithinLimit({ key, accountId: topupAccount.accountId, amount });
-
-  const charge = await createStripeCharge({ key, topupAccount, amount });
-
-  const transactionBody = await appendTopupTransaction({
-    key,
+  const transactionBody = await createTransaction(key, topupAccount.id, {
+    type: 'topup',
     amount,
-    topupAccount,
     data: {
       stripeFee: String(charge.balance_transaction.fee),
-      chargeId: String(charge.id)
+      chargeId: String(charge.id),
+      topupCustomerId: topupAccount.stripe.customer.id
     }
   });
 
   topupAccount.stripe.nextChargeToken = uuid();
-  await update({ topupAccount });
+  await update(topupAccount);
 
   return {
     ...transactionBody,
@@ -168,19 +146,17 @@ const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, t
   };
 };
 
-const recordCustomerDetails = async ({ customer, topupAccount }): Promise<TopupAccount> => {
-  const newAccount = {
-    ...topupAccount,
-    stripe: {
-      customer,
-      nextChargeToken: uuid()
-    }
-  };
+const createAndRecordCustomerDetails = async (
+  key, topupAccount: EnhancedItem<TopupAccount>, stripeToken
+): Promise<EnhancedItem<TopupAccount>> => {
+  const { id, stripe, stripeHistory: previousStripeHistory, ...other } = topupAccount;
 
-  return update({ topupAccount: newAccount });
-};
+  const description = stripe == null ?
+    `registration for ${id}` : `adding new card for ${id}`;
 
-const createAndRecordCustomerDetails = async ({ key, topupAccount, stripeToken, description }): Promise<TopupAccount> => {
+  const stripeHistory = stripe == null ?
+    [] : [...previousStripeHistory, stripe];
+
   let customer;
 
   try {
@@ -190,7 +166,7 @@ const createAndRecordCustomerDetails = async ({ key, topupAccount, stripeToken, 
         source: stripeToken,
         description,
         metadata: {
-          accountId: topupAccount.accountId
+          accountId: id
         }
       });
   } catch (e) {
@@ -199,24 +175,15 @@ const createAndRecordCustomerDetails = async ({ key, topupAccount, stripeToken, 
     throw userErrorFromStripeError(e);
   }
 
-  return await recordCustomerDetails({ customer, topupAccount });
-};
-
-const addStripeTokenToAccount = async ({ key, topupAccount, stripeToken }): Promise<TopupAccount> => {
-  const description = `registration for ${topupAccount.accountId}`;
-  return await createAndRecordCustomerDetails({ key, topupAccount, stripeToken, description });
-};
-
-const updateStripeTokenForAccount = async ({ key, topupAccount, stripeToken }): Promise<TopupAccount> => {
-  const previousStripeDetails = topupAccount.stripe;
-  const stripeHistory = topupAccount.stripeHistory || [];
-  const updatedTopupAccount: TopupAccount = {
-    ...topupAccount,
-    stripeHistory: [...stripeHistory, previousStripeDetails]
-  };
-
-  const description = `adding new card for ${updatedTopupAccount.accountId}`;
-  return await createAndRecordCustomerDetails({ key, topupAccount: updatedTopupAccount, stripeToken, description });
+  return await update({
+    id,
+    ...other,
+    stripe: {
+      customer,
+      nextChargeToken: uuid()
+    },
+    stripeHistory
+  });
 };
 
 const assertValidTopupAmount = (amount) => {
@@ -231,17 +198,14 @@ const attemptTopup = async ({ key, accountId, userId, amount, stripeToken }: Top
   let topupAccount = await getOrCreate({ key, accountId, userId });
 
   if (stripeToken) {
-    const topupDetails = { key, topupAccount, stripeToken };
-    topupAccount = topupAccount.stripe ?
-      await updateStripeTokenForAccount(topupDetails) :
-      await addStripeTokenToAccount(topupDetails);
+    topupAccount = await createAndRecordCustomerDetails(key, topupAccount, stripeToken);
   }
 
-  return topupExistingAccount({ key, topupAccount, amount });
+  return topupExistingAccount(key, topupAccount, amount);
 };
 
-const getCardDetails = async ({ userId }) => {
-  const topupAccount: TopupAccount = await get({ userId });
+const getCardDetails = async (id) => {
+  const topupAccount: TopupAccount = await read(id);
   assertValidStripeDetails(topupAccount);
   return extractCardDetails(topupAccount);
 };
