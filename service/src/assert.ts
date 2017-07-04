@@ -31,6 +31,12 @@ export const assertNonZeroPositiveInteger = (key: string, value: any) => {
   }
 };
 
+export const assertObject = (key: string, value: any) => {
+  if (typeof value !== 'object') {
+    throw new Error(`Invalid ${key} ${value}`);
+  }
+};
+
 export const assertOptional = (validator: Validator) => {
   return (key: string, value: any) => {
     if (value != null) {

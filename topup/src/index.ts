@@ -11,6 +11,15 @@ import { userErrorFromStripeError } from './errors';
 
 import { CardDetails, TopupAccount, TopupRequest } from './client/index';
 
+import {
+  assertObject,
+  assertPositiveInteger,
+  assertValidString,
+  assertValidUuid,
+  createAssertValidObject,
+  createAssertValidUuid
+} from '@honesty-store/service/lib/assert';
+
 const fixedTopupAmount = 500; // £5
 
 const stripeTest = stripeFactory(process.env.TEST_STRIPE_KEY);
@@ -51,6 +60,22 @@ const getOrCreate = async ({ key, accountId, userId }): Promise<EnhancedItem<Top
   }
 };
 
+const assertValidStripeDetails = (topupAccount: TopupAccount) => {
+  const validator = createAssertValidObject<Stripe>({
+    customer: assertObject,
+    nextChargeToken: assertValidUuid
+  });
+
+  if (topupAccount.stripe[0]) {
+    try {
+      validator(topupAccount.stripe[0]);
+    } catch (_) {
+      throw new CodedError(
+        'NoCardDetailsPresent',
+        `No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.id}`);
+    }
+  }
+};
 const appendTopupTransaction = async ({ key, topupAccount, amount, data }
   : { key: Key, topupAccount: TopupAccount, amount: number, data: any }) => {
   const transactionBody: TransactionBody = {
@@ -104,17 +129,6 @@ const createStripeCharge = async ({ key, topupAccount, amount }: { key: Key, top
     error(key, `couldn\'t create stripe charge${detail}`, e);
 
     throw userErrorFromStripeError(e);
-  }
-};
-
-const assertValidStripeDetails = (topupAccount) => {
-  if (!topupAccount.stripe
-  || !topupAccount.stripe.customer
-  || !topupAccount.stripe.nextChargeToken) {
-    // tslint:disable-next-line:max-line-length
-    throw new CodedError(
-      'NoCardDetailsPresent',
-      `No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.accountId} - please provide stripeToken`);
   }
 };
 
