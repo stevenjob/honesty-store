@@ -68,7 +68,7 @@ const Profile = ({
 );
 
 const mapStateToProps = ({
-  user: { creditLimit, emailAddress, balance, transactions },
+  user: { creditLimit, emailAddress, balance, transactions = [] },
   store: { code }
 }) => ({
   emailAddress,
