@@ -38,7 +38,9 @@ const Chrome = ({ storeCode, children, registered, balance }) => (
       <nav className="sticky top-0 bg-navy white flex items-center z1">
         <NavLink className="flex-auto" to="/store">Store</NavLink>
         {registered &&
-          <NavLink className="flex-auto" to="/profile"><Currency amount={balance} /></NavLink>}
+          <NavLink className="flex-auto" to="/profile">
+            <Currency amount={balance} />
+          </NavLink>}
         <NavLink className="flex-auto" to="/help">Help</NavLink>
       </nav>
 
