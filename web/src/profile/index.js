@@ -5,8 +5,9 @@ import Chrome from '../layout/chrome';
 import StoreBrowser from '../chrome/store-browser';
 import { performStoreChange } from '../actions/store';
 import Currency from '../format/Currency';
+import Transaction from './transaction';
 
-const Profile = ({ emailAddress, balance, storeCode, performStoreChange }) => (
+const Profile = ({ emailAddress, balance, storeCode, performStoreChange, latestTransaction }) => (
   <Chrome>
     <div className="navy bg-white center py2">
       <h3 className="mt0 mb1 regular">Your balance is</h3>
@@ -39,7 +40,7 @@ const Profile = ({ emailAddress, balance, storeCode, performStoreChange }) => (
         <h3 className="mt0 mb1 col-9">Latest Transaction</h3>
         <Link to="profile/history">View history</Link>
       </div>
-
+      <Transaction transaction={latestTransaction}/>
     </div>
     <ul className="list-reset bg-white px1 mt1">
       <li className="border-bottom border-silver">
