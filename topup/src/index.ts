@@ -17,99 +17,35 @@ const stripeProd = stripeFactory(process.env.LIVE_STRIPE_KEY);
 
 config.region = process.env.AWS_REGION;
 
+const { create, read, update } = cruftDDB<TopupAccount>({
+  tableName: process.env.TABLE_NAME,
+  limit: 100
+});
+
 const assertValidAccountId = createAssertValidUuid('accountId');
 const assertValidUserId = createAssertValidUuid('userId');
-
-const assertValidTopupAccount = (topupAccount: TopupAccount) => {
-  assertValidAccountId(topupAccount.accountId);
-};
 
 const stripeForUser = ({ test }) => {
   return test ? stripeTest : stripeProd;
 };
 
-const get = async ({ userId }): Promise<TopupAccount> => {
-  assertValidUserId(userId);
-
-  const queryResponse = await new DynamoDB.DocumentClient()
-    .query({
-      TableName: process.env.TABLE_NAME,
-      IndexName: 'userId',
-      KeyConditionExpression: 'userId = :userId',
-      ExpressionAttributeValues: {
-        ':userId': userId
-      }
-    })
-    .promise();
-
-  if (queryResponse.Items.length > 1) {
-    throw new Error(`Too many database entries for userId '${userId}'`);
-  }
-
-  const indexItem = queryResponse.Items[0];
-
-  if (indexItem == null) {
-    throw new Error(`No topup account for ${userId}`);
-  }
-
-  const { id } = indexItem;
-
-  const getResponse = await new DynamoDB.DocumentClient()
-    .get({
-      TableName: process.env.TABLE_NAME,
-      Key: { id }
-    })
-    .promise();
-
-  const item = <TopupAccount>getResponse.Item;
-
-  if (item == null) {
-    throw new Error(`Index lookup failed for ${userId} ${id}`);
-  }
-
-  return item;
-};
-
-const update = async ({ topupAccount }: { topupAccount: TopupAccount }) => {
-  assertValidTopupAccount(topupAccount);
-
-  await new DynamoDB.DocumentClient()
-    .update({
-      TableName: process.env.TABLE_NAME,
-      Key: {
-        id: topupAccount.id
-      },
-      UpdateExpression:
-      'set stripe = :stripe, accountId = :accountId, userId = :userId, created = :created, stripeHistory = :stripeHistory',
-      ExpressionAttributeValues: {
-        ':stripe': topupAccount.stripe || {},
-        ':accountId': topupAccount.accountId,
-        ':userId': topupAccount.userId,
-        ':created': topupAccount.created,
-        ':stripeHistory': topupAccount.stripeHistory || []
-      }
-    })
-    .promise();
-
-  return topupAccount;
-};
-
-const getOrCreate = async ({ key, accountId, userId }): Promise<TopupAccount> => {
+const getOrCreate = async ({ key, accountId, userId }): Promise<EnhancedItem<TopupAccount>> => {
   assertValidAccountId(accountId);
   assertValidUserId(userId);
 
   try {
-    return await get({ userId });
+    return await read(accountId);
   } catch (e) {
+    if (e.message !== `Key not found ${accountId}`) {
+      throw e;
+    }
+
     info(key, 'TopupAccount lookup failed, creating account', e);
-    return update({
-      topupAccount: {
-        id: uuid(),
-        created: Date.now(),
-        userId,
-        accountId,
-        test: false
-      }
+    return create({
+      id: accountId,
+      userId,
+      version: 0,
+      test: false
     });
   }
 };
