@@ -60,6 +60,16 @@ const getOrCreate = async ({ key, accountId, userId }): Promise<EnhancedItem<Top
   }
 };
 
+const extractCardDetails = (topupAccount: TopupAccount): CardDetails => {
+  const { brand, exp_month, exp_year, last4 } = topupAccount.stripe.customer.sources.data[0];
+  return {
+    brand,
+    expMonth: exp_month,
+    expYear: exp_year,
+    last4
+  };
+};
+
 const assertValidStripeDetails = (topupAccount: TopupAccount) => {
   const validator = createAssertValidObject<Stripe>({
     customer: assertObject,
@@ -130,17 +140,6 @@ const createStripeCharge = async ({ key, topupAccount, amount }: { key: Key, top
 
     throw userErrorFromStripeError(e);
   }
-};
-
-const extractCardDetails = (topupAccount: TopupAccount): CardDetails => {
-  const customerData = topupAccount.stripe.customer.sources.data[0];
-  const { brand, exp_month, exp_year, last4 } = customerData;
-  return {
-    brand,
-    expMonth: exp_month,
-    expYear: exp_year,
-    last4
-  };
 };
 
 const topupExistingAccount = async ({ key, topupAccount, amount }: { key: Key, topupAccount: TopupAccount, amount: number }) => {
