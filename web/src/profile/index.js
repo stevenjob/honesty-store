@@ -26,13 +26,20 @@ const Profile = ({ emailAddress, balance, storeCode, performStoreChange }) => (
         </div>
       </div>
       <div>
-        <h3 className="mt2 regular">Default Store</h3>
+        <h3 className="mt2">Default Store</h3>
         <StoreBrowser
           onSubmit={storeCode => performStoreChange({ storeCode })}
           buttonText="Change Store"
           storePlaceholder={storeCode}
         />
       </div>
+    </div>
+    <div className="navy bg-white mt1 p2">
+      <div className="flex">
+        <h3 className="mt0 mb1 col-9">Latest Transaction</h3>
+        <Link to="profile/history">View history</Link>
+      </div>
+
     </div>
     <ul className="list-reset bg-white px1 mt1">
       <li className="border-bottom border-silver">
@@ -50,12 +57,13 @@ const Profile = ({ emailAddress, balance, storeCode, performStoreChange }) => (
 );
 
 const mapStateToProps = ({
-  user: { emailAddress, balance },
+  user: { emailAddress, balance, transactions },
   store: { code }
 }) => ({
   emailAddress,
   balance: balance || 0,
-  storeCode: code
+  storeCode: code,
+  latestTransaction: (transactions.length > 0 ? transactions[0] : undefined)
 });
 
 const mapDispatchToProps = { performStoreChange };

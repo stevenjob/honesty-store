@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import safeLookupItemImage from '../item/safeLookupItemImage';
 import Currency from '../format/Currency';
 
-const HistoryItem = ({
+const Transaction = ({
   isRefundable = false,
   type,
   title,
@@ -89,4 +89,4 @@ const mapStateToProps = (
   }
 };
 
-export default connect(mapStateToProps)(HistoryItem);
+export default connect(mapStateToProps)(Transaction);

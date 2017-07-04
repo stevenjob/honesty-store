@@ -10,7 +10,7 @@ import App from './app';
 import Home from './home/index';
 import HomeSuccess from './home/success';
 import Store from './store/index';
-import History from './history/index';
+import TransactionHistory from './profile/transaction-history';
 import Marketplace from './marketplace';
 import MarketplaceNew from './marketplace/new';
 import MarketplaceComplete from './marketplace/complete';
@@ -154,7 +154,7 @@ ReactDOM.render(
           <Route path="topup/success" component={TopupSuccess} />
           <Route path="topup/:amount" component={TopupExistingCard} />
           <Route path="topup/:amount/new" component={TopupNewCard} />
-          <Route path="history" component={History} />
+          <Route path="profile/history" component={TransactionHistory} />
           <Route path="more" component={Marketplace} />
           <Route path="more/new" component={MarketplaceNew} />
           <Route path="more/success" component={MarketplaceComplete} />
