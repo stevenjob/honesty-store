@@ -6,6 +6,6 @@ export default () => (
   <Success
     title="We've processed your refund!"
     image={require('../chrome/assets/success.svg')}
-    onClick={() => history.replace(`/history`)}
+    onClick={() => history.replace(`/profile/history`)}
   />
 );

@@ -8,7 +8,7 @@ export const TopupSuccess = ({ balance }) => (
   <Success
     title={<span>Your balance is now <Currency amount={balance} /></span>}
     subtitle="Thank you for your top up!"
-    onClick={() => history.replace(`/history`)}
+    onClick={() => history.replace(`/profile/history`)}
   />
 );
 

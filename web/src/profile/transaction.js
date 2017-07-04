@@ -79,7 +79,7 @@ const mapStateToProps = (
         subtitle: qualifier,
         isRefundable: type === 'purchase' &&
           timestamp >= Date.now() - autoRefundPeriod,
-        href: itemExistsInStore ? `/item/${itemId}` : `/history`
+        href: itemExistsInStore ? `/item/${itemId}` : `/profile/history`
       };
     default:
       return {

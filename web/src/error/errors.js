@@ -8,7 +8,7 @@ const dismissalText = {
 const errorDefinitions = {
   MaxBalanceExceeded: {
     message: `Your balance can't exceed £10`,
-    redirectionPath: '/history',
+    redirectionPath: '/profile/history',
     dismissalText: dismissalText.DISMISS
   },
   TooManyPurchaseItems: {
@@ -86,13 +86,13 @@ const errorDefinitions = {
   AutoRefundPeriodExpired: {
     message: `You can no longer request a refund of this item`,
     actionDescription: `Please get in touch with us if you have any questions`,
-    redirectionPath: '/history',
+    redirectionPath: '/profile/history',
     dismissalText: dismissalText.DISMISS
   },
   RefundAlreadyIssued: {
     message: `A refund has already been issued for this purchase`,
     actionDescription: `Please get in touch with us if you have any questions`,
-    redirectionPath: '/history',
+    redirectionPath: '/profile/history',
     dismissalText: dismissalText.DISMISS
   },
   NonRefundableTransactionType: {

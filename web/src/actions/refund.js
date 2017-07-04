@@ -55,7 +55,7 @@ export const performRefund = ({ transactionId, reason }) => async (
 };
 
 export const nonRefundableTransaction = () => {
-  history.replace('/history');
+  history.replace('/profile/history');
   return {
     type: NONREFUNDABLE_TRANSACTION
   };
