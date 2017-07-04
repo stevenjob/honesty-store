@@ -8,13 +8,12 @@ export interface Stripe {
 
 export interface TopupAccount {
   id: string;
-  created: number;
-  accountId: string;
+  version: number;
   userId: string;
   test: boolean;
-
   stripe?: Stripe;
   stripeHistory?: Stripe[];
+  legacyId?: string;
 }
 
 export interface TopupRequest {
@@ -40,5 +39,5 @@ const { get, post } = fetch('topup');
 export const createTopup = (key, request: TopupRequest) =>
   post<TopupResponse>(1, key, '/', request);
 
-export const getCardDetails = (key, userId: string) =>
-  get<CardDetails>(1, key, `/${userId}/cardDetails`);
+export const getCardDetails = (key, accountId: string) =>
+  get<CardDetails>(1, key, `/${accountId}/cardDetails`);

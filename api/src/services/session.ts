@@ -2,7 +2,6 @@ import { getStoreFromId } from '@honesty-store/store';
 import { getUserSurveys } from '@honesty-store/survey';
 import { CardDetails, getCardDetails } from '@honesty-store/topup';
 import { AUTO_REFUND_PERIOD, Transaction } from '@honesty-store/transaction';
-import { userRegistered } from '@honesty-store/user';
 import { StoreItem, storeItems } from '../services/store';
 import { getExpandedTransactionsAndBalance } from '../services/transaction';
 import { expandTopPrioritySurvey } from './survey';
@@ -42,17 +41,17 @@ export const getUserFeatures = (user) => ({
 });
 
 const getUserSessionData = async (key, user): Promise<UserSessionData> => {
-  const { id, accountId: accountID, emailAddress } = user;
-  const { balance, transactions } = accountID ?
-    await getExpandedTransactionsAndBalance({ key, accountID }) :
+  const { accountId, emailAddress } = user;
+  const { balance, transactions } = accountId ?
+    await getExpandedTransactionsAndBalance({ key, accountID: accountId }) :
     { balance: 0, transactions: [] };
 
   const features = getUserFeatures(user);
 
   let cardDetails = null;
-  if (userRegistered(user)) {
+  if (accountId) {
     try {
-      cardDetails = await getCardDetails(key, id);
+      cardDetails = await getCardDetails(key, accountId);
     } catch (e) {
       if (e.code !== 'NoCardDetailsPresent') {
         throw e;
