@@ -7,6 +7,7 @@ import { assertBalanceWithinLimit, createTransaction, TransactionBody } from '@h
 import { config, DynamoDB } from 'aws-sdk';
 import * as stripeFactory from 'stripe';
 import { v4 as uuid } from 'uuid';
+import { userErrorFromStripeError } from './errors';
 
 import { CardDetails, TopupAccount, TopupRequest } from './client/index';
 
@@ -69,35 +70,6 @@ const appendTopupTransaction = async ({ key, topupAccount, amount, data }
     // remap error message
     throw new Error(`couldn't add transaction: ${e.message}`);
   }
-};
-
-const stripeCodeToErrorCode = (stripeCode) => {
-  switch (stripeCode) {
-    case 'incorrect_number':      return 'CardIncorrectNumber';
-    case 'invalid_number':        return 'CardInvalidNumber';
-    case 'invalid_expiry_month':  return 'CardInvalidExpiryMonth';
-    case 'invalid_expiry_year':   return 'CardInvalidExpiryYear';
-    case 'incorrect_cvc':         return 'CardIncorrectCVC';
-    case 'invalid_cvc':           return 'CardInvalidCVC';
-    case 'expired_card':          return 'CardExpired';
-    case 'card_declined':         return 'CardDeclined';
-
-    case 'incorrect_zip':
-    case 'missing':
-    case 'processing_error':
-      // fall through
-    default:
-      return 'CardError';
-  }
-};
-
-const userErrorFromStripeError = (stripeError) => {
-  if (stripeError.type !== 'StripeCardError') {
-    return stripeError;
-  }
-
-  const errorCode = stripeCodeToErrorCode(stripeError.code);
-  return new CodedError(errorCode, stripeError.message);
 };
 
 const createStripeCharge = async ({ key, topupAccount, amount }: { key: Key, topupAccount: TopupAccount, amount: number }) => {
