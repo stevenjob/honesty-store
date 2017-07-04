@@ -7,6 +7,7 @@ import { performRegister2 } from '../actions/register2';
 
 const RegisterCard = ({
   params: { itemId, emailAddress },
+  isPrepay,
   performRegister2,
   ...others
 }) => {
@@ -19,7 +20,7 @@ const RegisterCard = ({
     });
   };
 
-  const topUpText = 'Confirm £5 Top Up';
+  const topUpText = isPrepay ? 'Confirm £5 Top Up' : 'Confirm Card Details';
   return (
     <Full left={<BackToPage path={`/item/${itemId}`}>Register</BackToPage>}>
       <Card
