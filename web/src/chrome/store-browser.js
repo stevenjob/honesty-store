@@ -59,7 +59,7 @@ class StoreBrowser extends React.Component {
             onChange={e => this.handleStoreCodeChange(e)}
           />
         </p>
-        <p>
+        <p className="center">
           <Link className="btn btn-primary" onClick={e => this.openStore(e)}>
             {buttonText}
           </Link>
