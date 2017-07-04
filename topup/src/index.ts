@@ -214,12 +214,22 @@ export const router: LambdaRouter = lambdaRouter('topup', 1);
 
 router.post(
   '/',
-  async (key, {}, { accountId, userId, amount, stripeToken }) =>
-    attemptTopup({ key, accountId, userId, amount, stripeToken })
+  async (key, { }, { accountId, userId, amount: dirtyAmount, stripeToken }) => {
+    const amount = Number(dirtyAmount);
+
+    assertValidAccountId(accountId);
+    assertValidUserId(userId);
+    assertPositiveInteger('amount', amount);
+    assertValidString('stripeToken', stripeToken);
+
+    return await attemptTopup({ key, accountId, userId, amount, stripeToken });
+  }
 );
 
 router.get(
-  '/:userId/cardDetails',
-  async (_key, { userId }) =>
-    getCardDetails({ userId })
+  '/:id/cardDetails',
+  async (_key, { id }) => {
+    assertValidAccountId(id);
+    return await getCardDetails(id);
+  }
 );
