@@ -37,7 +37,7 @@ const getTopupText = ({ isInitialTopUp, isPrepay, creditLimit }) => {
       smallPrintText: 'Our card processor charges us a fixed fee + a variable ' +
         'fee for every transaction. To save on that fee (savings we pass on to ' +
         'you!) we group your transactions together and charge your card at ' +
-        `regular intervals, usually when you pass your credit limit (£${creditLimit / 100}).`
+        `regular intervals, usually when you've spent around (£${creditLimit / 100}).`
     };
   }
 };
