@@ -59,10 +59,30 @@ export const authenticateAccessTokenAndAdminUser = (request, response, next) => 
     response,
     () => {
       const { id, flags } = request.user;
-      if (!flags.admin) {
-        throw new CodedError('AccessDenied', `userId ${id} does not have permission`);
+      if (flags.admin) {
+        return next();
       }
-      next();
+      throw new CodedError('AccessDenied', `userId ${id} does not have permission`);
+    }
+  );
+};
+
+export const authenticateAccessTokenAndStoreAdminUser = (request, response, next) => {
+  authenticateAccessToken(
+    request,
+    response,
+    () => {
+      const { storeCode } = request.params;
+      const { id, flags } = request.user;
+      if (flags.admin) {
+        return next();
+      }
+      if (flags.storeAdmin) {
+        if (storeCode == null || flags[`storeAdmin:${storeCode}`]) {
+          return next();
+        }
+      }
+      throw new CodedError('AccessDenied', `userId ${id} does not have permission`);
     }
   );
 };

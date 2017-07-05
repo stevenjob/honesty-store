@@ -1,6 +1,6 @@
 import { getStoreFromCode, listItem, Store, unlistItem, updateItemCount, updateItemDetails } from '@honesty-store/store';
 import { updateUser, User } from '@honesty-store/user';
-import { authenticateAccessToken, authenticateAccessTokenAndAdminUser } from '../middleware/authenticate';
+import { authenticateAccessToken, authenticateAccessTokenAndStoreAdminUser } from '../middleware/authenticate';
 import { getSessionData } from '../services/session';
 
 const externaliseItem = (itemId: string, store: Store) => store.items.find(({ id }) => id === itemId);
@@ -31,7 +31,7 @@ export default (router) => {
 
   router.post(
     '/store/:storeCode/item/:itemId/unlist',
-    authenticateAccessTokenAndAdminUser,
+    authenticateAccessTokenAndStoreAdminUser,
     async (key, { itemId, storeCode }, { }, { }) => {
       const { id: storeId } = await getStoreFromCode(key, storeCode);
       const store = await unlistItem(key, storeId, itemId);
@@ -41,7 +41,7 @@ export default (router) => {
 
   router.post(
     '/store/:storeCode/item/:itemId/list',
-    authenticateAccessTokenAndAdminUser,
+    authenticateAccessTokenAndStoreAdminUser,
     async (key, { itemId, storeCode }, listing, { }) => {
       const { id: storeId } = await getStoreFromCode(key, storeCode);
       const storeItemListing = {
@@ -55,7 +55,7 @@ export default (router) => {
 
   router.post(
     '/store/:storeCode/item/:itemId/count',
-    authenticateAccessTokenAndAdminUser,
+    authenticateAccessTokenAndStoreAdminUser,
     async (key, { itemId, storeCode }, { count }, { user: { id: userId } }) => {
       const { id: storeId } = await getStoreFromCode(key, storeCode);
       const store = await updateItemCount(key, storeId, itemId, count, userId);
@@ -65,7 +65,7 @@ export default (router) => {
 
   router.post(
     '/store/:storeCode/item/:itemId',
-    authenticateAccessTokenAndAdminUser,
+    authenticateAccessTokenAndStoreAdminUser,
     async (key, { itemId, storeCode }, details, { }) => {
       const { id: storeId } = await getStoreFromCode(key, storeCode);
       const store = await updateItemDetails(key, storeId, itemId, details);
