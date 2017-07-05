@@ -71,7 +71,8 @@ const getInternal = async ({ userId }) => {
 
   return {
     ...user,
-    defaultStoreId: migrateStoreCodeToId(user.defaultStoreId)
+    defaultStoreId: migrateStoreCodeToId(user.defaultStoreId),
+    flags: user.flags || {}
   };
 };
 
@@ -134,7 +135,8 @@ const createUser = async ({ userId, userProfile }): Promise<UserWithAccessAndRef
     refreshToken: uuid(),
     accountId: userProfile.accountId,
     defaultStoreId: userProfile.defaultStoreId,
-    emailAddress: userProfile.emailAddress
+    emailAddress: userProfile.emailAddress,
+    flags: {}
   });
 
   return externaliseUserWithAccessTokenAndRefreshToken(user);

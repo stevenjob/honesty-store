@@ -6,6 +6,7 @@ export interface User {
   defaultStoreId: string;
   emailAddress?: string;
   version: number;
+  flags: { [feature: string]: boolean };
 }
 
 export interface WithRefreshToken {
