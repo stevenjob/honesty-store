@@ -41,7 +41,7 @@ const Profile = ({
         />
       </div>
     </div>
-    <div className="navy bg-white mt1 p2">
+    <div className="navy bg-white my1 p2">
       <div className="flex">
         <h3 className="mt0 mb1 col-9">Latest Transaction</h3>
         <Link to="profile/history">View history</Link>
