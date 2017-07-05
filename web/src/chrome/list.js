@@ -1,7 +1,9 @@
 import React from 'react';
 
-export default ({ data, itemRenderer }) => (
-  <ul className="list-reset my0 px1 bg-white border-bottom border-gray">
+export default ({ data, itemRenderer, className }) => (
+  <ul
+    className={`list-reset my0 px1 bg-white border-bottom border-gray ${className}`}
+  >
     {data == null
       ? <p>'No Data'</p>
       : data.map((item, index) => (

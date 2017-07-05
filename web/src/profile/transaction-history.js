@@ -9,7 +9,12 @@ const itemRenderer = transaction => <Transaction transaction={transaction} />;
 
 const TransactionHistory = ({ transactions, balance }) => (
   <Full left={<BackToPage title="Profile" path="/profile" />}>
-    <List data={transactions} itemRenderer={itemRenderer} />
+    <p>Here's a summary of your most recent activity</p>
+    <List
+      data={transactions}
+      itemRenderer={itemRenderer}
+      className="border-top left-align mxn2 mt1"
+    />
   </Full>
 );
 

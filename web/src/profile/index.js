@@ -16,10 +16,10 @@ const Profile = ({
 }) => (
   <Chrome>
     <div className="navy bg-white center py2">
-      <h3 className="mt0 mb1 regular">Your balance is</h3>
+      <h3 className="mt0 mb1 regular">Your account balance is</h3>
       <h1 className="mt1 mb1 regular"><Currency amount={balance} /></h1>
       <h3 className="regular my0 regular">
-        <Link to="/topup/500">Topup</Link>
+        <Link to="/topup/500">Topup now</Link>
       </h3>
     </div>
     <div className="navy bg-white p2 mt1 col-12">
@@ -33,7 +33,7 @@ const Profile = ({
         </div>
       </div>
       <div>
-        <h3 className="mt2">Default Store</h3>
+        <h3 className="mt2">Store</h3>
         <StoreBrowser
           onSubmit={storeCode => performStoreChange({ storeCode })}
           buttonText="Change Store"
@@ -42,21 +42,21 @@ const Profile = ({
       </div>
     </div>
     <div className="navy bg-white my1 p2">
-      <div className="flex">
-        <h3 className="mt0 mb1 col-9">Latest Transaction</h3>
+      <div className="flex justify-between">
+        <h3 className="mt0 mb1">Latest activity</h3>
         <Link to="profile/history">View history</Link>
       </div>
       <Transaction transaction={latestTransaction} />
     </div>
     <ul className="list-reset bg-white px1 mt1">
-      <li className="border-bottom border-silver">
+      <li className="border-bottom border-silver py1">
         <Link className="aqua btn block mxn1" to={`/profile/logout`}>
-          Log Out
+          Log out
         </Link>
       </li>
-      <li>
+      <li className="py1">
         <Link className="red btn block mxn1" to={`/profile/close`}>
-          Close Account
+          Close account
         </Link>
       </li>
     </ul>
