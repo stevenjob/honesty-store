@@ -13,10 +13,6 @@ class NewListingDetails extends React.Component {
     const {
       name,
       qualifier,
-      genericName,
-      genericNamePlural,
-      unit,
-      unitPlural,
       image,
       price,
       sellerId,
@@ -25,10 +21,6 @@ class NewListingDetails extends React.Component {
     this.state = {
       name,
       qualifier,
-      genericName,
-      genericNamePlural,
-      unit,
-      unitPlural,
       image,
       price,
       sellerId,
@@ -58,18 +50,7 @@ class NewListingDetails extends React.Component {
   }
 
   render() {
-    const {
-      name,
-      qualifier,
-      genericName,
-      genericNamePlural,
-      unit,
-      unitPlural,
-      image,
-      price,
-      sellerId,
-      listCount
-    } = this.state;
+    const { name, qualifier, image, price, sellerId, listCount } = this.state;
     const { params: { code } } = this.props;
     return (
       <Full
@@ -87,30 +68,6 @@ class NewListingDetails extends React.Component {
               id="qualifier"
               description="Qualifier"
               value={qualifier}
-              handler={e => this.updateState(e)}
-            />
-            <FormElement
-              id="genericName"
-              description="Category"
-              value={genericName}
-              handler={e => this.updateState(e)}
-            />
-            <FormElement
-              id="genericNamePlural"
-              description="Category plural"
-              value={genericNamePlural}
-              handler={e => this.updateState(e)}
-            />
-            <FormElement
-              id="unit"
-              description="Unit"
-              value={unit}
-              handler={e => this.updateState(e)}
-            />
-            <FormElement
-              id="unitPlural"
-              description="Unit plural"
-              value={unitPlural}
               handler={e => this.updateState(e)}
             />
             <FormElement

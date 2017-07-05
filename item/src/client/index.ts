@@ -4,13 +4,7 @@ import fetch from '@honesty-store/service/lib/fetch';
 export interface ItemDetails {
   name: string;
   qualifier?: string;
-  genericName: string;
-  genericNamePlural: string;
-  unit: string;
-  unitPlural: string;
-  location?: string;
   image: string;
-  weight?: number;
   notes?: string;
 }
 

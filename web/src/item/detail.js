@@ -3,9 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import history from '../history';
 import { BackToPage } from '../chrome/link';
-import Currency from '../format/Currency';
-import formatDate from '../format/date';
-import makePossessive from '../format/item';
 import { performPurchase } from '../actions/purchase';
 import { performUnlikeItem, performLikeItem } from '../actions/like-item';
 import isRegistered from '../reducers/is-registered-user';
@@ -31,16 +28,10 @@ const ItemDetail = ({
     price: { breakdown, total },
     image,
     count,
-    unit,
-    unitPlural,
     qualifier,
     notes,
-    weight,
-    location,
     isMarketplace,
-    isLiked,
-    expiry,
-    genericName
+    isLiked
   },
   balance,
   performLikeItem,
@@ -49,11 +40,6 @@ const ItemDetail = ({
   registered
 }) => {
   const calculateBalanceRemaining = numItems => balance - total * numItems;
-
-  const payForText = count =>
-    count !== 1
-      ? `Pay for ${count} ${unitPlural}`
-      : <span>Pay <Currency amount={total} /> for 1 {unit}</span>;
 
   const onClick = numItems => {
     const balance = calculateBalanceRemaining(numItems);
@@ -76,13 +62,13 @@ const ItemDetail = ({
 
   const registeredPurchaseButton = (
     <Link className={buttonClasses} onClick={() => onClick(1)}>
-      {payForText(1)}
+      Pay
     </Link>
   );
 
   const unregisteredPurchaseButton = (
     <Link className={buttonClasses} to={`/register/${id}`}>
-      {payForText(1)}
+      Pay
     </Link>
   );
 
@@ -115,9 +101,6 @@ const ItemDetail = ({
           </div>
           {notes && <p>{notes}</p>}
           <ul className="list-reset">
-            {weight && <li>Weight: <strong>{`${weight}g`}</strong></li>}
-            {location && <li>Location: <strong>{location}</strong></li>}
-            {expiry && <li>Expires: <strong>{formatDate(expiry)}</strong></li>}
             <li>Remaining: <strong>{count}</strong></li>
           </ul>
           <div>
@@ -127,7 +110,7 @@ const ItemDetail = ({
           </div>
           <div>
             <h4 className="mt3">Price Breakdown</h4>
-            <p>Your {makePossessive(genericName)} journey to you</p>
+            <p>Its journey to you</p>
             <Breakdown breakdown={breakdown} isMarketplace={isMarketplace} />
           </div>
           <div className="mt3 mb1">

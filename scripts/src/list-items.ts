@@ -27,15 +27,11 @@ const assertValidSellerId = createAssertValidUuid('sellerId');
 const assertValidAuditorId = createAssertValidUuid('auditorId');
 
 const addItem = async (itemId: string, count: number, price: number) => {
-  const { id, name, genericName, genericNamePlural, unit, unitPlural, image } = await getItem(key, itemId);
+  const { id, name, image } = await getItem(key, itemId);
 
   const storeItemListing: StoreItemListing = {
     id,
     name,
-    genericName,
-    genericNamePlural,
-    unit,
-    unitPlural,
     image,
     price,
     sellerId,

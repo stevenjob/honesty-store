@@ -226,10 +226,6 @@ router.get<Store>(
 const storeDetailsValidator: ObjectValidator<StoreItemDetails> = {
   name: assertValidString,
   qualifier: assertOptional(assertValidString),
-  genericName: assertValidString,
-  genericNamePlural: assertValidString,
-  unit: assertValidString,
-  unitPlural: assertValidString,
   image: assertValidString,
   price: assertNonZeroPositiveInteger
 };

@@ -4,10 +4,6 @@ export interface StoreItem {
   id: string;
   name: string;
   qualifier?: string;
-  genericName: string;
-  genericNamePlural: string;
-  unit: string;
-  unitPlural: string;
   image: string;
   isMarketplace: boolean;
   count: number;
@@ -15,9 +11,6 @@ export interface StoreItem {
     total: number;
     breakdown: PriceBreakdown;
   };
-  expiry?: number;
-  weight?: number;
-  location?: string;
 }
 
 export interface PriceBreakdown {
@@ -47,10 +40,6 @@ export const storeItems = async (key, storeId): Promise<StoreItem[]> => {
       id: item.id,
       name: item.name,
       qualifier: item.qualifier,
-      genericName: item.genericName,
-      genericNamePlural: item.genericNamePlural,
-      unit: item.unit,
-      unitPlural: item.unitPlural,
       image: item.image,
       isMarketplace: true,
       count: item.availableCount,

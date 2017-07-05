@@ -4,7 +4,6 @@ import { v4 as uuid } from 'uuid';
 
 import {
   assertOptional,
-  assertPositiveInteger,
   assertValidString,
   createAssertValidObject,
   createAssertValidUuid
@@ -24,24 +23,14 @@ const assertValidItemId = createAssertValidUuid('itemId');
 const assertValidItemDetails = createAssertValidObject<ItemDetails>({
   name: assertValidString,
   qualifier: assertOptional(assertValidString),
-  genericName: assertValidString,
-  genericNamePlural: assertValidString,
-  unit: assertValidString,
-  unitPlural: assertValidString,
-  location: assertOptional(assertValidString),
   image: assertValidString,
-  weight: assertOptional(assertPositiveInteger),
   notes: assertOptional(assertValidString)
 });
 
-const externalise = ({ id, name, qualifier, genericName, genericNamePlural, unit, unitPlural, image }: ItemInternal): Item => ({
+const externalise = ({ id, name, qualifier, image }: ItemInternal): Item => ({
   id,
   name,
   qualifier,
-  genericName,
-  genericNamePlural,
-  unit,
-  unitPlural,
   image
 });
 

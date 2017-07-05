@@ -6,14 +6,6 @@ import { BackToPage } from '../chrome/link';
 import Full from '../layout/full';
 
 const ourFees = 0.1;
-const expiryLimitYears = 6;
-
-const extractYYYYMMDDFromDate = date => date.toISOString().split('T')[0];
-
-const addYears = (date, years) => {
-  date.setFullYear(date.getFullYear() + years);
-  return date;
-};
 
 class MarketplaceItemAdd extends React.Component {
   constructor(props) {
@@ -23,8 +15,6 @@ class MarketplaceItemAdd extends React.Component {
       description: '',
       totalPrice: '',
       quantity: '',
-      location: '',
-      expiry: '',
       validity: 'not-submitted'
     };
   }
@@ -47,29 +37,13 @@ class MarketplaceItemAdd extends React.Component {
     });
   }
 
-  handleLocationChange(event) {
-    this.setState({
-      location: event.target.value
-    });
-  }
-
-  handleExpiryChange(event) {
-    this.setState({
-      expiry: event.target.value
-    });
-  }
-
   handleSubmit(event) {
     event.preventDefault();
 
     const { performMarketplace } = this.props;
-    const { description, totalPrice, quantity, location, expiry } = this.state;
+    const { description, totalPrice, quantity } = this.state;
 
-    const validity = description.length &&
-      totalPrice.length &&
-      quantity.length &&
-      location.length &&
-      expiry.length
+    const validity = description.length && totalPrice.length && quantity.length
       ? 'valid'
       : 'invalid';
 
@@ -79,9 +53,7 @@ class MarketplaceItemAdd extends React.Component {
       performMarketplace({
         description,
         totalPrice,
-        quantity,
-        location,
-        expiry
+        quantity
       });
     }
   }
@@ -96,10 +68,6 @@ class MarketplaceItemAdd extends React.Component {
 
   render() {
     const { validity } = this.state;
-    const minDate = extractYYYYMMDDFromDate(new Date());
-    const maxDate = extractYYYYMMDDFromDate(
-      addYears(new Date(), expiryLimitYears)
-    );
 
     return (
       <Full left={<BackToPage path="/more" title="Marketplace" />}>
@@ -145,30 +113,6 @@ class MarketplaceItemAdd extends React.Component {
               type="number"
               min="1"
               step="1"
-            />
-          </p>
-          <p>
-            <label htmlFor="location">Location</label>
-            <input
-              id="location"
-              placeholder="Fridge"
-              onChange={e => this.handleLocationChange(e)}
-              value={this.state.location}
-              className="input"
-              noValidate
-            />
-          </p>
-          <p>
-            <label htmlFor="expiry">Expiry Date</label>
-            <input
-              id="expiry"
-              onChange={e => this.handleExpiryChange(e)}
-              min={minDate}
-              max={maxDate}
-              value={this.state.expiry}
-              className="input"
-              noValidate
-              type="date"
             />
           </p>
           <p>

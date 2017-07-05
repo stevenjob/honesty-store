@@ -4,10 +4,6 @@ import { Transaction } from '@honesty-store/transaction';
 export interface StoreItemDetails {
   name: string;
   qualifier?: string;
-  genericName: string;
-  genericNamePlural: string;
-  unit: string;
-  unitPlural: string;
   image: string;
   price: number;
 }
@@ -49,10 +45,6 @@ export interface StoreItemDetailsChanged {
   price: number;
   name: string;
   qualifier?: string;
-  genericName: string;
-  genericNamePlural: string;
-  unit: string;
-  unitPlural: string;
   image: string;
 }
 

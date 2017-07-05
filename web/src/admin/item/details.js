@@ -7,22 +7,10 @@ export default class EditItemDetails extends React.Component {
   constructor(props) {
     super(props);
     const { item } = this.props;
-    const {
-      name,
-      qualifier,
-      genericName,
-      genericNamePlural,
-      unit,
-      unitPlural,
-      image
-    } = item || {};
+    const { name, qualifier, image } = item || {};
     this.state = {
       name,
       qualifier,
-      genericName,
-      genericNamePlural,
-      unit,
-      unitPlural,
       image
     };
   }
@@ -39,15 +27,7 @@ export default class EditItemDetails extends React.Component {
   }
 
   render() {
-    const {
-      name,
-      qualifier,
-      genericName,
-      genericNamePlural,
-      unit,
-      unitPlural,
-      image
-    } = this.state;
+    const { name, qualifier, image } = this.state;
     const { left } = this.props;
     return (
       <Full left={left}>
@@ -63,30 +43,6 @@ export default class EditItemDetails extends React.Component {
               id="qualifier"
               description="Qualifier"
               value={qualifier}
-              handler={e => this.updateState(e)}
-            />
-            <FormElement
-              id="genericName"
-              description="Category"
-              value={genericName}
-              handler={e => this.updateState(e)}
-            />
-            <FormElement
-              id="genericNamePlural"
-              description="Category plural"
-              value={genericNamePlural}
-              handler={e => this.updateState(e)}
-            />
-            <FormElement
-              id="unit"
-              description="Unit"
-              value={unit}
-              handler={e => this.updateState(e)}
-            />
-            <FormElement
-              id="unitPlural"
-              description="Unit plural"
-              value={unitPlural}
               handler={e => this.updateState(e)}
             />
             <FormElement

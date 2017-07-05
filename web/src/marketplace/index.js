@@ -45,8 +45,7 @@ const Index = () => (
     </ul>
     <h2 className="mt3">What Next?</h2>
     <p>
-      To list the items we need to take a few details (description, cost and
-      location e.g. your desk, a fridge, etc.). We'll review the
+      To list the items we need to take a few details (description, cost, e.t.c). We'll review the
       submission, add the listing and then notify you and the agent.
     </p>
     <p>

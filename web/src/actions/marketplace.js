@@ -27,9 +27,7 @@ const marketplaceFailure = error => {
 export const performMarketplace = ({
   description,
   totalPrice,
-  quantity,
-  location,
-  expiry
+  quantity
 }) => async (dispatch, getState) => {
   dispatch(marketplaceRequest());
 
@@ -41,9 +39,7 @@ export const performMarketplace = ({
           item: {
             description,
             totalPrice,
-            quantity,
-            location,
-            expiry
+            quantity
           }
         },
         getToken: () => getState().accessToken,
