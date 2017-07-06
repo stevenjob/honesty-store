@@ -574,7 +574,8 @@ const dirToTable = {
             refundCount: 0,
             sellerId: '9127e1db-2a2c-41c5-908f-781ac816b633',
             unit: 'pack',
-            unitPlural: 'packs'
+            unitPlural: 'packs',
+            revenue: 0
           },
           {
             availableCount: 1000,
@@ -590,7 +591,8 @@ const dirToTable = {
             refundCount: 0,
             sellerId: '9127e1db-2a2c-41c5-908f-781ac816b633',
             unit: 'bar',
-            unitPlural: 'bars'
+            unitPlural: 'bars',
+            revenue: 0
           },
           {
             availableCount: 1000,
@@ -605,7 +607,8 @@ const dirToTable = {
             refundCount: 0,
             sellerId: '9127e1db-2a2c-41c5-908f-781ac816b633',
             unit: 'can',
-            unitPlural: 'cans'
+            unitPlural: 'cans',
+            revenue: 0
           },
           {
             availableCount: 1000,
@@ -621,7 +624,8 @@ const dirToTable = {
             refundCount: 0,
             sellerId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649',
             unit: 'bar',
-            unitPlural: 'bars'
+            unitPlural: 'bars',
+            revenue: 0
           }
         ],
         lastEvent: null,
