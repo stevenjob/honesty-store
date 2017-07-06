@@ -1,10 +1,21 @@
 import React from 'react';
 import safeLookupItemImage from '../item/safeLookupItemImage';
 
-export default ({ item: { image, name, qualifier, purchaseCount, refundCount, listCount, count: availableCount } }) => {
+export default ({
+  item: {
+    image,
+    name,
+    qualifier,
+    purchaseCount,
+    refundCount,
+    listCount,
+    count: availableCount
+  }
+}) => {
   const soldCount = purchaseCount - refundCount;
   const soldStockPercentage = soldCount / listCount * 100;
-  const unaccountedStockPercentage = (listCount - availableCount - soldCount) / listCount * 100;
+  const unaccountedStockPercentage =
+    (listCount - availableCount - soldCount) / listCount * 100;
 
   return (
     <div className="flex p2">
@@ -31,13 +42,26 @@ export default ({ item: { image, name, qualifier, purchaseCount, refundCount, li
               </p>}
           </div>
           <div className="flex flex-column justify-center items-end">
-            <h4 className="navy regular my0"><span className="h3 bold">{purchaseCount - refundCount}</span>/{listCount}</h4>
+            <h4 className="navy regular my0">
+              <span className="h3 bold">{purchaseCount - refundCount}</span>
+              /
+              {listCount}
+            </h4>
             <p className="my0 gray">sold</p>
           </div>
         </div>
-        <div className="bg-silver border border-gray flex rounded mt2" style={{ height: '0.5rem' }}>
-          <div className="inline-block col-2 bg-aqua" style={{ width: `${soldStockPercentage}%` }}></div>
-          <div className="inline-block col-2 bg-yellow" style={{ width: `${unaccountedStockPercentage}%` }}></div>
+        <div
+          className="bg-silver border border-gray flex rounded mt2"
+          style={{ height: '0.5rem' }}
+        >
+          <div
+            className="inline-block col-2 bg-aqua"
+            style={{ width: `${soldStockPercentage}%` }}
+          />
+          <div
+            className="inline-block col-2 bg-yellow"
+            style={{ width: `${unaccountedStockPercentage}%` }}
+          />
         </div>
       </div>
     </div>

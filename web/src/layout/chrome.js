@@ -27,7 +27,13 @@ const NavLink = withRouter(
   )
 );
 
-const Chrome = ({ storeCode, children, registered, balance, isMarketplaceSeller }) => (
+const Chrome = ({
+  storeCode,
+  children,
+  registered,
+  balance,
+  isMarketplaceSeller
+}) => (
   <div className="col-12 sm-col-10 md-col-8 lg-col-6 mx-auto">
     <header className="bg-navy center pt2 pb2 relative">
       <div className="top-0 right-0 m1 white absolute">
@@ -44,8 +50,7 @@ const Chrome = ({ storeCode, children, registered, balance, isMarketplaceSeller 
       >
         <NavLink className="flex-auto" to="/store">Store</NavLink>
         {isMarketplaceSeller &&
-          <NavLink className="flex-auto" to="/more">& more</NavLink>
-        }
+          <NavLink className="flex-auto" to="/more">& more</NavLink>}
         {registered &&
           <NavLink className="flex-auto" to="/profile" activeText="Profile">
             <Currency amount={balance} />
