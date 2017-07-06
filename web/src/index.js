@@ -11,6 +11,7 @@ import Home from './home/index';
 import HomeSuccess from './home/success';
 import Store from './store/index';
 import TransactionHistory from './profile/transaction-history';
+import Marketplace from './marketplace/index';
 import MarketplaceList from './marketplace/list';
 import MarketplaceListNew from './marketplace/list/new';
 import MarketplaceListComplete from './marketplace/list/complete';
@@ -167,9 +168,12 @@ ReactDOM.render(
           <Route path="topup/:amount" component={TopupExistingCard} />
           <Route path="topup/:amount/new" component={TopupNewCard} />
           <Route path="profile/history" component={TransactionHistory} />
-          <Route path="more/list" component={MarketplaceList} />
-          <Route path="more/list/new" component={MarketplaceListNew} />
-          <Route path="more/list/success" component={MarketplaceListComplete} />
+          <Route path="more">
+            <IndexRoute component={Marketplace} />
+            <Route path="list" component={MarketplaceList} />
+            <Route path="list/new" component={MarketplaceListNew} />
+            <Route path="list/success" component={MarketplaceListComplete} />
+          </Route>
           <Route
             path="admin*"
             component={asyncComponent(() => import('./admin/routes'))}

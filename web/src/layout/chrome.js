@@ -27,7 +27,7 @@ const NavLink = withRouter(
   )
 );
 
-const Chrome = ({ storeCode, children, registered, balance }) => (
+const Chrome = ({ storeCode, children, registered, balance, isMarketplaceSeller }) => (
   <div className="col-12 sm-col-10 md-col-8 lg-col-6 mx-auto">
     <header className="bg-navy center pt2 pb2 relative">
       <div className="top-0 right-0 m1 white absolute">
@@ -43,6 +43,9 @@ const Chrome = ({ storeCode, children, registered, balance }) => (
         className="sticky top-0 bg-navy white flex items-stretch z1"
       >
         <NavLink className="flex-auto" to="/store">Store</NavLink>
+        {isMarketplaceSeller &&
+          <NavLink className="flex-auto" to="/more">& more</NavLink>
+        }
         {registered &&
           <NavLink className="flex-auto" to="/profile" activeText="Profile">
             <Currency amount={balance} />
@@ -57,10 +60,11 @@ const Chrome = ({ storeCode, children, registered, balance }) => (
   </div>
 );
 
-const mapStateToProps = ({ user, store: { code: storeCode } }) => ({
+const mapStateToProps = ({ user, store: { code: storeCode, items } }) => ({
   storeCode,
   registered: isRegisteredUser(user),
-  balance: user.balance || 0
+  balance: user.balance || 0,
+  isMarketplaceSeller: items.some(({ sellerId }) => sellerId === user.id)
 });
 
 export default connect(mapStateToProps, {})(Chrome);
