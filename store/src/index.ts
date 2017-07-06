@@ -19,6 +19,7 @@ import { error } from '@honesty-store/service/lib/log';
 import { assertValidTransaction, Transaction } from '@honesty-store/transaction';
 
 import {
+  calculateServiceFee,
   Store,
   StoreEvent,
   StoreItem,
@@ -64,7 +65,7 @@ const reducer = reduce<Transaction | StoreEvent>(
     const key = createServiceKey({ service: 'store' });
     switch (event.type) {
       case 'purchase': {
-        const { id, type, data: { itemId }, data } = event;
+        const { id, type, amount, data: { itemId }, data } = event;
 
         const item = lookupItem(store, itemId);
 
@@ -74,14 +75,16 @@ const reducer = reduce<Transaction | StoreEvent>(
         }
 
         const quantity = Number(data.quantity);
+        const revenue = amount - calculateServiceFee(amount);
 
         item.availableCount -= quantity;
         item.purchaseCount += quantity;
+        item.revenue += revenue;
 
         return store;
       }
       case 'refund': {
-        const { id, type, data: { itemId }, data } = event;
+        const { id, type, amount, data: { itemId }, data } = event;
 
         const item = lookupItem(store, itemId);
 
@@ -91,9 +94,11 @@ const reducer = reduce<Transaction | StoreEvent>(
         }
 
         const quantity = Number(data.quantity);
+        const revenue = amount - calculateServiceFee(amount);
 
         item.availableCount += quantity;
         item.refundCount += quantity;
+        item.revenue -= revenue;
 
         return store;
       }
@@ -157,7 +162,8 @@ const reducer = reduce<Transaction | StoreEvent>(
           ...listing,
           availableCount: listing.listCount,
           purchaseCount: 0,
-          refundCount: 0
+          refundCount: 0,
+          revenue: 0
         };
 
         store.items.push(item);

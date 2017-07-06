@@ -64,6 +64,7 @@ export interface StoreItemTracking {
   purchaseCount: number;
   refundCount: number;
   availableCount: number;
+  revenue: number;
 }
 
 export type StoreItem = StoreItemListing & StoreItemTracking;
@@ -77,6 +78,9 @@ export interface Store {
 }
 
 import { lambdaBaseUrl } from '@honesty-store/service/lib/baseUrl';
+
+export const calculateServiceFee = (price: number): number =>
+  Math.ceil(price / 1.1 * 0.1);
 
 const { get, post } = fetch('store', lambdaBaseUrl);
 

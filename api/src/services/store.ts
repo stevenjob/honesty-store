@@ -1,4 +1,4 @@
-import { getStoreFromId } from '@honesty-store/store';
+import { calculateServiceFee, getStoreFromId } from '@honesty-store/store';
 
 export interface StoreItem {
   id: string;
@@ -34,9 +34,6 @@ export const getItemPriceFromStore = async (key, storeId: string, itemId: string
   const { price } = items.find(item => item.id === itemId);
   return price;
 };
-
-const calculateServiceFee = (price: number): number =>
-  Math.ceil(price / 1.1 * 0.1);
 
 export const calculateDonation = (storeId: string, price: number): number =>
   storeId === '9a61dad3-f05c-46aa-a7e4-14311e9cccc5' ? Math.ceil(price * 0.1) : 0;
