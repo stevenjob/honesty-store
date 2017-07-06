@@ -2,6 +2,7 @@ import { getStoreFromId } from '@honesty-store/store';
 import { getUserSurveys } from '@honesty-store/survey';
 import { CardDetails, getCardDetails } from '@honesty-store/topup';
 import { AUTO_REFUND_PERIOD, Transaction } from '@honesty-store/transaction';
+import { userRegistered } from '@honesty-store/user';
 import { StoreItem, storeItems } from '../services/store';
 import { getExpandedTransactionsAndBalance } from '../services/transaction';
 import { expandTopPrioritySurvey } from './survey';
@@ -49,7 +50,7 @@ const getUserSessionData = async (key, user): Promise<UserSessionData> => {
   const features = getUserFeatures(user);
 
   let cardDetails = null;
-  if (accountId) {
+  if (userRegistered(user)) {
     try {
       cardDetails = await getCardDetails(key, accountId);
     } catch (e) {
