@@ -29,27 +29,11 @@ export interface SessionData {
   autoRefundPeriod: number;
 }
 
-const marketplaceFeature = ({ defaultStoreId }) => {
-  const allowedStoreIds = [
-    'b8d7305b-bb7d-4bbe-8b2f-5e94c6267bb6', // sl-ncl
-    'f79ff70c-2103-43f9-922d-d54a16315361', // sl-edn
-    '1e7c9c0d-a9be-4ab7-8499-e57bf859978d'  // dev-test
-  ];
-
-  return allowedStoreIds.indexOf(defaultStoreId) !== -1;
-};
-
-export const getUserFeatures = (user) => ({
-  marketplace: marketplaceFeature(user)
-});
-
 const getUserSessionData = async (key, user): Promise<UserSessionData> => {
   const { id, accountId, emailAddress } = user;
   const { balance = 0, transactions = [], creditLimit = 0 } = accountId
     ? await getExpandedTransactionsAndAccount({ key, accountID: accountId })
     : {};
-
-  const features = getUserFeatures(user);
 
   let cardDetails = null;
   if (userRegistered(user)) {
@@ -72,7 +56,7 @@ const getUserSessionData = async (key, user): Promise<UserSessionData> => {
     transactions,
     cardDetails,
     creditLimit,
-    features
+    features: {}
   };
 };
 
