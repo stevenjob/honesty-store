@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Full from '../../layout/full';
-import { BackToPage } from '../../chrome/link';
+import { Back } from '../../chrome/link';
 
 const Index = () => (
-  <Full left={<BackToPage title="Store" path="/store" />}>
+  <Full left={<Back />}>
     <h1>honesty.store & more!</h1>
     <p>We want to make sure your store has as much variety as possible.</p>
     <p>
