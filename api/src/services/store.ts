@@ -53,7 +53,8 @@ export const storeItems = async (key, storeId): Promise<StoreItem[]> => {
           creditCardFee: 0,
           VAT: 0
         }
-      }
+      },
+      sellerId: item.sellerId
     };
   });
 };
