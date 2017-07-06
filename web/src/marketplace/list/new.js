@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { performMarketplace } from '../actions/marketplace';
-import { BackToPage } from '../chrome/link';
-import Full from '../layout/full';
+import { performMarketplace } from '../../actions/marketplace';
+import { BackToPage } from '../../chrome/link';
+import Full from '../../layout/full';
 
 const ourFees = 0.1;
 

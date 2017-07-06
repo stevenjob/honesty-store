@@ -11,9 +11,9 @@ import Home from './home/index';
 import HomeSuccess from './home/success';
 import Store from './store/index';
 import TransactionHistory from './profile/transaction-history';
-import Marketplace from './marketplace';
-import MarketplaceNew from './marketplace/new';
-import MarketplaceComplete from './marketplace/complete';
+import MarketplaceList from './marketplace/list';
+import MarketplaceListNew from './marketplace/list/new';
+import MarketplaceListComplete from './marketplace/list/complete';
 import Profile from './profile/index';
 import CloseProfile from './profile/close';
 import EditProfile from './profile/edit';
@@ -167,9 +167,9 @@ ReactDOM.render(
           <Route path="topup/:amount" component={TopupExistingCard} />
           <Route path="topup/:amount/new" component={TopupNewCard} />
           <Route path="profile/history" component={TransactionHistory} />
-          <Route path="more" component={Marketplace} />
-          <Route path="more/new" component={MarketplaceNew} />
-          <Route path="more/success" component={MarketplaceComplete} />
+          <Route path="more/list" component={MarketplaceList} />
+          <Route path="more/list/new" component={MarketplaceListNew} />
+          <Route path="more/list/success" component={MarketplaceListComplete} />
           <Route
             path="admin*"
             component={asyncComponent(() => import('./admin/routes'))}

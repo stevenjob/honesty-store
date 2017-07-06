@@ -1,6 +1,6 @@
 import React from 'react';
-import { Success } from '../layout/alert';
-import history from '../history';
+import { Success } from '../../layout/alert';
+import history from '../../history';
 
 export default () => (
   <Success

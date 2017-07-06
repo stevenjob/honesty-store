@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
-import Full from '../layout/full';
-import { BackToPage } from '../chrome/link';
+import Full from '../../layout/full';
+import { BackToPage } from '../../chrome/link';
 
 const Index = () => (
   <Full left={<BackToPage title="Store" path="/store" />}>
