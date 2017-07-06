@@ -75,7 +75,8 @@ const reducer = reduce<Transaction | StoreEvent>(
         }
 
         const quantity = Number(data.quantity);
-        const revenue = amount - calculateServiceFee(amount);
+        const price = -amount;
+        const revenue = price - calculateServiceFee(price);
 
         item.availableCount -= quantity;
         item.purchaseCount += quantity;
@@ -94,7 +95,8 @@ const reducer = reduce<Transaction | StoreEvent>(
         }
 
         const quantity = Number(data.quantity);
-        const revenue = amount - calculateServiceFee(amount);
+        const price = -amount;
+        const revenue = price - calculateServiceFee(price);
 
         item.availableCount += quantity;
         item.refundCount += quantity;
