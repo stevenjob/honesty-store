@@ -44,7 +44,7 @@ export const getUserFeatures = (user) => ({
 });
 
 const getUserSessionData = async (key, user): Promise<UserSessionData> => {
-  const { accountId, emailAddress } = user;
+  const { id, accountId, emailAddress } = user;
   const { balance = 0, transactions = [], creditLimit = 0 } = accountId
     ? await getExpandedTransactionsAndAccount({ key, accountID: accountId })
     : {};
@@ -77,11 +77,11 @@ const getUserSessionData = async (key, user): Promise<UserSessionData> => {
 };
 
 const getStoreSessionData = async (key, user): Promise<StoreSessionData> => {
-  const { defaultStoreId } = user;
+  const { defaultStoreId, id: userId } = user;
 
   const [{ code }, items] = await Promise.all([
     getStoreFromId(key, defaultStoreId),
-    storeItems(key, defaultStoreId)
+    storeItems(key, defaultStoreId, userId)
   ]);
 
   return {

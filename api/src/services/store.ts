@@ -11,6 +11,10 @@ export interface StoreItem {
     total: number;
     breakdown: PriceBreakdown;
   };
+  sellerId: string;
+  listCount?: number;
+  refundCount?: number;
+  purchaseCount?: number;
 }
 
 export interface PriceBreakdown {
@@ -31,7 +35,7 @@ export const getItemPriceFromStore = async (key, storeId: string, itemId: string
 export const calculateDonation = (storeId: string, price: number): number =>
   storeId === '9a61dad3-f05c-46aa-a7e4-14311e9cccc5' ? Math.ceil(price * 0.1) : 0;
 
-export const storeItems = async (key, storeId): Promise<StoreItem[]> => {
+export const storeItems = async (key, storeId, userId): Promise<StoreItem[]> => {
   const { items } = await getStoreFromId(key, storeId);
   return items.map(item => {
     const donation = calculateDonation(storeId, item.price);
@@ -54,7 +58,16 @@ export const storeItems = async (key, storeId): Promise<StoreItem[]> => {
           VAT: 0
         }
       },
-      sellerId: item.sellerId
+      sellerId: item.sellerId,
+      ...(
+        userId === item.sellerId
+        ? {
+          listCount: item.listCount,
+          purchaseCount: item.purchaseCount,
+          refundCount: item.refundCount
+        }
+        : {}
+      )
     };
   });
 };
