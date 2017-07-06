@@ -71,7 +71,7 @@ class MarketplaceItemAdd extends React.Component {
     const { validity } = this.state;
 
     return (
-      <Full left={<BackToPage path="/more" title="Marketplace" />}>
+      <Full left={<BackToPage path="/more" title="& more" />}>
         <form className="center px2 navy" onSubmit={e => this.handleSubmit(e)}>
           <p>Please fill in the details for your items</p>
           {validity === 'invalid' &&
