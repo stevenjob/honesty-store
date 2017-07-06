@@ -14,6 +14,7 @@ export interface UserSessionData {
   features: any;
   emailAddress?: string;
   creditLimit: number;
+  id: string;
 }
 export interface StoreSessionData {
   code: string;
@@ -65,6 +66,7 @@ const getUserSessionData = async (key, user): Promise<UserSessionData> => {
   }
 
   return {
+    id,
     emailAddress,
     balance,
     transactions,
