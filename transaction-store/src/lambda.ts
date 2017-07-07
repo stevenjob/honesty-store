@@ -3,7 +3,7 @@ import { recordTransaction } from '@honesty-store/store';
 import { subscribeTransactions } from '@honesty-store/transaction/lib/client/stream';
 
 const asyncHandler = async event => {
-  const key = createServiceKey({ service: 'transaction-slack' });
+  const key = createServiceKey({ service: 'transaction-store' });
 
   for (const transaction of subscribeTransactions(event)) {
     switch (transaction.type) {
