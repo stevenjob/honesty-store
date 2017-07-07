@@ -13,6 +13,7 @@ import { CardDetails, Stripe, TopupAccount, TopupRequest } from './client';
 
 import {
   assertObject,
+  assertOptional,
   assertPositiveInteger,
   assertValidString,
   assertValidUuid,
@@ -220,7 +221,7 @@ router.post(
     assertValidAccountId(accountId);
     assertValidUserId(userId);
     assertPositiveInteger('amount', amount);
-    assertValidString('stripeToken', stripeToken);
+    assertOptional(assertValidString)('stripeToken', stripeToken);
 
     return await attemptTopup({ key, accountId, userId, amount, stripeToken });
   }
