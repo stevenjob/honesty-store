@@ -5,10 +5,11 @@
   "main": "lib/client/index.js",
   "types": "lib/client/index.d.ts",
   "scripts": {
+    "test": "../node_modules/.bin/jest",
     "tsc": "../node_modules/.bin/tsc",
     "rollup": "../node_modules/.bin/rollup -c ../rollup.config.js",
     "uglifyjs": "../node_modules/.bin/uglifyjs lib/bundle.js > lib/bundle-min.js",
-    "build": "npm run tsc && npm run rollup && npm run uglifyjs"
+    "build": "npm run test && npm run tsc && npm run rollup && npm run uglifyjs"
   },
   "dependencies": {
     "@honesty-store/cruft": "0.0.0",
@@ -19,10 +20,29 @@
   },
   "devDependencies": {
     "@types/body-parser": "0.0.33",
+    "@types/chai": "^3.5.2",
     "@types/express": "^4.0.34",
+    "@types/jest": "^19.2.0",
     "@types/node": "0.0.2",
     "@types/uuid": "^2.0.29",
-    "@types/validator": "^5.7.35"
+    "@types/validator": "^5.7.35",
+    "chai": "^3.5.0",
+    "jest": "^19.0.0",
+    "ts-jest": "^19.0.0"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!@honesty-store)"
+    ]
   },
   "peerDependencies": {
     "aws-sdk": "2.22.0"

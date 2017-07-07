@@ -30,6 +30,7 @@ import {
   StoreItemListing,
   StoreItemUnlisted
 } from './client';
+import calculateRevenue from './revenue';
 
 config.region = process.env.AWS_REGION;
 
@@ -82,6 +83,8 @@ const reducer = reduce<Transaction | StoreEvent>(
         item.purchaseCount += quantity;
         item.revenue += revenue;
 
+        store.revenue = calculateRevenue(store.revenue, item.sellerId, revenue);
+
         return store;
       }
       case 'refund': {
@@ -101,6 +104,8 @@ const reducer = reduce<Transaction | StoreEvent>(
         item.availableCount += quantity;
         item.refundCount += quantity;
         item.revenue -= revenue;
+
+        store.revenue = calculateRevenue(store.revenue, item.sellerId, revenue);
 
         return store;
       }
@@ -198,7 +203,8 @@ const externalise = (store: EnhancedItem<Store>): Store => ({
   version: store.version,
   code: store.code,
   agentId: store.agentId,
-  items: store.items
+  items: store.items,
+  revenue: store.revenue
 });
 
 router.get<Store>(

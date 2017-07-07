@@ -61,12 +61,22 @@ export interface StoreItemTracking {
 
 export type StoreItem = StoreItemListing & StoreItemTracking;
 
+export interface StoreRevenue {
+  startInclusive: number;
+  endExclusive: number;
+  total: number;
+  seller: {
+    [sellerId: string]: number;
+  };
+}
+
 export interface Store {
   id: string;
   version: number;
   code: string;
   agentId: string;
   items: StoreItem[];
+  revenue: StoreRevenue[];
 }
 
 import { lambdaBaseUrl } from '@honesty-store/service/lib/baseUrl';

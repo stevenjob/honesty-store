@@ -611,7 +611,8 @@ const dirToTable = {
           previous: '9c071db4-8417-4131-9b1e-4ce5f07353d3'
         },
         modified: 1497427124564,
-        version: 4
+        version: 4,
+        revenue: []
       },
       {
         created: 1497427123919,
