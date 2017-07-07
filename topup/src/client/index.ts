@@ -23,12 +23,6 @@ export interface TopupRequest {
   stripeToken: string;
 }
 
-export interface AddCardRequest {
-  accountId: string;
-  userId: string;
-  stripeToken: string;
-}
-
 export interface CardDetails {
   brand: string;
   last4: string;
@@ -47,8 +41,3 @@ export const createTopup = (key, request: TopupRequest) =>
 
 export const getCardDetails = (key, accountId: string) =>
   get<CardDetails>(1, key, `/${accountId}/cardDetails`);
-
-export const addCard = async (key, request: AddCardRequest) => {
-  const { cardDetails } = await createTopup(key, { ...request, amount: 0 });
-  return cardDetails;
-};
