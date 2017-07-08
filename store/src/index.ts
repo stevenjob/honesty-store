@@ -98,14 +98,14 @@ const reducer = reduce<Transaction | StoreEvent>(
         }
 
         const quantity = Number(data.quantity);
-        const price = -amount;
+        const price = amount;
         const revenue = price - calculateServiceFee(price);
 
         item.availableCount += quantity;
         item.refundCount += quantity;
         item.revenue -= revenue;
 
-        store.revenue = calculateRevenue(store.revenue, item.sellerId, revenue);
+        store.revenue = calculateRevenue(store.revenue, item.sellerId, -revenue);
 
         return store;
       }
