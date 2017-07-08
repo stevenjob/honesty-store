@@ -421,11 +421,14 @@ export default (state, action) => {
     case ALL_LISTINGS_REQUEST:
       return requestState('all-listings', {}, state);
     case ALL_LISTINGS_SUCCESS: {
-      const { response } = action;
+      const { response: { items, revenue } } = action;
       const updatedState = {
         admin: {
           ...state.admin,
-          listings: response
+          store: {
+            items,
+            revenue
+          }
         }
       };
       return completionState('all-listings', updatedState, state);
@@ -440,10 +443,13 @@ export default (state, action) => {
       const updatedState = {
         admin: {
           ...admin,
-          listings: [
-            ...admin.listings.filter(({ id }) => id !== updatedListing.id),
-            updatedListing
-          ]
+          store: {
+            ...admin.store,
+            items: [
+              ...admin.store.items.filter(({ id }) => id !== updatedListing.id),
+              updatedListing
+            ]
+          }
         }
       };
       return completionState('update-listing-count', updatedState, state);
@@ -458,10 +464,13 @@ export default (state, action) => {
       const updatedState = {
         admin: {
           ...admin,
-          listings: [
-            ...admin.listings.filter(({ id }) => id !== updatedListing.id),
-            updatedListing
-          ]
+          store: {
+            ...admin.store,
+            items: [
+              ...admin.store.items.filter(({ id }) => id !== updatedListing.id),
+              updatedListing
+            ]
+          }
         }
       };
       return completionState('update-listing-details', updatedState, state);
@@ -475,7 +484,10 @@ export default (state, action) => {
       const updatedState = {
         admin: {
           ...admin,
-          listings: [...admin.listings, action.response]
+          store: {
+            ...admin.store,
+            items: [...admin.store.items, action.response]
+          }
         }
       };
       return completionState('create-listing', updatedState, state);
@@ -489,7 +501,12 @@ export default (state, action) => {
       const updatedState = {
         admin: {
           ...admin,
-          listings: admin.listings.filter(({ id }) => id !== action.itemId)
+          store: {
+            ...admin.store,
+            items: [
+              ...admin.store.items.filter(({ id }) => id !== action.itemId)
+            ]
+          }
         }
       };
       return completionState('remove-listing', updatedState, state);

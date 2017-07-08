@@ -1,15 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import Currency from '../../format/Currency';
 import { performUpdateListingCount } from '../../actions/update-listing-count';
 import { performRemoveListing } from '../../actions/remove-listing';
 
 const ListingRow = ({
   listing: {
     id,
+    listCount,
     availableCount,
     purchaseCount,
     refundCount,
+    revenue,
     name,
     qualifier,
     sellerId
@@ -36,6 +39,7 @@ const ListingRow = ({
         {' '}
         <Link to={`/admin/listing/${storeCode}/item/${id}/edit`}>(edit)</Link>
       </td>
+      <td>{listCount}</td>
       <td>
         {availableCount} <Link
           onClick={() => promptForItemAvailability(id)}
@@ -46,6 +50,7 @@ const ListingRow = ({
       </td>
       <td>{purchaseCount}</td>
       <td>{refundCount}</td>
+      <td><Currency amount={revenue} /></td>
       <td>{sellerId.replace(/-.*/, '')}</td>
       <td>
         <Link

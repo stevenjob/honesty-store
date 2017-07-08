@@ -92,10 +92,10 @@ class EditListingDetails extends React.Component {
 }
 
 const mapStateToProps = ({ admin }, { params: { itemId } }) => {
-  const listings = admin.listings || [];
-  const listing = listings.find(({ id }) => id === itemId);
+  const items = admin.store.items || [];
+  const item = items.find(({ id }) => id === itemId);
   return {
-    details: listing
+    details: item
   };
 };
 

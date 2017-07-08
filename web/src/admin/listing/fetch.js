@@ -4,13 +4,8 @@ import { performAllListings } from '../../actions/all-listings';
 
 class AdminListingsFetch extends React.Component {
   componentWillMount() {
-    const {
-      listings,
-      pending,
-      performAllListings,
-      params: { code }
-    } = this.props;
-    if (listings == null && !pending.some(el => el === 'all-listings')) {
+    const { store, pending, performAllListings, params: { code } } = this.props;
+    if (store == null && !pending.some(el => el === 'all-listings')) {
       performAllListings({ storeCode: code });
     }
   }
@@ -20,8 +15,8 @@ class AdminListingsFetch extends React.Component {
   }
 }
 
-const mapStateToProps = ({ admin: { listings }, pending }) => ({
-  listings,
+const mapStateToProps = ({ admin: { store }, pending }) => ({
+  store,
   pending
 });
 

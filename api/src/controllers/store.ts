@@ -22,10 +22,10 @@ export default (router) => {
 
   router.get(
     '/store/:storeCode/item/all',
-    authenticateAccessToken,
+    authenticateAccessTokenAndStoreAdminUser,
     async (key, { storeCode }, { }, { }) => {
-      const { items } = await getStoreFromCode(key, storeCode);
-      return items;
+      const { items, revenue } = await getStoreFromCode(key, storeCode);
+      return { items, revenue };
     }
   );
 
