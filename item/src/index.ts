@@ -75,8 +75,8 @@ router.post<ItemDetails, Item>(
 );
 
 router.get(
-  '/all',
-  async (_key, {}) => getAllItems()
+  '/all/:includingAliases',
+  async (_key, { includingAliases = false }) => getAllItems(includingAliases === 'true')
 );
 
 router.get(

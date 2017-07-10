@@ -23,8 +23,8 @@ export const updateItem = (key, itemId: string, details: ItemDetails) =>
 export const getItem = (key, itemId: string) =>
   get<Item>(1, key, `/${itemId}`);
 
-export const getAllItems = (key) =>
-  get<Item[]>(1, key, `/all`);
+export const getAllItems = (key, { includingAliases = false } = {}) =>
+  get<Item[]>(1, key, `/all/${includingAliases}`);
 
 export const assertItemExistsAsync = (key, itemId: string) =>
   getItem(key, itemId)
