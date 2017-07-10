@@ -34,9 +34,15 @@ const externalise = ({ id, name, qualifier, image }: ItemInternal): Item => ({
   image
 });
 
-const getItem = async(itemId): Promise<Item> => {
+const getItem = async (itemId): Promise<Item> => {
   assertValidItemId(itemId);
-  return externalise(await cruft.read({ id: itemId }));
+
+  let item: ItemInternal;
+  for (let id = itemId; id; id = item.alias) {
+    item = await cruft.read({ id });
+  }
+
+  return externalise(item);
 };
 
 const getAllItems = async (includeAliases: boolean): Promise<Item[]> => {
