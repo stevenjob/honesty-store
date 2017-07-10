@@ -1,18 +1,16 @@
 import { createAssertValidUuid } from '@honesty-store/service/lib/assert';
+import { sendEmail } from '@honesty-store/service/lib/email';
 import { CodedError } from '@honesty-store/service/lib/error';
 import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
 import { info } from '@honesty-store/service/lib/log';
 import { migrateStoreCodeToId } from '@honesty-store/service/lib/store';
 import { getStoreFromId } from '@honesty-store/store';
 import { createAccount } from '@honesty-store/transaction';
-import { config, SES } from 'aws-sdk';
 import cruftDDB from 'cruft-ddb';
 import { v4 as uuid } from 'uuid';
 import isEmail = require('validator/lib/isEmail');
 import { User, UserProfile, UserWithAccessAndRefreshTokens, UserWithAccessToken } from './client';
 import { signAccessToken, signRefreshToken, verifyAccessToken, verifyMagicLinkToken, verifyRefreshToken } from './token';
-
-config.region = process.env.AWS_REGION;
 
 const cruft = cruftDDB<InternalUser>({
   tableName: process.env.TABLE_NAME
@@ -179,22 +177,16 @@ Tap the button below on your phone to log in to honesty.store
 
 Log in to honesty.store ( https://honesty.store/${requestedStoreCode}?code=${signAccessToken({ userId: user.id })} )
 `;
-  const response = await new SES({ apiVersion: '2010-12-01' })
-    .sendEmail({
-      Destination: {
-        ToAddresses: [user.emailAddress]
-      },
-      Source: 'no-reply@honesty.store',
-      Message: {
-        Subject: { Charset: 'UTF-8', Data: 'Log in to honesty.store' },
-        Body: { Text: { Charset: 'UTF-8', Data: message } }
-      }
-    })
-    .promise();
+  const messageId = await sendEmail({
+    to: [user.emailAddress],
+    from: 'no-reply@honesty.store',
+    subject: 'Log in to honesty.store',
+    message
+  });
 
-  info(key, `Magic link email sent to ${emailAddress}: ${response.MessageId}`);
+  info(key, `Magic link email sent to ${emailAddress}: ${messageId}`);
 
-  return response.MessageId;
+  return messageId;
 };
 
 const logoutUser = async (userId) => {
