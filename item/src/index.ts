@@ -13,7 +13,7 @@ import { Item, ItemDetails } from './client';
 
 config.region = process.env.AWS_REGION;
 
-type ItemInternal = Item & IHasVersion;
+type ItemInternal = Item & IHasVersion & { alias?: string };
 
 const cruft = cruftDDB<ItemInternal>({
   tableName: process.env.TABLE_NAME
@@ -39,9 +39,11 @@ const getItem = async(itemId): Promise<Item> => {
   return externalise(await cruft.read({ id: itemId }));
 };
 
-const getAllItems = async (): Promise<Item[]> => {
+const getAllItems = async (includeAliases: boolean): Promise<Item[]> => {
   const items = await cruft.__findAll({});
-  return items.map(externalise);
+  return items
+    .filter(({ alias }) => !alias || includeAliases)
+    .map(externalise);
 };
 
 const updateItem = async (itemId: string, details: ItemDetails) => {
