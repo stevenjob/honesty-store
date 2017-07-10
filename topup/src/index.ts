@@ -141,10 +141,7 @@ const topupExistingAccount = async (key, topupAccount: EnhancedItem<TopupAccount
   topupAccount.stripe.nextChargeToken = uuid();
   await update(topupAccount);
 
-  return {
-    ...transactionBody,
-    cardDetails: extractCardDetails(topupAccount)
-  };
+  return transactionBody;
 };
 
 const generateStripeCustomerFromStripeToken = async (
@@ -208,9 +205,18 @@ const attemptTopup = async (
     topupAccount = await generateStripeCustomerFromStripeToken(key, topupAccount, stripeToken);
   }
 
-  return amount
-    ? topupExistingAccount(key, topupAccount, amount)
-    : { cardDetails: extractCardDetails(topupAccount) };
+  const cardDetails = extractCardDetails(topupAccount);
+
+  if (amount === 0) {
+    return { cardDetails };
+  }
+
+  const topupTransaction = await topupExistingAccount(key, topupAccount, amount);
+
+  return {
+    cardDetails,
+    ...topupTransaction
+  };
 };
 
 const getCardDetails = async (id) => {
