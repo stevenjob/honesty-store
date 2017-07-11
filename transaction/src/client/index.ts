@@ -6,7 +6,7 @@ import { CodedError } from '@honesty-store/service/lib/error';
 import fetch from '@honesty-store/service/lib/fetch';
 
 export const balanceLimit = 1000; // £10
-export const AUTO_REFUND_PERIOD = ms('1h');
+export const AUTO_REFUND_PERIOD = ms('24h');
 
 export type TransactionType = 'topup' | 'purchase' | 'refund' | 'debit' | 'credit';
 export const transactionTypes = ['topup', 'purchase', 'refund', 'debit', 'credit'];
