@@ -7,10 +7,10 @@ import { createUser, updateUser } from '@honesty-store/user';
 import { v4 as uuid } from 'uuid';
 
 import { authenticateAccessToken, noopAuthentication } from '../middleware/authenticate';
-import { getSessionData, getUserFeatures } from '../services/session';
+import { getSessionData, getUserFeatures, SessionData } from '../services/session';
 import { purchase } from '../services/transaction';
 
-const register = async (key, storeCode) => {
+const register = async (key, storeCode): Promise<SessionData> => {
   const userId = uuid();
   const { id: defaultStoreId } = await getStoreFromCode(key, storeCode);
   const profile = {
@@ -21,7 +21,7 @@ const register = async (key, storeCode) => {
   return await getSessionData(key, { user });
 };
 
-const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, stripeToken }) => {
+const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, stripeToken }): Promise<SessionData> => {
   const user = await updateUser(key, userID, { emailAddress });
 
   const topupTx = await createTopup(key, { accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
