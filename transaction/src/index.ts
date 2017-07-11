@@ -30,16 +30,10 @@ const GET_TRANSACTION_LIMIT = 10;
 
 config.region = process.env.AWS_REGION;
 
-type UserPermittedRefundReason = 'outOfStock' | 'accidentalPurchase' | 'stockExpired';
-const userPermittedRefundReasons = ['outOfStock', 'accidentalPurchase', 'stockExpired'];
-const isUserPermittedRefundReason = (reason: string): reason is UserPermittedRefundReason => {
-  return userPermittedRefundReasons.some(permittedReason => permittedReason === reason);
-};
-
-type SupportPermittedRefundReason = UserPermittedRefundReason | 'other';
-const supportPermittedRefundReasons = [...userPermittedRefundReasons, 'other'];
-const isSupportPermittedRefundReason = (reason: string): reason is SupportPermittedRefundReason => {
-  return supportPermittedRefundReasons.some(permittedReason => permittedReason === reason);
+type PermittedRefundReason = 'outOfStock' | 'accidentalPurchase' | 'stockExpired' | 'other';
+const permittedRefundReasons = ['outOfStock', 'accidentalPurchase', 'stockExpired', 'other'];
+const isPermittedRefundReason = (reason: string): reason is PermittedRefundReason => {
+  return permittedRefundReasons.some(permittedReason => permittedReason === reason);
 };
 
 const getAccountAndTransactions = async ({ accountId, limit = GET_TRANSACTION_LIMIT }): Promise<AccountAndTransactions> => {
@@ -128,8 +122,8 @@ const assertUserCanAutoRefundTransaction = (userId: string, transaction: Transac
 };
 
 const issueUserRequestedRefund = async (transactionId, userId, reason) => {
-  if (!isUserPermittedRefundReason(reason)) {
-    throw new Error('Invalid reason for refund');
+  if (!isPermittedRefundReason(reason)) {
+    throw new Error(`Reason must be one of ${permittedRefundReasons}`);
   }
 
   const transactionToRefund = await getTransaction(transactionId);
@@ -143,8 +137,8 @@ const issueUserRequestedRefund = async (transactionId, userId, reason) => {
 };
 
 const issueSupportRequestedRefund = async (transactionId: string, reason: string, dateLimit: number) => {
-  if (!isSupportPermittedRefundReason(reason)) {
-    throw new Error(`Reason must be one of ${supportPermittedRefundReasons}`);
+  if (!isPermittedRefundReason(reason)) {
+    throw new Error(`Reason must be one of ${permittedRefundReasons}`);
   }
   if (!Number.isInteger(dateLimit)) {
     throw new Error(`Invalid timestamp for dateLimit ${dateLimit}`);
@@ -155,7 +149,7 @@ const issueSupportRequestedRefund = async (transactionId: string, reason: string
   return await issueRefund(transactionToRefund, reason, dateLimit);
 };
 
-const issueRefund = async (transactionToRefund: Transaction, reason: SupportPermittedRefundReason, dateLimit: number) => {
+const issueRefund = async (transactionToRefund: Transaction, reason: PermittedRefundReason, dateLimit: number) => {
   const { id: transactionId } = transactionToRefund;
 
   const { accountId } = extractFieldsFromTransactionId(transactionId);
