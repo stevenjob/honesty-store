@@ -51,9 +51,18 @@ export interface StoreItemDetailsChanged {
   userId?: string;
 }
 
+export interface StoreItemRelisted {
+  id: string;
+  type: 'store-relist';
+  storeId: string;
+  itemId: string;
+  userId: string;
+  additionalCount: number;
+}
+
 export type StoreItemEvent = StoreItemAudited | StoreItemDetailsChanged;
 
-export type StoreEvent = StoreItemEvent | StoreItemListed | StoreItemUnlisted;
+export type StoreEvent = StoreItemEvent | StoreItemListed | StoreItemUnlisted | StoreItemRelisted;
 
 export interface StoreItemTracking {
   purchaseCount: number;
@@ -109,3 +118,6 @@ export const updateItemCount = (key, storeId: string, itemId: string, count: num
 
 export const unlistItem = (key, storeId: string, itemId: string, userId: string) =>
   post<Store>(1, key, `/${storeId}/${itemId}/unlist`, { userId });
+
+export const relistItem = (key, storeId: string, itemId: string, additionalCount: number, userId: string) =>
+  post<Store>(1, key, `/${storeId}/${itemId}/relist`, { additionalCount, userId });

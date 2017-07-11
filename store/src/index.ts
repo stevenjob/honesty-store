@@ -28,6 +28,7 @@ import {
   StoreItemDetailsChanged,
   StoreItemListed,
   StoreItemListing,
+  StoreItemRelisted,
   StoreItemUnlisted
 } from './client';
 import calculateRevenue from './revenue';
@@ -56,6 +57,7 @@ const reducer = reduce<Transaction | StoreEvent>(
       case 'store-details-change':
       case 'store-list':
       case 'store-unlist':
+      case 'store-relist':
         return event.storeId;
       default:
         return assertNever(event);
@@ -187,6 +189,27 @@ const reducer = reduce<Transaction | StoreEvent>(
         }
 
         store.items = store.items.filter(item => item !== unlistedItem);
+
+        return store;
+      }
+      case 'store-relist': {
+        const { itemId, additionalCount } = event;
+
+        const existingItem = lookupItem(store, itemId);
+
+        if (existingItem == null) {
+          throw new Error(`Listing does not exist ${itemId} in ${store.id}`);
+        }
+
+        store.items = store.items.filter(item => item !== existingItem);
+
+        const item: StoreItem = {
+          ...existingItem,
+          availableCount: existingItem.availableCount + additionalCount,
+          listCount: existingItem.listCount + additionalCount
+        };
+
+        store.items.push(item);
 
         return store;
       }
@@ -328,6 +351,27 @@ router.post<{ count: number, userId: string }, Store>(
       storeId,
       itemId,
       userId
+    };
+
+    return externalise(await reducer(event));
+  }
+);
+
+router.post<{ additionalCount: number, userId: string }, Store>(
+  '/:storeId/:itemId/relist',
+  async (_key, { storeId, itemId }, { additionalCount, userId }) => {
+    assertValidUuid('storeId', storeId);
+    assertValidUuid('itemId', itemId);
+    assertValidUuid('userId', userId);
+    assertPositiveInteger('additionalCount', additionalCount);
+
+    const event: StoreItemRelisted = {
+      id: uuid(),
+      type: 'store-relist',
+      storeId,
+      itemId,
+      userId,
+      additionalCount
     };
 
     return externalise(await reducer(event));
