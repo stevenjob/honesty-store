@@ -236,7 +236,7 @@ export default async ({ branch, dirs }) => {
       codeFilter: lambdaConfig[dir].codeFilter,
       handler: lambdaConfig[dir].handler,
       dynamoAccess: lambdaConfig[dir].database,
-      withApiGateway: true,
+      withApiGateway: lambdaConfig[dir].exposeOnGateway,
       live: isLive(branch),
       environment: {
         TABLE_NAME: db && db.TableName,
