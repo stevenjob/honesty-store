@@ -7,7 +7,7 @@ import ItemDetails from './details';
 const AdminItemNew = ({ performCreateItem, params }) => (
   <ItemDetails
     onSubmit={details => performCreateItem({ details })}
-    left={<BackToPage path="admin/item" title="Listings" />}
+    left={<BackToPage path="/admin/item" title="Listings" />}
   />
 );
 
