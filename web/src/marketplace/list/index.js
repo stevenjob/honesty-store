@@ -1,64 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router';
-import Full from '../../layout/full';
 import { Back } from '../../chrome/link';
+import MiscSelection from '../../item/misc-selection';
+import Full from '../../layout/full';
 
-const Index = () => (
-  <Full left={<Back />}>
-    <h1>honesty.store & more!</h1>
-    <p>We want to make sure your store has as much variety as possible.</p>
+export default () => (
+  <Full left={<Back path="/store" />}>
+    <div className="col-4 mx-auto">
+      <MiscSelection />
+    </div>
+    <h2>honesty.store <span className="aqua">&</span> more!</h2>
+    <p className="bold">Fancy adding your own items to the store?</p>
     <p>
-      However, there are certain items that just aren't feasible for us to send
-      out: cold drinks, ice cream or those
-      really tasty flapjacks from the bakery around the corner!
+      Just fill in the details and choose a price. We recommend adding a little
+      extra to each item to cover shrinkage.
     </p>
     <p>
-      To get around this, we're rolling out the ability for you to list items
-      that aren't already available in your store.
-    </p>
-    <h2 className="mt3">How It Works</h2>
-    <ul className="pl2 left-align">
-      <li className="pb1">
-        You buy the items, tell us the details and we add our service fee of
-        10%.
-      </li>
-      <li className="pb1">
-        We list the item in the store and allow users to record their purchases
-        through the app.
-      </li>
-      <li className="pb1">
-        We give you access to analytics on your items including a full breakdown
-        of sales through the app (coming soon!).
-      </li>
-      <li className="pb1">
-        Every week, we send you the money from the last week's sales, minus our
-        service fees.
-      </li>
-      <li className="pb1">
-        Once everything has sold, you'll have received the amount you paid for
-        the items.
-      </li>
-      <li className="pb1">
-        You don't pay any service fees when you purchase your own items (for now
-        this will be retrospectively refunded).
-      </li>
-    </ul>
-    <h2 className="mt3">What Next?</h2>
-    <p>
-      To list the items we need to take a few details (description, cost, e.t.c). We'll review the
-      submission, add the listing and then notify you and the agent.
-    </p>
-    <p>
-      Normally this process takes a couple of hours, but feel free to put the
-      items out straight away and allow people to record their
-      purchases later.
+      At the end of each month we'll send you the money from the last month's
+      sales, minus our service fees. Don't worry, you won't pay any service fees
+      when you purchase your own items.
     </p>
     <p className="my3">
       <Link to="/more/new" className="btn btn-primary btn-big">
-        List My Items
+        Add an item
       </Link>
     </p>
   </Full>
 );
-
-export default Index;

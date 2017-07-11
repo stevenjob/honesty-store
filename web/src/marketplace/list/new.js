@@ -7,33 +7,49 @@ import Full from '../../layout/full';
 
 const ourFees = 0.1;
 
+const FormElement = ({
+  id,
+  placeholder,
+  description,
+  value,
+  type,
+  onChangeHandler,
+  fullWidth = true,
+  ...other
+}) => (
+  <p className="my3">
+    <label className={`left-align block bold`} htmlFor={id}>
+      {description}
+    </label>
+    <input
+      id={id}
+      placeholder={placeholder}
+      onChange={onChangeHandler}
+      value={value}
+      className={`input ${fullWidth ? '' : 'block col-4'}`}
+      noValidate
+      type={type}
+      {...other}
+    />
+  </p>
+);
+
 class MarketplaceItemAdd extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      description: '',
-      totalPrice: '',
+      name: '',
+      qualifier: '',
       quantity: '',
+      totalPaid: '',
       validity: 'not-submitted'
     };
   }
 
-  handleDescriptionChange(event) {
+  handleStateUpdate(event) {
     this.setState({
-      description: event.target.value
-    });
-  }
-
-  handlePriceChange(event) {
-    this.setState({
-      totalPrice: event.target.value
-    });
-  }
-
-  handleQuantityChange(event) {
-    this.setState({
-      quantity: event.target.value
+      [event.target.id]: event.target.value
     });
   }
 
@@ -41,9 +57,9 @@ class MarketplaceItemAdd extends React.Component {
     event.preventDefault();
 
     const { performMarketplace, storeCode } = this.props;
-    const { description, totalPrice, quantity } = this.state;
+    const { name, qualifier, quantity, totalPaid } = this.state;
 
-    const validity = description.length && totalPrice.length && quantity.length
+    const validity = name.length && totalPaid.length && quantity.length
       ? 'valid'
       : 'invalid';
 
@@ -51,16 +67,17 @@ class MarketplaceItemAdd extends React.Component {
 
     if (validity === 'valid') {
       performMarketplace({
-        description,
-        totalPrice,
-        quantity,
-        storeCode
+        storeCode,
+        name,
+        qualifier,
+        totalPaid,
+        quantity
       });
     }
   }
 
   calculatePerItemCost() {
-    const price = Number(this.state.totalPrice);
+    const price = Number(this.state.totalPaid);
     const quantity = Number(this.state.quantity);
     const result = price / quantity * (1 + ourFees);
 
@@ -76,63 +93,44 @@ class MarketplaceItemAdd extends React.Component {
           <p>Please fill in the details for your items</p>
           {validity === 'invalid' &&
             <p className="red">Please fill out every field</p>}
-          <p>
-            <label htmlFor="description">Description</label>
-            <textarea
-              id="description"
-              placeholder="Diet Coke 330ml can"
-              onChange={e => this.handleDescriptionChange(e)}
-              value={this.state.description}
-              className="textarea input"
-              noValidate
-              rows="1"
-            />
-          </p>
-          <p>
-            <label htmlFor="price">Total Price Paid (£)</label>
-            <input
-              id="price"
-              placeholder="3"
-              onChange={e => this.handlePriceChange(e)}
-              value={this.state.price}
-              className="input"
-              noValidate
-              type="number"
-              min="1"
-              step="any"
-            />
-          </p>
-          <p>
-            <label htmlFor="quantity">Item Quantity</label>
-            <input
-              id="quantity"
-              placeholder="10"
-              onChange={e => this.handleQuantityChange(e)}
-              value={this.state.quantity}
-              className="input"
-              noValidate
-              type="number"
-              min="1"
-              step="1"
-            />
-          </p>
-          <p>
-            <label htmlFor="pricingBreakdown">
-              Per Item Cost (inc. Service Fee)
-            </label>
-            <input
-              id="pricingBreakdown"
-              placeholder="£0.33"
-              value={this.calculatePerItemCost()}
-              disabled={true}
-              onChange={e => e.preventDefault()}
-              className="input"
-              noValidate
-            />
-          </p>
+          <FormElement
+            id="name"
+            description="Item name"
+            placeholder="Walkers"
+            onChangeHandler={e => this.handleStateUpdate(e)}
+            value={this.state.name}
+          />
+          <FormElement
+            id="qualifier"
+            description={
+              <span>Qualifier <span className="aqua">(optional)</span></span>
+            }
+            placeholder="Salt & Vinegar"
+            onChange={e => this.handleStateUpdate(e)}
+            value={this.state.qualifier}
+          />
+          <FormElement
+            id="quantity"
+            description="How many would you like to sell?"
+            placeholder="10"
+            onChange={e => this.handleStateUpdate(e)}
+            value={this.state.quantity}
+            type="number"
+            min="1"
+            step="any"
+            fullWidth={false}
+          />
+          <FormElement
+            id="totalPaid"
+            description="How much did you pay in total (£)?"
+            placeholder="3.00"
+            onChange={e => this.handleStateUpdate(e)}
+            value={this.state.totalPaid}
+            fullWidth={false}
+          />
           <p className="my3">
             <Link
-              className="btn btn-primary"
+              className="btn btn-primary btn-big"
               onClick={e => this.handleSubmit(e)}
             >
               Submit item

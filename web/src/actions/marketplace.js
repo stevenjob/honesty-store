@@ -25,8 +25,9 @@ const marketplaceFailure = error => {
 };
 
 export const performMarketplace = ({
-  description,
-  totalPrice,
+  name,
+  qualifier,
+  totalPaid,
   quantity,
   storeCode
 }) => async (dispatch, getState) => {
@@ -39,8 +40,9 @@ export const performMarketplace = ({
         body: {
           storeCode,
           item: {
-            description,
-            totalPrice,
+            name,
+            qualifier,
+            totalPaid,
             quantity
           }
         },

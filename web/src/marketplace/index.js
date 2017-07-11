@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import Chrome from '../layout/chrome';
 import List from '../chrome/list';
 import { formatAny } from '../format/Currency';
 import monthFromDate from '../format/date';
+import Chrome from '../layout/chrome';
 import ItemListing from './item-listing';
 
 const MonthyRevenue = ({ month, total }) => (
@@ -29,7 +29,7 @@ const More = ({ items, userRevenue }) => (
       </div>
     </div>
     <div className="center bg-white border-bottom border-silver p2 mt2">
-      <Link to="/more/list/new">+ Add a new item</Link>
+      <Link to="/more/list">+ Add a new item</Link>
     </div>
     <List data={items} itemRenderer={item => <ItemListing item={item} />} />
   </Chrome>
