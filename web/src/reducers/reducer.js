@@ -112,6 +112,11 @@ import {
   REMOVE_LISTING_SUCCESS,
   REMOVE_LISTING_FAILURE
 } from '../actions/remove-listing';
+import {
+  RELIST_REQUEST,
+  RELIST_SUCCESS,
+  RELIST_FAILURE
+} from '../actions/relist';
 import { getInitialState } from '../state';
 
 const requestState = (requestId, updatedProps, state) => ({
@@ -513,6 +518,27 @@ export default (state, action) => {
     }
     case REMOVE_LISTING_FAILURE:
       return fullPageErrorState('remove-listing', action.error, state);
+    case RELIST_REQUEST:
+      return requestState('relist', {}, state);
+    case RELIST_SUCCESS: {
+      const { admin } = state;
+      const relistedItem = action.response;
+      const updatedState = {
+        admin: {
+          ...admin,
+          store: {
+            ...admin.store,
+            items: [
+              ...admin.store.items.filter(({ id }) => id !== relistedItem.id),
+              relistedItem
+            ]
+          }
+        }
+      };
+      return completionState('relist', updatedState, state);
+    }
+    case RELIST_FAILURE:
+      return fullPageErrorState('relist', action.error, state);
     default:
       return state;
   }
