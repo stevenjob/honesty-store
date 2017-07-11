@@ -139,12 +139,17 @@ const permitLambdaCallFromApiGateway = async ({ func }) => {
   const policy = JSON.parse(policyString.Policy) as Policy;
 
   const removePromises = policy.Statement
+    .filter(({ Sid }) => Sid !== apiGatewaySid)
     .map(({ Sid }) => lambda.removePermission({
       FunctionName: func.FunctionArn,
       StatementId: Sid
     }).promise());
 
   await Promise.all(removePromises);
+
+  if (policy.Statement.some(({ Sid }) => Sid === apiGatewaySid)) {
+    return;
+  }
 
   const permission = await lambda.addPermission({
     FunctionName: func.FunctionArn,
