@@ -3,7 +3,7 @@
 import cruftDDB from 'cruft-ddb';
 import { stringify } from 'csv';
 
-import { getAllItems } from '@honesty-store/item';
+import { getAllItems, getItemAliases } from '@honesty-store/item';
 import { createServiceKey } from '@honesty-store/service/lib/key';
 import { Store } from '@honesty-store/store';
 import { InternalAccount, Transaction } from '@honesty-store/transaction';
@@ -64,7 +64,26 @@ const main = async (args) => {
     ];
   };
 
-  const items = await getAllItems(createServiceKey({ service: 'dump-transactions' }));
+  const key = createServiceKey({ service: 'dump-transactions' });
+  const items = await getAllItems(key);
+  const itemAliases = await getItemAliases(key);
+
+  const canonicaliseItemId = id => {
+    const canonId = itemAliases[id];
+    if (canonId != null) {
+      return canonicaliseItemId(canonId);
+    }
+    return id;
+  };
+
+  const lookupItemDetails = itemId => {
+    if (itemId == null) {
+      return {};
+    }
+
+    const canonicalItemId = canonicaliseItemId(itemId);
+    return items.find(({ id }) => id === canonicalItemId);
+  };
 
   const userTransactions = allAccounts
     .map(account => {
@@ -82,7 +101,7 @@ const main = async (args) => {
       return transactions.map((transaction) => {
         // tslint:disable-next-line:no-unused-variable
         const { id: transactionId, data, next, ...transactionDetails } = transaction;
-        const itemDetails = data.itemId ? items.find(({ id }) => id === data.itemId) : {};
+        const itemDetails = lookupItemDetails(data.itemId);
         return {
           userId,
           ...userDetails,
