@@ -28,14 +28,14 @@ describe.only(suiteName, () => {
 
   it('should find items over many pages', async () => {
     const id = nextId();
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 10; i++) {
       await cruft.create({ id: `${id}_${i}`, version: 0, bar: id });
     }
     let i = 0;
     for await (const _item of cruft.findAll({ bar: id })) {
       i++;
     }
-    expect(i).to.equal(15, 'Incorrect item count');
+    expect(i).to.equal(10, 'Incorrect item count');
   });
 
   it('should find items over many pages and stop if break called', async () => {
