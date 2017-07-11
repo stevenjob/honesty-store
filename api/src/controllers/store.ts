@@ -1,4 +1,4 @@
-import { getStoreFromCode, listItem, Store, unlistItem, updateItemCount, updateItemDetails } from '@honesty-store/store';
+import { getStoreFromCode, listItem, relistItem, Store, unlistItem, updateItemCount, updateItemDetails } from '@honesty-store/store';
 import { updateUser, User } from '@honesty-store/user';
 import { authenticateAccessToken, authenticateAccessTokenAndStoreAdminUser } from '../middleware/authenticate';
 import { getSessionData } from '../services/session';
@@ -49,6 +49,16 @@ export default (router) => {
         ...listing
       };
       const store = await listItem(key, storeId, storeItemListing, userId);
+      return externaliseItem(itemId, store);
+    }
+  );
+
+  router.post(
+    '/store/:storeCode/item/:itemId/relist',
+    authenticateAccessTokenAndStoreAdminUser,
+    async (key, { itemId, storeCode }, { additionalCount } , { user: { id: userId } }) => {
+      const { id: storeId } = await getStoreFromCode(key, storeCode);
+      const store = await relistItem(key, storeId, itemId, additionalCount, userId);
       return externaliseItem(itemId, store);
     }
   );
