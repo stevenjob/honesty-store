@@ -1,7 +1,6 @@
 import { DynamoDB, Lambda } from 'aws-sdk';
 import concatStream = require('concat-stream');
 import globCb = require('glob');
-import uuid = require('uuid/v4');
 import yazl = require('yazl');
 import { join, relative } from 'path';
 import * as winston from 'winston';
@@ -118,10 +117,38 @@ const ensureLambda = async ({ name, timeout, handler, environment, dynamoAccess,
 
 const permitLambdaCallFromApiGateway = async ({ func }) => {
   const lambda = new Lambda({ apiVersion: '2015-03-31' });
+  const apiGatewaySid = 'apiGatewaySid';
+
+  interface Policy {
+    Version: string;
+    Id: string;
+    Statement: {
+      Sid: string;
+      Effect: string;
+      Principal: {
+        Service: string;
+      };
+      Action: string;
+      Resource: string;
+    }[];
+  }
+
+  const policyString = await lambda.getPolicy({
+    FunctionName: func.FunctionArn
+  }).promise();
+  const policy = JSON.parse(policyString.Policy) as Policy;
+
+  const removePromises = policy.Statement
+    .map(({ Sid }) => lambda.removePermission({
+      FunctionName: func.FunctionArn,
+      StatementId: Sid
+    }).promise());
+
+  await Promise.all(removePromises);
 
   const permission = await lambda.addPermission({
     FunctionName: func.FunctionArn,
-    StatementId: uuid(),
+    StatementId: apiGatewaySid,
     Action: 'lambda:InvokeFunction',
     Principal: 'apigateway.amazonaws.com'
   })
