@@ -50,6 +50,7 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
   return {
     ...sessionData,
     user: {
+      ...sessionData.user,
       ...user,
       balance: purchaseTx == null ? topupTx.balance : purchaseTx.balance,
       transactions: [
