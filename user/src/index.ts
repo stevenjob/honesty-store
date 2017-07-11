@@ -179,7 +179,6 @@ Log in to honesty.store ( https://honesty.store/${requestedStoreCode}?code=${sig
 `;
   const messageId = await sendEmail({
     to: [user.emailAddress],
-    from: 'no-reply@honesty.store',
     subject: 'Log in to honesty.store',
     message
   });
