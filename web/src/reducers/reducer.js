@@ -18,11 +18,6 @@ import {
 } from '../actions/session';
 import { TOPUP_REQUEST, TOPUP_SUCCESS, TOPUP_FAILURE } from '../actions/topup';
 import {
-  NEW_CARD_REQUEST,
-  NEW_CARD_SUCCESS,
-  NEW_CARD_FAILURE
-} from '../actions/new-card';
-import {
   PURCHASE_REQUEST,
   PURCHASE_SUCCESS,
   PURCHASE_FAILURE
@@ -250,28 +245,6 @@ export default (state, action) => {
       return completionState('logout', getInitialState(), state);
     case LOGOUT_FAILURE:
       return fullPageErrorState('logout', action.error, state);
-    case NEW_CARD_REQUEST:
-      return requestState('new-card', {}, state);
-    case NEW_CARD_SUCCESS: {
-      const cardDetails = action.response;
-      const updatedStateProps = {
-        user: {
-          ...state.user,
-          cardDetails
-        }
-      };
-      return completionState('new-card', updatedStateProps, state);
-    }
-    case NEW_CARD_FAILURE: {
-      const { error, cardError } = action;
-      const updatedStateProps = {
-        error: {
-          inline: cardError,
-          fullPage: state.error.fullPage || error
-        }
-      };
-      return completionState('new-card', updatedStateProps, state);
-    }
     case TOPUP_REQUEST:
       return requestState('topup', {}, state);
     case TOPUP_SUCCESS: {
@@ -282,7 +255,7 @@ export default (state, action) => {
           ...state.user,
           balance,
           cardDetails,
-          transactions: [transaction, ...user.transactions]
+          transactions: transaction != null ? [transaction, ...user.transactions] : user.transactions
         }
       };
       return completionState('topup', updatedStateProps, state);

@@ -3,17 +3,17 @@ import { connect } from 'react-redux';
 import Card from '../chrome/card';
 import { Back } from '../chrome/link';
 import Full from '../layout/full';
-import { performNewCard } from '../actions/new-card';
+import { performTopup } from '../actions/topup';
 
-const NewCard = ({ performNewCard, ...rest }) => (
+const NewCard = ({ performTopup, ...rest }) => (
   <Full left={<Back />}>
     <Card
       isInitialTopUp={false}
       confirmButtonText="Add New Card"
-      onSubmit={({ cardDetails }) => performNewCard({ cardDetails })}
+      onSubmit={({ cardDetails }) => performTopup({ cardDetails, amount: 0 })}
       {...rest}
     />
   </Full>
 );
 
-export default connect(() => ({}), { performNewCard })(NewCard);
+export default connect(() => ({}), { performTopup })(NewCard);
