@@ -104,7 +104,7 @@ const ItemDetail = ({
             <li>Remaining: <strong>{count}</strong></li>
           </ul>
           <div>
-            {count === 0
+            {count <= 0
               ? <Depleted registered={registered} />
               : registered ? <FlagOutOfStock itemId={id} /> : null}
           </div>
