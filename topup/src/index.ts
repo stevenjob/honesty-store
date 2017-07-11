@@ -36,6 +36,43 @@ const { create, read, update } = cruftDDB<TopupAccount>({
 const assertValidAccountId = createAssertValidUuid('accountId');
 const assertValidUserId = createAssertValidUuid('userId');
 
+const assertValidStripeDetails = (topupAccount: TopupAccount) => {
+  const validator = createAssertValidObject<Stripe>({
+    customer: assertObject,
+    nextChargeToken: assertValidUuid
+  });
+
+  if (topupAccount.stripe[0]) {
+    try {
+      validator(topupAccount.stripe[0]);
+    } catch (_) {
+      throw new CodedError(
+        'NoCardDetailsPresent',
+        `No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.id}`);
+    }
+  }
+};
+
+const assertValidTopupAmount = (amount) => {
+  switch (amount) {
+    case fixedTopupAmount:
+    case 0:
+      break;
+    default:
+      throw new Error(`topup amount must be £0 or £${fixedTopupAmount / 100}`);
+  }
+};
+
+const extractCardDetails = (topupAccount: TopupAccount): CardDetails => {
+  const { brand, exp_month, exp_year, last4 } = topupAccount.stripe.customer.sources.data[0];
+  return {
+    brand,
+    expMonth: exp_month,
+    expYear: exp_year,
+    last4
+  };
+};
+
 const stripeForUser = ({ test }) => {
   return test ? stripeTest : stripeProd;
 };
@@ -58,33 +95,6 @@ const getOrCreate = async ({ key, accountId, userId }): Promise<EnhancedItem<Top
       version: 0,
       test: false
     });
-  }
-};
-
-const extractCardDetails = (topupAccount: TopupAccount): CardDetails => {
-  const { brand, exp_month, exp_year, last4 } = topupAccount.stripe.customer.sources.data[0];
-  return {
-    brand,
-    expMonth: exp_month,
-    expYear: exp_year,
-    last4
-  };
-};
-
-const assertValidStripeDetails = (topupAccount: TopupAccount) => {
-  const validator = createAssertValidObject<Stripe>({
-    customer: assertObject,
-    nextChargeToken: assertValidUuid
-  });
-
-  if (topupAccount.stripe[0]) {
-    try {
-      validator(topupAccount.stripe[0]);
-    } catch (_) {
-      throw new CodedError(
-        'NoCardDetailsPresent',
-        `No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.id}`);
-    }
   }
 };
 
@@ -184,15 +194,6 @@ const generateStripeCustomerFromStripeToken = async (
   });
 };
 
-const assertValidTopupAmount = (amount) => {
-  switch (amount) {
-    case fixedTopupAmount:
-    case 0:
-      break;
-    default:
-      throw new Error(`topup amount must be £0 or £${fixedTopupAmount / 100}`);
-  }
-};
 
 const attemptTopup = async (
   { key, accountId, userId, amount, stripeToken }: TopupRequest & { key: Key }
