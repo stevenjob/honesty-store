@@ -11,6 +11,7 @@ import AdminItemListings from './listing/index';
 import AdminItemListingsNew from './listing/new';
 import AdminItemListingEdit from './listing/edit';
 import AdminItemListingItemSelect from './listing/item-select';
+import AdminItemListingRelist from './listing/relist';
 
 const routes = (
   <Route path="admin" component={AdminItemFetch}>
@@ -24,6 +25,7 @@ const routes = (
       <IndexRoute component={AdminItemListings} />
       <Route path="item" component={AdminItemListingItemSelect} />
       <Route path="item/:itemId/edit" component={AdminItemListingEdit} />
+      <Route path="item/:itemId/add-more" component={AdminItemListingRelist} />
       <Route path="item/:itemId" component={AdminItemListingsNew} />
     </Route>
   </Route>

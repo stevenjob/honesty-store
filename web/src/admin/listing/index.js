@@ -27,6 +27,7 @@ const ItemListings = ({
           <th>Revenue</th>
           <th>Seller Id</th>
           <th />
+          <th />
         </tr>
       </thead>
       <tbody>
