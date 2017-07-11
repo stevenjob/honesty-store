@@ -9,7 +9,7 @@ import {
   createAssertValidUuid
 } from '@honesty-store/service/lib/assert';
 import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
-import { Item, ItemDetails } from './client';
+import { Item, ItemAliases, ItemDetails } from './client';
 
 config.region = process.env.AWS_REGION;
 
@@ -45,11 +45,18 @@ const getItem = async (itemId): Promise<Item> => {
   return externalise(item);
 };
 
-const getAllItems = async (includeAliases: boolean): Promise<Item[]> => {
+const getAllItems = async (): Promise<Item[]> => {
   const items = await cruft.__findAll({});
   return items
-    .filter(({ alias }) => !alias || includeAliases)
+    .filter(({ alias }) => alias == null)
     .map(externalise);
+};
+
+const getAliases = async (): Promise<ItemAliases> => {
+  const items = await cruft.__findAll({});
+  return items
+    .filter(({ alias }) => alias != null)
+    .reduce((single, { id, alias }) => ({ ...single, [id]: alias }), {});
 };
 
 const updateItem = async (itemId: string, details: ItemDetails) => {
@@ -83,8 +90,13 @@ router.post<ItemDetails, Item>(
 );
 
 router.get(
-  '/all/:includingAliases',
-  async (_key, { includingAliases = false }) => getAllItems(includingAliases === 'true')
+  '/all',
+  async (_key) => getAllItems()
+);
+
+router.get(
+  '/all/aliases',
+  async (_key) => getAliases()
 );
 
 router.get(
