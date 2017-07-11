@@ -245,17 +245,19 @@ const assertValidStoreItemListing = createAssertValidObject<StoreItemListing>({
 
 const assertValidStoreItemDetails = createAssertValidObject<StoreItemDetails>(storeDetailsValidator);
 
-router.post<StoreItemListing, Store>(
+router.post<{ userId: string, listing: StoreItemListing }, Store>(
   '/:storeId/item',
-  async (_key, { storeId }, listing) => {
+  async (_key, { storeId }, { userId, listing }) => {
     assertValidUuid('storeId', storeId);
     assertValidStoreItemListing(listing);
+    assertValidUuid('userId', userId);
 
     const event: StoreItemListed = {
       id: uuid(),
       type: 'store-list',
       storeId,
-      listing
+      listing,
+      userId
     };
 
     return externalise(await reducer(event));
@@ -271,18 +273,20 @@ router.post<Transaction, Store>(
   }
 );
 
-router.post<StoreItemDetails, Store>(
+router.post<{ userId: string, details: StoreItemDetails }, Store>(
   '/:storeId/:itemId',
-  async (_key, { storeId, itemId }, details) => {
+  async (_key, { storeId, itemId }, { userId, details }) => {
     assertValidUuid('storeId', storeId);
     assertValidUuid('itemId', itemId);
     assertValidStoreItemDetails(details);
+    assertValidUuid('userId', userId);
 
     const event: StoreItemDetailsChanged = {
       id: uuid(),
       type: 'store-details-change',
       storeId,
       itemId,
+      userId,
       ...details
     };
 
@@ -313,15 +317,17 @@ router.post<{ count: number, userId: string }, Store>(
 
 router.post<{ count: number, userId: string }, Store>(
   '/:storeId/:itemId/unlist',
-  async (_key, { storeId, itemId }, { }) => {
+  async (_key, { storeId, itemId }, { userId }) => {
     assertValidUuid('storeId', storeId);
     assertValidUuid('itemId', itemId);
+    assertValidUuid('userId', userId);
 
     const event: StoreItemUnlisted = {
       id: uuid(),
       type: 'store-unlist',
       storeId,
-      itemId
+      itemId,
+      userId
     };
 
     return externalise(await reducer(event));

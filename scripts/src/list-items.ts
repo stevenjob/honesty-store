@@ -39,7 +39,7 @@ const addItem = async (itemId: string, count: number, price: number) => {
   };
 
   try {
-    await listItem(key, storeId, storeItemListing);
+    await listItem(key, storeId, storeItemListing, auditorId);
   } catch (e) {
     if (e.message.includes('Listing already exists')) {
       await updateItemCount(key, storeId, itemId, count, auditorId);

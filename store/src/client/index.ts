@@ -19,6 +19,7 @@ export interface StoreItemListed {
   type: 'store-list';
   storeId: string;
   listing: StoreItemListing;
+  userId?: string;
 }
 
 export interface StoreItemUnlisted {
@@ -26,6 +27,7 @@ export interface StoreItemUnlisted {
   type: 'store-unlist';
   storeId: string;
   itemId: string;
+  userId?: string;
 }
 
 export interface StoreItemAudited {
@@ -46,6 +48,7 @@ export interface StoreItemDetailsChanged {
   name: string;
   qualifier?: string;
   image: string;
+  userId?: string;
 }
 
 export type StoreItemEvent = StoreItemAudited | StoreItemDetailsChanged;
@@ -95,14 +98,14 @@ export const getStoreFromId = (key, id: string) =>
 export const recordTransaction = (key, transaction: Transaction) =>
   post<Store>(1, key, `/transaction`, transaction);
 
-export const listItem = (key, storeId: string, listing: StoreItemListing) =>
-  post<Store>(1, key, `/${storeId}/item`, listing);
+export const listItem = (key, storeId: string, listing: StoreItemListing, userId: string) =>
+  post<Store>(1, key, `/${storeId}/item`, { userId, listing });
 
-export const updateItemDetails = (key, storeId: string, itemId: string, details: StoreItemDetails) =>
-  post<Store>(1, key, `/${storeId}/${itemId}`, details);
+export const updateItemDetails = (key, storeId: string, itemId: string, details: StoreItemDetails, userId: string) =>
+  post<Store>(1, key, `/${storeId}/${itemId}`, { userId, details });
 
 export const updateItemCount = (key, storeId: string, itemId: string, count: number, userId: string) =>
   post<Store>(1, key, `/${storeId}/${itemId}/count`, { count, userId });
 
-export const unlistItem = (key, storeId: string, itemId: string) =>
-  post<Store>(1, key, `/${storeId}/${itemId}/unlist`, {});
+export const unlistItem = (key, storeId: string, itemId: string, userId: string) =>
+  post<Store>(1, key, `/${storeId}/${itemId}/unlist`, { userId });
