@@ -17,7 +17,8 @@ const NavLink = withRouter(
       activeStyle={{ color: 'white' }}
       style={{
         borderBottomWidth: '0.2rem',
-        lineHeight: navBarHeight
+        lineHeight: navBarHeight,
+        flexBasis: '0'
       }}
       onlyActiveOnIndex={true}
     >
@@ -37,7 +38,10 @@ const Chrome = ({ storeCode, children, registered, balance }) => (
       <h2 className="my0 white regular">{storeCode}</h2>
     </header>
     <div style={{ minHeight: '100vh' }}>
-      <nav className="sticky top-0 bg-navy white flex items-center z1">
+      <nav
+        style={{ height: navBarHeight }}
+        className="sticky top-0 bg-navy white flex items-stretch z1"
+      >
         <NavLink className="flex-auto" to="/store">Store</NavLink>
         {registered &&
           <NavLink className="flex-auto" to="/profile" activeText="Profile">
