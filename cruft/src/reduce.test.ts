@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { createTable, cruftForTable, deleteTable, nextId } from './__tests__/aws';
 
 const suiteName = 'reduce';
@@ -29,9 +28,9 @@ describe.only(suiteName, () => {
     await cruft.create({ id: aggregateId, version: 0 });
     const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _) => aggregate);
     const aggregate = await reduce(event);
-    expect(aggregate.lastReceived && aggregate.lastReceived.id).to.equal(event.id);
-    expect(aggregate.lastReceived && aggregate.lastReceived.data).to.deep.equal(event);
-    expect(aggregate.lastReceived && aggregate.lastReceived.previous).to.equal(undefined);
+    expect(aggregate.lastReceived && aggregate.lastReceived.id).toEqual(event.id);
+    expect(aggregate.lastReceived && aggregate.lastReceived.data).toEqual(event);
+    expect(aggregate.lastReceived && aggregate.lastReceived.previous).toEqual(undefined);
   });
 
   it('should archive event when limit reached', async () => {
@@ -45,8 +44,8 @@ describe.only(suiteName, () => {
     aggregate = await reduce({
       id: nextId()
     });
-    expect(aggregate.lastReceived && aggregate.lastReceived.id).to.not.equal(event.id);
-    expect(aggregate.lastReceived && aggregate.lastReceived.previous).to.equal(event.id);
+    expect(aggregate.lastReceived && aggregate.lastReceived.id).not.toEqual(event.id);
+    expect(aggregate.lastReceived && aggregate.lastReceived.previous).toEqual(event.id);
   });
 
   it('should ignore the last event', async () => {
@@ -57,9 +56,9 @@ describe.only(suiteName, () => {
     await cruft.create({ id: aggregateId, version: 0 });
     const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _) => aggregate);
     let aggregate = await reduce(event);
-    expect(aggregate.version).to.equal(1);
+    expect(aggregate.version).toEqual(1);
     aggregate = await reduce(event);
-    expect(aggregate.version).to.equal(1);
+    expect(aggregate.version).toEqual(1);
   });
 
   it('should ignore archived events', async () => {
@@ -71,10 +70,32 @@ describe.only(suiteName, () => {
     await cruft.create({ id: event.id, version: 0, data: event });
     const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _) => aggregate);
     const aggregate = await reduce(event);
-    expect(aggregate.version).to.equal(0);
+    expect(aggregate.version).toEqual(0);
   });
 
-  it('should store emitted events', async () => {
+  it('should permit one emitted event', async () => {
+    const aggregateId = nextId();
+    const event = {
+      id: nextId()
+    };
+    await cruft.create({ id: aggregateId, version: 0 });
+    const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _, emit) => {
+      emit({ id: 'a', version: 0 });
+      return aggregate;
+    });
+
+    const aggregate = await reduce(event);
+
+    expect(aggregate.lastEmitted).toEqual({
+      id: 'a',
+      previous: undefined,
+      data: {
+        id: 'a', version: 0
+      }
+    });
+  });
+
+  it('should not permit more than one emitted event', async () => {
     const aggregateId = nextId();
     const event = {
       id: nextId()
@@ -83,21 +104,13 @@ describe.only(suiteName, () => {
     const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _, emit) => {
       emit({ id: 'a', version: 0 });
       emit({ id: 'b', version: 0 });
-      emit({ id: 'c', version: 0 });
       return aggregate;
     });
 
-    await reduce(event);
-
-    await cruft.read('a');
-    await cruft.read('b');
-    await cruft.read('c');
-
-    const oobKey = 'd';
     try {
-      await cruft.read(oobKey);
+      await reduce(event);
     } catch (e) {
-      if (e.message !== `Key not found ${oobKey}`) {
+      if (e.message !== 'Currently emit can only be invoked once a.') {
         throw e;
       }
     }

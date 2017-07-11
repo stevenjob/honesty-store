@@ -10,7 +10,7 @@ export const reduce = <
   Aggregate extends AbstractItem,
   ReceivedEvent extends AbstractItem,
   EmittedEvent extends AbstractItem
->({ client, tableName }: Configuration) =>
+  >({ client, tableName }: Configuration) =>
   (
     aggregateIdSelector: (event: ReceivedEvent) => string,
     eventIdSelector: (event: ReceivedEvent) => string,
@@ -28,7 +28,10 @@ export const reduce = <
 
       const eventId = eventIdSelector(event);
 
-      const { lastReceived: previousLastReceived } = aggregate;
+      const {
+        lastReceived: previousLastReceived,
+        lastEmitted: previousLastEmitted
+      } = aggregate;
 
       if (previousLastReceived != null && previousLastReceived.id === eventId) {
         return aggregate;
@@ -58,19 +61,31 @@ export const reduce = <
         }
       }
 
-      const emittedEvents: EventItem[] = [];
-      const emit = (emittedEvent: EmittedEvent) => {
-        const previous = emittedEvents.length
-          ? emittedEvents[emittedEvents.length - 1]
-          : aggregate.lastEmitted;
+      if (previousLastEmitted != null) {
+        try {
+          await create<EventItem & { version: 0 }>({ client, tableName })(<EventItem & { version: 0 }>previousLastEmitted);
+        } catch (e) {
+          if (e.message !== `Item already exists ${previousLastEmitted.id}`) {
+            throw e;
+          }
+        }
+      }
 
-        emittedEvents.push({
+      let updatedLastEmitted: EventItem | null = null;
+
+      const emit = (emittedEvent: EmittedEvent) => {
+        if (updatedLastEmitted != null) {
+          throw new Error(`Currently emit can only be invoked once ${updatedLastEmitted.id}.`);
+        }
+
+        updatedLastEmitted = {
           id: emittedEvent.id,
           data: emittedEvent,
-          previous: previous && previous.id
-        });
+          previous: aggregate.lastEmitted && aggregate.lastEmitted.id
+        };
       };
-      const reducedAggregate = await Promise.resolve(reducer(aggregate, event, emit));
+
+      const reducedAggregate = await reducer(aggregate, event, emit);
 
       const updatedLastReceived: EventItem = {
         id: eventId,
@@ -78,17 +93,12 @@ export const reduce = <
         previous: previousLastReceived && previousLastReceived.id
       };
 
-      const storeEvent = (eventItem: EventItem) =>
-        create<EventItem & { version: number }>({ client, tableName })(<EventItem & { version: 0 }>eventItem);
-
-      await Promise.all(emittedEvents.map(storeEvent));
-
       const updatedAggregate = Object.assign(
         {},
         reducedAggregate,
         {
           lastReceived: updatedLastReceived,
-          lastEmitted: emittedEvents[emittedEvents.length - 1]
+          lastEmitted: updatedLastEmitted
         }
       );
 
