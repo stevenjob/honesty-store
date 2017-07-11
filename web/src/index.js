@@ -54,6 +54,8 @@ import { loadState, saveState } from './state';
 import registerServiceWorker from './registerServiceWorker';
 import BlogHonestyStoreIsGettingALotCheaper
   from './blog/honesty-store-is-getting-a-lot-cheaper';
+import BlogHonestyStoreIsTakingEarlyRetirement
+  from './blog/honesty-store-is-taking-early-retirement';
 import asyncComponent from './asyncComponent';
 
 const middlewares = [thunkMiddleware];
@@ -113,6 +115,10 @@ ReactDOM.render(
       <Route
         path="blog/2017/05/29/honesty-store-is-getting-a-lot-cheaper"
         component={BlogHonestyStoreIsGettingALotCheaper}
+      />
+      <Route
+        path="blog/2017/07/11/honesty-store-is-taking-early-retirement"
+        component={BlogHonestyStoreIsTakingEarlyRetirement}
       />
       <Route path="/" component={App} onEnter={initialiseWithParams}>
         <IndexRoute component={Home} />
