@@ -86,6 +86,14 @@ class RefundRequest extends React.Component {
                 onClick={() => this.handleRadioClick('stockExpired')}
               />
             </div>
+            <div className="py2 left-align">
+              <Radio
+                name="other"
+                value="other"
+                text="Other"
+                onClick={() => this.handleRadioClick('other')}
+              />
+            </div>
             <button
               type="button"
               className="btn btn-primary btn-big center mt2 h3"
