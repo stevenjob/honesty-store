@@ -27,7 +27,8 @@ const marketplaceFailure = error => {
 export const performMarketplace = ({
   description,
   totalPrice,
-  quantity
+  quantity,
+  storeCode
 }) => async (dispatch, getState) => {
   dispatch(marketplaceRequest());
 
@@ -36,6 +37,7 @@ export const performMarketplace = ({
       {
         url: '/api/v1/marketplace',
         body: {
+          storeCode,
           item: {
             description,
             totalPrice,

@@ -40,7 +40,7 @@ class MarketplaceItemAdd extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    const { performMarketplace } = this.props;
+    const { performMarketplace, storeCode } = this.props;
     const { description, totalPrice, quantity } = this.state;
 
     const validity = description.length && totalPrice.length && quantity.length
@@ -53,7 +53,8 @@ class MarketplaceItemAdd extends React.Component {
       performMarketplace({
         description,
         totalPrice,
-        quantity
+        quantity,
+        storeCode
       });
     }
   }
@@ -143,4 +144,8 @@ class MarketplaceItemAdd extends React.Component {
   }
 }
 
-export default connect(() => ({}), { performMarketplace })(MarketplaceItemAdd);
+const mapStateToProps = ({ store: { code } }) => ({ storeCode: code });
+
+export default connect(mapStateToProps, { performMarketplace })(
+  MarketplaceItemAdd
+);
