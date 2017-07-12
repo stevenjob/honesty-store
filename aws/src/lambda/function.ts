@@ -133,22 +133,30 @@ const permitLambdaCallFromApiGateway = async ({ func }: { func: Lambda.FunctionC
     }[];
   }
 
-  const policyString = await lambda.getPolicy({
-    FunctionName: func.FunctionArn
-  }).promise();
-  const policy = JSON.parse(policyString.Policy) as Policy;
+  let policyString;
+  try {
+    policyString  = await lambda.getPolicy({
+      FunctionName: func.FunctionArn
+    }).promise();
 
-  const removePromises = policy.Statement
-    .filter(({ Sid }) => Sid !== apiGatewaySid)
-    .map(({ Sid }) => lambda.removePermission({
-      FunctionName: func.FunctionArn,
-      StatementId: Sid
-    }).promise());
+    const policy = JSON.parse(policyString.Policy) as Policy;
 
-  await Promise.all(removePromises);
+    const removePromises = policy.Statement
+      .filter(({ Sid }) => Sid !== apiGatewaySid)
+      .map(({ Sid }) => lambda.removePermission({
+        FunctionName: func.FunctionArn,
+        StatementId: Sid
+      }).promise());
 
-  if (policy.Statement.some(({ Sid }) => Sid === apiGatewaySid)) {
-    return;
+    await Promise.all(removePromises);
+
+    if (policy.Statement.some(({ Sid }) => Sid === apiGatewaySid)) {
+      return;
+    }
+  } catch (e) {
+    if (e.code !== 'ResourceNotFoundException') {
+      throw e;
+    }
   }
 
   const permission = await lambda.addPermission({
