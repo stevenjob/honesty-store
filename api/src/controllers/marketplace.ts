@@ -15,32 +15,22 @@ export default (router) => {
 
       const adminUrl = `https://honesty.store/admin/listing/${storeCode}`;
 
-      const message = `A marketplace request has been made - if you approve of this, you can list the item(s) at ${adminUrl}.
-Replying to this email will send your message to the user who submitted the request.
+      const message =
+`A marketplace request has been made by ${user.emailAddress}.
+If you're happy, you can list the item at ${adminUrl}.
 
-See the below "Item" fields for more details.
+Here's what the submitted:
+Description: ${description}
+Total (£): ${totalPrice}
+Quantity: ${quantity}
 `;
 
       return await mailStoreAgent({
         key,
-        storeCode,
-        fromUser: user,
+        replyTo: user.emailAddress,
         subject,
         message,
-        fields:  [
-          {
-            title: 'Item-Description',
-            value: description
-          },
-          {
-            title: 'Item-Total (£)',
-            value: totalPrice
-          },
-          {
-            title: 'Item-Quantity',
-            value: quantity
-          }
-        ]
+        storeCode
       });
     });
 };
