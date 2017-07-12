@@ -115,7 +115,7 @@ const ensureLambda = async ({ name, timeout, handler, environment, dynamoAccess,
   }
 };
 
-const permitLambdaCallFromApiGateway = async ({ func }) => {
+const permitLambdaCallFromApiGateway = async ({ func }: { func: Lambda.FunctionConfiguration }) => {
   const lambda = new Lambda({ apiVersion: '2015-03-31' });
   const apiGatewaySid = 'apiGatewaySid';
 
