@@ -1,5 +1,4 @@
-import isEmail = require('validator/lib/isEmail');
-
+import { assertValidEmailAddress } from '@honesty-store/service/lib/assert';
 import { sendEmail } from '@honesty-store/service/lib/email';
 import { Key } from '@honesty-store/service/lib/key';
 import { getStoreFromCode, getStoreFromId } from '@honesty-store/store';
@@ -35,8 +34,10 @@ export const mailStoreAgent = async (
 };
 
 const sendSupportMessage = async ({ key, user, message: userMessage, enteredEmailAddress, userAgent }) => {
+  assertValidEmailAddress(enteredEmailAddress);
+
   const validatedUserAgent = userAgent.substr(0, 250);
-  const validatedEmailAddress = user.emailAddress || (enteredEmailAddress && isEmail(enteredEmailAddress) ? enteredEmailAddress : null);
+  const validatedEmailAddress = user.emailAddress || enteredEmailAddress;
   const defaultStore = (await getStoreFromId(key, user.defaultStoreId)).code;
 
   const message =
