@@ -1,5 +1,5 @@
 import { authenticateAccessToken } from '../middleware/authenticate';
-import { sendSlackUserMessage } from './support';
+import { mailStoreAgent } from './support';
 
 export default (router) => {
   router.post(
@@ -8,15 +8,16 @@ export default (router) => {
     async (
       key,
       _params,
-      { item: { description, totalPrice, quantity } },
+      { item: { description, totalPrice, quantity }, storeCode },
       { user }
     ) => {
-      const message = 'Marketplace request';
+      const subject = 'Marketplace Request';
 
-      return await sendSlackUserMessage({
+      return await mailStoreAgent({
         key,
-        user,
-        message,
+        storeCode,
+        fromUser: user,
+        subject,
         fields:  [
           {
             title: 'Item-Description',
