@@ -58,6 +58,7 @@ ${details}
 
   return await sendEmail({
     to: [agentEmailAddress],
+    replyTo: [validatedEmailAddress],
     subject,
     message: concatenatedMessage
   });
