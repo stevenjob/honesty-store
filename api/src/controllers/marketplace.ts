@@ -8,7 +8,7 @@ export default (router) => {
     async (
       key,
       _params,
-      { item: { description, totalPrice, quantity }, storeCode },
+      { item: { name, qualifier, totalPaid, quantity }, storeCode },
       { user }
     ) => {
       const subject = 'Marketplace Request';
@@ -20,8 +20,9 @@ export default (router) => {
 If you're happy, you can list the item at ${adminUrl}.
 
 Here's what the submitted:
-Description: ${description}
-Total (£): ${totalPrice}
+Name: ${name}
+Qualifier: ${qualifier || ''}
+Total paid (£): ${totalPaid}
 Quantity: ${quantity}
 `;
 
