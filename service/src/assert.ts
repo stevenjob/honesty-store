@@ -1,3 +1,4 @@
+import isEmail from 'validator/lib/isEmail';
 import isUUID = require('validator/lib/isUUID');
 
 export const createAssertValidUuid = (name) =>
@@ -43,6 +44,12 @@ export const assertOptional = (validator: Validator) => {
       validator(key, value);
     }
   };
+};
+
+export const assertValidEmailAddress = (emailAddress) => {
+  if (emailAddress == null || !isEmail(emailAddress)) {
+    throw new Error(`Invalid emailAddress ${emailAddress}`);
+  }
 };
 
 export type Validator = (key: string, value: any) => void;

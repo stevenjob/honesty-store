@@ -1,4 +1,4 @@
-import { createAssertValidUuid } from '@honesty-store/service/lib/assert';
+import { assertValidEmailAddress, createAssertValidUuid } from '@honesty-store/service/lib/assert';
 import { sendEmail } from '@honesty-store/service/lib/email';
 import { CodedError } from '@honesty-store/service/lib/error';
 import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
@@ -8,7 +8,6 @@ import { getStoreFromId } from '@honesty-store/store';
 import { createAccount } from '@honesty-store/transaction';
 import cruftDDB from 'cruft-ddb';
 import { v4 as uuid } from 'uuid';
-import isEmail = require('validator/lib/isEmail');
 import { User, UserProfile, UserWithAccessAndRefreshTokens, UserWithAccessToken } from './client';
 import { signAccessToken, signRefreshToken, verifyAccessToken, verifyMagicLinkToken, verifyRefreshToken } from './token';
 
@@ -24,12 +23,6 @@ interface InternalUser extends User {
 const assertValidUserId = createAssertValidUuid('userId');
 const assertValidRefreshToken = createAssertValidUuid('refreshToken');
 const assertValidDefaultStoreId = createAssertValidUuid('storeId');
-
-const assertValidEmailAddress = (emailAddress) => {
-  if (emailAddress == null || !isEmail(emailAddress)) {
-    throw new Error(`Invalid emailAddress ${emailAddress}`);
-  }
-};
 
 const assertValidUserProfile = (userProfile: UserProfile) => {
   if (Object.keys(userProfile).some(key => ['defaultStoreId', 'emailAddress'].indexOf(key) === -1)) {
