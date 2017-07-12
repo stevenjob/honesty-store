@@ -44,7 +44,7 @@ export const mailStoreAgent = async ({ key, storeCode, fromUser, subject, messag
     },
     {
       title: 'Default Store',
-      value: fromUser.defaultStoreId
+      value: (await getStoreFromId(key, fromUser.defaultStoreId)).code
     },
     ...fields
   ].reduce((msg, { title, value }) => `${msg}${title}: ${value}\n`, '');
