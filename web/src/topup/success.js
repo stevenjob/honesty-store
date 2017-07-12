@@ -8,7 +8,11 @@ import { determinePrepay } from '../balance/prepay';
 export const TopupSuccess = ({ balance, isPrepay }) => (
   <Success
     title={<span>Your balance is now <Currency amount={balance} /></span>}
-    subtitle={isPrepay ? "Thank you for your top up!" : "Thank you for updating your card!"}
+    subtitle={
+      isPrepay
+        ? 'Thank you for your top up!'
+        : 'Thank you for updating your card!'
+    }
     onClick={() => history.replace(`/profile/history`)}
   />
 );

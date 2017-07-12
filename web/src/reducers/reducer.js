@@ -255,7 +255,9 @@ export default (state, action) => {
           ...state.user,
           balance,
           cardDetails,
-          transactions: transaction != null ? [transaction, ...user.transactions] : user.transactions
+          transactions: transaction != null
+            ? [transaction, ...user.transactions]
+            : user.transactions
         }
       };
       return completionState('topup', updatedStateProps, state);
