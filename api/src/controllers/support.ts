@@ -13,6 +13,7 @@ export interface MailStoreAgentParams {
   fromUser: User;
 
   subject: string;
+  message: string;
   fromEmailAddress?: string;
 
   fields: {
@@ -21,7 +22,7 @@ export interface MailStoreAgentParams {
   }[];
 }
 
-export const mailStoreAgent = async ({ key, storeCode, fromUser, subject, fields, fromEmailAddress }: MailStoreAgentParams) => {
+export const mailStoreAgent = async ({ key, storeCode, fromUser, subject, message, fields, fromEmailAddress }: MailStoreAgentParams) => {
   const validatedEmailAddress = fromUser.emailAddress || (fromEmailAddress && isEmail(fromEmailAddress) ? fromEmailAddress : null);
   const prefixedEmailAddress = `${userRegistered(fromUser) ? '' : '(unregistered) '}${validatedEmailAddress}`;
 
@@ -32,9 +33,11 @@ export const mailStoreAgent = async ({ key, storeCode, fromUser, subject, fields
     throw new Error('agent doesn\'t have an email address');
   }
 
-  const initialMessage = `honesty.store message from ${prefixedEmailAddress}\n`;
-
-  const message = [
+  const details = [
+    {
+      title: 'User Email',
+      value: prefixedEmailAddress
+    },
     {
       title: 'User ID',
       value: fromUser.id
@@ -43,17 +46,20 @@ export const mailStoreAgent = async ({ key, storeCode, fromUser, subject, fields
       title: 'Default Store',
       value: fromUser.defaultStoreId
     },
-    {
-      title: 'User Email',
-      value: prefixedEmailAddress
-    },
     ...fields
-  ].reduce((msg, { title, value }) => `${msg}\n${title}: ${value}`, initialMessage);
+  ].reduce((msg, { title, value }) => `${msg}${title}: ${value}\n`, '');
+
+  const concatenatedMessage = `honesty.store message from ${prefixedEmailAddress}\n
+
+${message}
+
+${details}
+`;
 
   return await sendEmail({
     to: [agentEmailAddress],
     subject,
-    message
+    message: concatenatedMessage
   });
 };
 
@@ -67,16 +73,11 @@ const sendSupportMessage = async ({ key, user, message, fromEmailAddress, userAg
     fromUser: user,
     subject: 'Support Message',
     fromEmailAddress,
-    fields: [
-      {
-        title: 'User Agent',
-        value: validatedUserAgent
-      },
-      {
-        title: 'Message',
-        value: message
-      }
-    ]
+    message,
+    fields: [{
+      title: 'User Agent',
+      value: validatedUserAgent
+    }]
   });
 };
 
