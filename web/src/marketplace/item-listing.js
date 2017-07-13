@@ -1,5 +1,12 @@
 import React from 'react';
 import safeLookupItemImage from '../item/safeLookupItemImage';
+import Currency from '../format/Currency';
+
+const ListingBreakdown = ({ items, itemRenderer }) => (
+  <ul className="gray list-reset my0">
+    {items.map((item, index, arr) => itemRenderer(item, index, arr.length))}
+  </ul>
+);
 
 export default ({
   item: {
@@ -9,14 +16,30 @@ export default ({
     purchaseCount,
     refundCount,
     listCount,
-    count: availableCount
+    count: availableCount,
+    revenue
   }
 }) => {
   const soldCount = purchaseCount - refundCount;
-  const soldStockPercentage = soldCount / listCount * 100;
-  const unaccountedStockPercentage =
-    (listCount - availableCount - soldCount) / listCount * 100;
-
+  const unknownCount = listCount - availableCount - soldCount;
+  const leftCount = listCount - unknownCount - soldCount;
+  const items = [
+    {
+      title: 'left',
+      count: leftCount,
+      color: 'navy'
+    },
+    {
+      title: 'unknown',
+      count: unknownCount,
+      color: 'aqua'
+    },
+    {
+      title: 'sold',
+      count: soldCount,
+      color: 'gray'
+    }
+  ].filter(({ count }) => count > 0);
   return (
     <div className="flex p2">
       <div className="col-3">
@@ -26,9 +49,7 @@ export default ({
             backgroundImage: `url(${safeLookupItemImage(image)})`,
             paddingBottom: '100%'
           }}
-        >
-          {'\u00a0'}
-        </div>
+        />
       </div>
       <div className="ml2 flex flex-column flex-auto justify-center">
         <div className="flex justify-between">
@@ -42,27 +63,42 @@ export default ({
               </p>}
           </div>
           <div className="flex flex-column justify-center items-end">
-            <h4 className="navy regular my0">
-              <span className="h3 bold">{purchaseCount - refundCount}</span>
-              /
-              {listCount}
-            </h4>
-            <p className="my0 gray">sold</p>
+            <h3 className="navy regular my0"><Currency amount={revenue} /></h3>
+            <p className="my0 gray">revenue</p>
           </div>
         </div>
         <div
-          className="bg-silver border border-gray flex rounded mt2"
-          style={{ height: '0.5rem' }}
+          className="bg-gray flex rounded my2"
+          style={{
+            height: '0.5rem',
+            backgroundColor: '#e6e6e6',
+            overflow: 'hidden'
+          }}
         >
           <div
-            className="inline-block col-2 bg-aqua"
-            style={{ width: `${soldStockPercentage}%` }}
+            className="inline-block col-2 bg-navy"
+            style={{
+              width: `${(listCount - unknownCount - soldCount) / listCount * 100}%`
+            }}
           />
           <div
-            className="inline-block col-2 bg-yellow"
-            style={{ width: `${unaccountedStockPercentage}%` }}
+            className="inline-block col-2 bg-aqua"
+            style={{ width: `${unknownCount / listCount * 100}%` }}
           />
         </div>
+        <ListingBreakdown
+          items={items}
+          itemRenderer={({ title, count, color }, index, length) => (
+            <li key={title} className="inline-block">
+              <span className={color}>
+                {count}
+                {'\u00a0'}
+                {title}
+              </span>
+              {index < length - 1 && <span>{'\u00a0'}/{'\u00a0'}</span>}
+            </li>
+          )}
+        />
       </div>
     </div>
   );
