@@ -5,6 +5,8 @@ import { getStoreFromCode, getStoreFromId } from '@honesty-store/store';
 import { getUser, userRegistered } from '@honesty-store/user';
 import { authenticateAccessToken } from '../middleware/authenticate';
 
+const emailStoreAgent = false;
+
 export interface MailStoreAgentParams {
   key: Key;
 
@@ -18,11 +20,19 @@ export interface MailStoreAgentParams {
 export const mailStoreAgent = async (
   { key, replyTo, subject, message, storeCode }: MailStoreAgentParams
 ) => {
-  const { agentId } = await getStoreFromCode(key, storeCode);
-  const { emailAddress: agentEmailAddress } = await getUser(key, agentId);
+  let agentEmailAddress: string;
 
-  if (agentEmailAddress == null) {
-    throw new Error('agent doesn\'t have an email address');
+  if (emailStoreAgent) {
+    const { agentId } = await getStoreFromCode(key, storeCode);
+    const { emailAddress } = await getUser(key, agentId);
+
+    if (emailAddress == null) {
+      throw new Error('agent doesn\'t have an email address');
+    }
+
+    agentEmailAddress = emailAddress;
+  } else {
+    agentEmailAddress = 'support@honesty.store';
   }
 
   return await sendEmail({
