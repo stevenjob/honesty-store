@@ -15,6 +15,7 @@ export interface StoreItem {
   listCount?: number;
   refundCount?: number;
   purchaseCount?: number;
+  revenue?: number;
 }
 
 export interface PriceBreakdown {
@@ -64,7 +65,8 @@ export const storeItems = async (key, storeId, userId): Promise<StoreItem[]> => 
         ? {
           listCount: item.listCount,
           purchaseCount: item.purchaseCount,
-          refundCount: item.refundCount
+          refundCount: item.refundCount,
+          revenue: item.revenue
         }
         : {}
       )
