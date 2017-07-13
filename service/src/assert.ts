@@ -1,4 +1,4 @@
-import isEmail from 'validator/lib/isEmail';
+import isEmail = require('validator/lib/isEmail');
 import isUUID = require('validator/lib/isUUID');
 
 export const createAssertValidUuid = (name) =>
