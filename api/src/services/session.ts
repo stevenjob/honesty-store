@@ -1,4 +1,4 @@
-import { getStoreFromId } from '@honesty-store/store';
+import { getStoreFromId, StoreRevenue } from '@honesty-store/store';
 import { getUserSurveys } from '@honesty-store/survey';
 import { CardDetails, getCardDetails } from '@honesty-store/topup';
 import { AUTO_REFUND_PERIOD, Transaction } from '@honesty-store/transaction';
@@ -16,9 +16,14 @@ export interface UserSessionData {
   creditLimit: number;
   id: string;
 }
+export interface UserRevenue {
+  startInclusive: number;
+  total: number;
+}
 export interface StoreSessionData {
   code: string;
   items: StoreItem[];
+  userRevenue: UserRevenue[];
 }
 export interface SessionData {
   user: UserSessionData;
@@ -60,17 +65,35 @@ const getUserSessionData = async (key, user): Promise<UserSessionData> => {
   };
 };
 
+const getRecentUserRevenue = (storeRevenue: StoreRevenue[], userId: string): UserRevenue[] => {
+  const existingUserRevenue: UserRevenue[] = storeRevenue
+    .map(({ startInclusive, seller }) => ({ startInclusive, total: seller[userId] }));
+
+  const today = new Date();
+  const expectedDates = [
+    Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1),
+    Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - 1, 1),
+    Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - 2, 1)
+  ];
+
+  return expectedDates.map((timestamp) => {
+    return existingUserRevenue.find(({ startInclusive }) => startInclusive === timestamp) ||
+      ({ startInclusive: timestamp, total: 0 });
+  });
+};
+
 const getStoreSessionData = async (key, user): Promise<StoreSessionData> => {
   const { defaultStoreId, id: userId } = user;
 
-  const [{ code }, items] = await Promise.all([
+  const [{ code, revenue }, items] = await Promise.all([
     getStoreFromId(key, defaultStoreId),
     storeItems(key, defaultStoreId, userId)
   ]);
 
   return {
     items,
-    code
+    code,
+    userRevenue: getRecentUserRevenue(revenue, userId)
   };
 };
 
