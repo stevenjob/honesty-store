@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Currency from '../../format/Currency';
+import monthFromDate from '../../format/date';
 import ListingRow from './listing-row';
 
 const ItemListings = ({
@@ -74,21 +75,6 @@ const ItemListings = ({
   </div>
 );
 
-const MONTHS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec'
-];
-
 const mapStateToProps = ({
   admin: { store: { items = [], revenue = [] } = {} }
 }) => {
@@ -104,7 +90,7 @@ const mapStateToProps = ({
       value: revenue.map(month => {
         const date = new Date(month.startInclusive);
         return {
-          label: `${MONTHS[date.getUTCMonth()]} ${date.getUTCFullYear()}`,
+          label: `${monthFromDate(date)} ${date.getUTCFullYear()}`,
           value: month.seller[sellerId] || 0,
           total: month.total
         };
