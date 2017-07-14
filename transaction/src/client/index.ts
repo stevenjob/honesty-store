@@ -97,13 +97,13 @@ export const assertValidTransaction = ({ type, amount, data, id, other, next, le
     case 'topup':
     case 'refund':
     case 'credit':
-      if (amount <= 0) {
+      if (amount < 0) {
         throw new Error(`Invalid transaction amount for type '${type}': ${amount}`);
       }
       break;
     case 'debit':
     case 'purchase':
-      if (amount >= 0) {
+      if (amount > 0) {
         throw new Error(`Invalid transaction amount for type '${type}': ${amount}`);
       }
       break;
