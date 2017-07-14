@@ -1,17 +1,26 @@
-import cruftDDB, { EnhancedItem } from '@honesty-store/cruft';
+import cruftDDB from '@honesty-store/cruft';
 import { CodedError } from '@honesty-store/service/lib/error';
-import { Key } from '@honesty-store/service/lib/key';
+import { createServiceKey } from '@honesty-store/service/lib/key';
 import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
-import { error, info } from '@honesty-store/service/lib/log';
+import { error } from '@honesty-store/service/lib/log';
 import { assertBalanceWithinLimit, createTransaction } from '@honesty-store/transaction';
-import { config } from 'aws-sdk';
 import * as stripeFactory from 'stripe';
 import { v4 as uuid } from 'uuid';
 import { userErrorFromStripeError } from './errors';
 
-import { CardDetails, Stripe, TopupAccount, TopupRequest, TopupResponse } from './client';
+import {
+  CardDetails,
+  Stripe,
+  TopupAccount,
+  TopupAttempted,
+  TopupCardDetailsChanged,
+  TopupEvent,
+  TopupRequest,
+  TopupResponse
+} from './client';
 
 import {
+  assertNever,
   assertObject,
   assertOptional,
   assertPositiveInteger,
@@ -26,9 +35,7 @@ const fixedTopupAmount = 500; // £5
 const stripeTest = stripeFactory(process.env.TEST_STRIPE_KEY);
 const stripeProd = stripeFactory(process.env.LIVE_STRIPE_KEY);
 
-config.region = process.env.AWS_REGION;
-
-const { create, read, update } = cruftDDB<TopupAccount>({
+const { create, read, reduce } = cruftDDB<TopupAccount>({
   tableName: process.env.TABLE_NAME,
   limit: 100
 });
@@ -36,20 +43,15 @@ const { create, read, update } = cruftDDB<TopupAccount>({
 const assertValidAccountId = createAssertValidUuid('accountId');
 const assertValidUserId = createAssertValidUuid('userId');
 
-const assertValidStripeDetails = (topupAccount: TopupAccount) => {
+const assertValidStripeDetails = ({ id, stripe }: TopupAccount) => {
   const validator = createAssertValidObject<Stripe>({
     customer: assertObject,
     nextChargeToken: assertValidUuid
   });
-
-  if (topupAccount.stripe[0]) {
-    try {
-      validator(topupAccount.stripe[0]);
-    } catch (_) {
-      throw new CodedError(
-        'NoCardDetailsPresent',
-        `No stripe details registered for ${topupAccount.test ? 'test ' : ''}account ${topupAccount.id}`);
-    }
+  try {
+    validator(stripe);
+  } catch (_) {
+    throw new CodedError('NoCardDetailsPresent', `No stripe details registered for account ${id}`);
   }
 };
 
@@ -64,6 +66,7 @@ const assertValidTopupAmount = (amount) => {
 };
 
 const extractCardDetails = (topupAccount: TopupAccount): CardDetails => {
+  assertValidStripeDetails(topupAccount);
   const { brand, exp_month, exp_year, last4 } = topupAccount.stripe.customer.sources.data[0];
   return {
     brand,
@@ -77,158 +80,100 @@ const stripeForUser = ({ test }) => {
   return test ? stripeTest : stripeProd;
 };
 
-const getOrCreate = async ({ key, accountId, userId }): Promise<EnhancedItem<TopupAccount>> => {
-  assertValidAccountId(accountId);
-  assertValidUserId(userId);
-
-  try {
-    return await read(accountId);
-  } catch (e) {
-    if (e.message !== `Key not found ${accountId}`) {
-      throw e;
+const reducer = reduce<TopupEvent>(
+  event => {
+    switch (event.type) {
+      case 'topup-card-details-change':
+      case 'topup-attempt':
+        return event.id;
+      default:
+        return assertNever(event);
     }
+  },
+  event => event.id,
+  async (topupAccount, event, _emit) => {
+    const key = createServiceKey({ service: 'topup' });
 
-    info(key, 'TopupAccount lookup failed, creating account', e);
-    return create({
-      id: accountId,
-      userId,
-      version: 0,
-      test: false
-    });
-  }
-};
+    switch (event.type) {
+      case 'topup-card-details-change': {
+        const { stripeToken } = event;
+        const { id, stripe, stripeHistory: previousStripeHistory } = topupAccount;
 
-const topupExistingAccount = async (key, topupAccount: EnhancedItem<TopupAccount>, amount: number) => {
-  assertValidStripeDetails(topupAccount);
+        const description = stripe == null ?
+          `registration for ${id}` : `adding new card for ${id}`;
 
-  await assertBalanceWithinLimit({ key, accountId: topupAccount.id, amount });
+        const stripeHistory = stripe == null ?
+          [] : [...previousStripeHistory, stripe];
 
-  let charge = null;
+        const customer = await stripeForUser(topupAccount)
+          .customers
+          .create({
+            source: stripeToken,
+            description,
+            metadata: {
+              accountId: id
+            }
+          });
 
-  try {
-    charge = await stripeForUser(topupAccount).charges.create(
-      {
-        amount,
-        currency: 'gbp',
-        customer: topupAccount.stripe.customer.id,
-        description: `topup for ${topupAccount.id}`,
-        metadata: {
-          accountId: topupAccount.id
-        },
-        expand: ['balance_transaction']
-      },
-      {
-        idempotency_key: topupAccount.stripe.nextChargeToken
+        return {
+          ...topupAccount,
+          stripe: {
+            customer,
+            nextChargeToken: uuid()
+          },
+          stripeHistory
+        };
       }
-    );
-  } catch (e) {
-    let detail = '';
+      case 'topup-attempt': {
+        const { id, stripe } = topupAccount;
+        const { amount } = event;
 
-    if (e.message === 'Must provide source or customer.') {
-      /* Note to future devs: this error appears to be a bug with stripe's API.
-       *
-       * We've correctly provided a customer, so the error seems odd. I
-       * believe it's to do with the idempotency_key being incorrect, so
-       * that's the first place to start looking. */
-      detail = ' (from topup: or the idempotency_key has already been used)';
-    }
+        assertValidStripeDetails(topupAccount);
+        await assertBalanceWithinLimit({ key, accountId: id, amount });
 
-    error(key, `couldn\'t create stripe charge${detail}`, e);
+        const charge = await stripeForUser(topupAccount).charges.create(
+          {
+            amount,
+            currency: 'gbp',
+            customer: stripe.customer.id,
+            description: `topup for ${id}`,
+            metadata: {
+              accountId: id
+            },
+            expand: ['balance_transaction']
+          },
+          {
+            idempotency_key: stripe.nextChargeToken
+          }
+        );
 
-    throw userErrorFromStripeError(e);
-  }
+        const topup = await createTransaction(key, id, {
+          type: 'topup',
+          amount,
+          data: {
+            stripeFee: String(charge.balance_transaction.fee),
+            chargeId: String(charge.id),
+            topupCustomerId: stripe.customer.id
+          }
+        });
 
-  const transactionBody = await createTransaction(key, topupAccount.id, {
-    type: 'topup',
-    amount,
-    data: {
-      stripeFee: String(charge.balance_transaction.fee),
-      chargeId: String(charge.id),
-      topupCustomerId: topupAccount.stripe.customer.id
+        return {
+          ...topupAccount,
+          stripe: {
+            ...stripe,
+            nextChargeToken: uuid()
+          },
+          lastTopup: topup.transaction
+        };
+      }
+      default:
+        return assertNever(event);
     }
   });
-
-  topupAccount.stripe.nextChargeToken = uuid();
-  await update(topupAccount);
-
-  return transactionBody;
-};
-
-const generateStripeCustomerFromStripeToken = async (
-  key, topupAccount: EnhancedItem<TopupAccount>, stripeToken
-): Promise<EnhancedItem<TopupAccount>> => {
-  const { id, stripe, stripeHistory: previousStripeHistory, ...other } = topupAccount;
-
-  const description = stripe == null ?
-    `registration for ${id}` : `adding new card for ${id}`;
-
-  const stripeHistory = stripe == null ?
-    [] : [...previousStripeHistory, stripe];
-
-  let customer;
-
-  try {
-    customer = await stripeForUser(topupAccount)
-      .customers
-      .create({
-        source: stripeToken,
-        description,
-        metadata: {
-          accountId: id
-        }
-      });
-  } catch (e) {
-    error(key, `couldn\'t create stripe customer`, { e, topupAccount });
-
-    throw userErrorFromStripeError(e);
-  }
-
-  return await update({
-    id,
-    ...other,
-    stripe: {
-      customer,
-      nextChargeToken: uuid()
-    },
-    stripeHistory
-  });
-};
-
-
-const attemptTopup = async (
-  { key, accountId, userId, amount, stripeToken }: TopupRequest & { key: Key }
-): Promise<TopupResponse> => {
-  assertValidTopupAmount(amount);
-
-  let topupAccount = await getOrCreate({ key, accountId, userId });
-
-  if (stripeToken) {
-    topupAccount = await generateStripeCustomerFromStripeToken(key, topupAccount, stripeToken);
-  }
-
-  const cardDetails = extractCardDetails(topupAccount);
-
-  if (amount === 0) {
-    return { cardDetails };
-  }
-
-  const topupTransaction = await topupExistingAccount(key, topupAccount, amount);
-
-  return {
-    cardDetails,
-    ...topupTransaction
-  };
-};
-
-const getCardDetails = async (id) => {
-  const topupAccount: TopupAccount = await read(id);
-  assertValidStripeDetails(topupAccount);
-  return extractCardDetails(topupAccount);
-};
 
 export const router: LambdaRouter = lambdaRouter('topup', 1);
 
-router.post(
+router.post<TopupRequest, TopupResponse>(
   '/',
   async (key, { }, { accountId, userId, amount: dirtyAmount, stripeToken }) => {
     const amount = Number(dirtyAmount);
@@ -237,15 +182,80 @@ router.post(
     assertValidUserId(userId);
     assertPositiveInteger('amount', amount);
     assertOptional(assertValidString)('stripeToken', stripeToken);
+    assertValidTopupAmount(amount);
 
-    return await attemptTopup({ key, accountId, userId, amount, stripeToken });
+    let topupAccount = null;
+
+    if (stripeToken != null) {
+      const event: TopupCardDetailsChanged = {
+        id: uuid(),
+        type: 'topup-card-details-change',
+        userId,
+        accountId,
+        stripeToken
+      };
+      try {
+        try {
+          topupAccount = await reducer(event);
+        } catch (e) {
+          if (e.message !== `Key not found ${event.id}`) {
+            throw e;
+          }
+          await create({
+            id: accountId,
+            userId,
+            version: 0,
+            test: false
+          });
+          topupAccount = await reducer(event);
+        }
+      } catch (e) {
+        error(key, `couldn't create stripe customer`, e);
+        throw userErrorFromStripeError(e);
+      }
+    }
+
+    if (amount > 0) {
+      const event: TopupAttempted = {
+        id: uuid(),
+        type: 'topup-attempt',
+        userId,
+        accountId,
+        amount
+      };
+      try {
+        topupAccount = await reducer(event);
+      } catch (e) {
+        let detail = '';
+        if (e.message === 'Must provide source or customer.') {
+          /* Note to future devs: this error appears to be a bug with stripe's API.
+           *
+           * We've correctly provided a customer, so the error seems odd. I
+           * believe it's to do with the idempotency_key being incorrect, so
+           * that's the first place to start looking. */
+          detail = ' (from topup: or the idempotency_key has already been used)';
+        }
+        error(key, `couldn't create stripe charge${detail}`, e);
+        throw userErrorFromStripeError(e);
+      }
+    }
+
+    if (topupAccount == null) {
+      throw new Error('Nothing to do, invalid request');
+    }
+
+    return {
+      cardDetails: extractCardDetails(topupAccount),
+      ...(topupAccount.lastTopup || {})
+    };
+
   }
 );
 
-router.get(
+router.get<CardDetails>(
   '/:id/cardDetails',
   async (_key, { id }) => {
     assertValidAccountId(id);
-    return await getCardDetails(id);
+    return extractCardDetails(await read(id));
   }
 );

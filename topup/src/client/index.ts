@@ -34,6 +34,24 @@ export type TopupResponse = {
   cardDetails: CardDetails;
 } & Partial<TransactionAndBalance>;
 
+export interface TopupCardDetailsChanged {
+  id: string;
+  type: 'topup-card-details-change';
+  accountId: string;
+  userId: string;
+  stripeToken: string;
+}
+
+export interface TopupAttempted {
+  id: string;
+  type: 'topup-attempt';
+  accountId: string;
+  userId: string;
+  amount: number;
+}
+
+export type TopupEvent = TopupCardDetailsChanged | TopupAttempted;
+
 const { get, post } = fetch('topup');
 
 export const createTopup = (key, request: TopupRequest) =>
