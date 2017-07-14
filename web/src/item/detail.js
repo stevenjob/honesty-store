@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import history from '../history';
 import { BackToPage } from '../chrome/link';
 import { performPurchase } from '../actions/purchase';
+import Currency from '../format/Currency';
 import { performUnlikeItem, performLikeItem } from '../actions/like-item';
 import isRegistered from '../reducers/is-registered-user';
 import isLikedItem from '../reducers/is-liked-item';
@@ -62,13 +63,13 @@ const ItemDetail = ({
 
   const registeredPurchaseButton = (
     <Link className={buttonClasses} onClick={() => onClick(1)}>
-      Pay
+      Pay <Currency amount={total} />
     </Link>
   );
 
   const unregisteredPurchaseButton = (
     <Link className={buttonClasses} to={`/register/${id}`}>
-      Pay
+      Pay <Currency amount={total} />
     </Link>
   );
 
