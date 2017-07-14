@@ -13,7 +13,7 @@ const TransactionHistory = ({ transactions, balance }) => (
     <List
       data={transactions}
       itemRenderer={itemRenderer}
-      className="border-top left-align mxn2 mt1"
+      className="left-align mxn2 mt1"
     />
   </Full>
 );

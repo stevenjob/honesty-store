@@ -10,7 +10,7 @@ import ItemListing from './item-listing';
 const MonthyRevenue = ({ month, total }) => (
   <div>
     <h2 className="navy my0">£{formatAny(total)}</h2>
-    <h3 className="gray regular my0 center">{month}</h3>
+    <h4 className="gray regular my0 center">{month}</h4>
   </div>
 );
 
