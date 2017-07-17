@@ -5,39 +5,18 @@ import { performOutOfStock } from '../actions/out-of-stock';
 import Full from '../layout/full';
 import { BackToPage } from '../chrome/link';
 import isLikedItem from '../reducers/is-liked-item';
+import { StockLevel } from './stocklevel';
 
-export const Report = ({ itemId }) => (
-  <Link to={`/help/item/${itemId}`}>Report a problem</Link>
+export const Report = ({ itemId, children }) => (
+  <Link to={`/help/item/${itemId}`}>
+    {children}
+  </Link>
 );
-
-const countRating = count => {
-  if (count <= 5) {
-    return {
-      desc: 'Low',
-      colour: 'bg-red',
-      percentage: 17
-    };
-  }
-  if (count <= 10) {
-    return {
-      desc: 'Medium',
-      colour: 'bg-yellow',
-      percentage: 50
-    };
-  }
-  return {
-    desc: 'High',
-    colour: 'bg-aqua',
-    percentage: 90
-  };
-};
 
 const OutOfStockInternal = ({
   item: { id: itemId, name, isLiked, count },
   performOutOfStock
 }) => {
-  const { desc, colour, percentage } = countRating(count);
-
   return (
     <Full left={<BackToPage path={`/item/${itemId}`} />}>
       <h1>
@@ -46,22 +25,8 @@ const OutOfStockInternal = ({
       <h2>
         {name}
       </h2>
-      <p>
-        Stock Level: <b>{desc}</b>
-      </p>
-      <div
-        className="bg-lightgray flex rounded mt2 mb3 mx-auto col-2"
-        style={{
-          height: '0.5rem',
-          overflow: 'hidden'
-        }}
-      >
-        <div
-          className={`inline-block col-2 ${colour}`}
-          style={{
-            width: `${percentage}%`
-          }}
-        />
+      <div className="mb3">
+        <StockLevel count={count} />
       </div>
       <p>
         We estimate stock levels by keeping track of purchases, but it doesn't always work out.
@@ -77,7 +42,9 @@ const OutOfStockInternal = ({
           Mark as out of stock
         </Link>
       </div>
-      <Report itemId={itemId} />
+      <Report itemId={itemId}>
+        Report a problem
+      </Report>
     </Full>
   );
 };
@@ -97,8 +64,6 @@ const mapStateToProps = (
 };
 
 const mapDispatchToProps = { performOutOfStock };
-export const OutOfStock = connect(mapStateToProps, mapDispatchToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
   OutOfStockInternal
 );
-
-export default OutOfStock;

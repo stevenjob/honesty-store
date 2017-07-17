@@ -10,7 +10,7 @@ import isRegistered from '../reducers/is-registered-user';
 import isLikedItem from '../reducers/is-liked-item';
 import safeLookupItemImage from './safeLookupItemImage';
 import Full from '../layout/full';
-import Breakdown from './breakdown';
+import { StockLevel } from './stocklevel';
 import Like from './like';
 import { Report } from './out-of-stock';
 
@@ -81,7 +81,7 @@ const ItemDetail = ({
       right={<Like isLiked={isLiked} onClick={handleLikeOrUnlikeClick} />}
     >
       {id != null &&
-        <div>
+        <div className="justify-between">
           <h1 className="mt1 mb0">{name}</h1>
           {qualifier &&
             <h3 className="mt0 aqua regular">
@@ -102,22 +102,22 @@ const ItemDetail = ({
           <div className="my3">
             {registered ? registeredPurchaseButton : unregisteredPurchaseButton}
           </div>
+          <div className="gray mb2">
+            Your balance will be <Currency amount={calculateBalanceRemaining(1)} />
+          </div>
           {notes && <p>{notes}</p>}
-          <ul className="list-reset">
-            <li>Remaining: <strong>{count}</strong></li>
-          </ul>
-          <div>
+          <div className="mt4 mb2">
+            <StockLevel count={count} />
+          </div>
+          <div className="mt0">
             {count <= 0
               ? <Depleted registered={registered} />
               : registered ? <OutOfStockLink itemId={id} /> : null}
           </div>
-          <div>
-            <h4 className="mt3">Price Breakdown</h4>
-            <p>Its journey to you</p>
-            <Breakdown breakdown={breakdown} isMarketplace={isMarketplace} />
-          </div>
           <div className="mt3 mb1">
-            <Report itemId={id} />
+            <Report itemId={id}>
+              Spotted a problem with this product?
+            </Report>
           </div>
         </div>}
     </Full>
