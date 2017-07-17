@@ -10,14 +10,23 @@ export const Report = ({ itemId }) => (
   <Link to={`/help/item/${itemId}`}>Report a problem</Link>
 );
 
-const percentageAsString = percentage => {
+const percentageRating = percentage => {
   if (percentage <= 0.3) {
-    return 'Low';
+    return {
+      desc: 'Low',
+      colour: 'bg-red'
+    };
   }
   if (percentage <= 0.6) {
-    return 'Medium';
+    return {
+      desc: 'Medium',
+      colour: 'bg-yellow'
+    };
   }
-  return 'High';
+  return {
+    desc: 'High',
+    colour: 'bg-aqua'
+  };
 };
 
 const OutOfStockInternal = ({
@@ -26,7 +35,7 @@ const OutOfStockInternal = ({
   item: { id: itemId, name, isLiked },
   performOutOfStock
 }) => {
-  const humanReadableStockLevel = percentageAsString(1 - soldCount / listCount);
+  const { desc, colour } = percentageRating(1 - soldCount / listCount);
   const soldPercentage = (listCount - soldCount) / listCount * 100;
 
   return (
@@ -38,7 +47,7 @@ const OutOfStockInternal = ({
         {name}
       </h2>
       <p>
-        Stock Level: <b>{humanReadableStockLevel}</b>
+        Stock Level: <b>{desc}</b>
       </p>
       <div
         className="bg-lightgray flex rounded my2 mx-auto col-2"
@@ -48,7 +57,7 @@ const OutOfStockInternal = ({
         }}
       >
         <div
-          className="inline-block col-2 bg-aqua"
+          className={`inline-block col-2 ${colour}`}
           style={{
             width: `${soldPercentage}%`
           }}
