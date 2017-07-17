@@ -39,7 +39,7 @@ const OutOfStockInternal = ({
   const { desc, colour, percentage } = countRating(count);
 
   return (
-    <Full left={<BackToPage path={`/item/${itemId}`} title="Out of Stock" />}>
+    <Full left={<BackToPage path={`/item/${itemId}`} />}>
       <h1>
         Report stock issue
       </h1>
