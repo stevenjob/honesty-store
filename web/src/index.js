@@ -39,7 +39,8 @@ import { HelpCardExpired, HelpCardNoDetails } from './help/card';
 import HelpSuccess from './help/success';
 import ItemDetail from './item/detail';
 import ItemGuard from './item/guard';
-import ItemStockReport from './item/stockreport';
+import ItemStockReport from './item/out-of-stock';
+import ItemStockReportSuccess from './item/out-of-stock-success';
 import ItemPurchaseSuccess from './item/success';
 import ConfirmStoreChange from './confirm-store-change/index';
 import ReceivedBoxReport from './received-box/index';
@@ -155,6 +156,7 @@ ReactDOM.render(
           <Route path="item/:itemId" component={ItemGuard}>
             <IndexRoute component={ItemDetail} />
             <Route path="out-of-stock" component={ItemStockReport} />
+            <Route path="out-of-stock/success" component={ItemStockReportSuccess} />
             <Route path=":quantity/success" component={ItemPurchaseSuccess} />
           </Route>
           <Route path="balance" component={Balance} />

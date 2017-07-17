@@ -12,14 +12,10 @@ import safeLookupItemImage from './safeLookupItemImage';
 import Full from '../layout/full';
 import Breakdown from './breakdown';
 import Like from './like';
-import FlagOutOfStock from './out-of-stock';
+import { Report } from './out-of-stock';
 
 const Depleted = ({ registered }) => (
   <p className="red">This item has been reported out of stock</p>
-);
-
-const Report = ({ itemId }) => (
-  <Link to={`/help/item/${itemId}`}>Report a problem</Link>
 );
 
 const ItemDetail = ({
@@ -73,6 +69,12 @@ const ItemDetail = ({
     </Link>
   );
 
+  const OutOfStockLink = () => (
+    <Link to={`/item/${id}/out-of-stock`}>
+      Report out of Stock
+    </Link>
+  );
+
   return (
     <Full
       left={<BackToPage path="/store" title="Store" />}
@@ -107,7 +109,9 @@ const ItemDetail = ({
           <div>
             {count <= 0
               ? <Depleted registered={registered} />
-              : registered ? <FlagOutOfStock itemId={id} /> : null}
+              : registered
+              ? <OutOfStockLink itemId={id} />
+              : null}
           </div>
           <div>
             <h4 className="mt3">Price Breakdown</h4>
