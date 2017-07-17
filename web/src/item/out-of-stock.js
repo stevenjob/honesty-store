@@ -10,33 +10,33 @@ export const Report = ({ itemId }) => (
   <Link to={`/help/item/${itemId}`}>Report a problem</Link>
 );
 
-const percentageRating = percentage => {
-  if (percentage <= 0.3) {
+const countRating = count => {
+  if (count <= 5) {
     return {
       desc: 'Low',
-      colour: 'bg-red'
+      colour: 'bg-red',
+      percentage: 10
     };
   }
-  if (percentage <= 0.6) {
+  if (count <= 10) {
     return {
       desc: 'Medium',
-      colour: 'bg-yellow'
+      colour: 'bg-yellow',
+      percentage: 50
     };
   }
   return {
     desc: 'High',
-    colour: 'bg-aqua'
+    colour: 'bg-aqua',
+    percentage: 90
   };
 };
 
 const OutOfStockInternal = ({
-  listCount,
-  soldCount,
-  item: { id: itemId, name, isLiked },
+  item: { id: itemId, name, isLiked, count },
   performOutOfStock
 }) => {
-  const { desc, colour } = percentageRating(1 - soldCount / listCount);
-  const soldPercentage = (listCount - soldCount) / listCount * 100;
+  const { desc, colour, percentage } = countRating(count);
 
   return (
     <Full left={<BackToPage path={`/item/${itemId}`} title="Out of Stock" />}>
@@ -59,7 +59,7 @@ const OutOfStockInternal = ({
         <div
           className={`inline-block col-2 ${colour}`}
           style={{
-            width: `${soldPercentage}%`
+            width: `${percentage}%`
           }}
         />
       </div>
@@ -92,9 +92,7 @@ const mapStateToProps = (
     item: {
       ...item,
       isLiked: isLikedItem(item, likedItemIds)
-    },
-    listCount: item.listCount,
-    soldCount: item.listCount - item.count
+    }
   };
 };
 
