@@ -1,4 +1,4 @@
-import cruftDDB from '@honesty-store/cruft';
+import cruftDDB, { EnhancedItem } from '@honesty-store/cruft';
 import { CodedError } from '@honesty-store/service/lib/error';
 import { createServiceKey } from '@honesty-store/service/lib/key';
 import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
@@ -159,7 +159,7 @@ const reducer = reduce<TopupEvent>(
             ...stripe,
             nextChargeToken: uuid()
           },
-          lastTopup: topup.transaction
+          lastTopup: topup
         };
       }
       default:
@@ -176,7 +176,7 @@ router.post<TopupRequest, TopupResponse>(
 
     const { accountId, userId, amount: dirtyAmount, stripeToken } = topupRequest;
 
-    let topupAccount = null;
+    let topupAccount: EnhancedItem<TopupAccount> = null;
 
     if (stripeToken != null) {
       const event: TopupCardDetailsChanged = {

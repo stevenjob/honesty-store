@@ -11,6 +11,7 @@ export interface TopupAccount {
   version: number;
   userId: string;
   test: boolean;
+  lastTopup?: TransactionAndBalance;
   stripe?: Stripe;
   stripeHistory?: Stripe[];
   legacyId?: string;
