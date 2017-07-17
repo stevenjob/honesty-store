@@ -193,13 +193,13 @@ router.post<TopupRequest, TopupResponse>(
           if (e.message !== `Key not found ${event.accountId}`) {
             throw e;
           }
-          await create({
+          topupAccount = await create({
             id: accountId,
             userId,
             version: 0,
             test: false
           });
-          topupAccount = await reducer(event);
+          topupAccount = await reducer(event, topupAccount);
         }
       } catch (e) {
         error(key, `couldn't create stripe customer`, e);
@@ -217,7 +217,7 @@ router.post<TopupRequest, TopupResponse>(
         amount
       };
       try {
-        topupAccount = await reducer(event);
+        topupAccount = await reducer(event, topupAccount);
       } catch (e) {
         /* Note to future devs: 'Must provide source or customer.'
           * appears to be a bug with stripe's API.
