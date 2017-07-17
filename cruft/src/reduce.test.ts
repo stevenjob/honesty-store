@@ -145,4 +145,31 @@ describe.only(suiteName, () => {
       }
     }
   });
+
+  it('should call the aggregate factory if supplied and record not found', async () => {
+    const aggregateId = nextId();
+    const event = {
+      id: nextId()
+    };
+    const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (agg) => agg, () => ({ id: aggregateId, version: 0 }));
+    const aggregate = await reduce(event);
+    expect(aggregate.id).toEqual(aggregateId);
+    expect(aggregate.lastReceived && aggregate.lastReceived.id).toEqual(event.id);
+  });
+
+  it('should not call the aggregate factory if aggregate found', async () => {
+    const aggregateId = nextId();
+    const event = {
+      id: nextId()
+    };
+    await cruft.create({ id: aggregateId, version: 0 });
+    const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (agg) => agg, () => {
+      throw new Error('Should not call factory');
+    });
+    const aggregate = await reduce(event);
+    expect(aggregate.id).toEqual(aggregateId);
+    expect(aggregate.lastReceived && aggregate.lastReceived.id).toEqual(event.id);
+  });
+
+
 });

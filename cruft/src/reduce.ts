@@ -1,5 +1,5 @@
 import { create } from './create';
-import { AbstractItem, Configuration, EnhancedItem, EventItem } from './index';
+import { AbstractItem, Configuration, EnhancedItem, EventItem, NewItem } from './index';
 import { read } from './read';
 import { update } from './update';
 
@@ -10,25 +10,52 @@ export const reduce = <
   Aggregate extends AbstractItem,
   ReceivedEvent extends AbstractItem,
   EmittedEvent extends AbstractItem
-  >({ client, tableName }: Configuration) =>
-  (
+  >({ client, tableName }: Configuration) => {
+
+  const getAggregate = async (
+    aggregateIdSelector: (event: ReceivedEvent) => string,
+    suppliedAggregate: EnhancedItem<Aggregate> | undefined,
+    event: ReceivedEvent,
+    aggregateFactory?: (event: ReceivedEvent) => NewItem<Aggregate>
+  ): Promise<EnhancedItem<Aggregate>> => {
+    const id = aggregateIdSelector(event);
+
+    if (suppliedAggregate != null) {
+      if (suppliedAggregate.id !== id) {
+        throw new Error(`Aggregate supplied ${suppliedAggregate.id} does not match id ${id}`);
+      }
+      return suppliedAggregate;
+    }
+
+    try {
+      return await read<Aggregate>({ client, tableName, consistent: false })(id);
+    } catch (e) {
+      if (aggregateFactory == null || e.message !== `Key not found ${id}`) {
+        throw e;
+      }
+    }
+
+    return await create<Aggregate>({ client, tableName })(aggregateFactory(event));
+  };
+
+  return (
     aggregateIdSelector: (event: ReceivedEvent) => string,
     eventIdSelector: (event: ReceivedEvent) => string,
     reducer: (
       aggregate: EnhancedItem<Aggregate>,
       event: ReceivedEvent,
       emit: ReduceEmit<EmittedEvent>
-    ) => MaybePromise<EnhancedItem<Aggregate>>
+    ) => MaybePromise<EnhancedItem<Aggregate>>,
+    aggregateFactory?: (event: ReceivedEvent) => NewItem<Aggregate>
   ) =>
     async (event: ReceivedEvent, aggregate?: EnhancedItem<Aggregate>): Promise<EnhancedItem<Aggregate>> => {
 
-      const aggregateId = aggregateIdSelector(event);
-
-      if (aggregate != null && aggregate.id !== aggregateId) {
-        throw new Error(`Aggregate supplied ${aggregate.id} does not match id ${aggregateId}`);
-      }
-
-      const innerAggregate = aggregate || await read<Aggregate>({ client, tableName, consistent: false })(aggregateId);
+      const innerAggregate = await getAggregate(
+        aggregateIdSelector,
+        aggregate,
+        event,
+        aggregateFactory
+      );
 
       const eventId = eventIdSelector(event);
 
@@ -108,3 +135,4 @@ export const reduce = <
 
       return await update<Aggregate>({ client, tableName })(updatedAggregate);
     };
+};
