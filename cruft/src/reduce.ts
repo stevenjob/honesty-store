@@ -20,21 +20,25 @@ export const reduce = <
       emit: ReduceEmit<EmittedEvent>
     ) => MaybePromise<EnhancedItem<Aggregate>>
   ) =>
-    async (event: ReceivedEvent): Promise<EnhancedItem<Aggregate>> => {
+    async (event: ReceivedEvent, aggregate?: EnhancedItem<Aggregate>): Promise<EnhancedItem<Aggregate>> => {
 
       const aggregateId = aggregateIdSelector(event);
 
-      const aggregate = await read<Aggregate>({ client, tableName, consistent: false })(aggregateId);
+      if (aggregate != null && aggregate.id !== aggregateId) {
+        throw new Error(`Aggregate supplied ${aggregate.id} does not match id ${aggregateId}`);
+      }
+
+      const innerAggregate = aggregate || await read<Aggregate>({ client, tableName, consistent: false })(aggregateId);
 
       const eventId = eventIdSelector(event);
 
       const {
         lastReceived: previousLastReceived,
         lastEmitted: previousLastEmitted
-      } = aggregate;
+      } = innerAggregate;
 
       if (previousLastReceived != null && previousLastReceived.id === eventId) {
-        return aggregate;
+        return innerAggregate;
       }
 
       let archivedEvent: EventItem | null = null;
@@ -48,7 +52,7 @@ export const reduce = <
       }
 
       if (archivedEvent != null) {
-        return aggregate;
+        return innerAggregate;
       }
 
       if (previousLastReceived != null) {
@@ -81,11 +85,11 @@ export const reduce = <
         updatedLastEmitted = {
           id: emittedEvent.id,
           data: emittedEvent,
-          previous: aggregate.lastEmitted && aggregate.lastEmitted.id
+          previous: innerAggregate.lastEmitted && innerAggregate.lastEmitted.id
         };
       };
 
-      const reducedAggregate = await reducer(aggregate, event, emit);
+      const reducedAggregate = await reducer(innerAggregate, event, emit);
 
       const updatedLastReceived: EventItem = {
         id: eventId,

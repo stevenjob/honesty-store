@@ -115,4 +115,34 @@ describe.only(suiteName, () => {
       }
     }
   });
+
+  it('should allow aggregate to be supplied', async () => {
+    const aggregateId = nextId();
+    const event = {
+      id: nextId()
+    };
+    const aggregate = await cruft.create({ id: aggregateId, version: 0 });
+    const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (agg) => agg);
+
+    const result = await reduce(event, aggregate);
+
+    expect(result.lastReceived && result.lastReceived.id).toEqual(event.id);
+  });
+
+  it('should not allow aggregate with mismatched id to be supplied', async () => {
+    const aggregateId = nextId();
+    const event = {
+      id: nextId()
+    };
+    const aggregate = await cruft.create({ id: aggregateId, version: 0 });
+    const reduce = cruft.reduce(_ => 'foo', ({ id }) => id, (agg) => agg);
+
+    try {
+      await reduce(event, aggregate);
+    } catch (e) {
+      if (e.message !== `Aggregate supplied ${aggregate.id} does not match id foo`) {
+        throw e;
+      }
+    }
+  });
 });
