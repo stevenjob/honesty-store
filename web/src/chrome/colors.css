@@ -47,6 +47,9 @@ a {
 .bg-red {
   background-color: #AE0000;
 }
+.bg-lightgray {
+  background-color: #E6E6E6;
+}
 
 .border-navy {
   border-color: #14415F;

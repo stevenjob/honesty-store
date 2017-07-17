@@ -68,10 +68,9 @@ export default ({
           </div>
         </div>
         <div
-          className="bg-gray flex rounded my2"
+          className="bg-lightgray flex rounded my2"
           style={{
             height: '0.5rem',
-            backgroundColor: '#e6e6e6',
             overflow: 'hidden'
           }}
         >
