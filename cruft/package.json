@@ -15,14 +15,15 @@
     "aws-sdk": "2.22.0",
     "chai": "^3.5.0",
     "jest": "^19.0.2",
+    "npm-run-all": "^4.0.2",
     "ts-jest": "^19.0.14",
     "typescript": "^2.3.2",
     "uuid": "^3.0.1"
   },
   "scripts": {
-    "start-dynamodb": "docker run -d --name dynamodb -p 8000:8000 -m 512M deangiberson/aws-dynamodb-local",
-    "stop-dynamodb": "docker rm -f dynamodb",
-    "test": "npm run start-dynamodb && jest; ec=$?; npm run stop-dynamodb; exit $ec",
+    "dynamodb": "docker run --name dynamodb --rm -p 8000:8000 -m 512M deangiberson/aws-dynamodb-local || true",
+    "jest": "jest",
+    "test": "npm-run-all --parallel --race dynamodb jest",
     "build": "npm run tsc && npm run test",
     "tsc": "../node_modules/.bin/tsc"
   },
