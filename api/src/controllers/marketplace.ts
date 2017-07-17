@@ -8,7 +8,7 @@ export default (router) => {
     async (
       key,
       _params,
-      { item: { name, qualifier, totalPaid, quantity }, storeCode },
+      { item: { name, qualifier, itemPrice, quantity }, storeCode },
       { user }
     ) => {
       const subject = 'Marketplace Request';
@@ -19,10 +19,10 @@ export default (router) => {
 `A marketplace request has been made by ${user.emailAddress}.
 If you're happy, you can list the item at ${adminUrl}.
 
-Here's what the submitted:
+Here's what they submitted:
 Name: ${name}
 Qualifier: ${qualifier || ''}
-Total paid (£): ${totalPaid}
+Item price (inclusive of all fees): £${(Number(itemPrice) / 100).toFixed(2)}
 Quantity: ${quantity}
 `;
 
