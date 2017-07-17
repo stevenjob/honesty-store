@@ -41,11 +41,10 @@ const OutOfStockInternal = ({
         Stock Level: <b>{humanReadableStockLevel}</b>
       </p>
       <div
-        className="bg-lightgray flex rounded my2 mx-auto"
+        className="bg-lightgray flex rounded my2 mx-auto col-2"
         style={{
           height: '0.5rem',
-          overflow: 'hidden',
-          width: '20%'
+          overflow: 'hidden'
         }}
       >
         <div
