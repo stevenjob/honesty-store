@@ -85,7 +85,7 @@ const reducer = reduce<TopupEvent>(
     switch (event.type) {
       case 'topup-card-details-change':
       case 'topup-attempt':
-        return event.id;
+        return event.accountId;
       default:
         return assertNever(event);
     }
@@ -198,7 +198,7 @@ router.post<TopupRequest, TopupResponse>(
         try {
           topupAccount = await reducer(event);
         } catch (e) {
-          if (e.message !== `Key not found ${event.id}`) {
+          if (e.message !== `Key not found ${event.accountId}`) {
             throw e;
           }
           await create({
