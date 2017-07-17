@@ -53,10 +53,6 @@ const OutOfStockInternal = ({
             width: `${soldPercentage}%`
           }}
         />
-        <div
-          className="inline-block col-2 bg-lightgray"
-          style={{ width: `${100 - soldPercentage}%` }}
-        />
       </div>
       <p>
         We estimate stock levels by keeping track of purchases, but it doesn't always work out.
