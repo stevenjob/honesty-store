@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Card from '../chrome/card';
-import { Back } from '../chrome/link';
+import { BackToPage } from '../chrome/link';
 import Full from '../layout/full';
 import { performTopup } from '../actions/topup';
 
 const NewCard = ({ performTopup, ...rest }) => (
-  <Full left={<Back />}>
+  <Full left={<BackToPage path="/store" title="Back" />}>
     <Card
       isInitialTopUp={false}
       confirmButtonText="Add New Card"

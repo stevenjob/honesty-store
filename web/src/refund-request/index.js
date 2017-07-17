@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { performRefund } from '../actions/refund';
-import { Back } from '../chrome/link';
+import { BackToPage } from '../chrome/link';
 import Full from '../layout/full';
 import './index.css';
 
@@ -53,7 +53,7 @@ class RefundRequest extends React.Component {
     const { itemName } = this.props;
 
     return (
-      <Full left={<Back fallbackPath="/profile" />}>
+      <Full left={<BackToPage title="Back" path="/profile" />}>
         <div className="refund-request">
           <h2 className="regular">
             Want a refund?

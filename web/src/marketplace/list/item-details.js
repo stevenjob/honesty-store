@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { Back } from '../../chrome/link';
+import { BackToPage } from '../../chrome/link';
 import Full from '../../layout/full';
 import history from '../../history';
 
@@ -55,7 +55,7 @@ class MarketplaceAddItemDetails extends React.Component {
     const { validity, name, qualifier, quantity, totalPaid } = this.state;
 
     return (
-      <Full left={<Back />}>
+      <Full left={<BackToPage path="/profile" title="Back" />}>
         <div className="left-align">
           <h2 className="regular center">Item details</h2>
           <form className="px2 navy" onSubmit={e => this.handleSubmit(e)}>

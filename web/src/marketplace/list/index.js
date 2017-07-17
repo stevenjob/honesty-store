@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Back } from '../../chrome/link';
+import { BackToPage } from '../../chrome/link';
 import MiscSelection from '../../item/misc-selection';
 import Full from '../../layout/full';
 
 export default () => (
-  <Full left={<Back />}>
+  <Full left={<BackToPage path="/profile" title="Back" />}>
     <div className="col-4 mx-auto">
       <MiscSelection />
     </div>
