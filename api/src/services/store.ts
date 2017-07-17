@@ -12,7 +12,7 @@ export interface StoreItem {
     breakdown: PriceBreakdown;
   };
   sellerId: string;
-  listCount?: number;
+  listCount: number;
   refundCount?: number;
   purchaseCount?: number;
   revenue?: number;
@@ -42,6 +42,7 @@ export const storeItems = async (key, storeId, userId): Promise<StoreItem[]> => 
       image: item.image,
       isMarketplace: true,
       count: item.availableCount,
+      listCount: item.listCount,
       price: {
         total: item.price + donation,
         breakdown: {
@@ -57,7 +58,6 @@ export const storeItems = async (key, storeId, userId): Promise<StoreItem[]> => 
       ...(
         userId === item.sellerId
         ? {
-          listCount: item.listCount,
           purchaseCount: item.purchaseCount,
           refundCount: item.refundCount,
           revenue: item.revenue
