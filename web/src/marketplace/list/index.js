@@ -5,7 +5,7 @@ import MiscSelection from '../../item/misc-selection';
 import Full from '../../layout/full';
 
 export default () => (
-  <Full left={<Back path="/store" />}>
+  <Full left={<Back />}>
     <div className="col-4 mx-auto">
       <MiscSelection />
     </div>
@@ -21,7 +21,7 @@ export default () => (
       when you purchase your own items.
     </p>
     <p className="my3">
-      <Link to="/more/new" className="btn btn-primary btn-big">
+      <Link to="/more/list/details" className="btn btn-primary btn-big">
         Add an item
       </Link>
     </p>

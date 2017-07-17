@@ -13,7 +13,7 @@ import Store from './store/index';
 import TransactionHistory from './profile/transaction-history';
 import Marketplace from './marketplace/index';
 import MarketplaceList from './marketplace/list';
-import MarketplaceListNew from './marketplace/list/new';
+import MarketplaceListAddItemDetails from './marketplace/list/item-details';
 import MarketplaceListComplete from './marketplace/list/complete';
 import Profile from './profile/index';
 import CloseProfile from './profile/close';
@@ -169,7 +169,10 @@ ReactDOM.render(
           <Route path="more">
             <IndexRoute component={Marketplace} />
             <Route path="list" component={MarketplaceList} />
-            <Route path="list/new" component={MarketplaceListNew} />
+            <Route
+              path="list/details"
+              component={MarketplaceListAddItemDetails}
+            />
             <Route path="list/success" component={MarketplaceListComplete} />
           </Route>
           <Route

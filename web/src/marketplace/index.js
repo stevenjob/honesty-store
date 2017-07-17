@@ -29,7 +29,7 @@ const More = ({ items, userRevenue }) => (
       </div>
     </div>
     <div className="center bg-white border-bottom border-silver p2 mt2">
-      <Link to="/more/list">+ Add a new item</Link>
+      <Link to="/more/list/details">+ Add a new item</Link>
     </div>
     <List data={items} itemRenderer={item => <ItemListing item={item} />} />
   </Chrome>
