@@ -14,6 +14,7 @@ import TransactionHistory from './profile/transaction-history';
 import Marketplace from './marketplace/index';
 import MarketplaceList from './marketplace/list';
 import MarketplaceListAddItemDetails from './marketplace/list/item-details';
+import MarketplaceListAddItemPricing from './marketplace/list/item-pricing';
 import MarketplaceListComplete from './marketplace/list/complete';
 import Profile from './profile/index';
 import CloseProfile from './profile/close';
@@ -172,6 +173,10 @@ ReactDOM.render(
             <Route
               path="list/details"
               component={MarketplaceListAddItemDetails}
+            />
+            <Route
+              path="list/pricing/:name(/:qualifier)/:quantity/:totalPaid"
+              component={MarketplaceListAddItemPricing}
             />
             <Route path="list/success" component={MarketplaceListComplete} />
           </Route>
