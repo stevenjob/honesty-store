@@ -109,9 +109,7 @@ const ItemDetail = ({
           <div>
             {count <= 0
               ? <Depleted registered={registered} />
-              : registered
-              ? <OutOfStockLink itemId={id} />
-              : null}
+              : registered ? <OutOfStockLink itemId={id} /> : null}
           </div>
           <div>
             <h4 className="mt3">Price Breakdown</h4>

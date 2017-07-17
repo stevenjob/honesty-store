@@ -20,14 +20,17 @@ const percentageAsString = percentage => {
   return 'High';
 };
 
-const OutOfStockInternal = ({ listCount, soldCount, item: { id: itemId, name, isLiked }, performOutOfStock }) => {
+const OutOfStockInternal = ({
+  listCount,
+  soldCount,
+  item: { id: itemId, name, isLiked },
+  performOutOfStock
+}) => {
   const humanReadableStockLevel = percentageAsString(1 - soldCount / listCount);
   const soldPercentage = (listCount - soldCount) / listCount * 100;
 
   return (
-    <Full
-      left={<BackToPage path={`/item/${itemId}`} title="Out of Stock" />}
-    >
+    <Full left={<BackToPage path={`/item/${itemId}`} title="Out of Stock" />}>
       <h1>
         Report stock issue
       </h1>
@@ -63,7 +66,10 @@ const OutOfStockInternal = ({ listCount, soldCount, item: { id: itemId, name, is
         If this doesn't look right, please let us know by marking it out of stock or reporting a problem.
       </p>
       <div className="my3">
-        <Link className="btn btn-primary" onClick={() => performOutOfStock({ itemId })}>
+        <Link
+          className="btn btn-primary"
+          onClick={() => performOutOfStock({ itemId })}
+        >
           Mark as out of stock
         </Link>
       </div>
@@ -89,6 +95,8 @@ const mapStateToProps = (
 };
 
 const mapDispatchToProps = { performOutOfStock };
-export const OutOfStock = connect(mapStateToProps, mapDispatchToProps)(OutOfStockInternal);
+export const OutOfStock = connect(mapStateToProps, mapDispatchToProps)(
+  OutOfStockInternal
+);
 
 export default OutOfStock;

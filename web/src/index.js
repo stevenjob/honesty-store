@@ -156,7 +156,10 @@ ReactDOM.render(
           <Route path="item/:itemId" component={ItemGuard}>
             <IndexRoute component={ItemDetail} />
             <Route path="out-of-stock" component={ItemStockReport} />
-            <Route path="out-of-stock/success" component={ItemStockReportSuccess} />
+            <Route
+              path="out-of-stock/success"
+              component={ItemStockReportSuccess}
+            />
             <Route path=":quantity/success" component={ItemPurchaseSuccess} />
           </Route>
           <Route path="balance" component={Balance} />
