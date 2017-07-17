@@ -32,7 +32,7 @@ import {
 const stripeTest = stripeFactory(process.env.TEST_STRIPE_KEY);
 const stripeProd = stripeFactory(process.env.LIVE_STRIPE_KEY);
 
-const { create, read, reduce } = cruftDDB<TopupAccount>({
+const { read, reduce } = cruftDDB<TopupAccount>({
   tableName: process.env.TABLE_NAME,
   limit: 100
 });
@@ -58,9 +58,7 @@ const assertValidStripeDetails = createAssertValidObject<Stripe>({
 });
 
 const extractCardDetails = ({ id, stripe }: TopupAccount): CardDetails => {
-  try {
-    assertValidStripeDetails(stripe);
-  } catch (_) {
+  if (stripe == null) {
     throw new CodedError('NoCardDetailsPresent', `No stripe details registered for account ${id}`);
   }
   const { brand, exp_month, exp_year, last4 } = stripe.customer.sources.data[0];
@@ -93,7 +91,7 @@ const reducer = reduce<TopupEvent>(
     switch (event.type) {
       case 'topup-card-details-change': {
         const { stripeToken } = event;
-        const { id, stripe, stripeHistory: previousStripeHistory } = topupAccount;
+        const { id, stripe, stripeHistory: previousStripeHistory = [] } = topupAccount;
 
         const description = stripe == null ?
           `registration for ${id}` : `adding new card for ${id}`;
@@ -123,6 +121,10 @@ const reducer = reduce<TopupEvent>(
       case 'topup-attempt': {
         const { id, stripe } = topupAccount;
         const { amount } = event;
+
+        if (stripe == null) {
+          throw new Error(`No Stripe details found for ${id}.`);
+        }
 
         assertValidStripeDetails(stripe);
         await assertBalanceWithinLimit({ key, accountId: id, amount });
@@ -165,6 +167,18 @@ const reducer = reduce<TopupEvent>(
       default:
         return assertNever(event);
     }
+  },
+  (event) => {
+    if (event.type !== 'topup-card-details-change') {
+      throw new Error(`Can only create topup account for topup-card-details-change events.`);
+    }
+    const { accountId: id, userId } = event;
+    return {
+      id,
+      userId,
+      version: 0,
+      test: false
+    };
   });
 
 export const router: LambdaRouter = lambdaRouter('topup', 1);
@@ -176,7 +190,7 @@ router.post<TopupRequest, TopupResponse>(
 
     const { accountId, userId, amount: dirtyAmount, stripeToken } = topupRequest;
 
-    let topupAccount: EnhancedItem<TopupAccount> = null;
+    let topupAccount: EnhancedItem<TopupAccount> | undefined;
 
     if (stripeToken != null) {
       const event: TopupCardDetailsChanged = {
@@ -187,20 +201,7 @@ router.post<TopupRequest, TopupResponse>(
         stripeToken
       };
       try {
-        try {
-          topupAccount = await reducer(event);
-        } catch (e) {
-          if (e.message !== `Key not found ${event.accountId}`) {
-            throw e;
-          }
-          topupAccount = await create({
-            id: accountId,
-            userId,
-            version: 0,
-            test: false
-          });
-          topupAccount = await reducer(event, topupAccount);
-        }
+        topupAccount = await reducer(event);
       } catch (e) {
         error(key, `couldn't create stripe customer`, e);
         throw userErrorFromStripeError(e);

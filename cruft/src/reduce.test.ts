@@ -171,5 +171,4 @@ describe.only(suiteName, () => {
     expect(aggregate.lastReceived && aggregate.lastReceived.id).toEqual(event.id);
   });
 
-
 });
