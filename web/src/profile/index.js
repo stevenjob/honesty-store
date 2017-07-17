@@ -53,6 +53,10 @@ const Profile = ({
       </div>
       {latestTransaction && <Transaction transaction={latestTransaction} />}
     </div>
+    <div className="navy bg-white my1 p2">
+      <h3 className="mt0 mb1">& more</h3>
+      <Link to="more/list">Sell your own items</Link>
+    </div>
     {showAdminLink &&
       <div className="navy bg-white my1 p2">
         <h3 className="mt0 mb1">Admin</h3>
