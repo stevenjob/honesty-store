@@ -54,7 +54,7 @@ export const performMarketplace = ({
     );
 
     dispatch(marketplaceSuccess(response));
-    history.push(`/more/success`);
+    history.push(`/more/list/success`);
   } catch (e) {
     dispatch(marketplaceFailure(e));
   }
