@@ -3,7 +3,7 @@ import { CodedError } from '@honesty-store/service/lib/error';
 import { createServiceKey } from '@honesty-store/service/lib/key';
 import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
 import { error } from '@honesty-store/service/lib/log';
-import { assertBalanceWithinLimit, createTransaction } from '@honesty-store/transaction';
+import { assertBalanceWithinLimit, assertValidTransaction, createTransaction, extractFieldsFromTransactionId } from '@honesty-store/transaction';
 import * as stripeFactory from 'stripe';
 import { v4 as uuid } from 'uuid';
 import { userErrorFromStripeError } from './errors';
@@ -16,13 +16,15 @@ import {
   TopupCardDetailsChanged,
   TopupEvent,
   TopupRequest,
-  TopupResponse
+  TopupResponse,
+  TransactionWithBalance
 } from './client';
 
 import {
   assertNever,
   assertObject,
   assertOptional,
+  assertPositiveInteger,
   assertValidString,
   assertValidUuid,
   createAssertValidObject,
@@ -54,7 +56,10 @@ const assertValidTopupRequest = createAssertValidObject<TopupRequest>({
 
 const assertValidStripeDetails = createAssertValidObject<Stripe>({
   customer: assertObject,
-  nextChargeToken: assertValidUuid
+  nextChargeToken: assertValidUuid,
+  lastError: assertOptional(assertValidString),
+  lastSuccess: assertOptional(assertPositiveInteger),
+  retriesRemaining: assertPositiveInteger
 });
 
 const extractCardDetails = ({ id, stripe }: TopupAccount): CardDetails => {
@@ -74,12 +79,18 @@ const stripeForUser = ({ test }) => {
   return test ? stripeTest : stripeProd;
 };
 
-const reducer = reduce<TopupEvent>(
+const reducer = reduce<TopupEvent | TransactionWithBalance>(
   event => {
     switch (event.type) {
       case 'topup-card-details-change':
       case 'topup-attempt':
         return event.accountId;
+      case 'topup':
+      case 'purchase':
+      case 'refund':
+      case 'debit':
+      case 'credit':
+        return extractFieldsFromTransactionId(event.id).accountId;
       default:
         return assertNever(event);
     }
@@ -183,6 +194,13 @@ const reducer = reduce<TopupEvent>(
           lastTopup: topup
         };
       }
+      case 'topup':
+      case 'purchase':
+      case 'refund':
+      case 'debit':
+      case 'credit': {
+        return topupAccount;
+      }
       default:
         return assertNever(event);
     }
@@ -243,6 +261,15 @@ router.post<TopupRequest, TopupResponse>(
       ...(topupAccount.lastTopup || {})
     };
 
+  }
+);
+
+router.post<TransactionWithBalance, TopupAccount>(
+  '/',
+  async (_key, { }, { balance, ...transaction }) => {
+    assertValidTransaction(transaction);
+
+    return await reducer({ balance, ...transaction });
   }
 );
 

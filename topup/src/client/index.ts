@@ -1,9 +1,12 @@
 import fetch from '@honesty-store/service/lib/fetch';
-import { TransactionAndBalance } from '@honesty-store/transaction';
+import { Transaction, TransactionAndBalance } from '@honesty-store/transaction';
 
 export interface Stripe {
   customer: any;
   nextChargeToken: string;
+  lastSuccess?: number;
+  lastError?: CardError;
+  retriesRemaining: number;
 }
 
 export interface TopupAccount {
@@ -24,11 +27,14 @@ export interface TopupRequest {
   stripeToken: string;
 }
 
+export type CardError = 'CardIncorrectNumber' | 'CardInvalidNumber' | 'CardInvalidExpiryMonth' | 'CardInvalidExpiryYear' | 'CardIncorrectCVC' | 'CardInvalidCVC' | 'CardExpired' | 'CardDeclined' | 'CardError';
+
 export interface CardDetails {
   brand: string;
   last4: string;
   expMonth: number;
   expYear: number;
+  lastError?: CardError;
 }
 
 export type TopupResponse = {
@@ -51,12 +57,17 @@ export interface TopupAttempted {
   amount: number;
 }
 
+export type TransactionWithBalance = Transaction & { balance: number };
+
 export type TopupEvent = TopupCardDetailsChanged | TopupAttempted;
 
 const { get, post } = fetch('topup');
 
 export const createTopup = (key, request: TopupRequest) =>
   post<TopupResponse>(1, key, '/', request);
+
+export const recordTransaction = (key, { transaction, balance }: TransactionAndBalance) =>
+  post<TopupAccount>(1, key, '/transaction', { ...transaction, balance });
 
 export const getCardDetails = (key, accountId: string) =>
   get<CardDetails>(1, key, `/${accountId}/cardDetails`);

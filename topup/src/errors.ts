@@ -1,6 +1,7 @@
 import { CodedError } from '@honesty-store/service/lib/error';
+import { CardError } from './client/index';
 
-const stripeCodeToErrorCode = (stripeCode) => {
+const stripeCodeToErrorCode = (stripeCode): CardError => {
   switch (stripeCode) {
     case 'incorrect_number':      return 'CardIncorrectNumber';
     case 'invalid_number':        return 'CardInvalidNumber';
