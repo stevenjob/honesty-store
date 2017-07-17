@@ -15,7 +15,7 @@ const countRating = count => {
     return {
       desc: 'Low',
       colour: 'bg-red',
-      percentage: 10
+      percentage: 17
     };
   }
   if (count <= 10) {
