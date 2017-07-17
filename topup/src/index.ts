@@ -23,14 +23,11 @@ import {
   assertNever,
   assertObject,
   assertOptional,
-  assertPositiveInteger,
   assertValidString,
   assertValidUuid,
   createAssertValidObject,
   createAssertValidUuid
 } from '@honesty-store/service/lib/assert';
-
-const fixedTopupAmount = 500; // £5
 
 const stripeTest = stripeFactory(process.env.TEST_STRIPE_KEY);
 const stripeProd = stripeFactory(process.env.LIVE_STRIPE_KEY);
@@ -41,33 +38,32 @@ const { create, read, reduce } = cruftDDB<TopupAccount>({
 });
 
 const assertValidAccountId = createAssertValidUuid('accountId');
-const assertValidUserId = createAssertValidUuid('userId');
 
-const assertValidStripeDetails = ({ id, stripe }: TopupAccount) => {
-  const validator = createAssertValidObject<Stripe>({
-    customer: assertObject,
-    nextChargeToken: assertValidUuid
-  });
+const assertValidTopupAmount = (key: string, amount: any) => {
+  if (amount !== 0 && amount !== 500) {
+    throw new Error(`${key} must be £0 or £5`);
+  }
+};
+
+const assertValidTopupRequest = createAssertValidObject<TopupRequest>({
+  accountId: assertValidUuid,
+  amount: assertValidTopupAmount,
+  stripeToken: assertOptional(assertValidString),
+  userId: assertValidUuid
+});
+
+const assertValidStripeDetails = createAssertValidObject<Stripe>({
+  customer: assertObject,
+  nextChargeToken: assertValidUuid
+});
+
+const extractCardDetails = ({ id, stripe }: TopupAccount): CardDetails => {
   try {
-    validator(stripe);
+    assertValidStripeDetails(stripe);
   } catch (_) {
     throw new CodedError('NoCardDetailsPresent', `No stripe details registered for account ${id}`);
   }
-};
-
-const assertValidTopupAmount = (amount) => {
-  switch (amount) {
-    case fixedTopupAmount:
-    case 0:
-      break;
-    default:
-      throw new Error(`topup amount must be £0 or £${fixedTopupAmount / 100}`);
-  }
-};
-
-const extractCardDetails = (topupAccount: TopupAccount): CardDetails => {
-  assertValidStripeDetails(topupAccount);
-  const { brand, exp_month, exp_year, last4 } = topupAccount.stripe.customer.sources.data[0];
+  const { brand, exp_month, exp_year, last4 } = stripe.customer.sources.data[0];
   return {
     brand,
     expMonth: exp_month,
@@ -128,7 +124,7 @@ const reducer = reduce<TopupEvent>(
         const { id, stripe } = topupAccount;
         const { amount } = event;
 
-        assertValidStripeDetails(topupAccount);
+        assertValidStripeDetails(stripe);
         await assertBalanceWithinLimit({ key, accountId: id, amount });
 
         const charge = await stripeForUser(topupAccount).charges.create(
@@ -175,14 +171,10 @@ export const router: LambdaRouter = lambdaRouter('topup', 1);
 
 router.post<TopupRequest, TopupResponse>(
   '/',
-  async (key, { }, { accountId, userId, amount: dirtyAmount, stripeToken }) => {
-    const amount = Number(dirtyAmount);
+  async (key, { }, topupRequest) => {
+    assertValidTopupRequest(topupRequest);
 
-    assertValidAccountId(accountId);
-    assertValidUserId(userId);
-    assertPositiveInteger('amount', amount);
-    assertOptional(assertValidString)('stripeToken', stripeToken);
-    assertValidTopupAmount(amount);
+    const { accountId, userId, amount: dirtyAmount, stripeToken } = topupRequest;
 
     let topupAccount = null;
 
@@ -215,6 +207,7 @@ router.post<TopupRequest, TopupResponse>(
       }
     }
 
+    const amount = Number(dirtyAmount);
     if (amount > 0) {
       const event: TopupAttempted = {
         id: uuid(),
@@ -226,16 +219,13 @@ router.post<TopupRequest, TopupResponse>(
       try {
         topupAccount = await reducer(event);
       } catch (e) {
-        let detail = '';
-        if (e.message === 'Must provide source or customer.') {
-          /* Note to future devs: this error appears to be a bug with stripe's API.
-           *
-           * We've correctly provided a customer, so the error seems odd. I
-           * believe it's to do with the idempotency_key being incorrect, so
-           * that's the first place to start looking. */
-          detail = ' (from topup: or the idempotency_key has already been used)';
-        }
-        error(key, `couldn't create stripe charge${detail}`, e);
+        /* Note to future devs: 'Must provide source or customer.'
+          * appears to be a bug with stripe's API.
+          *
+          * We've correctly provided a customer, so the error seems odd. I
+          * believe it's to do with the idempotency_key being incorrect, so
+          * that's the first place to start looking. */
+        error(key, `couldn't create stripe charge`, e);
         throw userErrorFromStripeError(e);
       }
     }
