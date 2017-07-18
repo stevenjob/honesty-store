@@ -43,6 +43,16 @@ const errorDefinitions = {
     redirectionPath: `/`,
     dismissalText: dismissalText.DISMISS
   },
+  ListingExists: {
+    message: `That listing already exists`,
+    actionDescription: `Could you remove the listing first, then try again?`,
+    dismissalText: dismissalText.DISMISS
+  },
+  ListingNotFound: {
+    message: `We couldn't find that listing`,
+    actionDescription: `Could you double check it and try again?`,
+    dismissalText: dismissalText.DISMISS
+  },
   LocalStorageBlocked: {
     message: `We can't hold onto your session in private browsing`,
     actionDescription: `Could you please disable it and try again?`,

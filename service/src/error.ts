@@ -6,6 +6,8 @@ export type ErrorCode =
   'EmailNotFound' |
   'NoCardDetailsPresent' |
   'StoreNotFound' |
+  'ListingExists' |
+  'ListingNotFound' |
   'CardIncorrectNumber' |
   'CardInvalidNumber' |
   'CardInvalidExpiryMonth' |

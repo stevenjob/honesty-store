@@ -164,7 +164,7 @@ const reducer = reduce<Transaction | StoreEvent>(
         const existingItem = lookupItem(store, listing.id);
 
         if (existingItem != null) {
-          throw new Error(`Listing already exists ${listing.id} in ${store.id}`);
+          throw new CodedError('ListingExists', `Listing already exists ${listing.id} in ${store.id}`);
         }
 
         const item: StoreItem = {
@@ -185,7 +185,7 @@ const reducer = reduce<Transaction | StoreEvent>(
         const unlistedItem = lookupItem(store, itemId);
 
         if (unlistedItem == null) {
-          throw new Error(`Listing does not exist ${itemId} in ${store.id}`);
+          throw new CodedError('ListingNotFound', `Listing does not exist ${itemId} in ${store.id}`);
         }
 
         store.items = store.items.filter(item => item !== unlistedItem);
@@ -198,7 +198,7 @@ const reducer = reduce<Transaction | StoreEvent>(
         const existingItem = lookupItem(store, itemId);
 
         if (existingItem == null) {
-          throw new Error(`Listing does not exist ${itemId} in ${store.id}`);
+          throw new CodedError('ListingNotFound', `Listing does not exist ${itemId} in ${store.id}`);
         }
 
         store.items = store.items.filter(item => item !== existingItem);
