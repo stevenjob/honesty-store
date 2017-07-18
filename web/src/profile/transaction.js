@@ -66,7 +66,7 @@ const mapStateToProps = (
         ...commonProps,
         image: require('./assets/top-up.svg'),
         title: 'TOP UP',
-        href: '/topup'
+        href: '/topup/500'
       };
     case 'purchase':
     case 'refund':

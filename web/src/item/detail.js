@@ -45,7 +45,7 @@ const ItemDetail = ({
   const onClick = numItems => {
     const balance = calculateBalanceRemaining(numItems);
     if (balance < 0) {
-      history.push(`/topup`);
+      history.push(`/topup/500`);
     } else {
       performPurchase({ itemId: id, quantity: numItems });
     }
