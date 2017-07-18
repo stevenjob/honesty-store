@@ -116,7 +116,7 @@ class MarketplaceAddItemDetails extends React.Component {
                 }
               }}
             >
-              Continue
+              Set price
             </Link>
           </p>
         </div>
