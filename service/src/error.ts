@@ -21,8 +21,6 @@ export type ErrorCode =
   'RefreshTokenExpired' |
   'MagicLinkTokenExpired' |
   'TokenError' |
-  'ItemNotInBox' |
-  'BoxAlreadyMarkedAsReceived' |
   'FullRegistrationRequired' |
   'AutoRefundPeriodExpired' |
   'RefundAlreadyIssued' |

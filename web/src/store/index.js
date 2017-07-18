@@ -44,7 +44,6 @@ const storeOrdering = items => {
 const mapStateToProps = ({
   user,
   store: { code, items = [] },
-  survey,
   likedItemIds
 }) => {
   const itemsWithLikeProp = items.map(item => ({

@@ -1,11 +1,9 @@
 import { getStoreFromId, StoreRevenue } from '@honesty-store/store';
-import { getUserSurveys } from '@honesty-store/survey';
 import { CardDetails, getCardDetails } from '@honesty-store/topup';
 import { AUTO_REFUND_PERIOD, Transaction } from '@honesty-store/transaction';
 import { userRegistered } from '@honesty-store/user';
 import { StoreItem, storeItems } from '../services/store';
 import { getExpandedTransactionsAndAccount } from '../services/transaction';
-import { expandTopPrioritySurvey } from './survey';
 
 export interface UserSessionData {
   balance: number;
@@ -31,7 +29,6 @@ export interface SessionData {
   store: StoreSessionData;
   refreshToken: string;
   accessToken: string;
-  survey: any;
   autoRefundPeriod: number;
 }
 
@@ -99,24 +96,17 @@ const getStoreSessionData = async (key, user): Promise<StoreSessionData> => {
   };
 };
 
-const getSurveySessionData = async (key, user) => {
-  const surveys = await getUserSurveys(key, user.id);
-  return await expandTopPrioritySurvey(surveys);
-};
-
 export const getSessionData = async (key, { user }): Promise<SessionData> => {
   const { accessToken, refreshToken } = user;
-  const [userProfile, store, survey] = await Promise.all([
+  const [userProfile, store] = await Promise.all([
     getUserSessionData(key, user),
-    getStoreSessionData(key, user),
-    getSurveySessionData(key, user)
+    getStoreSessionData(key, user)
   ]);
   return {
     autoRefundPeriod: AUTO_REFUND_PERIOD,
     user: userProfile,
     store,
     refreshToken,
-    accessToken,
-    survey
+    accessToken
   };
 };

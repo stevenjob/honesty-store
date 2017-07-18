@@ -5,7 +5,6 @@ import cors = require('cors');
 
 import { expressRouter, ExpressRouter } from '@honesty-store/service/lib/expressRouter';
 
-import boxController from './controllers/box';
 import itemController from './controllers/item';
 import logoutController from './controllers/logout';
 import marketplaceController from './controllers/marketplace';
@@ -16,7 +15,6 @@ import sessionController from './controllers/session';
 import signInController from './controllers/signin';
 import storeController from './controllers/store';
 import supportController from './controllers/support';
-import surveyController from './controllers/survey';
 import topUpController from './controllers/topup';
 import transactionsController from './controllers/transactions';
 import { apiVersion } from './version';
@@ -38,8 +36,6 @@ logoutController(router);
 marketplaceController(router);
 transactionsController(router);
 supportController(router);
-surveyController(router);
-boxController(router);
 refundController(router);
 itemController(router);
 

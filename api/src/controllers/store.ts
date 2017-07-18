@@ -12,6 +12,14 @@ export const updateDefaultStoreCode = async (key, userID, storeCode): Promise<Us
 
 export default (router) => {
   router.post(
+    '/out-of-stock',
+    authenticateAccessToken,
+    async (key, _params, { itemId }, { user }) => {
+      await updateItemCount(key, user.defaultStoreId, itemId, 0, user.id);
+      return {};
+    });
+
+  router.post(
     '/store',
     authenticateAccessToken,
     async (key, _params, { storeCode }, { user: { id: userId } }) => {

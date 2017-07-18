@@ -21,9 +21,6 @@ dependencies:
     - topup/node_modules
     - service/node_modules
     - test/node_modules
-    - survey/node_modules
-    - box/node_modules
-    - batch/node_modules
     - scripts/node_modules
     - store/node_modules
     - cruft/node_modules
@@ -42,7 +39,7 @@ deployment:
   aws:
     branch: /.*/
     commands:
-      - ./aws/bin/aws deploy $CIRCLE_BRANCH api batch item transaction user web topup survey box store transaction-slack transaction-store
+      - ./aws/bin/aws deploy $CIRCLE_BRANCH api item transaction user web topup store transaction-slack transaction-store
       - ./aws/bin/aws prune
 general:
   # attempt to speed up artifact collection by specifying an empty list

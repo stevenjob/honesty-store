@@ -12,12 +12,9 @@
     "start": "nodemon ./lib/api/src/app.js"
   },
   "dependencies": {
-    "@honesty-store/batch": "0.0.0",
-    "@honesty-store/box": "0.0.0",
     "@honesty-store/item": "0.0.0",
     "@honesty-store/service": "0.0.0",
     "@honesty-store/store": "0.0.0",
-    "@honesty-store/survey": "0.0.0",
     "@honesty-store/topup": "0.0.0",
     "@honesty-store/transaction": "0.0.0",
     "@honesty-store/user": "0.0.0",

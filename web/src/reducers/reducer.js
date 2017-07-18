@@ -45,11 +45,6 @@ import {
 } from '../actions/signin2';
 import { STORE_REQUEST, STORE_SUCCESS, STORE_FAILURE } from '../actions/store';
 import {
-  SURVEY_REQUEST,
-  SURVEY_SUCCESS,
-  SURVEY_FAILURE
-} from '../actions/survey';
-import {
   MARKETPLACE_REQUEST,
   MARKETPLACE_SUCCESS,
   MARKETPLACE_FAILURE
@@ -61,11 +56,6 @@ import {
 } from '../actions/out-of-stock';
 import { UNLIKE_ITEM, LIKE_ITEM } from '../actions/like-item';
 import { LOCAL_STORAGE_SAVE_ERROR } from '../actions/save-error';
-import {
-  BOX_RECEIVED_REQUEST,
-  BOX_RECEIVED_SUCCESS,
-  BOX_RECEIVED_FAILURE
-} from '../actions/box-received';
 import {
   REFUND_REQUEST,
   REFUND_SUCCESS,
@@ -294,12 +284,6 @@ export default (state, action) => {
       return completionState('store', action.response, state);
     case STORE_FAILURE:
       return fullPageErrorState('store', action.error, state);
-    case SURVEY_REQUEST:
-      return requestState('survey', {}, state);
-    case SURVEY_SUCCESS:
-      return completionState('survey', action.response, state);
-    case SURVEY_FAILURE:
-      return fullPageErrorState('survey', action.error, state);
     case MARKETPLACE_REQUEST:
       return requestState('marketplace', {}, state);
     case MARKETPLACE_SUCCESS:
@@ -334,23 +318,6 @@ export default (state, action) => {
         error: {
           fullPage: action.error
         }
-      };
-    case BOX_RECEIVED_REQUEST: {
-      const { boxId } = action;
-      const updatedStateProps = {
-        pending: [...state.pending, 'box-received'],
-        lastBoxIdMarkedAsReceived: boxId
-      };
-      return requestState('box-received', updatedStateProps, state);
-    }
-    case BOX_RECEIVED_SUCCESS: {
-      const { store } = action.response;
-      return completionState('box-received', { store }, state);
-    }
-    case BOX_RECEIVED_FAILURE:
-      return {
-        ...fullPageErrorState('box-received', action.error, state),
-        lastBoxIdMarkedAsReceived: null
       };
     case REFUND_REQUEST:
       return requestState('refund', {}, state);

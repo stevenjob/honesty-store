@@ -12,7 +12,6 @@ export const getInitialState = () => {
     error: {},
     accessToken: null,
     refreshToken: null,
-    survey: undefined,
     likedItemIds: [],
     lastBoxIdMarkedAsReceived: null,
     admin: {}

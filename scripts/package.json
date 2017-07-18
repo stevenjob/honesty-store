@@ -6,8 +6,6 @@
     "build": "../node_modules/.bin/tsc"
   },
   "dependencies": {
-    "@honesty-store/batch": "0.0.0",
-    "@honesty-store/box": "0.0.0",
     "@honesty-store/item": "0.0.0",
     "@honesty-store/service": "0.0.0",
     "@honesty-store/store": "0.0.0",

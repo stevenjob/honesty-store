@@ -81,12 +81,6 @@ const errorDefinitions = {
     redirectionPath: '/',
     dismissalText: dismissalText.DISMISS
   },
-  BoxAlreadyMarkedAsReceived: {
-    message: `You've already marked this box as received`,
-    actionDescription: `Please get in touch with us if the items are not available`,
-    redirectionPath: '/store',
-    dismissalText: dismissalText.DISMISS
-  },
   FullRegistrationRequired: {
     message: `You need to be fully registered to do that`,
     actionDescription: `Please sign up for an account and then try again`,

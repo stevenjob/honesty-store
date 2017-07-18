@@ -32,25 +32,7 @@ const lambdaConfig: LambdaConfig = {
     codeFilter: 'lib/bundle-min.js',
     timeout: 10
   },
-  box: {
-    database: 'rw',
-    handler: 'lib/bundle-min.handler',
-    codeFilter: 'lib/bundle-min.js',
-    timeout: 10
-  },
-  batch: {
-    database: 'ro',
-    handler: 'lib/bundle-min.handler',
-    codeFilter: 'lib/bundle-min.js',
-    timeout: 10
-  },
   store: {
-    database: 'rw',
-    handler: 'lib/bundle-min.handler',
-    codeFilter: 'lib/bundle-min.js',
-    timeout: 10
-  },
-  survey: {
     database: 'rw',
     handler: 'lib/bundle-min.handler',
     codeFilter: 'lib/bundle-min.js',

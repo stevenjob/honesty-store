@@ -128,44 +128,6 @@ const dirToContainer = {
       logGroup,
       environment: [],
       port: 8080
-    }),
-
-  survey: ({ image, baseUrl, lambdaBaseUrl, serviceSecret, logGroup, tableName }) =>
-    template({
-      image,
-      baseUrl,
-      lambdaBaseUrl,
-      serviceSecret,
-      logGroup,
-      environment: [
-        {
-          name: 'TABLE_NAME',
-          value: tableName
-        },
-        {
-          name: 'AWS_REGION',
-          value: 'eu-west-1'
-        }
-      ]
-    }),
-
-  box: ({ image, baseUrl, lambdaBaseUrl, serviceSecret, logGroup, tableName }) =>
-    template({
-      image,
-      baseUrl,
-      serviceSecret,
-      logGroup,
-      lambdaBaseUrl,
-      environment: [
-        {
-          name: 'TABLE_NAME',
-          value: tableName
-        },
-        {
-          name: 'AWS_REGION',
-          value: 'eu-west-1'
-        }
-      ]
     })
 };
 
