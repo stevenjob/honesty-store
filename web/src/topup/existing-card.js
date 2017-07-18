@@ -56,7 +56,7 @@ const NewCard = ({ amount }) => (
 );
 
 const TopupPrompt = ({ amount, cardDetails, performTopup }) => (
-  <Full left={<BackToPage path="/topup">Balance</BackToPage>}>
+  <Full left={<BackToPage path="/profile">Balance</BackToPage>}>
     {cardDetails
       ? <TopupCard
           cardDetails={cardDetails}

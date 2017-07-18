@@ -22,7 +22,6 @@ import LogoutProfile from './profile/logout';
 import Survey from './survey/index';
 import SurveyQuestions from './survey/questions';
 import SurveyComplete from './survey/complete';
-import TopupAmount from './topup/amount';
 import TopupExistingCard from './topup/existing-card';
 import TopupNewCard from './topup/new-card';
 import TopupSuccess from './topup/success';
@@ -163,7 +162,6 @@ ReactDOM.render(
           <Route path="survey" component={Survey} />
           <Route path="survey/questions" component={SurveyQuestions} />
           <Route path="survey/complete" component={SurveyComplete} />
-          <Route path="topup" component={TopupAmount} />
           <Route path="topup/success" component={TopupSuccess} />
           <Route path="topup/:amount" component={TopupExistingCard} />
           <Route path="topup/:amount/new" component={TopupNewCard} />
