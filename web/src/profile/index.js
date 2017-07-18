@@ -14,7 +14,8 @@ const Profile = ({
   storeCode,
   performStoreChange,
   latestTransaction,
-  isPrepay
+  isPrepay,
+  showAdminLink
 }) => (
   <Chrome>
     <div className="navy bg-white center py2">
@@ -52,6 +53,11 @@ const Profile = ({
       </div>
       <Transaction transaction={latestTransaction} />
     </div>
+    {showAdminLink &&
+      <div className="navy bg-white my1 p2">
+        <h3 className="mt0 mb1">Admin</h3>
+        <Link to={`admin/listing/${storeCode}`}>View {storeCode} listings</Link>
+      </div>}
     <ul className="list-reset bg-white px1 mt1">
       <li className="border-bottom border-silver py1">
         <Link className="aqua btn block mxn1" to={`/profile/logout`}>
@@ -68,14 +74,15 @@ const Profile = ({
 );
 
 const mapStateToProps = ({
-  user: { creditLimit, emailAddress, balance, transactions = [] },
+  user: { creditLimit, emailAddress, balance, transactions = [], flags = {} },
   store: { code }
 }) => ({
   emailAddress,
   balance: balance || 0,
   storeCode: code,
   latestTransaction: transactions.length > 0 ? transactions[0] : undefined,
-  isPrepay: determinePrepay(creditLimit)
+  isPrepay: determinePrepay(creditLimit),
+  showAdminLink: !!flags.admin || !!flags[`storeAdmin:${code}`]
 });
 
 const mapDispatchToProps = { performStoreChange };
