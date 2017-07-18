@@ -51,7 +51,7 @@ const Profile = ({
         <h3 className="mt0 mb1">Latest activity</h3>
         <Link to="profile/history">View history</Link>
       </div>
-      <Transaction transaction={latestTransaction} />
+      {latestTransaction && <Transaction transaction={latestTransaction} />}
     </div>
     {showAdminLink &&
       <div className="navy bg-white my1 p2">
