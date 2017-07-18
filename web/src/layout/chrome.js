@@ -69,7 +69,8 @@ const mapStateToProps = ({ user, store: { code: storeCode, items } }) => ({
   storeCode,
   registered: isRegisteredUser(user),
   balance: user.balance || 0,
-  isMarketplaceSeller: items.some(({ sellerId }) => sellerId === user.id)
+  isMarketplaceSeller: user.id != null &&
+    items.some(({ sellerId }) => sellerId === user.id)
 });
 
 export default connect(mapStateToProps, {})(Chrome);
