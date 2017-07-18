@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router';
 
 class Stepper extends React.Component {
   render() {
@@ -15,7 +14,7 @@ class Stepper extends React.Component {
     return (
       <div className={`mt3 ${className}`}>
         <div className="flex justify-between items-center">
-          <Link
+          <button
             className={`btn ${decrementDisabled ? 'rounded bg-gray white' : 'btn-primary'}`}
             onClick={() => !decrementDisabled && onDecrement()}
           >
@@ -27,11 +26,11 @@ class Stepper extends React.Component {
             >
               <polygon fill="#fff" points="100,37.5 0,37.5 0,62.5 100,62.5" />
             </svg>
-          </Link>
+          </button>
           <h2 className="my0" style={{ userSelect: 'none' }}>
             {value}
           </h2>
-          <Link
+          <button
             className={`btn ${incrementDisabled ? 'rounded bg-gray white' : 'btn-primary'}`}
             onClick={() => !incrementDisabled && onIncrement()}
           >
@@ -46,7 +45,7 @@ class Stepper extends React.Component {
                 points="100,37.5 62.5,37.5 62.5,0 37.5,0 37.5,37.5 0,37.5 0,62.5 37.5,62.5 37.5,100 62.5,100 62.5,62.5 100,62.5"
               />
             </svg>
-          </Link>
+          </button>
         </div>
       </div>
     );
