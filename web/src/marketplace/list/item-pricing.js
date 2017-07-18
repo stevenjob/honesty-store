@@ -9,31 +9,34 @@ import Full from '../../layout/full';
 
 const ourFees = 0.1;
 
-const EstimatedPayoutTable = ({ allSoldPrice }) => {
-  const Row = ({ description, total, bold }) => (
-    <tr className={`${bold ? 'bold' : ''}`}>
-      <td>{description}</td>
+const formatItemCount = count => (count !== 1 ? `${count} items` : `1 item`);
+
+const getShrinkageInfo = (quantity, itemPrice, shrinkage) => {
+  const shrunkItemCount = Math.ceil(quantity * shrinkage);
+  const itemsSoldAfterShrinkage = quantity - shrunkItemCount;
+  return {
+    revenue: itemsSoldAfterShrinkage * itemPrice,
+    shrunkItemCount
+  };
+};
+
+const ShrinkagePayoutRow = ({ className, quantity, price, shrinkage }) => {
+  const { revenue, shrunkItemCount } = getShrinkageInfo(
+    quantity,
+    price,
+    shrinkage
+  );
+  return (
+    <tr className={className}>
+      <td>
+        {shrinkage === 0
+          ? 'If everything sells'
+          : `With ${shrinkage * 100}% shrinkage (${formatItemCount(shrunkItemCount)})`}
+      </td>
       <td className="aqua right-align">
-        <Currency amount={Math.ceil(total)} />
+        <Currency amount={revenue} />
       </td>
     </tr>
-  );
-
-  return (
-    <table className="table block col-12">
-      <tbody>
-        <Row description="If everything sells" total={allSoldPrice} />
-        <Row
-          description="With 10% shrinkage"
-          total={allSoldPrice - allSoldPrice * 0.1}
-          bold={true}
-        />
-        <Row
-          description="With 20% shrinkage"
-          total={allSoldPrice - allSoldPrice * 0.2}
-        />
-      </tbody>
-    </table>
   );
 };
 
@@ -72,11 +75,17 @@ class MarketplaceAddItemPricing extends React.Component {
   }
 
   calculateMinimumSellerFee() {
+    const shrinkage = 0.1;
     const { quantity, totalPaid } = this.props;
-    const pricePerItem = totalPaid / quantity;
-    const itemsSoldAfterShrinkage = quantity - Math.ceil(quantity * 0.1);
-    const loss = totalPaid - itemsSoldAfterShrinkage * pricePerItem;
-    return Math.ceil(loss / itemsSoldAfterShrinkage);
+    const itemPrice = totalPaid / quantity;
+    const {
+      revenue: revenueAfterShrinkage,
+      shrunkItemCount
+    } = getShrinkageInfo(quantity, itemPrice, shrinkage);
+    const itemsSoldAfterShrinkage = quantity - shrunkItemCount;
+    const loss = totalPaid - revenueAfterShrinkage;
+    const sellerFee = Math.ceil(loss / itemsSoldAfterShrinkage);
+    return isFinite(sellerFee) ? sellerFee : 0;
   }
 
   getItemSubtotal() {
@@ -94,6 +103,7 @@ class MarketplaceAddItemPricing extends React.Component {
   render() {
     const { sellerFee } = this.state;
     const { quantity } = this.props;
+    const itemPriceWithSellerFee = this.getItemSubtotal();
 
     return (
       <Full left={<BackToPage path="/more/list/details" title="Details" />}>
@@ -124,9 +134,26 @@ class MarketplaceAddItemPricing extends React.Component {
             </h2>
           </div>
           <h3 className="mt3">Estimated payout</h3>
-          <EstimatedPayoutTable
-            allSoldPrice={this.getItemSubtotal() * quantity}
-          />
+          <table className="table block col-12">
+            <tbody>
+              <ShrinkagePayoutRow
+                quantity={quantity}
+                price={itemPriceWithSellerFee}
+                shrinkage={0}
+              />
+              <ShrinkagePayoutRow
+                className="bold"
+                quantity={quantity}
+                price={itemPriceWithSellerFee}
+                shrinkage={0.1}
+              />
+              <ShrinkagePayoutRow
+                quantity={quantity}
+                price={itemPriceWithSellerFee}
+                shrinkage={0.2}
+              />
+            </tbody>
+          </table>
 
           <p className="my3 center">
             <Link
