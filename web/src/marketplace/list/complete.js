@@ -5,7 +5,7 @@ import history from '../../history';
 export default () => (
   <div
     className="absolute top-0 right-0 bottom-0 left-0 flex flex-column justify-center navy center p2"
-    onClick={() => history.push('/store')}
+    onClick={() => history.replace('/store')}
   >
     <div className={`col-6 md-col-3 mx-auto layout-alert-success`}>
       <img src={sucess} alt="" />
