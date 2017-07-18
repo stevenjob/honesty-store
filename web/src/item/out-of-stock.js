@@ -64,6 +64,4 @@ const mapStateToProps = (
 };
 
 const mapDispatchToProps = { performOutOfStock };
-export default connect(mapStateToProps, mapDispatchToProps)(
-  OutOfStockInternal
-);
+export default connect(mapStateToProps, mapDispatchToProps)(OutOfStockInternal);
