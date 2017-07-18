@@ -99,15 +99,21 @@ const reducer = reduce<TopupEvent>(
         const stripeHistory = stripe == null ?
           [] : [...previousStripeHistory, stripe];
 
-        const customer = await stripeForUser(topupAccount)
-          .customers
-          .create({
-            source: stripeToken,
-            description,
-            metadata: {
-              accountId: id
-            }
-          });
+        let customer;
+        try {
+          customer = await stripeForUser(topupAccount)
+            .customers
+            .create({
+              source: stripeToken,
+              description,
+              metadata: {
+                accountId: id
+              }
+            });
+        } catch (e) {
+          error(key, `couldn't create stripe customer`, e);
+          throw userErrorFromStripeError(e);
+        }
 
         return {
           ...topupAccount,
@@ -129,21 +135,34 @@ const reducer = reduce<TopupEvent>(
         assertValidStripeDetails(stripe);
         await assertBalanceWithinLimit({ key, accountId: id, amount });
 
-        const charge = await stripeForUser(topupAccount).charges.create(
-          {
-            amount,
-            currency: 'gbp',
-            customer: stripe.customer.id,
-            description: `topup for ${id}`,
-            metadata: {
-              accountId: id
+        let charge;
+
+        try {
+          charge = await stripeForUser(topupAccount).charges.create(
+            {
+              amount,
+              currency: 'gbp',
+              customer: stripe.customer.id,
+              description: `topup for ${id}`,
+              metadata: {
+                accountId: id
+              },
+              expand: ['balance_transaction']
             },
-            expand: ['balance_transaction']
-          },
-          {
-            idempotency_key: stripe.nextChargeToken
-          }
-        );
+            {
+              idempotency_key: stripe.nextChargeToken
+            }
+          );
+        } catch (e) {
+          /* Note to future devs: 'Must provide source or customer.'
+          * appears to be a bug with stripe's API.
+          *
+          * We've correctly provided a customer, so the error seems odd. I
+          * believe it's to do with the idempotency_key being incorrect, so
+          * that's the first place to start looking. */
+          error(key, `couldn't create stripe charge`, e);
+          throw userErrorFromStripeError(e);
+        }
 
         const topup = await createTransaction(key, id, {
           type: 'topup',
@@ -185,7 +204,7 @@ export const router: LambdaRouter = lambdaRouter('topup', 1);
 
 router.post<TopupRequest, TopupResponse>(
   '/',
-  async (key, { }, topupRequest) => {
+  async (_key, { }, topupRequest) => {
     assertValidTopupRequest(topupRequest);
 
     const { accountId, userId, amount: dirtyAmount, stripeToken } = topupRequest;
@@ -200,12 +219,7 @@ router.post<TopupRequest, TopupResponse>(
         accountId,
         stripeToken
       };
-      try {
-        topupAccount = await reducer(event);
-      } catch (e) {
-        error(key, `couldn't create stripe customer`, e);
-        throw userErrorFromStripeError(e);
-      }
+      topupAccount = await reducer(event);
     }
 
     const amount = Number(dirtyAmount);
@@ -217,18 +231,7 @@ router.post<TopupRequest, TopupResponse>(
         accountId,
         amount
       };
-      try {
-        topupAccount = await reducer(event, topupAccount);
-      } catch (e) {
-        /* Note to future devs: 'Must provide source or customer.'
-          * appears to be a bug with stripe's API.
-          *
-          * We've correctly provided a customer, so the error seems odd. I
-          * believe it's to do with the idempotency_key being incorrect, so
-          * that's the first place to start looking. */
-        error(key, `couldn't create stripe charge`, e);
-        throw userErrorFromStripeError(e);
-      }
+      topupAccount = await reducer(event, topupAccount);
     }
 
     if (topupAccount == null) {
