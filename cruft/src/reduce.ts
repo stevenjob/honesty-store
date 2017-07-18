@@ -35,7 +35,11 @@ export const reduce = <
       }
     }
 
-    return await create<Aggregate>({ client, tableName })(aggregateFactory(event));
+    const newAggregate = aggregateFactory(event);
+    if (newAggregate.id !== id) {
+      throw new Error(`New aggregate id ${newAggregate.id} does not match selected id ${id}`);
+    }
+    return await create<Aggregate>({ client, tableName })(newAggregate);
   };
 
   return (

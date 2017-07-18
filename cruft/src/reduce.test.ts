@@ -109,6 +109,7 @@ describe.only(suiteName, () => {
 
     try {
       await reduce(event);
+      fail('should have thrown');
     } catch (e) {
       if (e.message !== 'Currently emit can only be invoked once a.') {
         throw e;
@@ -139,6 +140,7 @@ describe.only(suiteName, () => {
 
     try {
       await reduce(event, aggregate);
+      fail('should have thrown');
     } catch (e) {
       if (e.message !== `Aggregate supplied ${aggregate.id} does not match id foo`) {
         throw e;
@@ -169,6 +171,27 @@ describe.only(suiteName, () => {
     const aggregate = await reduce(event);
     expect(aggregate.id).toEqual(aggregateId);
     expect(aggregate.lastReceived && aggregate.lastReceived.id).toEqual(event.id);
+  });
+
+  it('should error if aggregate factory returns mismatched id', async () => {
+    const aggregateId = nextId();
+    const event = {
+      id: nextId()
+    };
+    const aggregate: { id: string, version: 0 } = {
+      id: nextId(),
+      version: 0
+    };
+    const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (agg) => agg, () => aggregate);
+
+    try {
+      await reduce(event);
+      fail('should have thrown');
+    } catch (e) {
+      if (e.message !== `New aggregate id ${aggregate.id} does not match selected id ${aggregateId}`) {
+        throw e;
+      }
+    }
   });
 
 });
