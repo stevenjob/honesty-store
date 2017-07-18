@@ -98,7 +98,12 @@ const mapStateToProps = ({
     };
   });
   return {
-    items,
+    items: items.sort((a, b) => {
+      const result = a.name.localeCompare(b.name);
+      if (result !== 0)
+        return result;
+      return a.qualifier(b.qualifier);
+    }),
     revenue: sparseRevenue
   };
 };
