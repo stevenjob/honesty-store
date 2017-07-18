@@ -97,7 +97,7 @@ class MarketplaceAddItemPricing extends React.Component {
 
   getItemTotal() {
     const subtotal = this.getItemSubtotal();
-    return Math.ceil(subtotal * (1 + ourFees));
+    return Math.ceil(Math.floor(subtotal * (1 + ourFees) * 100) / 100);
   }
 
   render() {
