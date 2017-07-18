@@ -7,7 +7,7 @@ export default () => (
     className="absolute top-0 right-0 bottom-0 left-0 flex flex-column justify-center navy center p2"
     onClick={() => history.push('/store')}
   >
-    <div className={`col-6 mx-auto layout-alert-success`}>
+    <div className={`col-6 md-col-3 mx-auto layout-alert-success`}>
       <img src={sucess} alt="" />
     </div>
     <h3>Thanks for adding an item!</h3>
