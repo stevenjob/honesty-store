@@ -6,25 +6,24 @@ import { error } from '@honesty-store/service/lib/log';
 import { assertBalanceWithinLimit, assertValidTransaction, createTransaction, extractFieldsFromTransactionId } from '@honesty-store/transaction';
 import * as stripeFactory from 'stripe';
 import { v4 as uuid } from 'uuid';
-import { userErrorFromStripeError } from './errors';
+import { isRetryableStripeError, userErrorCodeFromStripeError, userErrorFromStripeError } from './errors';
 
 import {
   CardDetails,
-  Stripe,
   TopupAccount,
   TopupAttempted,
   TopupCardDetailsChanged,
+  TopupError,
   TopupEvent,
+  TopupInProgress,
   TopupRequest,
   TopupResponse,
+  TopupSuccess,
   TransactionWithBalance
 } from './client';
 
 import {
-  assertNever,
-  assertObject,
   assertOptional,
-  assertPositiveInteger,
   assertValidString,
   assertValidUuid,
   createAssertValidObject,
@@ -54,14 +53,6 @@ const assertValidTopupRequest = createAssertValidObject<TopupRequest>({
   userId: assertValidUuid
 });
 
-const assertValidStripeDetails = createAssertValidObject<Stripe>({
-  customer: assertObject,
-  nextChargeToken: assertValidUuid,
-  lastError: assertOptional(assertValidString),
-  lastSuccess: assertOptional(assertPositiveInteger),
-  retriesRemaining: assertPositiveInteger
-});
-
 const extractCardDetails = ({ id, stripe }: TopupAccount): CardDetails => {
   if (stripe == null) {
     throw new CodedError('NoCardDetailsPresent', `No stripe details registered for account ${id}`);
@@ -79,6 +70,13 @@ const stripeForUser = ({ test }) => {
   return test ? stripeTest : stripeProd;
 };
 
+const getStripeCustomerId = ({ id, stripe }: TopupAccount) => {
+  if (stripe == null) {
+    throw new Error(`No Stripe details found for ${id}.`);
+  }
+  return stripe.customer.id;
+};
+
 const reducer = reduce<TopupEvent | TransactionWithBalance>(
   event => {
     switch (event.type) {
@@ -91,8 +89,6 @@ const reducer = reduce<TopupEvent | TransactionWithBalance>(
       case 'debit':
       case 'credit':
         return extractFieldsFromTransactionId(event.id).accountId;
-      default:
-        return assertNever(event);
     }
   },
   event => event.id,
@@ -106,6 +102,8 @@ const reducer = reduce<TopupEvent | TransactionWithBalance>(
 
         const description = stripe == null ?
           `registration for ${id}` : `adding new card for ${id}`;
+
+        // throw new Error(`check for pending payment`)
 
         const stripeHistory = stripe == null ?
           [] : [...previousStripeHistory, stripe];
@@ -143,7 +141,6 @@ const reducer = reduce<TopupEvent | TransactionWithBalance>(
           throw new Error(`No Stripe details found for ${id}.`);
         }
 
-        assertValidStripeDetails(stripe);
         await assertBalanceWithinLimit({ key, accountId: id, amount });
 
         let charge;
@@ -194,15 +191,120 @@ const reducer = reduce<TopupEvent | TransactionWithBalance>(
           lastTopup: topup
         };
       }
-      case 'topup':
+      case 'topup': {
+        const { id, status } = topupAccount;
+
+        if (status == null) {
+          // old-skool topup
+          return topupAccount;
+        }
+
+        if (status.status !== 'in-progress') {
+          throw new Error(`Invalid status ${status.status} for receiving a topup ${id}`);
+        }
+
+        const { balance, ...transaction } = event;
+
+        const updatedStatus: TopupSuccess = {
+          status: 'success',
+          transactionAndBalance: { balance, transaction },
+          timestamp: Date.now()
+        };
+
+        return {
+          ...topupAccount,
+          status: updatedStatus
+        };
+      }
       case 'purchase':
       case 'refund':
       case 'debit':
       case 'credit': {
-        return topupAccount;
+        const { id, status } = topupAccount;
+
+        if (status == null) {
+          // old-skool topup
+          return topupAccount;
+        }
+
+        if (status.status === 'success' && status.timestamp >= Date.now() - ms('24h')) {
+          // safety valve, don't charge multiple times in 24h period
+          return topupAccount;
+        }
+
+        if (status.status === 'in-progress') {
+          // existing topup must complete
+          return topupAccount;
+        }
+
+        if (status.status === 'error' && status.retriesRemaining === 0) {
+          // user must update card details
+          return topupAccount;
+        }
+
+        const { id: eventId, balance } = event;
+
+        if (balance > -500) {
+          return topupAccount;
+        }
+
+        const amount = -balance;
+
+        try {
+          const topupCustomerId = getStripeCustomerId(topupAccount);
+          const charge = await stripeForUser(topupAccount).charges.create(
+            {
+              amount,
+              currency: 'gbp',
+              customer: topupCustomerId,
+              description: `topup for ${id}`,
+              metadata: {
+                accountId: id
+              },
+              expand: ['balance_transaction']
+            },
+            {
+              idempotency_key: eventId
+            }
+          );
+
+          const updatedStatus: TopupInProgress = {
+            status: 'in-progress',
+            amount,
+            stripeFee: charge.balance_transaction.fee,
+            chargeId: charge.id,
+            topupCustomerId: topupCustomerId
+          };
+
+          return {
+            ...topupAccount,
+            status: updatedStatus
+          };
+        } catch (e) {
+          /* Note to future devs: 'Must provide source or customer.'
+          * appears to be a bug with stripe's API.
+          *
+          * We've correctly provided a customer, so the error seems odd. I
+          * believe it's to do with the idempotency_key being incorrect, so
+          * that's the first place to start looking. */
+          error(key, `couldn't create stripe charge`, e);
+
+          const retriesRemaining = isRetryableStripeError(e) ?
+            (status.status !== 'error' ? 2 : status.retriesRemaining - 1) : 0;
+
+          const updatedStatus: TopupError = {
+            status: 'error',
+            amount,
+            code: userErrorCodeFromStripeError(e),
+            retriesRemaining
+          };
+
+          return {
+            ...topupAccount,
+            status: updatedStatus
+          };
+        }
       }
-      default:
-        return assertNever(event);
     }
   },
   (event) => {
@@ -257,8 +359,7 @@ router.post<TopupRequest, TopupResponse>(
     }
 
     return {
-      cardDetails: extractCardDetails(topupAccount),
-      ...(topupAccount.lastTopup || {})
+      cardDetails: extractCardDetails(topupAccount)
     };
 
   }

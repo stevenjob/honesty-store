@@ -1,12 +1,32 @@
 import fetch from '@honesty-store/service/lib/fetch';
 import { Transaction, TransactionAndBalance } from '@honesty-store/transaction';
 
+export interface TopupSuccess {
+  status: 'success',
+  transactionAndBalance: TransactionAndBalance;
+  timestamp: number;
+}
+
+export interface TopupInProgress {
+  status: 'in-progress',
+  amount: number;
+  stripeFee: number;
+  chargeId: string;
+  topupCustomerId: string;
+}
+
+export interface TopupError {
+  status: 'error';
+  amount: number;
+  code: CardError;
+  retriesRemaining: number;
+}
+
+export type TopupStatus = TopupSuccess | TopupInProgress | TopupError;
+
 export interface Stripe {
   customer: any;
   nextChargeToken: string;
-  lastSuccess?: number;
-  lastError?: CardError;
-  retriesRemaining: number;
 }
 
 export interface TopupAccount {
@@ -14,7 +34,7 @@ export interface TopupAccount {
   version: number;
   userId: string;
   test: boolean;
-  lastTopup?: TransactionAndBalance;
+  status?: TopupStatus;
   stripe?: Stripe;
   stripeHistory?: Stripe[];
   legacyId?: string;

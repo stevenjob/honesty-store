@@ -21,6 +21,11 @@ const stripeCodeToErrorCode = (stripeCode): CardError => {
   }
 };
 
+export const isRetryableStripeError = ({ code, type }) =>
+ type === 'StripeCardError' && (code === 'card_declined' || code === 'processing_error');
+
+export const userErrorCodeFromStripeError = ({ code }) => stripeCodeToErrorCode(code);
+
 export const userErrorFromStripeError = (stripeError) => {
   if (stripeError.type !== 'StripeCardError') {
     return stripeError;
