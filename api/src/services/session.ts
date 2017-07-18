@@ -15,6 +15,7 @@ export interface UserSessionData {
   emailAddress?: string;
   creditLimit: number;
   id: string;
+  flags: any;
 }
 export interface UserRevenue {
   startInclusive: number;
@@ -35,7 +36,7 @@ export interface SessionData {
 }
 
 const getUserSessionData = async (key, user): Promise<UserSessionData> => {
-  const { id, accountId, emailAddress } = user;
+  const { id, accountId, emailAddress, flags } = user;
   const { balance = 0, transactions = [], creditLimit = 0 } = accountId
     ? await getExpandedTransactionsAndAccount({ key, accountID: accountId })
     : {};
@@ -61,7 +62,8 @@ const getUserSessionData = async (key, user): Promise<UserSessionData> => {
     transactions,
     cardDetails,
     creditLimit,
-    features: {}
+    features: {},
+    flags
   };
 };
 
