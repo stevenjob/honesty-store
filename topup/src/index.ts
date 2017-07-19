@@ -4,6 +4,7 @@ import { createServiceKey } from '@honesty-store/service/lib/key';
 import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
 import { error } from '@honesty-store/service/lib/log';
 import { assertBalanceWithinLimit, assertValidTransaction, createTransaction, extractFieldsFromTransactionId } from '@honesty-store/transaction';
+import * as ms from 'ms';
 import * as stripeFactory from 'stripe';
 import { v4 as uuid } from 'uuid';
 import { isRetryableStripeError, userErrorCodeFromStripeError, userErrorFromStripeError } from './errors';
@@ -103,8 +104,6 @@ const reducer = reduce<TopupEvent | TransactionWithBalance>(
         const description = stripe == null ?
           `registration for ${id}` : `adding new card for ${id}`;
 
-        // throw new Error(`check for pending payment`)
-
         const stripeHistory = stripe == null ?
           [] : [...previousStripeHistory, stripe];
 
@@ -182,13 +181,19 @@ const reducer = reduce<TopupEvent | TransactionWithBalance>(
           }
         });
 
+        const updatedStatus: TopupSuccess = {
+          status: 'success',
+          transactionAndBalance: topup,
+          timestamp: Date.now()
+        };
+
         return {
           ...topupAccount,
           stripe: {
             ...stripe,
             nextChargeToken: uuid()
           },
-          lastTopup: topup
+          status: updatedStatus
         };
       }
       case 'topup': {
