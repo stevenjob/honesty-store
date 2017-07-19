@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { formatWithSymbol } from '../../format/Currency';
-import { performUpdateListingCount } from '../../actions/update-listing-count';
 import { performRemoveListing } from '../../actions/remove-listing';
 
 const ListingRow = ({
@@ -18,21 +17,10 @@ const ListingRow = ({
     sellerId,
     price
   },
-  performUpdateListingCount,
   performRemoveListing,
   storeCode,
   className
 }) => {
-  const promptForItemAvailability = itemId => {
-    const count = prompt('How many items are available?');
-    if (count == null || count === '') return;
-    performUpdateListingCount({
-      itemId: id,
-      storeCode,
-      count: Number(count)
-    });
-  };
-
   return (
     <tr className={className}>
       <td>
@@ -45,8 +33,7 @@ const ListingRow = ({
       <td className="right-align">{listCount}</td>
       <td className="right-align">
         {availableCount} <Link
-          onClick={() => promptForItemAvailability(id)}
-          style={{ cursor: 'pointer' }}
+          to={`/admin/listing/${storeCode}/item/${id}/available`}
         >
           (edit)
         </Link>
@@ -78,6 +65,5 @@ const ListingRow = ({
 };
 
 export default connect(() => ({}), {
-  performUpdateListingCount,
   performRemoveListing
 })(ListingRow);

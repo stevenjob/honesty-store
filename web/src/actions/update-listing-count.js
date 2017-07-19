@@ -1,4 +1,5 @@
 import apifetch from './apirequest';
+import history from '../history';
 
 export const UPDATE_LISTING_COUNT_REQUEST = 'UPDATE_LISTING_COUNT_REQUEST';
 export const UPDATE_LISTING_COUNT_SUCCESS = 'UPDATE_LISTING_COUNT_SUCCESS';
@@ -46,6 +47,7 @@ export const performUpdateListingCount = ({
     );
 
     dispatch(updateListingCountSuccess(response));
+    history.push(`/admin/listing/${storeCode}`);
   } catch (e) {
     dispatch(updateListingCountFailure(e));
   }

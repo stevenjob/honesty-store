@@ -33,11 +33,7 @@ const ItemListings = ({
       </thead>
       <tbody>
         {items.map((item, index) => (
-          <ListingRow
-            key={index}
-            listing={item}
-            storeCode={code}
-          />
+          <ListingRow key={index} listing={item} storeCode={code} />
         ))}
       </tbody>
     </table>

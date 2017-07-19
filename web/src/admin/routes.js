@@ -12,6 +12,7 @@ import AdminItemListingsNew from './listing/new';
 import AdminItemListingEdit from './listing/edit';
 import AdminItemListingItemSelect from './listing/item-select';
 import AdminItemListingRelist from './listing/relist';
+import AdminItemListingAvailable from './listing/available';
 
 const routes = (
   <Route path="admin" component={AdminItemFetch}>
@@ -26,6 +27,10 @@ const routes = (
       <Route path="item" component={AdminItemListingItemSelect} />
       <Route path="item/:itemId/edit" component={AdminItemListingEdit} />
       <Route path="item/:itemId/add-more" component={AdminItemListingRelist} />
+      <Route
+        path="item/:itemId/available"
+        component={AdminItemListingAvailable}
+      />
       <Route path="item/:itemId" component={AdminItemListingsNew} />
     </Route>
   </Route>

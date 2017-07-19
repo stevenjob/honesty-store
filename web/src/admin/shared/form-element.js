@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default ({ id, description, value, handler }) => (
+export default ({ id, description, value, handler, ...other }) => (
   <p>
     <label htmlFor="name">{description}</label>
     <input
@@ -9,6 +9,7 @@ export default ({ id, description, value, handler }) => (
       value={value || ''}
       className="input"
       onChange={handler}
+      {...other}
     />
   </p>
 );
