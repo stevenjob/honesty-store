@@ -54,11 +54,12 @@ const ListingRow = ({
       <td><Currency amount={revenue} /></td>
       <td>{sellerId.replace(/-.*/, '')}</td>
       <td>
-        <Link to={`/admin/listing/${storeCode}/item/${id}/add-more`}>
+        <Link
+          to={`/admin/listing/${storeCode}/item/${id}/add-more`}
+          className="block mb1"
+        >
           Add more
         </Link>
-      </td>
-      <td>
         <Link
           className="red"
           onClick={() =>

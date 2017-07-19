@@ -28,8 +28,7 @@ const ItemListings = ({
           <th>Refunded</th>
           <th>Revenue</th>
           <th>Seller Id</th>
-          <th />
-          <th />
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
