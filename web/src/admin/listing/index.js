@@ -18,7 +18,7 @@ const ItemListings = ({
         Add listing
       </Link>
     </div>
-    <table className="col-12">
+    <table className="col-12 admin-table">
       <thead>
         <tr className="left-align">
           <th>Item</th>
@@ -37,13 +37,12 @@ const ItemListings = ({
             key={index}
             listing={item}
             storeCode={code}
-            className={index % 2 === 0 ? 'bg-lightgray' : ''}
           />
         ))}
       </tbody>
     </table>
     <h3>Revenue</h3>
-    <table className="col-12">
+    <table className="col-12 admin-table">
       <thead>
         <tr>
           <th className="left-align">Seller Id</th>

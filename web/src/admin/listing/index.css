@@ -1,3 +1,12 @@
-tr>th, tr>td {
+.admin-table tr>th, .admin-table tr>td {
   padding: 0.5em;
+}
+
+.admin-table thead {
+  background-color: #A9B8B9;
+  color: white;
+}
+
+.admin-table tbody>tr:nth-child(even) {
+  background-color: #E6E6E6;
 }
