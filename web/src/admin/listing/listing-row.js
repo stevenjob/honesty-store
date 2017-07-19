@@ -49,8 +49,7 @@ const ListingRow = ({
           (edit)
         </Link>
       </td>
-      <td>{purchaseCount}</td>
-      <td>{refundCount}</td>
+      <td>{purchaseCount - refundCount}</td>
       <td><Currency amount={revenue} /></td>
       <td>{sellerId.replace(/-.*/, '')}</td>
       <td>

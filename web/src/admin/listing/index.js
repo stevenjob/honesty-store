@@ -24,8 +24,7 @@ const ItemListings = ({
           <th>Item</th>
           <th>List Count</th>
           <th>Available</th>
-          <th>Purchased</th>
-          <th>Refunded</th>
+          <th>Sold</th>
           <th>Revenue</th>
           <th>Seller Id</th>
           <th>Actions</th>
