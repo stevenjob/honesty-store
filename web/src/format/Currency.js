@@ -11,6 +11,8 @@ export const formatAny = value => {
   throw new Error(`Parsing not supported`);
 };
 
+export const formatWithSymbol = value => `£${formatAny(value)}`;
+
 const Currency = ({ amount }) => {
   const showPence = Math.abs(amount) < 100;
 

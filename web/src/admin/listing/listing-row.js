@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import Currency from '../../format/Currency';
+import { formatWithSymbol } from '../../format/Currency';
 import { performUpdateListingCount } from '../../actions/update-listing-count';
 import { performRemoveListing } from '../../actions/remove-listing';
 
@@ -41,7 +41,7 @@ const ListingRow = ({
         {' '}
         <Link to={`/admin/listing/${storeCode}/item/${id}/edit`}>(edit)</Link>
       </td>
-      <td className="right-align"><Currency amount={price} /></td>
+      <td className="right-align">{formatWithSymbol(price)}</td>
       <td className="right-align">{listCount}</td>
       <td className="right-align">
         {availableCount} <Link
@@ -52,7 +52,7 @@ const ListingRow = ({
         </Link>
       </td>
       <td className="right-align">{purchaseCount - refundCount}</td>
-      <td className="right-align"><Currency amount={revenue} /></td>
+      <td className="right-align">{formatWithSymbol(revenue)}</td>
       <td>{sellerId.replace(/-.*/, '')}</td>
       <td>
         <Link

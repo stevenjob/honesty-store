@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import Currency from '../../format/Currency';
+import { formatWithSymbol } from '../../format/Currency';
 import monthFromDate from '../../format/date';
 import ListingRow from './listing-row';
 import './index.css';
@@ -58,7 +58,7 @@ const ItemListings = ({
           {revenue.length > 0 &&
             revenue[0].value.map((item, index) => (
               <th key={index} className="right-align">
-                <Currency amount={item.total} />
+                {formatWithSymbol(item.total)}
               </th>
             ))}
         </tr>
@@ -69,7 +69,7 @@ const ItemListings = ({
             <td className="left-align">{item.label}</td>
             {item.value.map((item, index) => (
               <td key={index} className="right-align">
-                <Currency amount={item.value} />
+                {formatWithSymbol(item.value)}
               </td>
             ))}
           </tr>
