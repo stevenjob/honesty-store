@@ -11,7 +11,8 @@ class AdminListingsFetch extends React.Component {
   }
 
   render() {
-    return this.props.children;
+    const { pending, children } = this.props;
+    return pending.length === 0 ? children : null;
   }
 }
 

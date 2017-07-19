@@ -1,4 +1,5 @@
 import apifetch from './apirequest';
+import history from '../history';
 
 export const REMOVE_LISTING_REQUEST = 'REMOVE_LISTING_REQUEST';
 export const REMOVE_LISTING_SUCCESS = 'REMOVE_LISTING_SUCCESS';
@@ -42,6 +43,7 @@ export const performRemoveListing = ({ storeCode, itemId }) => async (
     );
 
     dispatch(removeListingSuccess(itemId));
+    history.replace(`/admin/listing/${storeCode}`);
   } catch (e) {
     dispatch(removeListingFailure(e));
   }
