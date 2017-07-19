@@ -12,7 +12,7 @@ export default ({
     revenue,
     name,
     qualifier,
-    sellerId,
+    sellerEmail,
     price
   },
   storeCode,
@@ -36,7 +36,7 @@ export default ({
       </td>
       <td className="right-align">{purchaseCount - refundCount}</td>
       <td className="right-align">{formatWithSymbol(revenue)}</td>
-      <td>{sellerId.replace(/-.*/, '')}</td>
+      <td>{sellerEmail}</td>
       <td>
         <Link to={`${itemListingPrefix}/add-more`} className="block mb1">
           Add more

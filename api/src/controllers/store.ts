@@ -1,9 +1,32 @@
-import { getStoreFromCode, listItem, relistItem, Store, unlistItem, updateItemCount, updateItemDetails } from '@honesty-store/store';
-import { updateUser, User } from '@honesty-store/user';
+import {
+  getStoreFromCode,
+  listItem,
+  relistItem,
+  Store,
+  StoreItem,
+  unlistItem,
+  updateItemCount,
+  updateItemDetails
+} from '@honesty-store/store';
+import { getUser, updateUser, User } from '@honesty-store/user';
 import { authenticateAccessToken, authenticateAccessTokenAndStoreAdminUser } from '../middleware/authenticate';
 import { getSessionData } from '../services/session';
 
-const externaliseItem = (itemId: string, store: Store) => store.items.find(({ id }) => id === itemId);
+const itemWithSellerEmail = async (key, item: StoreItem) => {
+  const { emailAddress: sellerEmail } = await getUser(key, item.sellerId);
+  return {
+    ...item,
+    sellerEmail
+  };
+};
+
+const externaliseItem = async (key, itemId: string, store: Store) => {
+  const item = store.items.find(({ id }) => id === itemId);
+  if (item == null) {
+    return;
+  }
+  return await itemWithSellerEmail(key, item);
+};
 
 export const updateDefaultStoreCode = async (key, userID, storeCode): Promise<User> => {
   const { id: defaultStoreId } = await getStoreFromCode(key, storeCode);
@@ -33,7 +56,12 @@ export default (router) => {
     authenticateAccessTokenAndStoreAdminUser,
     async (key, { storeCode }, { }, { }) => {
       const { items, revenue } = await getStoreFromCode(key, storeCode);
-      return { items, revenue };
+      const itemsWithSellerEmailPromises = items.map(async (item) => itemWithSellerEmail(key, item));
+
+      return {
+        items: await Promise.all(itemsWithSellerEmailPromises),
+        revenue
+      };
     }
   );
 
@@ -43,7 +71,7 @@ export default (router) => {
     async (key, { itemId, storeCode }, { }, { user: { id: userId } }) => {
       const { id: storeId } = await getStoreFromCode(key, storeCode);
       const store = await unlistItem(key, storeId, itemId, userId);
-      return externaliseItem(itemId, store);
+      return await externaliseItem(key, itemId, store);
     }
   );
 
@@ -57,7 +85,7 @@ export default (router) => {
         ...listing
       };
       const store = await listItem(key, storeId, storeItemListing, userId);
-      return externaliseItem(itemId, store);
+      return await externaliseItem(key, itemId, store);
     }
   );
 
@@ -67,7 +95,7 @@ export default (router) => {
     async (key, { itemId, storeCode }, { additionalCount } , { user: { id: userId } }) => {
       const { id: storeId } = await getStoreFromCode(key, storeCode);
       const store = await relistItem(key, storeId, itemId, additionalCount, userId);
-      return externaliseItem(itemId, store);
+      return await externaliseItem(key, itemId, store);
     }
   );
 
@@ -77,7 +105,7 @@ export default (router) => {
     async (key, { itemId, storeCode }, { count }, { user: { id: userId } }) => {
       const { id: storeId } = await getStoreFromCode(key, storeCode);
       const store = await updateItemCount(key, storeId, itemId, count, userId);
-      return externaliseItem(itemId, store);
+      return await externaliseItem(key, itemId, store);
     }
   );
 
@@ -87,7 +115,7 @@ export default (router) => {
     async (key, { itemId, storeCode }, details, { user: { id: userId } }) => {
       const { id: storeId } = await getStoreFromCode(key, storeCode);
       const store = await updateItemDetails(key, storeId, itemId, details, userId);
-      return externaliseItem(itemId, store);
+      return await externaliseItem(key, itemId, store);
     }
   );
 };

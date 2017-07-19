@@ -27,7 +27,7 @@ const ItemListings = ({
           <th>Available</th>
           <th>Sold</th>
           <th>Revenue</th>
-          <th>Seller Id</th>
+          <th>Seller</th>
           <th>Actions</th>
         </tr>
       </thead>
