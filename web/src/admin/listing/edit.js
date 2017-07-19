@@ -73,7 +73,7 @@ class EditListingDetails extends React.Component {
             />
             <FormElement
               id="price"
-              description="Price (p)"
+              description="Price, including all fees (p)"
               value={`${price || ''}`}
               handler={e => this.updateState(e)}
             />
