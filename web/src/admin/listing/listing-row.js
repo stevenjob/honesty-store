@@ -50,11 +50,18 @@ const ListingRow = ({
         </Link>
         <Link
           className="red"
-          onClick={() =>
-            performRemoveListing({
-              storeCode,
-              itemId: id
-            })}
+          onClick={() => {
+            const itemDesc = `${name}${qualifier ? ' ' + qualifier : ''}`;
+            const result = window.confirm(
+              `Are you sure you want to remove this ${itemDesc} listing?`
+            );
+            if (result) {
+              performRemoveListing({
+                storeCode,
+                itemId: id
+              });
+            }
+          }}
           style={{ cursor: 'pointer' }}
         >
           Unlist
