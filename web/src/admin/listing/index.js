@@ -12,7 +12,7 @@ const ItemListings = ({
   params: { code },
   performUpdateListingCount
 }) => (
-  <div className="col-10 mx-auto">
+  <div className="col-12 md-col-11 lg-col-10 mx-auto">
     <div className="my1 col-right">
       <Link className="btn btn-primary" to={`/admin/listing/${code}/item`}>
         Add listing
