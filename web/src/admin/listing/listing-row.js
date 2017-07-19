@@ -41,9 +41,9 @@ const ListingRow = ({
         {' '}
         <Link to={`/admin/listing/${storeCode}/item/${id}/edit`}>(edit)</Link>
       </td>
-      <td><Currency amount={price} /></td>
-      <td>{listCount}</td>
-      <td>
+      <td className="right-align"><Currency amount={price} /></td>
+      <td className="right-align">{listCount}</td>
+      <td className="right-align">
         {availableCount} <Link
           onClick={() => promptForItemAvailability(id)}
           style={{ cursor: 'pointer' }}
@@ -51,8 +51,8 @@ const ListingRow = ({
           (edit)
         </Link>
       </td>
-      <td>{purchaseCount - refundCount}</td>
-      <td><Currency amount={revenue} /></td>
+      <td className="right-align">{purchaseCount - refundCount}</td>
+      <td className="right-align"><Currency amount={revenue} /></td>
       <td>{sellerId.replace(/-.*/, '')}</td>
       <td>
         <Link
