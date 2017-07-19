@@ -31,12 +31,13 @@ class RelistItem extends React.Component {
 
   render() {
     const { additionalCount } = this.state;
-    const { params: { code } } = this.props;
+    const { params: { code }, item: { name, qualifier } } = this.props;
     return (
       <Full
         left={<BackToPage path={`/admin/listing/${code}`} title="Listings" />}
       >
         <div className="px2 center">
+          <p>Add more {name}{qualifier ? ` ${qualifier}` : ''}</p>
           <form>
             <FormElement
               id="additionalCount"
@@ -58,4 +59,9 @@ class RelistItem extends React.Component {
   }
 }
 
-export default connect(() => ({}), { performRelist })(RelistItem);
+export default connect(
+  ({ store: { items } }, { params: { itemId } }) => ({
+    item: items.find(({ id }) => id === itemId)
+  }),
+  { performRelist }
+)(RelistItem);
