@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import Currency from '../../format/Currency';
 import monthFromDate from '../../format/date';
 import ListingRow from './listing-row';
+import './index.css';
 
 const ItemListings = ({
   items,
@@ -33,7 +34,12 @@ const ItemListings = ({
       </thead>
       <tbody>
         {items.map((item, index) => (
-          <ListingRow key={index} listing={item} storeCode={code} />
+          <ListingRow
+            key={index}
+            listing={item}
+            storeCode={code}
+            className={index % 2 === 0 ? 'bg-lightgray' : ''}
+          />
         ))}
       </tbody>
     </table>
@@ -100,8 +106,7 @@ const mapStateToProps = ({
   return {
     items: items.sort((a, b) => {
       const result = a.name.localeCompare(b.name);
-      if (result !== 0)
-        return result;
+      if (result !== 0) return result;
       return a.qualifier(b.qualifier);
     }),
     revenue: sparseRevenue

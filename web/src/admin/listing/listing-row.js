@@ -19,7 +19,8 @@ const ListingRow = ({
   },
   performUpdateListingCount,
   performRemoveListing,
-  storeCode
+  storeCode,
+  className
 }) => {
   const promptForItemAvailability = itemId => {
     const count = prompt('How many items are available?');
@@ -32,7 +33,7 @@ const ListingRow = ({
   };
 
   return (
-    <tr>
+    <tr className={className}>
       <td>
         {name}
         {qualifier ? ` ${qualifier}` : ''}
