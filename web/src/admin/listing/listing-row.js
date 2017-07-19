@@ -15,7 +15,8 @@ const ListingRow = ({
     revenue,
     name,
     qualifier,
-    sellerId
+    sellerId,
+    price
   },
   performUpdateListingCount,
   performRemoveListing,
@@ -40,6 +41,7 @@ const ListingRow = ({
         {' '}
         <Link to={`/admin/listing/${storeCode}/item/${id}/edit`}>(edit)</Link>
       </td>
+      <td><Currency amount={price} /></td>
       <td>{listCount}</td>
       <td>
         {availableCount} <Link

@@ -22,6 +22,7 @@ const ItemListings = ({
       <thead>
         <tr className="left-align">
           <th>Item</th>
+          <th>Price</th>
           <th>List Count</th>
           <th>Available</th>
           <th>Sold</th>
