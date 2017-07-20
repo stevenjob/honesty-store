@@ -1,0 +1,326 @@
+{
+  "Parameters": {
+    "ServiceName": {
+      "Type": "String",
+      "Description": "the name of the service, e.g. item, store, etc"
+    },
+    "ServiceSecret": {
+      "Type": "String",
+      "Description": "Secret for inter-service authentication"
+    },
+
+    "Index-userId": {
+      "Type": "String",
+      "Description": "whether to add a 'userId' to the table keyschema",
+      "AllowedValues": ["Yes", "No"]
+    },
+    "ReadCapacityUnits": {
+      "Type": "String",
+      "Description": "table capacity - read"
+    },
+    "WriteCapacityUnits": {
+      "Type": "String",
+      "Description": "table capacity - write"
+    },
+
+    "LambdaCode": {
+      "Type": "String",
+      "Description": "something about the lambda code - maybe a zip ref?"
+    },
+    "LambdaTimeout": {
+      "Type": "String"
+    },
+    "LambdaHandler": {
+      "Type": "String",
+      "Description": "Handler for the lambda, e.g. 'server/lambda.handler', 'lib/bundle-min.handler'"
+    },
+
+    "WithTable": {
+      "Type": "String",
+      "Description": "Boolean describing whether a table should be created",
+      "AllowedValues": ["Yes", "No"]
+    },
+    "WithUserSecret": {
+      "Type": "String",
+      "Description": "Boolean describing whether the lambda is given the service secret",
+      "AllowedValues": ["Yes", "No"]
+    },
+    "WithStripe": {
+      "Type": "String",
+      "Description": "Boolean describing whether the lambda is given the live stripe secret",
+      "AllowedValues": ["Yes", "No"]
+    },
+    "WithApiGateway": {
+      "Type": "String",
+      "Description": "Boolean describing whether the lambda is exposed on ApiGateway",
+      "AllowedValues": ["Yes", "No"]
+    },
+    "ApiGatewayCatchAll": {
+      "Type": "String",
+      "Description": "Boolean describing whether the ApiGateway is a catch-all resource",
+      "AllowedValues": ["Yes", "No"]
+    }
+
+  },
+  "Resources": {
+    "Table": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Fn::Join": [
+            "",
+            [
+              "honesty-store-",
+              {
+                "Ref": "ServiceName"
+              }
+            ]
+          ]
+        },
+        "KeySchema": [ { "AttributeName": "id", "KeyType": "HASH" } ],
+        "AttributeDefinitions": [
+          { "AttributeName": "id", "AttributeType": "S" },
+          {
+            "Fn::If": [
+              { "Fn::Equals": [ {"Ref": "Index-userId"}, "Yes" ] },
+              {
+                "AttributeName": "userId",
+                "AttributeType": "S"
+              },
+              { "Ref": "AWS::NoValue" }
+            ]
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": {
+            "Ref": "ReadCapacityUnits"
+          },
+          "WriteCapacityUnits": {
+            "Ref": "WriteCapacityUnits"
+          }
+        },
+        "GlobalSecondaryIndexes": [{
+          "Fn::If": [
+            { "Fn::Equals": [ {"Ref": "Index-userId"}, "Yes" ] },
+            {
+              "IndexName": "userId",
+              "KeySchema": [{
+                "AttributeName": "userId",
+                "KeyType": "HASH"
+              }],
+              "Projection": {
+                "ProjectionType": "KEYS_ONLY"
+              },
+              "ProvisionedThroughput": {
+                "ReadCapacityUnits": 1,
+                "WriteCapacityUnits": 1
+              }
+            },
+            {
+              "Ref": "AWS::NoValue"
+            }
+          ]
+        }]
+      }
+    },
+    "Lambda": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "Ref": "LambdaCode"
+        },
+        "FunctionName": {
+          "Fn::Join": [
+            "",
+            [
+              "honesty-store-",
+              {
+                "Ref": "ServiceName"
+              }
+            ]
+          ]
+        },
+        "Timeout": {
+          "Ref": "LambdaTimeout"
+        },
+        "Role": "arn:aws:iam::812374064424:role/honesty-store-lambda-dynamo-rw",
+        "Handler": {
+          "Ref": "LambdaHandler"
+        },
+        "Environment": {
+          "Variables": {
+            "BASE_URL": "https://live.honesty.store",
+            "LAMBDA_BASE_URL": "https://live.honesty.store",
+            "SERVICE_TOKEN_SECRET": {
+              "Ref": "ServiceSecret"
+            },
+            "TEST_STRIPE_KEY": { "Ref": "StripeKeyTest" },
+            "SLACK_CHANNEL_PREFIX": "",
+            {
+              "Fn::If": [
+                { "Fn::Equals": [ {"Ref": "WithTable"}, "Yes" ] },
+                {
+                  "TABLE_NAME": {
+                    "Fn::Join": [ "", [ "honesty-store-", { "Ref": "ServiceName" } ] ]
+                  }
+                },
+                { "Ref": "AWS::NoValue" }
+              ]
+            },
+            {
+              "Fn::If": [
+                { "Fn::Equals": [ {"Ref": "WithUserSecret"}, "Yes" ] },
+                { "USER_TOKEN_SECRET": { "Ref": "UserSecret" } },
+                { "Ref": "AWS::NoValue" }
+              ]
+            },
+            {
+              "LIVE_STRIPE_KEY": {
+                "Fn::If": [
+                  { "Fn::Equals": [ {"Ref": "WithStripe"}, "Yes" ] },
+                  { "Ref": "StripeKeyLive" },
+                  { "Ref": "StripeKeyTest" }
+                ]
+              }
+            }
+          }
+        },
+        "Runtime": "nodejs6.10",
+        "TracingConfig": {
+          "Mode": "Active"
+        }
+      }
+    },
+    {
+      "Fn::If": [
+        { "Fn::Equals": [ {"Ref": "WithApiGateway"}, "Yes" ] },
+        {
+          "Lambda-ApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "Action": "lambda:InvokeFunction",
+              "FunctionName": {
+                "Fn::Join": [ "", [ "honesty-store-", { "Ref": "ServiceName" } ] ]
+              },
+              "Principal": "apigateway.amazonaws.com"
+            }
+          }
+        },
+        { "Ref": "AWS::NoValue" }
+      ]
+    },
+    {
+      "Fn::If": [
+        { "Fn::Equals": [ {"Ref": "ApiGatewayCatchAll"}, "Yes" ] },
+        {
+          "ApiGateway-catchall": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "RestApi"
+              },
+              "ParentId": "/",
+              "PathPart": "{proxy+}"
+            }
+          },
+          "ApiGateway-method": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "RestApi"
+              },
+              "ResourceId": {
+                "Ref": "ApiGateway-catchall"
+              },
+              "HttpMethod": "ANY",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Ref": "Lambda"
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                },
+                "Credentials": null
+              }
+            }
+          }
+        },
+        {
+          "ApiGateway-parent": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "RestApi"
+              },
+              "ParentId": "/",
+              "PathPart": {
+                "Ref": "ServiceName"
+              }
+            }
+          },
+          "ApiGateway-nested": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "RestApi"
+              },
+              "ParentId": {
+                "Ref": "ApiGateway-parent"
+              },
+              "PathPart": "{proxy+}"
+            }
+          },
+          "ApiGateway-method": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "RestApi"
+              },
+              "ResourceId": {
+                "Ref": "ApiGateway-nested"
+              },
+              "HttpMethod": "ANY",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:aws:apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Ref": "Lambda"
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  },
+                  "Credentials": null
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
