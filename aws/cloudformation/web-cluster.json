@@ -5,6 +5,28 @@
     "VpcCidrBlock": {
       "Type": "String",
       "Description": "E.g. 10.1.0.0/16"
+    },
+    "StageName": {
+      "Type": "String",
+      "Description": "Name of the ApiGateway deployment",
+      "Default": "live"
+    },
+    "CertificateArn": {
+      "Type": "String",
+      "Description": "The certificate to use on ApiGateway (first [8f1b6ff9...] is live)",
+      "AllowedValues": [
+        "arn:aws:acm:us-east-1:812374064424:certificate/8f1b6ff9-f215-4c9c-8a14-04a2aab84004",
+        "arn:aws:acm:us-east-1:812374064424:certificate/952d48cc-77bc-4736-b398-c5451e7dc970"
+      ]
+    },
+    "DomainName": {
+      "Type": "String",
+      "Description": "The domain name under which this deployment should be deployed",
+      "Default": "live.honesty.store"
+    },
+    "ServiceSecret": {
+      "Type": "String",
+      "Description": "Secret for inter-service authentication"
     }
   },
   "Resources": {
@@ -22,6 +44,386 @@
     "Cluster": {
       "Type": "AWS::ECS::Cluster",
       "Properties": {}
+    },
+    "RestApi": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Name": "honesty-store",
+        "BinaryMediaTypes": [
+          "application/font-woff",
+          "application/font-woff2",
+          "application/javascript",
+          "application/json",
+          "application/octet-stream",
+          "application/xml",
+          "font/eot",
+          "font/opentype",
+          "font/otf",
+          "image/jpeg",
+          "image/png",
+          "image/svg+xml",
+          "image/x-icon",
+          "text/comma-separated-values",
+          "text/css",
+          "text/html",
+          "text/javascript",
+          "text/plain",
+          "text/text",
+          "text/xml",
+          "*/*"
+        ]
+      }
+    },
+
+    "item-stack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": {
+          "Fn::Join": [
+            "",
+            [
+              "https://s3.amazonaws.com/cloudformation-templates-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "/per-service.json"
+            ]
+          ]
+        },
+        "TimeoutInMinutes": "10",
+        "Parameters": {
+          "ServiceName": "item",
+          "ServiceSecret": {
+            "Ref": "ServiceSecret"
+          },
+          "Index-userId": "No",
+          "ReadCapacityUnits": "2",
+          "WriteCapacityUnits": "1",
+          "LambdaCode": {
+            "S3Bucket": "lambdas",
+            "S3Key": "item.zip"
+          },
+          "LambdaTimeout": "10",
+          "LambdaHandler": "lib/bundle-min.handler",
+          "WithTable": "Yes",
+          "WithUserSecret": "No",
+          "WithStripe": "No",
+          "WithApiGateway": "No",
+          "ApiGatewayCatchAll": "No"
+        }
+      }
+    },
+    "store-stack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": {
+          "Fn::Join": [
+            "",
+            [
+              "https://s3.amazonaws.com/cloudformation-templates-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "/per-service.json"
+            ]
+          ]
+        },
+        "TimeoutInMinutes": "10",
+        "Parameters": {
+          "ServiceName": "store",
+          "ServiceSecret": {
+            "Ref": "ServiceSecret"
+          },
+          "Index-userId": "No",
+          "ReadCapacityUnits": "3",
+          "WriteCapacityUnits": "3",
+          "LambdaCode": {
+            "S3Bucket": "lambdas",
+            "S3Key": "store.zip"
+          },
+          "LambdaTimeout": "10",
+          "LambdaHandler": "lib/bundle-min.handler",
+          "WithTable": "Yes",
+          "WithUserSecret": "No",
+          "WithStripe": "No",
+          "WithApiGateway": "No",
+          "ApiGatewayCatchAll": "No"
+        }
+      }
+    },
+    "topup-stack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": {
+          "Fn::Join": [
+            "",
+            [
+              "https://s3.amazonaws.com/cloudformation-templates-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "/per-service.json"
+            ]
+          ]
+        },
+        "TimeoutInMinutes": "10",
+        "Parameters": {
+          "ServiceName": "topup",
+          "ServiceSecret": {
+            "Ref": "ServiceSecret"
+          },
+          "Index-userId": "Yes",
+          "ReadCapacityUnits": "1",
+          "WriteCapacityUnits": "1",
+          "LambdaCode": {
+            "S3Bucket": "lambdas",
+            "S3Key": "topup.zip"
+          },
+          "LambdaTimeout": "10",
+          "LambdaHandler": "lib/bundle-min.handler",
+          "WithTable": "Yes",
+          "WithUserSecret": "No",
+          "WithStripe": "Yes",
+          "WithApiGateway": "No",
+          "ApiGatewayCatchAll": "No"
+        }
+      }
+    },
+    "transaction-stack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": {
+          "Fn::Join": [
+            "",
+            [
+              "https://s3.amazonaws.com/cloudformation-templates-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "/per-service.json"
+            ]
+          ]
+        },
+        "TimeoutInMinutes": "10",
+        "Parameters": {
+          "ServiceName": "transaction",
+          "ServiceSecret": {
+            "Ref": "ServiceSecret"
+          },
+          "Index-userId": "No",
+          "ReadCapacityUnits": "2",
+          "WriteCapacityUnits": "2",
+          "LambdaCode": {
+            "S3Bucket": "lambdas",
+            "S3Key": "transaction.zip"
+          },
+          "LambdaTimeout": "10",
+          "LambdaHandler": "lib/bundle-min.handler",
+          "WithTable": "Yes",
+          "WithUserSecret": "No",
+          "WithStripe": "No",
+          "WithApiGateway": "No",
+          "ApiGatewayCatchAll": "No"
+        }
+      }
+    },
+    "transaction-slack-stack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": {
+          "Fn::Join": [
+            "",
+            [
+              "https://s3.amazonaws.com/cloudformation-templates-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "/per-service.json"
+            ]
+          ]
+        },
+        "TimeoutInMinutes": "10",
+        "Parameters": {
+          "ServiceName": "transaction-slack",
+          "ServiceSecret": {
+            "Ref": "ServiceSecret"
+          },
+          "Index-userId": "No",
+          "ReadCapacityUnits": "1",
+          "WriteCapacityUnits": "1",
+          "LambdaCode": {
+            "S3Bucket": "lambdas",
+            "S3Key": "transaction-slack.zip"
+          },
+          "LambdaTimeout": "10",
+          "LambdaHandler": "lib/bundle-min.handler",
+          "WithTable": "Yes",
+          "WithUserSecret": "No",
+          "WithStripe": "No",
+          "WithApiGateway": "No",
+          "ApiGatewayCatchAll": "No"
+        }
+      }
+    },
+    "user-stack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": {
+          "Fn::Join": [
+            "",
+            [
+              "https://s3.amazonaws.com/cloudformation-templates-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "/per-service.json"
+            ]
+          ]
+        },
+        "TimeoutInMinutes": "10",
+        "Parameters": {
+          "ServiceName": "user",
+          "ServiceSecret": {
+            "Ref": "ServiceSecret"
+          },
+          "Index-userId": "No",
+          "ReadCapacityUnits": "1",
+          "WriteCapacityUnits": "1",
+          "LambdaCode": {
+            "S3Bucket": "lambdas",
+            "S3Key": "user.zip"
+          },
+          "LambdaTimeout": "10",
+          "LambdaHandler": "lib/bundle-min.handler",
+          "WithTable": "Yes",
+          "WithUserSecret": "Yes",
+          "WithStripe": "No",
+          "WithApiGateway": "No",
+          "ApiGatewayCatchAll": "No"
+        }
+      }
+    },
+    "web-stack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": {
+          "Fn::Join": [
+            "",
+            [
+              "https://s3.amazonaws.com/cloudformation-templates-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "/per-service.json"
+            ]
+          ]
+        },
+        "TimeoutInMinutes": "10",
+        "Parameters": {
+          "ServiceName": "web",
+          "ServiceSecret": {
+            "Ref": "ServiceSecret"
+          },
+          "Index-userId": "No",
+          "ReadCapacityUnits": "0",
+          "WriteCapacityUnits": "0",
+          "LambdaCode": {
+            "S3Bucket": "lambdas",
+            "S3Key": "web.zip"
+          },
+          "LambdaTimeout": "10",
+          "LambdaHandler": "server/lambda.handler",
+          "WithTable": "No",
+          "WithUserSecret": "No",
+          "WithStripe": "No",
+          "WithApiGateway": "Yes",
+          "ApiGatewayCatchAll": "Yes"
+        }
+      }
+    },
+    "api-stack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": {
+          "Fn::Join": [
+            "",
+            [
+              "https://s3.amazonaws.com/cloudformation-templates-",
+              {
+                "Ref": "AWS::Region"
+              },
+              "/per-service.json"
+            ]
+          ]
+        },
+        "TimeoutInMinutes": "10",
+        "Parameters": {
+          "ServiceName": "api",
+          "ServiceSecret": {
+            "Ref": "ServiceSecret"
+          },
+          "Index-userId": "No",
+          "ReadCapacityUnits": "0",
+          "WriteCapacityUnits": "0",
+          "LambdaCode": {
+            "S3Bucket": "lambdas",
+            "S3Key": "api.zip"
+          },
+          "LambdaTimeout": "30",
+          "LambdaHandler": "lib/bundle-min.handler",
+          "WithTable": "No",
+          "WithUserSecret": "No",
+          "WithStripe": "No",
+          "WithApiGateway": "Yes",
+          "ApiGatewayCatchAll": "No"
+        }
+      }
+    },
+
+    "Deployment": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": { "Ref": "RestApi" },
+        "StageName": { "Ref": "StageName" }
+      }
+    },
+    "Stage": {
+      "Type": "AWS::ApiGateway::Stage",
+      "Properties": {
+        "RestApiId": { "Ref": "RestApi" },
+        "DeploymentId": { "Ref": "Deployment" },
+        "StageName": { "Ref": "StageName" }
+      }
+    },
+    "DomainName": {
+      "Type": "AWS::ApiGateway::DomainName",
+      "Properties": {
+        "CertificateArn": { "Ref": "CertificateArn" },
+        "DomainName": { "Ref": "DomainName" }
+      }
+    },
+    "BasePathMapping": {
+      "Type": "AWS::ApiGateway::BasePathMapping",
+      "Properties": {
+        "BasePath": "",
+        "RestApiId": { "Ref": "RestApi" },
+        "Stage": { "Ref": "Stage" },
+        "DomainName": { "Ref": "DomainName" }
+      }
+    },
+
+    "RecordSet": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "Type": "CNAME",
+        "Name": { "Ref": "DomainName" },
+        "TTL": 300,
+        "HostedZoneId": "Z1NOZ8HJXP3L7I",
+        "Region": { "Ref": "AWS::Region" },
+        "ResourceRecords": [{
+          "Value": { "Fn::GetAtt": [ "DomainName", "distributionDomainName" ] }
+        }]
+      }
     }
   },
   "Outputs": {
