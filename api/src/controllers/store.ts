@@ -30,7 +30,7 @@ const itemWithSellerEmail = async (key, item: StoreItem) => {
   };
 };
 
-const externaliseItem = async (key, itemId: string, store: Store) => {
+const externaliseItem = async (key, itemId: string, store: Store): Promise<StoreItem | undefined> => {
   const item = store.items.find(({ id }) => id === itemId);
   if (item == null) {
     return;
