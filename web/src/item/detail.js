@@ -82,12 +82,14 @@ const ItemDetail = ({
     >
       {id != null &&
         <div className="justify-between">
-          <h1 className="mt1 mb0">{name}</h1>
-          {qualifier &&
-            <h3 className="mt0 aqua regular">
-              {qualifier}
-            </h3>}
-          <div className="col-6 mx-auto">
+          <div className="my3">
+            <h1 className="my0">{name}</h1>
+            {qualifier &&
+              <h3 className="aqua regular mb0 mt1">
+                {qualifier}
+              </h3>}
+          </div>
+          <div className="col-6 mx-auto my3">
             <div
               className={`bg-center bg-no-repeat ${count === 0 ? 'grayscale' : ''}`}
               style={{
@@ -100,24 +102,26 @@ const ItemDetail = ({
             </div>
           </div>
           <div className="my3">
-            {registered ? registeredPurchaseButton : unregisteredPurchaseButton}
+            <div>
+              {registered ? registeredPurchaseButton : unregisteredPurchaseButton}
+            </div>
+            {registered &&
+              <div className="gray my2">
+                Your balance will be
+                {' '}
+                <Currency amount={calculateBalanceRemaining(1)} />
+              </div>}
+            {notes && <p>{notes}</p>}
           </div>
-          {registered &&
-            <div className="gray mb2">
-              Your balance will be
-              {' '}
-              <Currency amount={calculateBalanceRemaining(1)} />
-            </div>}
-          {notes && <p>{notes}</p>}
-          <div className="mt4 mb2">
+          <div className="my3">
             <StockLevel count={count} />
+            <div className="my2">
+              {count <= 0
+                ? <Depleted registered={registered} />
+                : registered ? <OutOfStockLink itemId={id} /> : null}
+            </div>
           </div>
-          <div className="mt0">
-            {count <= 0
-              ? <Depleted registered={registered} />
-              : registered ? <OutOfStockLink itemId={id} /> : null}
-          </div>
-          <div className="mt3 mb1">
+          <div className="my3">
             <Report itemId={id}>
               Spotted a problem with this product?
             </Report>
