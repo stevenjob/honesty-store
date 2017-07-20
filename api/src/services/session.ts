@@ -69,7 +69,7 @@ const getUserSessionData = async (key, user): Promise<UserSessionData> => {
 
 const getRecentUserRevenue = (storeRevenue: StoreRevenue[], userId: string): UserRevenue[] => {
   const existingUserRevenue: UserRevenue[] = storeRevenue
-    .map(({ startInclusive, seller }) => ({ startInclusive, total: seller[userId] }));
+    .map(({ startInclusive, seller }) => ({ startInclusive, total: seller[userId] || 0 }));
 
   const today = new Date();
   const expectedDates = [

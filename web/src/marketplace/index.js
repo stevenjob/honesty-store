@@ -7,7 +7,7 @@ import monthFromDate from '../format/date';
 import Chrome from '../layout/chrome';
 import ItemListing from './item-listing';
 
-const MonthyRevenue = ({ month, total }) => (
+const MonthyRevenue = ({ month, total = 0 }) => (
   <div>
     <h2 className="navy my0">£{formatAny(total)}</h2>
     <h4 className="gray regular my0 center">{month}</h4>
@@ -37,7 +37,7 @@ const More = ({ items, userRevenue }) => (
 
 const mapStateToProps = ({
   user: { id: userId },
-  store: { items, userRevenue = [] }
+  store: { items = [], userRevenue = [] }
 }) => ({
   items: items.filter(({ sellerId }) => sellerId === userId),
   userRevenue: userRevenue.sort((a, b) => a.startInclusive - b.startInclusive)
