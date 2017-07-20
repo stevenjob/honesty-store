@@ -26,7 +26,6 @@ export type TopupStatus = TopupSuccess | TopupInProgress | TopupError;
 
 export interface Stripe {
   customer: any;
-  nextChargeToken: string;
 }
 
 export interface TopupAccount {
@@ -41,6 +40,7 @@ export interface TopupAccount {
 }
 
 export interface TopupRequest {
+  id: string;
   accountId: string;
   userId: string;
   amount: number;

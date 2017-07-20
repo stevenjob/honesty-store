@@ -1,6 +1,5 @@
 import * as ms from 'ms';
 import * as stripeFactory from 'stripe';
-import { v4 as uuid } from 'uuid';
 
 import { error } from '@honesty-store/service/lib/log';
 
@@ -45,8 +44,7 @@ export const createCustomer = async (key, topupAccount: TopupAccount, stripeToke
         }
       });
     return {
-      customer,
-      nextChargeToken: uuid()
+      customer
     };
   } catch (e) {
     error(key, `couldn't create stripe customer`, e);

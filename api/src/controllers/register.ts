@@ -24,7 +24,7 @@ const register = async (key, storeCode): Promise<SessionData> => {
 const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, stripeToken }): Promise<SessionData> => {
   const user = await updateUser(key, userID, { emailAddress });
 
-  const topupTx = await createTopup(key, { accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
+  const topupTx = await createTopup(key, { id: uuid(), accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
 
   let purchaseTx: TransactionAndBalance = null;
   if (itemID != null) {

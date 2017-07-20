@@ -3,7 +3,6 @@ import { CodedError } from '@honesty-store/service/lib/error';
 import { createServiceKey } from '@honesty-store/service/lib/key';
 import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
 import { assertBalanceWithinLimit, assertValidTransaction, extractFieldsFromTransactionId } from '@honesty-store/transaction';
-import { v4 as uuid } from 'uuid';
 
 import { attemptTopup, createCustomer } from './stripe';
 
@@ -41,6 +40,7 @@ const assertValidTopupAmount = (key: string, amount: any) => {
 };
 
 const assertValidTopupRequest = createAssertValidObject<TopupRequest>({
+  id: assertValidUuid,
   accountId: assertValidUuid,
   amount: assertValidTopupAmount,
   stripeToken: assertOptional(assertValidString),
@@ -80,18 +80,29 @@ const reducer = reduce<TopupEvent | TransactionWithBalance>(
 
     switch (event.type) {
       case 'topup-card-details-change': {
-        const { stripeToken } = event;
-        const { stripe, stripeHistory: previousStripeHistory = [] } = topupAccount;
+        const { id: eventId, stripeToken } = event;
+        const { stripe, stripeHistory: previousStripeHistory = [], status } = topupAccount;
 
         const stripeHistory = stripe == null ?
           [] : [...previousStripeHistory, stripe];
 
         const updatedStripe = await createCustomer(key, topupAccount, stripeToken);
 
+        if (status == null || status.status !== 'error') {
+          return {
+            ...topupAccount,
+            stripe: updatedStripe,
+            stripeHistory
+          };
+        }
+
+        const updatedStatus = await attemptTopup(key, topupAccount, eventId, status.amount);
+
         return {
           ...topupAccount,
           stripe: updatedStripe,
-          stripeHistory
+          stripeHistory,
+          status: updatedStatus
         };
       }
       case 'topup-attempt': {
@@ -106,10 +117,6 @@ const reducer = reduce<TopupEvent | TransactionWithBalance>(
 
         return {
           ...topupAccount,
-          stripe: {
-            ...stripe,
-            nextChargeToken: uuid()
-          },
           status: updatedStatus
         };
       }
@@ -157,10 +164,6 @@ const reducer = reduce<TopupEvent | TransactionWithBalance>(
 
         return {
           ...topupAccount,
-          stripe: {
-            ...stripe,
-            nextChargeToken: uuid()
-          },
           status: updatedStatus
         };
       }
@@ -186,13 +189,17 @@ router.post<TopupRequest, TopupResponse>(
   async (key, { }, topupRequest) => {
     assertValidTopupRequest(topupRequest);
 
-    const { accountId, userId, amount: dirtyAmount, stripeToken } = topupRequest;
+    const { id, accountId, userId, amount: dirtyAmount, stripeToken } = topupRequest;
+
+    // By using the same id for both events we implicitly block an errored topup retrying.
+    // In the real world, this would require a user transitioning from auto-topup back to
+    // manual topup which should never happen (all users are being migrated to auto).
 
     let topupAccount: EnhancedItem<TopupAccount> | undefined;
 
     if (stripeToken != null) {
       const event: TopupCardDetailsChanged = {
-        id: uuid(),
+        id,
         type: 'topup-card-details-change',
         userId,
         accountId,
@@ -204,7 +211,7 @@ router.post<TopupRequest, TopupResponse>(
     const amount = Number(dirtyAmount);
     if (amount > 0) {
       const event: TopupAttempted = {
-        id: uuid(),
+        id,
         type: 'topup-attempt',
         userId,
         accountId,
