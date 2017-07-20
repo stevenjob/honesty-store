@@ -14,10 +14,14 @@ import { getSessionData } from '../services/session';
 
 const itemWithSellerEmail = async (key, item: StoreItem) => {
   let sellerEmail;
+  const { sellerId } = item;
   try {
-    const { emailAddress } = await getUser(key, item.sellerId);
+    const { emailAddress } = await getUser(key, sellerId);
     sellerEmail = emailAddress;
   } catch (e) {
+    if (e.message !== `Key not found ${sellerId}`) {
+      throw e;
+    }
     sellerEmail = '';
   }
   return {
