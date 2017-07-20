@@ -13,7 +13,13 @@ import { authenticateAccessToken, authenticateAccessTokenAndStoreAdminUser } fro
 import { getSessionData } from '../services/session';
 
 const itemWithSellerEmail = async (key, item: StoreItem) => {
-  const { emailAddress: sellerEmail } = await getUser(key, item.sellerId);
+  let sellerEmail;
+  try {
+    const { emailAddress } = await getUser(key, item.sellerId);
+    sellerEmail = emailAddress;
+  } catch (e) {
+    sellerEmail = '';
+  }
   return {
     ...item,
     sellerEmail
