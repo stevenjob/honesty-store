@@ -22,7 +22,7 @@ const countRating = count => {
   };
 };
 
-export const StockLevel = count => {
+export const StockLevel = ({ count }) => {
   const { desc, colour, percentage } = countRating(count);
 
   return (
