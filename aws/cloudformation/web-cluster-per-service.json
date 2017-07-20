@@ -59,6 +59,10 @@
       "Type": "String",
       "Description": "Boolean describing whether the ApiGateway is a catch-all resource",
       "AllowedValues": ["Yes", "No"]
+    },
+    "HonestyStorePrefix": {
+      "Type": "String",
+      "Description": "Prefix for all service-based names, e.g. \"honesty-store\", \"hs-<branch>\""
     }
 
   },
@@ -70,10 +74,9 @@
           "Fn::Join": [
             "",
             [
-              "honesty-store-",
-              {
-                "Ref": "ServiceName"
-              }
+              { "Ref": "HonestyStorePrefix" },
+              "-"
+              { "Ref": "ServiceName" }
             ]
           ]
         },
@@ -133,17 +136,25 @@
           "Fn::Join": [
             "",
             [
-              "honesty-store-",
-              {
-                "Ref": "ServiceName"
-              }
+              { "Ref": "HonestyStorePrefix" },
+              "-",
+              { "Ref": "ServiceName" }
             ]
           ]
         },
         "Timeout": {
           "Ref": "LambdaTimeout"
         },
-        "Role": "arn:aws:iam::812374064424:role/honesty-store-lambda-dynamo-rw",
+        "Role": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:aws:iam::812374064424:role/",
+              { "Ref": "HonestyStorePrefix" },
+              "-lambda-dynamo-rw"
+            ]
+          ]
+        },
         "Handler": {
           "Ref": "LambdaHandler"
         },
@@ -161,7 +172,14 @@
                 { "Fn::Equals": [ {"Ref": "WithTable"}, "Yes" ] },
                 {
                   "TABLE_NAME": {
-                    "Fn::Join": [ "", [ "honesty-store-", { "Ref": "ServiceName" } ] ]
+                    "Fn::Join": [
+                      "",
+                      [
+                        { "Ref": "HonestyStorePrefix" },
+                        "-",
+                        { "Ref": "ServiceName" }
+                      ]
+                    ]
                   }
                 },
                 { "Ref": "AWS::NoValue" }
@@ -200,7 +218,14 @@
             "Properties": {
               "Action": "lambda:InvokeFunction",
               "FunctionName": {
-                "Fn::Join": [ "", [ "honesty-store-", { "Ref": "ServiceName" } ] ]
+                "Fn::Join": [
+                  "",
+                  [
+                    { "Ref": "HonestyStorePrefix" },
+                    "-",
+                    { "Ref": "ServiceName" }
+                  ]
+                ]
               },
               "Principal": "apigateway.amazonaws.com"
             }

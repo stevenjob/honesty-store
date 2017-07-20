@@ -37,7 +37,8 @@ const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => 
           "WithUserSecret": boolToYN(name == "user"),
           "WithStripe": boolToYN(name == "topup"),
           "WithApiGateway": boolToYN(name == "web" || name == "api"),
-          "ApiGatewayCatchAll": boolToYN(name == "web")
+          "ApiGatewayCatchAll": boolToYN(name == "web"),
+          "HonestyStorePrefix": { "Ref": "HonestyStorePrefix" }
         }
       }
     }

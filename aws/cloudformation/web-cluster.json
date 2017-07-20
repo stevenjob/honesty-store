@@ -23,13 +23,18 @@
     "ServiceSecret": {
       "Type": "String",
       "Description": "Secret for inter-service authentication"
+    },
+    "HonestyStorePrefix": {
+      "Type": "String",
+      "Description": "Prefix for all service-based names, e.g. \"honesty-store\", \"hs-<branch>\""
     }
+
   },
   "Resources": {
     "RestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "honesty-store",
+        "Name": { "Ref": "HonestyStorePrefix" },
         "BinaryMediaTypes": [
           "application/font-woff",
           "application/font-woff2",
@@ -90,7 +95,8 @@
           "WithUserSecret": "No",
           "WithStripe": "No",
           "WithApiGateway": "No",
-          "ApiGatewayCatchAll": "No"
+          "ApiGatewayCatchAll": "No",
+          "HonestyStorePrefix": { "Ref": "HonestyStorePrefix" }
         }
       }
     },
@@ -128,7 +134,8 @@
           "WithUserSecret": "No",
           "WithStripe": "No",
           "WithApiGateway": "No",
-          "ApiGatewayCatchAll": "No"
+          "ApiGatewayCatchAll": "No",
+          "HonestyStorePrefix": { "Ref": "HonestyStorePrefix" }
         }
       }
     },
@@ -166,7 +173,8 @@
           "WithUserSecret": "No",
           "WithStripe": "Yes",
           "WithApiGateway": "No",
-          "ApiGatewayCatchAll": "No"
+          "ApiGatewayCatchAll": "No",
+          "HonestyStorePrefix": { "Ref": "HonestyStorePrefix" }
         }
       }
     },
@@ -204,7 +212,8 @@
           "WithUserSecret": "No",
           "WithStripe": "No",
           "WithApiGateway": "No",
-          "ApiGatewayCatchAll": "No"
+          "ApiGatewayCatchAll": "No",
+          "HonestyStorePrefix": { "Ref": "HonestyStorePrefix" }
         }
       }
     },
@@ -242,7 +251,8 @@
           "WithUserSecret": "No",
           "WithStripe": "No",
           "WithApiGateway": "No",
-          "ApiGatewayCatchAll": "No"
+          "ApiGatewayCatchAll": "No",
+          "HonestyStorePrefix": { "Ref": "HonestyStorePrefix" }
         }
       }
     },
@@ -280,7 +290,8 @@
           "WithUserSecret": "Yes",
           "WithStripe": "No",
           "WithApiGateway": "No",
-          "ApiGatewayCatchAll": "No"
+          "ApiGatewayCatchAll": "No",
+          "HonestyStorePrefix": { "Ref": "HonestyStorePrefix" }
         }
       }
     },
@@ -318,7 +329,8 @@
           "WithUserSecret": "No",
           "WithStripe": "No",
           "WithApiGateway": "Yes",
-          "ApiGatewayCatchAll": "Yes"
+          "ApiGatewayCatchAll": "Yes",
+          "HonestyStorePrefix": { "Ref": "HonestyStorePrefix" }
         }
       }
     },
@@ -356,7 +368,8 @@
           "WithUserSecret": "No",
           "WithStripe": "No",
           "WithApiGateway": "Yes",
-          "ApiGatewayCatchAll": "No"
+          "ApiGatewayCatchAll": "No",
+          "HonestyStorePrefix": { "Ref": "HonestyStorePrefix" }
         }
       }
     },
