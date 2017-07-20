@@ -1,8 +1,8 @@
 import React from 'react';
 
-export default ({ id, description, value, handler, ...other }) => (
-  <p>
-    <label htmlFor="name">{description}</label>
+export default ({ id, description, value, handler, className, ...other }) => (
+  <p className={className}>
+    {description && <label htmlFor="name">{description}</label>}
     <input
       id={id}
       type="text"
