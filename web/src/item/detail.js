@@ -102,11 +102,12 @@ const ItemDetail = ({
           <div className="my3">
             {registered ? registeredPurchaseButton : unregisteredPurchaseButton}
           </div>
-          <div className="gray mb2">
-            Your balance will be
-            {' '}
-            <Currency amount={calculateBalanceRemaining(1)} />
-          </div>
+          {registered &&
+            <div className="gray mb2">
+              Your balance will be
+              {' '}
+              <Currency amount={calculateBalanceRemaining(1)} />
+            </div>}
           {notes && <p>{notes}</p>}
           <div className="mt4 mb2">
             <StockLevel count={count} />
