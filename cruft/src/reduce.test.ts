@@ -80,7 +80,7 @@ describe.only(suiteName, () => {
     };
     await cruft.create({ id: aggregateId, version: 0 });
     const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _, emit) => {
-      emit({ id: 'a', version: 0 });
+      emit({ id: 'a' });
       return aggregate;
     });
 
@@ -90,7 +90,7 @@ describe.only(suiteName, () => {
       id: 'a',
       previous: undefined,
       data: {
-        id: 'a', version: 0
+        id: 'a'
       }
     });
   });
@@ -102,8 +102,8 @@ describe.only(suiteName, () => {
     };
     await cruft.create({ id: aggregateId, version: 0 });
     const reduce = cruft.reduce(_ => aggregateId, ({ id }) => id, (aggregate, _, emit) => {
-      emit({ id: 'a', version: 0 });
-      emit({ id: 'b', version: 0 });
+      emit({ id: 'a' });
+      emit({ id: 'b' });
       return aggregate;
     });
 

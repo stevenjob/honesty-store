@@ -47,11 +47,13 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
 
   const sessionData = await getSessionData(key, { user });
 
+  const { accountId, defaultStoreId, version, ...externalisedUser } = user;
+
   return {
     ...sessionData,
     user: {
       ...sessionData.user,
-      ...user,
+      ...externalisedUser,
       balance: purchaseTx == null ? topupTx.balance : purchaseTx.balance,
       transactions: [
         ...(purchaseTx != null ? [purchaseTx.transaction] : []),

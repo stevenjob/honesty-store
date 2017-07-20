@@ -27,8 +27,9 @@ import {
   createAssertValidUuid
 } from '@honesty-store/service/lib/assert';
 
-const { read, reduce } = cruftDDB<TopupAccount>({
+const { read, reduce } = cruftDDB<TopupAccount, TopupEvent | TransactionWithBalance>({
   tableName: process.env.TABLE_NAME,
+  region: process.env.AWS_REGION,
   limit: 100
 });
 
@@ -61,7 +62,7 @@ const extractCardDetails = ({ id, stripe }: TopupAccount): CardDetails => {
   };
 };
 
-const reducer = reduce<TopupEvent | TransactionWithBalance>(
+const reducer = reduce(
   event => {
     switch (event.type) {
       case 'topup-card-details-change':

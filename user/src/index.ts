@@ -189,7 +189,7 @@ const logoutUser = async (userId) => {
   }
 
   // can't clear access token, but it'll expire soon enough
-  const loggedoutUser: InternalUser = {
+  const loggedoutUser = {
     ...originalUser,
     refreshToken: uuid()
   };

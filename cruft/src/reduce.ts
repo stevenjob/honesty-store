@@ -1,15 +1,15 @@
 import { create } from './create';
-import { AbstractItem, Configuration, EnhancedItem, EventItem, NewItem } from './index';
+import { AbstractItem, Configuration, EnhancedItem, EventItem, HasId, NewItem } from './index';
 import { read } from './read';
 import { update } from './update';
 
-type ReduceEmit<Event> = (event: Event) => void;
+type ReduceEmit<Bar> = (event: Bar) => void;
 type MaybePromise<T> = Promise<T> | T;
 
 export const reduce = <
   Aggregate extends AbstractItem,
-  ReceivedEvent extends AbstractItem,
-  EmittedEvent extends AbstractItem
+  ReceivedEvent extends HasId,
+  EmittedEvent extends HasId
   >({ client, tableName }: Configuration) => {
 
   const getAggregate = async (

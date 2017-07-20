@@ -79,7 +79,7 @@ export const lambdaRouter = (service: string, version: number): LambdaRouter => 
 
   const createEndpoint = <Body, Result>(method: 'get' | 'post' | 'put', path: string, action: LambdaBodyAction<Body, Result>) => {
     const pathKeys: { name: string }[] = [];
-    const pathRegex = pathToRegexp(`/${service}/v${version}${path}`, pathKeys);
+    const pathRegex = pathToRegexp(`/${service}/v${version}${path}`, <any>pathKeys);
     endpoints.push({
       parse: (requestMethod, requestPath) => {
         if (requestMethod.toLowerCase() !== method.toLowerCase()) {

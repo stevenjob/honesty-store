@@ -27,7 +27,7 @@ interface SimplifiedTransaction {
   type: 'refund' | 'purchase';
 }
 
-const cruft = cruftDDB<SimplifiedTransaction>({
+const cruft = cruftDDB<SimplifiedTransaction, SimplifiedTransaction>({
   tableName: process.env.TABLE_NAME,
   limit: 100
 });
@@ -117,7 +117,7 @@ const asyncHandler = async dynamoEvent => {
     }
   };
 
-  const reduce = cruft.reduce<SimplifiedTransaction>(
+  const reduce = cruft.reduce(
     _event => 'aggregate',
     event => event.id,
     async (aggregate, event, _emit) => {

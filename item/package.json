@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@honesty-store/service": "0.0.0",
-    "cruft-ddb": "^3.0.6",
+    "@honesty-store/cruft": "0.0.0",
     "uuid": "^3.0.1"
   },
   "devDependencies": {

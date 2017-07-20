@@ -35,7 +35,7 @@ import calculateRevenue from './revenue';
 
 config.region = process.env.AWS_REGION;
 
-const { read, reduce, find } = cruft<Store>({
+const { read, reduce, find } = cruft<Store, Transaction | StoreEvent>({
   tableName: process.env.TABLE_NAME,
   limit: 100
 });
@@ -43,7 +43,7 @@ const { read, reduce, find } = cruft<Store>({
 const lookupItem = (store: Store, itemId: string): StoreItem | undefined =>
   store.items.find(({ id }) => itemId === id);
 
-const reducer = reduce<Transaction | StoreEvent>(
+const reducer = reduce(
   event => {
     switch (event.type) {
       case 'purchase':
@@ -141,6 +141,8 @@ const reducer = reduce<Transaction | StoreEvent>(
           id,
           type,
           itemId,
+          storeId,
+          userId,
           ...details
         } = event;
 

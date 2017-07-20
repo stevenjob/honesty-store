@@ -55,7 +55,7 @@ export const createServiceKey = ({ service }) => {
 };
 
 export const tagKey = (key: Key, tags) => {
-  return createKey({
+  return createKey(<any>{
     ...key,
     tags: {
       ...key.tags,

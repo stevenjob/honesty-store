@@ -1,5 +1,5 @@
+import { default as cruftDDB, HasVersion } from '@honesty-store/cruft';
 import { config } from 'aws-sdk';
-import { default as cruftDDB, IHasVersion } from 'cruft-ddb';
 import { v4 as uuid } from 'uuid';
 
 import {
@@ -11,12 +11,12 @@ import {
 import { lambdaRouter, LambdaRouter } from '@honesty-store/service/lib/lambdaRouter';
 import { Item, ItemAliases, ItemDetails } from './client';
 
-config.region = process.env.AWS_REGION;
-
-type ItemInternal = Item & IHasVersion & { alias?: string };
+type ItemInternal = Item & HasVersion & { alias?: string };
 
 const cruft = cruftDDB<ItemInternal>({
-  tableName: process.env.TABLE_NAME
+  tableName: process.env.TABLE_NAME,
+  region: process.env.AWS_REGION,
+  limit: 100
 });
 
 const assertValidItemId = createAssertValidUuid('itemId');
@@ -39,7 +39,7 @@ const getItem = async (itemId): Promise<Item> => {
 
   let item: ItemInternal;
   for (let id = itemId; id; id = item.alias) {
-    item = await cruft.read({ id });
+    item = await cruft.read(id);
   }
 
   return externalise(item);
@@ -62,8 +62,8 @@ const getAliases = async (): Promise<ItemAliases> => {
 const updateItem = async (itemId: string, details: ItemDetails) => {
   assertValidItemId(itemId);
   assertValidItemDetails(details);
-  const originalItem = await cruft.read({ id: itemId });
-  const updatedItem: ItemInternal = {
+  const originalItem = await cruft.read(itemId);
+  const updatedItem = {
     ...originalItem,
     ...details
   };

@@ -8,7 +8,6 @@
         "outDir": "lib",
         "strict": true,
         "noUnusedParameters": true,
-        "noUnusedLocals": true,
         "lib": [
             "esnext",
             "esnext.asynciterable"

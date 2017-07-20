@@ -11,7 +11,7 @@ export interface Params {
   [key: string]: string;
 }
 
-export interface ExpressBodyAction<Result, Body> {
+export interface ExpressBodyAction<Body, Result> {
   (key: Key, params: Params, body: Body, request: any): Promise<Result>;
 }
 

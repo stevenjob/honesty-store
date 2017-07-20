@@ -1,6 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
-import index, { Cruft } from '../index';
+import index, { Cruft, HasId, HasVersion } from '../index';
 
 export interface Foo {
   id: string;
