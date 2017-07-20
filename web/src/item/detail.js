@@ -103,7 +103,9 @@ const ItemDetail = ({
           </div>
           <div className="my3">
             <div>
-              {registered ? registeredPurchaseButton : unregisteredPurchaseButton}
+              {registered
+                ? registeredPurchaseButton
+                : unregisteredPurchaseButton}
             </div>
             {registered &&
               <div className="gray my2">
