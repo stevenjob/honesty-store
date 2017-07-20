@@ -205,6 +205,8 @@ router.post<TopupRequest, TopupResponse>(
     // In the real world, this would require a user transitioning from auto-topup back to
     // manual topup which should never happen (all users are being migrated to auto).
 
+    // The above also prevents a new user from registering and topping up
+
     let topupAccount: EnhancedItem<TopupAccount> | undefined;
 
     if (stripeToken != null) {
