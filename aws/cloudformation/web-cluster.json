@@ -2,10 +2,6 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "",
   "Parameters": {
-    "VpcCidrBlock": {
-      "Type": "String",
-      "Description": "E.g. 10.1.0.0/16"
-    },
     "StageName": {
       "Type": "String",
       "Description": "Name of the ApiGateway deployment",
@@ -30,21 +26,6 @@
     }
   },
   "Resources": {
-    "Vpc": {
-      "Type": "AWS::EC2::VPC",
-      "Properties": {
-        "CidrBlock": {
-          "Ref": "VpcCidrBlock"
-        },
-        "InstanceTenancy": "default",
-        "EnableDnsSupport": "true",
-        "EnableDnsHostnames": "true"
-      }
-    },
-    "Cluster": {
-      "Type": "AWS::ECS::Cluster",
-      "Properties": {}
-    },
     "RestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
@@ -427,25 +408,5 @@
     }
   },
   "Outputs": {
-    "Vpc": {
-      "Value": {
-        "Ref": "Vpc"
-      },
-      "Export": {
-        "Name": {
-          "Fn::Sub": "${AWS::StackName}-Vpc"
-        }
-      }
-    },
-    "Cluster": {
-      "Value": {
-        "Ref": "Cluster"
-      },
-      "Export": {
-        "Name": {
-          "Fn::Sub": "${AWS::StackName}-Cluster"
-        }
-      }
-    }
   }
 }
