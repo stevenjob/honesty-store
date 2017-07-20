@@ -1,7 +1,7 @@
 import * as ms from 'ms';
 import * as stripeFactory from 'stripe';
 
-import { error } from '@honesty-store/service/lib/log';
+import { error, info } from '@honesty-store/service/lib/log';
 
 import {
   TopupAccount,
@@ -59,22 +59,22 @@ export const attemptTopup = async (key, topupAccount: TopupAccount, idempotencyK
   const { id, status } = topupAccount;
 
   if (status != null) {
-    // old accounts didn't have status, assume they're good to go
-
     if (status.status === 'success' && status.timestamp >= Date.now() - ms('24h')) {
-      // safety valve, don't charge multiple times within 24h period
+      info(key, `Refusing to topup ${id} again within 24h period ${status.timestamp}`);
       return;
     }
 
     if (status.status === 'in-progress') {
-      // existing topup must complete
+      info(key, `Refusing to topup ${id} until pending topup completes`);
       return;
     }
 
     if (status.status === 'error' && status.retriesRemaining === 0) {
-      // user must update card details
+      info(key, `Refusing to topup ${id} because there are no retries remaining`);
       return;
     }
+  } else {
+    info(key, `No status found for ${id}, assuming previous version and therefore good to go`);
   }
 
   try {
@@ -99,8 +99,7 @@ export const attemptTopup = async (key, topupAccount: TopupAccount, idempotencyK
       status: 'in-progress',
       amount,
       stripeFee: charge.balance_transaction.fee,
-      chargeId: charge.id,
-      topupCustomerId: topupCustomerId
+      chargeId: charge.id
     };
   } catch (e) {
     /* Note to future devs: 'Must provide source or customer.'

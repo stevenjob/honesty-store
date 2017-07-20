@@ -12,7 +12,6 @@ export interface TopupInProgress {
   amount: number;
   stripeFee: number;
   chargeId: string;
-  topupCustomerId: string;
 }
 
 export interface TopupError {

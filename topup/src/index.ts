@@ -115,6 +115,10 @@ const reducer = reduce<TopupEvent | TransactionWithBalance>(
 
         const updatedStatus = await attemptTopup(key, topupAccount, eventId, amount);
 
+        if (updatedStatus == null) {
+          throw new CodedError('CardError', 'Topup refused, contact support');
+        }
+
         return {
           ...topupAccount,
           status: updatedStatus
@@ -227,10 +231,13 @@ router.post<TopupRequest, TopupResponse>(
       throw new Error('Nothing to do, invalid request');
     }
 
+    if (topupAccount.status != null && topupAccount.status.status === 'error') {
+      throw new CodedError(topupAccount.status.code, 'Topup failed');
+    }
+
     return {
       cardDetails: extractCardDetails(topupAccount)
     };
-
   }
 );
 
