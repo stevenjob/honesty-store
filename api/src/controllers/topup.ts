@@ -1,6 +1,5 @@
 import { createTopup } from '@honesty-store/topup';
 import { authenticateAccessToken } from '../middleware/authenticate';
-import { v4 as uuid } from 'uuid';
 
 export default (router) => {
   router.post(

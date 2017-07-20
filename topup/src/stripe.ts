@@ -4,12 +4,12 @@ import * as stripeFactory from 'stripe';
 import { error, info } from '@honesty-store/service/lib/log';
 
 import {
+  Stripe,
   TopupAccount,
-  TopupError,
   // TopupStatus,
+  TopupError,
   TopupInProgress,
-  TopupSuccess,
-  Stripe
+  TopupSuccess
 } from './client';
 import { isRetryableStripeError, userErrorCodeFromStripeError, userErrorFromStripeError } from './errors';
 
@@ -50,11 +50,12 @@ export const createCustomer = async (key, topupAccount: TopupAccount, stripeToke
     error(key, `couldn't create stripe customer`, e);
     throw userErrorFromStripeError(e);
   }
-}
+};
 
 type TopupStatus = TopupSuccess | TopupInProgress | TopupError;
 
-export const attemptTopup = async (key, topupAccount: TopupAccount, idempotencyKey: string, amount: number): Promise<TopupStatus | undefined> => {
+export const attemptTopup = async (key, topupAccount: TopupAccount, idempotencyKey: string, amount: number):
+  Promise<TopupStatus | undefined> => {
 
   const { id, status } = topupAccount;
 

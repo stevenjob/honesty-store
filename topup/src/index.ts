@@ -19,6 +19,7 @@ import {
 } from './client';
 
 import {
+  assertNever,
   assertOptional,
   assertValidString,
   assertValidUuid,
@@ -72,6 +73,8 @@ const reducer = reduce<TopupEvent | TransactionWithBalance>(
       case 'debit':
       case 'credit':
         return extractFieldsFromTransactionId(event.id).accountId;
+      default:
+        return assertNever(event);
     }
   },
   event => event.id,
@@ -171,6 +174,8 @@ const reducer = reduce<TopupEvent | TransactionWithBalance>(
           status: updatedStatus
         };
       }
+      default:
+        return assertNever(event);
     }
   },
   (event) => {

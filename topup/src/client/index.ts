@@ -2,13 +2,13 @@ import fetch from '@honesty-store/service/lib/fetch';
 import { Transaction, TransactionAndBalance } from '@honesty-store/transaction';
 
 export interface TopupSuccess {
-  status: 'success',
+  status: 'success';
   transactionAndBalance: TransactionAndBalance;
   timestamp: number;
 }
 
 export interface TopupInProgress {
-  status: 'in-progress',
+  status: 'in-progress';
   amount: number;
   stripeFee: number;
   chargeId: string;
@@ -46,7 +46,15 @@ export interface TopupRequest {
   stripeToken: string;
 }
 
-export type CardError = 'CardIncorrectNumber' | 'CardInvalidNumber' | 'CardInvalidExpiryMonth' | 'CardInvalidExpiryYear' | 'CardIncorrectCVC' | 'CardInvalidCVC' | 'CardExpired' | 'CardDeclined' | 'CardError';
+export type CardError = 'CardIncorrectNumber' |
+  'CardInvalidNumber' |
+  'CardInvalidExpiryMonth' |
+  'CardInvalidExpiryYear' |
+  'CardIncorrectCVC' |
+  'CardInvalidCVC' |
+  'CardExpired' |
+  'CardDeclined' |
+  'CardError';
 
 export interface CardDetails {
   brand: string;
