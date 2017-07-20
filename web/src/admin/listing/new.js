@@ -91,14 +91,16 @@ class NewListingDetails extends React.Component {
             />
             <FormElement
               id="price"
-              description="Price, including all fees (p)"
+              description="Price per item including all fees (in pence)"
               value={price || ''}
               handler={e => this.updateState(e)}
+              placeholder="50"
             />
             <FormElement
               id="listCount"
               description="Number of items"
               value={listCount}
+              placeholder="100"
               handler={e => this.updateState(e)}
             />
             <div className="mt3 mb2">
