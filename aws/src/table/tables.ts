@@ -48,6 +48,14 @@ const dirToTable = {
         emailAddress: 'support@honesty.store',
         refreshToken: '34726c71-92aa-4e2e-83ec-0b4a5d83dedf',
         version: 0
+      },
+      {
+        id: '9127e1db-2a2c-41c5-908f-781ac816b633',
+        accountId: 'b411a0e5-7dce-4a7c-830b-72a0e46c9d7a',
+        defaultStoreId: '1e7c9c0d-a9be-4ab7-8499-e57bf859978d',
+        emailAddress: 'admin@scottlogic.co.uk',
+        refreshToken: null,
+        version: 0
       }
     ]
   }),
@@ -124,6 +132,13 @@ const dirToTable = {
         created: 1487667277000,
         id: 'b423607f-64de-441f-ac39-12d50aaedbe9',
         version: 0
+      },
+      {
+        balance: 0,
+        cachedTransactions: [],
+        created: 1500545744909,
+        id: 'b411a0e5-7dce-4a7c-830b-72a0e46c9d7a',
+        version: 0
       }
     ]
   }),
@@ -138,6 +153,13 @@ const dirToTable = {
         userId: 'c50234ff-6c33-4878-a1ab-05f6b3e7b649',
         created: 1487667277000,
         test: true
+      },
+      {
+        id: '74385eed-74b6-40aa-a5f3-cc43be364f58',
+        accountId: 'b411a0e5-7dce-4a7c-830b-72a0e46c9d7a',
+        userId: '9127e1db-2a2c-41c5-908f-781ac816b633',
+        created: 1500545744909,
+        test: false
       }
     ],
     config: {
