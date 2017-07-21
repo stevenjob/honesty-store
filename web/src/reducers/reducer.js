@@ -50,10 +50,10 @@ import {
   MARKETPLACE_FAILURE
 } from '../actions/marketplace';
 import {
-  OUT_OF_STOCK_REQUEST,
-  OUT_OF_STOCK_SUCCESS,
-  OUT_OF_STOCK_FAILURE
-} from '../actions/out-of-stock';
+  UPDATE_STOCK_COUNT_REQUEST,
+  UPDATE_STOCK_COUNT_SUCCESS,
+  UPDATE_STOCK_COUNT_FAILURE
+} from '../actions/update-stock-count';
 import { UNLIKE_ITEM, LIKE_ITEM } from '../actions/like-item';
 import { LOCAL_STORAGE_SAVE_ERROR } from '../actions/save-error';
 import {
@@ -207,22 +207,24 @@ export default (state, action) => {
       };
     case SESSION_FAILURE:
       return fullPageErrorState('session', action.error, state);
-    case OUT_OF_STOCK_REQUEST:
-      return requestState('outofstock', {}, state);
-    case OUT_OF_STOCK_SUCCESS: {
-      const { itemId } = action;
-      const tagItemAsDepleted = item =>
-        item.id === itemId ? { ...item, count: 0 } : item;
-      const updatedStateProps = {
+    case UPDATE_STOCK_COUNT_REQUEST:
+      return requestState('update-stock-count', {}, state);
+    case UPDATE_STOCK_COUNT_SUCCESS: {
+      const updatedItem = action.response;
+      const { items } = state.store || [];
+      const updatedState = {
         store: {
           ...state.store,
-          items: state.store.items.map(tagItemAsDepleted)
+          items: [
+            ...items.filter(({ id }) => id !== updatedItem.id),
+            updatedItem
+          ]
         }
       };
-      return completionState('outofstock', updatedStateProps, state);
+      return completionState('update-stock-count', updatedState, state);
     }
-    case OUT_OF_STOCK_FAILURE:
-      return fullPageErrorState('outofstock', action.error, state);
+    case UPDATE_STOCK_COUNT_FAILURE:
+      return fullPageErrorState('update-stock-count', action.error, state);
     case SUPPORT_REQUEST:
       return requestState('support', {}, state);
     case SUPPORT_SUCCESS:

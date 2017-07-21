@@ -43,7 +43,7 @@ export const performOutOfStock = ({ itemId }) => async (dispatch, getState) => {
 
     dispatch(outOfStockSuccess(response, itemId));
 
-    history.push(`/item/${itemId}/out-of-stock/success`);
+    history.push(`/item/${itemId}/update-stock-count/success`);
   } catch (e) {
     dispatch(outOfStockFailure(e));
   }

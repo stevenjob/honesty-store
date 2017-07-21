@@ -4,7 +4,7 @@ import { Success } from '../layout/alert';
 
 export default ({ params: { itemId } }) => (
   <Success
-    title="We've marked the item as out of stock"
+    title="We've updated the stock count"
     subtitle="Thanks for the report!"
     onClick={() => history.replace(`/item/${itemId}`)}
   />

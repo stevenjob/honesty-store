@@ -12,7 +12,7 @@ import safeLookupItemImage from './safeLookupItemImage';
 import Full from '../layout/full';
 import { StockLevel } from './stocklevel';
 import Like from './like';
-import { Report } from './out-of-stock';
+import { Report } from './update-stock-count';
 
 const Depleted = ({ registered }) => (
   <p className="red">This item has been reported out of stock</p>
@@ -70,8 +70,8 @@ const ItemDetail = ({
   );
 
   const OutOfStockLink = () => (
-    <Link to={`/item/${id}/out-of-stock`}>
-      Report out of Stock
+    <Link to={`/item/${id}/update-stock-count`}>
+      Update stock level
     </Link>
   );
 
