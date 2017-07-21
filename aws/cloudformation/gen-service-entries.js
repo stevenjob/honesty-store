@@ -13,8 +13,10 @@ const config = [
 
 const boolToYN = b => b ? "Yes" : "No";
 
+const removeHyphens = str => str.replace(/-/g, '');
+
 const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => ({
-    [`${name}Stack`]: {
+    [`${removeHyphens(name)}Stack`]: {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
         "TemplateURL": {

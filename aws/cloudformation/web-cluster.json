@@ -233,7 +233,7 @@
         }
       }
     },
-    "transaction-slackStack": {
+    "transactionslackStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
         "TemplateURL": {
