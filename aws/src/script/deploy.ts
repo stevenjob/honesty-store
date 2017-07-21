@@ -2,8 +2,12 @@ import * as winston from 'winston';
 import { aliasToBaseUrl } from '../route53/alias';
 import { aliasToName } from '../route53/alias';
 import { ensureStack } from '../cloudformation/stack';
+import { S3 } from 'aws-sdk';
+import { readFileSync } from 'fs';
 
 export const prefix = 'hs';
+
+const templateBucket = 'honesty-store-templates';
 
 const isLive = (branch) => branch === 'live';
 
@@ -37,6 +41,28 @@ const getCertificateArn = ({ branch }) => isLive(branch) ?
   'arn:aws:acm:us-east-1:812374064424:certificate/8f1b6ff9-f215-4c9c-8a14-04a2aab84004' :
   'arn:aws:acm:us-east-1:812374064424:certificate/952d48cc-77bc-4736-b398-c5451e7dc970';
 
+const s3Upload = async ({ localFile, bucket, key }) => {
+  const s3 = new S3();
+
+  try {
+    await s3.createBucket({
+      Bucket: bucket
+    })
+      .promise();
+  } catch (e) {
+    if (e.code !== 'BucketAlreadyExists') {
+      throw e;
+    }
+  }
+
+  return await s3.putObject({
+    Bucket: bucket,
+    Key: key,
+    Body: readFileSync(localFile, 'utf8')
+  })
+    .promise();
+};
+
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
 export default async ({ branch }) => {
   if (isLive(branch)) {
@@ -58,6 +84,12 @@ export default async ({ branch }) => {
   });
 
   const baseUrl = aliasToBaseUrl(branch);
+
+  await s3Upload({
+    localFile: `${__dirname}/../../cloudformation/web-cluster-per-service.json`,
+    bucket: templateBucket,
+    key: 'per-service.json'
+  });
 
   await ensureStack({
     name: `stack-${branch}`,

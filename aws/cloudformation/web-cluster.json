@@ -76,18 +76,7 @@
     "itemStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": {
-          "Fn::Join": [
-            "",
-            [
-              "https://s3.amazonaws.com/cloudformation-templates-",
-              {
-                "Ref": "AWS::Region"
-              },
-              "/per-service.json"
-            ]
-          ]
-        },
+        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
         "TimeoutInMinutes": "10",
         "Parameters": {
           "ServiceName": "item",
@@ -115,18 +104,7 @@
     "storeStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": {
-          "Fn::Join": [
-            "",
-            [
-              "https://s3.amazonaws.com/cloudformation-templates-",
-              {
-                "Ref": "AWS::Region"
-              },
-              "/per-service.json"
-            ]
-          ]
-        },
+        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
         "TimeoutInMinutes": "10",
         "Parameters": {
           "ServiceName": "store",
@@ -154,18 +132,7 @@
     "topupStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": {
-          "Fn::Join": [
-            "",
-            [
-              "https://s3.amazonaws.com/cloudformation-templates-",
-              {
-                "Ref": "AWS::Region"
-              },
-              "/per-service.json"
-            ]
-          ]
-        },
+        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
         "TimeoutInMinutes": "10",
         "Parameters": {
           "ServiceName": "topup",
@@ -197,18 +164,7 @@
     "transactionStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": {
-          "Fn::Join": [
-            "",
-            [
-              "https://s3.amazonaws.com/cloudformation-templates-",
-              {
-                "Ref": "AWS::Region"
-              },
-              "/per-service.json"
-            ]
-          ]
-        },
+        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
         "TimeoutInMinutes": "10",
         "Parameters": {
           "ServiceName": "transaction",
@@ -236,18 +192,7 @@
     "transactionslackStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": {
-          "Fn::Join": [
-            "",
-            [
-              "https://s3.amazonaws.com/cloudformation-templates-",
-              {
-                "Ref": "AWS::Region"
-              },
-              "/per-service.json"
-            ]
-          ]
-        },
+        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
         "TimeoutInMinutes": "10",
         "Parameters": {
           "ServiceName": "transaction-slack",
@@ -275,18 +220,7 @@
     "userStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": {
-          "Fn::Join": [
-            "",
-            [
-              "https://s3.amazonaws.com/cloudformation-templates-",
-              {
-                "Ref": "AWS::Region"
-              },
-              "/per-service.json"
-            ]
-          ]
-        },
+        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
         "TimeoutInMinutes": "10",
         "Parameters": {
           "ServiceName": "user",
@@ -316,18 +250,7 @@
     "webStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": {
-          "Fn::Join": [
-            "",
-            [
-              "https://s3.amazonaws.com/cloudformation-templates-",
-              {
-                "Ref": "AWS::Region"
-              },
-              "/per-service.json"
-            ]
-          ]
-        },
+        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
         "TimeoutInMinutes": "10",
         "Parameters": {
           "ServiceName": "web",
@@ -355,18 +278,7 @@
     "apiStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": {
-          "Fn::Join": [
-            "",
-            [
-              "https://s3.amazonaws.com/cloudformation-templates-",
-              {
-                "Ref": "AWS::Region"
-              },
-              "/per-service.json"
-            ]
-          ]
-        },
+        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
         "TimeoutInMinutes": "10",
         "Parameters": {
           "ServiceName": "api",

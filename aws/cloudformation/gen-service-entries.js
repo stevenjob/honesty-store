@@ -19,9 +19,7 @@ const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => 
     [`${removeHyphens(name)}Stack`]: {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": {
-          "Fn::Join": ["", [ "https://s3.amazonaws.com/cloudformation-templates-", { "Ref": "AWS::Region" }, "/per-service.json" ] ]
-        },
+        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
         "TimeoutInMinutes": "10",
         "Parameters": {
           "ServiceName": `${name}`,
