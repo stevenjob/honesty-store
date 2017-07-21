@@ -35,7 +35,8 @@ const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => 
           "LambdaHandler": `${handler}`,
           "WithTable": boolToYN(read && write),
           "WithUserSecret": boolToYN(name == "user"),
-          "WithStripe": boolToYN(name == "topup"),
+          "StripeKeyLive": name == "topup" ? { "Ref": "StripeKeyLive" } : "",
+          "StripeKeyTest": name == "topup" ? { "Ref": "StripeKeyTest" } : "",
           "WithApiGateway": boolToYN(name == "web" || name == "api"),
           "ApiGatewayCatchAll": boolToYN(name == "web"),
           "HonestyStorePrefix": { "Ref": "HonestyStorePrefix" }
