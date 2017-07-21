@@ -14,7 +14,7 @@ const config = [
 const boolToYN = b => b ? "Yes" : "No";
 
 const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => ({
-    [`${name}-stack`]: {
+    [`${name}Stack`]: {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
         "TemplateURL": {
@@ -24,7 +24,7 @@ const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => 
         "Parameters": {
           "ServiceName": `${name}`,
           "ServiceSecret": { "Ref": "ServiceSecret" },
-          "Index-userId": boolToYN(name == "topup"),
+          "IndexUserId": boolToYN(name == "topup"),
           "ReadCapacityUnits": `${read}`,
           "WriteCapacityUnits": `${write}`,
           "LambdaCode": {

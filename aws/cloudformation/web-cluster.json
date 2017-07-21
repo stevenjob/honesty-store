@@ -73,7 +73,7 @@
       }
     },
 
-    "item-stack": {
+    "itemStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
         "TemplateURL": {
@@ -94,7 +94,7 @@
           "ServiceSecret": {
             "Ref": "ServiceSecret"
           },
-          "Index-userId": "No",
+          "IndexUserId": "No",
           "ReadCapacityUnits": "2",
           "WriteCapacityUnits": "1",
           "LambdaCode": {
@@ -113,7 +113,7 @@
         }
       }
     },
-    "store-stack": {
+    "storeStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
         "TemplateURL": {
@@ -134,7 +134,7 @@
           "ServiceSecret": {
             "Ref": "ServiceSecret"
           },
-          "Index-userId": "No",
+          "IndexUserId": "No",
           "ReadCapacityUnits": "3",
           "WriteCapacityUnits": "3",
           "LambdaCode": {
@@ -153,7 +153,7 @@
         }
       }
     },
-    "topup-stack": {
+    "topupStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
         "TemplateURL": {
@@ -174,7 +174,7 @@
           "ServiceSecret": {
             "Ref": "ServiceSecret"
           },
-          "Index-userId": "Yes",
+          "IndexUserId": "Yes",
           "ReadCapacityUnits": "1",
           "WriteCapacityUnits": "1",
           "LambdaCode": {
@@ -193,7 +193,7 @@
         }
       }
     },
-    "transaction-stack": {
+    "transactionStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
         "TemplateURL": {
@@ -214,7 +214,7 @@
           "ServiceSecret": {
             "Ref": "ServiceSecret"
           },
-          "Index-userId": "No",
+          "IndexUserId": "No",
           "ReadCapacityUnits": "2",
           "WriteCapacityUnits": "2",
           "LambdaCode": {
@@ -233,7 +233,7 @@
         }
       }
     },
-    "transaction-slack-stack": {
+    "transaction-slackStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
         "TemplateURL": {
@@ -254,7 +254,7 @@
           "ServiceSecret": {
             "Ref": "ServiceSecret"
           },
-          "Index-userId": "No",
+          "IndexUserId": "No",
           "ReadCapacityUnits": "1",
           "WriteCapacityUnits": "1",
           "LambdaCode": {
@@ -273,7 +273,7 @@
         }
       }
     },
-    "user-stack": {
+    "userStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
         "TemplateURL": {
@@ -294,7 +294,7 @@
           "ServiceSecret": {
             "Ref": "ServiceSecret"
           },
-          "Index-userId": "No",
+          "IndexUserId": "No",
           "ReadCapacityUnits": "1",
           "WriteCapacityUnits": "1",
           "LambdaCode": {
@@ -313,7 +313,7 @@
         }
       }
     },
-    "web-stack": {
+    "webStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
         "TemplateURL": {
@@ -334,7 +334,7 @@
           "ServiceSecret": {
             "Ref": "ServiceSecret"
           },
-          "Index-userId": "No",
+          "IndexUserId": "No",
           "ReadCapacityUnits": "0",
           "WriteCapacityUnits": "0",
           "LambdaCode": {
@@ -353,7 +353,7 @@
         }
       }
     },
-    "api-stack": {
+    "apiStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
         "TemplateURL": {
@@ -374,7 +374,7 @@
           "ServiceSecret": {
             "Ref": "ServiceSecret"
           },
-          "Index-userId": "No",
+          "IndexUserId": "No",
           "ReadCapacityUnits": "0",
           "WriteCapacityUnits": "0",
           "LambdaCode": {

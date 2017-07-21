@@ -9,7 +9,7 @@
       "Description": "Secret for inter-service authentication"
     },
 
-    "Index-userId": {
+    "IndexUserId": {
       "Type": "String",
       "Description": "whether to add a 'userId' to the table keyschema",
       "AllowedValues": ["Yes", "No"]
@@ -201,7 +201,7 @@
       "Fn::If": [
         { "Fn::Equals": [ {"Ref": "WithApiGateway"}, "Yes" ] },
         {
-          "Lambda-ApiGateway": {
+          "LambdaApiGateway": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
               "Action": "lambda:InvokeFunction",
@@ -226,7 +226,7 @@
       "Fn::If": [
         { "Fn::Equals": [ {"Ref": "ApiGatewayCatchAll"}, "Yes" ] },
         {
-          "ApiGateway-catchall": {
+          "ApiGatewayCatchAll": {
             "Type": "AWS::ApiGateway::Resource",
             "Properties": {
               "RestApiId": {
@@ -236,7 +236,7 @@
               "PathPart": "{proxy+}"
             }
           },
-          "ApiGateway-method": {
+          "ApiGatewayMethod": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
               "RestApiId": {
@@ -272,7 +272,7 @@
           }
         },
         {
-          "ApiGateway-parent": {
+          "ApiGatewayParent": {
             "Type": "AWS::ApiGateway::Resource",
             "Properties": {
               "RestApiId": {
@@ -284,7 +284,7 @@
               }
             }
           },
-          "ApiGateway-nested": {
+          "ApiGatewayNested": {
             "Type": "AWS::ApiGateway::Resource",
             "Properties": {
               "RestApiId": {
@@ -296,7 +296,7 @@
               "PathPart": "{proxy+}"
             }
           },
-          "ApiGateway-method": {
+          "ApiGatewayMethod": {
             "Type": "AWS::ApiGateway::Method",
             "Properties": {
               "RestApiId": {
