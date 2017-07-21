@@ -1,4 +1,4 @@
-import { calculateServiceFee, getStoreFromId } from '@honesty-store/store';
+import { calculateServiceFee, getStoreFromId, StoreItem as StoreItemInternal } from '@honesty-store/store';
 
 export interface StoreItem {
   id: string;
@@ -30,40 +30,42 @@ export interface PriceBreakdown {
 export const calculateDonation = (storeId: string, price: number): number =>
   storeId === '9a61dad3-f05c-46aa-a7e4-14311e9cccc5' ? Math.ceil(price * 0.1) : 0;
 
+export const externaliseItem = (item: StoreItemInternal, storeId: string, userId: string): StoreItem => {
+  const donation = calculateDonation(storeId, item.price);
+  const serviceFee = calculateServiceFee(item.price);
+  return {
+    id: item.id,
+    name: item.name,
+    qualifier: item.qualifier,
+    image: item.image,
+    isMarketplace: true,
+    count: item.availableCount,
+    price: {
+      total: item.price + donation,
+      breakdown: {
+        wholesaleCost: item.price - serviceFee,
+        serviceFee: serviceFee,
+        donation,
+        handlingFee: 0,
+        creditCardFee: 0,
+        VAT: 0
+      }
+    },
+    sellerId: item.sellerId,
+    ...(
+      userId === item.sellerId
+      ? {
+        listCount: item.listCount,
+        purchaseCount: item.purchaseCount,
+        refundCount: item.refundCount,
+        revenue: item.revenue
+      }
+      : {}
+    )
+  };
+};
+
 export const storeItems = async (key, storeId, userId): Promise<StoreItem[]> => {
   const { items } = await getStoreFromId(key, storeId);
-  return items.map(item => {
-    const donation = calculateDonation(storeId, item.price);
-    const serviceFee = calculateServiceFee(item.price);
-    return {
-      id: item.id,
-      name: item.name,
-      qualifier: item.qualifier,
-      image: item.image,
-      isMarketplace: true,
-      count: item.availableCount,
-      price: {
-        total: item.price + donation,
-        breakdown: {
-          wholesaleCost: item.price - serviceFee,
-          serviceFee: serviceFee,
-          donation,
-          handlingFee: 0,
-          creditCardFee: 0,
-          VAT: 0
-        }
-      },
-      sellerId: item.sellerId,
-      ...(
-        userId === item.sellerId
-        ? {
-          listCount: item.listCount,
-          purchaseCount: item.purchaseCount,
-          refundCount: item.refundCount,
-          revenue: item.revenue
-        }
-        : {}
-      )
-    };
-  });
+  return items.map((item) => externaliseItem(item, storeId, userId));
 };
