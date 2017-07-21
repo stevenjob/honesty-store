@@ -128,6 +128,10 @@ const reducer = reduce<Transaction | StoreEvent>(
           return store;
         }
 
+        if (count > item.listCount) {
+          throw new CodedError('AvailableCountInvalid', `Available count cannot be greater than list count`);
+        }
+
         item.availableCount = count;
 
         return store;

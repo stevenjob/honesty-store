@@ -120,6 +120,11 @@ const errorDefinitions = {
     dismissalText: dismissalText.DISMISS,
     redirectionPath: `/store`
   },
+  AvailableCountInvalid: {
+    message: `There can't be more items available then originally listed`,
+    actionDescription: `Please get in touch if there's an issue`,
+    dismissalText: dismissalText.DISMISS
+  },
   // The following error codes are handled internally and never presented to the user
   EmailNotFound: { message: `Couldn't find your email` },
   RefreshTokenExpired: {

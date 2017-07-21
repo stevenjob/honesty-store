@@ -27,6 +27,7 @@ export type ErrorCode =
   'NonRefundableTransactionType' |
   'UserLoggedOut' |
   'AccessDenied' |
+  'AvailableCountInvalid' |
   'UnknownError';
 
 export class CodedError extends Error {
