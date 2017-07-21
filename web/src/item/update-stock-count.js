@@ -29,13 +29,15 @@ class UpdateStockCount extends React.Component {
     return (
       <Full left={<BackToPage title="Item" path={`/item/${itemId}`} />}>
         <h1>
-          Report stock issue
+          Update stock level
         </h1>
         <h2>
           {name}
         </h2>
         <div className="mb3">
-          <StockLevel count={count} />
+          {count <= 0
+            ? <p className="red">This item has been reported out of stock</p>
+            : <StockLevel count={count} />}
         </div>
         <p>
           We estimate stock levels by keeping track of purchases, but it doesn't always work out.

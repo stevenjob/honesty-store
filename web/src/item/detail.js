@@ -116,11 +116,11 @@ const ItemDetail = ({
             {notes && <p>{notes}</p>}
           </div>
           <div className="my3">
-            <StockLevel count={count} />
+            {count <= 0
+              ? <Depleted registered={registered} />
+              : <StockLevel count={count} />}
             <div className="my2">
-              {count <= 0
-                ? <Depleted registered={registered} />
-                : registered ? <UpdateStockLevelLink itemId={id} /> : null}
+              {registered && <UpdateStockLevelLink itemId={id} />}
             </div>
           </div>
           <div className="my3">
