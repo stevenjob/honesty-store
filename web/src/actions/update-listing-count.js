@@ -35,7 +35,7 @@ export const performUpdateListingCount = ({
   try {
     const response = await apifetch(
       {
-        url: `/api/v1/store/${storeCode}/item/${itemId}/count`,
+        url: `/api/v1/store/${storeCode}/item/${itemId}/count/admin`,
         body: {
           count
         },
