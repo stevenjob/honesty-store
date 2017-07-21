@@ -4,10 +4,10 @@ import { BackToPage } from '../../chrome/link';
 import { performCreateItem } from '../../actions/create-item';
 import ItemDetails from './details';
 
-const AdminItemNew = ({ performCreateItem, params }) => (
+const AdminItemNew = ({ performCreateItem, params: { code: storeCode } }) => (
   <ItemDetails
-    onSubmit={details => performCreateItem({ details })}
-    left={<BackToPage path="/admin/item" title="Listings" />}
+    onSubmit={details => performCreateItem({ details, storeCode })}
+    left={<BackToPage path={`/admin/listing/${storeCode}`} title="Listings" />}
   />
 );
 

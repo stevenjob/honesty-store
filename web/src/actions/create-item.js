@@ -25,7 +25,7 @@ const createItemFailure = error => {
   };
 };
 
-export const performCreateItem = ({ details }) => async (
+export const performCreateItem = ({ details, storeCode }) => async (
   dispatch,
   getState
 ) => {
@@ -44,7 +44,7 @@ export const performCreateItem = ({ details }) => async (
     );
 
     dispatch(createItemSuccess(response));
-    history.push(`/admin/item/${response.id}/success`);
+    history.push(`/admin/listing/${storeCode}/item/${response.id}`);
   } catch (e) {
     dispatch(createItemFailure(e));
   }

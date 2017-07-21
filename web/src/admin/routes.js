@@ -19,13 +19,13 @@ const routes = (
   <Route path="admin" component={AdminItemFetch}>
     <Route path="item">
       <IndexRoute component={AdminItemsList} />
-      <Route path="new" component={AdminItemDetailsNew} />
       <Route path=":itemId" component={AdminItemDetailsEdit} />
       <Route path=":itemId/success" component={AdminItemDetailsSuccess} />
     </Route>
     <Route path="listing/:code" component={AdminListingsFetch}>
       <IndexRoute component={AdminItemListings} />
       <Route path="item" component={AdminItemListingItemSelect} />
+      <Route path="item/new" component={AdminItemDetailsNew} />
       <Route path="item/:itemId">
         <IndexRoute component={AdminItemListingsNew} />
         <Route path="edit" component={AdminItemListingEdit} />
