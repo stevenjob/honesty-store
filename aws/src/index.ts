@@ -24,16 +24,16 @@ winston.configure({
   ]
 });
 
-config.region = 'eu-west-1';
+config.region = process.env.AWS_REGION || 'eu-west-1';
 
 const warnAndExit = e => {
   console.error(e);
   process.exit(1);
 };
 
-program.command('deploy <branch> [dirs...]')
-  .action((branch, dirs) => {
-    deploy({ branch, dirs })
+program.command('deploy <branch>')
+  .action((branch) => {
+    deploy({ branch })
       .catch(warnAndExit);
   });
 
