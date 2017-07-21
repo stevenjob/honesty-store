@@ -39,6 +39,13 @@ const getCertificateArn = ({ branch }) => isLive(branch) ?
 
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
 export default async ({ branch }) => {
+  if (isLive(branch)) {
+    console.error("Refusing to run on live");
+    while(1){
+      process.exit(5);
+    }
+  }
+
   const serviceSecret = generateSecret({
     secretPrefix: 'service',
     branch,
