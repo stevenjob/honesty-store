@@ -196,10 +196,10 @@
         }
       }
     },
-    "Fn::If": [
-      { "Fn::Equals": [ {"Ref": "WithApiGateway"}, "Yes" ] },
-      {
-        "LambdaApiGateway": {
+    "LambdaApiGateway": {
+      "Fn::If": [
+        { "Fn::Equals": [ {"Ref": "WithApiGateway"}, "Yes" ] },
+        {
           "Type": "AWS::Lambda::Permission",
           "Properties": {
             "Action": "lambda:InvokeFunction",
@@ -215,118 +215,85 @@
             },
             "Principal": "apigateway.amazonaws.com"
           }
-        }
-      },
-      { "Ref": "AWS::NoValue" }
-    ],
+        },
+        { "Ref": "AWS::NoValue" }
+      ]
+    },
+
+  "ApiGatewayEndpoint": {
     "Fn::If": [
-      { "Fn::Equals": [ {"Ref": "ApiGatewayCatchAll"}, "Yes" ] },
+      { "Fn::Equals": [ { "Ref": "ApiGatewayCatchAll" }, "Yes" ] },
       {
-        "ApiGatewayCatchAll": {
-          "Type": "AWS::ApiGateway::Resource",
-          "Properties": {
-            "RestApiId": {
-              "Ref": "RestApi"
-            },
-            "ParentId": "/",
-            "PathPart": "{proxy+}"
-          }
-        },
-        "ApiGatewayMethod": {
-          "Type": "AWS::ApiGateway::Method",
-          "Properties": {
-            "RestApiId": {
-              "Ref": "RestApi"
-            },
-            "ResourceId": {
-              "Ref": "ApiGateway-catchall"
-            },
-            "HttpMethod": "ANY",
-            "AuthorizationType": "NONE",
-            "Integration": {
-              "IntegrationHttpMethod": "POST",
-              "Type": "AWS_PROXY",
-              "Uri": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:aws:apigateway:",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    ":lambda:path/2015-03-31/functions/",
-                    {
-                      "Ref": "Lambda"
-                    },
-                    "/invocations"
-                  ]
-                ]
-              },
-              "Credentials": null
-            }
-          }
+        "Type": "AWS::ApiGateway::Resource",
+        "Properties": {
+          "RestApiId": {
+            "Ref": "RestApi"
+          },
+          "ParentId": "/",
+          "PathPart": "{proxy+}"
         }
       },
       {
-        "ApiGatewayParent": {
-          "Type": "AWS::ApiGateway::Resource",
-          "Properties": {
-            "RestApiId": {
-              "Ref": "RestApi"
-            },
-            "ParentId": "/",
-            "PathPart": {
-              "Ref": "ServiceName"
-            }
-          }
+        "Type": "AWS::ApiGateway::Resource",
+        "Properties": {
+          "RestApiId": {
+            "Ref": "RestApi"
+          },
+          "ParentId": {
+            "Ref": "ApiGatewayRoot"
+          },
+          "PathPart": "{proxy+}"
+        }
+      }
+    ]
+  },
+  "ApiGatewayIntegration": {
+    "Type": "AWS::ApiGateway::Method",
+    "Properties": {
+      "RestApiId": {
+        "Ref": "RestApi"
+      },
+      "ResourceId": {
+        "Ref": "ApiGatewayEndpoint"
+      },
+      "HttpMethod": "ANY",
+      "AuthorizationType": "NONE",
+      "Integration": {
+        "IntegrationHttpMethod": "POST",
+        "Type": "AWS_PROXY",
+        "Uri": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:aws:apigateway:",
+              { "Ref": "AWS::Region" },
+              ":lambda:path/2015-03-31/functions/",
+              { "Ref": "Lambda" },
+              "/invocations"
+            ]
+          ]
         },
-        "ApiGatewayNested": {
-          "Type": "AWS::ApiGateway::Resource",
-          "Properties": {
-            "RestApiId": {
-              "Ref": "RestApi"
-            },
-            "ParentId": {
-              "Ref": "ApiGateway-parent"
-            },
-            "PathPart": "{proxy+}"
-          }
-        },
-        "ApiGatewayMethod": {
-          "Type": "AWS::ApiGateway::Method",
-          "Properties": {
-            "RestApiId": {
-              "Ref": "RestApi"
-            },
-            "ResourceId": {
-              "Ref": "ApiGateway-nested"
-            },
-            "HttpMethod": "ANY",
-            "AuthorizationType": "NONE",
-            "Integration": {
-              "IntegrationHttpMethod": "POST",
-              "Type": "AWS_PROXY",
-              "Uri": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:aws:apigateway:",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    ":lambda:path/2015-03-31/functions/",
-                    {
-                      "Ref": "Lambda"
-                    },
-                    "/invocations"
-                  ]
-                ]
-              },
-              "Credentials": null
-            }
+        "Credentials": null
+      }
+    }
+  },
+  "ApiGatewayRoot": {
+    "Fn::If": [
+      { "Fn::Equals": [ { "Ref": "ApiGatewayCatchAll" }, "Yes" ] },
+      { "Ref": "AWS::NoValue" },
+      {
+        "Type": "AWS::ApiGateway::Resource",
+        "Properties": {
+          "RestApiId": {
+            "Ref": "RestApi"
+          },
+          "ParentId": "/",
+          "PathPart": {
+            "Ref": "ServiceName"
           }
         }
       }
     ]
   }
+}
 }
