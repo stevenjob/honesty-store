@@ -69,7 +69,7 @@ const ItemDetail = ({
     </Link>
   );
 
-  const OutOfStockLink = () => (
+  const UpdateStockLevelLink = () => (
     <Link to={`/item/${id}/update-stock-count`}>
       Update stock level
     </Link>
@@ -120,7 +120,7 @@ const ItemDetail = ({
             <div className="my2">
               {count <= 0
                 ? <Depleted registered={registered} />
-                : registered ? <OutOfStockLink itemId={id} /> : null}
+                : registered ? <UpdateStockLevelLink itemId={id} /> : null}
             </div>
           </div>
           <div className="my3">
