@@ -29,10 +29,7 @@ const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => 
           "IndexUserId": boolToYN(name == "topup"),
           "ReadCapacityUnits": `${read}`,
           "WriteCapacityUnits": `${write}`,
-          "LambdaCode": {
-            "S3Bucket": "lambdas",
-            "S3Key": `${name}.zip`
-          },
+          "LambdaS3Key": `${name}.zip`,
           "LambdaTimeout": `${timeout}`,
           "LambdaHandler": `${handler}`,
           "WithTable": boolToYN(read && write),

@@ -97,10 +97,7 @@
           "IndexUserId": "No",
           "ReadCapacityUnits": "2",
           "WriteCapacityUnits": "1",
-          "LambdaCode": {
-            "S3Bucket": "lambdas",
-            "S3Key": "item.zip"
-          },
+          "LambdaS3Key": "item.zip",
           "LambdaTimeout": "10",
           "LambdaHandler": "lib/bundle-min.handler",
           "WithTable": "Yes",
@@ -137,10 +134,7 @@
           "IndexUserId": "No",
           "ReadCapacityUnits": "3",
           "WriteCapacityUnits": "3",
-          "LambdaCode": {
-            "S3Bucket": "lambdas",
-            "S3Key": "store.zip"
-          },
+          "LambdaS3Key": "store.zip",
           "LambdaTimeout": "10",
           "LambdaHandler": "lib/bundle-min.handler",
           "WithTable": "Yes",
@@ -177,10 +171,7 @@
           "IndexUserId": "Yes",
           "ReadCapacityUnits": "1",
           "WriteCapacityUnits": "1",
-          "LambdaCode": {
-            "S3Bucket": "lambdas",
-            "S3Key": "topup.zip"
-          },
+          "LambdaS3Key": "topup.zip",
           "LambdaTimeout": "10",
           "LambdaHandler": "lib/bundle-min.handler",
           "WithTable": "Yes",
@@ -217,10 +208,7 @@
           "IndexUserId": "No",
           "ReadCapacityUnits": "2",
           "WriteCapacityUnits": "2",
-          "LambdaCode": {
-            "S3Bucket": "lambdas",
-            "S3Key": "transaction.zip"
-          },
+          "LambdaS3Key": "transaction.zip",
           "LambdaTimeout": "10",
           "LambdaHandler": "lib/bundle-min.handler",
           "WithTable": "Yes",
@@ -257,10 +245,7 @@
           "IndexUserId": "No",
           "ReadCapacityUnits": "1",
           "WriteCapacityUnits": "1",
-          "LambdaCode": {
-            "S3Bucket": "lambdas",
-            "S3Key": "transaction-slack.zip"
-          },
+          "LambdaS3Key": "transaction-slack.zip",
           "LambdaTimeout": "10",
           "LambdaHandler": "lib/bundle-min.handler",
           "WithTable": "Yes",
@@ -297,10 +282,7 @@
           "IndexUserId": "No",
           "ReadCapacityUnits": "1",
           "WriteCapacityUnits": "1",
-          "LambdaCode": {
-            "S3Bucket": "lambdas",
-            "S3Key": "user.zip"
-          },
+          "LambdaS3Key": "user.zip",
           "LambdaTimeout": "10",
           "LambdaHandler": "lib/bundle-min.handler",
           "WithTable": "Yes",
@@ -337,10 +319,7 @@
           "IndexUserId": "No",
           "ReadCapacityUnits": "0",
           "WriteCapacityUnits": "0",
-          "LambdaCode": {
-            "S3Bucket": "lambdas",
-            "S3Key": "web.zip"
-          },
+          "LambdaS3Key": "web.zip",
           "LambdaTimeout": "10",
           "LambdaHandler": "server/lambda.handler",
           "WithTable": "No",
@@ -377,10 +356,7 @@
           "IndexUserId": "No",
           "ReadCapacityUnits": "0",
           "WriteCapacityUnits": "0",
-          "LambdaCode": {
-            "S3Bucket": "lambdas",
-            "S3Key": "api.zip"
-          },
+          "LambdaS3Key": "api.zip",
           "LambdaTimeout": "30",
           "LambdaHandler": "lib/bundle-min.handler",
           "WithTable": "No",

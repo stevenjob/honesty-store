@@ -23,7 +23,7 @@
       "Description": "table capacity - write"
     },
 
-    "LambdaCode": {
+    "LambdaS3Key": {
       "Type": "String",
       "Description": "something about the lambda code - maybe a zip ref?"
     },
@@ -132,7 +132,8 @@
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-          "Ref": "LambdaCode"
+          "S3Bucket": "lambdas",
+          "S3Key": { "Ref": "LambdaS3Key" }
         },
         "FunctionName": {
           "Fn::Join": [
