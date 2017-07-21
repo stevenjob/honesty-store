@@ -250,7 +250,7 @@ router.post<TopupRequest, TopupResponse>(
 );
 
 router.post<TransactionWithBalance, TopupAccount>(
-  '/',
+  '/transaction',
   async (_key, { }, { balance, ...transaction }) => {
     assertValidTransaction(transaction);
 

@@ -12,9 +12,11 @@
     "store",
     "test",
     "topup",
+    "topup-transaction",
     "transaction",
     "transaction-slack",
     "transaction-store",
+    "transaction-topup",
     "user",
     "web"
   ]

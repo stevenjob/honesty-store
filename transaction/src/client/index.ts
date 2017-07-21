@@ -41,7 +41,11 @@ export interface Account {
   version: number;
 }
 
-export type InternalAccount = Account & { transactionHead?: string } & { cachedTransactions: TransactionList; };
+export type InternalAccount = Account & {
+  transactionHead?: string;
+  cachedTransactions: TransactionList;
+  recentTopupIds: string[];
+};
 
 export type TransactionList = Transaction[];
 
@@ -154,6 +158,9 @@ export const issueUserRequestedRefund = (key, transactionId: string, userId: str
 
 export const issueSupportRequestedRefund = (key, transactionId: string, reason: string, dateLimit: number) =>
   post<TransactionAndBalance>(1, key, `/tx/${transactionId}/refund/support`, { dateLimit, reason });
+
+export const recordTopup = (key, accountId: string, id: string, transaction: TransactionBody & { type: 'topup' }) =>
+  post<TransactionAndBalance>(1, key, `/account/${accountId}/topup/${id}`, transaction);
 
 export const assertBalanceWithinLimit = async ({ key, accountId, amount }) => {
   const currentBalance = (await getAccount(key, accountId)).balance;

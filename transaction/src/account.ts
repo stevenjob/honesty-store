@@ -39,7 +39,8 @@ export const createAccount = async ({ accountId }): Promise<InternalAccount> => 
     creditLimit: 0,
     balance: 0,
     version: 0,
-    cachedTransactions: []
+    cachedTransactions: [],
+    recentTopupIds: []
   };
 
   await new DynamoDB.DocumentClient()
@@ -77,6 +78,7 @@ export const updateAccount = async (
         'set balance=:updatedBalance,' +
         'transactionHead=:updatedHead,' +
         'version=:updatedVersion,' +
+        'recentTopupIds=:recentTopupIds,' +
         'cachedTransactions=:cachedTransactions'
       ,
       ExpressionAttributeValues: {
@@ -85,7 +87,8 @@ export const updateAccount = async (
         ':originalBalance': originalAccount.balance,
         ':updatedBalance': updatedAccount.balance,
         ':updatedHead': updatedAccount.transactionHead || null,
-        ':cachedTransactions': updatedAccount.cachedTransactions
+        ':cachedTransactions': updatedAccount.cachedTransactions,
+        ':recentTopupIds': updatedAccount.recentTopupIds || []
       }
     })
     .promise();

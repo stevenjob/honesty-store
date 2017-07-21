@@ -1,0 +1,22 @@
+{
+  "name": "@honesty-store/transaction-topup",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "tsc": "../node_modules/.bin/tsc",
+    "rollup": "../node_modules/.bin/rollup -c ../rollup.config.js",
+    "uglifyjs": "../node_modules/.bin/uglifyjs lib/bundle.js > lib/bundle-min.js",
+    "build": "npm run tsc && npm run rollup && npm run uglifyjs"
+  },
+  "devDependencies": {
+    "@types/node": "0.0.2"
+  },
+  "dependencies": {
+    "@honesty-store/service": "0.0.0",
+    "@honesty-store/topup": "0.0.0",
+    "@honesty-store/transaction": "0.0.0"
+  },
+  "peerDependencies": {
+    "aws-sdk": "2.22.0"
+  }
+}

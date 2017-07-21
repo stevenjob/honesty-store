@@ -87,6 +87,22 @@ const lambdaConfig: LambdaConfig = {
     watchedTableNames: [
       'transaction'
     ]
+  },
+  ['transaction-topup']: {
+    handler: 'lib/bundle-min.handler',
+    codeFilter: 'lib/bundle-min.js',
+    timeout: 10,
+    watchedTableNames: [
+      'transaction'
+    ]
+  },
+  ['topup-transaction']: {
+    handler: 'lib/bundle-min.handler',
+    codeFilter: 'lib/bundle-min.js',
+    timeout: 10,
+    watchedTableNames: [
+      'topup'
+    ]
   }
 };
 

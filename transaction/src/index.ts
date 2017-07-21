@@ -39,7 +39,7 @@ const isPermittedRefundReason = (reason: string): reason is PermittedRefundReaso
 const getAccountAndTransactions = async ({ accountId, limit = GET_TRANSACTION_LIMIT }): Promise<AccountAndTransactions> => {
   assertValidAccountId(accountId);
 
-  const { transactionHead, cachedTransactions, ...externalAccount } = await getAccountInternal({ accountId });
+  const { transactionHead, cachedTransactions, recentTopupIds, ...externalAccount } = await getAccountInternal({ accountId });
 
   const idToFetch = cachedTransactions.length > 0
     ? cachedTransactions[cachedTransactions.length - 1].next
@@ -210,6 +210,22 @@ router.post(
     const internalAccount = await createAccount({ accountId });
     const { transactionHead, cachedTransactions, ...externalAccount } = internalAccount;
     return externalAccount;
+  }
+);
+
+router.post(
+  '/account/:accountId/topup/:id',
+  async (_key, { accountId, id }, { amount, data }) => {
+    const account = await getAccountInternal({ accountId });
+    const { recentTopupIds = [] } = account;
+    if (recentTopupIds.includes(id)) {
+      // hack - this completely breaks separation of conerns, we should use reduce but I've run out of time
+      // do nothing, assume we're re-processing stream entries
+      // assumes max age < 24 hours and > 1 topup in 24 hour period is blocked
+      return;
+    }
+    account.recentTopupIds = [id, ...recentTopupIds.slice(0, 2)];
+    return await createTransaction(account, { type: 'topup', amount, data });
   }
 );
 
