@@ -64,7 +64,7 @@ class NewListingDetails extends React.Component {
 
   render() {
     const { name, qualifier, image, price, sellerId, listCount } = this.state;
-    const { params: { code } } = this.props;
+    const { params: { code }, isAdmin } = this.props;
     return (
       <Full
         left={<BackToPage path={`/admin/listing/${code}`} title="Listings" />}
@@ -75,18 +75,21 @@ class NewListingDetails extends React.Component {
               id="name"
               description="Name"
               value={name}
+              disabled={!isAdmin}
               handler={e => this.updateState(e)}
             />
             <FormElement
               id="qualifier"
               description="Qualifier"
               value={qualifier}
+              disabled={!isAdmin}
               handler={e => this.updateState(e)}
             />
             <FormElement
               id="image"
               description="Image"
               value={image}
+              disabled={!isAdmin}
               handler={e => this.updateState(e)}
             />
             <FormElement
@@ -150,11 +153,14 @@ class NewListingDetails extends React.Component {
   }
 }
 
-const mapStateToProps = ({ admin }, { params: { itemId } }) => {
-  const items = admin.items || [];
+const mapStateToProps = (
+  { admin: { items = [] }, user: { flags } },
+  { params: { itemId } }
+) => {
   const item = items.find(({ id }) => id === itemId);
   return {
-    details: item
+    details: item,
+    isAdmin: !!flags.admin
   };
 };
 
