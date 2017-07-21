@@ -65,7 +65,7 @@ export default async ({ branch }) => {
     params: {
       StageName: branch,
       CertificateArn: getCertificateArn(branch),
-      DomainName: aliasToName(branch),
+      HSDomainName: aliasToName(branch),
       ServiceSecret: serviceSecret,
       UserSecret: userSecret,
       HonestyStorePrefix: isLive(branch) ? 'honesty-store' : `hs-${branch}`,

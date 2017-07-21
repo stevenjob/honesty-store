@@ -15,7 +15,7 @@
         "arn:aws:acm:us-east-1:812374064424:certificate/952d48cc-77bc-4736-b398-c5451e7dc970"
       ]
     },
-    "DomainName": {
+    "HSDomainName": {
       "Type": "String",
       "Description": "The domain name under which this deployment should be deployed",
       "Default": "live.honesty.store"
@@ -413,7 +413,7 @@
       "Type": "AWS::ApiGateway::DomainName",
       "Properties": {
         "CertificateArn": { "Ref": "CertificateArn" },
-        "DomainName": { "Ref": "DomainName" }
+        "DomainName": { "Ref": "HSDomainName" }
       }
     },
     "BasePathMapping": {
@@ -422,7 +422,7 @@
         "BasePath": "",
         "RestApiId": { "Ref": "RestApi" },
         "Stage": { "Ref": "Stage" },
-        "DomainName": { "Ref": "DomainName" }
+        "DomainName": { "Ref": "HSDomainName" }
       }
     },
 
@@ -430,7 +430,7 @@
       "Type": "AWS::Route53::RecordSet",
       "Properties": {
         "Type": "CNAME",
-        "Name": { "Ref": "DomainName" },
+        "Name": { "Ref": "HSDomainName" },
         "TTL": 300,
         "HostedZoneId": "Z1H4BLMHZ9P4II",
         "Region": { "Ref": "AWS::Region" },
