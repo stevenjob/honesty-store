@@ -435,7 +435,7 @@
         "HostedZoneId": "Z1H4BLMHZ9P4II",
         "Region": { "Ref": "AWS::Region" },
         "ResourceRecords": [{
-          "Value": { "Fn::GetAtt": [ "DomainName", "distributionDomainName" ] }
+          "Value": { "Fn::GetAtt": [ "DomainName", "DistributionDomainName" ] }
         }]
       }
     }
