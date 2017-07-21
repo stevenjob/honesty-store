@@ -40,15 +40,17 @@
       "Description": "Boolean describing whether a table should be created",
       "AllowedValues": ["Yes", "No"]
     },
-    "WithUserSecret": {
+    "UserSecret": {
       "Type": "String",
-      "Description": "Boolean describing whether the lambda is given the service secret",
-      "AllowedValues": ["Yes", "No"]
+      "Description": "The user secret (or empty) for this service"
     },
-    "WithStripe": {
+    "StripeKeyLive": {
       "Type": "String",
-      "Description": "Boolean describing whether the lambda is given the live stripe secret",
-      "AllowedValues": ["Yes", "No"]
+      "Description": "Stripe live secret"
+    },
+    "StripeKeyTest": {
+      "Type": "String",
+      "Description": "Stripe test secret"
     },
     "WithApiGateway": {
       "Type": "String",
@@ -165,8 +167,10 @@
             "SERVICE_TOKEN_SECRET": {
               "Ref": "ServiceSecret"
             },
+            "LIVE_STRIPE_KEY": { "Ref": "StripeKeyLive" },
             "TEST_STRIPE_KEY": { "Ref": "StripeKeyTest" },
             "SLACK_CHANNEL_PREFIX": "",
+            "USER_TOKEN_SECRET": { "Ref": "UserSecret" },
             {
               "Fn::If": [
                 { "Fn::Equals": [ {"Ref": "WithTable"}, "Yes" ] },
@@ -184,22 +188,6 @@
                 },
                 { "Ref": "AWS::NoValue" }
               ]
-            },
-            {
-              "Fn::If": [
-                { "Fn::Equals": [ {"Ref": "WithUserSecret"}, "Yes" ] },
-                { "USER_TOKEN_SECRET": { "Ref": "UserSecret" } },
-                { "Ref": "AWS::NoValue" }
-              ]
-            },
-            {
-              "LIVE_STRIPE_KEY": {
-                "Fn::If": [
-                  { "Fn::Equals": [ {"Ref": "WithStripe"}, "Yes" ] },
-                  { "Ref": "StripeKeyLive" },
-                  { "Ref": "StripeKeyTest" }
-                ]
-              }
             }
           }
         },
