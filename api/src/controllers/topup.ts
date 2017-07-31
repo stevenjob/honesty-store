@@ -1,13 +1,13 @@
-import { createTopup } from '@honesty-store/topup';
 import { v4 as uuid } from 'uuid';
 import { authenticateAccessToken } from '../middleware/authenticate';
+import { topup } from '../services/topup';
 
 export default (router) => {
   router.post(
     '/topup',
     authenticateAccessToken,
     async (key, _params, { stripeToken, amount }, { user }) =>
-      await createTopup(
+      await topup(
         key,
         {
           id: uuid(),

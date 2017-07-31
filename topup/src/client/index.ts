@@ -64,9 +64,9 @@ export interface CardDetails {
   lastError?: CardError;
 }
 
-export type TopupResponse = {
+export interface TopupResponse {
   cardDetails: CardDetails;
-} & Partial<TransactionAndBalance>;
+}
 
 export interface TopupCardDetailsChanged {
   id: string;
@@ -89,6 +89,9 @@ export type TransactionWithBalance = Transaction & { balance: number };
 export type TopupEvent = TopupCardDetailsChanged | TopupAttempted;
 
 const { get, post } = fetch('topup');
+
+export const getTopupAccount = (key, id: string) =>
+  get<TopupAccount>(1, key, `/${id}`);
 
 export const createTopup = (key, request: TopupRequest) =>
   post<TopupResponse>(1, key, '/', request);

@@ -194,6 +194,14 @@ const reducer = reduce(
 
 export const router: LambdaRouter = lambdaRouter('topup', 1);
 
+router.get<TopupAccount>(
+  '/:id',
+  async (_key, { id }) => {
+    assertValidAccountId(id);
+    return await read(id);
+  }
+);
+
 router.post<TopupRequest, TopupResponse>(
   '/',
   async (key, { }, topupRequest) => {

@@ -1,13 +1,15 @@
 import isEmail = require('validator/lib/isEmail');
-import { error } from '@honesty-store/service/lib/log';
+import ms = require('ms');
+
+import { debug, error } from '@honesty-store/service/lib/log';
 import { getStoreFromCode } from '@honesty-store/store';
-import { createTopup } from '@honesty-store/topup';
 import { TransactionAndBalance } from '@honesty-store/transaction';
 import { createUser, updateUser } from '@honesty-store/user';
 import { v4 as uuid } from 'uuid';
 
 import { authenticateAccessToken, noopAuthentication } from '../middleware/authenticate';
 import { getSessionData, SessionData } from '../services/session';
+import { topup } from '../services/topup';
 import { purchase } from '../services/transaction';
 
 const register = async (key, storeCode): Promise<SessionData> => {
@@ -24,7 +26,7 @@ const register = async (key, storeCode): Promise<SessionData> => {
 const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, stripeToken }): Promise<SessionData> => {
   const user = await updateUser(key, userID, { emailAddress });
 
-  const topupTx = await createTopup(key, { id: uuid(), accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
+  const topupTx = await topup(key, { id: uuid(), accountId: user.accountId, userId: user.id, amount: topUpAmount, stripeToken });
 
   let purchaseTx: TransactionAndBalance = null;
   if (itemID != null) {
