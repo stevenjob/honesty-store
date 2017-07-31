@@ -1,3 +1,4 @@
+import ms = require('ms');
 import { assertValidEmailAddress, createAssertValidUuid } from '@honesty-store/service/lib/assert';
 import { sendEmail } from '@honesty-store/service/lib/email';
 import { CodedError } from '@honesty-store/service/lib/error';
@@ -15,9 +16,13 @@ const cruft = cruftDDB<InternalUser>({
   tableName: process.env.TABLE_NAME
 });
 
+// ttl is in epoch seconds
+const ttl = (period: string): number => Math.round((Date.now() + ms(period)) / 1000);
+
 interface InternalUser extends User {
   version: number;
   refreshToken: string;
+  ttl: number;
 }
 
 const assertValidUserId = createAssertValidUuid('userId');
@@ -127,7 +132,8 @@ const createUser = async ({ userId, userProfile }): Promise<UserWithAccessAndRef
     accountId: userProfile.accountId,
     defaultStoreId: userProfile.defaultStoreId,
     emailAddress: userProfile.emailAddress,
-    flags: {}
+    flags: {},
+    ttl: ttl('7 days')
   });
 
   return externaliseUserWithAccessTokenAndRefreshToken(user);
@@ -146,7 +152,8 @@ const updateUser = async ({ key, userId, userProfile }): Promise<User> => {
 
   const updatedUser: InternalUser = {
     ...originalUser,
-    ...userProfile
+    ...userProfile,
+    ttl: ttl('10 years')
   };
 
   if (originalUser.emailAddress == null && updatedUser.emailAddress != null) {
