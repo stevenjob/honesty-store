@@ -90,8 +90,8 @@ export type TopupEvent = TopupCardDetailsChanged | TopupAttempted;
 
 const { get, post } = fetch('topup');
 
-export const getTopupAccount = (key, id: string) =>
-  get<TopupAccount>(1, key, `/${id}`);
+export const getTopupAccount = (key, id: string, cacheBypass: boolean = false) =>
+  get<TopupAccount>(1, key, `/${id}`, cacheBypass);
 
 export const createTopup = (key, request: TopupRequest) =>
   post<TopupResponse>(1, key, '/', request);

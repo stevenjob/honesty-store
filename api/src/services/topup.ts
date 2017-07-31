@@ -14,7 +14,7 @@ const getLastTopupTransactionAndBalance = async (key: any, id: string): Promise<
   let attemptsRemaining = 5;
   while (attemptsRemaining > 0) {
     try {
-      const { status } = await getTopupAccount(key, id);
+      const { status } = await getTopupAccount(key, id, true);
       // the within check works around any eventual consistency problems
       if (status != null && status.status === 'success' && within(status.timestamp, '10s')) {
         return status.transactionAndBalance;

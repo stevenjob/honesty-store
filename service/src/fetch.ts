@@ -101,8 +101,15 @@ export default (service: string, baseUrl = defaultBaseUrl) => {
   });
 
   // tslint:disable-next-line:no-reserved-keywords
-  const get = async <Result>(version: number, key: Key, path: string) => {
+  const get = async <Result>(version: number, key: Key, path: string, cacheBypass: boolean = false) => {
     const url = getUrl(version, path);
+    if (cacheBypass) {
+      return <Result>(await fetchAndParse({
+        method: 'GET',
+        url,
+        key: createServiceKey({ service })
+      }));
+    }
     info(key, `cache check for GET ${url}`);
     return <Result>(await cache.get(url));
   };
