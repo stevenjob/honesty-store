@@ -18,7 +18,7 @@ export default ({
 }) => (
   <Link
     to={`/item/${id}`}
-    className={`btn regular flex navy ${count === 0 ? 'grayscale' : ''}`}
+    className={`btn regular flex navy ${count <= 0 ? 'grayscale' : ''}`}
   >
     <div className="flex-none col-3">
       <div

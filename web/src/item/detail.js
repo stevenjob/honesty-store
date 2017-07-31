@@ -91,7 +91,7 @@ const ItemDetail = ({
           </div>
           <div className="col-6 mx-auto my3">
             <div
-              className={`bg-center bg-no-repeat ${count === 0 ? 'grayscale' : ''}`}
+              className={`bg-center bg-no-repeat ${count <= 0 ? 'grayscale' : ''}`}
               style={{
                 backgroundImage: `url(${safeLookupItemImage(image)})`,
                 paddingBottom: '100%',

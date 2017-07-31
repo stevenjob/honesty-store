@@ -32,7 +32,7 @@ const storeOrdering = items => {
     return 0;
   };
   const likedItemsComparison = (a, b) => b.isLiked - a.isLiked;
-  const depletionComparison = (a, b) => !!b.count - !!a.count;
+  const depletionComparison = (a, b) => (b.count > 0) - (a.count > 0);
 
   return items.slice().sort((a, b) => {
     if (depletionComparison(a, b)) return depletionComparison(a, b);
