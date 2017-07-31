@@ -201,17 +201,16 @@ router.post<TopupRequest, TopupResponse>(
 
     const { id, accountId, userId, amount: dirtyAmount, stripeToken } = topupRequest;
 
-    // By using the same id for both events we implicitly block an errored topup retrying.
-    // In the real world, this would require a user transitioning from auto-topup back to
-    // manual topup which should never happen (all users are being migrated to auto).
-
-    // The above also prevents a new user from registering and topping up
+    // This endpoint is unecessarily overloaded but we don't want to change it at this point.
+    // Therefore to avoid skipping the second action (both actions would normally use the same
+    // id), we mutate the event id slightly (under the assumption that we'll still be incredibly
+    // unlikely to see a collision).
 
     let topupAccount: EnhancedItem<TopupAccount> | undefined;
 
     if (stripeToken != null) {
       const event: TopupCardDetailsChanged = {
-        id,
+        id: id.replace(/.$/, '0'),
         type: 'topup-card-details-change',
         userId,
         accountId,
@@ -223,7 +222,7 @@ router.post<TopupRequest, TopupResponse>(
     const amount = Number(dirtyAmount);
     if (amount > 0) {
       const event: TopupAttempted = {
-        id,
+        id: id.replace(/.$/, '1'),
         type: 'topup-attempt',
         userId,
         accountId,
