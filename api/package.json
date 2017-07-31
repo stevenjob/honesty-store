@@ -7,7 +7,7 @@
   "scripts": {
     "tsc": "../node_modules/.bin/tsc",
     "rollup": "../node_modules/.bin/rollup -c ../rollup.config.js",
-    "uglifyjs": "../node_modules/.bin/uglifyjs lib/bundle.js > lib/bundle-min.js",
+    "uglifyjs": "../node_modules/uglify-es/bin/uglifyjs lib/bundle.js > lib/bundle-min.js",
     "build": "npm run tsc && npm run rollup && npm run uglifyjs",
     "start": "nodemon ./lib/api/src/app.js"
   },
