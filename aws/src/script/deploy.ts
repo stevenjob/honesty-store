@@ -63,18 +63,19 @@ const s3Upload = async ({ content, bucket, key }) => {
   const s3 = new S3();
 
   try {
-    await s3.createBucket({
+    await s3.headBucket({
       Bucket: bucket
     })
       .promise();
   } catch (e) {
-    switch (e.code) {
-      case 'BucketAlreadyExists':
-      case 'BucketAlreadyOwnedByYou':
-        break;
-      default:
-        throw e;
+    if (e.code !== 'NotFound') {
+      throw e;
     }
+
+    await s3.createBucket({
+      Bucket: bucket
+    })
+      .promise();
   }
 
   return await s3.putObject({
@@ -116,12 +117,14 @@ export default async ({ branch }) => {
 
   for (const { path, pattern } of dirs) {
     console.log(`s3Upload() for ${path}...`);
-    const zipFile = await zip(path, pattern);
-    await s3Upload({
-      content: zipFile,
-      bucket: 'honesty-store-lambdas',
-      key: `${path}.zip`
-    });
+    if((()=>false)()){
+      const zipFile = await zip(path, pattern);
+      await s3Upload({
+        content: zipFile,
+        bucket: `honesty-store-lambdas-${config.region}`,
+        key: `${path}.zip`
+      });
+    }
   }
 
   console.log(`ensureStack('stack-${branch}', ...)...`);
