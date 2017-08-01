@@ -17,6 +17,9 @@ export type ErrorCode =
   'CardExpired' |
   'CardDeclined' |
   'CardError' |
+  'LessThan24HoursSinceLastTopup' |
+  'TopupAlreadyInProgress' |
+  'NoTopupRetriesRemaining' |
   'AccessTokenExpired' |
   'RefreshTokenExpired' |
   'MagicLinkTokenExpired' |

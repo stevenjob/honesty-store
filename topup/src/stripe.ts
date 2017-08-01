@@ -1,12 +1,12 @@
 import * as ms from 'ms';
 import * as stripeFactory from 'stripe';
 
+import { CodedError } from '@honesty-store/service/lib/error';
 import { error, info } from '@honesty-store/service/lib/log';
 
 import {
   Stripe,
   TopupAccount,
-  // TopupStatus,
   TopupError,
   TopupInProgress,
   TopupSuccess
@@ -54,25 +54,34 @@ export const createCustomer = async (key, topupAccount: TopupAccount, stripeToke
 
 type TopupStatus = TopupSuccess | TopupInProgress | TopupError;
 
-export const attemptTopup = async (key, topupAccount: TopupAccount, idempotencyKey: string, amount: number):
-  Promise<TopupStatus | undefined> => {
+export const attemptTopup = async (key, topupAccount: TopupAccount, idempotencyKey: string, amount: number, ignoreRetries: boolean = false):
+  Promise<TopupStatus> => {
 
   const { id, status } = topupAccount;
 
   if (status != null) {
     if (status.status === 'success' && status.timestamp >= Date.now() - ms('24h')) {
       info(key, `Refusing to topup ${id} again within 24h period ${status.timestamp}`);
-      return;
+      throw new CodedError(
+        'LessThan24HoursSinceLastTopup',
+        `Refusing to topup again within 24h period ${status.timestamp}`
+      );
     }
 
     if (status.status === 'in-progress') {
       info(key, `Refusing to topup ${id} until pending topup completes`);
-      return;
+      throw new CodedError(
+        'TopupAlreadyInProgress',
+        `Refusing to topup until pending topup completes`
+      );
     }
 
-    if (status.status === 'error' && status.retriesRemaining === 0) {
+    if (ignoreRetries !== true && status.status === 'error' && status.retriesRemaining === 0) {
       info(key, `Refusing to topup ${id} because there are no retries remaining`);
-      return;
+      throw new CodedError(
+        'NoTopupRetriesRemaining',
+        `Refusing to topup because there are no retries remaining`
+      );
     }
   } else {
     info(key, `No status found for ${id}, assuming previous version and therefore good to go`);

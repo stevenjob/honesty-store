@@ -100,7 +100,7 @@ const reducer = reduce(
           };
         }
 
-        const updatedStatus = await attemptTopup(key, topupAccount, eventId, status.amount);
+        const updatedStatus = await attemptTopup(key, topupAccount, eventId, status.amount, true);
 
         return {
           ...topupAccount,
@@ -118,10 +118,6 @@ const reducer = reduce(
         }
 
         const updatedStatus = await attemptTopup(key, topupAccount, eventId, amount);
-
-        if (updatedStatus == null) {
-          throw new CodedError('CardError', 'Topup refused, contact support');
-        }
 
         return {
           ...topupAccount,
@@ -168,12 +164,22 @@ const reducer = reduce(
           return topupAccount;
         }
 
-        const updatedStatus = await attemptTopup(key, topupAccount, eventId, -balance);
-
-        return {
-          ...topupAccount,
-          status: updatedStatus
-        };
+        try {
+          const updatedStatus = await attemptTopup(key, topupAccount, eventId, -balance);
+          return {
+            ...topupAccount,
+            status: updatedStatus
+          };
+        } catch (e) {
+          switch (e.code) {
+            case 'LessThan24HoursSinceLastTopup':
+            case 'TopupAlreadyInProgress':
+            case 'NoTopupRetriesRemaining':
+              return topupAccount;
+            default:
+              throw e;
+          }
+        }
       }
       default:
         return assertNever(event);
