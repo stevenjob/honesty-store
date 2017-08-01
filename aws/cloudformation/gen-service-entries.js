@@ -50,7 +50,10 @@ const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => 
           "ApiGatewayCatchAll": boolToYN(name == "web"),
           "HSPrefix": { "Ref": "HSPrefix" },
           "ServicePrefix" : { "Ref" : "ServicePrefix" },
-          "RestApi": { "Ref": "RestApi" }
+          "RestApi": { "Ref": "RestApi" },
+          "RestApiRootResourceId": {
+            "Fn::GetAtt": [ "RestApi", "RootResourceId" ]
+          }
         }
       }
     }

@@ -73,6 +73,10 @@
     "RestApi": {
       "Type": "String",
       "Description": "The RestApi to which this service should be attached"
+    },
+    "RestApiRootResourceId": {
+      "Type": "String",
+      "Description": "The RestApi's root resourceId"
     }
   },
 
@@ -168,7 +172,15 @@
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-          "S3Bucket": "honesty-store-lambdas",
+          "S3Bucket": {
+            "Fn::Join": [
+              "",
+              [
+                "honesty-store-lambdas-",
+                { "Ref": "AWS::Region" }
+              ]
+            ]
+          },
           "S3Key": { "Ref": "LambdaS3Key" }
         },
         "FunctionName": {
@@ -248,7 +260,10 @@
           ]
         },
         "Principal": "apigateway.amazonaws.com"
-      }
+      },
+      "DependsOn": [
+        "Lambda"
+      ]
     },
 
     "ApiGatewayEndpointCatchAll": {
@@ -258,7 +273,9 @@
         "RestApiId": {
           "Ref": "RestApi"
         },
-        "ParentId": "/",
+        "ParentId": {
+          "Ref": "RestApiRootResourceId"
+        },
         "PathPart": "{proxy+}"
       }
     },
@@ -301,7 +318,7 @@
                 "arn:aws:apigateway:",
                 { "Ref": "AWS::Region" },
                 ":lambda:path/2015-03-31/functions/",
-                { "Ref": "Lambda" },
+                { "Fn::GetAtt": [ "Lambda", "Arn" ] },
                 "/invocations"
               ]
             ]
@@ -316,11 +333,16 @@
         "RestApiId": {
           "Ref": "RestApi"
         },
-        "ParentId": "/",
+        "ParentId": {
+          "Ref": "RestApiRootResourceId"
+        },
         "PathPart": {
           "Ref": "ServiceName"
         }
-      }
+      },
+      "DependsOn": [
+        "Lambda"
+      ]
     }
   }
 }

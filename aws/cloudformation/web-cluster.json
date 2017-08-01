@@ -72,52 +72,445 @@
       }
     },
 
-    "itemStack": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": {
-          "Fn::Join": [
-            "",
-            [
-              "https://s3.amazonaws.com/honesty-store-templates-",
-              { "Ref": "AWS::Region" },
-              "/per-service.json"
-            ]
+
+  "itemStack": {
+    "Type": "AWS::CloudFormation::Stack",
+    "DependsOn": [
+      "RestApi"
+    ],
+    "Properties": {
+      "TemplateURL": {
+        "Fn::Join": [
+          "",
+          [
+            "https://s3.amazonaws.com/honesty-store-templates-",
+            {
+              "Ref": "AWS::Region"
+            },
+            "/per-service.json"
           ]
-        },
-        "TimeoutInMinutes": "10",
-        "Parameters": {
-          "ServiceName": "item",
-          "ServiceSecret": {
-            "Ref": "ServiceSecret"
-          },
-          "IndexUserId": "No",
-          "ReadCapacityUnits": "2",
-          "WriteCapacityUnits": "1",
-          "LambdaS3Key": "item.zip",
-          "LambdaTimeout": "10",
-          "LambdaHandler": "lib/bundle-min.handler",
-          "WithTable": "Yes",
-          "UserSecret": "",
-          "StripeKeyLive": "",
-          "StripeKeyTest": "",
-          "WithApiGateway": "No",
-          "ApiGatewayCatchAll": "No",
-          "ServicePrefix": {
-            "Ref": "ServicePrefix"
-          },
-          "HSPrefix": {
-            "Ref": "HSPrefix"
-          },
-          "RestApi": {
-            "Ref": "RestApi"
-          }
-        }
+        ]
       },
-      "DependsOn": [
-        "RestApi"
-      ]
-    },
+      "TimeoutInMinutes": "10",
+      "Parameters": {
+        "ServiceName": "item",
+        "ServiceSecret": {
+          "Ref": "ServiceSecret"
+        },
+        "IndexUserId": "No",
+        "ReadCapacityUnits": "2",
+        "WriteCapacityUnits": "1",
+        "LambdaS3Key": "item.zip",
+        "LambdaTimeout": "10",
+        "LambdaHandler": "lib/bundle-min.handler",
+        "WithTable": "Yes",
+        "UserSecret": "",
+        "StripeKeyLive": "",
+        "StripeKeyTest": "",
+        "WithApiGateway": "No",
+        "ApiGatewayCatchAll": "No",
+        "HSPrefix": {
+          "Ref": "HSPrefix"
+        },
+        "ServicePrefix": {
+          "Ref": "ServicePrefix"
+        },
+        "RestApi": {
+          "Ref": "RestApi"
+        },
+        "RestApiRootResourceId": {
+          "Fn::GetAtt": [
+            "RestApi",
+            "RootResourceId"
+          ]
+        }
+      }
+    }
+  },
+  "storeStack": {
+    "Type": "AWS::CloudFormation::Stack",
+    "DependsOn": [
+      "RestApi"
+    ],
+    "Properties": {
+      "TemplateURL": {
+        "Fn::Join": [
+          "",
+          [
+            "https://s3.amazonaws.com/honesty-store-templates-",
+            {
+              "Ref": "AWS::Region"
+            },
+            "/per-service.json"
+          ]
+        ]
+      },
+      "TimeoutInMinutes": "10",
+      "Parameters": {
+        "ServiceName": "store",
+        "ServiceSecret": {
+          "Ref": "ServiceSecret"
+        },
+        "IndexUserId": "No",
+        "ReadCapacityUnits": "3",
+        "WriteCapacityUnits": "3",
+        "LambdaS3Key": "store.zip",
+        "LambdaTimeout": "10",
+        "LambdaHandler": "lib/bundle-min.handler",
+        "WithTable": "Yes",
+        "UserSecret": "",
+        "StripeKeyLive": "",
+        "StripeKeyTest": "",
+        "WithApiGateway": "No",
+        "ApiGatewayCatchAll": "No",
+        "HSPrefix": {
+          "Ref": "HSPrefix"
+        },
+        "ServicePrefix": {
+          "Ref": "ServicePrefix"
+        },
+        "RestApi": {
+          "Ref": "RestApi"
+        },
+        "RestApiRootResourceId": {
+          "Fn::GetAtt": [
+            "RestApi",
+            "RootResourceId"
+          ]
+        }
+      }
+    }
+  },
+  "topupStack": {
+    "Type": "AWS::CloudFormation::Stack",
+    "DependsOn": [
+      "RestApi"
+    ],
+    "Properties": {
+      "TemplateURL": {
+        "Fn::Join": [
+          "",
+          [
+            "https://s3.amazonaws.com/honesty-store-templates-",
+            {
+              "Ref": "AWS::Region"
+            },
+            "/per-service.json"
+          ]
+        ]
+      },
+      "TimeoutInMinutes": "10",
+      "Parameters": {
+        "ServiceName": "topup",
+        "ServiceSecret": {
+          "Ref": "ServiceSecret"
+        },
+        "IndexUserId": "Yes",
+        "ReadCapacityUnits": "1",
+        "WriteCapacityUnits": "1",
+        "LambdaS3Key": "topup.zip",
+        "LambdaTimeout": "10",
+        "LambdaHandler": "lib/bundle-min.handler",
+        "WithTable": "Yes",
+        "UserSecret": "",
+        "StripeKeyLive": {
+          "Ref": "StripeKeyLive"
+        },
+        "StripeKeyTest": {
+          "Ref": "StripeKeyTest"
+        },
+        "WithApiGateway": "No",
+        "ApiGatewayCatchAll": "No",
+        "HSPrefix": {
+          "Ref": "HSPrefix"
+        },
+        "ServicePrefix": {
+          "Ref": "ServicePrefix"
+        },
+        "RestApi": {
+          "Ref": "RestApi"
+        },
+        "RestApiRootResourceId": {
+          "Fn::GetAtt": [
+            "RestApi",
+            "RootResourceId"
+          ]
+        }
+      }
+    }
+  },
+  "transactionStack": {
+    "Type": "AWS::CloudFormation::Stack",
+    "DependsOn": [
+      "RestApi"
+    ],
+    "Properties": {
+      "TemplateURL": {
+        "Fn::Join": [
+          "",
+          [
+            "https://s3.amazonaws.com/honesty-store-templates-",
+            {
+              "Ref": "AWS::Region"
+            },
+            "/per-service.json"
+          ]
+        ]
+      },
+      "TimeoutInMinutes": "10",
+      "Parameters": {
+        "ServiceName": "transaction",
+        "ServiceSecret": {
+          "Ref": "ServiceSecret"
+        },
+        "IndexUserId": "No",
+        "ReadCapacityUnits": "2",
+        "WriteCapacityUnits": "2",
+        "LambdaS3Key": "transaction.zip",
+        "LambdaTimeout": "10",
+        "LambdaHandler": "lib/bundle-min.handler",
+        "WithTable": "Yes",
+        "UserSecret": "",
+        "StripeKeyLive": "",
+        "StripeKeyTest": "",
+        "WithApiGateway": "No",
+        "ApiGatewayCatchAll": "No",
+        "HSPrefix": {
+          "Ref": "HSPrefix"
+        },
+        "ServicePrefix": {
+          "Ref": "ServicePrefix"
+        },
+        "RestApi": {
+          "Ref": "RestApi"
+        },
+        "RestApiRootResourceId": {
+          "Fn::GetAtt": [
+            "RestApi",
+            "RootResourceId"
+          ]
+        }
+      }
+    }
+  },
+  "transactionslackStack": {
+    "Type": "AWS::CloudFormation::Stack",
+    "DependsOn": [
+      "RestApi"
+    ],
+    "Properties": {
+      "TemplateURL": {
+        "Fn::Join": [
+          "",
+          [
+            "https://s3.amazonaws.com/honesty-store-templates-",
+            {
+              "Ref": "AWS::Region"
+            },
+            "/per-service.json"
+          ]
+        ]
+      },
+      "TimeoutInMinutes": "10",
+      "Parameters": {
+        "ServiceName": "transaction-slack",
+        "ServiceSecret": {
+          "Ref": "ServiceSecret"
+        },
+        "IndexUserId": "No",
+        "ReadCapacityUnits": "1",
+        "WriteCapacityUnits": "1",
+        "LambdaS3Key": "transaction-slack.zip",
+        "LambdaTimeout": "10",
+        "LambdaHandler": "lib/bundle-min.handler",
+        "WithTable": "Yes",
+        "UserSecret": "",
+        "StripeKeyLive": "",
+        "StripeKeyTest": "",
+        "WithApiGateway": "No",
+        "ApiGatewayCatchAll": "No",
+        "HSPrefix": {
+          "Ref": "HSPrefix"
+        },
+        "ServicePrefix": {
+          "Ref": "ServicePrefix"
+        },
+        "RestApi": {
+          "Ref": "RestApi"
+        },
+        "RestApiRootResourceId": {
+          "Fn::GetAtt": [
+            "RestApi",
+            "RootResourceId"
+          ]
+        }
+      }
+    }
+  },
+  "userStack": {
+    "Type": "AWS::CloudFormation::Stack",
+    "DependsOn": [
+      "RestApi"
+    ],
+    "Properties": {
+      "TemplateURL": {
+        "Fn::Join": [
+          "",
+          [
+            "https://s3.amazonaws.com/honesty-store-templates-",
+            {
+              "Ref": "AWS::Region"
+            },
+            "/per-service.json"
+          ]
+        ]
+      },
+      "TimeoutInMinutes": "10",
+      "Parameters": {
+        "ServiceName": "user",
+        "ServiceSecret": {
+          "Ref": "ServiceSecret"
+        },
+        "IndexUserId": "No",
+        "ReadCapacityUnits": "1",
+        "WriteCapacityUnits": "1",
+        "LambdaS3Key": "user.zip",
+        "LambdaTimeout": "10",
+        "LambdaHandler": "lib/bundle-min.handler",
+        "WithTable": "Yes",
+        "UserSecret": {
+          "Ref": "UserSecret"
+        },
+        "StripeKeyLive": "",
+        "StripeKeyTest": "",
+        "WithApiGateway": "No",
+        "ApiGatewayCatchAll": "No",
+        "HSPrefix": {
+          "Ref": "HSPrefix"
+        },
+        "ServicePrefix": {
+          "Ref": "ServicePrefix"
+        },
+        "RestApi": {
+          "Ref": "RestApi"
+        },
+        "RestApiRootResourceId": {
+          "Fn::GetAtt": [
+            "RestApi",
+            "RootResourceId"
+          ]
+        }
+      }
+    }
+  },
+  "webStack": {
+    "Type": "AWS::CloudFormation::Stack",
+    "DependsOn": [
+      "RestApi"
+    ],
+    "Properties": {
+      "TemplateURL": {
+        "Fn::Join": [
+          "",
+          [
+            "https://s3.amazonaws.com/honesty-store-templates-",
+            {
+              "Ref": "AWS::Region"
+            },
+            "/per-service.json"
+          ]
+        ]
+      },
+      "TimeoutInMinutes": "10",
+      "Parameters": {
+        "ServiceName": "web",
+        "ServiceSecret": {
+          "Ref": "ServiceSecret"
+        },
+        "IndexUserId": "No",
+        "ReadCapacityUnits": "0",
+        "WriteCapacityUnits": "0",
+        "LambdaS3Key": "web.zip",
+        "LambdaTimeout": "10",
+        "LambdaHandler": "server/lambda.handler",
+        "WithTable": "No",
+        "UserSecret": "",
+        "StripeKeyLive": "",
+        "StripeKeyTest": "",
+        "WithApiGateway": "Yes",
+        "ApiGatewayCatchAll": "Yes",
+        "HSPrefix": {
+          "Ref": "HSPrefix"
+        },
+        "ServicePrefix": {
+          "Ref": "ServicePrefix"
+        },
+        "RestApi": {
+          "Ref": "RestApi"
+        },
+        "RestApiRootResourceId": {
+          "Fn::GetAtt": [
+            "RestApi",
+            "RootResourceId"
+          ]
+        }
+      }
+    }
+  },
+  "apiStack": {
+    "Type": "AWS::CloudFormation::Stack",
+    "DependsOn": [
+      "RestApi"
+    ],
+    "Properties": {
+      "TemplateURL": {
+        "Fn::Join": [
+          "",
+          [
+            "https://s3.amazonaws.com/honesty-store-templates-",
+            {
+              "Ref": "AWS::Region"
+            },
+            "/per-service.json"
+          ]
+        ]
+      },
+      "TimeoutInMinutes": "10",
+      "Parameters": {
+        "ServiceName": "api",
+        "ServiceSecret": {
+          "Ref": "ServiceSecret"
+        },
+        "IndexUserId": "No",
+        "ReadCapacityUnits": "0",
+        "WriteCapacityUnits": "0",
+        "LambdaS3Key": "api.zip",
+        "LambdaTimeout": "30",
+        "LambdaHandler": "lib/bundle-min.handler",
+        "WithTable": "No",
+        "UserSecret": "",
+        "StripeKeyLive": "",
+        "StripeKeyTest": "",
+        "WithApiGateway": "Yes",
+        "ApiGatewayCatchAll": "No",
+        "HSPrefix": {
+          "Ref": "HSPrefix"
+        },
+        "ServicePrefix": {
+          "Ref": "ServicePrefix"
+        },
+        "RestApi": {
+          "Ref": "RestApi"
+        },
+        "RestApiRootResourceId": {
+          "Fn::GetAtt": [
+            "RestApi",
+            "RootResourceId"
+          ]
+        }
+      }
+    }
+  },
 
     "Deployment": {
       "Type": "AWS::ApiGateway::Deployment",
@@ -127,7 +520,13 @@
       },
       "DependsOn": [
         "itemStack",
-        "RestApi"
+        "storeStack",
+        "topupStack",
+        "transactionStack",
+        "transactionslackStack",
+        "userStack",
+        "webStack",
+        "apiStack"
       ]
     },
     "Stage": {
