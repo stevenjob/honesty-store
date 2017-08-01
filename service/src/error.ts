@@ -20,6 +20,7 @@ export type ErrorCode =
   'LessThan24HoursSinceLastTopup' |
   'TopupAlreadyInProgress' |
   'NoTopupRetriesRemaining' |
+  'TopupTransactionNotFound' |
   'AccessTokenExpired' |
   'RefreshTokenExpired' |
   'MagicLinkTokenExpired' |

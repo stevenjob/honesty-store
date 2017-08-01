@@ -1,5 +1,6 @@
 import ms = require('ms');
 
+import { CodedError } from '@honesty-store/service/lib/error';
 import { debug } from '@honesty-store/service/lib/log';
 import { createTopup, getTopupAccount, TopupAccount, TopupRequest,  TopupResponse } from '@honesty-store/topup';
 import { TransactionAndBalance } from '@honesty-store/transaction';
@@ -11,7 +12,7 @@ const wait = (period: string) => new Promise(resolve => setTimeout(resolve, ms(p
 const within = (timestamp: number, period: string): boolean => Math.abs(timestamp - Date.now()) < ms(period);
 
 const getLastTopupTransactionAndBalance = async (key: any, id: string): Promise<TransactionAndBalance> => {
-  let attemptsRemaining = 5;
+  let attemptsRemaining = 8;
   while (attemptsRemaining > 0) {
     try {
       const { status } = await getTopupAccount(key, id, true);
@@ -32,7 +33,7 @@ const getLastTopupTransactionAndBalance = async (key: any, id: string): Promise<
       await wait('1s');
     }
   }
-  throw new Error(`Failed to retrieve topup transaction after 5 attempts`);
+  throw new CodedError('TopupTransactionNotFound', `Failed to retrieve topup transaction after 5 attempts`);
 };
 
 export const topup = async (key, topupRequest: TopupRequest): Promise<TopupResponse & Partial<TransactionAndBalance>> => {
