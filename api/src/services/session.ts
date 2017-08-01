@@ -34,7 +34,7 @@ export interface SessionData {
 
 const getUserSessionData = async (key, user): Promise<UserSessionData> => {
   const { id, accountId, emailAddress, flags } = user;
-  const { balance = 0, transactions = [], creditLimit = 0 } = accountId
+  const { balance = 0, transactions = [], creditLimit = -1000 } = accountId
     ? await getExpandedTransactionsAndAccount({ key, accountID: accountId })
     : {};
 

@@ -36,7 +36,7 @@ export const createAccount = async ({ accountId }): Promise<InternalAccount> => 
   const account: InternalAccount = {
     id: accountId,
     created: Date.now(),
-    creditLimit: 0,
+    creditLimit: -1000,
     balance: 0,
     version: 0,
     cachedTransactions: [],

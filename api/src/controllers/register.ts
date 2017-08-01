@@ -59,7 +59,7 @@ const register2 = async (key, { userID, emailAddress, topUpAmount, itemID, strip
       balance: purchaseTx == null ? topupTx.balance : purchaseTx.balance,
       transactions: [
         ...(purchaseTx != null ? [purchaseTx.transaction] : []),
-        topupTx.transaction
+        ...(topupTx != null ? [topupTx.transaction] : [])
       ],
       cardDetails: topupTx.cardDetails,
       features: {}
