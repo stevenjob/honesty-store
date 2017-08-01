@@ -157,7 +157,11 @@
               "Ref": "AWS::NoValue"
             }
           ]
-        }]
+        }],
+        "TimeToLiveSpecification": {
+          "AttributeName": "ttl",
+          "Enabled": true
+        }
       }
     },
     "Lambda": {
