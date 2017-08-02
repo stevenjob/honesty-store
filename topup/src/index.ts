@@ -49,7 +49,7 @@ const assertValidTopupRequest = createAssertValidObject<TopupRequest>({
   userId: assertValidUuid
 });
 
-const extractCardDetails = ({ id, stripe }: TopupAccount): CardDetails => {
+const extractCardDetails = ({ id, stripe, status }: TopupAccount): CardDetails => {
   if (stripe == null) {
     throw new CodedError('NoCardDetailsPresent', `No stripe details registered for account ${id}`);
   }
@@ -58,7 +58,8 @@ const extractCardDetails = ({ id, stripe }: TopupAccount): CardDetails => {
     brand,
     expMonth: exp_month,
     expYear: exp_year,
-    last4
+    last4,
+    status
   };
 };
 
@@ -138,10 +139,15 @@ const reducer = reduce(
 
         const { balance, ...transaction } = event;
 
+        if (status.chargeId !== transaction.data.chargeId) {
+          throw new Error(`Mismatched chargeIds ${status.chargeId} for transaction ${id}`);
+        }
+
         const updatedStatus: TopupSuccess = {
           status: 'success',
           transactionAndBalance: { balance, transaction },
-          timestamp: Date.now()
+          timestamp: Date.now(),
+          amount: transaction.amount
         };
 
         return {

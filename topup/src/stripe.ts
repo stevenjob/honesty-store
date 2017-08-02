@@ -109,7 +109,8 @@ export const attemptTopup = async (key, topupAccount: TopupAccount, idempotencyK
       status: 'in-progress',
       amount,
       stripeFee: charge.balance_transaction.fee,
-      chargeId: charge.id
+      chargeId: charge.id,
+      timestamp: Date.now()
     };
   } catch (e) {
     /* Note to future devs: 'Must provide source or customer.'
@@ -127,7 +128,8 @@ export const attemptTopup = async (key, topupAccount: TopupAccount, idempotencyK
       status: 'error',
       amount,
       code: userErrorCodeFromStripeError(e),
-      retriesRemaining
+      retriesRemaining,
+      timestamp: Date.now()
     };
   }
 };

@@ -4,12 +4,14 @@ import { Transaction, TransactionAndBalance } from '@honesty-store/transaction';
 export interface TopupSuccess {
   status: 'success';
   transactionAndBalance: TransactionAndBalance;
+  amount: number;
   timestamp: number;
 }
 
 export interface TopupInProgress {
   status: 'in-progress';
   amount: number;
+  timestamp: number;
   stripeFee: number;
   chargeId: string;
 }
@@ -19,6 +21,7 @@ export interface TopupError {
   amount: number;
   code: CardError;
   retriesRemaining: number;
+  timestamp: number;
 }
 
 export type TopupStatus = TopupSuccess | TopupInProgress | TopupError;
@@ -61,7 +64,7 @@ export interface CardDetails {
   last4: string;
   expMonth: number;
   expYear: number;
-  lastError?: CardError;
+  status?: TopupStatus;
 }
 
 export interface TopupResponse {
