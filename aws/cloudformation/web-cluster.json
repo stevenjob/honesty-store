@@ -558,10 +558,17 @@
       "Type": "AWS::Route53::RecordSet",
       "Properties": {
         "Type": "CNAME",
-        "Name": { "Ref": "HSDomainName" },
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              { "Ref": "HSDomainName" },
+              "."
+            ]
+          ]
+        },
         "TTL": 300,
-        "HostedZoneId": "Z1H4BLMHZ9P4II",
-        "Region": { "Ref": "AWS::Region" },
+        "HostedZoneId": "Z1NOZ8HJXP3L7I",
         "ResourceRecords": [
           { "Fn::GetAtt": [ "DomainName", "DistributionDomainName" ] }
         ]
