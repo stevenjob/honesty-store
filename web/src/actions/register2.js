@@ -70,7 +70,7 @@ export const performRegister2 = ({
     if (itemID == null) {
       path = `/register//success`;
     } else {
-      path = user.transactions.length === 2
+      path = user.creditLimit !== 0 && user.transactions.length === 2
         ? `/register/${itemID}/success`
         : `/register/${itemID}/partial`;
     }

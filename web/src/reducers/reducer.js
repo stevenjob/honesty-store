@@ -245,7 +245,7 @@ export default (state, action) => {
       const updatedStateProps = {
         user: {
           ...state.user,
-          balance,
+          balance: transaction != null ? balance : user.balance,
           cardDetails,
           transactions: transaction != null
             ? [transaction, ...user.transactions]

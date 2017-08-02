@@ -31,6 +31,7 @@ const ItemDetail = ({
     isLiked
   },
   balance,
+  creditLimit,
   performLikeItem,
   performUnlikeItem,
   performPurchase,
@@ -40,7 +41,7 @@ const ItemDetail = ({
 
   const onClick = numItems => {
     const balance = calculateBalanceRemaining(numItems);
-    if (balance < 0) {
+    if (creditLimit === 0 && balance < 0) {
       history.push(`/topup/500`);
     } else {
       performPurchase({ itemId: id, quantity: numItems });
@@ -144,10 +145,11 @@ const mapStateToProps = (
       isLiked: isLikedItem(i, likedItemIds)
     };
   })();
-  const { balance } = user;
+  const { balance, creditLimit } = user;
   return {
     item,
     balance,
+    creditLimit,
     registered: isRegistered(user)
   };
 };

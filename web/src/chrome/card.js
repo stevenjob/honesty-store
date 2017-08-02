@@ -103,7 +103,10 @@ class Card extends React.Component {
     e.preventDefault();
     const { number, cvc, exp } = this.state;
     const cardDetails = { number, cvc, exp };
-    this.props.onSubmit({ topUpAmount: TOPUP_AMOUNT, cardDetails });
+    this.props.onSubmit({
+      topUpAmount: this.props.creditLimit === 0 ? TOPUP_AMOUNT : 0,
+      cardDetails
+    });
   }
 
   render() {
