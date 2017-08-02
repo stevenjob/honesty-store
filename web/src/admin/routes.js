@@ -32,6 +32,7 @@ const routes = (
         <Route path="add-more" component={AdminItemListingRelist} />
         <Route path="available" component={AdminItemListingAvailable} />
         <Route path="unlist" component={AdminItemListingRemove} />
+        <Route path="success" component={AdminItemDetailsSuccess} />
       </Route>
     </Route>
   </Route>

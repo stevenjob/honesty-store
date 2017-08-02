@@ -44,7 +44,7 @@ export const performCreateItem = ({ details, storeCode }) => async (
     );
 
     dispatch(createItemSuccess(response));
-    history.push(`/admin/listing/${storeCode}/item/${response.id}`);
+    history.push(`/admin/listing/${storeCode}/item/${response.id}/success`);
   } catch (e) {
     dispatch(createItemFailure(e));
   }
