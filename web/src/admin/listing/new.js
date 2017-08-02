@@ -67,7 +67,14 @@ class NewListingDetails extends React.Component {
   }
 
   render() {
-    const { name, qualifier, image, priceInPounds, sellerId, listCount } = this.state;
+    const {
+      name,
+      qualifier,
+      image,
+      priceInPounds,
+      sellerId,
+      listCount
+    } = this.state;
     const { params: { code }, isAdmin } = this.props;
     return (
       <Full
