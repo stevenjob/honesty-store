@@ -5,19 +5,23 @@ import { BackToPage } from '../../chrome/link';
 import Full from '../../layout/full';
 import FormElement from '../shared/form-element';
 import convertEmptyStringToNull from '../convertToNull';
+import { formatWithSymbol } from '../../format/Currency';
 
 const scottLogicId = '9127e1db-2a2c-41c5-908f-781ac816b633';
+
+const parsePriceInPounds = price => Number(price.replace(/^£/, '')) * 100;
 
 class NewListingDetails extends React.Component {
   constructor(props) {
     super(props);
     const { details } = this.props;
     const { name, qualifier, image, price, listCount } = details || {};
+    const priceInPounds = formatWithSymbol(price);
     this.state = {
       name,
       qualifier,
       image,
-      price,
+      priceInPounds,
       sellerId: scottLogicId,
       listCount
     };
@@ -49,10 +53,10 @@ class NewListingDetails extends React.Component {
 
   handleUpdateItemSubmit() {
     const { params: { code, itemId }, performCreateListing } = this.props;
-    const { price, listCount, ...other } = this.state;
+    const { priceInPounds, listCount, ...other } = this.state;
     const listingDetails = {
       ...other,
-      price: Number(price),
+      price: parsePriceInPounds(priceInPounds),
       listCount: Number(listCount)
     };
     performCreateListing({
@@ -63,7 +67,7 @@ class NewListingDetails extends React.Component {
   }
 
   render() {
-    const { name, qualifier, image, price, sellerId, listCount } = this.state;
+    const { name, qualifier, image, priceInPounds, sellerId, listCount } = this.state;
     const { params: { code }, isAdmin } = this.props;
     return (
       <Full
@@ -93,11 +97,11 @@ class NewListingDetails extends React.Component {
               handler={e => this.updateState(e)}
             />
             <FormElement
-              id="price"
-              description="Price per item including all fees (in pence)"
-              value={price || ''}
+              id="priceInPounds"
+              description="Price per item including all fees (£)"
+              value={priceInPounds || ''}
               handler={e => this.updateState(e)}
-              placeholder="50"
+              placeholder="£0.50"
             />
             <FormElement
               id="listCount"

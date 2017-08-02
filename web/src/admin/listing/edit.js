@@ -7,17 +7,21 @@ import { BackToPage } from '../../chrome/link';
 import Full from '../../layout/full';
 import FormElement from '../shared/form-element';
 import convertEmptyStringToNull from '../convertToNull';
+import { formatWithSymbol } from '../../format/Currency';
+
+const parsePriceInPounds = price => Number(price.replace(/^£/, '')) * 100;
 
 class EditListingDetails extends React.Component {
   constructor(props) {
     super(props);
     const { details } = this.props;
     const { name, qualifier, image, price } = details || {};
+    const priceInPounds = formatWithSymbol(price);
     this.state = {
       name,
       qualifier,
       image,
-      price
+      priceInPounds
     };
   }
 
@@ -32,10 +36,10 @@ class EditListingDetails extends React.Component {
       params: { code, itemId },
       performUpdateListingDetails
     } = this.props;
-    const { price, listCount, ...other } = this.state;
+    const { priceInPounds, listCount, ...other } = this.state;
     const listingDetails = {
       ...other,
-      price: Number(price)
+      price: parsePriceInPounds(priceInPounds)
     };
     performUpdateListingDetails({
       storeCode: code,
@@ -45,7 +49,7 @@ class EditListingDetails extends React.Component {
   }
 
   render() {
-    const { name, qualifier, image, price } = this.state;
+    const { name, qualifier, image, priceInPounds } = this.state;
     const { params: { code }, isAdmin } = this.props;
     return (
       <Full
@@ -75,10 +79,11 @@ class EditListingDetails extends React.Component {
               handler={e => this.updateState(e)}
             />
             <FormElement
-              id="price"
-              description="Price, including all fees (p)"
-              value={`${price || ''}`}
+              id="priceInPounds"
+              description="Price per item including all fees (£)"
+              value={priceInPounds || ''}
               handler={e => this.updateState(e)}
+              placeholder="1.50"
             />
             <button
               type="button"
