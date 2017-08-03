@@ -2,7 +2,7 @@
 
 ## Listing/unlisting items in a store
 
-- Navigate to https://honesty.store/admin/listing/<storeCode>
+- Navigate to https://honesty.store/admin/listing/<storeCode> (or follow the link from your profile screen)
 
 ## Adding/editing items
 
