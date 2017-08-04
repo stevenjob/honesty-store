@@ -13,7 +13,6 @@
     "test",
     "topup",
     "transaction",
-    "transaction-slack",
     "transaction-store",
     "user",
     "web"

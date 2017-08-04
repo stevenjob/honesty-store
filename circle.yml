@@ -38,7 +38,7 @@ deployment:
   aws:
     branch: /.*/
     commands:
-      - ./aws/bin/aws deploy $CIRCLE_BRANCH api item transaction user web topup store transaction-slack transaction-store
+      - ./aws/bin/aws deploy $CIRCLE_BRANCH api item transaction user web topup store transaction-store
       - ./aws/bin/aws prune
 general:
   # attempt to speed up artifact collection by specifying an empty list

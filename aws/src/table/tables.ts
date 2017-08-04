@@ -365,19 +365,6 @@ const dirToTable = {
         version: 0
       }
     ]
-  }),
-
-  ['transaction-slack']: ({ readCapacityUnits, writeCapacityUnits }) => template({
-    readCapacityUnits,
-    writeCapacityUnits,
-    dummyData: [
-      {
-        id: 'aggregate',
-        created: 1498468512751,
-        modified: 1498468512751,
-        version: 0
-      }
-    ]
   })
 };
 
