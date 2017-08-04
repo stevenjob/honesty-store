@@ -41,7 +41,7 @@ const ItemListings = ({
     <table className="col-12 admin-table">
       <thead>
         <tr>
-          <th className="left-align">Seller Id</th>
+          <th className="left-align">Seller</th>
           {revenue.length > 0 &&
             revenue[0].value.map((item, index) => (
               <th key={index} className="right-align">{item.label}</th>
