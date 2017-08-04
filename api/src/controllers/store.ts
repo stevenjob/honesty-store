@@ -13,30 +13,28 @@ import { authenticateAccessToken, authenticateAccessTokenAndStoreAdminUser } fro
 import { getSessionData } from '../services/session';
 import { externaliseItem, StoreItem as StoreItemExternal } from '../services/store';
 
-const itemWithSellerEmail = async (key, item: StoreItemInternal) => {
-  let sellerEmail;
-  const { sellerId } = item;
+const lookupSellerEmail = async (key, sellerId: string) => {
   try {
     const { emailAddress } = await getUser(key, sellerId);
-    sellerEmail = emailAddress;
+    return emailAddress;
   } catch (e) {
     if (e.message !== `Key not found ${sellerId}`) {
       throw e;
     }
-    sellerEmail = '';
+    return `Unknown ${sellerId.slice(0, 6)}`;
   }
-  return {
-    ...item,
-    sellerEmail
-  };
 };
 
-const getItem = async (key, itemId: string, { items }: Store): Promise<StoreItemInternal | undefined> => {
+const getItem = async (key, itemId: string, { items }: Store): Promise<(StoreItemInternal & { sellerEmail: string }) | undefined> => {
   const item = items.find(({ id }) => id === itemId);
   if (item == null) {
     return;
   }
-  return await itemWithSellerEmail(key, item);
+  const sellerEmail = await lookupSellerEmail(key, item.sellerId);
+  return {
+    ...item,
+    sellerEmail
+  };
 };
 
 export const updateDefaultStoreCode = async (key, userID, storeCode): Promise<User> => {
@@ -67,7 +65,13 @@ export default (router) => {
     authenticateAccessTokenAndStoreAdminUser,
     async (key, { storeCode }, { }, { }) => {
       const { items, revenue } = await getStoreFromCode(key, storeCode);
-      const itemsWithSellerEmailPromises = items.map(async (item) => itemWithSellerEmail(key, item));
+      const itemsWithSellerEmailPromises = items.map(async (item) => {
+        const sellerEmail = await lookupSellerEmail(key, item.sellerId);
+        return {
+          ...item,
+          sellerEmail
+        };
+      });
 
       return {
         items: await Promise.all(itemsWithSellerEmailPromises),
