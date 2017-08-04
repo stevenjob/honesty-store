@@ -65,6 +65,7 @@ export default (router) => {
     authenticateAccessTokenAndStoreAdminUser,
     async (key, { storeCode }, { }, { }) => {
       const { items, revenue } = await getStoreFromCode(key, storeCode);
+
       const itemsWithSellerEmailPromises = items.map(async (item) => {
         const sellerEmail = await lookupSellerEmail(key, item.sellerId);
         return {
@@ -73,9 +74,27 @@ export default (router) => {
         };
       });
 
+      const revenueWithSellerEmailPromises = revenue.map(async bucket => {
+        const sellerIdsAndEmails = await Promise.all(
+          Object.keys(bucket.seller)
+            .map(async id => ({
+              id,
+              email: await lookupSellerEmail(key, id)
+            }))
+        );
+        const updatedSeller = {};
+        for (const { id, email } of sellerIdsAndEmails) {
+          updatedSeller[email] = bucket.seller[id];
+        }
+        return {
+          ...bucket,
+          seller: updatedSeller
+        };
+      });
+
       return {
         items: await Promise.all(itemsWithSellerEmailPromises),
-        revenue
+        revenue: await Promise.all(revenueWithSellerEmailPromises)
       };
     }
   );
@@ -107,7 +126,7 @@ export default (router) => {
   router.post(
     '/store/:storeCode/item/:itemId/relist',
     authenticateAccessTokenAndStoreAdminUser,
-    async (key, { itemId, storeCode }, { additionalCount } , { user: { id: userId } }) => {
+    async (key, { itemId, storeCode }, { additionalCount }, { user: { id: userId } }) => {
       const { id: storeId } = await getStoreFromCode(key, storeCode);
       const store = await relistItem(key, storeId, itemId, additionalCount, userId);
       return await getItem(key, itemId, store);
