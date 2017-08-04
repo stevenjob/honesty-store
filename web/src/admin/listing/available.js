@@ -67,7 +67,7 @@ class UpdateCount extends React.Component {
 }
 
 export default connect(
-  ({ store: { items } }, { params: { itemId } }) => ({
+  ({ admin: { store: { items } } }, { params: { itemId } }) => ({
     item: items.find(({ id }) => id === itemId)
   }),
   { performUpdateListingCount }
