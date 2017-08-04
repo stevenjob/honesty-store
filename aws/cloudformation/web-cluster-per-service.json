@@ -66,6 +66,10 @@
       "Type": "String",
       "Description": "Prefix for all shared names, e.g. \"honesty-store\", \"hs\""
     },
+    "HSDomainName": {
+      "Type": "String",
+      "Description": "The domain name under which this deployment should be deployed"
+    },
     "ServicePrefix": {
       "Type": "String",
       "Description": "Prefix for all service-based names, e.g. \"honesty-store\", \"hs-<branch>\""
@@ -211,8 +215,24 @@
         },
         "Environment": {
           "Variables": {
-            "BASE_URL": "https://live.honesty.store",
-            "LAMBDA_BASE_URL": "https://live.honesty.store",
+            "BASE_URL": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  { "Ref": "HSDomainName" }
+                ]
+              ]
+            },
+            "LAMBDA_BASE_URL": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  { "Ref": "HSDomainName" }
+                ]
+              ]
+            },
             "SERVICE_TOKEN_SECRET": {
               "Ref": "ServiceSecret"
             },

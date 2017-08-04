@@ -49,6 +49,7 @@ const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => 
           "WithApiGateway": boolToYN(name == "web" || name == "api"),
           "ApiGatewayCatchAll": boolToYN(name == "web"),
           "HSPrefix": { "Ref": "HSPrefix" },
+          "HSDomainName": { "Ref": "HSDomainName" },
           "ServicePrefix" : { "Ref" : "ServicePrefix" },
           "RestApi": { "Ref": "RestApi" },
           "RestApiRootResourceId": {

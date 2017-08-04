@@ -112,6 +112,9 @@
         "HSPrefix": {
           "Ref": "HSPrefix"
         },
+        "HSDomainName": {
+          "Ref": "HSDomainName"
+        },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
         },
@@ -165,6 +168,9 @@
         "ApiGatewayCatchAll": "No",
         "HSPrefix": {
           "Ref": "HSPrefix"
+        },
+        "HSDomainName": {
+          "Ref": "HSDomainName"
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
@@ -224,6 +230,9 @@
         "HSPrefix": {
           "Ref": "HSPrefix"
         },
+        "HSDomainName": {
+          "Ref": "HSDomainName"
+        },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
         },
@@ -278,6 +287,9 @@
         "HSPrefix": {
           "Ref": "HSPrefix"
         },
+        "HSDomainName": {
+          "Ref": "HSDomainName"
+        },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
         },
@@ -331,6 +343,9 @@
         "ApiGatewayCatchAll": "No",
         "HSPrefix": {
           "Ref": "HSPrefix"
+        },
+        "HSDomainName": {
+          "Ref": "HSDomainName"
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
@@ -388,6 +403,9 @@
         "HSPrefix": {
           "Ref": "HSPrefix"
         },
+        "HSDomainName": {
+          "Ref": "HSDomainName"
+        },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
         },
@@ -442,6 +460,9 @@
         "HSPrefix": {
           "Ref": "HSPrefix"
         },
+        "HSDomainName": {
+          "Ref": "HSDomainName"
+        },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
         },
@@ -495,6 +516,9 @@
         "ApiGatewayCatchAll": "No",
         "HSPrefix": {
           "Ref": "HSPrefix"
+        },
+        "HSDomainName": {
+          "Ref": "HSDomainName"
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
