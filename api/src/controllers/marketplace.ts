@@ -24,6 +24,7 @@ Name: ${name}
 Qualifier: ${qualifier || ''}
 Item price (inclusive of all fees): £${(Number(itemPrice) / 100).toFixed(2)}
 Quantity: ${quantity}
+Seller Id: ${user.id}
 `;
 
       return await mailStoreAgent({
