@@ -15,7 +15,13 @@ class NewListingDetails extends React.Component {
   constructor(props) {
     super(props);
     const { details } = this.props;
-    const { name, qualifier, image, price, listCount } = details || {};
+    const {
+      name,
+      qualifier = '',
+      image,
+      price = 0,
+      listCount = 0
+    } = details || {};
     const priceInPounds = formatWithSymbol(price);
     this.state = {
       name,
