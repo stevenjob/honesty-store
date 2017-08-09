@@ -116,9 +116,53 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
+        }
+      }
+    }
+  },
+  "apiStack": {
+    "Type": "AWS::CloudFormation::Stack",
+    "DependsOn": [
+      "RestApi"
+    ],
+    "Properties": {
+      "TemplateURL": {
+        "Fn::Join": [
+          "",
+          [
+            "https://s3.amazonaws.com/honesty-store-templates-",
+            {
+              "Ref": "AWS::Region"
+            },
+            "/per-service.json"
+          ]
+        ]
+      },
+      "TimeoutInMinutes": "10",
+      "Parameters": {
+        "ServiceName": "api",
+        "ServiceSecret": {
+          "Ref": "ServiceSecret"
         },
-        "RestApi": {
-          "Ref": "RestApi"
+        "IndexUserId": "No",
+        "ReadCapacityUnits": "0",
+        "WriteCapacityUnits": "0",
+        "LambdaS3Key": "api.zip",
+        "LambdaTimeout": "30",
+        "LambdaHandler": "lib/bundle-min.handler",
+        "WithTable": "No",
+        "UserSecret": "",
+        "StripeKeyLive": "",
+        "StripeKeyTest": "",
+        "WithApiGateway": "Yes",
+        "HSPrefix": {
+          "Ref": "HSPrefix"
+        },
+        "HSDomainName": {
+          "Ref": "HSDomainName"
+        },
+        "ServicePrefix": {
+          "Ref": "ServicePrefix"
         }
       }
     }

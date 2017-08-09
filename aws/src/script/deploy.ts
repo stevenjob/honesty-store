@@ -115,9 +115,11 @@ export default async ({ branch }) => {
     key: 'per-service.json'
   });
 
+  const doZips = true;
+
   for (const { path, pattern } of dirs) {
     console.log(`s3Upload() for ${path}...`);
-    if((()=>false)()){
+    if(doZips){
       const zipFile = await zip(path, pattern);
       await s3Upload({
         content: zipFile,
