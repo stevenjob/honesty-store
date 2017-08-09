@@ -182,13 +182,8 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    {
-                      "Fn::GetAtt": [
-                        "webStack",
-                        "Outputs.Lambda"
-                      ]
-                    },
-                    "Arn"
+                    "webStack",
+                    "Outputs.Lambda"
                   ]
                 },
                 "/invocations"
@@ -248,13 +243,8 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    {
-                      "Fn::GetAtt": [
-                        "apiStack",
-                        "Outputs.Lambda"
-                      ]
-                    },
-                    "Arn"
+                    "apiStack",
+                    "Outputs.Lambda"
                   ]
                 },
                 "/invocations"
@@ -303,13 +293,8 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    {
-                      "Fn::GetAtt": [
-                        "webStack",
-                        "Outputs.Lambda"
-                      ]
-                    },
-                    "Arn"
+                    "webStack",
+                    "Outputs.Lambda"
                   ]
                 },
                 "/invocations"

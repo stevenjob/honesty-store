@@ -74,14 +74,14 @@
   "Outputs": {
     "Lambda": {
       "Value": {
-        "Ref": "Lambda"
+        "Fn::GetAtt": [ "Lambda", "Arn" ]
       },
       "Export": {
         "Name": {
           "Fn::Join": [
             "",
             [
-              "Lambda-",
+              "Lambda-Arn-",
               { "Ref": "ServiceName" }
             ]
           ]
