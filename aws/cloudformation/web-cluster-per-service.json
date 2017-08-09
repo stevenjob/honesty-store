@@ -57,11 +57,6 @@
       "Description": "Boolean describing whether the lambda is exposed on ApiGateway",
       "AllowedValues": ["Yes", "No"]
     },
-    "ApiGatewayCatchAll": {
-      "Type": "String",
-      "Description": "Boolean describing whether the ApiGateway is a catch-all resource",
-      "AllowedValues": ["Yes", "No"]
-    },
     "HSPrefix": {
       "Type": "String",
       "Description": "Prefix for all shared names, e.g. \"honesty-store\", \"hs\""
@@ -73,29 +68,29 @@
     "ServicePrefix": {
       "Type": "String",
       "Description": "Prefix for all service-based names, e.g. \"honesty-store\", \"hs-<branch>\""
-    },
-    "RestApi": {
-      "Type": "String",
-      "Description": "The RestApi to which this service should be attached"
-    },
-    "RestApiRootResourceId": {
-      "Type": "String",
-      "Description": "The RestApi's root resourceId"
+    }
+  },
+
+  "Outputs": {
+    "Lambda": {
+      "Value": {
+        "Ref": "Lambda"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "Lambda-",
+              { "Ref": "ServiceName" }
+            ]
+          ]
+        }
+      }
     }
   },
 
   "Conditions": {
-    "ApiGatewayCatchAll": {
-      "Fn::Equals": [ { "Ref": "ApiGatewayCatchAll" }, "Yes" ]
-    },
-    "ApiGatewayServiceOnly": {
-      "Fn::And": [
-        "Fn::Not": [{
-          "Fn::Equals": [ { "Ref": "ApiGatewayCatchAll" }, "Yes" ]
-        }],
-        "Fn::Equals": [ { "Ref": "WithApiGateway" }, "Yes" ]
-      ]
-    },
     "WithApiGateway": {
       "Fn::Equals": [ { "Ref": "WithApiGateway" }, "Yes" ]
     },
@@ -280,85 +275,6 @@
           ]
         },
         "Principal": "apigateway.amazonaws.com"
-      },
-      "DependsOn": [
-        "Lambda"
-      ]
-    },
-
-    "ApiGatewayEndpointCatchAll": {
-      "Condition": "ApiGatewayCatchAll",
-      "Type": "AWS::ApiGateway::Resource",
-      "Properties": {
-        "RestApiId": {
-          "Ref": "RestApi"
-        },
-        "ParentId": {
-          "Ref": "RestApiRootResourceId"
-        },
-        "PathPart": "{proxy+}"
-      }
-    },
-    "ApiGatewayEndpointServiceOnly": {
-      "Condition": "ApiGatewayServiceOnly",
-      "Type": "AWS::ApiGateway::Resource",
-      "Properties": {
-        "RestApiId": {
-          "Ref": "RestApi"
-        },
-        "ParentId": {
-          "Ref": "ApiGatewayRoot"
-        },
-        "PathPart": "{proxy+}"
-      }
-    },
-    "ApiGatewayIntegration": {
-      "Condition": "WithApiGateway",
-      "Type": "AWS::ApiGateway::Method",
-      "Properties": {
-        "RestApiId": {
-          "Ref": "RestApi"
-        },
-        "ResourceId": {
-          "Fn::If": [
-            "ApiGatewayCatchAll",
-            { "Ref": "ApiGatewayEndpointCatchAll" },
-            { "Ref": "ApiGatewayEndpointServiceOnly" }
-          ]
-        },
-        "HttpMethod": "ANY",
-        "AuthorizationType": "NONE",
-        "Integration": {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": {
-            "Fn::Join": [
-              "",
-              [
-                "arn:aws:apigateway:",
-                { "Ref": "AWS::Region" },
-                ":lambda:path/2015-03-31/functions/",
-                { "Fn::GetAtt": [ "Lambda", "Arn" ] },
-                "/invocations"
-              ]
-            ]
-          }
-        }
-      }
-    },
-    "ApiGatewayRoot": {
-      "Condition": "WithApiGateway",
-      "Type": "AWS::ApiGateway::Resource",
-      "Properties": {
-        "RestApiId": {
-          "Ref": "RestApi"
-        },
-        "ParentId": {
-          "Ref": "RestApiRootResourceId"
-        },
-        "PathPart": {
-          "Ref": "ServiceName"
-        }
       },
       "DependsOn": [
         "Lambda"

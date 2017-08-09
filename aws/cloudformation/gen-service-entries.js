@@ -47,14 +47,9 @@ const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => 
           "StripeKeyLive": name == "topup" ? { "Ref": "StripeKeyLive" } : "",
           "StripeKeyTest": name == "topup" ? { "Ref": "StripeKeyTest" } : "",
           "WithApiGateway": boolToYN(name == "web" || name == "api"),
-          "ApiGatewayCatchAll": boolToYN(name == "web"),
           "HSPrefix": { "Ref": "HSPrefix" },
           "HSDomainName": { "Ref": "HSDomainName" },
           "ServicePrefix" : { "Ref" : "ServicePrefix" },
-          "RestApi": { "Ref": "RestApi" },
-          "RestApiRootResourceId": {
-            "Fn::GetAtt": [ "RestApi", "RootResourceId" ]
-          }
         }
       }
     }

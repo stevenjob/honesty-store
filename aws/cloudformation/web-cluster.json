@@ -108,7 +108,6 @@
         "StripeKeyLive": "",
         "StripeKeyTest": "",
         "WithApiGateway": "Yes",
-        "ApiGatewayCatchAll": "Yes",
         "HSPrefix": {
           "Ref": "HSPrefix"
         },
@@ -120,12 +119,6 @@
         },
         "RestApi": {
           "Ref": "RestApi"
-        },
-        "RestApiRootResourceId": {
-          "Fn::GetAtt": [
-            "RestApi",
-            "RootResourceId"
-          ]
         }
       }
     }
@@ -163,6 +156,167 @@
         "RestApiId": { "Ref": "RestApi" },
         "Stage": { "Ref": "Stage" },
         "DomainName": { "Ref": "HSDomainName" }
+      }
+    },
+
+    "ApiGatewayWebRootMethod": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "ResourceId": {
+          "Fn::GetAtt": [ "RestApi", "RootResourceId" ]
+        },
+        "HttpMethod": "ANY",
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:apigateway:",
+                { "Ref": "AWS::Region" },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    {
+                      "Fn::GetAtt": [
+                        "webStack",
+                        "Outputs.Lambda"
+                      ]
+                    },
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "ApiGatewayAPIRoute": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "ParentId": {
+          "Fn::GetAtt": [
+            "RestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "api"
+      }
+    },
+    "ApiGatewayAPIProxyRoute": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "ParentId": {
+          "Ref": "ApiGatewayAPIRoute"
+        },
+        "PathPart": "{proxy+}"
+      }
+    },
+    "ApiGatewayApiMethod": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayAPIProxyRoute"
+        },
+        "HttpMethod": "ANY",
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:apigateway:",
+                { "Ref": "AWS::Region" },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    {
+                      "Fn::GetAtt": [
+                        "apiStack",
+                        "Outputs.Lambda"
+                      ]
+                    },
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      }
+    },
+
+    "ApiGatewayWebProxyRoute": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "ParentId": {
+          "Fn::GetAtt": [
+            "RestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "{proxy+}"
+      }
+    },
+    "ApiGatewayWebProxyMethod": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayWebProxyRoute"
+        },
+        "HttpMethod": "ANY",
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:apigateway:",
+                { "Ref": "AWS::Region" },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    {
+                      "Fn::GetAtt": [
+                        "webStack",
+                        "Outputs.Lambda"
+                      ]
+                    },
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
       }
     },
 
