@@ -64,5 +64,3 @@ const out = config
   }, {});
 
 console.log(JSON.stringify(out));
-
-console.error('remember to update Deployment.DependsOn');

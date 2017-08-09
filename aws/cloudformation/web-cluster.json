@@ -131,7 +131,9 @@
         "StageName": "live__deploy"
       },
       "DependsOn": [
-        "webStack"
+        "ApiGatewayWebRootMethod",
+        "ApiGatewayApiMethod",
+        "ApiGatewayWebProxyMethod"
       ]
     },
     "Stage": {
@@ -140,7 +142,12 @@
         "RestApiId": { "Ref": "RestApi" },
         "DeploymentId": { "Ref": "Deployment" },
         "StageName": "live"
-      }
+      },
+      "DependsOn": [
+        "ApiGatewayWebRootMethod",
+        "ApiGatewayApiMethod",
+        "ApiGatewayWebProxyMethod"
+      ]
     },
     "DomainName": {
       "Type": "AWS::ApiGateway::DomainName",
