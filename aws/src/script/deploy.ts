@@ -27,7 +27,7 @@ const dirs: DirConfig[] = [
   { path: 'transaction-store', pattern: 'lib/bundle-min.js' },
 ];
 
-const isLive = (branch) => branch === 'live';
+export const isLive = (branch) => branch === 'live';
 
 const getAndAssertEnvironment = (key) => {
   const value = process.env[key];
