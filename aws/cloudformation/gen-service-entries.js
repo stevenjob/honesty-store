@@ -18,8 +18,20 @@ const removeHyphens = str => str.replace(/-/g, '');
 const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => ({
     [`${removeHyphens(name)}Stack`]: {
       "Type": "AWS::CloudFormation::Stack",
+      "DependsOn" : [
+         "RestApi"
+      ],
       "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
+        "TemplateURL": {
+          "Fn::Join": [
+            "",
+            [
+              "https://s3.amazonaws.com/honesty-store-templates-",
+              { "Ref": "AWS::Region" },
+              "/per-service.json"
+            ]
+          ]
+        },
         "TimeoutInMinutes": "10",
         "Parameters": {
           "ServiceName": `${name}`,
@@ -36,7 +48,9 @@ const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => 
           "StripeKeyTest": name == "topup" ? { "Ref": "StripeKeyTest" } : "",
           "WithApiGateway": boolToYN(name == "web" || name == "api"),
           "ApiGatewayCatchAll": boolToYN(name == "web"),
-          "HonestyStorePrefix": { "Ref": "HonestyStorePrefix" }
+          "HSPrefix": { "Ref": "HSPrefix" },
+          "ServicePrefix" : { "Ref" : "ServicePrefix" },
+          "RestApi": { "Ref": "RestApi" }
         }
       }
     }
@@ -51,3 +65,5 @@ const out = config
   }, {});
 
 console.log(JSON.stringify(out));
+
+console.error('remember to update Deployment.DependsOn');

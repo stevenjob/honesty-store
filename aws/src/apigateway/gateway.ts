@@ -366,7 +366,7 @@ const ensureStagedIntegration = async ({ restApi, deployment }) => {
 };
 
 export const restApiToBaseUrl = ({ id }: APIGateway.RestApi) =>
-  `https://${id}.execute-api.eu-west-1.amazonaws.com/${stageName}`;
+  `https://${id}.execute-api.${config.region}.amazonaws.com/${stageName}`;
 
 export const ensureLambdaMethod = async ({
   restApi,

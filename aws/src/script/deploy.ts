@@ -1,13 +1,31 @@
 import * as winston from 'winston';
 import { aliasToBaseUrl } from '../route53/alias';
+import { zip } from '../lambda/function';
 import { aliasToName } from '../route53/alias';
 import { ensureStack } from '../cloudformation/stack';
-import { S3 } from 'aws-sdk';
+import { config, S3 } from 'aws-sdk';
 import { readFileSync } from 'fs';
 
 export const prefix = 'hs';
 
 const templateBucket = 'honesty-store-templates';
+
+interface DirConfig {
+  path: string;
+  pattern: string;
+}
+
+const dirs: DirConfig[] = [
+  { path: 'item', pattern: 'lib/bundle-min.js' },
+  { path: 'store', pattern: 'lib/bundle-min.js' },
+  { path: 'transaction', pattern: 'lib/bundle-min.js' },
+  { path: 'topup', pattern: 'lib/bundle-min.js' },
+  { path: 'user', pattern: 'lib/bundle-min.js' },
+  { path: 'api', pattern: 'lib/bundle-min.js' },
+  { path: 'web', pattern: '{node_modules,server,build}/**/*' },
+  { path: 'transaction-slack', pattern: 'lib/bundle-min.js' },
+  { path: 'transaction-store', pattern: 'lib/bundle-min.js' },
+];
 
 const isLive = (branch) => branch === 'live';
 
@@ -41,7 +59,7 @@ const getCertificateArn = ({ branch }) => isLive(branch) ?
   'arn:aws:acm:us-east-1:812374064424:certificate/8f1b6ff9-f215-4c9c-8a14-04a2aab84004' :
   'arn:aws:acm:us-east-1:812374064424:certificate/952d48cc-77bc-4736-b398-c5451e7dc970';
 
-const s3Upload = async ({ localFile, bucket, key }) => {
+const s3Upload = async ({ content, bucket, key }) => {
   const s3 = new S3();
 
   try {
@@ -50,15 +68,19 @@ const s3Upload = async ({ localFile, bucket, key }) => {
     })
       .promise();
   } catch (e) {
-    if (e.code !== 'BucketAlreadyExists') {
-      throw e;
+    switch (e.code) {
+      case 'BucketAlreadyExists':
+      case 'BucketAlreadyOwnedByYou':
+        break;
+      default:
+        throw e;
     }
   }
 
   return await s3.putObject({
     Bucket: bucket,
     Key: key,
-    Body: readFileSync(localFile, 'utf8')
+    Body: content
   })
     .promise();
 };
@@ -85,22 +107,34 @@ export default async ({ branch }) => {
 
   const baseUrl = aliasToBaseUrl(branch);
 
+  console.log(`s3Upload() for per-service json...`);
   await s3Upload({
-    localFile: `${__dirname}/../../cloudformation/web-cluster-per-service.json`,
-    bucket: templateBucket,
+    content: readFileSync(`${__dirname}/../../cloudformation/web-cluster-per-service.json`, 'utf8'),
+    bucket: `${templateBucket}-${config.region}`,
     key: 'per-service.json'
   });
 
+  for (const { path, pattern } of dirs) {
+    console.log(`s3Upload() for ${path}...`);
+    const zipFile = await zip(path, pattern);
+    await s3Upload({
+      content: zipFile,
+      bucket: 'honesty-store-lambdas',
+      key: `${path}.zip`
+    });
+  }
+
+  console.log(`ensureStack('stack-${branch}', ...)...`);
   await ensureStack({
     name: `stack-${branch}`,
     templateName: `${__dirname}/../../cloudformation/web-cluster.json`,
     params: {
-      StageName: branch,
       CertificateArn: getCertificateArn(branch),
       HSDomainName: aliasToName(branch),
       ServiceSecret: serviceSecret,
       UserSecret: userSecret,
-      HonestyStorePrefix: isLive(branch) ? 'honesty-store' : `hs-${branch}`,
+      ServicePrefix: isLive(branch) ? 'honesty-store' : `hs-${branch}`,
+      HSPrefix: isLive(branch) ? 'honesty-store' : 'hs',
       StripeKeyLive: generateStripeKey({ branch, type: 'live' }),
       StripeKeyTest: generateStripeKey({ branch, type: 'test' })
     }});

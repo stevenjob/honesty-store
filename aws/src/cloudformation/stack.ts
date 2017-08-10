@@ -3,7 +3,10 @@ import { readFileSync } from 'fs';
 import * as winston from 'winston';
 
 export const ensureStack = async ({ name, templateName, params }) => {
-  const cloudFormation = new CloudFormation({ apiVersion: '2010-05-15' });
+  const cloudFormation = new CloudFormation({
+    apiVersion: '2010-05-15',
+    s3ForcePathStyle: true
+  });
 
   const createUpdateParams = {
     StackName: name,

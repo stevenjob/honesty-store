@@ -2,11 +2,6 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "",
   "Parameters": {
-    "StageName": {
-      "Type": "String",
-      "Description": "Name of the ApiGateway deployment",
-      "Default": "live"
-    },
     "CertificateArn": {
       "Type": "String",
       "Description": "The certificate to use on ApiGateway (first [8f1b6ff9...] is live)",
@@ -28,7 +23,11 @@
       "Type": "String",
       "Description": "Secret for user authentication"
     },
-    "HonestyStorePrefix": {
+    "HSPrefix": {
+      "Type": "String",
+      "Description": "Prefix for all shared names, e.g. \"honesty-store\", \"hs\""
+    },
+    "ServicePrefix": {
       "Type": "String",
       "Description": "Prefix for all service-based names, e.g. \"honesty-store\", \"hs-<branch>\""
     },
@@ -46,7 +45,7 @@
     "RestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": { "Ref": "HonestyStorePrefix" },
+        "Name": { "Ref": "ServicePrefix" },
         "BinaryMediaTypes": [
           "application/font-woff",
           "application/font-woff2",
@@ -76,7 +75,16 @@
     "itemStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
+        "TemplateURL": {
+          "Fn::Join": [
+            "",
+            [
+              "https://s3.amazonaws.com/honesty-store-templates-",
+              { "Ref": "AWS::Region" },
+              "/per-service.json"
+            ]
+          ]
+        },
         "TimeoutInMinutes": "10",
         "Parameters": {
           "ServiceName": "item",
@@ -95,228 +103,39 @@
           "StripeKeyTest": "",
           "WithApiGateway": "No",
           "ApiGatewayCatchAll": "No",
-          "HonestyStorePrefix": {
-            "Ref": "HonestyStorePrefix"
+          "ServicePrefix": {
+            "Ref": "ServicePrefix"
+          },
+          "HSPrefix": {
+            "Ref": "HSPrefix"
+          },
+          "RestApi": {
+            "Ref": "RestApi"
           }
         }
-      }
-    },
-    "storeStack": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
-        "TimeoutInMinutes": "10",
-        "Parameters": {
-          "ServiceName": "store",
-          "ServiceSecret": {
-            "Ref": "ServiceSecret"
-          },
-          "IndexUserId": "No",
-          "ReadCapacityUnits": "3",
-          "WriteCapacityUnits": "3",
-          "LambdaS3Key": "store.zip",
-          "LambdaTimeout": "10",
-          "LambdaHandler": "lib/bundle-min.handler",
-          "WithTable": "Yes",
-          "UserSecret": "",
-          "StripeKeyLive": "",
-          "StripeKeyTest": "",
-          "WithApiGateway": "No",
-          "ApiGatewayCatchAll": "No",
-          "HonestyStorePrefix": {
-            "Ref": "HonestyStorePrefix"
-          }
-        }
-      }
-    },
-    "topupStack": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
-        "TimeoutInMinutes": "10",
-        "Parameters": {
-          "ServiceName": "topup",
-          "ServiceSecret": {
-            "Ref": "ServiceSecret"
-          },
-          "IndexUserId": "Yes",
-          "ReadCapacityUnits": "1",
-          "WriteCapacityUnits": "1",
-          "LambdaS3Key": "topup.zip",
-          "LambdaTimeout": "10",
-          "LambdaHandler": "lib/bundle-min.handler",
-          "WithTable": "Yes",
-          "UserSecret": "",
-          "StripeKeyLive": {
-            "Ref": "StripeKeyLive"
-          },
-          "StripeKeyTest": {
-            "Ref": "StripeKeyTest"
-          },
-          "WithApiGateway": "No",
-          "ApiGatewayCatchAll": "No",
-          "HonestyStorePrefix": {
-            "Ref": "HonestyStorePrefix"
-          }
-        }
-      }
-    },
-    "transactionStack": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
-        "TimeoutInMinutes": "10",
-        "Parameters": {
-          "ServiceName": "transaction",
-          "ServiceSecret": {
-            "Ref": "ServiceSecret"
-          },
-          "IndexUserId": "No",
-          "ReadCapacityUnits": "2",
-          "WriteCapacityUnits": "2",
-          "LambdaS3Key": "transaction.zip",
-          "LambdaTimeout": "10",
-          "LambdaHandler": "lib/bundle-min.handler",
-          "WithTable": "Yes",
-          "UserSecret": "",
-          "StripeKeyLive": "",
-          "StripeKeyTest": "",
-          "WithApiGateway": "No",
-          "ApiGatewayCatchAll": "No",
-          "HonestyStorePrefix": {
-            "Ref": "HonestyStorePrefix"
-          }
-        }
-      }
-    },
-    "transactionslackStack": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
-        "TimeoutInMinutes": "10",
-        "Parameters": {
-          "ServiceName": "transaction-slack",
-          "ServiceSecret": {
-            "Ref": "ServiceSecret"
-          },
-          "IndexUserId": "No",
-          "ReadCapacityUnits": "1",
-          "WriteCapacityUnits": "1",
-          "LambdaS3Key": "transaction-slack.zip",
-          "LambdaTimeout": "10",
-          "LambdaHandler": "lib/bundle-min.handler",
-          "WithTable": "Yes",
-          "UserSecret": "",
-          "StripeKeyLive": "",
-          "StripeKeyTest": "",
-          "WithApiGateway": "No",
-          "ApiGatewayCatchAll": "No",
-          "HonestyStorePrefix": {
-            "Ref": "HonestyStorePrefix"
-          }
-        }
-      }
-    },
-    "userStack": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
-        "TimeoutInMinutes": "10",
-        "Parameters": {
-          "ServiceName": "user",
-          "ServiceSecret": {
-            "Ref": "ServiceSecret"
-          },
-          "IndexUserId": "No",
-          "ReadCapacityUnits": "1",
-          "WriteCapacityUnits": "1",
-          "LambdaS3Key": "user.zip",
-          "LambdaTimeout": "10",
-          "LambdaHandler": "lib/bundle-min.handler",
-          "WithTable": "Yes",
-          "UserSecret": {
-            "Ref": "UserSecret"
-          },
-          "StripeKeyLive": "",
-          "StripeKeyTest": "",
-          "WithApiGateway": "No",
-          "ApiGatewayCatchAll": "No",
-          "HonestyStorePrefix": {
-            "Ref": "HonestyStorePrefix"
-          }
-        }
-      }
-    },
-    "webStack": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
-        "TimeoutInMinutes": "10",
-        "Parameters": {
-          "ServiceName": "web",
-          "ServiceSecret": {
-            "Ref": "ServiceSecret"
-          },
-          "IndexUserId": "No",
-          "ReadCapacityUnits": "0",
-          "WriteCapacityUnits": "0",
-          "LambdaS3Key": "web.zip",
-          "LambdaTimeout": "10",
-          "LambdaHandler": "server/lambda.handler",
-          "WithTable": "No",
-          "UserSecret": "",
-          "StripeKeyLive": "",
-          "StripeKeyTest": "",
-          "WithApiGateway": "Yes",
-          "ApiGatewayCatchAll": "Yes",
-          "HonestyStorePrefix": {
-            "Ref": "HonestyStorePrefix"
-          }
-        }
-      }
-    },
-    "apiStack": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/honesty-store-templates/per-service.json",
-        "TimeoutInMinutes": "10",
-        "Parameters": {
-          "ServiceName": "api",
-          "ServiceSecret": {
-            "Ref": "ServiceSecret"
-          },
-          "IndexUserId": "No",
-          "ReadCapacityUnits": "0",
-          "WriteCapacityUnits": "0",
-          "LambdaS3Key": "api.zip",
-          "LambdaTimeout": "30",
-          "LambdaHandler": "lib/bundle-min.handler",
-          "WithTable": "No",
-          "UserSecret": "",
-          "StripeKeyLive": "",
-          "StripeKeyTest": "",
-          "WithApiGateway": "Yes",
-          "ApiGatewayCatchAll": "No",
-          "HonestyStorePrefix": {
-            "Ref": "HonestyStorePrefix"
-          }
-        }
-      }
+      },
+      "DependsOn": [
+        "RestApi"
+      ]
     },
 
     "Deployment": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": { "Ref": "RestApi" },
-        "StageName": { "Ref": "StageName" }
-      }
+        "StageName": "live"
+      },
+      "DependsOn": [
+        "itemStack",
+        "RestApi"
+      ]
     },
     "Stage": {
       "Type": "AWS::ApiGateway::Stage",
       "Properties": {
         "RestApiId": { "Ref": "RestApi" },
         "DeploymentId": { "Ref": "Deployment" },
-        "StageName": { "Ref": "StageName" }
+        "StageName": "live"
       }
     },
     "DomainName": {
