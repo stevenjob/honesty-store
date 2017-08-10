@@ -144,8 +144,5 @@ export default async ({ branch }) => {
       StripeKeyTest: generateStripeKey({ branch, type: 'test' })
     }});
 
-
-  // TODO: dummy data in the db
-
   winston.info(`Deployed to ${baseUrl}`);
 };

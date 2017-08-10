@@ -6,6 +6,7 @@ import { securityGroupCreate } from './ec2/securitygroup';
 import { clusterCreate } from './ecs/cluster';
 import iamSync from './iam/sync';
 import deploy from './script/deploy';
+import pushDefaultTableData from './script/push-default-table-data';
 import { createLocalDatabase } from './script/local';
 import prune from './script/prune';
 
@@ -41,6 +42,12 @@ const warnAndExit = e => {
 program.command('deploy <branch>')
   .action((branch) => {
     deploy({ branch })
+      .catch(warnAndExit);
+  });
+
+program.command('push-default-table-data <branch>')
+  .action((branch) => {
+    pushDefaultTableData({ branch })
       .catch(warnAndExit);
   });
 

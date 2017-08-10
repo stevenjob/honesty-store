@@ -39,6 +39,7 @@ deployment:
     branch: /.*/
     commands:
       - ./aws/bin/aws deploy $CIRCLE_BRANCH
+      - ./aws/bin/aws push-default-table-data $CIRCLE_BRANCH
       - ./aws/bin/aws prune
 general:
   # attempt to speed up artifact collection by specifying an empty list
