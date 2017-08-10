@@ -516,7 +516,7 @@
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": { "Ref": "RestApi" },
-        "StageName": "live"
+        "StageName": "live__deploy"
       },
       "DependsOn": [
         "itemStack",
@@ -562,9 +562,9 @@
         "TTL": 300,
         "HostedZoneId": "Z1H4BLMHZ9P4II",
         "Region": { "Ref": "AWS::Region" },
-        "ResourceRecords": [{
-          "Value": { "Fn::GetAtt": [ "DomainName", "DistributionDomainName" ] }
-        }]
+        "ResourceRecords": [
+          { "Fn::GetAtt": [ "DomainName", "DistributionDomainName" ] }
+        ]
       }
     }
   },
