@@ -1,6 +1,23 @@
 import { DynamoDB } from 'aws-sdk';
 import * as winston from 'winston';
 
+export const ensureTableData = async ({ data, tableName }) => {
+    // TODO could use batch API
+    const dynamodb = new DynamoDB.DocumentClient();
+
+    const promises = data.map(item =>
+      dynamodb
+        .put({
+          TableName: tableName,
+          Item: item
+        })
+        .promise());
+
+    await Promise.all(promises);
+
+    winston.debug('table: put');
+};
+
 export const ensureTable = async ({ config, data }: { config: DynamoDB.Types.CreateTableInput, data }) => {
   const db = new DynamoDB({ apiVersion: '2012-08-10' });
   try {
@@ -14,18 +31,7 @@ export const ensureTable = async ({ config, data }: { config: DynamoDB.Types.Cre
 
     winston.debug('table: tableExists');
 
-    // TODO could use batch API
-    const promises = data.map((item) =>
-      new DynamoDB.DocumentClient()
-        .put({
-          TableName: config.TableName,
-          Item: item
-        })
-        .promise()
-    );
-    await Promise.all(promises);
-
-    winston.debug('table: put');
+    await ensureTableData({ data, tableName: config.TableName });
 
     return response.TableDescription;
   } catch (e) {
