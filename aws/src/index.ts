@@ -6,9 +6,9 @@ import { securityGroupCreate } from './ec2/securitygroup';
 import { clusterCreate } from './ecs/cluster';
 import iamSync from './iam/sync';
 import deploy from './script/deploy';
-import pushDefaultTableData from './script/push-default-table-data';
 import { createLocalDatabase } from './script/local';
 import prune from './script/prune';
+import pushDefaultTableData from './script/push-default-table-data';
 
 winston.configure({
   level: 'debug',

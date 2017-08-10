@@ -9,6 +9,10 @@ const generateName = ({ branch, dir }: { branch: string, dir?: string }) => {
 
 export default async ({ branch }) => {
   for (const dir in dummyData) {
+    if (!dummyData.hasOwnProperty(dir)) {
+      continue;
+    }
+
     const data = dummyData[dir];
 
     await ensureTableData({

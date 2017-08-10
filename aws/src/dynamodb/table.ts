@@ -2,20 +2,20 @@ import { DynamoDB } from 'aws-sdk';
 import * as winston from 'winston';
 
 export const ensureTableData = async ({ data, tableName }) => {
-    // TODO could use batch API
-    const dynamodb = new DynamoDB.DocumentClient();
+  // TODO could use batch API
+  const dynamodb = new DynamoDB.DocumentClient();
 
-    const promises = data.map(item =>
-      dynamodb
-        .put({
-          TableName: tableName,
-          Item: item
-        })
-        .promise());
+  const promises = data.map(item =>
+    dynamodb
+      .put({
+        TableName: tableName,
+        Item: item
+      })
+      .promise());
 
-    await Promise.all(promises);
+  await Promise.all(promises);
 
-    winston.debug('table: put');
+  winston.debug('table: put');
 };
 
 export const ensureTable = async ({ config, data }: { config: DynamoDB.Types.CreateTableInput, data }) => {

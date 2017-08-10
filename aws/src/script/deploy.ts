@@ -1,10 +1,9 @@
-import * as winston from 'winston';
-import { aliasToBaseUrl } from '../route53/alias';
-import { zip } from '../lambda/function';
-import { aliasToName } from '../route53/alias';
-import { ensureStack } from '../cloudformation/stack';
 import { config, S3 } from 'aws-sdk';
 import { readFileSync } from 'fs';
+import * as winston from 'winston';
+import { ensureStack } from '../cloudformation/stack';
+import { zip } from '../lambda/function';
+import { aliasToBaseUrl, aliasToName } from '../route53/alias';
 
 export const prefix = 'hs';
 
@@ -23,7 +22,7 @@ const dirs: DirConfig[] = [
   { path: 'user', pattern: 'lib/bundle-min.js' },
   { path: 'api', pattern: 'lib/bundle-min.js' },
   { path: 'web', pattern: '{node_modules,server,build}/**/*' },
-  { path: 'transaction-store', pattern: 'lib/bundle-min.js' },
+  { path: 'transaction-store', pattern: 'lib/bundle-min.js' }
 ];
 
 export const isLive = (branch) => branch === 'live';
