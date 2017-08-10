@@ -25,14 +25,7 @@ winston.configure({
   ]
 });
 
-config.region = process.env.AWS_REGION || 'us-east-1';
-
-if (config.region == 'eu-west-1') {
-  console.error("Refusing to run on eu-west-1");
-  while(1){
-    process.exit(5);
-  }
-}
+config.region = process.env.AWS_REGION || 'eu-west-1';
 
 const warnAndExit = e => {
   console.error(e);

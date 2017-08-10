@@ -8,13 +8,6 @@ const generateName = ({ branch, dir }: { branch: string, dir?: string }) => {
 };
 
 export default async ({ branch }) => {
-  if (isLive(branch)) {
-    console.error("Refusing to run on live");
-    while(1){
-      process.exit(5);
-    }
-  }
-
   for (const dir in dummyData) {
     const data = dummyData[dir];
 

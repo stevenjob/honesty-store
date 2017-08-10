@@ -88,13 +88,6 @@ const s3Upload = async ({ content, bucket, key }) => {
 
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
 export default async ({ branch }) => {
-  if (isLive(branch)) {
-    console.error("Refusing to run on live");
-    while(1){
-      process.exit(5);
-    }
-  }
-
   const serviceSecret = generateSecret({
     secretPrefix: 'service',
     branch,
@@ -108,30 +101,28 @@ export default async ({ branch }) => {
 
   const baseUrl = aliasToBaseUrl(branch);
 
-  console.log(`s3Upload() for per-service json...`);
+  winston.info(`s3Upload() for per-service json...`);
   await s3Upload({
     content: readFileSync(`${__dirname}/../../cloudformation/web-cluster-per-service.json`, 'utf8'),
     bucket: `${templateBucket}-${config.region}`,
     key: 'per-service.json'
   });
 
-  const doZips = true;
-
   for (const { path, pattern } of dirs) {
-    console.log(`s3Upload() for ${path}...`);
-    if(doZips){
-      const zipFile = await zip(path, pattern);
-      await s3Upload({
-        content: zipFile,
-        bucket: `honesty-store-lambdas-${config.region}`,
-        key: `${path}.zip`
-      });
-    }
+    winston.info(`s3Upload() for ${path}...`);
+
+    const zipFile = await zip(path, pattern);
+    await s3Upload({
+      content: zipFile,
+      bucket: `honesty-store-lambdas-${config.region}`,
+      key: `${path}.zip`
+    });
   }
 
-  console.log(`ensureStack('stack-${branch}', ...)...`);
+  const stackName = `stack-${branch}`;
+  winston.info(`ensureStack('${stackName}')...`);
   await ensureStack({
-    name: `stack-${branch}`,
+    name: stackName,
     templateName: `${__dirname}/../../cloudformation/web-cluster.json`,
     params: {
       CertificateArn: getCertificateArn(branch),
