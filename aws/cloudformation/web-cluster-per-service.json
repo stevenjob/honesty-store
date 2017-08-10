@@ -68,6 +68,9 @@
     "ServicePrefix": {
       "Type": "String",
       "Description": "Prefix for all service-based names, e.g. \"honesty-store\", \"hs-<branch>\""
+    },
+    "IsLive": {
+      "Type": "String"
     }
   },
 
@@ -99,6 +102,9 @@
     },
     "WithTable": {
       "Fn::Equals": [ {"Ref": "WithTable"}, "Yes" ]
+    },
+    "IsLive": {
+      "Fn::Equals": [ {"Ref": "IsLive"}, "Yes" ]
     }
   },
 
@@ -106,6 +112,13 @@
     "Table": {
       "Condition": "WithTable",
       "Type": "AWS::DynamoDB::Table",
+      "DeletionPolicy": {
+        "Fn::If": [
+          "IsLive",
+          "Retain",
+          "Delete"
+        ]
+      },
       "Properties": {
         "TableName": {
           "Fn::Join": [

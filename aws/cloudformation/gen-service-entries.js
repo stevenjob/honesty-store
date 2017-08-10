@@ -49,6 +49,7 @@ const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => 
           "HSPrefix": { "Ref": "HSPrefix" },
           "HSDomainName": { "Ref": "HSDomainName" },
           "ServicePrefix" : { "Ref" : "ServicePrefix" },
+          "IsLive" : { "Ref" : "IsLive" },
         }
       }
     }

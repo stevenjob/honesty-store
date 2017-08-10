@@ -130,7 +130,8 @@ export default async ({ branch }) => {
       ServicePrefix: isLive(branch) ? 'honesty-store' : `hs-${branch}`,
       HSPrefix: isLive(branch) ? 'honesty-store' : 'hs',
       StripeKeyLive: generateStripeKey({ branch, type: 'live' }),
-      StripeKeyTest: generateStripeKey({ branch, type: 'test' })
+      StripeKeyTest: generateStripeKey({ branch, type: 'test' }),
+      IsLive: isLive(branch) ? 'Yes' : 'No'
     }});
 
   winston.info(`Deployed to ${baseUrl}`);

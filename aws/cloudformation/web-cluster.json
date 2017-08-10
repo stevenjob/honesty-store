@@ -38,8 +38,10 @@
     "StripeKeyTest": {
       "Type": "String",
       "Description": "Stripe secret - test"
+    },
+    "IsLive": {
+      "Type": "String"
     }
-
   },
   "Resources": {
     "RestApi": {
@@ -115,6 +117,9 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
+        },
+        "IsLive": {
+          "Ref": "IsLive"
         }
       }
     }
@@ -162,6 +167,9 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
+        },
+        "IsLive": {
+          "Ref": "IsLive"
         }
       }
     }
@@ -213,6 +221,9 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
+        },
+        "IsLive": {
+          "Ref": "IsLive"
         }
       }
     }
@@ -260,6 +271,9 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
+        },
+        "IsLive": {
+          "Ref": "IsLive"
         }
       }
     }
@@ -309,6 +323,9 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
+        },
+        "IsLive": {
+          "Ref": "IsLive"
         }
       }
     }
@@ -356,6 +373,9 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
+        },
+        "IsLive": {
+          "Ref": "IsLive"
         }
       }
     }
@@ -403,6 +423,9 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
+        },
+        "IsLive": {
+          "Ref": "IsLive"
         }
       }
     }
