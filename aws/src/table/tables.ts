@@ -72,11 +72,6 @@ const dirToTable = {
   store: ({ readCapacityUnits, writeCapacityUnits }) => template({
     readCapacityUnits,
     writeCapacityUnits
-  }),
-
-  ['transaction-slack']: ({ readCapacityUnits, writeCapacityUnits }) => template({
-    readCapacityUnits,
-    writeCapacityUnits
   })
 };
 

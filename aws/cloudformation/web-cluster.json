@@ -264,53 +264,6 @@
       }
     }
   },
-  "transactionslackStack": {
-    "Type": "AWS::CloudFormation::Stack",
-    "DependsOn": [
-      "RestApi"
-    ],
-    "Properties": {
-      "TemplateURL": {
-        "Fn::Join": [
-          "",
-          [
-            "https://s3.amazonaws.com/honesty-store-templates-",
-            {
-              "Ref": "AWS::Region"
-            },
-            "/per-service.json"
-          ]
-        ]
-      },
-      "TimeoutInMinutes": "10",
-      "Parameters": {
-        "ServiceName": "transaction-slack",
-        "ServiceSecret": {
-          "Ref": "ServiceSecret"
-        },
-        "IndexUserId": "No",
-        "ReadCapacityUnits": "1",
-        "WriteCapacityUnits": "1",
-        "LambdaS3Key": "transaction-slack.zip",
-        "LambdaTimeout": "10",
-        "LambdaHandler": "lib/bundle-min.handler",
-        "WithTable": "Yes",
-        "UserSecret": "",
-        "StripeKeyLive": "",
-        "StripeKeyTest": "",
-        "WithApiGateway": "No",
-        "HSPrefix": {
-          "Ref": "HSPrefix"
-        },
-        "HSDomainName": {
-          "Ref": "HSDomainName"
-        },
-        "ServicePrefix": {
-          "Ref": "ServicePrefix"
-        }
-      }
-    }
-  },
   "userStack": {
     "Type": "AWS::CloudFormation::Stack",
     "DependsOn": [

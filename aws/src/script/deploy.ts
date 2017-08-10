@@ -23,7 +23,6 @@ const dirs: DirConfig[] = [
   { path: 'user', pattern: 'lib/bundle-min.js' },
   { path: 'api', pattern: 'lib/bundle-min.js' },
   { path: 'web', pattern: '{node_modules,server,build}/**/*' },
-  { path: 'transaction-slack', pattern: 'lib/bundle-min.js' },
   { path: 'transaction-store', pattern: 'lib/bundle-min.js' },
 ];
 

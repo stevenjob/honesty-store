@@ -5,7 +5,6 @@ const config = [
   { name: "store",             capacity: { read: 3, write: 3 }, timeout: 10, handler: 'lib/bundle-min.handler' },
   { name: "topup",             capacity: { read: 1, write: 1 }, timeout: 10, handler: 'lib/bundle-min.handler' },
   { name: "transaction",       capacity: { read: 2, write: 2 }, timeout: 10, handler: 'lib/bundle-min.handler' },
-  { name: "transaction-slack", capacity: { read: 1, write: 1 }, timeout: 10, handler: 'lib/bundle-min.handler' },
   { name: "user",              capacity: { read: 1, write: 1 }, timeout: 10, handler: 'lib/bundle-min.handler' },
   { name: "web",               capacity: { read: 0, write: 0 }, timeout: 10, handler: 'server/lambda.handler' },
   { name: "api",               capacity: { read: 0, write: 0 }, timeout: 30, handler: 'lib/bundle-min.handler' }
