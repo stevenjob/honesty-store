@@ -2,7 +2,7 @@ import { CloudFormation } from 'aws-sdk';
 import { readFileSync } from 'fs';
 import * as winston from 'winston';
 
-export const ensureStack = async ({ name, templateName, params }) => {
+const createOrUpdateStack = async ({ name, templateName, params }) => {
   const cloudFormation = new CloudFormation({
     apiVersion: '2010-05-15',
     s3ForcePathStyle: true
@@ -55,4 +55,25 @@ export const ensureStack = async ({ name, templateName, params }) => {
     },
     {}
   );
+};
+
+const deleteStack = async ({ name }) => {
+  await new CloudFormation({ apiVersion: '2010-05-15' })
+    .deleteStack({
+      StackName: name
+    })
+    .promise();
+};
+
+export const ensureStack = async ({ name, templateName, params }) => {
+  try {
+    await createOrUpdateStack({ name, templateName, params });
+  } catch (e) {
+    if (e.code !== 'ValidationError' || e.message.indexOf('is in ROLLBACK_COMPLETE state') === -1) {
+      throw e;
+    }
+
+    await deleteStack({ name });
+    await createOrUpdateStack({ name, templateName, params });
+  }
 };
