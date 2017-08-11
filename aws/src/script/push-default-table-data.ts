@@ -1,11 +1,6 @@
 import { ensureTableData } from '../dynamodb/table';
 import { dummyData } from '../table/tables';
-import { isLive, prefix } from './deploy';
-
-const generateName = ({ branch, dir }: { branch: string, dir?: string }) => {
-  const base = isLive(branch) ? 'honesty-store' : `${prefix}-${branch}`;
-  return dir == null ? base : `${base}-${dir}`;
-};
+import { generateName } from '../name';
 
 export default async ({ branch }) => {
   for (const dir in dummyData) {
@@ -13,10 +8,8 @@ export default async ({ branch }) => {
       continue;
     }
 
-    const data = dummyData[dir];
-
     await ensureTableData({
-      data,
+      data: dummyData[dir],
       tableName: generateName({ branch, dir })
     });
   }

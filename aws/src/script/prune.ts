@@ -10,7 +10,7 @@ import { pruneTargetGroups } from '../elbv2/targetgroup';
 import { getOriginBranchNames } from '../git/branch';
 import { pruneFunctions } from '../lambda/function';
 import { aliasToName, pruneAliases } from '../route53/alias';
-import { prefix } from './deploy';
+import { prefix } from '../name';
 
 const force = process.env.FORCE;
 

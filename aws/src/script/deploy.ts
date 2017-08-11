@@ -3,9 +3,8 @@ import { readFileSync } from 'fs';
 import * as winston from 'winston';
 import { ensureStack } from '../cloudformation/stack';
 import { zip } from '../lambda/function';
+import { isLive, generateName } from '../name';
 import { aliasToBaseUrl, aliasToName } from '../route53/alias';
-
-export const prefix = 'hs';
 
 const templateBucket = 'honesty-store-templates';
 
@@ -24,8 +23,6 @@ const dirs: DirConfig[] = [
   { path: 'web', pattern: '{node_modules,server,build}/**/*' },
   { path: 'transaction-store', pattern: 'lib/bundle-min.js' }
 ];
-
-export const isLive = (branch) => branch === 'live';
 
 const getAndAssertEnvironment = (key) => {
   const value = process.env[key];
