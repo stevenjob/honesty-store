@@ -27,8 +27,7 @@ export interface PriceBreakdown {
   VAT: number;
 }
 
-export const calculateDonation = (storeId: string, price: number): number =>
-  storeId === '9a61dad3-f05c-46aa-a7e4-14311e9cccc5' ? Math.ceil(price * 0.1) : 0;
+export const calculateDonation = (_storeId: string, _price: number): number => 0;
 
 const scottLogicId = '9127e1db-2a2c-41c5-908f-781ac816b633';
 
