@@ -58,6 +58,10 @@
       "Type": "String",
       "Description": "Whether to create the transaction table, or simply use it"
     },
+    "CreateTabletransactionstore": {
+      "Type": "String",
+      "Description": "Whether to create the transaction-store table, or simply use it"
+    },
     "CreateTableuser": {
       "Type": "String",
       "Description": "Whether to create the user table, or simply use it"
@@ -290,6 +294,59 @@
         "WithTable": "Yes",
         "CreateTable": {
           "Ref": "CreateTabletransaction"
+        },
+        "UserSecret": "",
+        "StripeKeyLive": "",
+        "StripeKeyTest": "",
+        "WithApiGateway": "No",
+        "HSPrefix": {
+          "Ref": "HSPrefix"
+        },
+        "HSDomainName": {
+          "Ref": "HSDomainName"
+        },
+        "ServicePrefix": {
+          "Ref": "ServicePrefix"
+        },
+        "IsLive": {
+          "Ref": "IsLive"
+        }
+      }
+    }
+  },
+  "transactionstoreStack": {
+    "Type": "AWS::CloudFormation::Stack",
+    "DependsOn": [
+      "RestApi"
+    ],
+    "Properties": {
+      "TemplateURL": {
+        "Fn::Join": [
+          "",
+          [
+            "https://s3.amazonaws.com/honesty-store-templates-",
+            {
+              "Ref": "AWS::Region"
+            },
+            "/per-service.json"
+          ]
+        ]
+      },
+      "TimeoutInMinutes": "10",
+      "Parameters": {
+        "ServiceName": "transaction-store",
+        "ServiceSecret": {
+          "Ref": "ServiceSecret"
+        },
+        "IndexUserId": "No",
+        "ReadCapacityUnits": "1",
+        "WriteCapacityUnits": "1",
+        "LambdaS3Key": "transaction-store.zip",
+        "LambdaTimeout": "10",
+        "LambdaHandler": "lib/bundle-min.handler",
+        "WithTable": "Yes",
+        "CreateTable": {
+          "Ref": "CreateTabletransactionstore"
         },
         "UserSecret": "",
         "StripeKeyLive": "",
