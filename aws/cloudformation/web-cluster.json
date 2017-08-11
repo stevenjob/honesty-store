@@ -41,6 +41,26 @@
     },
     "IsLive": {
       "Type": "String"
+    },
+    "CreateTableitem": {
+      "Type": "String",
+      "Description": "Whether to create the item table, or simply use it"
+    },
+    "CreateTablestore": {
+      "Type": "String",
+      "Description": "Whether to create the store table, or simply use it"
+    },
+    "CreateTabletopup": {
+      "Type": "String",
+      "Description": "Whether to create the topup table, or simply use it"
+    },
+    "CreateTabletransaction": {
+      "Type": "String",
+      "Description": "Whether to create the transaction table, or simply use it"
+    },
+    "CreateTableuser": {
+      "Type": "String",
+      "Description": "Whether to create the user table, or simply use it"
     }
   },
   "Resources": {
@@ -105,6 +125,9 @@
         "LambdaTimeout": "10",
         "LambdaHandler": "lib/bundle-min.handler",
         "WithTable": "Yes",
+        "CreateTable": {
+          "Ref": "CreateTableitem"
+        },
         "UserSecret": "",
         "StripeKeyLive": "",
         "StripeKeyTest": "",
@@ -155,6 +178,9 @@
         "LambdaTimeout": "10",
         "LambdaHandler": "lib/bundle-min.handler",
         "WithTable": "Yes",
+        "CreateTable": {
+          "Ref": "CreateTablestore"
+        },
         "UserSecret": "",
         "StripeKeyLive": "",
         "StripeKeyTest": "",
@@ -205,6 +231,9 @@
         "LambdaTimeout": "10",
         "LambdaHandler": "lib/bundle-min.handler",
         "WithTable": "Yes",
+        "CreateTable": {
+          "Ref": "CreateTabletopup"
+        },
         "UserSecret": "",
         "StripeKeyLive": {
           "Ref": "StripeKeyLive"
@@ -259,6 +288,9 @@
         "LambdaTimeout": "10",
         "LambdaHandler": "lib/bundle-min.handler",
         "WithTable": "Yes",
+        "CreateTable": {
+          "Ref": "CreateTabletransaction"
+        },
         "UserSecret": "",
         "StripeKeyLive": "",
         "StripeKeyTest": "",
@@ -309,6 +341,9 @@
         "LambdaTimeout": "10",
         "LambdaHandler": "lib/bundle-min.handler",
         "WithTable": "Yes",
+        "CreateTable": {
+          "Ref": "CreateTableuser"
+        },
         "UserSecret": {
           "Ref": "UserSecret"
         },
@@ -361,6 +396,7 @@
         "LambdaTimeout": "10",
         "LambdaHandler": "server/lambda.handler",
         "WithTable": "No",
+        "CreateTable": "No",
         "UserSecret": "",
         "StripeKeyLive": "",
         "StripeKeyTest": "",
@@ -411,6 +447,7 @@
         "LambdaTimeout": "30",
         "LambdaHandler": "lib/bundle-min.handler",
         "WithTable": "No",
+        "CreateTable": "No",
         "UserSecret": "",
         "StripeKeyLive": "",
         "StripeKeyTest": "",

@@ -37,7 +37,12 @@
 
     "WithTable": {
       "Type": "String",
-      "Description": "Boolean describing whether a table should be created",
+      "Description": "Boolean describing whether a table should be referenced",
+      "AllowedValues": ["Yes", "No"]
+    },
+    "CreateTable": {
+      "Type": "String",
+      "Description": "Boolean describing whether a table should be created and owned by this stack (as opposed to pre-existing)",
       "AllowedValues": ["Yes", "No"]
     },
     "UserSecret": {
@@ -103,6 +108,9 @@
     "WithTable": {
       "Fn::Equals": [ {"Ref": "WithTable"}, "Yes" ]
     },
+    "CreateTable": {
+      "Fn::Equals": [ {"Ref": "CreateTable"}, "Yes" ]
+    },
     "IsLive": {
       "Fn::Equals": [ {"Ref": "IsLive"}, "Yes" ]
     }
@@ -110,7 +118,7 @@
 
   "Resources": {
     "Table": {
-      "Condition": "WithTable",
+      "Condition": "CreateTable",
       "Type": "AWS::DynamoDB::Table",
       "DeletionPolicy": {
         "Fn::If": [

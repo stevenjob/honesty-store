@@ -42,6 +42,7 @@ const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => 
           "LambdaTimeout": `${timeout}`,
           "LambdaHandler": `${handler}`,
           "WithTable": boolToYN(read && write),
+          "CreateTable": read && write ? { "Ref": `CreateTable${name}` } : "No",
           "UserSecret": name == "user" ? { "Ref": "UserSecret" } : "",
           "StripeKeyLive": name == "topup" ? { "Ref": "StripeKeyLive" } : "",
           "StripeKeyTest": name == "topup" ? { "Ref": "StripeKeyTest" } : "",

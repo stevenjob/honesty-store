@@ -105,3 +105,21 @@ export const ensureStreamingDB = async (tableName: string) => {
     return response.Table;
   }
 };
+
+export const tableExists = async table => {
+  try {
+    await new DynamoDB({ apiVersion: '2012-08-10' })
+      .describeTable({
+        TableName: table
+      })
+      .promise();
+
+    return true;
+  } catch (e) {
+    if (e.code !== 'ResourceNotFoundException') {
+      throw e;
+    }
+
+    return false;
+  }
+};

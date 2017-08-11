@@ -5,6 +5,7 @@ import { ensureStack } from '../cloudformation/stack';
 import { zip } from '../lambda/function';
 import { isLive, generateName } from '../name';
 import { aliasToBaseUrl, aliasToName } from '../route53/alias';
+import { tableExists } from '../dynamodb/table';
 
 const templateBucket = 'honesty-store-templates';
 
@@ -81,6 +82,16 @@ const s3Upload = async ({ content, bucket, key }) => {
     .promise();
 };
 
+const listExistingTables = async ({ dirs, branch }: { dirs: string[], branch: string }) =>
+  await Promise.all(
+    dirs.map(
+      async path => ({
+        path,
+        exists: await tableExists(generateName({ branch, dir: path }))
+      })
+    )
+  );
+
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
 export default async ({ branch }) => {
   const serviceSecret = generateSecret({
@@ -114,6 +125,17 @@ export default async ({ branch }) => {
     });
   }
 
+  const existingTableKeys = (await listExistingTables({
+    dirs: dirs.map(({ path }) => path),
+    branch
+  }))
+    .reduce((acc, { path, exists }) => {
+      const key = `CreateTable${path}`;
+      acc[key] = exists;
+      return acc;
+    },
+    {});
+
   const stackName = `stack-${branch}`;
   winston.info(`ensureStack('${stackName}')...`);
   await ensureStack({
@@ -128,7 +150,8 @@ export default async ({ branch }) => {
       HSPrefix: isLive(branch) ? 'honesty-store' : 'hs',
       StripeKeyLive: generateStripeKey({ branch, type: 'live' }),
       StripeKeyTest: generateStripeKey({ branch, type: 'test' }),
-      IsLive: isLive(branch) ? 'Yes' : 'No'
+      IsLive: isLive(branch) ? 'Yes' : 'No',
+      ...existingTableKeys
     }});
 
   winston.info(`Deployed to ${baseUrl}`);
