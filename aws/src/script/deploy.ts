@@ -130,7 +130,7 @@ export default async ({ branch }) => {
     branch
   }))
     .reduce((acc, { path, exists }) => {
-      const key = `CreateTable${path}`;
+      const key = `CreateTable${path}`.replace(/-/g, '');
       acc[key] = exists ? 'No' : 'Yes';
       return acc;
       // tslint:disable-next-line:align
