@@ -39,9 +39,6 @@
       "Type": "String",
       "Description": "Stripe secret - test"
     },
-    "IsLive": {
-      "Type": "String"
-    },
     "CreateTableitem": {
       "Type": "String",
       "Description": "Whether to create the item table, or simply use it"
@@ -144,9 +141,6 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
-        },
-        "IsLive": {
-          "Ref": "IsLive"
         }
       }
     }
@@ -197,9 +191,6 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
-        },
-        "IsLive": {
-          "Ref": "IsLive"
         }
       }
     }
@@ -254,9 +245,6 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
-        },
-        "IsLive": {
-          "Ref": "IsLive"
         }
       }
     }
@@ -307,9 +295,6 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
-        },
-        "IsLive": {
-          "Ref": "IsLive"
         }
       }
     }
@@ -360,9 +345,6 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
-        },
-        "IsLive": {
-          "Ref": "IsLive"
         }
       }
     }
@@ -415,9 +397,6 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
-        },
-        "IsLive": {
-          "Ref": "IsLive"
         }
       }
     }
@@ -466,9 +445,6 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
-        },
-        "IsLive": {
-          "Ref": "IsLive"
         }
       }
     }
@@ -517,9 +493,6 @@
         },
         "ServicePrefix": {
           "Ref": "ServicePrefix"
-        },
-        "IsLive": {
-          "Ref": "IsLive"
         }
       }
     }

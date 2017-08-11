@@ -151,7 +151,6 @@ export default async ({ branch }) => {
       HSPrefix: isLive(branch) ? 'honesty-store' : 'hs',
       StripeKeyLive: generateStripeKey({ branch, type: 'live' }),
       StripeKeyTest: generateStripeKey({ branch, type: 'test' }),
-      IsLive: isLive(branch) ? 'Yes' : 'No',
       ...existingTableKeys
     }});
 
