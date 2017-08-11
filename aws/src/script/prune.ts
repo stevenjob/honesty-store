@@ -9,8 +9,8 @@ import { pruneLoadBalancers } from '../elbv2/loadbalancer';
 import { pruneTargetGroups } from '../elbv2/targetgroup';
 import { getOriginBranchNames } from '../git/branch';
 import { pruneFunctions } from '../lambda/function';
-import { aliasToName, pruneAliases } from '../route53/alias';
 import { prefix } from '../name';
+import { aliasToName, pruneAliases } from '../route53/alias';
 
 const force = process.env.FORCE;
 

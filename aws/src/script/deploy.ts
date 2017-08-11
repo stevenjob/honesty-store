@@ -2,10 +2,10 @@ import { config, S3 } from 'aws-sdk';
 import { readFileSync } from 'fs';
 import * as winston from 'winston';
 import { ensureStack } from '../cloudformation/stack';
-import { zip } from '../lambda/function';
-import { isLive, generateName } from '../name';
-import { aliasToBaseUrl, aliasToName } from '../route53/alias';
 import { tableExists } from '../dynamodb/table';
+import { zip } from '../lambda/function';
+import { generateName, isLive } from '../name';
+import { aliasToBaseUrl, aliasToName } from '../route53/alias';
 
 const templateBucket = 'honesty-store-templates';
 
@@ -82,9 +82,9 @@ const s3Upload = async ({ content, bucket, key }) => {
     .promise();
 };
 
-const listExistingTables = async ({ dirs, branch }: { dirs: string[], branch: string }) =>
+const listExistingTables = async ({ services, branch }: { services: string[], branch: string }) =>
   await Promise.all(
-    dirs.map(
+    services.map(
       async path => ({
         path,
         exists: await tableExists(generateName({ branch, dir: path }))
@@ -126,15 +126,15 @@ export default async ({ branch }) => {
   }
 
   const existingTableKeys = (await listExistingTables({
-    dirs: dirs.map(({ path }) => path),
+    services: dirs.map(({ path }) => path),
     branch
   }))
     .reduce((acc, { path, exists }) => {
       const key = `CreateTable${path}`;
       acc[key] = exists;
       return acc;
-    },
-    {});
+      // tslint:disable-next-line:align
+    }, {});
 
   const stackName = `stack-${branch}`;
   winston.info(`ensureStack('${stackName}')...`);

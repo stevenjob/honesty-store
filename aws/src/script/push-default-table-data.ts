@@ -1,6 +1,6 @@
 import { ensureTableData } from '../dynamodb/table';
-import { dummyData } from '../table/tables';
 import { generateName } from '../name';
+import { dummyData } from '../table/tables';
 
 export default async ({ branch }) => {
   for (const dir in dummyData) {
