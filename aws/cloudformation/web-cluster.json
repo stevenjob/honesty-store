@@ -62,6 +62,38 @@
     "CreateTableuser": {
       "Type": "String",
       "Description": "Whether to create the user table, or simply use it"
+    },
+    "CreateLambdaitem": {
+      "Type": "String",
+      "Description": "Whether to create the item lambda, or simply use it"
+    },
+    "CreateLambdastore": {
+      "Type": "String",
+      "Description": "Whether to create the store lambda, or simply use it"
+    },
+    "CreateLambdatransaction": {
+      "Type": "String",
+      "Description": "Whether to create the transaction lambda, or simply use it"
+    },
+    "CreateLambdatopup": {
+      "Type": "String",
+      "Description": "Whether to create the topup lambda, or simply use it"
+    },
+    "CreateLambdauser": {
+      "Type": "String",
+      "Description": "Whether to create the user lambda, or simply use it"
+    },
+    "CreateLambdaapi": {
+      "Type": "String",
+      "Description": "Whether to create the api lambda, or simply use it"
+    },
+    "CreateLambdaweb": {
+      "Type": "String",
+      "Description": "Whether to create the web lambda, or simply use it"
+    },
+    "CreateLambdatransactionstore": {
+      "Type": "String",
+      "Description": "Whether to create the transaction-store lambda, or simply use it"
     }
   },
   "Resources": {
@@ -129,6 +161,9 @@
         "CreateTable": {
           "Ref": "CreateTableitem"
         },
+        "CreateLambda": {
+          "Ref": "CreateLambdaitem"
+        },
         "UserSecret": "",
         "StripeKeyLive": "",
         "StripeKeyTest": "",
@@ -179,6 +214,9 @@
         "CreateTable": {
           "Ref": "CreateTablestore"
         },
+        "CreateLambda": {
+          "Ref": "CreateLambdastore"
+        },
         "UserSecret": "",
         "StripeKeyLive": "",
         "StripeKeyTest": "",
@@ -228,6 +266,9 @@
         "WithTable": "Yes",
         "CreateTable": {
           "Ref": "CreateTabletopup"
+        },
+        "CreateLambda": {
+          "Ref": "CreateLambdatopup"
         },
         "UserSecret": "",
         "StripeKeyLive": {
@@ -283,6 +324,9 @@
         "CreateTable": {
           "Ref": "CreateTabletransaction"
         },
+        "CreateLambda": {
+          "Ref": "CreateLambdatransaction"
+        },
         "UserSecret": "",
         "StripeKeyLive": "",
         "StripeKeyTest": "",
@@ -332,6 +376,9 @@
         "WithTable": "Yes",
         "CreateTable": {
           "Ref": "CreateTabletransactionstore"
+        },
+        "CreateLambda": {
+          "Ref": "CreateLambdatransactionstore"
         },
         "UserSecret": "",
         "StripeKeyLive": "",
@@ -383,6 +430,9 @@
         "CreateTable": {
           "Ref": "CreateTableuser"
         },
+        "CreateLambda": {
+          "Ref": "CreateLambdauser"
+        },
         "UserSecret": {
           "Ref": "UserSecret"
         },
@@ -433,6 +483,9 @@
         "LambdaHandler": "server/lambda.handler",
         "WithTable": "No",
         "CreateTable": "No",
+        "CreateLambda": {
+          "Ref": "CreateLambdaweb"
+        },
         "UserSecret": "",
         "StripeKeyLive": "",
         "StripeKeyTest": "",
@@ -481,6 +534,9 @@
         "LambdaHandler": "lib/bundle-min.handler",
         "WithTable": "No",
         "CreateTable": "No",
+        "CreateLambda": {
+          "Ref": "CreateLambdaapi"
+        },
         "UserSecret": "",
         "StripeKeyLive": "",
         "StripeKeyTest": "",

@@ -45,6 +45,11 @@
       "Description": "Boolean describing whether a table should be created and owned by this stack (as opposed to pre-existing)",
       "AllowedValues": ["Yes", "No"]
     },
+    "CreateLambda": {
+      "Type": "String",
+      "Description": "Boolean describing whether a lambda should be created and owned by this stack (as opposed to pre-existing)",
+      "AllowedValues": ["Yes", "No"]
+    },
     "UserSecret": {
       "Type": "String",
       "Description": "The user secret (or empty) for this service"
@@ -79,7 +84,13 @@
   "Outputs": {
     "Lambda": {
       "Value": {
-        "Fn::GetAtt": [ "Lambda", "Arn" ]
+        "Fn::If": [
+          "CreateLambda",
+          {
+            "Fn::GetAtt": [ "Lambda", "Arn" ]
+          },
+          "n/a"
+        ]
       },
       "Export": {
         "Name": {
@@ -107,6 +118,9 @@
     },
     "CreateTable": {
       "Fn::Equals": [ {"Ref": "CreateTable"}, "Yes" ]
+    },
+    "CreateLambda": {
+      "Fn::Equals": [ {"Ref": "CreateLambda"}, "Yes" ]
     }
   },
 
@@ -178,6 +192,7 @@
     },
     "Lambda": {
       "Type": "AWS::Lambda::Function",
+      "Condition": "CreateLambda",
       "Properties": {
         "Code": {
           "S3Bucket": {

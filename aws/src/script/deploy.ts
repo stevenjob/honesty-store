@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import * as winston from 'winston';
 import { ensureStack } from '../cloudformation/stack';
 import { tableExists } from '../dynamodb/table';
-import { zip } from '../lambda/function';
+import { lambdaExists, zip } from '../lambda/function';
 import { generateName, isLive } from '../name';
 import { aliasToBaseUrl, aliasToName } from '../route53/alias';
 
@@ -93,6 +93,16 @@ const listExistingTables = async ({ services, branch }: { services: string[], br
     )
   );
 
+const listExistingLambdas = async ({ services, branch }: { services: string[], branch: string }) =>
+  await Promise.all(
+    services.map(
+      async path => ({
+        path,
+        exists: await lambdaExists(generateName({ branch, dir: path }))
+      })
+    )
+  );
+
 // TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
 export default async ({ branch }) => {
   const serviceSecret = generateSecret({
@@ -137,6 +147,17 @@ export default async ({ branch }) => {
       // tslint:disable-next-line:align
     }, {});
 
+  const existingLambdaKeys = (await listExistingLambdas({
+    services: dirs.map(({ path }) => path),
+    branch
+  }))
+    .reduce((acc, { path, exists }) => {
+      const key = `CreateLambda${path}`.replace(/-/g, '');
+      acc[key] = exists ? 'No' : 'Yes';
+      return acc;
+      // tslint:disable-next-line:align
+    }, {});
+
   const stackName = `stack-${branch}`;
   winston.info(`ensureStack('${stackName}')...`);
   await ensureStack({
@@ -151,7 +172,8 @@ export default async ({ branch }) => {
       HSPrefix: isLive(branch) ? 'honesty-store' : 'hs',
       StripeKeyLive: generateStripeKey({ branch, type: 'live' }),
       StripeKeyTest: generateStripeKey({ branch, type: 'test' }),
-      ...existingTableKeys
+      ...existingTableKeys,
+      ...existingLambdaKeys
     }});
 
   winston.info(`Deployed to ${baseUrl}`);

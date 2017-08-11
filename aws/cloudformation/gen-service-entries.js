@@ -44,6 +44,7 @@ const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => 
           "LambdaHandler": `${handler}`,
           "WithTable": boolToYN(read && write),
           "CreateTable": read && write ? { "Ref": `CreateTable${removeHyphens(name)}` } : "No",
+          "CreateLambda": { "Ref": `CreateLambda${removeHyphens(name)}` },
           "UserSecret": name == "user" ? { "Ref": "UserSecret" } : "",
           "StripeKeyLive": name == "topup" ? { "Ref": "StripeKeyLive" } : "",
           "StripeKeyTest": name == "topup" ? { "Ref": "StripeKeyTest" } : "",

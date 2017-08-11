@@ -194,6 +194,24 @@ export const ensureFunctionDynamoTrigger = async (
   }
 };
 
+export const lambdaExists = async name => {
+  try {
+    await new Lambda({ apiVersion: '2015-03-31' })
+      .getFunction({
+        FunctionName: name
+      })
+      .promise();
+
+    return true;
+  } catch (e) {
+    if (e.code !== 'ResourceNotFoundException') {
+      throw e;
+    }
+
+    return false;
+  }
+};
+
 export const ensureFunction = async ({
   name,
   codeDirectory,
