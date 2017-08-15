@@ -15,6 +15,110 @@ const boolToYN = b => b ? "Yes" : "No";
 
 const removeHyphens = str => str.replace(/-/g, '');
 
+const makeLambda = ({ handler, name, timeout }) => ({
+  [`${removeHyphens(name)}Lambda`]: {
+    "Type": "AWS::Lambda::Function",
+    "Properties": {
+      "Code": {
+        "S3Bucket": {
+          "Fn::Join": [
+            "",
+            [
+              "honesty-store-lambdas-",
+              { "Ref": "AWS::Region" }
+            ]
+          ]
+        },
+        "S3Key": { "Ref": `${name}.zip` }
+      },
+      "FunctionName": {
+        "Fn::Join": [
+          "",
+          [
+            { "Ref": "ServicePrefix" },
+            "-",
+            name
+          ]
+        ]
+      },
+      "Timeout": `${timeout}`,
+      "Role": {
+        "Fn::Join": [
+          "",
+          [
+            "arn:aws:iam::812374064424:role/",
+            { "Ref": "HSPrefix" },
+            "-lambda-dynamo-rw"
+          ]
+        ]
+      },
+      "Handler": {
+        "Ref": `${handler}`
+      },
+      "Environment": {
+        "Variables": {
+          "BASE_URL": {
+            "Fn::Join": [
+              "",
+              [
+                "https://",
+                { "Ref": "HSDomainName" }
+              ]
+            ]
+          },
+          "LAMBDA_BASE_URL": {
+            "Fn::Join": [
+              "",
+              [
+                "https://",
+                { "Ref": "HSDomainName" }
+              ]
+            ]
+          },
+          "SERVICE_TOKEN_SECRET": {
+            "Ref": "ServiceSecret"
+          },
+          "LIVE_STRIPE_KEY": (
+            name === 'topup'
+            ? { "Ref": "StripeKeyLive" }
+            : ""
+          ),
+          "TEST_STRIPE_KEY": (
+            name === 'topup'
+            ? { "Ref": "StripeKeyTest" }
+            : ""
+          ),
+          "SLACK_CHANNEL_PREFIX": "",
+          "USER_TOKEN_SECRET": (
+            name === 'user'
+            ? { "Ref": "UserSecret" }
+            : ""
+          ),
+          "TABLE_NAME": {
+            "Fn::If": [
+              "WithTable",
+              {
+                "Fn::Join": [
+                  "",
+                  [
+                    { "Ref": "ServicePrefix" },
+                    "-",
+                    `${name}`
+                  ]
+                ]
+              },
+              { "Ref": "AWS::NoValue" }
+            ]
+          }
+        }
+      },
+      "Runtime": "nodejs6.10",
+      "TracingConfig": {
+        "Mode": "Active"
+      }
+    }
+  }});
+
 const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => ({
     [`${removeHyphens(name)}Stack`]: {
       "Type": "AWS::CloudFormation::Stack",
@@ -39,7 +143,6 @@ const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => 
           "IndexUserId": boolToYN(name == "topup"),
           "ReadCapacityUnits": `${read}`,
           "WriteCapacityUnits": `${write}`,
-          "LambdaS3Key": `${name}.zip`,
           "LambdaTimeout": `${timeout}`,
           "LambdaHandler": `${handler}`,
           "WithTable": boolToYN(read && write),
@@ -58,11 +161,12 @@ const makeTemplate = ({ name, capacity: { read, write }, timeout, handler }) => 
 });
 
 const out = config
-  .map(makeTemplate)
-  .reduce((acc, ent) => {
-    const name = Object.keys(ent)[0];
-    acc[name] = ent[name];
-    return acc;
-  }, {});
+  .map(entry => {
+    return Object.assign(
+      {},
+      makeTemplate(entry),
+      makeLambda(entry));
+  })
+  .reduce((acc, ent) => Object.assign(acc, ent), {});
 
 console.log(JSON.stringify(out));
