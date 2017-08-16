@@ -96,6 +96,16 @@
       "Description": "Whether to create the transaction-store lambda, or simply use it"
     }
   },
+  "Conditions": {
+      "CreateLambdaitem": { "Fn::Equals": [ { "Ref": "CreateLambdaitem" }, "Yes" ] },
+      "CreateLambdastore": { "Fn::Equals": [ { "Ref": "CreateLambdastore" }, "Yes" ] },
+      "CreateLambdatransaction": { "Fn::Equals": [ { "Ref": "CreateLambdatransaction" }, "Yes" ] },
+      "CreateLambdatopup": { "Fn::Equals": [ { "Ref": "CreateLambdatopup" }, "Yes" ] },
+      "CreateLambdauser": { "Fn::Equals": [ { "Ref": "CreateLambdauser" }, "Yes" ] },
+      "CreateLambdaapi": { "Fn::Equals": [ { "Ref": "CreateLambdaapi" }, "Yes" ] },
+      "CreateLambdaweb": { "Fn::Equals": [ { "Ref": "CreateLambdaweb" }, "Yes" ] },
+      "CreateLambdatransactionstore": { "Fn::Equals": [ { "Ref": "CreateLambdatransactionstore" }, "Yes" ] }
+  },
   "Resources": {
     "RestApi": {
       "Type": "AWS::ApiGateway::RestApi",
@@ -181,6 +191,7 @@
   },
   "itemLambda": {
     "Type": "AWS::Lambda::Function",
+    "Condition": "CreateLambdaitem",
     "Properties": {
       "Code": {
         "S3Bucket": {
@@ -254,23 +265,15 @@
           "SLACK_CHANNEL_PREFIX": "",
           "USER_TOKEN_SECRET": "",
           "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "item"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "ServicePrefix"
+                },
+                "-",
+                "item"
+              ]
             ]
           }
         }
@@ -335,6 +338,7 @@
   },
   "storeLambda": {
     "Type": "AWS::Lambda::Function",
+    "Condition": "CreateLambdastore",
     "Properties": {
       "Code": {
         "S3Bucket": {
@@ -408,23 +412,15 @@
           "SLACK_CHANNEL_PREFIX": "",
           "USER_TOKEN_SECRET": "",
           "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "store"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "ServicePrefix"
+                },
+                "-",
+                "store"
+              ]
             ]
           }
         }
@@ -493,6 +489,7 @@
   },
   "topupLambda": {
     "Type": "AWS::Lambda::Function",
+    "Condition": "CreateLambdatopup",
     "Properties": {
       "Code": {
         "S3Bucket": {
@@ -570,23 +567,15 @@
           "SLACK_CHANNEL_PREFIX": "",
           "USER_TOKEN_SECRET": "",
           "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "topup"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "ServicePrefix"
+                },
+                "-",
+                "topup"
+              ]
             ]
           }
         }
@@ -651,6 +640,7 @@
   },
   "transactionLambda": {
     "Type": "AWS::Lambda::Function",
+    "Condition": "CreateLambdatransaction",
     "Properties": {
       "Code": {
         "S3Bucket": {
@@ -724,23 +714,15 @@
           "SLACK_CHANNEL_PREFIX": "",
           "USER_TOKEN_SECRET": "",
           "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "transaction"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "ServicePrefix"
+                },
+                "-",
+                "transaction"
+              ]
             ]
           }
         }
@@ -805,6 +787,7 @@
   },
   "transactionstoreLambda": {
     "Type": "AWS::Lambda::Function",
+    "Condition": "CreateLambdatransactionstore",
     "Properties": {
       "Code": {
         "S3Bucket": {
@@ -878,23 +861,15 @@
           "SLACK_CHANNEL_PREFIX": "",
           "USER_TOKEN_SECRET": "",
           "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "transaction-store"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "ServicePrefix"
+                },
+                "-",
+                "transaction-store"
+              ]
             ]
           }
         }
@@ -961,6 +936,7 @@
   },
   "userLambda": {
     "Type": "AWS::Lambda::Function",
+    "Condition": "CreateLambdauser",
     "Properties": {
       "Code": {
         "S3Bucket": {
@@ -1036,23 +1012,15 @@
             "Ref": "UserSecret"
           },
           "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "user"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "ServicePrefix"
+                },
+                "-",
+                "user"
+              ]
             ]
           }
         }
@@ -1115,6 +1083,7 @@
   },
   "webLambda": {
     "Type": "AWS::Lambda::Function",
+    "Condition": "CreateLambdaweb",
     "Properties": {
       "Code": {
         "S3Bucket": {
@@ -1187,26 +1156,7 @@
           "TEST_STRIPE_KEY": "",
           "SLACK_CHANNEL_PREFIX": "",
           "USER_TOKEN_SECRET": "",
-          "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "web"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
-            ]
-          }
+          "TABLE_NAME": ""
         }
       },
       "Runtime": "nodejs6.10",
@@ -1267,6 +1217,7 @@
   },
   "apiLambda": {
     "Type": "AWS::Lambda::Function",
+    "Condition": "CreateLambdaapi",
     "Properties": {
       "Code": {
         "S3Bucket": {
@@ -1339,26 +1290,7 @@
           "TEST_STRIPE_KEY": "",
           "SLACK_CHANNEL_PREFIX": "",
           "USER_TOKEN_SECRET": "",
-          "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "api"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
-            ]
-          }
+          "TABLE_NAME": ""
         }
       },
       "Runtime": "nodejs6.10",
@@ -1412,6 +1344,7 @@
 
     "ApiGatewayWebRootMethod": {
       "Type": "AWS::ApiGateway::Method",
+      "Condition": "CreateLambdaweb",
       "Properties": {
         "RestApiId": {
           "Ref": "RestApi"
@@ -1433,8 +1366,8 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "webStack",
-                    "Outputs.Lambda"
+                    "webLambda",
+                    "Arn"
                   ]
                 },
                 "/invocations"
@@ -1473,6 +1406,7 @@
     },
     "ApiGatewayApiMethod": {
       "Type": "AWS::ApiGateway::Method",
+      "Condition": "CreateLambdaapi",
       "Properties": {
         "RestApiId": {
           "Ref": "RestApi"
@@ -1494,8 +1428,8 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "apiStack",
-                    "Outputs.Lambda"
+                    "apiLambda",
+                    "Arn"
                   ]
                 },
                 "/invocations"
@@ -1523,6 +1457,7 @@
     },
     "ApiGatewayWebProxyMethod": {
       "Type": "AWS::ApiGateway::Method",
+      "Condition": "CreateLambdaweb",
       "Properties": {
         "RestApiId": {
           "Ref": "RestApi"
@@ -1544,8 +1479,8 @@
                 ":lambda:path/2015-03-31/functions/",
                 {
                   "Fn::GetAtt": [
-                    "webStack",
-                    "Outputs.Lambda"
+                    "webLambda",
+                    "Arn"
                   ]
                 },
                 "/invocations"

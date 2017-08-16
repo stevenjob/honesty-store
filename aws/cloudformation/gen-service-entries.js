@@ -15,9 +15,10 @@ const boolToYN = b => b ? "Yes" : "No";
 
 const removeHyphens = str => str.replace(/-/g, '');
 
-const makeLambda = ({ handler, name, timeout }) => ({
+const makeLambda = ({ handler, name, timeout, capacity: { read, write } }) => ({
   [`${removeHyphens(name)}Lambda`]: {
     "Type": "AWS::Lambda::Function",
+    "Condition": `CreateLambda${removeHyphens(name)}`,
     "Properties": {
       "Code": {
         "S3Bucket": {
@@ -92,22 +93,20 @@ const makeLambda = ({ handler, name, timeout }) => ({
             ? { "Ref": "UserSecret" }
             : ""
           ),
-          "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    { "Ref": "ServicePrefix" },
-                    "-",
-                    `${name}`
-                  ]
+          "TABLE_NAME": (
+            read && write
+            ? {
+              "Fn::Join": [
+                "",
+                [
+                  { "Ref": "ServicePrefix" },
+                  "-",
+                  `${name}`
                 ]
-              },
-              { "Ref": "AWS::NoValue" }
-            ]
-          }
+              ]
+            }
+            : ""
+          )
         }
       },
       "Runtime": "nodejs6.10",
