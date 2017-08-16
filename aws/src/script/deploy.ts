@@ -12,18 +12,17 @@ const templateBucket = 'honesty-store-templates';
 interface DirConfig {
   path: string;
   pattern: string;
-  db: boolean;
 }
 
 const dirs: DirConfig[] = [
-  { path: 'item', pattern: 'lib/bundle-min.js', db: true },
-  { path: 'store', pattern: 'lib/bundle-min.js', db: true },
-  { path: 'transaction', pattern: 'lib/bundle-min.js', db: true },
-  { path: 'topup', pattern: 'lib/bundle-min.js', db: true },
-  { path: 'user', pattern: 'lib/bundle-min.js', db: true },
-  { path: 'api', pattern: 'lib/bundle-min.js', db: false },
-  { path: 'web', pattern: '{node_modules,server,build}/**/*', db: false },
-  { path: 'transaction-store', pattern: 'lib/bundle-min.js', db: true }
+  { path: 'item', pattern: 'lib/bundle-min.js' },
+  { path: 'store', pattern: 'lib/bundle-min.js' },
+  { path: 'transaction', pattern: 'lib/bundle-min.js' },
+  { path: 'topup', pattern: 'lib/bundle-min.js' },
+  { path: 'user', pattern: 'lib/bundle-min.js' },
+  { path: 'api', pattern: 'lib/bundle-min.js' },
+  { path: 'web', pattern: '{node_modules,server,build}/**/*' },
+  { path: 'transaction-store', pattern: 'lib/bundle-min.js' }
 ];
 
 const getAndAssertEnvironment = (key) => {
@@ -137,7 +136,7 @@ export default async ({ branch }) => {
   }
 
   const existingTableKeys = (await listExistingTables({
-    services: dirs.filter(({ db }) => db).map(({ path }) => path),
+    services: dirs.map(({ path }) => path),
     branch
   }))
     .reduce((acc, { path, exists }) => {
