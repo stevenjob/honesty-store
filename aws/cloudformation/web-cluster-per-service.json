@@ -23,6 +23,10 @@
       "Description": "table capacity - write"
     },
 
+    "LambdaS3Key": {
+      "Type": "String",
+      "Description": "something about the lambda code - maybe a zip ref?"
+    },
     "LambdaTimeout": {
       "Type": "String"
     },
@@ -74,6 +78,31 @@
     "ServicePrefix": {
       "Type": "String",
       "Description": "Prefix for all service-based names, e.g. \"honesty-store\", \"hs-<branch>\""
+    }
+  },
+
+  "Outputs": {
+    "Lambda": {
+      "Value": {
+        "Fn::If": [
+          "CreateLambda",
+          {
+            "Fn::GetAtt": [ "Lambda", "Arn" ]
+          },
+          "n/a"
+        ]
+      },
+      "Export": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              "Lambda-Arn-",
+              { "Ref": "ServiceName" }
+            ]
+          ]
+        }
+      }
     }
   },
 
@@ -177,7 +206,10 @@
           ]
         },
         "Principal": "apigateway.amazonaws.com"
-      }
+      },
+      "DependsOn": [
+        "Lambda"
+      ]
     }
   }
 }
