@@ -154,6 +154,7 @@
         "IndexUserId": "No",
         "ReadCapacityUnits": "2",
         "WriteCapacityUnits": "1",
+        "LambdaS3Key": "item.zip",
         "LambdaTimeout": "10",
         "LambdaHandler": "lib/bundle-min.handler",
         "WithTable": "Yes",
@@ -176,112 +177,6 @@
         "ServicePrefix": {
           "Ref": "ServicePrefix"
         }
-      }
-    }
-  },
-  "itemLambda": {
-    "Type": "AWS::Lambda::Function",
-    "Properties": {
-      "Code": {
-        "S3Bucket": {
-          "Fn::Join": [
-            "",
-            [
-              "honesty-store-lambdas-",
-              {
-                "Ref": "AWS::Region"
-              }
-            ]
-          ]
-        },
-        "S3Key": {
-          "Ref": "item.zip"
-        }
-      },
-      "FunctionName": {
-        "Fn::Join": [
-          "",
-          [
-            {
-              "Ref": "ServicePrefix"
-            },
-            "-",
-            "item"
-          ]
-        ]
-      },
-      "Timeout": "10",
-      "Role": {
-        "Fn::Join": [
-          "",
-          [
-            "arn:aws:iam::812374064424:role/",
-            {
-              "Ref": "HSPrefix"
-            },
-            "-lambda-dynamo-rw"
-          ]
-        ]
-      },
-      "Handler": {
-        "Ref": "lib/bundle-min.handler"
-      },
-      "Environment": {
-        "Variables": {
-          "BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "LAMBDA_BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "SERVICE_TOKEN_SECRET": {
-            "Ref": "ServiceSecret"
-          },
-          "LIVE_STRIPE_KEY": "",
-          "TEST_STRIPE_KEY": "",
-          "SLACK_CHANNEL_PREFIX": "",
-          "USER_TOKEN_SECRET": "",
-          "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "item"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
-            ]
-          }
-        }
-      },
-      "Runtime": "nodejs6.10",
-      "TracingConfig": {
-        "Mode": "Active"
       }
     }
   },
@@ -312,6 +207,7 @@
         "IndexUserId": "No",
         "ReadCapacityUnits": "3",
         "WriteCapacityUnits": "3",
+        "LambdaS3Key": "store.zip",
         "LambdaTimeout": "10",
         "LambdaHandler": "lib/bundle-min.handler",
         "WithTable": "Yes",
@@ -334,112 +230,6 @@
         "ServicePrefix": {
           "Ref": "ServicePrefix"
         }
-      }
-    }
-  },
-  "storeLambda": {
-    "Type": "AWS::Lambda::Function",
-    "Properties": {
-      "Code": {
-        "S3Bucket": {
-          "Fn::Join": [
-            "",
-            [
-              "honesty-store-lambdas-",
-              {
-                "Ref": "AWS::Region"
-              }
-            ]
-          ]
-        },
-        "S3Key": {
-          "Ref": "store.zip"
-        }
-      },
-      "FunctionName": {
-        "Fn::Join": [
-          "",
-          [
-            {
-              "Ref": "ServicePrefix"
-            },
-            "-",
-            "store"
-          ]
-        ]
-      },
-      "Timeout": "10",
-      "Role": {
-        "Fn::Join": [
-          "",
-          [
-            "arn:aws:iam::812374064424:role/",
-            {
-              "Ref": "HSPrefix"
-            },
-            "-lambda-dynamo-rw"
-          ]
-        ]
-      },
-      "Handler": {
-        "Ref": "lib/bundle-min.handler"
-      },
-      "Environment": {
-        "Variables": {
-          "BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "LAMBDA_BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "SERVICE_TOKEN_SECRET": {
-            "Ref": "ServiceSecret"
-          },
-          "LIVE_STRIPE_KEY": "",
-          "TEST_STRIPE_KEY": "",
-          "SLACK_CHANNEL_PREFIX": "",
-          "USER_TOKEN_SECRET": "",
-          "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "store"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
-            ]
-          }
-        }
-      },
-      "Runtime": "nodejs6.10",
-      "TracingConfig": {
-        "Mode": "Active"
       }
     }
   },
@@ -470,6 +260,7 @@
         "IndexUserId": "Yes",
         "ReadCapacityUnits": "1",
         "WriteCapacityUnits": "1",
+        "LambdaS3Key": "topup.zip",
         "LambdaTimeout": "10",
         "LambdaHandler": "lib/bundle-min.handler",
         "WithTable": "Yes",
@@ -496,116 +287,6 @@
         "ServicePrefix": {
           "Ref": "ServicePrefix"
         }
-      }
-    }
-  },
-  "topupLambda": {
-    "Type": "AWS::Lambda::Function",
-    "Properties": {
-      "Code": {
-        "S3Bucket": {
-          "Fn::Join": [
-            "",
-            [
-              "honesty-store-lambdas-",
-              {
-                "Ref": "AWS::Region"
-              }
-            ]
-          ]
-        },
-        "S3Key": {
-          "Ref": "topup.zip"
-        }
-      },
-      "FunctionName": {
-        "Fn::Join": [
-          "",
-          [
-            {
-              "Ref": "ServicePrefix"
-            },
-            "-",
-            "topup"
-          ]
-        ]
-      },
-      "Timeout": "10",
-      "Role": {
-        "Fn::Join": [
-          "",
-          [
-            "arn:aws:iam::812374064424:role/",
-            {
-              "Ref": "HSPrefix"
-            },
-            "-lambda-dynamo-rw"
-          ]
-        ]
-      },
-      "Handler": {
-        "Ref": "lib/bundle-min.handler"
-      },
-      "Environment": {
-        "Variables": {
-          "BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "LAMBDA_BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "SERVICE_TOKEN_SECRET": {
-            "Ref": "ServiceSecret"
-          },
-          "LIVE_STRIPE_KEY": {
-            "Ref": "StripeKeyLive"
-          },
-          "TEST_STRIPE_KEY": {
-            "Ref": "StripeKeyTest"
-          },
-          "SLACK_CHANNEL_PREFIX": "",
-          "USER_TOKEN_SECRET": "",
-          "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "topup"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
-            ]
-          }
-        }
-      },
-      "Runtime": "nodejs6.10",
-      "TracingConfig": {
-        "Mode": "Active"
       }
     }
   },
@@ -636,6 +317,7 @@
         "IndexUserId": "No",
         "ReadCapacityUnits": "2",
         "WriteCapacityUnits": "2",
+        "LambdaS3Key": "transaction.zip",
         "LambdaTimeout": "10",
         "LambdaHandler": "lib/bundle-min.handler",
         "WithTable": "Yes",
@@ -658,112 +340,6 @@
         "ServicePrefix": {
           "Ref": "ServicePrefix"
         }
-      }
-    }
-  },
-  "transactionLambda": {
-    "Type": "AWS::Lambda::Function",
-    "Properties": {
-      "Code": {
-        "S3Bucket": {
-          "Fn::Join": [
-            "",
-            [
-              "honesty-store-lambdas-",
-              {
-                "Ref": "AWS::Region"
-              }
-            ]
-          ]
-        },
-        "S3Key": {
-          "Ref": "transaction.zip"
-        }
-      },
-      "FunctionName": {
-        "Fn::Join": [
-          "",
-          [
-            {
-              "Ref": "ServicePrefix"
-            },
-            "-",
-            "transaction"
-          ]
-        ]
-      },
-      "Timeout": "10",
-      "Role": {
-        "Fn::Join": [
-          "",
-          [
-            "arn:aws:iam::812374064424:role/",
-            {
-              "Ref": "HSPrefix"
-            },
-            "-lambda-dynamo-rw"
-          ]
-        ]
-      },
-      "Handler": {
-        "Ref": "lib/bundle-min.handler"
-      },
-      "Environment": {
-        "Variables": {
-          "BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "LAMBDA_BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "SERVICE_TOKEN_SECRET": {
-            "Ref": "ServiceSecret"
-          },
-          "LIVE_STRIPE_KEY": "",
-          "TEST_STRIPE_KEY": "",
-          "SLACK_CHANNEL_PREFIX": "",
-          "USER_TOKEN_SECRET": "",
-          "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "transaction"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
-            ]
-          }
-        }
-      },
-      "Runtime": "nodejs6.10",
-      "TracingConfig": {
-        "Mode": "Active"
       }
     }
   },
@@ -794,6 +370,7 @@
         "IndexUserId": "No",
         "ReadCapacityUnits": "1",
         "WriteCapacityUnits": "1",
+        "LambdaS3Key": "transaction-store.zip",
         "LambdaTimeout": "10",
         "LambdaHandler": "lib/bundle-min.handler",
         "WithTable": "Yes",
@@ -816,112 +393,6 @@
         "ServicePrefix": {
           "Ref": "ServicePrefix"
         }
-      }
-    }
-  },
-  "transactionstoreLambda": {
-    "Type": "AWS::Lambda::Function",
-    "Properties": {
-      "Code": {
-        "S3Bucket": {
-          "Fn::Join": [
-            "",
-            [
-              "honesty-store-lambdas-",
-              {
-                "Ref": "AWS::Region"
-              }
-            ]
-          ]
-        },
-        "S3Key": {
-          "Ref": "transaction-store.zip"
-        }
-      },
-      "FunctionName": {
-        "Fn::Join": [
-          "",
-          [
-            {
-              "Ref": "ServicePrefix"
-            },
-            "-",
-            "transaction-store"
-          ]
-        ]
-      },
-      "Timeout": "10",
-      "Role": {
-        "Fn::Join": [
-          "",
-          [
-            "arn:aws:iam::812374064424:role/",
-            {
-              "Ref": "HSPrefix"
-            },
-            "-lambda-dynamo-rw"
-          ]
-        ]
-      },
-      "Handler": {
-        "Ref": "lib/bundle-min.handler"
-      },
-      "Environment": {
-        "Variables": {
-          "BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "LAMBDA_BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "SERVICE_TOKEN_SECRET": {
-            "Ref": "ServiceSecret"
-          },
-          "LIVE_STRIPE_KEY": "",
-          "TEST_STRIPE_KEY": "",
-          "SLACK_CHANNEL_PREFIX": "",
-          "USER_TOKEN_SECRET": "",
-          "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "transaction-store"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
-            ]
-          }
-        }
-      },
-      "Runtime": "nodejs6.10",
-      "TracingConfig": {
-        "Mode": "Active"
       }
     }
   },
@@ -952,6 +423,7 @@
         "IndexUserId": "No",
         "ReadCapacityUnits": "1",
         "WriteCapacityUnits": "1",
+        "LambdaS3Key": "user.zip",
         "LambdaTimeout": "10",
         "LambdaHandler": "lib/bundle-min.handler",
         "WithTable": "Yes",
@@ -976,114 +448,6 @@
         "ServicePrefix": {
           "Ref": "ServicePrefix"
         }
-      }
-    }
-  },
-  "userLambda": {
-    "Type": "AWS::Lambda::Function",
-    "Properties": {
-      "Code": {
-        "S3Bucket": {
-          "Fn::Join": [
-            "",
-            [
-              "honesty-store-lambdas-",
-              {
-                "Ref": "AWS::Region"
-              }
-            ]
-          ]
-        },
-        "S3Key": {
-          "Ref": "user.zip"
-        }
-      },
-      "FunctionName": {
-        "Fn::Join": [
-          "",
-          [
-            {
-              "Ref": "ServicePrefix"
-            },
-            "-",
-            "user"
-          ]
-        ]
-      },
-      "Timeout": "10",
-      "Role": {
-        "Fn::Join": [
-          "",
-          [
-            "arn:aws:iam::812374064424:role/",
-            {
-              "Ref": "HSPrefix"
-            },
-            "-lambda-dynamo-rw"
-          ]
-        ]
-      },
-      "Handler": {
-        "Ref": "lib/bundle-min.handler"
-      },
-      "Environment": {
-        "Variables": {
-          "BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "LAMBDA_BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "SERVICE_TOKEN_SECRET": {
-            "Ref": "ServiceSecret"
-          },
-          "LIVE_STRIPE_KEY": "",
-          "TEST_STRIPE_KEY": "",
-          "SLACK_CHANNEL_PREFIX": "",
-          "USER_TOKEN_SECRET": {
-            "Ref": "UserSecret"
-          },
-          "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "user"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
-            ]
-          }
-        }
-      },
-      "Runtime": "nodejs6.10",
-      "TracingConfig": {
-        "Mode": "Active"
       }
     }
   },
@@ -1114,6 +478,7 @@
         "IndexUserId": "No",
         "ReadCapacityUnits": "0",
         "WriteCapacityUnits": "0",
+        "LambdaS3Key": "web.zip",
         "LambdaTimeout": "10",
         "LambdaHandler": "server/lambda.handler",
         "WithTable": "No",
@@ -1134,112 +499,6 @@
         "ServicePrefix": {
           "Ref": "ServicePrefix"
         }
-      }
-    }
-  },
-  "webLambda": {
-    "Type": "AWS::Lambda::Function",
-    "Properties": {
-      "Code": {
-        "S3Bucket": {
-          "Fn::Join": [
-            "",
-            [
-              "honesty-store-lambdas-",
-              {
-                "Ref": "AWS::Region"
-              }
-            ]
-          ]
-        },
-        "S3Key": {
-          "Ref": "web.zip"
-        }
-      },
-      "FunctionName": {
-        "Fn::Join": [
-          "",
-          [
-            {
-              "Ref": "ServicePrefix"
-            },
-            "-",
-            "web"
-          ]
-        ]
-      },
-      "Timeout": "10",
-      "Role": {
-        "Fn::Join": [
-          "",
-          [
-            "arn:aws:iam::812374064424:role/",
-            {
-              "Ref": "HSPrefix"
-            },
-            "-lambda-dynamo-rw"
-          ]
-        ]
-      },
-      "Handler": {
-        "Ref": "server/lambda.handler"
-      },
-      "Environment": {
-        "Variables": {
-          "BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "LAMBDA_BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "SERVICE_TOKEN_SECRET": {
-            "Ref": "ServiceSecret"
-          },
-          "LIVE_STRIPE_KEY": "",
-          "TEST_STRIPE_KEY": "",
-          "SLACK_CHANNEL_PREFIX": "",
-          "USER_TOKEN_SECRET": "",
-          "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "web"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
-            ]
-          }
-        }
-      },
-      "Runtime": "nodejs6.10",
-      "TracingConfig": {
-        "Mode": "Active"
       }
     }
   },
@@ -1270,6 +529,7 @@
         "IndexUserId": "No",
         "ReadCapacityUnits": "0",
         "WriteCapacityUnits": "0",
+        "LambdaS3Key": "api.zip",
         "LambdaTimeout": "30",
         "LambdaHandler": "lib/bundle-min.handler",
         "WithTable": "No",
@@ -1290,112 +550,6 @@
         "ServicePrefix": {
           "Ref": "ServicePrefix"
         }
-      }
-    }
-  },
-  "apiLambda": {
-    "Type": "AWS::Lambda::Function",
-    "Properties": {
-      "Code": {
-        "S3Bucket": {
-          "Fn::Join": [
-            "",
-            [
-              "honesty-store-lambdas-",
-              {
-                "Ref": "AWS::Region"
-              }
-            ]
-          ]
-        },
-        "S3Key": {
-          "Ref": "api.zip"
-        }
-      },
-      "FunctionName": {
-        "Fn::Join": [
-          "",
-          [
-            {
-              "Ref": "ServicePrefix"
-            },
-            "-",
-            "api"
-          ]
-        ]
-      },
-      "Timeout": "30",
-      "Role": {
-        "Fn::Join": [
-          "",
-          [
-            "arn:aws:iam::812374064424:role/",
-            {
-              "Ref": "HSPrefix"
-            },
-            "-lambda-dynamo-rw"
-          ]
-        ]
-      },
-      "Handler": {
-        "Ref": "lib/bundle-min.handler"
-      },
-      "Environment": {
-        "Variables": {
-          "BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "LAMBDA_BASE_URL": {
-            "Fn::Join": [
-              "",
-              [
-                "https://",
-                {
-                  "Ref": "HSDomainName"
-                }
-              ]
-            ]
-          },
-          "SERVICE_TOKEN_SECRET": {
-            "Ref": "ServiceSecret"
-          },
-          "LIVE_STRIPE_KEY": "",
-          "TEST_STRIPE_KEY": "",
-          "SLACK_CHANNEL_PREFIX": "",
-          "USER_TOKEN_SECRET": "",
-          "TABLE_NAME": {
-            "Fn::If": [
-              "WithTable",
-              {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Ref": "ServicePrefix"
-                    },
-                    "-",
-                    "api"
-                  ]
-                ]
-              },
-              {
-                "Ref": "AWS::NoValue"
-              }
-            ]
-          }
-        }
-      },
-      "Runtime": "nodejs6.10",
-      "TracingConfig": {
-        "Mode": "Active"
       }
     }
   },

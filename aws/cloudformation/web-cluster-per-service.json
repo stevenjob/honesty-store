@@ -190,6 +190,99 @@
         }
       }
     },
+    "Lambda": {
+      "Type": "AWS::Lambda::Function",
+      "Condition": "CreateLambda",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Join": [
+              "",
+              [
+                "honesty-store-lambdas-",
+                { "Ref": "AWS::Region" }
+              ]
+            ]
+          },
+          "S3Key": { "Ref": "LambdaS3Key" }
+        },
+        "FunctionName": {
+          "Fn::Join": [
+            "",
+            [
+              { "Ref": "ServicePrefix" },
+              "-",
+              { "Ref": "ServiceName" }
+            ]
+          ]
+        },
+        "Timeout": {
+          "Ref": "LambdaTimeout"
+        },
+        "Role": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:aws:iam::812374064424:role/",
+              { "Ref": "HSPrefix" },
+              "-lambda-dynamo-rw"
+            ]
+          ]
+        },
+        "Handler": {
+          "Ref": "LambdaHandler"
+        },
+        "Environment": {
+          "Variables": {
+            "BASE_URL": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  { "Ref": "HSDomainName" }
+                ]
+              ]
+            },
+            "LAMBDA_BASE_URL": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  { "Ref": "HSDomainName" }
+                ]
+              ]
+            },
+            "SERVICE_TOKEN_SECRET": {
+              "Ref": "ServiceSecret"
+            },
+            "LIVE_STRIPE_KEY": { "Ref": "StripeKeyLive" },
+            "TEST_STRIPE_KEY": { "Ref": "StripeKeyTest" },
+            "SLACK_CHANNEL_PREFIX": "",
+            "USER_TOKEN_SECRET": { "Ref": "UserSecret" },
+            "TABLE_NAME": {
+              "Fn::If": [
+                "WithTable",
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      { "Ref": "ServicePrefix" },
+                      "-",
+                      { "Ref": "ServiceName" }
+                    ]
+                  ]
+                },
+                { "Ref": "AWS::NoValue" }
+              ]
+            }
+          }
+        },
+        "Runtime": "nodejs6.10",
+        "TracingConfig": {
+          "Mode": "Active"
+        }
+      }
+    },
     "LambdaApiGateway": {
       "Condition": "WithApiGateway",
       "Type": "AWS::Lambda::Permission",
