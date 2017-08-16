@@ -194,9 +194,7 @@
             ]
           ]
         },
-        "S3Key": {
-          "Ref": "item.zip"
-        }
+        "S3Key": "item.zip"
       },
       "FunctionName": {
         "Fn::Join": [
@@ -223,9 +221,7 @@
           ]
         ]
       },
-      "Handler": {
-        "Ref": "lib/bundle-min.handler"
-      },
+      "Handler": "lib/bundle-min.handler",
       "Environment": {
         "Variables": {
           "BASE_URL": {
@@ -352,9 +348,7 @@
             ]
           ]
         },
-        "S3Key": {
-          "Ref": "store.zip"
-        }
+        "S3Key": "store.zip"
       },
       "FunctionName": {
         "Fn::Join": [
@@ -381,9 +375,7 @@
           ]
         ]
       },
-      "Handler": {
-        "Ref": "lib/bundle-min.handler"
-      },
+      "Handler": "lib/bundle-min.handler",
       "Environment": {
         "Variables": {
           "BASE_URL": {
@@ -514,9 +506,7 @@
             ]
           ]
         },
-        "S3Key": {
-          "Ref": "topup.zip"
-        }
+        "S3Key": "topup.zip"
       },
       "FunctionName": {
         "Fn::Join": [
@@ -543,9 +533,7 @@
           ]
         ]
       },
-      "Handler": {
-        "Ref": "lib/bundle-min.handler"
-      },
+      "Handler": "lib/bundle-min.handler",
       "Environment": {
         "Variables": {
           "BASE_URL": {
@@ -676,9 +664,7 @@
             ]
           ]
         },
-        "S3Key": {
-          "Ref": "transaction.zip"
-        }
+        "S3Key": "transaction.zip"
       },
       "FunctionName": {
         "Fn::Join": [
@@ -705,9 +691,7 @@
           ]
         ]
       },
-      "Handler": {
-        "Ref": "lib/bundle-min.handler"
-      },
+      "Handler": "lib/bundle-min.handler",
       "Environment": {
         "Variables": {
           "BASE_URL": {
@@ -834,9 +818,7 @@
             ]
           ]
         },
-        "S3Key": {
-          "Ref": "transaction-store.zip"
-        }
+        "S3Key": "transaction-store.zip"
       },
       "FunctionName": {
         "Fn::Join": [
@@ -863,9 +845,7 @@
           ]
         ]
       },
-      "Handler": {
-        "Ref": "lib/bundle-min.handler"
-      },
+      "Handler": "lib/bundle-min.handler",
       "Environment": {
         "Variables": {
           "BASE_URL": {
@@ -994,9 +974,7 @@
             ]
           ]
         },
-        "S3Key": {
-          "Ref": "user.zip"
-        }
+        "S3Key": "user.zip"
       },
       "FunctionName": {
         "Fn::Join": [
@@ -1023,9 +1001,7 @@
           ]
         ]
       },
-      "Handler": {
-        "Ref": "lib/bundle-min.handler"
-      },
+      "Handler": "lib/bundle-min.handler",
       "Environment": {
         "Variables": {
           "BASE_URL": {
@@ -1152,9 +1128,7 @@
             ]
           ]
         },
-        "S3Key": {
-          "Ref": "web.zip"
-        }
+        "S3Key": "web.zip"
       },
       "FunctionName": {
         "Fn::Join": [
@@ -1181,9 +1155,7 @@
           ]
         ]
       },
-      "Handler": {
-        "Ref": "server/lambda.handler"
-      },
+      "Handler": "server/lambda.handler",
       "Environment": {
         "Variables": {
           "BASE_URL": {
@@ -1308,9 +1280,7 @@
             ]
           ]
         },
-        "S3Key": {
-          "Ref": "api.zip"
-        }
+        "S3Key": "api.zip"
       },
       "FunctionName": {
         "Fn::Join": [
@@ -1337,9 +1307,7 @@
           ]
         ]
       },
-      "Handler": {
-        "Ref": "lib/bundle-min.handler"
-      },
+      "Handler": "lib/bundle-min.handler",
       "Environment": {
         "Variables": {
           "BASE_URL": {
