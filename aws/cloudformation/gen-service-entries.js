@@ -29,7 +29,7 @@ const makeLambda = ({ handler, name, timeout }) => ({
             ]
           ]
         },
-        "S3Key": `${name}.zip`
+        "S3Key": { "Ref": `${name}.zip` }
       },
       "FunctionName": {
         "Fn::Join": [
@@ -52,7 +52,9 @@ const makeLambda = ({ handler, name, timeout }) => ({
           ]
         ]
       },
-      "Handler": handler,
+      "Handler": {
+        "Ref": `${handler}`
+      },
       "Environment": {
         "Variables": {
           "BASE_URL": {
