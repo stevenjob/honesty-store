@@ -2,6 +2,48 @@ import { CloudFormation } from 'aws-sdk';
 import { readFileSync } from 'fs';
 import * as winston from 'winston';
 
+import { listAll } from '../list';
+
+export const isStackPresent = async (name: string) => {
+  const cloudFormation = new CloudFormation({
+    apiVersion: '2010-05-15'
+  });
+
+  const stackSummaries = await listAll(
+    nextToken => cloudFormation.listStacks({
+      NextToken: nextToken,
+      StackStatusFilter: [
+        // all except deleted
+        'CREATE_IN_PROGRESS',
+        'CREATE_FAILED',
+        'CREATE_COMPLETE',
+        'ROLLBACK_IN_PROGRESS',
+        'ROLLBACK_FAILED',
+        'ROLLBACK_COMPLETE',
+        'DELETE_IN_PROGRESS',
+        'DELETE_FAILED',
+        //'DELETE_COMPLETE',
+        'UPDATE_IN_PROGRESS',
+        'UPDATE_COMPLETE_CLEANUP_IN_PROGRESS',
+        'UPDATE_COMPLETE',
+        'UPDATE_ROLLBACK_IN_PROGRESS',
+        'UPDATE_ROLLBACK_FAILED',
+        'UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS',
+        'UPDATE_ROLLBACK_COMPLETE',
+        'REVIEW_IN_PROGRESS'
+      ]
+    }),
+    response => response.StackSummaries,
+    response => response.NextToken
+  );
+
+  const names = stackSummaries
+    .reduce<CloudFormation.StackSummaries>((all, cur) => all.concat(cur), [])
+    .map(({ StackName }) => StackName);
+
+  return names.indexOf(name) !== -1;
+};
+
 export const ensureStack = async ({ name, templateName, params }) => {
   const cloudFormation = new CloudFormation({
     apiVersion: '2010-05-15',

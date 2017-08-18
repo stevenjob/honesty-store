@@ -1,9 +1,8 @@
 import { config, S3 } from 'aws-sdk';
 import { readFileSync } from 'fs';
 import * as winston from 'winston';
-import { ensureStack } from '../cloudformation/stack';
-import { tableExists } from '../dynamodb/table';
-import { lambdaExists, zip } from '../lambda/function';
+import { ensureStack, isStackPresent } from '../cloudformation/stack';
+import { ensureLambdaCode, zip } from '../lambda/function';
 import { generateName, isLive } from '../name';
 import { aliasToBaseUrl, aliasToName } from '../route53/alias';
 
@@ -82,28 +81,47 @@ const s3Upload = async ({ content, bucket, key }) => {
     .promise();
 };
 
-const listExistingTables = async ({ services, branch }: { services: string[], branch: string }) =>
-  await Promise.all(
-    services.map(
-      async path => ({
-        path,
-        exists: await tableExists(generateName({ branch, dir: path }))
-      })
-    )
-  );
+const uploadZip = async (path, pattern) => {
+  winston.info(`uploading '${path}' to S3...`);
 
-const listExistingLambdas = async ({ services, branch }: { services: string[], branch: string }) =>
-  await Promise.all(
-    services.map(
-      async path => ({
-        path,
-        exists: await lambdaExists(generateName({ branch, dir: path }))
-      })
-    )
-  );
+  const zipFile = await zip(path, pattern);
 
-// TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
-export default async ({ branch }) => {
+  const bucket = `honesty-store-lambdas-${config.region}`;
+  const key = `${path}.zip`;
+
+  await s3Upload({
+    content: zipFile,
+    bucket,
+    key
+  });
+
+  return {
+    bucket,
+    key
+  };
+};
+
+const uploadZips = async () => {
+  for (const { path, pattern } of dirs) {
+    await uploadZip(path, pattern);
+  }
+};
+
+const updateLambdasAndZips = async ({ branch }) => {
+  for (const { path, pattern } of dirs) {
+    const { bucket, key } = await uploadZip(path, pattern);
+
+    const name = generateName({ branch, dir: path });
+
+    await ensureLambdaCode({
+      name,
+      S3Bucket: bucket,
+      S3Key: key
+    });
+  }
+};
+
+const deployStack = async ({ branch, stackName }) => {
   const serviceSecret = generateSecret({
     secretPrefix: 'service',
     branch,
@@ -117,48 +135,16 @@ export default async ({ branch }) => {
 
   const baseUrl = aliasToBaseUrl(branch);
 
-  winston.info(`s3Upload() for per-service json...`);
+  winston.info(`uploading 'per-service json' to S3...`);
   await s3Upload({
     content: readFileSync(`${__dirname}/../../cloudformation/web-cluster-per-service.json`, 'utf8'),
     bucket: `${templateBucket}-${config.region}`,
     key: 'per-service.json'
   });
 
-  for (const { path, pattern } of dirs) {
-    winston.info(`s3Upload() for ${path}...`);
+  await uploadZips();
 
-    const zipFile = await zip(path, pattern);
-    await s3Upload({
-      content: zipFile,
-      bucket: `honesty-store-lambdas-${config.region}`,
-      key: `${path}.zip`
-    });
-  }
-
-  const existingTableKeys = (await listExistingTables({
-    services: dirs.map(({ path }) => path),
-    branch
-  }))
-    .reduce((acc, { path, exists }) => {
-      const key = `CreateTable${path}`.replace(/-/g, '');
-      acc[key] = exists ? 'No' : 'Yes';
-      return acc;
-      // tslint:disable-next-line:align
-    }, {});
-
-  const existingLambdaKeys = (await listExistingLambdas({
-    services: dirs.map(({ path }) => path),
-    branch
-  }))
-    .reduce((acc, { path, exists }) => {
-      const key = `CreateLambda${path}`.replace(/-/g, '');
-      acc[key] = exists ? 'No' : 'Yes';
-      return acc;
-      // tslint:disable-next-line:align
-    }, {});
-
-  const stackName = `stack-${branch}`;
-  winston.info(`ensureStack('${stackName}')...`);
+  winston.info(`ensure stack '${stackName}'...`);
   await ensureStack({
     name: stackName,
     templateName: `${__dirname}/../../cloudformation/web-cluster.json`,
@@ -170,10 +156,21 @@ export default async ({ branch }) => {
       ServicePrefix: isLive(branch) ? 'honesty-store' : `hs-${branch}`,
       HSPrefix: isLive(branch) ? 'honesty-store' : 'hs',
       StripeKeyLive: generateStripeKey({ branch, type: 'live' }),
-      StripeKeyTest: generateStripeKey({ branch, type: 'test' }),
-      ...existingTableKeys,
-      ...existingLambdaKeys
+      StripeKeyTest: generateStripeKey({ branch, type: 'test' })
     }});
 
   winston.info(`Deployed to ${baseUrl}`);
+};
+
+// TODO: doesn't remove resources left over when a dir is deleted until the branch is deleted
+export default async ({ branch }) => {
+  const stackName = `stack-${branch}`;
+
+  if (await isStackPresent(stackName)) {
+    winston.info(`Stack exists, updating lambdas...`);
+    await updateLambdasAndZips({ branch });
+  } else {
+    winston.info(`Creating stack...`);
+    await deployStack({ branch, stackName });
+  }
 };

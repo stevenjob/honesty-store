@@ -8,7 +8,8 @@ interface Promiseable<T> {
 
 export async function listAll<Response extends Paged, Result>(
   requestFactory: (nextToken: string) => Promiseable<Response>,
-  resultSelector: (response: Response) => Result[]
+  resultSelector: (response: Response) => Result[],
+  nextTokenSelector = (response: Response) => response.nextToken
 ): Promise<Result[]> {
   const results = [];
   let nextToken = null;
@@ -16,7 +17,7 @@ export async function listAll<Response extends Paged, Result>(
     const result = await requestFactory(nextToken)
       .promise();
     results.push(...resultSelector(result));
-    nextToken = result.nextToken;
+    nextToken = nextTokenSelector(result);
   }
   while (nextToken != null);
   return results;

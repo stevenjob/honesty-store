@@ -40,16 +40,6 @@
       "Description": "Boolean describing whether a table should be referenced",
       "AllowedValues": ["Yes", "No"]
     },
-    "CreateTable": {
-      "Type": "String",
-      "Description": "Boolean describing whether a table should be created and owned by this stack (as opposed to pre-existing)",
-      "AllowedValues": ["Yes", "No"]
-    },
-    "CreateLambda": {
-      "Type": "String",
-      "Description": "Boolean describing whether a lambda should be created and owned by this stack (as opposed to pre-existing)",
-      "AllowedValues": ["Yes", "No"]
-    },
     "UserSecret": {
       "Type": "String",
       "Description": "The user secret (or empty) for this service"
@@ -83,15 +73,9 @@
 
   "Outputs": {
     "Lambda": {
-      "Value": {
-        "Fn::If": [
-          "CreateLambda",
-          {
-            "Fn::GetAtt": [ "Lambda", "Arn" ]
-          },
-          "n/a"
-        ]
-      },
+			"Value": {
+				"Fn::GetAtt": [ "Lambda", "Arn" ]
+			},
       "Export": {
         "Name": {
           "Fn::Join": [
@@ -115,18 +99,11 @@
     },
     "WithTable": {
       "Fn::Equals": [ {"Ref": "WithTable"}, "Yes" ]
-    },
-    "CreateTable": {
-      "Fn::Equals": [ {"Ref": "CreateTable"}, "Yes" ]
-    },
-    "CreateLambda": {
-      "Fn::Equals": [ {"Ref": "CreateLambda"}, "Yes" ]
     }
   },
 
   "Resources": {
     "Table": {
-      "Condition": "CreateTable",
       "Type": "AWS::DynamoDB::Table",
       "DeletionPolicy": "Retain",
       "Properties": {
@@ -192,7 +169,6 @@
     },
     "Lambda": {
       "Type": "AWS::Lambda::Function",
-      "Condition": "CreateLambda",
       "Properties": {
         "Code": {
           "S3Bucket": {

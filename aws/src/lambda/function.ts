@@ -52,6 +52,20 @@ const dynamoAccessToRole = ({ access, live }: { access?: 'ro' | 'rw', live: bool
   return `arn:aws:iam::812374064424:role/${name}-lambda-dynamo-${access}`;
 };
 
+type EnsureLambdaCodeParameters = {
+  name: string;
+} & ({ zipFile: Buffer } | { S3Bucket: string, S3Key: string });
+
+export const ensureLambdaCode = async ({ name, ...codeParams }: EnsureLambdaCodeParameters) => {
+  const lambda = new Lambda({ apiVersion: '2015-03-31' });
+
+  return await lambda.updateFunctionCode({
+    FunctionName: name,
+    ...codeParams
+  })
+    .promise();
+};
+
 const ensureLambda = async ({ name, timeout, handler, environment, dynamoAccess, zipFile, live }) => {
   const lambda = new Lambda({ apiVersion: '2015-03-31' });
 
@@ -86,11 +100,10 @@ const ensureLambda = async ({ name, timeout, handler, environment, dynamoAccess,
     if (e.code !== 'ResourceConflictException') {
       throw e;
     }
-    const func = await lambda.updateFunctionCode({
-      FunctionName: name,
-      ZipFile: zipFile
-    })
-      .promise();
+    const func = await ensureLambdaCode({
+      name,
+      zipFile
+    });
 
     winston.debug(`function: updateFunctionCode`, func);
 
