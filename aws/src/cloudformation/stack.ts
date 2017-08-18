@@ -4,12 +4,12 @@ import * as winston from 'winston';
 
 import { listAll } from '../list';
 
-export const isStackPresent = async (name: string) => {
+const listStacks = async () => {
   const cloudFormation = new CloudFormation({
     apiVersion: '2010-05-15'
   });
 
-  const stackSummaries = await listAll(
+  return await listAll(
     nextToken => cloudFormation.listStacks({
       NextToken: nextToken,
       StackStatusFilter: [
@@ -36,6 +36,10 @@ export const isStackPresent = async (name: string) => {
     response => response.StackSummaries,
     response => response.NextToken
   );
+};
+
+export const isStackPresent = async (name: string) => {
+  const stackSummaries = await listStacks();
 
   const names = stackSummaries
     .reduce<CloudFormation.StackSummaries>((all, cur) => all.concat(cur), [])
@@ -97,4 +101,21 @@ export const ensureStack = async ({ name, templateName, params }) => {
     },
     {}
   );
+};
+
+export const pruneStacks = async (
+    { filter }: { filter: (_: CloudFormation.StackSummary) => boolean }
+) => {
+  const stackSummaries = await listStacks();
+
+  const toPrune = stackSummaries.filter(filter);
+
+  const cloudFormation = new CloudFormation({
+    apiVersion: '2010-05-15'
+  });
+
+  const deletions = toPrune.map(
+    ({ StackName }) => cloudFormation.deleteStack({ StackName }).promise());
+
+  await Promise.all(deletions);
 };

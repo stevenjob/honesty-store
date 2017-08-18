@@ -1,26 +1,9 @@
-import { pruneApiGateway, pruneDomainNames } from '../apigateway/gateway';
-import { ensureStack } from '../cloudformation/stack';
+import { pruneStacks } from '../cloudformation/stack';
 import { pruneLogGroups } from '../cloudwatchlogs/loggroup';
-import { pruneTables } from '../dynamodb/table';
-import { pruneRepositories } from '../ecr/repository';
-import { pruneServices } from '../ecs/service';
-import { pruneTaskDefinitions } from '../ecs/taskDefinition';
-import { pruneLoadBalancers } from '../elbv2/loadbalancer';
-import { pruneTargetGroups } from '../elbv2/targetgroup';
 import { getOriginBranchNames } from '../git/branch';
-import { pruneFunctions } from '../lambda/function';
 import { prefix } from '../name';
-import { aliasToName, pruneAliases } from '../route53/alias';
 
 const force = process.env.FORCE;
-
-const ensureWebStack = async () =>
-  await ensureStack({
-    name: 'web-cluster',
-    templateName: `${__dirname}/../../cloudformation/web-cluster.json`,
-    params: {
-      VpcCidrBlock: '10.1.0.0/16'
-    }});
 
 export default async () => {
   const branchNames = force ? ['live', 'test'] : Array.from(await getOriginBranchNames());
@@ -35,58 +18,14 @@ export default async () => {
 
   const filter = (name) => matchesGlobalPrefix(name) && !matchesBranchPrefixes(name);
 
-  await pruneFunctions(
-    lambda => filter(lambda.FunctionName)
-  );
-
-  await pruneDomainNames(
-    (domainName) => !branchNames.some(
-      branchName => aliasToName(branchName) === domainName
-    )
-  );
-
-  await pruneApiGateway(
-    ({ name }) => filter(name)
-  );
-
-  await pruneLoadBalancers({
-    filter: ({ LoadBalancerName }) => filter(LoadBalancerName)
-  });
-
-  await pruneAliases({
-    filter: (name) => !branchNames.some(branchName => branchName === name)
-  });
-
-  const stack = await ensureWebStack();
-
-  await pruneServices({
-    cluster: stack.Cluster,
-    filter: ({ name }) => filter(name)
-  });
-
-  await pruneTaskDefinitions({
-    filter: ({ family }) => filter(family)
-  });
-
-  // pruneListeners/pruneRules - listeners/rules belong to load balancers so are removed implicitly
-
-  await pruneTargetGroups({
-    filter: ({ TargetGroupName }) => filter(TargetGroupName)
-  });
-
-  await pruneRepositories({
-    filter: ({ repositoryName }) => filter(repositoryName)
-  });
-
-  // TODO: won't prune tables from deleted dirs or dirs which no longer require db
-  await pruneTables({
-    filter
-  });
-
   await pruneLogGroups({
     filter: ({ name }) => {
       const matches = name.match(new RegExp('/aws/lambda/(.*)'));
       return filter((matches && matches[1]) || name);
     }
+  });
+
+  await pruneStacks({
+    filter: ({ StackName }) => filter(StackName)
   });
 };
