@@ -49,7 +49,7 @@ const lambdaConfig: LambdaConfig = {
     handler: 'lib/bundle-min.handler',
     codeFilter: 'lib/bundle-min.js',
     withStripe: true,
-    timeout: 10
+    timeout: 30
   },
   user: {
     database: 'rw',
