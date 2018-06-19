@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.9.0
+      - image: dwmkerr/dynamodb:38
+    environment:
+      TEST_STRIPE_KEY: sk_test_qqeGkZVE30FLH76H2g2Fd4NL
+    steps:
+      - checkout
+      - run: yarn
+      - run: yarn run bootstrap
+      - run: yarn run tslint
+      - run:
+          name: yarn run build
+          command: |
+            export REACT_APP_STRIPE_PUBLISHABLE_KEY=$([ $CIRCLE_BRANCH = 'live' ] && echo pk_live_koh6JFFsmJxYyGBok5DHRtJZ || echo pk_test_Lp6VONbqz8TbbnD4oFThDBmT)
+            export PUBLIC_URL=$([ $CIRCLE_BRANCH = 'live' ] && echo https://honesty.store || echo https://$CIRCLE_BRANCH.honesty.store)
+            yarn run build
+      - run: ./aws/bin/aws deploy $CIRCLE_BRANCH api item transaction user web topup store transaction-store
+      - run: ./aws/bin/aws prune

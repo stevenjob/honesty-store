@@ -22,7 +22,7 @@
   "scripts": {
     "start-dynamodb": "docker run -d --name dynamodb -p 8000:8000 -m 512M deangiberson/aws-dynamodb-local",
     "stop-dynamodb": "docker rm -f dynamodb",
-    "test": "npm run start-dynamodb && jest; ec=$?; npm run stop-dynamodb; exit $ec",
+    "test": "jest",
     "build": "npm run tsc && npm run test",
     "tsc": "../node_modules/.bin/tsc"
   },
