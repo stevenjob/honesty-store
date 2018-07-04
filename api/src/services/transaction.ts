@@ -1,4 +1,4 @@
-import { getItem } from '@honesty-store/item';
+import { getItem, Item } from '@honesty-store/item';
 import { CodedError } from '@honesty-store/service/lib/error';
 import { getStoreFromId } from '@honesty-store/store';
 import {
@@ -11,7 +11,23 @@ import { calculateDonation } from './store';
 
 const expandItemDetails = async (key, transaction) => {
   const { itemId } = transaction.data;
-  const item = itemId && await getItem(key, itemId);
+  let item: Item = null;
+  try {
+    if (itemId != null) {
+      item = await getItem(key, itemId);
+    }
+  } catch (e) {
+    if (!e.message.match(/Key not found/)) {
+      throw e;
+    }
+  }
+  if (item == null) {
+    item = {
+      id: itemId,
+      image: 'misc-bar.svg',
+      name: 'Unknown Item'
+    };
+  }
   return {
     ...transaction,
     data: {
