@@ -46,7 +46,7 @@ const getItem = async (itemId): Promise<Item> => {
 };
 
 const getAllItems = async (): Promise<Item[]> => {
-  const items = await cruft.__findAll({});
+  const items = await cruft.__findAll({}, { limit: 1000 });
   return items
     .filter(({ alias }) => alias == null)
     .map(externalise);
