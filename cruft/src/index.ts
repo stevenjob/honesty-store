@@ -8,7 +8,9 @@ import { reduce } from './reduce';
 import { truncate } from './truncate';
 import { update } from './update';
 
-(<any>Symbol).asyncIterator = Symbol.for('asyncIterator');
+if ((<any>Symbol).asyncIterator == null) {
+  (<any>Symbol).asyncIterator = Symbol.for('asyncIterator');
+}
 
 export type Timestamp = number;
 
