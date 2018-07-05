@@ -98,8 +98,22 @@ export const calculateServiceFee = (price: number): number =>
 
 const { get, post } = fetch('store', lambdaBaseUrl);
 
-export const getStoreFromCode = (key, code: string) =>
-  get<Store>(1, key, `/code/${code}`);
+export const getStoreFromCode = async (key, code: string) => {
+  switch (code) {
+    case 'dev-test':
+      return await getStoreFromId(key, '1e7c9c0d-a9be-4ab7-8499-e57bf859978d');
+    case 'sl-brs':
+      return await getStoreFromId(key, '9a61dad3-f05c-46aa-a7e4-14311e9cccc5');
+    case 'sl-ldn':
+      return await getStoreFromId(key, '1cfb21d8-52d8-4eee-98ce-740c466bfc0e');
+    case 'sl-ncl':
+      return await getStoreFromId(key, 'b8d7305b-bb7d-4bbe-8b2f-5e94c6267bb6');
+    case 'sl-edn':
+      return await getStoreFromId(key, 'f79ff70c-2103-43f9-922d-d54a16315361');
+    default:
+      return await get<Store>(1, key, `/code/${code}`);
+  }
+};
 
 export const getStoreFromId = (key, id: string) =>
   get<Store>(1, key, `/${id}`);
