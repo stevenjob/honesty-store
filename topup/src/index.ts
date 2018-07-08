@@ -32,7 +32,7 @@ import {
 const stripeTest = stripeFactory(process.env.TEST_STRIPE_KEY);
 const stripeProd = stripeFactory(process.env.LIVE_STRIPE_KEY);
 
-const { read, reduce } = cruftDDB<TopupAccount>({
+const { read, reduce } = cruftDDB<TopupAccount, TopupEvent>({
   tableName: process.env.TABLE_NAME,
   limit: 100
 });
@@ -74,7 +74,7 @@ const stripeForUser = ({ test }) => {
   return test ? stripeTest : stripeProd;
 };
 
-const reducer = reduce<TopupEvent>(
+const reducer = reduce(
   event => {
     switch (event.type) {
       case 'topup-card-details-change':

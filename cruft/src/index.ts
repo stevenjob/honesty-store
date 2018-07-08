@@ -12,6 +12,11 @@ if ((<any>Symbol).asyncIterator == null) {
   (<any>Symbol).asyncIterator = Symbol.for('asyncIterator');
 }
 
+// hack - endpoint isn't a valid property according to the typings
+interface DocumentClientOptions extends DynamoDB.DocumentClient.DocumentClientOptions {
+  endpoint: string;
+}
+
 export type Timestamp = number;
 
 export interface HasId {
@@ -72,15 +77,19 @@ export interface FindConfiguration extends Configuration {
   limit: number;
 }
 
-export interface Cruft<T extends AbstractItem> {
+export interface Cruft<
+  T extends AbstractItem,
+  ReceivedEvent extends AbstractItem = AbstractItem,
+  EmittedEvent extends AbstractItem = AbstractItem
+  > {
   create(item: NewItem<T>): Promise<EnhancedItem<T>>;
   read(id: string): Promise<EnhancedItem<T>>;
-  reduce<Event extends HasId>(
-    aggregateIdSelector: (event: Event) => string,
-    eventIdSelector: (event: Event) => string,
-    reducer: (aggregate: EnhancedItem<T>, event: Event, emit: (event: AbstractItem) => void) => Promise<EnhancedItem<T>> | EnhancedItem<T>,
-    aggregateFactory?: (event: Event) => NewItem<T>
-  ): (event: Event, aggregate?: EnhancedItem<T>) => Promise<EnhancedItem<T>>;
+  reduce(
+    aggregateIdSelector: (event: ReceivedEvent) => string,
+    eventIdSelector: (event: ReceivedEvent) => string,
+    reducer: (aggregate: EnhancedItem<T>, event: ReceivedEvent, emit: (event: EmittedEvent) => void) => Promise<EnhancedItem<T>> | EnhancedItem<T>,
+    aggregateFactory?: (event: ReceivedEvent) => NewItem<T>
+  ): (event: ReceivedEvent, aggregate?: EnhancedItem<T>) => Promise<EnhancedItem<T>>;
   update(item: EnhancedItem<T>): Promise<EnhancedItem<T>>;
   find(fields: PrototypicalItem<T>): Promise<EnhancedItem<T>>;
   __findAll(fields: PrototypicalItem<T>, options?: { limit?: number }): Promise<EnhancedItem<T>[]>;
@@ -90,16 +99,15 @@ export interface Cruft<T extends AbstractItem> {
 
 export default <
   Aggregate extends AbstractItem,
-  ReceivedEvent extends AbstractItem = AbstractItem,
-  EmittedEvent extends AbstractItem = AbstractItem
+  ReceivedEvent extends AbstractItem,
+  EmittedEvent extends AbstractItem
 >({
   endpoint = process.env.AWS_DYNAMODB_ENDPOINT,
   region = process.env.AWS_REGION,
   tableName,
   limit
-}): Cruft<Aggregate> => {
-  // hack - endpoint isn't a valid property according to the typings
-  const client = new DynamoDB.DocumentClient(<{ endpoint: string }>{
+  }): Cruft<Aggregate, ReceivedEvent, EmittedEvent> => {
+  const client = new DynamoDB.DocumentClient(<DocumentClientOptions>{
     apiVersion: '2012-08-10',
     endpoint,
     region
