@@ -141,6 +141,8 @@ const reducer = reduce(
           id,
           type,
           itemId,
+          storeId,
+          userId,
           ...details
         } = event;
 

@@ -70,7 +70,7 @@ export type EventItem = HasId & { previous?: string, data: HasId };
 
 export interface Configuration {
   client: DynamoDB.DocumentClient;
-  tableName: string;
+  tableDescription: Promise<DynamoDB.TableDescription>;
 }
 
 export interface FindConfiguration extends Configuration {
@@ -101,26 +101,47 @@ export default <
   Aggregate extends AbstractItem,
   ReceivedEvent extends AbstractItem,
   EmittedEvent extends AbstractItem
->({
-  endpoint = process.env.AWS_DYNAMODB_ENDPOINT,
-  region = process.env.AWS_REGION,
-  tableName,
-  limit
+  >({
+    endpoint = process.env.AWS_DYNAMODB_ENDPOINT,
+    region = process.env.AWS_REGION,
+    tableName,
+    limit
   }): Cruft<Aggregate, ReceivedEvent, EmittedEvent> => {
+
+  const describeTable = async () => {
+    const api = new DynamoDB(<{ endpoint: string }>{
+      apiVersion: '2012-08-10',
+      endpoint,
+      region
+    });
+
+    const { Table: tableDescription } = await api.describeTable({
+      TableName: tableName
+    }).promise();
+
+    if (tableDescription == null) {
+      throw new Error(`Table ${tableName} not found`);
+    }
+
+    return tableDescription;
+  };
+
   const client = new DynamoDB.DocumentClient(<DocumentClientOptions>{
     apiVersion: '2012-08-10',
     endpoint,
     region
   });
 
+  const tableDescription = describeTable();
+
   return {
-    create: create<Aggregate>({ client, tableName }),
-    read: read<Aggregate>({ client, tableName }),
-    reduce: reduce<Aggregate, ReceivedEvent, EmittedEvent>({ client, tableName }),
-    update: update<Aggregate>({ client, tableName }),
-    __findAll: __findAll<Aggregate>({ client, tableName, limit }),
-    findAll: findAll<Aggregate>({ client, tableName, limit }),
-    find: find<Aggregate>({ client, tableName, limit }),
-    truncate: truncate({ client, tableName })
+    create: create<Aggregate>({ client, tableDescription }),
+    read: read<Aggregate>({ client, tableDescription }),
+    reduce: reduce<Aggregate, ReceivedEvent, EmittedEvent>({ client, tableDescription }),
+    update: update<Aggregate>({ client, tableDescription }),
+    __findAll: __findAll<Aggregate>({ client, tableDescription, limit }),
+    findAll: findAll<Aggregate>({ client, tableDescription, limit }),
+    find: find<Aggregate>({ client, tableDescription, limit }),
+    truncate: truncate({ client, tableDescription })
   };
 };
